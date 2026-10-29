@@ -1,6 +1,7 @@
-/* Player reports (verified). One entry per accepted GitHub issue.
-   floor: floor number; mon: monster English name exactly as in the bestiary;
-   level: the monster's level (each monster has exactly one level);
-   x, z: where the screenshot was taken; img: local copy of the screenshot (reports/<issue>.jpg);
-   issue: GitHub issue number; date: date the report was accepted. */
+/* Accepted player reports (one entry per accepted GitHub issue in Cheng-1001/SAOMC-tool).
+   type: "monster" | "item" | "place" | "other"
+   floor: floor number; name: English name as in the game
+   level: monster level (monsters have exactly one level), x / z: coordinates from the screenshot
+   img: local copy of the screenshot (reports/<issue>.jpg); issue: issue number; date: accepted date
+   summary: one-line Chinese summary of what was added to the tool */
 window.SAO_REPORTS = [];

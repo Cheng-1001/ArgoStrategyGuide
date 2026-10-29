@@ -1,0 +1,46 @@
+name: 地點
+description: 村鎮、NPC、採集點、地下城、首領位置等（必須附截圖）
+title: "[地點] "
+labels: ["玩家回報", "待審核", "地點"]
+body:
+  - type: input
+    id: floor
+    attributes:
+      label: 樓層
+      description: 只填數字，例如 1
+      placeholder: "1"
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: 名稱
+      placeholder: Hidden Well
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 種類
+      options: [村鎮, NPC, 採集點, 地下城或礦坑, 首領位置, 怪物重生點, 其他]
+    validations:
+      required: true
+  - type: input
+    id: coords
+    attributes:
+      label: 座標（x, z）
+      description: 小地圖上顯示的座標
+      placeholder: "4309, 3697"
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 截圖（必填）
+      description: 把截圖拖進這個框，或按 Ctrl+V 貼上。等框裡出現一行圖片連結後再送出。可以放多張。
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 說明（選填）

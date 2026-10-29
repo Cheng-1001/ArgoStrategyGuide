@@ -255,6 +255,20 @@ h4.sec .c{font-family:var(--f-body);letter-spacing:0;text-transform:none;font-we
 .btbl th{font-size:11.5px;color:var(--muted);font-weight:600}
 .flboss{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 
+
+.rtypes{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.rtype{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;color:inherit;text-decoration:none;transition:border-color .15s,transform .15s}
+.rtype:hover{border-color:var(--accent);transform:translateY(-1px)}
+.rtype .ric{font-size:26px;line-height:1}
+.rtype b{font-family:var(--f-display);font-size:17px}
+.rtype .rd{font-size:13px}
+.rtype ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--muted)}
+.rtype .rgo{margin-top:auto;padding-top:4px;font-weight:600;font-size:13px;color:var(--accent)}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:13.5px}
+.replist{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}
+.replist img{width:96px;height:60px;object-fit:cover;border-radius:6px;background:#111;flex:none}
+.replist .t{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:13px}
+.replist .t>span{color:var(--muted);font-size:12.5px}
 /* player reports */
 .pill.rep{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
 .repbtn{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;border:1px solid var(--accent)}
@@ -317,7 +331,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   .browse{height:auto}
   .results{overflow:visible}
   .gsearch{order:3;max-width:none;flex-basis:100%;margin-left:0}
-  nav.tabs{order:2}
+  nav.tabs{order:2;flex-basis:100%}
+  nav.tabs a{flex:1;justify-content:center;padding:6px 4px;white-space:nowrap}
+  nav.tabs a .n{display:none}
   #panel{top:auto;left:0;right:0;bottom:0;width:auto;max-width:none;height:78vh;border-radius:14px 14px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
   .legend{display:none}
 }
@@ -345,6 +361,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <a href="#items" data-v="items">物品 <span class="n" id="nItem"></span></a>
       <a href="#quests" data-v="quests">任務 <span class="n" id="nQuest"></span></a>
       <a href="#bosses" data-v="bosses">首領</a>
+      <a href="#report" data-v="report">回報</a>
     </nav>
     <label class="gsearch" for="q">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
@@ -389,7 +406,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fMonSort" aria-label="排序">
         <option value="num">圖鑑編號</option><option value="diff">難度（高→低）</option><option value="name">名稱</option><option value="lv">等級（低→高）</option></select></div>
     </div>
-    <div class="results"><div class="rhead"><h2>怪物</h2><span class="count" id="cMon"></span><a class="repbtn" id="repNew" target="_blank" rel="noopener">回報新怪物</a></div><div class="grid" id="lMon"></div></div>
+    <div class="results"><div class="rhead"><h2>怪物</h2><span class="count" id="cMon"></span></div><div class="grid" id="lMon"></div></div>
   </section>
 
   <!-- ITEMS -->
@@ -420,6 +437,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 
   <!-- BOSSES -->
   <section class="view bossview" id="view-bosses" hidden><div class="bwrap" id="bWrap"></div></section>
+
+  <!-- REPORT -->
+  <section class="view bossview" id="view-report" hidden><div class="bwrap" id="rWrap"></div></section>
 </div>
 
 <aside id="panel" hidden aria-live="polite">
@@ -555,18 +575,13 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
 // ---- player reports ----
 const REPO="https://github.com/Cheng-1001/SAOMC-tool";
 const REPS=(window.SAO_REPORTS||[]);
-const repsOf=m=>REPS.filter(r=>r.floor===m.floor&&r.mon===m.name);
-const lvOf=m=>{const r=repsOf(m);return r.length?r[0].level:null};
-const repURL=(f,name)=>REPO+"/issues/new?template=monster-report.yml&title="+encodeURIComponent(`[F${f}] ${name||"新怪物"} 等級回報`)+"&floor="+f+(name?"&monster="+encodeURIComponent(name):"");
-function repBlock(m){const r=repsOf(m);
-  if(!r.length)return`<h3 class="sec">等級</h3><div class="note">還沒有人回報這隻怪物的等級。在遊戲裡截一張看得到「名字上方的等級」和「小地圖座標」的圖，就可以回報。</div>
-  <a class="repbtn" href="${repURL(m.floor,m.name)}" target="_blank" rel="noopener">回報等級（需要 GitHub 帳號）</a>`;
-  const a=r[0];
-  return`<h3 class="sec">等級 <span class="c">玩家回報 ${r.length} 則</span></h3>
-  <figure class="repfig"><a href="${esc(a.img)}" target="_blank" rel="noopener"><img src="${esc(a.img)}" alt="${esc(m.name)} 等級 ${a.level} 的遊戲截圖" loading="lazy"></a>
-  <figcaption>等級 <b class="mono">${a.level}</b>・截圖位置 <span class="mono">X ${a.x} · Z ${a.z}</span>・<a href="${REPO}/issues/${a.issue}" target="_blank" rel="noopener">回報 #${a.issue}</a>（${esc(a.date)}）</figcaption></figure>
-  ${FLOORS[m.floor].map&&a.x!=null?`<button class="linkbtn" data-rep="${m.floor}|${a.x}|${a.z}">在地圖上看截圖位置</button>`:""}
-  <a class="repbtn ghost" href="${repURL(m.floor,m.name)}" target="_blank" rel="noopener">等級不對？回報更正</a>`}
+const repsOf=m=>REPS.filter(r=>r.type==="monster"&&r.floor===m.floor&&r.name===m.name);
+const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:null};
+function repBlock(m){const r=repsOf(m);if(!r.length)return"";const a=r[0];
+  return`<h3 class="sec">玩家回報 <span class="c">${r.length} 則</span></h3>
+  <figure class="repfig"><a href="${esc(a.img)}" target="_blank" rel="noopener"><img src="${esc(a.img)}" alt="${esc(m.name)} 的遊戲截圖" loading="lazy"></a>
+  <figcaption>${a.level!=null?`等級 <b class="mono">${a.level}</b>・`:""}${a.x!=null?`截圖位置 <span class="mono">X ${a.x} · Z ${a.z}</span>・`:""}<a href="${REPO}/issues/${a.issue}" target="_blank" rel="noopener">回報 #${a.issue}</a>（${esc(a.date)}）</figcaption></figure>
+  ${FLOORS[m.floor].map&&a.x!=null?`<button class="linkbtn" data-rep="${m.floor}|${a.x}|${a.z}">在地圖上看截圖位置</button>`:""}`}
 const killText=qq=>`擊殺 ${qq.kill[0].join(" / ")} ${qq.kill[2]?"各 ":""}${qq.kill[1]} 隻`;
 
 function itemDetail(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id],gat=GATHER[id];
@@ -632,7 +647,7 @@ function fillZoneSelect(){$("fMonZone").innerHTML=`<option value="all">全部區
 function renderMon(){const s=Sq(),zf=$("fMonZone").value,so=$("fMonSort").value;const M=F().M;
   let a=M.filter(m=>(monType==="all"||m.type===monType)&&(zf==="all"||m.zone===zf)&&monHit(m,s));
   if(so==="diff")a=[...a].sort((x,y)=>y.diff-x.diff);else if(so==="name")a=[...a].sort((x,y)=>x.name.localeCompare(y.name));else if(so==="lv")a=[...a].sort((x,y)=>(lvOf(x)??999)-(lvOf(y)??999));
-  $("cMon").textContent=`${a.length} / ${M.length} 種・已知等級 ${M.filter(m=>lvOf(m)!=null).length}`;$("repNew").href=repURL(FL,"");
+  $("cMon").textContent=`${a.length} / ${M.length} 種・已知等級 ${M.filter(m=>lvOf(m)!=null).length}`;
   $("lMon").innerHTML=a.length?a.map(m=>{const p=monPos(m);return`<button class="card" data-key="m|${m.id}" data-go="m|${m.id}">
     <div class="chead">${thHTML(m)}<div class="cname"><b>${esc(m.name)}</b><span>${m.num?"#"+esc(m.num)+" · ":""}${esc(p.spot?p.spot.zh:F().zones[m.zone].zh)}</span></div></div>
     <div class="cmeta">${lvOf(m)!=null?`<span class="pill rep">Lv ${lvOf(m)}</span>`:""}<span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span>${stars(m.diff)}<span class="pill ${STATUS[p.s].c}">${STATUS[p.s].t}</span></div>
@@ -727,6 +742,43 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
   </article>`;
   bindGo($("bWrap"));
   clearTimeout(bossTimer);bossTimer=setTimeout(()=>{if(view==="bosses")renderBosses()},30000)}
+
+
+// ================= report tab =================
+const RTYPES=[
+ {k:"monster",f:"1-monster.yml",ic:"👾",t:"怪物",d:"新怪物，或已知怪物的等級、出沒位置、掉落物。",need:["樓層、怪物名稱","野外截圖：名字上方的等級和小地圖座標","或圖鑑（Codex）截圖：編號、區域、掉落機率"]},
+ {k:"item",f:"2-item.yml",ic:"🎒",t:"物品",d:"新物品，或物品從哪裡拿到、拿來做什麼。",need:["樓層、物品名稱、怎麼拿到的","截圖拍到物品說明或掉落畫面"]},
+ {k:"place",f:"3-place.yml",ic:"📍",t:"地點",d:"村鎮、NPC、採集點、地下城、首領或怪物重生點。",need:["樓層、名稱、種類、座標","截圖拍到該地點和小地圖座標"]},
+ {k:"other",f:"4-other.yml",ic:"✏️",t:"更正或其他",d:"工具裡的資料錯了，或不屬於上面三種的資訊。",need:["樓層、主題、說明","截圖能證明正確的資料"]}];
+const RT_ZH={monster:"怪物",item:"物品",place:"地點",other:"其他"};
+const formURL=(t,f)=>`${REPO}/issues/new?template=${t.f}&floor=${f}`;
+let pendingCache=null;
+async function loadPending(){if(pendingCache)return pendingCache;
+  try{const r=await fetch("https://api.github.com/repos/Cheng-1001/SAOMC-tool/issues?state=open&per_page=50&labels="+encodeURIComponent("待審核"));if(!r.ok)throw 0;
+    pendingCache=(await r.json()).filter(x=>!x.pull_request);}catch(e){pendingCache="err"}return pendingCache}
+function renderReport(){const f=FL;
+  const done=REPS.slice().sort((a,b)=>b.issue-a.issue);
+  $("rWrap").innerHTML=`
+  <div class="rhead"><h2>回報區</h2><span class="count">新增或更正資料，每筆都要附遊戲截圖</span></div>
+  <div class="note">回報會送到 GitHub（需要免費的 GitHub 帳號）。核對截圖後才會加進查詢工具，工具裡還沒有的怪物、物品、地點也可以回報。下面的表單會先填好樓層 <b>${f}</b>，要回報其他樓層請先在左上角換樓層，或在表單裡改。</div>
+  <div class="rtypes">${RTYPES.map(t=>`<a class="rtype" href="${formURL(t,f)}" target="_blank" rel="noopener">
+    <span class="ric" aria-hidden="true">${t.ic}</span><b>${t.t}</b><span class="rd">${t.d}</span>
+    <ul>${t.need.map(n=>`<li>${n}</li>`).join("")}</ul><span class="rgo">填寫回報 ↗</span></a>`).join("")}</div>
+  <article class="bcard"><h4 class="sec">截圖怎麼拍</h4>
+    <ul class="uses"><li>畫面上要看得到要回報的東西：怪物名字和上方的等級、物品說明、地點本身。</li><li><b>怪物的圖鑑截圖</b>：遊戲內打開 Codex → Monstres → 點該怪物，截整頁（編號、區域、掉落機率、描述都要在畫面裡）；再點「LOCATION HINT」多截一張更好。<b>圖鑑不顯示等級</b>，等級要在野外截名字上方的「LV」。</li><li>小地圖的座標要在畫面裡（x、z），才能放到地圖上。</li><li>截圖拖進表單的「截圖」框，或複製後按 Ctrl+V 貼上；出現一行圖片連結才算上傳完成。</li><li>沒有截圖的表單送不出去；截圖看不出內容的回報會被退回。</li></ul>
+  <h4 class="sec">審核流程</h4>
+    <ol class="steps"><li><b>待審核</b>：送出後自動標上。</li><li><b>核對</b>：截圖和填寫的內容對得上才收錄；同一隻怪物等級說法不同時，以截圖清楚的為準。</li><li><b>已收錄</b>：資料加進工具，截圖存一份在網站裡，回報會被關閉。</li><li><b>退回</b>：截圖看不出內容或資料對不上，會留言說明原因。</li></ol></article>
+  <article class="bcard"><h4 class="sec">等待審核 <span class="c" id="pendC"></span></h4><div id="pendL" class="muted">讀取中…</div>
+    <a class="linkbtn" href="${REPO}/issues?q=${encodeURIComponent("is:issue label:待審核")}" target="_blank" rel="noopener">在 GitHub 看全部待審核回報 ↗</a></article>
+  <article class="bcard"><h4 class="sec">已收錄 <span class="c">${done.length} 則</span></h4>
+    ${done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?FLOORS[r.floor]?.M.find(x=>x.name===r.name):null;
+      return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span><a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">#${r.issue}</a>・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`}</article>`;
+  bindGo($("rWrap"));
+  loadPending().then(list=>{const L=$("pendL"),C=$("pendC");if(!L)return;
+    if(list==="err"){L.textContent="這裡讀不到 GitHub 的資料，請用下面的連結查看。";return}
+    C.textContent=list.length+" 則";
+    L.innerHTML=list.length?`<ul class="rows">${list.map(x=>`<li class="lrowx"><span class="t"><b><a href="${esc(x.html_url)}" target="_blank" rel="noopener">${esc(x.title)}</a></b><span>#${x.number}・${new Date(x.created_at).toLocaleDateString("zh-TW")}・${esc(x.user?.login||"")}</span></span></li>`).join("")}</ul>`:"目前沒有待審核的回報。";
+    L.classList.remove("muted")})}
 
 // ================= map =================
 const stage=$("stage"),world=$("world"),mapImg=$("mapImg");let sc=1,tx=0,ty=0,fitted=false;
@@ -828,7 +880,7 @@ $("exportBtn").onclick=async()=>{const out={};Object.entries(userPos[FL]).forEac
 $("resetBtn").onclick=()=>{userPos[FL]={};savePos(FL);renderMap();renderZoneList()};
 
 // ================= floor switch + routing =================
-const VIEWS=["map","monsters","items","quests","bosses"];let view="map";
+const VIEWS=["map","monsters","items","quests","bosses","report"];let view="map";
 const hashFor=(v,f)=>(f===1?"":"f"+f+"-")+v;
 function go(v,f){location.hash=hashFor(v,f??FL)}
 document.querySelectorAll("nav.tabs a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v)}));
@@ -854,13 +906,13 @@ function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length;
   $("nItem").textContent=Object.keys(ITEMS).filter(id=>itemFloors(id).includes(f)).length;
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
-function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|quests|bosses)$/);
+function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|quests|bosses|report)$/);
   view=mm?mm[2]:"map";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
   VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);
   document.querySelectorAll("nav.tabs a").forEach(a=>{a.href="#"+hashFor(a.dataset.v,FL);if(a.dataset.v===view)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   if(view==="map")requestAnimationFrame(()=>{if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
   renderCurrent()}
-function renderCurrent(){if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else renderQuests()}
+function renderCurrent(){if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else renderQuests()}
 window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
 

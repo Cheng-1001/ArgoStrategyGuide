@@ -1,0 +1,90 @@
+name: 怪物
+description: 新怪物，或已知怪物的等級、出沒位置、掉落物（必須附截圖：野外或圖鑑 Codex）
+title: "[怪物] "
+labels: ["玩家回報", "待審核", "怪物"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        工具裡**還沒有**的怪物也可以回報。兩種截圖都收，能兩種都附最好：
+
+        - **野外截圖**：拍到怪物名字和上方的等級（例如「Young Spider LV 3」）以及小地圖座標。**等級只能從這裡看到**，圖鑑不會顯示等級。
+        - **圖鑑截圖**：遊戲內 Codex → Monstres，點開該怪物的那一頁（看得到編號、區域、掉落機率、描述）。可以再點「LOCATION HINT」多截一張。
+  - type: dropdown
+    id: shot_type
+    attributes:
+      label: 附了哪種截圖
+      options: [野外截圖, 圖鑑截圖, 兩種都有]
+    validations:
+      required: true
+  - type: input
+    id: floor
+    attributes:
+      label: 樓層
+      description: 只填數字，例如 1
+      placeholder: "1"
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: 怪物名稱（英文，和遊戲裡一樣）
+      placeholder: Woodland Mage
+    validations:
+      required: true
+  - type: input
+    id: codex_no
+    attributes:
+      label: 圖鑑編號（有圖鑑截圖才填）
+      placeholder: "#012"
+  - type: input
+    id: region
+    attributes:
+      label: 圖鑑上的區域（有圖鑑截圖才填）
+      placeholder: Forêts du 1er Palier
+  - type: input
+    id: level
+    attributes:
+      label: 等級（有野外截圖才填）
+      description: 只填數字；每隻怪物只有一個等級
+      placeholder: "3"
+  - type: input
+    id: coords
+    attributes:
+      label: 座標 x, z（有野外截圖才填）
+      description: 截圖時小地圖上顯示的座標
+      placeholder: "1340, 3569"
+  - type: dropdown
+    id: kind
+    attributes:
+      label: 類型
+      options: [不確定, 一般怪物, 小首領, 首領]
+  - type: dropdown
+    id: behavior
+    attributes:
+      label: 行為
+      options: [不確定, 主動攻擊（看到就打）, 中立（被打才還手）, 被動（不會攻擊）]
+  - type: textarea
+    id: drops
+    attributes:
+      label: 掉落物和機率（選填）
+      description: 一行一個；圖鑑上有機率就照抄
+      placeholder: |
+        Enchanted Twig 85%
+        Spectral Cloth 75%
+  - type: textarea
+    id: hint
+    attributes:
+      label: 圖鑑描述或 LOCATION HINT（選填）
+      description: 照抄原文即可
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 截圖（必填）
+      description: 把截圖拖進這個框，或按 Ctrl+V 貼上。等框裡出現一行圖片連結後再送出。可以放多張。
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 備註（選填）

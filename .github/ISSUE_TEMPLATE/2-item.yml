@@ -1,0 +1,49 @@
+name: 物品
+description: 新物品，或物品的取得方式、用途（必須附截圖）
+title: "[物品] "
+labels: ["玩家回報", "待審核", "物品"]
+body:
+  - type: input
+    id: floor
+    attributes:
+      label: 樓層
+      description: 只填數字，例如 1
+      placeholder: "1"
+    validations:
+      required: true
+  - type: input
+    id: name
+    attributes:
+      label: 物品名稱（和遊戲裡一樣，英文或法文都可以）
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: 怎麼拿到的
+      options: [怪物掉落, 採集, 任務獎勵, 商店購買, 合成或鍛造, 其他]
+    validations:
+      required: true
+  - type: input
+    id: from
+    attributes:
+      label: 來源（怪物名稱、NPC、地點）
+      placeholder: Forest Spider
+  - type: input
+    id: coords
+    attributes:
+      label: 座標（x, z）
+      description: 截圖時小地圖上顯示的座標
+      placeholder: "1340, 3569"
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 截圖（必填）
+      description: 把截圖拖進這個框，或按 Ctrl+V 貼上。等框裡出現一行圖片連結後再送出。可以放多張。
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 備註（選填）
+      description: 例如用途、合成配方、價格
