@@ -218,6 +218,42 @@ aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:
 .nomap b{font-family:var(--f-display);font-size:20px;color:#fff}
 .nomap span{max-width:36ch;font-size:13px}
 .mapnote{position:absolute;left:12px;bottom:46px;z-index:5;max-width:min(420px,calc(100% - 70px));background:rgba(10,16,22,.78);color:#e8eef3;font-size:11.5px;padding:5px 9px;border-radius:5px}
+
+/* bosses */
+.bossview{overflow:auto}
+.bwrap{max-width:980px;margin:0 auto;padding-block:16px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+.bcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.bcard p{margin:0}
+.bhead{display:flex;gap:14px;align-items:center}
+.bimg{width:96px;height:96px;border-radius:12px;background:#20262d;object-fit:cover;flex:none}
+.bttl{min-width:0;display:flex;flex-direction:column;gap:2px;align-items:flex-start}
+.bttl .kick{font-family:var(--f-display);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.bttl h3{margin:0;font-family:var(--f-display);font-size:21px;line-height:1.2}
+.bttl .sub{font-size:12.5px;color:var(--muted)}
+.bstat{margin-top:4px;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:1px 10px;color:var(--muted)}
+.bstat.on{border-color:var(--ok);color:var(--ok)}
+.bfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:0}
+.bfacts div{background:var(--panel-2);border-radius:8px;padding:8px 10px}
+.bfacts dt{font-size:11.5px;color:var(--muted)} .bfacts dd{margin:0;font-size:15px;font-weight:600}
+.bcols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.bcols section{display:flex;flex-direction:column;gap:8px;min-width:0}
+h4.sec{margin:0;font-family:var(--f-display);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+h4.sec .c{font-family:var(--f-body);letter-spacing:0;text-transform:none;font-weight:400}
+.sched{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.sched li{border-left:3px solid var(--line);padding-left:8px}
+.sched li.on{border-color:var(--ok)}
+.sched .muted{display:block;font-size:11.5px}
+.lrowx{display:flex;justify-content:space-between;gap:10px;padding:2px 4px}
+.lrowx .t{display:flex;flex-direction:column;min-width:0} .lrowx .t span{font-size:11.5px;color:var(--muted)}
+.rows .bar{margin:-2px 4px 4px}
+.atk{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px}
+.atk li{background:var(--panel-2);border-radius:8px;padding:8px 10px;font-size:13px;display:flex;flex-direction:column;gap:2px}
+.atk b{font-family:var(--f-display);font-weight:600}
+.tblwrap{overflow-x:auto}
+.btbl{border-collapse:collapse;width:100%;font-size:13px;min-width:340px}
+.btbl th,.btbl td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
+.btbl th{font-size:11.5px;color:var(--muted);font-weight:600}
+.flboss{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 /* ---------- detail drawer ---------- */
 #panel{position:fixed;top:calc(var(--head-h) + 10px);right:max(10px,env(safe-area-inset-right,0px));bottom:10px;width:400px;max-width:calc(100% - 20px);z-index:30;
   background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:0}
@@ -294,6 +330,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <a href="#monsters" data-v="monsters">怪物 <span class="n" id="nMon"></span></a>
       <a href="#items" data-v="items">物品 <span class="n" id="nItem"></span></a>
       <a href="#quests" data-v="quests">任務 <span class="n" id="nQuest"></span></a>
+      <a href="#bosses" data-v="bosses">首領</a>
     </nav>
     <label class="gsearch" for="q">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
@@ -366,6 +403,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
     </div>
     <div class="results"><div class="rhead"><h2>支線任務</h2><span class="count" id="cQ"></span></div><div id="lQ" style="display:flex;flex-direction:column;gap:10px"></div></div>
   </section>
+
+  <!-- BOSSES -->
+  <section class="view bossview" id="view-bosses" hidden><div class="bwrap" id="bWrap"></div></section>
 </div>
 
 <aside id="panel" hidden aria-live="polite">
@@ -375,6 +415,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 
 <script src="data.js"></script>
 <script src="data23.js"></script>
+<script src="bosses.js"></script>
 <script>
 (()=>{
 const S1=window.SAO,S23=window.SAO23;
@@ -599,6 +640,62 @@ function renderQuests(){const s=Sq(),so=$("fQSort").value;const QS=F().quests;
   else{a=[...a].sort((x,y)=>so==="xp"?(y.xp||0)-(x.xp||0):(y.money||0)-(x.money||0));html=a.map(x=>qRow(x,true)).join("")}
   $("lQ").innerHTML=html||`<div class="empty-note">沒有符合條件的任務。</div>`;bindGo($("lQ"))}
 
+
+// ================= bosses tab =================
+const BO=window.SAO_BOSSES;
+const zParts=(d,zone)=>{const o={};new Intl.DateTimeFormat("en-US",{timeZone:zone,hourCycle:"h23",weekday:"short",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}).formatToParts(d).forEach(p=>o[p.type]=p.value);
+  return{y:+o.year,m:+o.month,d:+o.day,h:+o.hour,mi:+o.minute,wd:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"].indexOf(o.weekday)}};
+function zoned(y,m,d,h,mi,zone){const want=Date.UTC(y,m-1,d,h,mi);let t=want;for(let k=0;k<3;k++){const p=zParts(new Date(t),zone);t+=want-Date.UTC(p.y,p.m-1,p.d,p.h,p.mi)}return new Date(t)}
+function nextSlot(s,now){const [H,Mi]=s.time.split(":").map(Number);for(let k=-1;k<9;k++){const p=zParts(new Date(now.getTime()+k*864e5),s.zone);if(p.wd!==s.day)continue;
+  const st=zoned(p.y,p.m,p.d,H,Mi,s.zone),en=new Date(st.getTime()+s.minutes*6e4);if(en>now)return{st,en}}return null}
+const myZone=(()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){return""}})();
+const fmtT=d=>d.toLocaleString("zh-TW",{weekday:"short",month:"numeric",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:false});
+const dur=ms=>{const m=Math.round(ms/6e4),dd=Math.floor(m/1440),hh=Math.floor(m%1440/60),mm=m%60;return(dd?dd+" 天 ":"")+(hh?hh+" 小時 ":"")+mm+" 分"};
+const ZONE_ZH={"Europe/Paris":"巴黎","America/New_York":"紐約","America/Los_Angeles":"洛杉磯"};
+let bossTimer=null;
+function renderBosses(){const now=new Date();const g=BO.world[0];
+  const slots=g.schedule.map(s=>({s,...nextSlot(s,now)})).filter(x=>x.st).sort((a,b)=>a.st-b.st);
+  const open=slots.find(x=>x.st<=now&&x.en>now),next=slots.find(x=>x.st>now);
+  const status=open?`<span class="bstat on">開放中・剩 ${dur(open.en-now)}</span>`:next?`<span class="bstat">下次開放 ${fmtT(next.st)}・${dur(next.st-now)}後</span>`:"";
+  const floorBoss=FL_KEYS.map(f=>{const Fx=FLOORS[f];const m=Fx.M.find(x=>x.name.startsWith(Fx.boss));return`<li><span class="fl fl${f}">F${f}</span> <b>${esc(Fx.boss)}</b>${m?` <button class="linkbtn" data-go="m|${m.id}">看圖鑑</button>`:` <span class="muted">（圖鑑還沒有收錄）</span>`}${Fx.status==="soon"?' <span class="muted">・預計 11/4 開放</span>':""}</li>`}).join("");
+  const u=BO.unique[0];
+  $("bWrap").innerHTML=`
+  <div class="rhead"><h2>首領</h2><span class="count">世界首領・獨特怪物・樓層首領</span></div>
+  <article class="bcard">
+    <div class="bhead"><img src="${g.img}" alt="" class="bimg"><div class="bttl"><span class="kick">世界首領 World Boss</span><h3>${esc(g.zh)}</h3><div class="sub">${esc(g.name)}</div>${status}</div></div>
+    <dl class="bfacts"><div><dt>需求等級</dt><dd class="mono">${g.level}</dd></div><div><dt>入場費</dt><dd class="mono">${money(g.price)} Col</dd></div><div><dt>人數上限</dt><dd class="mono">${g.maxPlayers} 人</dd></div><div><dt>保底獎勵</dt><dd>${esc(g.guaranteed)}</dd></div></dl>
+    <p>${esc(g.desc)}</p>
+    <div class="bcols">
+      <section><h4 class="sec">每週開放時段 <span class="c">${myZone?"以你的時區（"+esc(myZone)+"）顯示":""}</span></h4>
+        <ul class="sched">${slots.map(x=>`<li class="${x===open?"on":""}"><b>${fmtT(x.st)}</b> 起 ${x.s.minutes} 分鐘<span class="muted">（官方：${ZONE_ZH[x.s.zone]||x.s.zone} ${["週日","週一","週二","週三","週四","週五","週六"][x.s.day]} ${x.s.time}）</span></li>`).join("")}</ul>
+        <div class="note">官方說明：時段可能臨時取消，會在遊戲內和 Discord 公告。</div></section>
+      <section><h4 class="sec">結束時抽獎 <span class="c">${g.rolls} 次</span></h4>
+        <ul class="rows">${g.roulette.map(([en,fr,p])=>`<li class="lrowx"><span class="t"><b>${esc(en)}</b><span>${esc(fr)}</span></span><span class="v mono">${p}%</span></li><div class="bar"><b style="width:${p}%"></b></div>`).join("")}</ul></section>
+    </div>
+    <h4 class="sec">攻擊招式</h4><ul class="atk">${g.attacks.map(([n,t])=>`<li><b>${esc(n)}</b>${esc(t)}</li>`).join("")}</ul>
+    <div class="note warn"><b>弱點：</b>${esc(g.weakness)}</div>
+    <div class="note">${esc(g.access)}</div>
+  </article>
+  <article class="bcard">
+    <div class="bhead"><img src="${u.img}" alt="" class="bimg"><div class="bttl"><span class="kick">獨特怪物 Unique Monster・${esc(u.unit)}</span><h3>${esc(u.zh)}</h3><div class="sub">${esc(u.name)}</div><span class="bstat ${u.available?"on":""}">${u.available?"已開放":"未開放"}</span></div></div>
+    <dl class="bfacts"><div><dt>等級</dt><dd class="mono">${u.level} <span class="muted" style="font-size:11px">（wiki）</span></dd></div><div><dt>樓層</dt><dd>第 ${u.floor} 層</dd></div><div><dt>出現方式</dt><dd>隱藏條件</dd></div></dl>
+    <h4 class="sec">攻擊招式</h4><ul class="atk">${u.attacks.map(([n,t])=>`<li><b>${esc(n)}</b>${esc(t)}</li>`).join("")}</ul>
+    <div class="note warn"><b>階段：</b>${esc(u.phases)}</div>
+    <div class="note">${esc(u.note)}</div>
+    <h4 class="sec">獨特怪物的規則（wiki）</h4><ul class="uses">${BO.uniqueRules.map(r=>`<li>${esc(r)}</li>`).join("")}</ul>
+    <h4 class="sec">wiki 列出的 UNIT</h4>
+    <div class="tblwrap"><table class="btbl"><thead><tr><th>編號</th><th>樓層</th><th>等級</th><th>難度</th><th>狀態</th></tr></thead><tbody>${BO.uniqueWiki.map(r=>`<tr><td class="mono">${r[0]}</td><td>F${r[1]}</td><td class="mono">${r[2]}</td><td>${stars(r[3])}</td><td>${r[4]}</td></tr>`).join("")}</tbody></table></div>
+  </article>
+  <article class="bcard">
+    <div class="bttl"><span class="kick">樓層首領</span><h3>各樓層的首領</h3></div>
+    <ul class="flboss">${floorBoss}</ul>
+    <h4 class="sec">wiki 另外列出的世界首領</h4>
+    <div class="note">以下 5 隻只出現在 wiki；官方網站目前只有 Galiath，這些可能是規劃中或舊資料。</div>
+    <div class="tblwrap"><table class="btbl"><thead><tr><th>名稱</th><th>等級</th><th>難度</th></tr></thead><tbody>${BO.wikiWorld.map(r=>`<tr><td>${esc(r[0])}</td><td class="mono">${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
+  </article>`;
+  bindGo($("bWrap"));
+  clearTimeout(bossTimer);bossTimer=setTimeout(()=>{if(view==="bosses")renderBosses()},30000)}
+
 // ================= map =================
 const stage=$("stage"),world=$("world"),mapImg=$("mapImg");let sc=1,tx=0,ty=0,fitted=false;
 const MP=()=>F().map;
@@ -698,7 +795,7 @@ $("exportBtn").onclick=async()=>{const out={};Object.entries(userPos[FL]).forEac
 $("resetBtn").onclick=()=>{userPos[FL]={};savePos(FL);renderMap();renderZoneList()};
 
 // ================= floor switch + routing =================
-const VIEWS=["map","monsters","items","quests"];let view="map";
+const VIEWS=["map","monsters","items","quests","bosses"];let view="map";
 const hashFor=(v,f)=>(f===1?"":"f"+f+"-")+v;
 function go(v,f){location.hash=hashFor(v,f??FL)}
 document.querySelectorAll("nav.tabs a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v)}));
@@ -724,13 +821,13 @@ function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length;
   $("nItem").textContent=Object.keys(ITEMS).filter(id=>itemFloors(id).includes(f)).length;
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
-function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|quests)$/);
+function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|quests|bosses)$/);
   view=mm?mm[2]:"map";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
   VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);
   document.querySelectorAll("nav.tabs a").forEach(a=>{a.href="#"+hashFor(a.dataset.v,FL);if(a.dataset.v===view)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   if(view==="map")requestAnimationFrame(()=>{if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
   renderCurrent()}
-function renderCurrent(){if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else renderQuests()}
+function renderCurrent(){if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else renderQuests()}
 window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
 
