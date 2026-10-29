@@ -1,8 +1,8 @@
-# SAOMC-tool
+# ArgoStrategyGuide
 
 SAO Minecraft（saominecraft.com）的 Aincrad 樓層查詢工具：地圖、怪物、物品、支線任務互相連結。
 
-網站：https://cheng-1001.github.io/SAOMC-tool/
+網站：https://cheng-1001.github.io/ArgoStrategyGuide/
 
 資料來源：
 - [SAO Minecraft Wiki](https://saominecraft.wiki.gg/)（怪物圖鑑、樓層地圖、支線任務）

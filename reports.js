@@ -1,4 +1,4 @@
-/* Accepted player reports (one entry per accepted GitHub issue in Cheng-1001/SAOMC-tool).
+/* Accepted player reports (one entry per accepted GitHub issue in Cheng-1001/ArgoStrategyGuide).
    type: "monster" | "item" | "place" | "other"
    floor: floor number; name: English name as in the game
    level: monster level (monsters have exactly one level), x / z: coordinates from the screenshot

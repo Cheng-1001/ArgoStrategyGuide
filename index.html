@@ -596,7 +596,7 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   <div class="note">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>
   ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}`}
 // ---- player reports ----
-const REPO="https://github.com/Cheng-1001/SAOMC-tool";
+const REPO="https://github.com/Cheng-1001/ArgoStrategyGuide";
 const REPS=(window.SAO_REPORTS||[]);
 const repsOf=m=>REPS.filter(r=>r.type==="monster"&&r.floor===m.floor&&r.name===m.name);
 const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:null};
@@ -883,7 +883,7 @@ function buildReport(){
   rResetShot();rDrawFields();rBuilt=true}
 let pendingCache=null;
 async function loadPending(){if(pendingCache)return pendingCache;
-  try{const r=await fetch("https://api.github.com/repos/Cheng-1001/SAOMC-tool/issues?state=open&per_page=50&labels="+encodeURIComponent("待審核"));if(!r.ok)throw 0;
+  try{const r=await fetch("https://api.github.com/repos/Cheng-1001/ArgoStrategyGuide/issues?state=open&per_page=50&labels="+encodeURIComponent("待審核"));if(!r.ok)throw 0;
     pendingCache=(await r.json()).filter(x=>!x.pull_request);}catch(e){pendingCache="err"}return pendingCache}
 let rFloorShown=null;
 function renderReport(){if(!rBuilt)buildReport();
