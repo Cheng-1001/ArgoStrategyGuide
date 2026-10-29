@@ -1,0 +1,56 @@
+name: 怪物等級回報
+description: 回報怪物的等級（必須附遊戲截圖）
+title: "[F1] 怪物名稱 等級回報"
+labels: ["玩家回報", "待審核"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        感謝回報！每隻怪物只有一個等級。截圖裡要**同時看得到**：
+        1. 怪物名字上方的等級（例如「Young Spider LV 3」）
+        2. 小地圖上的座標（x / z）
+
+        沒有截圖、或截圖看不出等級的回報不會被收錄。
+  - type: input
+    id: floor
+    attributes:
+      label: 樓層
+      description: 只填數字，例如 1
+      placeholder: "1"
+    validations:
+      required: true
+  - type: input
+    id: monster
+    attributes:
+      label: 怪物名稱（英文，和遊戲裡一樣）
+      placeholder: Young Spider
+    validations:
+      required: true
+  - type: input
+    id: level
+    attributes:
+      label: 等級
+      description: 只填數字
+      placeholder: "3"
+    validations:
+      required: true
+  - type: input
+    id: coords
+    attributes:
+      label: 截圖時的座標（x, z）
+      description: 小地圖上顯示的座標
+      placeholder: "1340, 3569"
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: 截圖
+      description: 把截圖拖進這個框，或按 Ctrl+V 貼上。等上傳完成、出現一行圖片連結後再送出。
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: 備註（選填）
+      description: 例如在哪個區域、白天或晚上、是不是任務才會出現。

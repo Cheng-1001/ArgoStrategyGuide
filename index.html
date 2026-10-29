@@ -254,6 +254,20 @@ h4.sec .c{font-family:var(--f-body);letter-spacing:0;text-transform:none;font-we
 .btbl th,.btbl td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 .btbl th{font-size:11.5px;color:var(--muted);font-weight:600}
 .flboss{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+
+/* player reports */
+.pill.rep{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
+.repbtn{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;border:1px solid var(--accent)}
+.repbtn.ghost{background:transparent;color:var(--accent)}
+.rhead .repbtn{margin-left:auto;padding:4px 10px;font-size:12.5px}
+.repfig{margin:0;display:flex;flex-direction:column;gap:6px}
+.repfig img{width:100%;max-height:260px;object-fit:contain;background:#111;border-radius:8px;border:1px solid var(--line)}
+.repfig figcaption{font-size:12.5px;color:var(--muted)}
+.rpin{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:6;display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none}
+.rpin span{width:16px;height:16px;border-radius:50%;background:var(--accent);border:3px solid #fff;box-shadow:0 0 0 3px rgba(0,0,0,.35);animation:rp 1.2s ease-out 3}
+.rpin b{font:600 11.5px var(--f-display);background:rgba(10,16,22,.85);color:#fff;padding:1px 8px;border-radius:3px;white-space:nowrap}
+@keyframes rp{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--accent) 70%,transparent)}100%{box-shadow:0 0 0 18px transparent}}
+@media (prefers-reduced-motion:reduce){.rpin span{animation:none}}
 /* ---------- detail drawer ---------- */
 #panel{position:fixed;top:calc(var(--head-h) + 10px);right:max(10px,env(safe-area-inset-right,0px));bottom:10px;width:400px;max-width:calc(100% - 20px);z-index:30;
   background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:0}
@@ -373,9 +387,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">類型</span><div class="chips" id="fMonType"></div></div>
       <div class="fgroup"><span class="flabel">區域</span><select class="sel" id="fMonZone" aria-label="區域"></select></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fMonSort" aria-label="排序">
-        <option value="num">圖鑑編號</option><option value="diff">難度（高→低）</option><option value="name">名稱</option></select></div>
+        <option value="num">圖鑑編號</option><option value="diff">難度（高→低）</option><option value="name">名稱</option><option value="lv">等級（低→高）</option></select></div>
     </div>
-    <div class="results"><div class="rhead"><h2>怪物</h2><span class="count" id="cMon"></span></div><div class="grid" id="lMon"></div></div>
+    <div class="results"><div class="rhead"><h2>怪物</h2><span class="count" id="cMon"></span><a class="repbtn" id="repNew" target="_blank" rel="noopener">回報新怪物</a></div><div class="grid" id="lMon"></div></div>
   </section>
 
   <!-- ITEMS -->
@@ -416,6 +430,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="data.js"></script>
 <script src="data23.js"></script>
 <script src="bosses.js"></script>
+<script src="reports.js"></script>
 <script>
 (()=>{
 const S1=window.SAO,S23=window.SAO23;
@@ -510,6 +525,7 @@ function renderP(){const cur=stack[stack.length-1];if(!cur)return;
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");
   pBody.innerHTML=cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
+  pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);goMapThen(f,()=>repPin(x,z))}));
   pBody.querySelectorAll("[data-spot]").forEach(b=>b.addEventListener("click",()=>{const sp=spotById(b.dataset.spot);goMapThen(sp.floor,()=>focusSpot(sp.id))}));
   pBody.querySelectorAll("[data-town]").forEach(b=>b.addEventListener("click",()=>{const t=townById[b.dataset.town];goMapThen(t.floor,()=>centerOn(t.x,t.z,2.6))}));
 }
@@ -527,14 +543,30 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   const kq=KILLQ[m.id]||[];
   return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(m.name)}</h2></div></div>
   ${soonNote(m.floor)}
-  <dl class="facts"><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
+  <dl class="facts"><dt>等級</dt><dd>${lvOf(m)!=null?`<b class="mono">${lvOf(m)}</b> <span class="pill rep">玩家回報</span>`:`<span class="muted">未回報</span>`}</dd><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
   <dt>圖鑑區域</dt><dd>${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span></dd>
   <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd></dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
+  ${repBlock(m)}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length}</span></h3>${drops}
   ${kq.length?`<h3 class="sec">相關任務</h3><ul class="rows">${kq.map(qq=>`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>${killText(qq)}（${esc(qq.raw)}）</span></span><span class="v">${qq.xp?qq.xp+" xp":""}</span></button></li>`).join("")}</ul>`:""}
   <div class="note">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>
   ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}`}
+// ---- player reports ----
+const REPO="https://github.com/Cheng-1001/SAOMC-tool";
+const REPS=(window.SAO_REPORTS||[]);
+const repsOf=m=>REPS.filter(r=>r.floor===m.floor&&r.mon===m.name);
+const lvOf=m=>{const r=repsOf(m);return r.length?r[0].level:null};
+const repURL=(f,name)=>REPO+"/issues/new?template=monster-report.yml&title="+encodeURIComponent(`[F${f}] ${name||"新怪物"} 等級回報`)+"&floor="+f+(name?"&monster="+encodeURIComponent(name):"");
+function repBlock(m){const r=repsOf(m);
+  if(!r.length)return`<h3 class="sec">等級</h3><div class="note">還沒有人回報這隻怪物的等級。在遊戲裡截一張看得到「名字上方的等級」和「小地圖座標」的圖，就可以回報。</div>
+  <a class="repbtn" href="${repURL(m.floor,m.name)}" target="_blank" rel="noopener">回報等級（需要 GitHub 帳號）</a>`;
+  const a=r[0];
+  return`<h3 class="sec">等級 <span class="c">玩家回報 ${r.length} 則</span></h3>
+  <figure class="repfig"><a href="${esc(a.img)}" target="_blank" rel="noopener"><img src="${esc(a.img)}" alt="${esc(m.name)} 等級 ${a.level} 的遊戲截圖" loading="lazy"></a>
+  <figcaption>等級 <b class="mono">${a.level}</b>・截圖位置 <span class="mono">X ${a.x} · Z ${a.z}</span>・<a href="${REPO}/issues/${a.issue}" target="_blank" rel="noopener">回報 #${a.issue}</a>（${esc(a.date)}）</figcaption></figure>
+  ${FLOORS[m.floor].map&&a.x!=null?`<button class="linkbtn" data-rep="${m.floor}|${a.x}|${a.z}">在地圖上看截圖位置</button>`:""}
+  <a class="repbtn ghost" href="${repURL(m.floor,m.name)}" target="_blank" rel="noopener">等級不對？回報更正</a>`}
 const killText=qq=>`擊殺 ${qq.kill[0].join(" / ")} ${qq.kill[2]?"各 ":""}${qq.kill[1]} 隻`;
 
 function itemDetail(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id],gat=GATHER[id];
@@ -599,11 +631,11 @@ $("fMonZone").onchange=renderMon;$("fMonSort").onchange=renderMon;
 function fillZoneSelect(){$("fMonZone").innerHTML=`<option value="all">全部區域</option>`+F().order.map(z=>`<option value="${z}">${esc(F().zones[z].n)}（${esc(F().zones[z].zh)}）</option>`).join("")}
 function renderMon(){const s=Sq(),zf=$("fMonZone").value,so=$("fMonSort").value;const M=F().M;
   let a=M.filter(m=>(monType==="all"||m.type===monType)&&(zf==="all"||m.zone===zf)&&monHit(m,s));
-  if(so==="diff")a=[...a].sort((x,y)=>y.diff-x.diff);else if(so==="name")a=[...a].sort((x,y)=>x.name.localeCompare(y.name));
-  $("cMon").textContent=`${a.length} / ${M.length} 種`;
+  if(so==="diff")a=[...a].sort((x,y)=>y.diff-x.diff);else if(so==="name")a=[...a].sort((x,y)=>x.name.localeCompare(y.name));else if(so==="lv")a=[...a].sort((x,y)=>(lvOf(x)??999)-(lvOf(y)??999));
+  $("cMon").textContent=`${a.length} / ${M.length} 種・已知等級 ${M.filter(m=>lvOf(m)!=null).length}`;$("repNew").href=repURL(FL,"");
   $("lMon").innerHTML=a.length?a.map(m=>{const p=monPos(m);return`<button class="card" data-key="m|${m.id}" data-go="m|${m.id}">
     <div class="chead">${thHTML(m)}<div class="cname"><b>${esc(m.name)}</b><span>${m.num?"#"+esc(m.num)+" · ":""}${esc(p.spot?p.spot.zh:F().zones[m.zone].zh)}</span></div></div>
-    <div class="cmeta"><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span>${stars(m.diff)}<span class="pill ${STATUS[p.s].c}">${STATUS[p.s].t}</span></div>
+    <div class="cmeta">${lvOf(m)!=null?`<span class="pill rep">Lv ${lvOf(m)}</span>`:""}<span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span>${stars(m.diff)}<span class="pill ${STATUS[p.s].c}">${STATUS[p.s].t}</span></div>
     ${m.drops.length?`<div class="minis">${m.drops.map(d=>slot(d[0],26)).join("")}</div>`:""}</button>`}).join(""):`<div class="empty-note">沒有符合條件的怪物。</div>`;
   bindGo($("lMon"));markSel()}
 
@@ -733,7 +765,7 @@ const SRC_COL={label:"var(--ok)",npc:"var(--ok)",player:"var(--ok)",quest:"var(-
 function mapThumb(m){const b=document.createElement("button");b.className=`th mapth ${cls(m.type)}`;b.dataset.id=m.id;b.dataset.key="m|"+m.id;
   b.setAttribute("aria-label",m.name+"，"+TYPE_ZH[m.type]);b.title=m.name;b.innerHTML=face(m)+`<i class="beh beh-${m.beh}"></i>`;
   b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("m",m.id,"new")});return b}
-function renderMap(){world.querySelectorAll(".zone,.town").forEach(n=>n.remove());
+function renderMap(){world.querySelectorAll(".zone,.town,.rpin").forEach(n=>n.remove());
   const m=MP();$("noMap").hidden=!!m;world.hidden=!m;document.querySelector(".zoombtns").hidden=!m;document.querySelector(".hud").hidden=!m;document.querySelector(".legend").hidden=!m;
   $("mapNote").hidden=!(m&&m.note);if(m&&m.note)$("mapNote").textContent=m.note;
   if(!m){filterMap();return}
@@ -771,6 +803,7 @@ function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(F
       zl.appendChild(row)})}
   $("editToggle").hidden=!MP();
   filterMap();markSel()}
+function repPin(x,z){world.querySelectorAll(".rpin").forEach(n=>n.remove());const d=document.createElement("div");d.className="rpin";d.style.left=toPxX(x)+"px";d.style.top=toPxZ(z)+"px";d.innerHTML=`<span></span><b>X ${x} · Z ${z}</b>`;world.appendChild(d);centerOn(x,z,2.4)}
 function focusSpot(id){const sp=spotById(id);if(!sp)return;centerOn(sp.x,sp.z,2.4);const el=zoneEls[id];if(el){el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1300)}}
 const spotHit=(sp,s)=>!s||norm(sp.n+" "+sp.zh).includes(s)||sp.mons.some(n=>monHit(FLOORS[sp.floor].monByName[n],s))||sp.items.some(i=>itemHit(i,s,true));
 function filterMap(){const s=Sq();
@@ -833,8 +866,8 @@ q.addEventListener("input",renderCurrent);
 
 const setHead=()=>document.documentElement.style.setProperty("--head-h",$("top").getBoundingClientRect().height+"px");
 new ResizeObserver(setHead).observe($("top"));
-let lastW=0;new ResizeObserver(()=>{const w=Math.round(stage.getBoundingClientRect().width);if(w&&w!==lastW&&MP()){lastW=w;fit()}}).observe(stage);
-mapImg.addEventListener("load",()=>{if(view==="map")fit()});
+let lastW=0;new ResizeObserver(()=>{const w=Math.round(stage.getBoundingClientRect().width);if(w&&w!==lastW&&MP()){const first=!lastW;lastW=w;if(!first||!fitted)fit()}}).observe(stage);
+mapImg.addEventListener("load",()=>{if(view==="map"&&!fitted)fit()});
 show();setHead();
 })();
 
