@@ -256,14 +256,37 @@ h4.sec .c{font-family:var(--f-body);letter-spacing:0;text-transform:none;font-we
 .flboss{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
 
 
-.rtypes{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
-.rtype{display:flex;flex-direction:column;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;color:inherit;text-decoration:none;transition:border-color .15s,transform .15s}
-.rtype:hover{border-color:var(--accent);transform:translateY(-1px)}
-.rtype .ric{font-size:26px;line-height:1}
-.rtype b{font-family:var(--f-display);font-size:17px}
-.rtype .rd{font-size:13px}
-.rtype ul{margin:0;padding-left:18px;font-size:12.5px;color:var(--muted)}
-.rtype .rgo{margin-top:auto;padding-top:4px;font-weight:600;font-size:13px;color:var(--accent)}
+.rform{display:flex;flex-direction:column;gap:12px}
+.rstep{display:flex;align-items:center;gap:8px;font-family:var(--f-display);font-weight:600;font-size:15px;margin-top:4px}
+.rstep>b{width:24px;height:24px;border-radius:50%;background:var(--accent);color:#fff;display:inline-grid;place-items:center;font-size:13px}
+i.req{font-style:normal;font-size:11px;font-weight:600;color:var(--bad,#d1453b);border:1px solid currentColor;border-radius:4px;padding:0 4px;margin-left:4px;font-family:var(--f-body)}
+.rtabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.rtab{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;background:var(--panel-2);border:2px solid transparent;border-radius:10px;padding:10px 12px;color:inherit;font:inherit;cursor:pointer}
+.rtab>span{font-size:20px}.rtab b{font-size:15px}.rtab small{font-size:12px;color:var(--muted)}
+.rtab[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--panel))}
+.rdrop{display:flex;align-items:center;gap:14px;border:2px dashed var(--line);border-radius:12px;padding:18px;cursor:pointer;background:var(--panel-2);min-height:88px}
+.rdrop.over,.rdrop:hover{border-color:var(--accent)}
+.rdrop.has{border-style:solid;border-color:var(--ok)}
+.rdrop img{width:160px;max-height:110px;object-fit:contain;background:#111;border-radius:6px;flex:none}
+.rdt{display:flex;flex-direction:column;gap:2px;min-width:0}.rdt b{font-size:14px;overflow-wrap:anywhere}.rdt span{font-size:12.5px;color:var(--muted)}
+.rhow summary{cursor:pointer;font-size:13px;color:var(--accent);font-weight:600}
+.rhow ul{margin-top:6px}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 14px}
+.rfield{display:flex;flex-direction:column;gap:4px;min-width:0}
+.rfield>span{font-size:13px;font-weight:600}
+.rfield small{font-size:11.5px;color:var(--muted)}
+.rfield input,.rfield textarea{font:inherit;font-size:14px;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 10px;min-width:0}
+.rfield textarea{resize:vertical}
+.rfield input:focus,.rfield textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.rgrid .rfield:has(textarea){grid-column:1/-1}
+.rsub{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.rsub .muted{font-size:12.5px;flex:1;min-width:220px}
+.rsub .repbtn{font-size:15px;padding:9px 18px;cursor:pointer}
+button.repbtn{font:inherit;font-weight:600;cursor:pointer}
+.rmsg{font-size:13px;min-height:1em}.rmsg.err{color:var(--bad,#d1453b);font-weight:600}
+.note.ok{border-left:3px solid var(--ok)}
+.steps.big{font-size:14.5px;gap:8px}
+.steps code{font-size:12px;background:var(--panel-2);padding:1px 5px;border-radius:4px}
+.rbtns{display:flex;gap:8px;flex-wrap:wrap}
 .steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:13.5px}
 .replist{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}
 .replist img{width:96px;height:60px;object-fit:cover;border-radius:6px;background:#111;flex:none}
@@ -745,35 +768,130 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
 
 
 // ================= report tab =================
-const RTYPES=[
- {k:"monster",f:"1-monster.yml",ic:"👾",t:"怪物",d:"新怪物，或已知怪物的等級、出沒位置、掉落物。",need:["樓層、怪物名稱","野外截圖：名字上方的等級和小地圖座標","或圖鑑（Codex）截圖：編號、區域、掉落機率"]},
- {k:"item",f:"2-item.yml",ic:"🎒",t:"物品",d:"新物品，或物品從哪裡拿到、拿來做什麼。",need:["樓層、物品名稱、怎麼拿到的","截圖拍到物品說明或掉落畫面"]},
- {k:"place",f:"3-place.yml",ic:"📍",t:"地點",d:"村鎮、NPC、採集點、地下城、首領或怪物重生點。",need:["樓層、名稱、種類、座標","截圖拍到該地點和小地圖座標"]},
- {k:"other",f:"4-other.yml",ic:"✏️",t:"更正或其他",d:"工具裡的資料錯了，或不屬於上面三種的資訊。",need:["樓層、主題、說明","截圖能證明正確的資料"]}];
+// The form lives here; GitHub only receives it. Field ids match .github/ISSUE_TEMPLATE/*.yml so GitHub can prefill them.
 const RT_ZH={monster:"怪物",item:"物品",place:"地點",other:"其他"};
-const formURL=(t,f)=>`${REPO}/issues/new?template=${t.f}&floor=${f}`;
+const RF={
+ monster:{f:"1-monster.yml",ic:"👾",t:"怪物",d:"新怪物，或已知怪物的等級、位置、掉落物",name:"怪物名稱（英文，和遊戲裡一樣）",ph:"Woodland Mage",list:"monster",
+  fields:[
+   {id:"shot_type",l:"截圖種類",type:"select",opts:["野外截圖","圖鑑截圖","兩種都有"],req:1,help:"野外截圖才看得到等級；圖鑑（Codex）截圖看得到編號、區域、掉落機率"},
+   {id:"level",l:"等級",ph:"3",num:1,help:"名字上方的 LV；每隻怪物只有一個等級",show:v=>v.shot_type!=="圖鑑截圖"},
+   {id:"coords",l:"座標 x, z",ph:"1340, 3569",help:"截圖時小地圖上的座標",show:v=>v.shot_type!=="圖鑑截圖"},
+   {id:"codex_no",l:"圖鑑編號",ph:"#012",show:v=>v.shot_type!=="野外截圖"},
+   {id:"region",l:"圖鑑上的區域",ph:"Forêts du 1er Palier",show:v=>v.shot_type!=="野外截圖"},
+   {id:"kind",l:"類型",type:"select",opts:["不確定","一般怪物","小首領","首領"]},
+   {id:"behavior",l:"行為",type:"select",opts:["不確定","主動攻擊（看到就打）","中立（被打才還手）","被動（不會攻擊）"]},
+   {id:"drops",l:"掉落物和機率",type:"area",ph:"Enchanted Twig 85%\nSpectral Cloth 75%",help:"一行一個；圖鑑上有機率就照抄"},
+   {id:"hint",l:"圖鑑描述或 LOCATION HINT",type:"area",show:v=>v.shot_type!=="野外截圖"},
+   {id:"notes",l:"備註",type:"area"}]},
+ item:{f:"2-item.yml",ic:"🎒",t:"物品",d:"新物品，或物品從哪裡拿到、拿來做什麼",name:"物品名稱（英文或法文）",ph:"Spider Cloth",list:"item",
+  fields:[
+   {id:"source",l:"怎麼拿到的",type:"select",opts:["怪物掉落","採集","任務獎勵","商店購買","合成或鍛造","其他"],req:1},
+   {id:"from",l:"來源（怪物、NPC 或地點）",ph:"Forest Spider"},
+   {id:"coords",l:"座標 x, z",ph:"1340, 3569"},
+   {id:"notes",l:"備註",type:"area",help:"例如用途、合成配方、價格"}]},
+ place:{f:"3-place.yml",ic:"📍",t:"地點",d:"村鎮、NPC、採集點、地下城、首領或怪物重生點",name:"名稱",ph:"Hidden Well",
+  fields:[
+   {id:"kind",l:"種類",type:"select",opts:["村鎮","NPC","採集點","地下城或礦坑","首領位置","怪物重生點","其他"],req:1},
+   {id:"coords",l:"座標 x, z",ph:"4309, 3697",req:1,help:"小地圖上的座標"},
+   {id:"notes",l:"說明",type:"area"}]},
+ other:{f:"4-other.yml",ic:"✏️",t:"更正或其他",d:"工具裡的資料錯了，或不屬於上面三種",name:"主題",ph:"Tolbana 座標錯了",nameId:"subject",
+  fields:[{id:"detail",l:"說明",type:"area",req:1,help:"哪裡錯了、正確的是什麼"}]}};
+let rType="monster",rShot=null,rBuilt=false;
+const RV={};// remembered values per type
+function rVals(){const v={floor:$("rf_floor").value.trim(),name:$("rf_name").value.trim()};RF[rType].fields.forEach(f=>{const el=$("rf_"+f.id);if(el)v[f.id]=el.value.trim()});return v}
+function rFieldHTML(f,v){const val=v[f.id]??(f.type==="select"?f.opts[0]:"");const req=f.req?' <i class="req">必填</i>':"";
+  const ctl=f.type==="select"?`<select class="sel" id="rf_${f.id}">${f.opts.map(o=>`<option${o===val?" selected":""}>${esc(o)}</option>`).join("")}</select>`
+   :f.type==="area"?`<textarea id="rf_${f.id}" rows="3" placeholder="${esc(f.ph||"")}">${esc(val)}</textarea>`
+   :`<input id="rf_${f.id}" ${f.num?'inputmode="numeric"':""} placeholder="${esc(f.ph||"")}" value="${esc(val)}" autocomplete="off">`;
+  return`<label class="rfield" data-id="${f.id}"><span>${esc(f.l)}${req}</span>${ctl}${f.help?`<small>${esc(f.help)}</small>`:""}</label>`}
+function rDrawFields(){const T=RF[rType],v=RV[rType]||{};
+  $("rf_namel").innerHTML=`${esc(T.name)} <i class="req">必填</i>`;$("rf_name").placeholder=T.ph;$("rf_name").value=v.name||"";
+  $("rf_name").setAttribute("list",T.list?"rf_dl":"");
+  if(T.list){const names=T.list==="monster"?F().M.map(m=>m.name):Object.keys(ITEMS);$("rf_dl").innerHTML=[...new Set(names)].sort().map(n=>`<option value="${esc(n)}">`).join("")}
+  $("rf_more").innerHTML=T.fields.map(f=>rFieldHTML(f,v)).join("");
+  $("rf_more").querySelectorAll("select").forEach(el=>el.addEventListener("change",rApplyShow));rApplyShow();
+  document.querySelectorAll(".rtab").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.k===rType)))}
+function rApplyShow(){const v=rVals();RF[rType].fields.forEach(f=>{const lab=$("rf_more").querySelector(`[data-id="${f.id}"]`);if(lab)lab.hidden=!!(f.show&&!f.show(v))})}
+async function toPng(file){const bmp=await createImageBitmap(file);const c=document.createElement("canvas");c.width=bmp.width;c.height=bmp.height;c.getContext("2d").drawImage(bmp,0,0);
+  return await new Promise(r=>c.toBlob(r,"image/png"))}
+async function rSetShot(file){if(!file||!file.type.startsWith("image/")){rMsg("這不是圖片檔，請選 PNG 或 JPG。","err");return}
+  try{const png=await toPng(file);rShot={file,png,url:URL.createObjectURL(file)};
+    $("rf_drop").classList.add("has");$("rf_prev").src=rShot.url;$("rf_prev").hidden=false;$("rf_droptxt").innerHTML=`<b>${esc(file.name||"貼上的截圖")}</b><span>點這裡或拖另一張圖可以換掉</span>`;rMsg("")}
+  catch(e){rMsg("讀不到這張圖片，請換一張試試。","err")}}
+function rMsg(t,c){const m=$("rf_msg");m.textContent=t;m.className="rmsg "+(c||"")}
+function rCheck(v){const T=RF[rType];const miss=[];if(!/^\d{1,3}$/.test(v.floor))miss.push("樓層（只填數字）");if(!v.name)miss.push(T.name.replace(/（.*）/,""));
+  T.fields.forEach(f=>{const lab=$("rf_more").querySelector(`[data-id="${f.id}"]`);if(f.req&&!(lab&&lab.hidden)&&!v[f.id])miss.push(f.l)});
+  if(v.level&&!/^\d{1,3}$/.test(v.level))miss.push("等級只能填數字");if(!rShot)miss.push("截圖");return miss}
+async function rSubmit(){const v=rVals();RV[rType]=v;const miss=rCheck(v);if(miss.length){rMsg("還沒填好："+miss.join("、"),"err");return}
+  const T=RF[rType];const q=new URLSearchParams();q.set("template",T.f);
+  q.set("title",`[${RT_ZH[rType]}] F${v.floor} ${v.name}${v.level?" LV "+v.level:""}`);q.set("floor",v.floor);q.set(T.nameId||"name",v.name);
+  T.fields.forEach(f=>{const lab=$("rf_more").querySelector(`[data-id="${f.id}"]`);if(v[f.id]&&!(lab&&lab.hidden))q.set(f.id,v[f.id])});
+  const url=`${REPO}/issues/new?${q}`;let copied=false;
+  try{await navigator.clipboard.write([new ClipboardItem({"image/png":rShot.png})]);copied=true}catch(e){}
+  const w=window.open(url,"_blank","noopener");
+  $("rf_done").hidden=false;$("rf_form").hidden=true;
+  $("rf_done").innerHTML=`<h4 class="sec">最後一步：在 GitHub 頁面上</h4>
+   ${copied?`<div class="note ok">截圖已經複製好了。</div>`:`<div class="note warn">這裡沒辦法自動複製截圖，請改用拖曳：把你的截圖檔案拖進 GitHub 的「截圖」框。</div>`}
+   <ol class="steps big"><li>沒有登入的話先登入 GitHub（沒有帳號可以免費註冊）。所有欄位都已經幫你填好了。</li>
+   <li>往下捲到 <b>「截圖（必填）」</b>那一格，點一下框裡面。</li>
+   <li>${copied?"按 <b>Ctrl+V</b>（Mac 是 ⌘+V）貼上截圖。":"把截圖檔案拖進那一格。"}</li>
+   <li>等框裡出現一行 <code>![image](https://...)</code> 的文字，代表上傳完成。</li>
+   <li>按最下面綠色的 <b>Create</b> 送出。</li></ol>
+   <div class="rbtns"><a class="repbtn" href="${esc(url)}" target="_blank" rel="noopener">${w?"GitHub 沒有打開？":""}打開 GitHub 回報頁 ↗</a>
+   ${copied?`<button class="repbtn ghost" id="rf_recopy">再複製一次截圖</button>`:""}<button class="repbtn ghost" id="rf_again">再回報一筆</button></div>`;
+  if($("rf_recopy"))$("rf_recopy").onclick=async()=>{try{await navigator.clipboard.write([new ClipboardItem({"image/png":rShot.png})]);$("rf_recopy").textContent="已複製"}catch(e){$("rf_recopy").textContent="複製失敗，請用拖曳"}};
+  $("rf_again").onclick=()=>{rShot=null;RV[rType]={};$("rf_done").hidden=true;$("rf_form").hidden=false;rResetShot();rDrawFields();$("rf_floor").value=FL;$("rWrap").scrollIntoView({block:"start"})}}
+function rResetShot(){$("rf_drop").classList.remove("has");$("rf_prev").hidden=true;$("rf_prev").removeAttribute("src");$("rf_droptxt").innerHTML=`<b>點這裡選截圖，或把圖片拖進來</b><span>也可以先複製截圖，再在這個頁面按 Ctrl+V</span>`;$("rf_file").value=""}
+function buildReport(){
+  $("rWrap").innerHTML=`
+  <div class="rhead"><h2>回報區</h2><span class="count">新增或更正資料，每筆都要附遊戲截圖</span></div>
+  <article class="bcard" id="rf_card">
+   <div id="rf_form" class="rform">
+    <div class="rstep"><b>1</b> 要回報什麼</div>
+    <div class="rtabs" role="group" aria-label="回報種類">${Object.entries(RF).map(([k,T])=>`<button type="button" class="rtab" data-k="${k}" aria-pressed="false"><span aria-hidden="true">${T.ic}</span><b>${T.t}</b><small>${T.d}</small></button>`).join("")}</div>
+    <div class="rstep"><b>2</b> 截圖 <i class="req">必填</i></div>
+    <label class="rdrop" id="rf_drop"><input type="file" id="rf_file" accept="image/*" hidden><img id="rf_prev" alt="截圖預覽" hidden><span class="rdt" id="rf_droptxt"></span></label>
+    <details class="rhow"><summary>截圖要拍到什麼？</summary><ul class="uses">
+      <li><b>怪物（野外）</b>：怪物名字和上方的等級（例如「Young Spider LV 3」），以及小地圖座標。</li>
+      <li><b>怪物（圖鑑）</b>：遊戲內 Codex → Monstres → 點該怪物，截整頁。<b>圖鑑不顯示等級</b>，等級要在野外截。</li>
+      <li><b>物品</b>：物品說明，或掉落、取得的畫面。<b>地點</b>：地點本身和小地圖座標。</li>
+      <li>只能自動複製一張截圖；要附更多張，到 GitHub 時再拖進同一格就好。</li></ul></details>
+    <div class="rstep"><b>3</b> 填資料</div>
+    <div class="rgrid">
+      <label class="rfield"><span>樓層 <i class="req">必填</i></span><input id="rf_floor" inputmode="numeric" autocomplete="off"></label>
+      <label class="rfield"><span id="rf_namel"></span><input id="rf_name" autocomplete="off"><datalist id="rf_dl"></datalist></label>
+    </div>
+    <div class="rgrid" id="rf_more"></div>
+    <div class="rstep"><b>4</b> 送出</div>
+    <div class="rsub"><button type="button" class="repbtn" id="rf_go">送出到 GitHub ↗</button><span class="muted">會打開 GitHub 回報頁，欄位都會先填好；截圖會先複製起來，到那邊按 Ctrl+V 貼上。</span></div>
+    <div id="rf_msg" class="rmsg" role="status"></div>
+   </div>
+   <div id="rf_done" hidden></div>
+  </article>
+  <article class="bcard"><h4 class="sec">審核流程</h4>
+    <ol class="steps"><li><b>待審核</b>：送出後自動標上。</li><li><b>核對</b>：截圖和填寫的內容對得上才收錄；同一隻怪物等級說法不同時，以截圖清楚的為準。</li><li><b>已收錄</b>：資料加進工具，截圖存一份在網站裡，回報會被關閉。</li><li><b>退回</b>：截圖看不出內容或資料對不上，會留言說明原因。</li></ol></article>
+  <article class="bcard"><h4 class="sec">等待審核 <span class="c" id="pendC"></span></h4><div id="pendL" class="muted">讀取中…</div>
+    <a class="linkbtn" href="${REPO}/issues?q=${encodeURIComponent("is:issue label:待審核")}" target="_blank" rel="noopener">在 GitHub 看全部待審核回報 ↗</a></article>
+  <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article>`;
+  document.querySelectorAll(".rtab").forEach(b=>b.onclick=()=>{RV[rType]=rVals();rType=b.dataset.k;rDrawFields();rMsg("")});
+  $("rf_file").onchange=e=>rSetShot(e.target.files[0]);
+  const dz=$("rf_drop");["dragenter","dragover"].forEach(t=>dz.addEventListener(t,e=>{e.preventDefault();dz.classList.add("over")}));
+  ["dragleave","drop"].forEach(t=>dz.addEventListener(t,()=>dz.classList.remove("over")));
+  dz.addEventListener("drop",e=>{e.preventDefault();const f=[...(e.dataTransfer?.files||[])].find(x=>x.type.startsWith("image/"));if(f)rSetShot(f)});
+  document.addEventListener("paste",e=>{if(view!=="report"||$("rf_form").hidden)return;const it=[...(e.clipboardData?.items||[])].find(x=>x.type.startsWith("image/"));if(it){e.preventDefault();rSetShot(it.getAsFile())}});
+  $("rf_go").onclick=rSubmit;
+  rResetShot();rDrawFields();rBuilt=true}
 let pendingCache=null;
 async function loadPending(){if(pendingCache)return pendingCache;
   try{const r=await fetch("https://api.github.com/repos/Cheng-1001/SAOMC-tool/issues?state=open&per_page=50&labels="+encodeURIComponent("待審核"));if(!r.ok)throw 0;
     pendingCache=(await r.json()).filter(x=>!x.pull_request);}catch(e){pendingCache="err"}return pendingCache}
-function renderReport(){const f=FL;
-  const done=REPS.slice().sort((a,b)=>b.issue-a.issue);
-  $("rWrap").innerHTML=`
-  <div class="rhead"><h2>回報區</h2><span class="count">新增或更正資料，每筆都要附遊戲截圖</span></div>
-  <div class="note">回報會送到 GitHub（需要免費的 GitHub 帳號）。核對截圖後才會加進查詢工具，工具裡還沒有的怪物、物品、地點也可以回報。下面的表單會先填好樓層 <b>${f}</b>，要回報其他樓層請先在左上角換樓層，或在表單裡改。</div>
-  <div class="rtypes">${RTYPES.map(t=>`<a class="rtype" href="${formURL(t,f)}" target="_blank" rel="noopener">
-    <span class="ric" aria-hidden="true">${t.ic}</span><b>${t.t}</b><span class="rd">${t.d}</span>
-    <ul>${t.need.map(n=>`<li>${n}</li>`).join("")}</ul><span class="rgo">填寫回報 ↗</span></a>`).join("")}</div>
-  <article class="bcard"><h4 class="sec">截圖怎麼拍</h4>
-    <ul class="uses"><li>畫面上要看得到要回報的東西：怪物名字和上方的等級、物品說明、地點本身。</li><li><b>怪物的圖鑑截圖</b>：遊戲內打開 Codex → Monstres → 點該怪物，截整頁（編號、區域、掉落機率、描述都要在畫面裡）；再點「LOCATION HINT」多截一張更好。<b>圖鑑不顯示等級</b>，等級要在野外截名字上方的「LV」。</li><li>小地圖的座標要在畫面裡（x、z），才能放到地圖上。</li><li>截圖拖進表單的「截圖」框，或複製後按 Ctrl+V 貼上；出現一行圖片連結才算上傳完成。</li><li>沒有截圖的表單送不出去；截圖看不出內容的回報會被退回。</li></ul>
-  <h4 class="sec">審核流程</h4>
-    <ol class="steps"><li><b>待審核</b>：送出後自動標上。</li><li><b>核對</b>：截圖和填寫的內容對得上才收錄；同一隻怪物等級說法不同時，以截圖清楚的為準。</li><li><b>已收錄</b>：資料加進工具，截圖存一份在網站裡，回報會被關閉。</li><li><b>退回</b>：截圖看不出內容或資料對不上，會留言說明原因。</li></ol></article>
-  <article class="bcard"><h4 class="sec">等待審核 <span class="c" id="pendC"></span></h4><div id="pendL" class="muted">讀取中…</div>
-    <a class="linkbtn" href="${REPO}/issues?q=${encodeURIComponent("is:issue label:待審核")}" target="_blank" rel="noopener">在 GitHub 看全部待審核回報 ↗</a></article>
-  <article class="bcard"><h4 class="sec">已收錄 <span class="c">${done.length} 則</span></h4>
-    ${done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?FLOORS[r.floor]?.M.find(x=>x.name===r.name):null;
-      return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span><a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">#${r.issue}</a>・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`}</article>`;
-  bindGo($("rWrap"));
+let rFloorShown=null;
+function renderReport(){if(!rBuilt)buildReport();
+  if(rFloorShown!==FL){$("rf_floor").value=FL;rFloorShown=FL;if(RF[rType].list==="monster")rDrawFields()}
+  const done=REPS.slice().sort((a,b)=>b.issue-a.issue);$("doneC").textContent=done.length+" 則";
+  $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?FLOORS[r.floor]?.M.find(x=>x.name===r.name):null;
+      return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span><a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">#${r.issue}</a>・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
+  bindGo($("doneL"));
   loadPending().then(list=>{const L=$("pendL"),C=$("pendC");if(!L)return;
     if(list==="err"){L.textContent="這裡讀不到 GitHub 的資料，請用下面的連結查看。";return}
     C.textContent=list.length+" 則";

@@ -17,11 +17,11 @@ body:
       label: 物品名稱（和遊戲裡一樣，英文或法文都可以）
     validations:
       required: true
-  - type: dropdown
+  - type: input
     id: source
     attributes:
       label: 怎麼拿到的
-      options: [怪物掉落, 採集, 任務獎勵, 商店購買, 合成或鍛造, 其他]
+      description: "怪物掉落／採集／任務獎勵／商店購買／合成或鍛造／其他"
     validations:
       required: true
   - type: input

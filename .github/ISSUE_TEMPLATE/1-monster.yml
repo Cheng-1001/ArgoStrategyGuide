@@ -10,11 +10,11 @@ body:
 
         - **野外截圖**：拍到怪物名字和上方的等級（例如「Young Spider LV 3」）以及小地圖座標。**等級只能從這裡看到**，圖鑑不會顯示等級。
         - **圖鑑截圖**：遊戲內 Codex → Monstres，點開該怪物的那一頁（看得到編號、區域、掉落機率、描述）。可以再點「LOCATION HINT」多截一張。
-  - type: dropdown
+  - type: input
     id: shot_type
     attributes:
       label: 附了哪種截圖
-      options: [野外截圖, 圖鑑截圖, 兩種都有]
+      description: "野外截圖／圖鑑截圖／兩種都有"
     validations:
       required: true
   - type: input
@@ -54,16 +54,16 @@ body:
       label: 座標 x, z（有野外截圖才填）
       description: 截圖時小地圖上顯示的座標
       placeholder: "1340, 3569"
-  - type: dropdown
+  - type: input
     id: kind
     attributes:
       label: 類型
-      options: [不確定, 一般怪物, 小首領, 首領]
-  - type: dropdown
+      description: "不確定／一般怪物／小首領／首領"
+  - type: input
     id: behavior
     attributes:
       label: 行為
-      options: [不確定, 主動攻擊（看到就打）, 中立（被打才還手）, 被動（不會攻擊）]
+      description: "不確定／主動攻擊（看到就打）／中立（被打才還手）／被動（不會攻擊）"
   - type: textarea
     id: drops
     attributes:

@@ -1,1 +1,5 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
+contact_links:
+  - name: 用查詢工具的回報區填寫（比較簡單）
+    url: https://cheng-1001.github.io/SAOMC-tool/#report
+    about: 在工具裡填好欄位、選好截圖，再一鍵送到這裡。

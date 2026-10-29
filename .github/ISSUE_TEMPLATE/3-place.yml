@@ -18,11 +18,11 @@ body:
       placeholder: Hidden Well
     validations:
       required: true
-  - type: dropdown
+  - type: input
     id: kind
     attributes:
       label: 種類
-      options: [村鎮, NPC, 採集點, 地下城或礦坑, 首領位置, 怪物重生點, 其他]
+      description: "村鎮／NPC／採集點／地下城或礦坑／首領位置／怪物重生點／其他"
     validations:
       required: true
   - type: input
