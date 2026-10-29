@@ -1,0 +1,747 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="SAO Minecraft Aincrad 樓層查詢工具：地圖、怪物、物品、支線任務。">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Aincrad 樓層查詢工具</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: SAO system-window feel. A header with the four query tabs and one search box;
+   each tab is a filter column + result list; one detail drawer on the right (bottom sheet on phones) links everything together. */
+:root{
+  --bg:#e9eef2; --panel:#f8fafb; --panel-2:#eef2f5; --line:#cfd8df; --fg:#1f2a33; --muted:#5d6b77;
+  --accent:#e0811a; --accent-ink:#ffffff; --accent-soft:#fbe7cf;
+  --boss:#d9701a; --mini:#7b55c8; --minion:#8a96a1; --ok:#2f8a5b; --warn:#b7791f; --unk:#8a6f6f; --rare:#2f6fc4;
+  --stage:#0b1219; --shadow:0 10px 30px rgba(20,35,50,.22);
+  --slot:#2b313a; --slot-edge:#46505c; --slot-ink:#9aa6b2;
+  --f-display:"Chakra Petch","Noto Sans TC",system-ui,sans-serif;
+  --f-body:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --head-h:58px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e161e;--panel:#151f29;--panel-2:#1b2733;--line:#2b3a47;--fg:#e4eaef;--muted:#93a2ae;
+  --accent:#f0a040;--accent-ink:#1a1206;--accent-soft:#3a2a14;--boss:#f0953a;--mini:#a888ee;--minion:#7d8a96;
+  --ok:#5cc28c;--warn:#e0aa50;--unk:#b89a9a;--rare:#6fa6f0;--stage:#070c11;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e161e;--panel:#151f29;--panel-2:#1b2733;--line:#2b3a47;--fg:#e4eaef;--muted:#93a2ae;
+  --accent:#f0a040;--accent-ink:#1a1206;--accent-soft:#3a2a14;--boss:#f0953a;--mini:#a888ee;--minion:#7d8a96;
+  --ok:#5cc28c;--warn:#e0aa50;--unk:#b89a9a;--rare:#6fa6f0;--stage:#070c11;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}
+
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:14px;line-height:1.55}
+*{box-sizing:border-box}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+
+.app{height:100%;display:grid;grid-template-rows:auto auto minmax(0,1fr)}
+/* ---------- header ---------- */
+header.top{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;background:var(--panel);border-bottom:1px solid var(--line);
+  padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));position:relative;z-index:20}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand .floor{font-family:var(--f-display);font-weight:600;font-size:12px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.brand h1{margin:0;font-family:var(--f-display);font-weight:700;font-size:19px;letter-spacing:.03em;white-space:nowrap}
+nav.tabs{display:flex;gap:4px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px}
+nav.tabs a{font-family:var(--f-display);font-weight:600;font-size:14px;letter-spacing:.04em;text-decoration:none;color:var(--muted);padding:5px 14px;border-radius:7px;display:flex;gap:6px;align-items:center}
+nav.tabs a[aria-current="page"]{background:var(--panel);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+nav.tabs a .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.gsearch{position:relative;flex:1;min-width:220px;max-width:460px;margin-left:auto}
+.gsearch input{width:100%;padding:8px 12px 8px 34px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2)}
+.gsearch svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted)}
+
+/* ---------- views ---------- */
+.view{min-height:0;height:100%}
+.view[hidden]{display:none!important}
+#view-map{display:grid;grid-template-columns:minmax(0,1fr) 360px}
+.browse{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:0;height:100%}
+.filters{background:var(--panel);border-right:1px solid var(--line);padding:16px;display:flex;flex-direction:column;gap:16px;overflow:auto}
+.fgroup{display:flex;flex-direction:column;gap:7px}
+.flabel{font-family:var(--f-display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:3px 11px;font-size:12.5px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+select.sel{padding:6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--panel-2);width:100%}
+label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointer}
+.results{overflow:auto;padding:16px;padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:12px;min-width:0}
+.rhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.rhead h2{margin:0;font-family:var(--f-display);font-size:18px;font-weight:700}
+.rhead .count{color:var(--muted);font-size:12.5px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.empty-note{color:var(--muted);padding:24px 0}
+
+/* cards */
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;cursor:pointer;text-align:left;min-width:0;transition:border-color .12s}
+.card:hover{border-color:var(--accent)}
+.card.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.chead{display:flex;gap:10px;align-items:center;min-width:0}
+.cname{min-width:0;flex:1}
+.cname b{display:block;font-family:var(--f-display);font-weight:600;font-size:15px;line-height:1.25;overflow-wrap:anywhere}
+.cname span{display:block;font-size:12px;color:var(--muted);overflow-wrap:anywhere}
+.cmeta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--muted)}
+.minis{display:flex;gap:4px;flex-wrap:wrap}
+
+/* quest rows */
+.qtown{display:flex;flex-direction:column;gap:8px}
+.qtown h3{margin:6px 0 0;font-family:var(--f-display);font-size:15px;font-weight:600;display:flex;gap:8px;align-items:baseline}
+.qtown h3 button{background:none;border:0;padding:0;font:inherit;cursor:pointer;color:var(--fg)}
+.qtown h3 button:hover{color:var(--accent)}
+.qrow{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;grid-template-columns:minmax(120px,170px) minmax(0,1fr) auto;gap:10px 14px;align-items:center}
+.qnpc b{font-family:var(--f-display);font-weight:600;font-size:14.5px}
+.qnpc .mono{display:block;font-size:11.5px;color:var(--muted)}
+.reqs{display:flex;flex-wrap:wrap;gap:6px}
+.req{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel-2);border-radius:8px;padding:3px 8px 3px 3px;cursor:pointer;font-size:12.5px;max-width:100%}
+.req:hover{border-color:var(--accent)}
+.req .qty{font-family:var(--f-mono);font-weight:600}
+.req.kill{padding-left:8px}
+.reward{text-align:right;font-size:12.5px;white-space:nowrap}
+.reward .xp{color:var(--ok);font-family:var(--f-mono)}
+.reward .col{color:var(--warn);font-family:var(--f-mono)}
+.inf{color:var(--warn);font-size:11px}
+
+/* ---------- shared bits ---------- */
+.pill{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;padding:1px 8px;border-radius:999px;border:1px solid var(--line);background:var(--panel-2);white-space:nowrap;color:var(--fg)}
+.pill.boss{border-color:var(--boss);color:var(--boss)} .pill.mini{border-color:var(--mini);color:var(--mini)}
+.pill.s-label,.pill.s-npc{border-color:var(--ok);color:var(--ok)} .pill.s-est{border-color:var(--warn);color:var(--warn)}
+.pill.s-unk{border-color:var(--unk);color:var(--unk)} .pill.s-player{border-color:var(--ok);color:var(--ok)} .pill.s-user{border-color:var(--accent);color:var(--accent)}
+.pill.r-c{color:var(--muted)} .pill.r-b{border-color:var(--rare);color:var(--rare)} .pill.r-a{border-color:var(--mini);color:var(--mini)} .pill.r-s{border-color:var(--boss);color:var(--boss)}
+.pill.r-x{border-style:dashed;color:var(--muted)}
+.stars{color:var(--accent);letter-spacing:1.5px;font-size:12.5px} .stars .off{color:var(--line)}
+.slot{--s:36px;flex:none;width:var(--s);height:var(--s);border-radius:6px;background-color:var(--slot);background-image:url(items.png);background-repeat:no-repeat;
+  box-shadow:inset 0 0 0 1px var(--slot-edge);image-rendering:pixelated;display:inline-grid;place-items:center;color:var(--slot-ink);font-family:var(--f-display);font-weight:700;font-size:calc(var(--s)*.38)}
+.slot.empty{background-image:none}
+.th{--ring:var(--minion);flex:none;width:38px;height:38px;border-radius:50%;border:3px solid var(--ring);background:radial-gradient(circle at 35% 30%,#ffffff,#dfe6ec);
+  display:grid;place-items:center;font-size:20px;line-height:1;padding:0;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.th.boss{--ring:var(--boss);width:46px;height:46px;font-size:24px} .th.mini{--ring:var(--mini)} .th.minion{border-style:dashed}
+.th img.face{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.th .beh{position:absolute;right:-2px;bottom:-2px;width:11px;height:11px;border-radius:50%;border:2px solid #fff}
+.beh-A{background:#d6443a}.beh-N{background:#e3a21a}.beh-P{background:#3fa86b}
+.th.sm{width:28px;height:28px;font-size:14px;border-width:2px;box-shadow:none} .th.sm .beh{width:8px;height:8px;border-width:1.5px}
+.note{font-size:12.5px;color:var(--muted);background:var(--panel-2);border-radius:6px;padding:8px 10px}
+.note.warn{border-left:3px solid var(--warn)}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}
+
+/* ---------- map ---------- */
+.stage{position:relative;overflow:hidden;background:var(--stage);touch-action:none;cursor:grab;min-height:0}
+.stage.dragging{cursor:grabbing} .stage.edit{cursor:crosshair}
+.world{position:absolute;left:0;top:0;width:1000px;height:1000px;transform-origin:0 0;--inv:1}
+.world img.map{width:1000px;height:1000px;max-width:none;display:block;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.town{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;cursor:pointer;z-index:2}
+.town .pin{width:12px;height:12px;transform:rotate(45deg);background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.6)}
+.town .tname{font-family:var(--f-display);font-weight:600;font-size:12px;color:#fff;letter-spacing:.04em;white-space:nowrap;text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.9)}
+.zone{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:3;display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none}
+.zone .zlabel{pointer-events:auto;cursor:pointer;font-family:var(--f-display);font-family:var(--f-display);font-weight:600;font-size:11.5px;letter-spacing:.05em;white-space:nowrap;background:rgba(10,16,22,.78);color:#fff;border:1px solid rgba(255,255,255,.25);padding:1px 8px;border-radius:3px;display:flex;align-items:center;gap:6px}
+.zone .zlabel i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.zone.est .zlabel{border-style:dashed}
+.zone .thumbs{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:186px;pointer-events:auto}
+.zone.poi .zlabel{background:rgba(255,255,255,.9);color:#1f2a33;border-color:rgba(0,0,0,.25)}
+.zsec{font-family:var(--f-display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:14px 0 2px}
+.zsec[hidden]{display:none}
+.zone .more{display:none;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:999px;background:rgba(10,16,22,.82);color:#fff;font-family:var(--f-mono);font-size:11px;align-self:center;pointer-events:none}
+.world.compact .zone .thumbs .mapth:nth-child(n+2){display:none}
+.world.compact .zone .more{display:inline-grid}
+.zone.dim{opacity:.25} .zone.flash .zlabel{background:var(--accent);color:var(--accent-ink)}
+.mapth{cursor:pointer;transition:transform .12s}
+.mapth:hover{transform:scale(1.12)}
+.mapth.dim{opacity:.22;filter:grayscale(1)} .mapth.hit{box-shadow:0 0 0 3px var(--accent),0 2px 8px rgba(0,0,0,.5)} .th.selm{outline:3px solid #fff;outline-offset:2px}
+.hud{position:absolute;left:12px;bottom:12px;z-index:5}
+.hud .coord{font-family:var(--f-mono);font-size:12px;color:#e8eef3;background:rgba(10,16,22,.78);padding:4px 9px;border-radius:4px}
+.zoombtns{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:6px;z-index:5}
+.zoombtns button{width:36px;height:36px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(10,16,22,.8);color:#fff;font-size:18px;cursor:pointer}
+.legend{position:absolute;left:12px;top:12px;z-index:5;display:flex;gap:10px;flex-wrap:wrap;background:rgba(10,16,22,.72);color:#e8eef3;font-size:11.5px;padding:5px 10px;border-radius:6px;max-width:calc(100% - 24px)}
+.legend span,.legend .lgt{display:inline-flex;gap:5px;align-items:center}
+.legend .lgt{background:none;border:1px solid rgba(255,255,255,.28);color:inherit;border-radius:999px;padding:1px 8px 1px 6px;cursor:pointer;font-size:11.5px}
+.legend .lgt:hover{border-color:#fff}
+.legend .lgt[aria-pressed="false"]{opacity:.45;text-decoration:line-through;border-style:dashed}
+.lg{width:11px;height:11px;border-radius:50%;border:2.5px solid var(--minion);background:#fff;display:inline-block}
+.editbar{position:absolute;left:50%;top:48px;transform:translateX(-50%);z-index:6;background:var(--accent);color:var(--accent-ink);padding:6px 14px;border-radius:6px;font-size:13px;box-shadow:var(--shadow);max-width:calc(100% - 24px);text-align:center}
+aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.zlist{overflow:auto;padding:4px 16px 12px;flex:1;min-height:0}
+.zrow{padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.zrow[hidden]{display:none}
+.zhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.zhead .zn{font-family:var(--f-display);font-weight:600;font-size:14.5px;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+.zhead .zn:disabled{cursor:default}
+.zhead .zzh{color:var(--muted);font-size:12px}
+.zhead .place{margin-left:auto;font-size:12px;border:1px solid var(--accent);color:var(--accent);background:none;border-radius:6px;padding:2px 9px;cursor:pointer}
+.zhead .place[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.zrow .thumbs{display:flex;flex-wrap:wrap;gap:6px}
+.zrow .th{width:34px;height:34px;font-size:18px;box-shadow:none;cursor:pointer} .zrow .th.boss{width:40px;height:40px;font-size:21px}
+.zrow .th.dim{opacity:.22;filter:grayscale(1)}
+.mapfoot{padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--muted)}
+.mapfoot .row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:var(--panel-2);border-radius:6px;padding:5px 11px;cursor:pointer;font-size:12.5px}
+.btn.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.exportbox{width:100%;height:100px;font-family:var(--f-mono);font-size:11px;border:1px solid var(--line);border-radius:6px;background:var(--panel-2);padding:6px;resize:vertical}
+
+
+/* floors */
+.flpick{position:relative}
+.fltrig{display:flex;align-items:baseline;gap:8px;border:1px solid var(--line);background:var(--panel-2);border-radius:10px;padding:5px 12px;cursor:pointer;max-width:260px}
+.fltrig .flno{font-family:var(--f-display);font-weight:700;font-size:16px;color:var(--accent)}
+.fltrig .flnm{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.fltrig .caret{color:var(--muted);font-size:11px}
+.fltrig[aria-expanded="true"]{border-color:var(--accent)}
+.flpop{position:absolute;top:calc(100% + 6px);left:0;z-index:40;width:min(380px,calc(100vw - 32px));background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);padding:12px;display:flex;flex-direction:column;gap:10px}
+.flhead{display:flex;gap:6px;align-items:center;font-size:13px;margin:0}
+.flhead input{width:72px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--panel-2);font-family:var(--f-mono)}
+.flmsg{font-size:12px;color:var(--warn);min-height:0}
+.flmsg:empty{display:none}
+.flgrid{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.flcell{aspect-ratio:1;max-width:100%;border-radius:6px;border:1px solid var(--line);background:var(--panel-2);font-family:var(--f-mono);font-size:12px;display:grid;place-items:center;cursor:pointer;padding:0;color:var(--fg);position:relative}
+.flcell.soon{border-color:var(--warn);color:var(--warn)}
+.flcell.soon::after{content:"";position:absolute;right:3px;top:3px;width:5px;height:5px;border-radius:50%;background:var(--warn)}
+.flcell.lock{opacity:.4;cursor:not-allowed;border-style:dashed;color:var(--muted)}
+.flcell.cur{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.flcell:not(.lock):hover{border-color:var(--accent)}
+.fllegend{display:flex;gap:6px 12px;flex-wrap:wrap;font-size:11.5px;color:var(--muted)}
+.fllegend span{display:inline-flex;gap:5px;align-items:center}
+.sw{width:10px;height:10px;border-radius:3px;border:1px solid var(--line);background:var(--panel-2);display:inline-block}
+.sw.soon{border-color:var(--warn)} .sw.lock{border-style:dashed;opacity:.5}
+@media (max-width:820px){.flpop{position:fixed;left:16px;right:16px;top:calc(var(--head-h) + 6px);width:auto}}
+.floorinfo{display:flex;gap:6px 16px;flex-wrap:wrap;align-items:baseline;font-size:12.5px;color:var(--muted);background:var(--panel);border-bottom:1px solid var(--line);
+  padding-block:5px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.floorinfo b{font-family:var(--f-display);color:var(--fg);font-size:13.5px}
+.floorinfo .soon{color:var(--warn)}
+.fl{display:inline-grid;place-items:center;font-family:var(--f-mono);font-size:10.5px;font-weight:600;padding:0 5px;border-radius:4px;border:1px solid var(--line);color:var(--muted);line-height:16px;vertical-align:1px}
+.fl.fl2{border-color:var(--rare);color:var(--rare)} .fl.fl3{border-color:var(--mini);color:var(--mini)}
+.rows .fsep{font-size:12px;color:var(--muted);padding:6px 4px 0;display:flex;gap:6px;align-items:center}
+.req.task{cursor:default;padding-left:8px}
+.nomap{position:absolute;inset:0;display:flex;flex-direction:column;gap:8px;align-items:center;justify-content:center;text-align:center;color:#c9d3dc;padding:24px}
+.nomap b{font-family:var(--f-display);font-size:20px;color:#fff}
+.nomap span{max-width:36ch;font-size:13px}
+.mapnote{position:absolute;left:12px;bottom:46px;z-index:5;max-width:min(420px,calc(100% - 70px));background:rgba(10,16,22,.78);color:#e8eef3;font-size:11.5px;padding:5px 9px;border-radius:5px}
+/* ---------- detail drawer ---------- */
+#panel{position:fixed;top:calc(var(--head-h) + 10px);right:max(10px,env(safe-area-inset-right,0px));bottom:10px;width:400px;max-width:calc(100% - 20px);z-index:30;
+  background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;min-height:0}
+.ptop{display:flex;align-items:center;gap:8px;padding:8px 10px;border-bottom:1px solid var(--line)}
+.ptop .crumb{flex:1;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.iconbtn{flex:none;height:30px;min-width:30px;border-radius:6px;border:1px solid var(--line);background:var(--panel-2);cursor:pointer;font-size:13px;padding:0 8px}
+.pbody{overflow:auto;padding:14px 16px 18px;display:flex;flex-direction:column;gap:14px;min-height:0}
+.phead{display:flex;gap:12px;align-items:center}
+.phead .ttl{min-width:0;flex:1}
+.phead .num{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.phead h2{margin:0;font-family:var(--f-display);font-weight:700;font-size:19px;line-height:1.2;overflow-wrap:anywhere;text-wrap:balance}
+.phead .sub{font-size:12.5px;color:var(--muted);overflow-wrap:anywhere}
+h3.sec{margin:0;font-family:var(--f-display);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;display:flex;gap:8px;align-items:baseline}
+h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;margin:0}
+.facts dt{color:var(--muted);font-size:12px} .facts dd{margin:0;min-width:0}
+.stats{display:grid;grid-template-columns:1fr auto;gap:3px 12px;margin:0;font-size:13px}
+.stats dt{color:var(--muted)} .stats dd{margin:0;text-align:right}
+.lore{margin:0;font-style:italic}
+.rows{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.lrow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;width:100%;background:none;border:0;border-radius:8px;padding:4px;text-align:left;cursor:pointer}
+.lrow:hover{background:var(--panel-2)}
+.lrow .t{display:flex;flex-direction:column;min-width:0}
+.lrow .t b{font-weight:500;overflow-wrap:anywhere}
+.lrow .t span{font-size:11.5px;color:var(--muted);overflow-wrap:anywhere}
+.lrow .v{font-family:var(--f-mono);font-size:12.5px;text-align:right;white-space:nowrap}
+.bar{height:3px;border-radius:2px;background:var(--panel-2);overflow:hidden;margin:-2px 4px 0 50px}
+.bar b{display:block;height:100%;background:var(--accent)}
+.uses{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+
+@media (min-width:1180px){body.panel-open .results{padding-right:430px}}
+@media (max-width:900px){
+  .browse{grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr)}
+  .filters{border-right:0;border-bottom:1px solid var(--line);flex-direction:row;flex-wrap:wrap;gap:10px 16px;padding:12px 16px;overflow:visible}
+  .fgroup{min-width:0}
+  .qrow{grid-template-columns:minmax(0,1fr) auto}
+  .qrow .reqs{grid-column:1/-1;grid-row:2}
+}
+@media (max-width:820px){
+  .app{height:auto;min-height:100%}
+  html,body{height:auto}
+  .view{height:auto}
+  #view-map{grid-template-columns:minmax(0,1fr)}
+  #view-map .stage{height:62vh}
+  aside.mapside{border-left:0;border-top:1px solid var(--line)}
+  .zlist{overflow:visible}
+  .browse{height:auto}
+  .results{overflow:visible}
+  .gsearch{order:3;max-width:none;flex-basis:100%;margin-left:0}
+  nav.tabs{order:2}
+  #panel{top:auto;left:0;right:0;bottom:0;width:auto;max-width:none;height:78vh;border-radius:14px 14px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  .legend{display:none}
+}
+@media (prefers-reduced-motion:reduce){.card,.mapth{transition:none}}
+</style>
+</head>
+<body>
+
+
+<div class="app">
+  <header class="top" id="top">
+    <div class="brand"><span class="floor">SAO Minecraft</span><h1>Aincrad 查詢工具</h1></div>
+    <div class="flpick" id="floorPick">
+      <button class="fltrig" id="flTrig" aria-haspopup="dialog" aria-expanded="false" aria-controls="flPop"><span class="flno" id="flNo">1F</span><span class="flnm" id="flNm"></span><span class="caret" aria-hidden="true">▾</span></button>
+      <div class="flpop" id="flPop" hidden role="dialog" aria-label="選擇樓層">
+        <form class="flhead" id="flForm"><label for="flJump">跳到第</label><input id="flJump" type="number" min="1" max="100" inputmode="numeric" placeholder="1–100"><span>層</span><button class="btn" type="submit">前往</button></form>
+        <div class="flmsg" id="flMsg" aria-live="polite"></div>
+        <div class="flgrid" id="flGrid"></div>
+        <div class="fllegend"><span><i class="sw open"></i>已開放</span><span><i class="sw soon"></i>即將開放（wiki 已有資料）</span><span><i class="sw lock"></i>未開放</span></div>
+      </div>
+    </div>
+    <nav class="tabs" aria-label="分頁">
+      <a href="#map" data-v="map">地圖</a>
+      <a href="#monsters" data-v="monsters">怪物 <span class="n" id="nMon"></span></a>
+      <a href="#items" data-v="items">物品 <span class="n" id="nItem"></span></a>
+      <a href="#quests" data-v="quests">任務 <span class="n" id="nQuest"></span></a>
+    </nav>
+    <label class="gsearch" for="q">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="搜尋怪物、物品（英文或法文）、NPC、地區" autocomplete="off">
+    </label>
+  </header>
+  <div class="floorinfo" id="floorInfo"></div>
+
+  <!-- MAP -->
+  <section class="view" id="view-map" hidden>
+    <div class="stage" id="stage" aria-label="第一層地圖（可拖曳與縮放）">
+      <div class="world" id="world"><img class="map" id="mapImg" src="floor1.jpg" alt="樓層俯視地圖" draggable="false"></div>
+      <div class="nomap" id="noMap" hidden><b>這一層目前沒有地圖</b><span>wiki 還沒有這一層的地圖。怪物、物品資料可以在其他分頁查詢；右側列出圖鑑上的區域。</span></div>
+      <div class="mapnote" id="mapNote" hidden></div>
+      <div class="legend" role="group" aria-label="地圖顯示項目">
+        <button class="lgt" data-k="boss" aria-pressed="true" title="顯示或隱藏首領"><i class="lg" style="border-color:var(--boss)"></i>首領</button><button class="lgt" data-k="mini" aria-pressed="true" title="顯示或隱藏小首領"><i class="lg" style="border-color:var(--mini)"></i>小首領</button><button class="lgt" data-k="mob" aria-pressed="true" title="顯示或隱藏一般怪物"><i class="lg"></i>一般</button>
+        <span><i class="beh-A" style="width:9px;height:9px;border-radius:50%;display:inline-block"></i>主動</span><span><i class="beh-N" style="width:9px;height:9px;border-radius:50%;display:inline-block"></i>中立</span><span><i class="beh-P" style="width:9px;height:9px;border-radius:50%;display:inline-block"></i>被動</span>
+        <button class="lgt" data-k="town" aria-pressed="true" title="顯示或隱藏村鎮"><i style="width:9px;height:9px;transform:rotate(45deg);background:var(--accent);display:inline-block"></i>村鎮</button>
+      </div>
+      <div class="editbar" id="editbar" hidden></div>
+      <div class="hud"><span class="coord" id="coord">X — · Z —</span></div>
+      <div class="zoombtns"><button id="zin" aria-label="放大">+</button><button id="zout" aria-label="縮小">−</button><button id="zfit" aria-label="顯示整張地圖" style="font-size:13px">⤢</button></div>
+    </div>
+    <aside class="mapside">
+      <div class="zlist" id="zlist"></div>
+      <div class="mapfoot">
+        <div class="row">
+          <button class="btn" id="editToggle" aria-pressed="false">校正未知區域位置</button>
+          <button class="btn" id="exportBtn" hidden>匯出座標</button>
+          <button class="btn" id="resetBtn" hidden>還原預設</button>
+        </div>
+        <textarea class="exportbox" id="exportBox" hidden readonly aria-label="匯出的座標 JSON"></textarea>
+      </div>
+    </aside>
+  </section>
+
+  <!-- MONSTERS -->
+  <section class="view browse" id="view-monsters" hidden>
+    <div class="filters">
+      <div class="fgroup"><span class="flabel">類型</span><div class="chips" id="fMonType"></div></div>
+      <div class="fgroup"><span class="flabel">區域</span><select class="sel" id="fMonZone" aria-label="區域"></select></div>
+      <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fMonSort" aria-label="排序">
+        <option value="num">圖鑑編號</option><option value="diff">難度（高→低）</option><option value="name">名稱</option></select></div>
+    </div>
+    <div class="results"><div class="rhead"><h2>怪物</h2><span class="count" id="cMon"></span></div><div class="grid" id="lMon"></div></div>
+  </section>
+
+  <!-- ITEMS -->
+  <section class="view browse" id="view-items" hidden>
+    <div class="filters">
+      <div class="fgroup"><span class="flabel">分類</span><div class="chips" id="fItemGroup"></div></div>
+      <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fItemRar"></div></div>
+      <div class="fgroup"><span class="flabel">條件</span>
+        <label class="check"><input type="checkbox" id="fItemQuest"> 只看任務需要的</label>
+        <label class="check"><input type="checkbox" id="fItemDrop"> 只看怪物會掉的</label>
+        <label class="check"><input type="checkbox" id="fItemAll"> 顯示所有樓層的物品</label></div>
+      <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fItemSort" aria-label="排序">
+        <option value="name">名稱</option><option value="rar">稀有度（高→低）</option><option value="src">掉落來源最多</option><option value="need">任務需求量最多</option></select></div>
+    </div>
+    <div class="results"><div class="rhead"><h2>物品</h2><span class="count" id="cItem"></span></div><div class="grid" id="lItem"></div></div>
+  </section>
+
+  <!-- QUESTS -->
+  <section class="view browse" id="view-quests" hidden>
+    <div class="filters">
+      <div class="fgroup"><span class="flabel">村鎮</span><div class="chips" id="fQTown"></div></div>
+      <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fQSort" aria-label="排序">
+        <option value="town">依村鎮</option><option value="xp">經驗值（高→低）</option><option value="col">Col（高→低）</option></select></div>
+      <div class="note">任務需求與座標來自 wiki 支線任務表。標有<span class="inf"> 推斷 </span>的物品是依任務原文的簡寫推斷，原文可在詳細資料裡看到。</div>
+    </div>
+    <div class="results"><div class="rhead"><h2>支線任務</h2><span class="count" id="cQ"></span></div><div id="lQ" style="display:flex;flex-direction:column;gap:10px"></div></div>
+  </section>
+</div>
+
+<aside id="panel" hidden aria-live="polite">
+  <div class="ptop"><button class="iconbtn" id="pBack" aria-label="上一頁" hidden>←</button><span class="crumb" id="pCrumb"></span><button class="iconbtn" id="pClose" aria-label="關閉">✕</button></div>
+  <div class="pbody" id="pBody"></div>
+</aside>
+
+<script src="data.js"></script>
+<script src="data23.js"></script>
+<script>
+(()=>{
+const S1=window.SAO,S23=window.SAO23;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const STATUS={...S1.STATUS,quest:{t:"任務座標",c:"s-player",d:"座標寫在 wiki 的任務說明裡。"}};
+
+// ---------- floors ----------
+const FLOORS={
+  1:{name:"Town of Beginnings",lv:"1–5",boss:"Illfang",status:"open",map:{img:"floor1.jpg",size:S1.MAP,x0:0,z0:0},
+     zones:S1.ZONES,order:S1.ZONE_ORDER,M:S1.M,towns:S1.TOWNS,spots:S1.SPOTS,quests:S1.QUESTS},
+  2:S23.floors[2],3:S23.floors[3]
+};
+Object.entries(FLOORS).forEach(([f,F])=>{f=+f;F.no=f;
+  F.M.forEach(m=>m.floor=f);F.towns.forEach(t=>t.floor=f);
+  F.spots=F.spots.map(s=>({src:"player",mons:[],items:[],...s,floor:f}));
+  F.quests=F.quests.map((q,i)=>({need:[],...q,id:q.id||("f"+f+"q"+i),floor:f}));
+  F.monByName=Object.fromEntries(F.M.map(m=>[m.name,m]))});
+const FL_KEYS=Object.keys(FLOORS).map(Number).sort((a,b)=>a-b);
+const ALLM=FL_KEYS.flatMap(f=>FLOORS[f].M), monById=Object.fromEntries(ALLM.map(m=>[m.id,m]));
+const ALLT=FL_KEYS.flatMap(f=>FLOORS[f].towns), townById=Object.fromEntries(ALLT.map(t=>[t.id,t]));
+const ALLQ=FL_KEYS.flatMap(f=>FLOORS[f].quests);
+const ALLS=FL_KEYS.flatMap(f=>FLOORS[f].spots);
+
+// ---------- items ----------
+const ITEMS={...S1.ITEMS};
+Object.entries(window.SAO23_ITEMS).forEach(([id,r])=>{ITEMS[id]={id,fr:r[0],r:r[1],lv:r[2],cat:r[3],lore:r[4],dmg:r[5],st:r[6],ic:r[7],...(S23.extra[id]||{})}});
+Object.entries(S23.unknown).forEach(([id,x])=>{ITEMS[id]={id,fr:null,r:null,lv:null,cat:"unknown",lore:null,dmg:null,st:null,ic:-1,...x}});
+
+const SOURCES={},USES={},GATHER={};Object.keys(ITEMS).forEach(k=>{SOURCES[k]=[];USES[k]=[];GATHER[k]=[]});
+ALLM.forEach(m=>m.drops.forEach(([id,p])=>SOURCES[id].push({m,p})));
+Object.values(SOURCES).forEach(a=>a.sort((x,y)=>x.m.floor-y.m.floor||(y.p??-1)-(x.p??-1)));
+ALLQ.forEach(q=>q.need.forEach(([id,n,inf])=>USES[id].push({q,n,inf})));
+ALLS.forEach(s=>s.items.forEach(i=>GATHER[i].push(s)));
+const needTotal=(id,f)=>USES[id].filter(u=>!f||u.q.floor===f).reduce((s,u)=>s+u.n,0);
+const itemFloors=id=>[...new Set([...SOURCES[id].map(s=>s.m.floor),...USES[id].map(u=>u.q.floor),...GATHER[id].map(s=>s.floor)])].sort();
+const KILLQ={};ALLQ.forEach(q=>{if(q.kill)q.kill[0].forEach(n=>{const m=FLOORS[q.floor].monByName[n];(KILLQ[m.id]=KILLQ[m.id]||[]).push(q)})});
+
+// ---------- current floor ----------
+let FL=1;const F=()=>FLOORS[FL];
+
+// ---------- user-placed zone positions (per floor, per browser) ----------
+const posKey=f=>f===1?"sao-f1-zone-pos":"sao-f"+f+"-zone-pos";
+const userPos={};FL_KEYS.forEach(f=>{try{userPos[f]=JSON.parse(localStorage.getItem(posKey(f))||"{}")||{}}catch(e){userPos[f]={}}});
+const savePos=f=>{try{localStorage.setItem(posKey(f),JSON.stringify(userPos[f]))}catch(e){}};
+const BASE_SPOT={};ALLS.forEach(sp=>sp.mons.forEach(n=>BASE_SPOT[FLOORS[sp.floor].monByName[n].id]=sp));
+const KIND={boss:["首領","👑"],dungeon:["地下城","⚔️"],mob:["怪物區","🐾"],poi:["地點","📍"]};
+const spotsOf=f=>{const Fx=FLOORS[f];return Fx.spots.concat(Object.entries(userPos[f]).filter(([z])=>Fx.zones[z]).map(([z,p])=>({id:"u"+f+"-"+z,floor:f,zone:z,kind:"mob",n:Fx.zones[z].n,zh:Fx.zones[z].zh,x:p.x,z:p.z,src:"user",items:[],
+  mons:Fx.M.filter(m=>m.zone===z&&!BASE_SPOT[m.id]).map(m=>m.name)})).filter(sp=>sp.mons.length||sp.items.length))};
+const spotById=id=>{for(const f of FL_KEYS){const s=spotsOf(f).find(x=>x.id===id);if(s)return s}return null};
+const monPos=m=>{const sp=spotsOf(m.floor).find(x=>x.mons.includes(m.name));return sp?{x:sp.x,z:sp.z,s:sp.src,spot:sp}:{x:null,z:null,s:"unk"}};
+const unknownZones=f=>FLOORS[f].order.filter(z=>FLOORS[f].M.some(m=>m.zone===z&&!BASE_SPOT[m.id]));
+
+// ---------- labels ----------
+const TYPE_ZH={"Boss":"首領","Mini-Boss":"小首領","Monster":"一般怪物","Minion":"嘍囉"};
+const BEH_ZH={A:"主動攻擊（看到就打）",N:"中立（被打才反擊）",P:"被動（不會攻擊）"};
+const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["傳說+","r-s",5]};
+const GROUP={material:"材料",food:"食物",ring:"飾品",artifact:"飾品",amulet:"飾品",bracelet:"飾品",shield:"防具",armor_set:"防具",bow:"武器",crossbow:"武器",dagger:"武器",sword:"武器",staff_mage:"武器",staff_shaman:"武器",lumberjack_job:"採集",miner_job:"採集",farmer_job:"採集",tool:"工具",gem_stone:"符文",fortifier:"藥水",unknown:"未收錄"};
+const CAT_ZH={material:"材料",food:"食物",ring:"戒指",artifact:"飾品",amulet:"項鍊",bracelet:"手環",shield:"盾牌",armor_set:"防具套裝",bow:"弓",crossbow:"弩",dagger:"匕首",sword:"近戰武器",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",lumberjack_job:"伐木採集",miner_job:"採礦",farmer_job:"農作",tool:"工具",gem_stone:"符文",fortifier:"強化藥水",unknown:"未收錄"};
+const STAT_ZH={"Defense":"防禦","Max Health":"最大生命","Max Mana":"最大魔力","Max Stamina":"最大體力","Attack Speed":"攻擊速度","Critical Strike Power":"暴擊傷害","Critical Strike Chance":"暴擊率","Skill Critical Strike Power":"技能暴擊傷害","Skill Critical Strike Chance":"技能暴擊率","Movement Speed":"移動速度","Health Regeneration":"生命回復","Mana Regeneration":"魔力回復","Stamina Regeneration":"體力回復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"治療加成","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"吸血","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋強度","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力"};
+const CLASS_ZH={guerrier:"戰士",archer:"弓箭手",mage:"法師",assassin:"刺客",shaman:"薩滿"};
+const FLN=f=>`第 ${f} 層`;
+const flBadge=f=>`<span class="fl fl${f}">F${f}</span>`;
+
+// ---------- render helpers ----------
+const cls=t=>t==="Boss"?"boss":t==="Mini-Boss"?"mini":t==="Minion"?"minion":"";
+const face=m=>S1.PHOTO[m.name]&&m.floor===1?`<img class="face" src="${S1.PHOTO[m.name]}" alt="">`:`<span aria-hidden="true">${m.icon}</span>`;
+const thHTML=(m,extra="")=>`<span class="th ${cls(m.type)} ${extra}" aria-hidden="true">${face(m)}<i class="beh beh-${m.beh}"></i></span>`;
+const slot=(id,s=36)=>{const it=ITEMS[id];const n=it?it.ic:-1;
+  if(n<0)return`<span class="slot empty" style="--s:${s}px" aria-hidden="true">${it&&it.vanilla?"MC":"?"}</span>`;
+  return`<span class="slot" style="--s:${s}px;background-size:${8*s}px auto;background-position:${-(n%8)*s}px ${-Math.floor(n/8)*s}px" aria-hidden="true"></span>`};
+const rarPill=it=>it.r&&RAR[it.r]?`<span class="pill ${RAR[it.r][1]}">${RAR[it.r][0]}</span>`:`<span class="pill r-x">未收錄</span>`;
+const stars=d=>d?`<span class="stars" aria-label="難度 ${d} / 5">${"★".repeat(d)}<span class="off">${"★".repeat(5-d)}</span></span>`:`<span class="muted" style="font-size:12px">難度未評</span>`;
+const pct=p=>p==null?"?":(p+"%");
+const money=n=>n==null?"":n.toLocaleString("en-US");
+
+// ---------- search ----------
+const q=$("q");const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/\p{M}/gu,"").replace(/[’']/g,"'");
+const Sq=()=>norm(q.value.trim());
+function itemHit(id,s,shallow){if(!s)return true;const it=ITEMS[id];if(norm(id).includes(s)||norm(it.fr).includes(s))return true;if(shallow)return false;return!!(CAT_ZH[it.cat]&&CAT_ZH[it.cat].includes(q.value.trim()))}
+const monHit=(m,s)=>{if(!s)return true;const z=FLOORS[m.floor].zones[m.zone];return norm(m.name).includes(s)||m.num.includes(s)||norm(z.n+" "+z.zh).includes(s)||m.drops.some(d=>itemHit(d[0],s,true))};
+const questHit=(qq,s)=>{if(!s)return true;const t=townById[qq.town];return norm(qq.npc).includes(s)||norm(t.n+" "+(t.en||"")).includes(s)||norm(qq.raw).includes(s)||norm(qq.task).includes(s)||qq.need.some(n=>itemHit(n[0],s,true))||(qq.kill&&qq.kill[0].some(k=>norm(k).includes(s)))};
+
+// ================= detail drawer =================
+const panel=$("panel"),pBody=$("pBody");let stack=[];
+function openP(type,id,mode){if(mode==="push"&&!panel.hidden&&stack.length)stack.push({type,id});else stack=[{type,id}];
+  renderP();panel.hidden=false;document.body.classList.add("panel-open");pBody.scrollTop=0;markSel()}
+let pending=null;
+function goMapThen(f,fn){if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
+const nameOf=s=>s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
+function renderP(){const cur=stack[stack.length-1];if(!cur)return;
+  $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");
+  pBody.innerHTML=cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
+  pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
+  pBody.querySelectorAll("[data-spot]").forEach(b=>b.addEventListener("click",()=>{const sp=spotById(b.dataset.spot);goMapThen(sp.floor,()=>focusSpot(sp.id))}));
+  pBody.querySelectorAll("[data-town]").forEach(b=>b.addEventListener("click",()=>{const t=townById[b.dataset.town];goMapThen(t.floor,()=>centerOn(t.x,t.z,2.6))}));
+}
+$("pBack").onclick=()=>{stack.pop();renderP();markSel()};
+$("pClose").onclick=closeP;
+function closeP(){panel.hidden=true;stack=[];document.body.classList.remove("panel-open");markSel()}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!panel.hidden)closeP()});
+function markSel(){const cur=!panel.hidden&&stack[stack.length-1];
+  document.querySelectorAll(".card.sel").forEach(e=>e.classList.remove("sel"));document.querySelectorAll(".th.selm").forEach(e=>e.classList.remove("selm"));
+  if(!cur)return;document.querySelectorAll(`[data-key="${cur.type}|${CSS.escape(cur.id)}"]`).forEach(e=>e.classList.add(e.classList.contains("th")?"selm":"sel"))}
+const soonNote=f=>FLOORS[f].status==="soon"?`<div class="note warn">${FLN(f)}預計 11 月 4 日開放。這是 wiki 目前的資料，官方說會調整進度設計，開放後可能不同。</div>`:"";
+
+function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.zones[m.zone];const p=monPos(m);const st=STATUS[p.s];
+  const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(iid)}</b><span>${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
+  const kq=KILLQ[m.id]||[];
+  return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(m.name)}</h2></div></div>
+  ${soonNote(m.floor)}
+  <dl class="facts"><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
+  <dt>圖鑑區域</dt><dd>${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span></dd>
+  <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd></dl>
+  ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
+  <h3 class="sec">掉落物 <span class="c">${m.drops.length}</span></h3>${drops}
+  ${kq.length?`<h3 class="sec">相關任務</h3><ul class="rows">${kq.map(qq=>`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>${killText(qq)}（${esc(qq.raw)}）</span></span><span class="v">${qq.xp?qq.xp+" xp":""}</span></button></li>`).join("")}</ul>`:""}
+  <div class="note">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>
+  ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}`}
+const killText=qq=>`擊殺 ${qq.kill[0].join(" / ")} ${qq.kill[2]?"各 ":""}${qq.kill[1]} 隻`;
+
+function itemDetail(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id],gat=GATHER[id];
+  const stl=it.st?Object.entries(it.st).map(([k,v])=>{let val=v;if(k==="Classe requise")val=String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]||c).join("、");else if(k==="Arme à deux mains")val="是";else if(typeof v==="number"&&!["Item Cooldown","Restore Food","Max Durability"].includes(k)&&!k.startsWith("Required"))val=(v>0?"+":"")+v;return`<dt>${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(val)}</dd>`}).join(""):"";
+  let lastF=0;const fh=f=>{if(f===lastF)return"";lastF=f;return`<li class="fsep">${flBadge(f)} ${FLN(f)}</li>`};
+  const multi=itemFloors(id).length>1;
+  const srcRows=src.map(({m,p})=>{const zp=monPos(m);return(multi?fh(m.floor):"")+`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(m.name)}</b><span>${esc(zp.spot?zp.spot.zh:FLOORS[m.floor].zones[m.zone].zh)}・${STATUS[zp.s].t}</span></span><span class="v">${pct(p)}</span></button></li>`}).join("")
+    +gat.map(sp=>`<li><button class="lrow" data-go="s|${sp.id}"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">${KIND[sp.kind][1]}</span><span class="t"><b>${flBadge(sp.floor)} ${esc(sp.n)}</b><span>${esc(sp.zh)}・X ${sp.x} · Z ${sp.z}</span></span><span class="v">撿取</span></button></li>`).join("");
+  lastF=0;
+  const useRows=use.map(({q:qq,n,inf})=>(multi?fh(qq.floor):"")+`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>原文：${esc(qq.raw)}${inf?' <span class="inf">推斷</span>':""}</span></span><span class="v">× ${n}</span></button></li>`).join("");
+  return`<div class="phead">${slot(id,64)}<div class="ttl"><h2>${esc(id)}</h2><div class="sub">${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</div>
+    <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${rarPill(it)}<span class="muted" style="font-size:12px">${esc(CAT_ZH[it.cat]||it.cat)}${it.lv?" · 等級 "+it.lv:""}</span>${itemFloors(id).map(flBadge).join("")}</div></div></div>
+  ${it.lore?`<p class="lore">${esc(it.lore)}</p>`:""}
+  ${it.dmg||stl?`<dl class="stats">${it.dmg?`<dt>傷害</dt><dd class="mono">${esc(it.dmg)}</dd>`:""}${stl}</dl>`:""}
+  ${it.note?`<div class="note">${esc(it.note)}</div>`:""}
+  ${it.vanilla?`<div class="note">這是 Minecraft 原版物品，官方圖鑑沒有自訂圖示。</div>`:""}
+  ${it.ic<0&&it.fr&&!it.vanilla?`<div class="note">官方圖鑑還沒有這個物品的圖示或模型。</div>`:""}
+  <h3 class="sec">取得方式</h3>
+  ${srcRows?`<ul class="rows">${srcRows}</ul>`:""}${it.src?`<div class="note">${esc(it.src)}</div>`:""}${!srcRows&&!it.src?`<div class="note">目前沒有已知的取得方式。</div>`:""}
+  <h3 class="sec">用途 <span class="c">${use.length?use.length+" 個任務，共 "+needTotal(id)+" 個":""}</span></h3>
+  ${use.length?`<ul class="rows">${useRows}</ul>`:""}
+  ${it.use?`<ul class="uses">${it.use.map(u=>`<li>${esc(u)}<span class="muted">（依官方物品描述）</span></li>`).join("")}</ul>`:""}
+  ${it.locked?`<div class="note">官方資料標示此物品不能用於一般合成、熔煉、鍛造台、修理或附魔。</div>`:""}
+  ${!use.length&&!it.use&&!it.locked?`<div class="note">目前沒有已知用途。</div>`:""}
+  <div class="note warn">配方：公開資料尚未提供鍛造或合成配方（wiki 鍛造頁標示為「待補」），以上用途只來自任務需求與物品描述。</div>`}
+
+function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">這個地點已不存在。</div>`;const st=STATUS[sp.src];const Fx=FLOORS[sp.floor];
+  const ms=sp.mons.map(n=>Fx.monByName[n]);
+  return`<div class="phead"><span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span><div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(sp.n)}</h2><div class="sub">${esc(sp.zh)}</div></div></div>
+  <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd><dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd></dl>
+  ${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}
+  <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>
+  ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(m.name)}</b><span>${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
+  ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(i)}</b><span>${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}`}
+
+function townDetail(id){const t=townById[id];const qs=ALLQ.filter(x=>x.town===id);
+  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">🏘️</span><div class="ttl"><div class="num mono">${flBadge(t.floor)} X ${t.x} · Z ${t.z}</div><h2>${esc(t.n)}</h2>${t.en?`<div class="sub">${esc(t.en)}</div>`:""}</div></div>
+  ${soonNote(t.floor)}${t.note?`<div class="note">${esc(t.note)}</div>`:""}
+  <button class="linkbtn" data-town="${id}">在地圖上查看</button>
+  <h3 class="sec">支線任務 <span class="c">${qs.length}</span></h3>
+  <div style="display:flex;flex-direction:column;gap:10px">${qs.map(qq=>`<div style="border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px">
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><b style="font-family:var(--f-display);font-size:15px">${esc(qq.npc)}</b><span class="mono muted" style="font-size:11.5px">X ${qq.x} · Z ${qq.z}</span></div>
+    <div class="reqs">${reqChips(qq)}</div>
+    <div class="muted" style="font-size:12px">原文：${esc(qq.raw)}</div>
+    <div style="font-size:12.5px">${rewardText(qq)}</div></div>`).join("")}</div>`}
+
+function reqChips(qq){const Fx=FLOORS[qq.floor];const a=qq.need.map(([id,n,inf])=>`<button class="req" data-go="i|${esc(id)}" title="${esc(ITEMS[id].fr||id)}">${slot(id,26)}<span class="qty">${n}</span><span>${esc(id)}</span>${inf?'<span class="inf">推斷</span>':""}</button>`);
+  if(qq.kill)qq.kill[0].forEach(n=>a.push(`<button class="req kill" data-go="m|${Fx.monByName[n].id}">⚔️ <span>擊殺 ${esc(n)}</span><span class="qty">× ${qq.kill[1]}${qq.kill[0].length>1&&!qq.kill[2]?"（合計）":""}</span></button>`));
+  if(qq.task)a.push(`<span class="req task">📝 <span>${esc(qq.task)}</span></span>`);
+  return a.join("")}
+const rewardText=qq=>[qq.xp?`<span style="color:var(--ok);font-family:var(--f-mono)">${qq.xp} xp</span>`:"",qq.money?`<span style="color:var(--warn);font-family:var(--f-mono)">${money(qq.money)} Col</span>`:"",qq.bonus?`獎勵：${esc(qq.bonus)}`:""].filter(Boolean).join(" · ")||'<span class="muted">wiki 未記錄獎勵</span>';
+
+// ================= shared filter chips =================
+const chipsInto=(el,opts,get,set,cb)=>{el.innerHTML=opts.map(([v,l])=>`<button class="chip" data-v="${v}" aria-pressed="${get()===v}">${l}</button>`).join("");
+  el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{set(c.dataset.v);el.querySelectorAll(".chip").forEach(o=>o.setAttribute("aria-pressed",o===c));cb()})};
+function bindGo(root){root.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [t,i]=b.dataset.go.split("|");openP(t,i,"new")})}
+
+// ================= monsters tab =================
+let monType="all";
+chipsInto($("fMonType"),[["all","全部"],["Boss","首領"],["Mini-Boss","小首領"],["Monster","一般"],["Minion","嘍囉"]],()=>monType,v=>monType=v,renderMon);
+$("fMonZone").onchange=renderMon;$("fMonSort").onchange=renderMon;
+function fillZoneSelect(){$("fMonZone").innerHTML=`<option value="all">全部區域</option>`+F().order.map(z=>`<option value="${z}">${esc(F().zones[z].n)}（${esc(F().zones[z].zh)}）</option>`).join("")}
+function renderMon(){const s=Sq(),zf=$("fMonZone").value,so=$("fMonSort").value;const M=F().M;
+  let a=M.filter(m=>(monType==="all"||m.type===monType)&&(zf==="all"||m.zone===zf)&&monHit(m,s));
+  if(so==="diff")a=[...a].sort((x,y)=>y.diff-x.diff);else if(so==="name")a=[...a].sort((x,y)=>x.name.localeCompare(y.name));
+  $("cMon").textContent=`${a.length} / ${M.length} 種`;
+  $("lMon").innerHTML=a.length?a.map(m=>{const p=monPos(m);return`<button class="card" data-key="m|${m.id}" data-go="m|${m.id}">
+    <div class="chead">${thHTML(m)}<div class="cname"><b>${esc(m.name)}</b><span>${m.num?"#"+esc(m.num)+" · ":""}${esc(p.spot?p.spot.zh:F().zones[m.zone].zh)}</span></div></div>
+    <div class="cmeta"><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span>${stars(m.diff)}<span class="pill ${STATUS[p.s].c}">${STATUS[p.s].t}</span></div>
+    ${m.drops.length?`<div class="minis">${m.drops.map(d=>slot(d[0],26)).join("")}</div>`:""}</button>`}).join(""):`<div class="empty-note">沒有符合條件的怪物。</div>`;
+  bindGo($("lMon"));markSel()}
+
+// ================= items tab =================
+let itemGroup="all",itemRar="all";
+const GROUPS=["材料","武器","防具","飾品","符文","藥水","食物","採集","工具","未收錄"];
+chipsInto($("fItemGroup"),[["all","全部"],...GROUPS.map(g=>[g,g])],()=>itemGroup,v=>itemGroup=v,renderItems);
+chipsInto($("fItemRar"),[["all","全部"],["c","普通"],["b","稀有"],["a","史詩"],["s","傳說"],["splus","傳說+"]],()=>itemRar,v=>itemRar=v,renderItems);
+["fItemQuest","fItemDrop","fItemSort","fItemAll"].forEach(i=>$(i).onchange=renderItems);
+function renderItems(){const s=Sq(),so=$("fItemSort").value,all=$("fItemAll").checked;
+  const pool=Object.keys(ITEMS).filter(id=>all||itemFloors(id).includes(FL));
+  let a=pool.filter(id=>{const it=ITEMS[id];return(itemGroup==="all"||GROUP[it.cat]===itemGroup)&&(itemRar==="all"||it.r===itemRar)
+    &&(!$("fItemQuest").checked||USES[id].length)&&(!$("fItemDrop").checked||SOURCES[id].length)&&(itemHit(id,s)||SOURCES[id].some(x=>norm(x.m.name).includes(s)))});
+  const rv=id=>ITEMS[id].r&&RAR[ITEMS[id].r]?RAR[ITEMS[id].r][2]:0;const nt=id=>needTotal(id,all?0:FL);
+  if(so==="name")a.sort((x,y)=>x.localeCompare(y));else if(so==="rar")a.sort((x,y)=>rv(y)-rv(x)||x.localeCompare(y));
+  else if(so==="src")a.sort((x,y)=>SOURCES[y].length-SOURCES[x].length||x.localeCompare(y));else a.sort((x,y)=>nt(y)-nt(x)||x.localeCompare(y));
+  $("cItem").textContent=`${a.length} / ${pool.length} 件`;
+  $("lItem").innerHTML=a.length?a.map(id=>{const it=ITEMS[id];const src=SOURCES[id].filter(x=>all||x.m.floor===FL),use=USES[id].filter(u=>all||u.q.floor===FL);return`<button class="card" data-key="i|${esc(id)}" data-go="i|${esc(id)}">
+    <div class="chead">${slot(id,44)}<div class="cname"><b>${esc(id)}</b><span>${it.fr?esc(it.fr):"官方圖鑑未收錄"}</span></div></div>
+    <div class="cmeta">${rarPill(it)}<span>${esc(CAT_ZH[it.cat]||"")}</span>${src.length?`<span>· ${src.length} 種怪物掉落</span>`:it.src?`<span>· ${esc(it.src.split("：")[0].split("（")[0])}</span>`:""}${use.length?`<span>· ${use.length} 任務需 ${nt(id)}</span>`:""}${itemFloors(id).length>1||all?itemFloors(id).map(flBadge).join(""):""}</div></button>`}).join(""):`<div class="empty-note">沒有符合條件的物品。</div>`;
+  bindGo($("lItem"));markSel()}
+
+// ================= quests tab =================
+let qTown="all";
+$("fQSort").onchange=renderQuests;
+function fillTownChips(){qTown="all";chipsInto($("fQTown"),[["all","全部"],...F().towns.map(t=>[t.id,t.n])],()=>qTown,v=>qTown=v,renderQuests)}
+function qRow(qq,showTown){return`<div class="qrow"><div class="qnpc">${showTown?`<span class="muted" style="font-size:11.5px">${esc(townById[qq.town].n)}</span>`:""}<b>${esc(qq.npc)}</b><span class="mono">X ${qq.x} · Z ${qq.z}</span></div><div class="reqs">${reqChips(qq)}</div><div class="reward">${rewardText(qq)}</div></div>`}
+function renderQuests(){const s=Sq(),so=$("fQSort").value;const QS=F().quests;
+  if(!QS.length){$("cQ").textContent="";$("lQ").innerHTML=`<div class="empty-note">${FLN(FL)}在 wiki 上還沒有支線任務資料。</div>`;return}
+  let a=QS.filter(qq=>(qTown==="all"||qq.town===qTown)&&questHit(qq,s));
+  $("cQ").textContent=`${a.length} / ${QS.length} 個`;let html="";
+  if(so==="town"){F().towns.forEach(t=>{const g=a.filter(qq=>qq.town===t.id);if(!g.length)return;
+    html+=`<div class="qtown"><h3><button data-go="t|${t.id}">${esc(t.n)}</button><span class="mono muted" style="font-size:12px">X ${t.x} · Z ${t.z} · ${g.length} 個任務</span></h3>${g.map(x=>qRow(x)).join("")}</div>`})}
+  else{a=[...a].sort((x,y)=>so==="xp"?(y.xp||0)-(x.xp||0):(y.money||0)-(x.money||0));html=a.map(x=>qRow(x,true)).join("")}
+  $("lQ").innerHTML=html||`<div class="empty-note">沒有符合條件的任務。</div>`;bindGo($("lQ"))}
+
+// ================= map =================
+const stage=$("stage"),world=$("world"),mapImg=$("mapImg");let sc=1,tx=0,ty=0,fitted=false;
+const MP=()=>F().map;
+const toPxX=b=>(b-MP().x0)/MP().size*1000,toPxZ=b=>(b-MP().z0)/MP().size*1000;
+const fromPx=(px,pz)=>[px/1000*MP().size+MP().x0,pz/1000*MP().size+MP().z0];
+const fitSc=()=>{const r=stage.getBoundingClientRect();return Math.min(r.width,r.height)/1000};
+function apply(){world.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;world.style.setProperty("--inv",Math.max(.55,Math.min(1.4,1/sc*fitSc()*1.35)));world.classList.toggle("compact",sc<fitSc()*1.9)}
+function fit(){const r=stage.getBoundingClientRect();if(!r.width)return;sc=fitSc();tx=(r.width-1000*sc)/2;ty=(r.height-1000*sc)/2;apply();fitted=true}
+function zoomAt(f,cx,cy){const ns=Math.max(fitSc()*.8,Math.min(fitSc()*10,sc*f));const k=ns/sc;tx=cx-(cx-tx)*k;ty=cy-(cy-ty)*k;sc=ns;apply()}
+function centerOn(bx,bz,minZoom){if(!MP())return;if(!fitted)fit();const r=stage.getBoundingClientRect();sc=Math.max(sc,fitSc()*(minZoom||2.2));
+  const mobile=matchMedia("(max-width:820px)").matches;const cx=mobile?r.width/2:(r.width-(panel.hidden?0:Math.max(0,410-(innerWidth-r.right))))/2;
+  tx=cx-toPxX(bx)*sc;ty=r.height/2-toPxZ(bz)*sc;apply()}
+stage.addEventListener("wheel",e=>{if(!MP())return;e.preventDefault();const r=stage.getBoundingClientRect();zoomAt(e.deltaY<0?1.15:1/1.15,e.clientX-r.left,e.clientY-r.top)},{passive:false});
+const pts=new Map();let moved=0,pinch0=null;
+stage.addEventListener("pointerdown",e=>{if(!MP()||e.target.closest(".zoombtns"))return;pts.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=0;if(pts.size===2){const [a,b]=[...pts.values()];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),sc}}});
+window.addEventListener("pointermove",e=>{if(!MP())return;const r=stage.getBoundingClientRect();
+  if(stage.contains(e.target)){const [bx,bz]=fromPx((e.clientX-r.left-tx)/sc,(e.clientY-r.top-ty)/sc);const m=MP();if(bx>=m.x0&&bz>=m.z0&&bx<=m.x0+m.size&&bz<=m.z0+m.size)$("coord").textContent=`X ${Math.round(bx)} · Z ${Math.round(bz)}`}
+  if(!pts.has(e.pointerId))return;const p=pts.get(e.pointerId);const dx=e.clientX-p.x,dy=e.clientY-p.y;p.x=e.clientX;p.y=e.clientY;
+  if(pts.size===1){moved+=Math.abs(dx)+Math.abs(dy);if(moved>4){stage.classList.add("dragging");tx+=dx;ty+=dy;apply()}}
+  else if(pts.size===2&&pinch0){const [a,b]=[...pts.values()];const d=Math.hypot(a.x-b.x,a.y-b.y);moved=99;zoomAt((pinch0.sc*d/pinch0.d)/sc,(a.x+b.x)/2-r.left,(a.y+b.y)/2-r.top)}});
+const up=e=>{pts.delete(e.pointerId);if(pts.size<2)pinch0=null;if(!pts.size)setTimeout(()=>stage.classList.remove("dragging"),0)};
+window.addEventListener("pointerup",up);window.addEventListener("pointercancel",up);
+$("zin").onclick=()=>{const r=stage.getBoundingClientRect();zoomAt(1.4,r.width/2,r.height/2)};
+$("zout").onclick=()=>{const r=stage.getBoundingClientRect();zoomAt(1/1.4,r.width/2,r.height/2)};
+$("zfit").onclick=fit;
+
+const zoneEls={};
+// map layer toggles (remembered per viewer)
+const typeKey=m=>m.type==="Boss"?"boss":m.type==="Mini-Boss"?"mini":"mob";
+let HIDE={};try{HIDE=JSON.parse(localStorage.getItem("sao-map-hide")||"{}")||{}}catch(e){HIDE={}}
+document.querySelectorAll(".legend .lgt").forEach(b=>{b.setAttribute("aria-pressed",!HIDE[b.dataset.k]);
+  b.addEventListener("click",ev=>{ev.stopPropagation();const k=b.dataset.k;HIDE[k]=!HIDE[k];b.setAttribute("aria-pressed",!HIDE[k]);
+    try{localStorage.setItem("sao-map-hide",JSON.stringify(HIDE))}catch(e){};renderMap()})});
+const SRC_COL={label:"var(--ok)",npc:"var(--ok)",player:"var(--ok)",quest:"var(--ok)",est:"var(--warn)",user:"var(--accent)"};
+function mapThumb(m){const b=document.createElement("button");b.className=`th mapth ${cls(m.type)}`;b.dataset.id=m.id;b.dataset.key="m|"+m.id;
+  b.setAttribute("aria-label",m.name+"，"+TYPE_ZH[m.type]);b.title=m.name;b.innerHTML=face(m)+`<i class="beh beh-${m.beh}"></i>`;
+  b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("m",m.id,"new")});return b}
+function renderMap(){world.querySelectorAll(".zone,.town").forEach(n=>n.remove());
+  const m=MP();$("noMap").hidden=!!m;world.hidden=!m;document.querySelector(".zoombtns").hidden=!m;document.querySelector(".hud").hidden=!m;document.querySelector(".legend").hidden=!m;
+  $("mapNote").hidden=!(m&&m.note);if(m&&m.note)$("mapNote").textContent=m.note;
+  if(!m){filterMap();return}
+  if(!mapImg.src.endsWith(m.img)){mapImg.src=m.img;fitted=false}
+  if(!HIDE.town)F().towns.forEach(t=>{const b=document.createElement("button");b.className="town";b.style.left=toPxX(t.x)+"px";b.style.top=toPxZ(t.z)+"px";
+    b.innerHTML=`<span class="pin"></span><span class="tname">${esc(t.n)}</span>`;b.setAttribute("aria-label","村鎮 "+t.n);
+    b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("t",t.id,"new")});world.appendChild(b)});
+  const rank={"Boss":0,"Mini-Boss":1,"Monster":2,"Minion":3};
+  spotsOf(FL).forEach(sp=>{const vm=sp.mons.map(n=>F().monByName[n]).filter(m=>!HIDE[typeKey(m)]);if(sp.mons.length&&!vm.length)return;
+    const d=document.createElement("div");d.className="zone"+(sp.src==="est"?" est":"")+(sp.mons.length?"":" poi");d.dataset.s=sp.id;
+    d.style.left=toPxX(sp.x)+"px";d.style.top=toPxZ(sp.z)+"px";
+    const lb=document.createElement("button");lb.className="zlabel";lb.innerHTML=`<i style="background:${SRC_COL[sp.src]}"></i>${sp.mons.length?"":KIND[sp.kind][1]+" "}${esc(sp.n)}`;
+    lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("s",sp.id,"new")});d.appendChild(lb);
+    if(sp.mons.length){const tw=document.createElement("div");tw.className="thumbs";
+      vm.sort((a,b)=>rank[a.type]-rank[b.type]).forEach(mm=>tw.appendChild(mapThumb(mm)));
+      if(vm.length>1){const mo=document.createElement("span");mo.className="more";mo.textContent="+"+(vm.length-1);tw.appendChild(mo)}
+      d.appendChild(tw)}
+    world.appendChild(d);zoneEls[sp.id]=d});
+  filterMap();markSel()}
+let editing=false,placing=null;
+function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(FL);
+  const sec=(title,n)=>{const h=document.createElement("div");h.className="zsec";h.innerHTML=`${title} <span class="mono">${n}</span>`;zl.appendChild(h)};
+  [["boss","首領"],["dungeon","地下城"],["mob","怪物區"],["poi","地點"]].forEach(([k,title])=>{const g=sp.filter(x=>x.kind===k);if(!g.length)return;sec(title,g.length);
+    g.forEach(x=>{const st=STATUS[x.src];const row=document.createElement("div");row.className="zrow";row.dataset.s=x.id;
+      row.innerHTML=`<div class="zhead"><button class="zn">${esc(x.n)}</button><span class="zzh">${esc(x.zh)}</span><span class="pill ${st.c}">${st.t}</span><span class="mono muted" style="font-size:11px;margin-left:auto">X ${x.x} · Z ${x.z}</span></div>`;
+      row.querySelector(".zn").onclick=()=>{focusSpot(x.id);openP("s",x.id,"new")};
+      if(x.mons.length){const tw=document.createElement("div");tw.className="thumbs";x.mons.forEach(n=>{const b=mapThumb(F().monByName[n]);b.classList.remove("mapth");tw.appendChild(b)});row.appendChild(tw)}
+      zl.appendChild(row)})});
+  const uz=unknownZones(FL).filter(z=>!userPos[FL][z]);
+  if(uz.length){sec("位置未知",uz.length);
+    uz.forEach(z=>{const row=document.createElement("div");row.className="zrow";row.dataset.z=z;
+      row.innerHTML=`<div class="zhead"><span class="zn" style="cursor:default">${esc(F().zones[z].n)}</span><span class="zzh">${esc(F().zones[z].zh)}</span><span class="pill s-unk">位置未知</span>${editing&&MP()?`<button class="place" aria-pressed="${placing===z}">${placing===z?"點地圖放置…":"放到地圖"}</button>`:""}</div>`;
+      const tw=document.createElement("div");tw.className="thumbs";F().M.filter(m=>m.zone===z&&!BASE_SPOT[m.id]).forEach(m=>{const b=mapThumb(m);b.classList.remove("mapth");tw.appendChild(b)});row.appendChild(tw);
+      const pl=row.querySelector(".place");if(pl)pl.onclick=()=>{placing=placing===z?null:z;updateEditbar();renderZoneList()};
+      zl.appendChild(row)})}
+  $("editToggle").hidden=!MP();
+  filterMap();markSel()}
+function focusSpot(id){const sp=spotById(id);if(!sp)return;centerOn(sp.x,sp.z,2.4);const el=zoneEls[id];if(el){el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1300)}}
+const spotHit=(sp,s)=>!s||norm(sp.n+" "+sp.zh).includes(s)||sp.mons.some(n=>monHit(FLOORS[sp.floor].monByName[n],s))||sp.items.some(i=>itemHit(i,s,true));
+function filterMap(){const s=Sq();
+  document.querySelectorAll("#view-map .th[data-id]").forEach(b=>{const m=monById[b.dataset.id];const hit=monHit(m,s);b.classList.toggle("dim",!hit);b.classList.toggle("hit",!!(s&&hit))});
+  const sp=spotsOf(FL);
+  document.querySelectorAll(".zone").forEach(z=>{const x=sp.find(y=>y.id===z.dataset.s);z.classList.toggle("dim",!!x&&!spotHit(x,s))});
+  document.querySelectorAll(".zrow").forEach(r=>{if(r.dataset.s){const x=sp.find(y=>y.id===r.dataset.s);r.hidden=!x||!spotHit(x,s)}else r.hidden=!F().M.some(m=>m.zone===r.dataset.z&&!BASE_SPOT[m.id]&&monHit(m,s))});
+  document.querySelectorAll(".zsec").forEach(h=>{let n=h.nextElementSibling,any=false;while(n&&!n.classList.contains("zsec")){if(!n.hidden)any=true;n=n.nextElementSibling}h.hidden=!any})}
+const editbar=$("editbar"),editToggle=$("editToggle");
+function updateEditbar(){editbar.hidden=!editing;stage.classList.toggle("edit",editing&&!!placing);
+  editbar.textContent=placing?`點地圖上的位置，把「${F().zones[placing].n}」放在那裡`:"校正模式：在右側「位置未知」清單按「放到地圖」，再點地圖放置。位置只存在這個瀏覽器。"}
+function setEditing(v){editing=v;placing=null;editToggle.setAttribute("aria-pressed",editing);editToggle.classList.toggle("on",editing);
+  editToggle.textContent=editing?"結束校正":"校正未知區域位置";$("exportBtn").hidden=!editing;$("resetBtn").hidden=!editing;if(!editing)$("exportBox").hidden=true;updateEditbar();renderZoneList()}
+editToggle.onclick=()=>setEditing(!editing);
+stage.addEventListener("click",e=>{if(!editing||!placing||moved>4||!MP())return;if(e.target.closest(".zoombtns,.th,.town,.zlabel"))return;
+  const r=stage.getBoundingClientRect();let [bx,bz]=fromPx((e.clientX-r.left-tx)/sc,(e.clientY-r.top-ty)/sc);bx=Math.round(bx);bz=Math.round(bz);const m=MP();
+  if(bx<m.x0||bz<m.z0||bx>m.x0+m.size||bz>m.z0+m.size)return;userPos[FL][placing]={x:bx,z:bz};savePos(FL);placing=null;updateEditbar();renderMap();renderZoneList()});
+$("exportBtn").onclick=async()=>{const out={};Object.entries(userPos[FL]).forEach(([z,p])=>{if(F().zones[z])out[F().zones[z].n]={x:p.x,z:p.z}});
+  const box=$("exportBox");box.value=Object.keys(out).length?JSON.stringify({floor:FL,positions:out},null,1):"（這一層還沒有自行標示的位置）";box.hidden=false;box.select();
+  try{await navigator.clipboard.writeText(box.value);$("exportBtn").textContent="已複製"}catch(err){$("exportBtn").textContent="已選取，請手動複製"}
+  setTimeout(()=>$("exportBtn").textContent="匯出座標",1800)};
+$("resetBtn").onclick=()=>{userPos[FL]={};savePos(FL);renderMap();renderZoneList()};
+
+// ================= floor switch + routing =================
+const VIEWS=["map","monsters","items","quests"];let view="map";
+const hashFor=(v,f)=>(f===1?"":"f"+f+"-")+v;
+function go(v,f){location.hash=hashFor(v,f??FL)}
+document.querySelectorAll("nav.tabs a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v)}));
+// floor picker: 100 floors; only floors with data can be opened
+const TOTAL=100;const flTrig=$("flTrig"),flPop=$("flPop");
+const flState=f=>FLOORS[f]?(FLOORS[f].status==="soon"?"soon":"open"):"lock";
+$("flGrid").innerHTML=Array.from({length:TOTAL},(_,i)=>{const f=i+1,st=flState(f);
+  const tip=st==="lock"?`第 ${f} 層・尚未開放`:`第 ${f} 層・${FLOORS[f].name}${st==="soon"?"（預計 11/4 開放）":""}`;
+  return`<button class="flcell ${st}" data-f="${f}" title="${esc(tip)}" aria-label="${esc(tip)}" ${st==="lock"?'aria-disabled="true"':""}>${f}</button>`}).join("");
+function openPick(o){flPop.hidden=!o;flTrig.setAttribute("aria-expanded",o);$("flMsg").textContent="";if(o){$("flJump").value="";setTimeout(()=>$("flJump").focus(),0)}}
+flTrig.onclick=e=>{e.stopPropagation();openPick(flPop.hidden)};
+document.addEventListener("click",e=>{if(!flPop.hidden&&!e.target.closest("#floorPick"))openPick(false)});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!flPop.hidden){openPick(false);flTrig.focus()}});
+function pickFloor(f){if(!(f>=1&&f<=TOTAL)){$("flMsg").textContent="請輸入 1 到 100 之間的樓層。";return}
+  if(flState(f)==="lock"){$("flMsg").textContent=`第 ${f} 層還沒有開放，也還沒有資料。`;return}
+  openPick(false);go(view,f)}
+$("flGrid").querySelectorAll(".flcell").forEach(b=>b.onclick=()=>pickFloor(+b.dataset.f));
+$("flForm").onsubmit=e=>{e.preventDefault();pickFloor(parseInt($("flJump").value,10))};
+function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.ready=1;
+  $("flNo").textContent=f+"F";$("flNm").textContent=F().name;
+  $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
+  const Fx=F();$("floorInfo").innerHTML=`<b>${FLN(f)}・${esc(Fx.name)}</b><span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/4 開放・wiki 現有資料，開放後可能變動</span>`:""}`;
+  $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length;
+  $("nItem").textContent=Object.keys(ITEMS).filter(id=>itemFloors(id).includes(f)).length;
+  fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
+function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|quests)$/);
+  view=mm?mm[2]:"map";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
+  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);
+  document.querySelectorAll("nav.tabs a").forEach(a=>{a.href="#"+hashFor(a.dataset.v,FL);if(a.dataset.v===view)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  if(view==="map")requestAnimationFrame(()=>{if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
+  renderCurrent()}
+function renderCurrent(){if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else renderQuests()}
+window.addEventListener("hashchange",show);
+q.addEventListener("input",renderCurrent);
+
+const setHead=()=>document.documentElement.style.setProperty("--head-h",$("top").getBoundingClientRect().height+"px");
+new ResizeObserver(setHead).observe($("top"));
+let lastW=0;new ResizeObserver(()=>{const w=Math.round(stage.getBoundingClientRect().width);if(w&&w!==lastW&&MP()){lastW=w;fit()}}).observe(stage);
+mapImg.addEventListener("load",()=>{if(view==="map")fit()});
+show();setHead();
+})();
+
+</script>
+
+</body>
+</html>
