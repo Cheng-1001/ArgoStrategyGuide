@@ -287,6 +287,7 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .note.ok{border-left:3px solid var(--ok)}
 .steps.big{font-size:14.5px;gap:8px}
 .steps code{font-size:12px;background:var(--panel-2);padding:1px 5px;border-radius:4px}
+.repbtn.big{font-size:17px;padding:12px 22px;align-self:flex-start}
 .rbtns{display:flex;gap:8px;flex-wrap:wrap}
 .steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:13.5px}
 .replist{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:1px solid var(--line)}
@@ -498,6 +499,24 @@ Object.entries(FLOORS).forEach(([f,F])=>{f=+f;F.no=f;
   F.spots=F.spots.map(s=>({src:"player",mons:[],items:[],...s,floor:f}));
   F.quests=F.quests.map((q,i)=>({need:[],...q,id:q.id||("f"+f+"q"+i),floor:f}));
   F.monByName=Object.fromEntries(F.M.map(m=>[m.name,m]))});
+// ---- player reports from the Google form arrive as raw "question title: answer" pairs; turn them into fields here,
+// so changing the form only needs changes in this page (the Google script copies answers without interpreting them)
+const RAWF={level:/等級/,coords:/座標/,codexNo:/圖鑑編號/,region:/圖鑑區域/,drops:/掉落/,desc:/圖鑑描述|LOCATION HINT/i,kind:/怪物・類型|地點・種類/,beh:/行為/,from:/來源/,how:/怎麼拿到/,notes:/備註|說明/};
+function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,v] of Object.entries(r.raw))if(re.test(k)&&String(v).trim())return String(v).trim();return""};
+  const lv=g(RAWF.level).match(/\d+/);if(lv)o.level=+lv[0];
+  const c=g(RAWF.coords).match(/(-?\d+)[^\d-]+(-?\d+)/);if(c){o.x=+c[1];o.z=+c[2]}
+  ["codexNo","region","desc","kind","beh","from","how","notes"].forEach(k=>{const v=g(RAWF[k]);if(v)o[k]=v});
+  const dl=g(RAWF.drops).split(/\n+/).map(l=>l.trim()).filter(Boolean);
+  if(dl.length){const parsed=dl.map(l=>{const m=l.match(/^(.+?)[\s:：x×]*(\d+(?:\.\d+)?)\s*%?$/);return m?[m[1].trim(),+m[2]]:[l,null]});o.dropsText=dl;if(parsed.every(d=>d[1]!=null))o.drops=parsed}
+  if(!o.summary){const t=[];if(o.level!=null)t.push("等級 "+o.level);if(o.codexNo)t.push("圖鑑 "+o.codexNo);if(o.drops)t.push("掉落物 "+o.drops.length+" 種");if(o.how)t.push(o.how+(o.from?"："+o.from:""));if(o.kind&&r.type==="place")t.push(o.kind);o.summary=t.join("・")}
+  return o}
+window.SAO_REPORTS=(window.SAO_REPORTS||[]).map(normRep);
+// monsters reported by players that the tool does not have yet get their own entry
+window.SAO_REPORTS.forEach(r=>{if(r.type!=="monster"||!FLOORS[r.floor])return;const Fx=FLOORS[r.floor];if(Fx.monByName[r.name])return;
+  if(!Fx.zones.rep){Fx.zones.rep={n:"Player reports",zh:"玩家回報（位置待整理）"};if(Fx.order&&!Fx.order.includes("rep"))Fx.order.push("rep")}
+  const type={"一般怪物":"Monster","小首領":"Mini-Boss","首領":"Boss"}[r.kind]||"Monster";const beh=/主動/.test(r.beh||"")?"A":/被動/.test(r.beh||"")?"P":"N";
+  const m={id:"rep-"+r.id,num:(r.codexNo||"").replace("#",""),name:r.name,type,beh,zone:"rep",diff:0,drops:[],note:"這隻怪物是玩家回報新增的，wiki 沒有收錄。"+(/主動|中立|被動/.test(r.beh||"")?"":"行為未回報。"),icon:"❔",floor:r.floor,fromReport:true};
+  Fx.M.push(m);Fx.monByName[m.name]=m});
 const FL_KEYS=Object.keys(FLOORS).map(Number).sort((a,b)=>a-b);
 const ALLM=FL_KEYS.flatMap(f=>FLOORS[f].M), monById=Object.fromEntries(ALLM.map(m=>[m.id,m]));
 const ALLT=FL_KEYS.flatMap(f=>FLOORS[f].towns), townById=Object.fromEntries(ALLT.map(t=>[t.id,t]));
@@ -511,7 +530,9 @@ Object.entries(S23.unknown).forEach(([id,x])=>{ITEMS[id]={id,fr:null,r:null,lv:n
 
 // accepted player reports with in-game Codex data replace the wiki drop list (the Codex is the game's own data)
 (window.SAO_REPORTS||[]).forEach(r=>{if(r.type!=="monster")return;const m=ALLM.find(x=>x.floor===r.floor&&x.name===r.name);if(!m)return;
-  if(r.drops){m.wikiDrops=m.drops;const ok=d=>ITEMS[d[0]]&&d[0]!=="???";m.drops=r.drops.filter(ok);m.dropsLocked=r.drops.filter(d=>!ok(d));m.dropSrc=r}
+  // replace the wiki drop list only when every reported item is one the tool knows ("???" = still locked in the Codex)
+  if(r.drops&&r.drops.every(d=>d[0]==="???"||ITEMS[d[0]])){m.wikiDrops=m.drops;m.drops=r.drops.filter(d=>d[0]!=="???");m.dropsLocked=r.drops.filter(d=>d[0]==="???");m.dropSrc=r}
+  else if(r.dropsText)m.repDropsText=r.dropsText;
   if(r.desc)m.codexDesc=r.desc});
 const SOURCES={},USES={},GATHER={};Object.keys(ITEMS).forEach(k=>{SOURCES[k]=[];USES[k]=[];GATHER[k]=[]});
 ALLM.forEach(m=>m.drops.forEach(([id,p])=>SOURCES[id].push({m,p})));
@@ -604,7 +625,8 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   ${(()=>{const h=(window.SAO_HINTS||{})[m.floor]?.[m.name];return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted">${esc(h[1])}${h[2]?"":"・依圖鑑順序推斷對應，可能不準"}</span></div>`:""})()}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
   ${m.dropsLocked&&m.dropsLocked.length?`<div class="note">另有 ${m.dropsLocked.length} 種掉落物在圖鑑上還沒解鎖（${m.dropsLocked.map(d=>pct(d[1])).join("、")}）。</div>`:""}
-  ${m.dropSrc?`<div class="note">掉落機率來自遊戲內圖鑑（玩家回報 #${m.dropSrc.issue}）。wiki 原本寫：${m.wikiDrops.map(([i,p])=>esc(i)+" "+pct(p)).join("、")}。</div>`:""}
+  ${m.dropSrc?`<div class="note">掉落機率來自玩家回報（${repRef(m.dropSrc)}）。${m.wikiDrops.length?"wiki 原本寫："+m.wikiDrops.map(([i,p])=>esc(i)+" "+pct(p)).join("、")+"。":""}</div>`:""}
+  ${m.repDropsText?`<div class="note">玩家回報的掉落物（名稱還沒對應到物品資料）：${m.repDropsText.map(esc).join("、")}</div>`:""}
   ${repBlock(m)}
   ${kq.length?`<h3 class="sec">相關任務</h3><ul class="rows">${kq.map(qq=>`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>${killText(qq)}（${esc(qq.raw)}）</span></span><span class="v">${qq.xp?qq.xp+" xp":""}</span></button></li>`).join("")}</ul>`:""}
   <div class="note">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>
@@ -612,12 +634,14 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
 // ---- player reports ----
 const REPO="https://github.com/Cheng-1001/ArgoStrategyGuide";
 const REPS=(window.SAO_REPORTS||[]);
+const repRef=r=>r.issue?`<a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">回報 #${r.issue}</a>`:`回報 ${esc(r.id||"")}`;
+const repKey=r=>r.issue?"#"+r.issue:(r.id||"");
 const repsOf=m=>REPS.filter(r=>r.type==="monster"&&r.floor===m.floor&&r.name===m.name);
 const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:null};
 function repBlock(m){const r=repsOf(m);if(!r.length)return"";const a=r[0];
   return`<h3 class="sec">玩家回報 <span class="c">${r.length} 則</span></h3>
   <figure class="repfig"><a href="${esc(a.img)}" target="_blank" rel="noopener"><img src="${esc(a.img)}" alt="${esc(m.name)} 的遊戲截圖" loading="lazy"></a>
-  <figcaption>${a.codexNo?`圖鑑 ${esc(a.codexNo)}・${esc(a.region||"")}・`:""}${a.level!=null?`等級 <b class="mono">${a.level}</b>・`:""}${a.x!=null?`截圖位置 <span class="mono">X ${a.x} · Z ${a.z}</span>・`:""}<a href="${REPO}/issues/${a.issue}" target="_blank" rel="noopener">回報 #${a.issue}</a>（${esc(a.date)}）</figcaption></figure>
+  <figcaption>${a.codexNo?`圖鑑 ${esc(a.codexNo)}・${esc(a.region||"")}・`:""}${a.level!=null?`等級 <b class="mono">${a.level}</b>・`:""}${a.x!=null?`截圖位置 <span class="mono">X ${a.x} · Z ${a.z}</span>・`:""}${repRef(a)}（${esc(a.date)}）</figcaption></figure>
   ${FLOORS[m.floor].map&&a.x!=null?`<button class="linkbtn" data-rep="${m.floor}|${a.x}|${a.z}">在地圖上看截圖位置</button>`:""}`}
 const killText=qq=>`擊殺 ${qq.kill[0].join(" / ")} ${qq.kill[2]?"各 ":""}${qq.kill[1]} 隻`;
 
@@ -904,12 +928,33 @@ async function loadPending(){if(pendingCache)return pendingCache;
   try{const r=await fetch("https://api.github.com/repos/Cheng-1001/ArgoStrategyGuide/issues?state=open&per_page=100");if(!r.ok)throw 0;
     pendingCache=(await r.json()).filter(x=>!x.pull_request&&/^\[(怪物|物品|地點|其他)\]/.test(x.title));}catch(e){pendingCache="err"}return pendingCache}
 let rFloorShown=null;
-function renderReport(){if(!rBuilt)buildReport();
-  if(rFloorShown!==FL){$("rf_floor").value=FL;rFloorShown=FL;if(RF[rType].list==="monster")rDrawFields()}
-  const done=REPS.slice().sort((a,b)=>b.issue-a.issue);$("doneC").textContent=done.length+" 則";
+// Google form (filled in after the form exists). FORM_PREFILL contains "{floor}" where the floor number goes.
+const FORM_PREFILL="";
+function buildFormReport(){
+  $("rWrap").innerHTML=`
+  <div class="rhead"><h2>回報區</h2><span class="count">新增或更正資料，每筆都要附遊戲截圖</span></div>
+  <article class="bcard rform">
+    <a class="repbtn big" id="formGo" target="_blank" rel="noopener">填寫回報表單 ↗</a>
+    <ol class="steps big">
+      <li><b>先準備截圖</b>：遊戲裡按 F2 存截圖。怪物要拍到名字上方的等級和小地圖座標；或打開圖鑑（Codex）截整頁。</li>
+      <li><b>按上面的按鈕</b>，用 Google 帳號登入（上傳截圖需要登入，不會公開你的帳號）。樓層會先幫你填好。</li>
+      <li><b>填名稱、選回報種類</b>（怪物、物品、地點），下一頁再填該種類的資料。</li>
+      <li><b>最後一頁上傳截圖</b>，按「提交」。</li></ol>
+    <div class="note">審核員核對截圖後按「核准」，網站會在幾分鐘內自動更新。工具裡還沒有的怪物、物品、地點也可以回報。</div>
+  </article>
+  <article class="bcard"><h4 class="sec">審核流程</h4>
+    <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線。</li></ol>
+    <div class="muted" style="font-size:12.5px">想當審核員？請聯絡網站管理者。</div></article>
+  <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article>`;
+  rBuilt=true}
+function renderReport(){
+  if(FORM_PREFILL){if(!rBuilt)buildFormReport();$("formGo").href=FORM_PREFILL.replace("{floor}",FL)}
+  else{if(!rBuilt)buildReport();if(rFloorShown!==FL){$("rf_floor").value=FL;rFloorShown=FL;if(RF[rType].list==="monster")rDrawFields()}}
+  const done=REPS.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(repKey(b)).localeCompare(String(repKey(a))));$("doneC").textContent=done.length+" 則";
   $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?FLOORS[r.floor]?.M.find(x=>x.name===r.name):null;
-      return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span><a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">#${r.issue}</a>・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
-  bindGo($("doneL"));
+      return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span>${repRef(r)}・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}${r.x!=null&&FLOORS[r.floor]?.map?` ・<button class="linkbtn" data-rep="${r.floor}|${r.x}|${r.z}">在地圖上看</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
+  bindGo($("doneL"));$("doneL").querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);goMapThen(f,()=>repPin(x,z))});
+  if(FORM_PREFILL)return;
   loadPending().then(list=>{const L=$("pendL"),C=$("pendC");if(!L)return;
     if(list==="err"){L.textContent="這裡讀不到 GitHub 的資料，請用下面的連結查看。";return}
     C.textContent=list.length+" 則";
