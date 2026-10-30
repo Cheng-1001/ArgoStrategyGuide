@@ -159,6 +159,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .legend span,.legend .lgt{display:inline-flex;gap:5px;align-items:center}
 .legend .lgt{background:none;border:1px solid rgba(255,255,255,.28);color:inherit;border-radius:999px;padding:1px 8px 1px 6px;cursor:pointer;font-size:11.5px}
 .legend .lgt:hover{border-color:#fff}
+.legend .lgb{background:var(--accent);border:0;color:#fff;border-radius:999px;padding:2px 10px;cursor:pointer;font-size:11.5px;font-weight:600}
 .legend .lgt[aria-pressed="false"]{opacity:.45;text-decoration:line-through;border-style:dashed}
 .lg{width:11px;height:11px;border-radius:50%;border:2.5px solid var(--minion);background:#fff;display:inline-block}
 .editbar{position:absolute;left:50%;top:48px;transform:translateX(-50%);z-index:6;background:var(--accent);color:var(--accent-ink);padding:6px 14px;border-radius:6px;font-size:13px;box-shadow:var(--shadow);max-width:calc(100% - 24px);text-align:center}
@@ -406,6 +407,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
         <button class="lgt" data-k="boss" aria-pressed="true" title="顯示或隱藏首領"><i class="lg" style="border-color:var(--boss)"></i>首領</button><button class="lgt" data-k="mini" aria-pressed="true" title="顯示或隱藏小首領"><i class="lg" style="border-color:var(--mini)"></i>小首領</button><button class="lgt" data-k="mob" aria-pressed="true" title="顯示或隱藏一般怪物"><i class="lg"></i>一般</button>
         <span><i class="beh-A" style="width:9px;height:9px;border-radius:50%;display:inline-block"></i>主動</span><span><i class="beh-N" style="width:9px;height:9px;border-radius:50%;display:inline-block"></i>中立</span><span><i class="beh-P" style="width:9px;height:9px;border-radius:50%;display:inline-block"></i>被動</span>
         <button class="lgt" data-k="town" aria-pressed="true" title="顯示或隱藏村鎮"><i style="width:9px;height:9px;transform:rotate(45deg);background:var(--accent);display:inline-block"></i>村鎮</button>
+        <button class="lgb" id="baseBtn" hidden title="切換底圖：wiki 地圖或 JourneyMap 探索地圖"></button>
       </div>
       <div class="editbar" id="editbar" hidden></div>
       <div class="hud"><span class="coord" id="coord">X — · Z —</span></div>
@@ -487,7 +489,7 @@ const STATUS={...S1.STATUS,quest:{t:"任務座標",c:"s-player",d:"座標寫在 
 
 // ---------- floors ----------
 const FLOORS={
-  1:{name:"Town of Beginnings",lv:"1–5",boss:"Illfang",status:"open",map:{img:"floor1.jpg",size:S1.MAP,x0:0,z0:0},
+  1:{name:"Town of Beginnings",lv:"1–5",boss:"Illfang",status:"open",map:{img:"floor1.jpg",size:S1.MAP,x0:70,z0:70,jm:"floor1_jm.jpg",jmDate:"2026-10-30"},
      zones:S1.ZONES,order:S1.ZONE_ORDER,M:S1.M,towns:S1.TOWNS,spots:S1.SPOTS,quests:S1.QUESTS},
   2:S23.floors[2],3:S23.floors[3]
 };
@@ -943,7 +945,9 @@ $("zfit").onclick=fit;
 const zoneEls={};
 // map layer toggles (remembered per viewer)
 const typeKey=m=>m.type==="Boss"?"boss":m.type==="Mini-Boss"?"mini":"mob";
+let BASE="wiki";try{BASE=localStorage.getItem("sao-map-base")||"wiki"}catch(e){}
 let HIDE={};try{HIDE=JSON.parse(localStorage.getItem("sao-map-hide")||"{}")||{}}catch(e){HIDE={}}
+$("baseBtn").addEventListener("click",ev=>{ev.stopPropagation();BASE=BASE==="jm"?"wiki":"jm";try{localStorage.setItem("sao-map-base",BASE)}catch(e){};renderMap()});
 document.querySelectorAll(".legend .lgt").forEach(b=>{b.setAttribute("aria-pressed",!HIDE[b.dataset.k]);
   b.addEventListener("click",ev=>{ev.stopPropagation();const k=b.dataset.k;HIDE[k]=!HIDE[k];b.setAttribute("aria-pressed",!HIDE[k]);
     try{localStorage.setItem("sao-map-hide",JSON.stringify(HIDE))}catch(e){};renderMap()})});
@@ -955,7 +959,9 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin").forEach(n=>n.re
   const m=MP();$("noMap").hidden=!!m;world.hidden=!m;document.querySelector(".zoombtns").hidden=!m;document.querySelector(".hud").hidden=!m;document.querySelector(".legend").hidden=!m;
   $("mapNote").hidden=!(m&&m.note);if(m&&m.note)$("mapNote").textContent=m.note;
   if(!m){filterMap();return}
-  if(!mapImg.src.endsWith(m.img)){mapImg.src=m.img;fitted=false}
+  const want=BASE==="jm"&&m.jm?m.jm:m.img;$("baseBtn").hidden=!m.jm;$("baseBtn").textContent=BASE==="jm"&&m.jm?"底圖：探索地圖":"底圖：wiki 地圖";
+  if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate}），其餘為變暗的 wiki 地圖。`}
+  if(!mapImg.src.endsWith(want)){const same=mapImg.dataset.f===String(FL);mapImg.src=want;mapImg.dataset.f=String(FL);if(!same)fitted=false}
   if(!HIDE.town)F().towns.forEach(t=>{const b=document.createElement("button");b.className="town";b.style.left=toPxX(t.x)+"px";b.style.top=toPxZ(t.z)+"px";
     b.innerHTML=`<span class="pin"></span><span class="tname">${esc(t.n)}</span>`;b.setAttribute("aria-label","村鎮 "+t.n);
     b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("t",t.id,"new")});world.appendChild(b)});
