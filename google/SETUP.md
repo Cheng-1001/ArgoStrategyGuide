@@ -21,7 +21,7 @@
    - **Expiration**：選 `Custom`，日期選一年後（到期後要重新產生，見最下方「金鑰到期」）
    - **Resource owner**：`Cheng-1001`
    - **Repository access**：選 `Only select repositories`，再選 `Cheng-1001/ArgoStrategyGuide`
-   - **Permissions** → **Repository permissions** → 找到 **Contents**，改成 `Read and write`（Metadata 會自動變成 Read-only，不用動）
+   - **Permissions**：在「Repositories」分頁按右邊的 **+ Add permissions** → 在清單裡勾選 **Contents** → 關閉清單後，把 Contents 那一列右邊的存取權改成 **Read and write**（Metadata 會自動加上 Read-only，不用動）
 3. 按最下面的 **Generate token**，確認後畫面會出現一串 `github_pat_` 開頭的文字。
 4. 按旁邊的複製圖示，先貼在記事本裡。**這串文字只會顯示這一次**，離開頁面就看不到了。不要傳給任何人，包括傳到對話裡。
 
