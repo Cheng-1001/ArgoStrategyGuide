@@ -503,6 +503,10 @@ const ITEMS={...S1.ITEMS};
 Object.entries(window.SAO23_ITEMS).forEach(([id,r])=>{ITEMS[id]={id,fr:r[0],r:r[1],lv:r[2],cat:r[3],lore:r[4],dmg:r[5],st:r[6],ic:r[7],...(S23.extra[id]||{})}});
 Object.entries(S23.unknown).forEach(([id,x])=>{ITEMS[id]={id,fr:null,r:null,lv:null,cat:"unknown",lore:null,dmg:null,st:null,ic:-1,...x}});
 
+// accepted player reports with in-game Codex data replace the wiki drop list (the Codex is the game's own data)
+(window.SAO_REPORTS||[]).forEach(r=>{if(r.type!=="monster")return;const m=ALLM.find(x=>x.floor===r.floor&&x.name===r.name);if(!m)return;
+  if(r.drops){m.wikiDrops=m.drops;const ok=d=>ITEMS[d[0]]&&d[0]!=="???";m.drops=r.drops.filter(ok);m.dropsLocked=r.drops.filter(d=>!ok(d));m.dropSrc=r}
+  if(r.desc)m.codexDesc=r.desc});
 const SOURCES={},USES={},GATHER={};Object.keys(ITEMS).forEach(k=>{SOURCES[k]=[];USES[k]=[];GATHER[k]=[]});
 ALLM.forEach(m=>m.drops.forEach(([id,p])=>SOURCES[id].push({m,p})));
 Object.values(SOURCES).forEach(a=>a.sort((x,y)=>x.m.floor-y.m.floor||(y.p??-1)-(x.p??-1)));
@@ -590,8 +594,11 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   <dt>圖鑑區域</dt><dd>${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span></dd>
   <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd></dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
+  ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
+  <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
+  ${m.dropsLocked&&m.dropsLocked.length?`<div class="note">另有 ${m.dropsLocked.length} 種掉落物在圖鑑上還沒解鎖（${m.dropsLocked.map(d=>pct(d[1])).join("、")}）。</div>`:""}
+  ${m.dropSrc?`<div class="note">掉落機率來自遊戲內圖鑑（玩家回報 #${m.dropSrc.issue}）。wiki 原本寫：${m.wikiDrops.map(([i,p])=>esc(i)+" "+pct(p)).join("、")}。</div>`:""}
   ${repBlock(m)}
-  <h3 class="sec">掉落物 <span class="c">${m.drops.length}</span></h3>${drops}
   ${kq.length?`<h3 class="sec">相關任務</h3><ul class="rows">${kq.map(qq=>`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>${killText(qq)}（${esc(qq.raw)}）</span></span><span class="v">${qq.xp?qq.xp+" xp":""}</span></button></li>`).join("")}</ul>`:""}
   <div class="note">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>
   ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}`}
@@ -603,7 +610,7 @@ const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:null};
 function repBlock(m){const r=repsOf(m);if(!r.length)return"";const a=r[0];
   return`<h3 class="sec">玩家回報 <span class="c">${r.length} 則</span></h3>
   <figure class="repfig"><a href="${esc(a.img)}" target="_blank" rel="noopener"><img src="${esc(a.img)}" alt="${esc(m.name)} 的遊戲截圖" loading="lazy"></a>
-  <figcaption>${a.level!=null?`等級 <b class="mono">${a.level}</b>・`:""}${a.x!=null?`截圖位置 <span class="mono">X ${a.x} · Z ${a.z}</span>・`:""}<a href="${REPO}/issues/${a.issue}" target="_blank" rel="noopener">回報 #${a.issue}</a>（${esc(a.date)}）</figcaption></figure>
+  <figcaption>${a.codexNo?`圖鑑 ${esc(a.codexNo)}・${esc(a.region||"")}・`:""}${a.level!=null?`等級 <b class="mono">${a.level}</b>・`:""}${a.x!=null?`截圖位置 <span class="mono">X ${a.x} · Z ${a.z}</span>・`:""}<a href="${REPO}/issues/${a.issue}" target="_blank" rel="noopener">回報 #${a.issue}</a>（${esc(a.date)}）</figcaption></figure>
   ${FLOORS[m.floor].map&&a.x!=null?`<button class="linkbtn" data-rep="${m.floor}|${a.x}|${a.z}">在地圖上看截圖位置</button>`:""}`}
 const killText=qq=>`擊殺 ${qq.kill[0].join(" / ")} ${qq.kill[2]?"各 ":""}${qq.kill[1]} 隻`;
 
@@ -822,21 +829,25 @@ function rMsg(t,c){const m=$("rf_msg");m.textContent=t;m.className="rmsg "+(c||"
 function rCheck(v){const T=RF[rType];const miss=[];if(!/^\d{1,3}$/.test(v.floor))miss.push("樓層（只填數字）");if(!v.name)miss.push(T.name.replace(/（.*）/,""));
   T.fields.forEach(f=>{const lab=$("rf_more").querySelector(`[data-id="${f.id}"]`);if(f.req&&!(lab&&lab.hidden)&&!v[f.id])miss.push(f.l)});
   if(v.level&&!/^\d{1,3}$/.test(v.level))miss.push("等級只能填數字");if(!rShot)miss.push("截圖");return miss}
+const SHOT_MARK="（在這一行按 Ctrl+V 貼上截圖，這行字可以刪掉）";
+function rBody(v,T){const L=[`<!-- 由查詢工具的回報區產生 -->`,`**種類**：${RT_ZH[rType]}`,`**樓層**：${v.floor}`,`**${T.name.replace(/（.*）/,"")}**：${v.name}`];
+  T.fields.forEach(f=>{const lab=$("rf_more").querySelector(`[data-id="${f.id}"]`);if(!v[f.id]||(lab&&lab.hidden))return;
+    if(f.type==="area")L.push("",`**${f.l}**：`,"```",v[f.id],"```");else L.push(`**${f.l}**：${v[f.id]}`)});
+  L.push("","### 截圖",SHOT_MARK,"");return L.join("\n")}
 async function rSubmit(){const v=rVals();RV[rType]=v;const miss=rCheck(v);if(miss.length){rMsg("還沒填好："+miss.join("、"),"err");return}
-  const T=RF[rType];const q=new URLSearchParams();q.set("template",T.f);
-  q.set("title",`[${RT_ZH[rType]}] F${v.floor} ${v.name}${v.level?" LV "+v.level:""}`);q.set("floor",v.floor);q.set(T.nameId||"name",v.name);
-  T.fields.forEach(f=>{const lab=$("rf_more").querySelector(`[data-id="${f.id}"]`);if(v[f.id]&&!(lab&&lab.hidden))q.set(f.id,v[f.id])});
+  const T=RF[rType];const q=new URLSearchParams();
+  q.set("title",`[${RT_ZH[rType]}] F${v.floor} ${v.name}${v.level?" LV "+v.level:""}`);q.set("body",rBody(v,T));
   const url=`${REPO}/issues/new?${q}`;let copied=false;
   try{await navigator.clipboard.write([new ClipboardItem({"image/png":rShot.png})]);copied=true}catch(e){}
   const w=window.open(url,"_blank","noopener");
   $("rf_done").hidden=false;$("rf_form").hidden=true;
   $("rf_done").innerHTML=`<h4 class="sec">最後一步：在 GitHub 頁面上</h4>
-   ${copied?`<div class="note ok">截圖已經複製好了。</div>`:`<div class="note warn">這裡沒辦法自動複製截圖，請改用拖曳：把你的截圖檔案拖進 GitHub 的「截圖」框。</div>`}
-   <ol class="steps big"><li>沒有登入的話先登入 GitHub（沒有帳號可以免費註冊）。所有欄位都已經幫你填好了。</li>
-   <li>往下捲到 <b>「截圖（必填）」</b>那一格，點一下框裡面。</li>
-   <li>${copied?"按 <b>Ctrl+V</b>（Mac 是 ⌘+V）貼上截圖。":"把截圖檔案拖進那一格。"}</li>
-   <li>等框裡出現一行 <code>![image](https://...)</code> 的文字，代表上傳完成。</li>
-   <li>按最下面綠色的 <b>Create</b> 送出。</li></ol>
+   ${copied?`<div class="note ok">截圖已經複製好了。</div>`:`<div class="note warn">這裡沒辦法自動複製截圖，請改用拖曳：把你的截圖檔案拖進 GitHub 的說明框。</div>`}
+   <ol class="steps big"><li>沒有登入的話先登入 GitHub（沒有帳號可以免費註冊）。標題和說明都已經幫你填好了。</li>
+   <li>在說明框裡找到最下面這一行：<br><code>${SHOT_MARK}</code><br>點一下那一行。</li>
+   <li>${copied?"按 <b>Ctrl+V</b>（Mac 是 ⌘+V）貼上截圖。":"把截圖檔案拖進說明框。"}</li>
+   <li>等那裡出現一行 <code>![image](https://...)</code> 或 <code>&lt;img ...&gt;</code> 的文字，代表上傳完成。<b>還在上傳時不要送出。</b></li>
+   <li>按右下角綠色的 <b>Create</b> 送出。</li></ol>
    <div class="rbtns"><a class="repbtn" href="${esc(url)}" target="_blank" rel="noopener">${w?"GitHub 沒有打開？":""}打開 GitHub 回報頁 ↗</a>
    ${copied?`<button class="repbtn ghost" id="rf_recopy">再複製一次截圖</button>`:""}<button class="repbtn ghost" id="rf_again">再回報一筆</button></div>`;
   if($("rf_recopy"))$("rf_recopy").onclick=async()=>{try{await navigator.clipboard.write([new ClipboardItem({"image/png":rShot.png})]);$("rf_recopy").textContent="已複製"}catch(e){$("rf_recopy").textContent="複製失敗，請用拖曳"}};
@@ -855,7 +866,7 @@ function buildReport(){
       <li><b>怪物（野外）</b>：怪物名字和上方的等級（例如「Young Spider LV 3」），以及小地圖座標。</li>
       <li><b>怪物（圖鑑）</b>：遊戲內 Codex → Monstres → 點該怪物，截整頁。<b>圖鑑不顯示等級</b>，等級要在野外截。</li>
       <li><b>物品</b>：物品說明，或掉落、取得的畫面。<b>地點</b>：地點本身和小地圖座標。</li>
-      <li>只能自動複製一張截圖；要附更多張，到 GitHub 時再拖進同一格就好。</li></ul></details>
+      <li>只能自動複製一張截圖；要附更多張，到 GitHub 時再拖進說明框就好。</li></ul></details>
     <div class="rstep"><b>3</b> 填資料</div>
     <div class="rgrid">
       <label class="rfield"><span>樓層 <i class="req">必填</i></span><input id="rf_floor" inputmode="numeric" autocomplete="off"></label>
@@ -863,15 +874,15 @@ function buildReport(){
     </div>
     <div class="rgrid" id="rf_more"></div>
     <div class="rstep"><b>4</b> 送出</div>
-    <div class="rsub"><button type="button" class="repbtn" id="rf_go">送出到 GitHub ↗</button><span class="muted">會打開 GitHub 回報頁，欄位都會先填好；截圖會先複製起來，到那邊按 Ctrl+V 貼上。</span></div>
+    <div class="rsub"><button type="button" class="repbtn" id="rf_go">送出到 GitHub ↗</button><span class="muted">會打開 GitHub 回報頁，標題和內容都會先填好；截圖會先複製起來，到那邊按 Ctrl+V 貼上。</span></div>
     <div id="rf_msg" class="rmsg" role="status"></div>
    </div>
    <div id="rf_done" hidden></div>
   </article>
   <article class="bcard"><h4 class="sec">審核流程</h4>
-    <ol class="steps"><li><b>待審核</b>：送出後自動標上。</li><li><b>核對</b>：截圖和填寫的內容對得上才收錄；同一隻怪物等級說法不同時，以截圖清楚的為準。</li><li><b>已收錄</b>：資料加進工具，截圖存一份在網站裡，回報會被關閉。</li><li><b>退回</b>：截圖看不出內容或資料對不上，會留言說明原因。</li></ol></article>
+    <ol class="steps"><li><b>待審核</b>：送出後就會出現在下面的「等待審核」。</li><li><b>核對</b>：截圖和填寫的內容對得上才收錄；同一隻怪物等級說法不同時，以截圖清楚的為準。</li><li><b>已收錄</b>：資料加進工具，截圖存一份在網站裡，回報會被關閉。</li><li><b>退回</b>：截圖看不出內容或資料對不上，會留言說明原因。</li></ol></article>
   <article class="bcard"><h4 class="sec">等待審核 <span class="c" id="pendC"></span></h4><div id="pendL" class="muted">讀取中…</div>
-    <a class="linkbtn" href="${REPO}/issues?q=${encodeURIComponent("is:issue label:待審核")}" target="_blank" rel="noopener">在 GitHub 看全部待審核回報 ↗</a></article>
+    <a class="linkbtn" href="${REPO}/issues?q=${encodeURIComponent("is:issue is:open")}" target="_blank" rel="noopener">在 GitHub 看全部待審核回報 ↗</a></article>
   <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article>`;
   document.querySelectorAll(".rtab").forEach(b=>b.onclick=()=>{RV[rType]=rVals();rType=b.dataset.k;rDrawFields();rMsg("")});
   $("rf_file").onchange=e=>rSetShot(e.target.files[0]);
@@ -883,8 +894,8 @@ function buildReport(){
   rResetShot();rDrawFields();rBuilt=true}
 let pendingCache=null;
 async function loadPending(){if(pendingCache)return pendingCache;
-  try{const r=await fetch("https://api.github.com/repos/Cheng-1001/ArgoStrategyGuide/issues?state=open&per_page=50&labels="+encodeURIComponent("待審核"));if(!r.ok)throw 0;
-    pendingCache=(await r.json()).filter(x=>!x.pull_request);}catch(e){pendingCache="err"}return pendingCache}
+  try{const r=await fetch("https://api.github.com/repos/Cheng-1001/ArgoStrategyGuide/issues?state=open&per_page=100");if(!r.ok)throw 0;
+    pendingCache=(await r.json()).filter(x=>!x.pull_request&&/^\[(怪物|物品|地點|其他)\]/.test(x.title));}catch(e){pendingCache="err"}return pendingCache}
 let rFloorShown=null;
 function renderReport(){if(!rBuilt)buildReport();
   if(rFloorShown!==FL){$("rf_floor").value=FL;rFloorShown=FL;if(RF[rType].list==="monster")rDrawFields()}
