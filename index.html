@@ -292,6 +292,9 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .replist img{width:96px;height:60px;object-fit:cover;border-radius:6px;background:#111;flex:none}
 .replist .t{display:flex;flex-direction:column;gap:2px;min-width:0;font-size:13px}
 .replist .t>span{color:var(--muted);font-size:12.5px}
+.hint{display:flex;flex-direction:column;gap:2px;border-left:3px solid var(--accent);background:var(--panel-2);border-radius:0 8px 8px 0;padding:8px 12px}
+.hint .hk{font-size:11.5px;color:var(--accent);font-weight:600;letter-spacing:.06em}
+.hint b{font-size:14px;font-weight:600}.hint .muted{font-size:12px}
 /* player reports */
 .pill.rep{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
 .repbtn{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;border:1px solid var(--accent)}
@@ -474,6 +477,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="data23.js"></script>
 <script src="bosses.js"></script>
 <script src="reports.js"></script>
+<script src="hints.js"></script>
 <script>
 (()=>{
 const S1=window.SAO,S23=window.SAO23;
@@ -537,7 +541,7 @@ const BEH_ZH={A:"主動攻擊（看到就打）",N:"中立（被打才反擊）"
 const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["傳說+","r-s",5]};
 const GROUP={material:"材料",food:"食物",ring:"飾品",artifact:"飾品",amulet:"飾品",bracelet:"飾品",shield:"防具",armor_set:"防具",bow:"武器",crossbow:"武器",dagger:"武器",sword:"武器",staff_mage:"武器",staff_shaman:"武器",lumberjack_job:"採集",miner_job:"採集",farmer_job:"採集",tool:"工具",gem_stone:"符文",fortifier:"藥水",unknown:"未收錄"};
 const CAT_ZH={material:"材料",food:"食物",ring:"戒指",artifact:"飾品",amulet:"項鍊",bracelet:"手環",shield:"盾牌",armor_set:"防具套裝",bow:"弓",crossbow:"弩",dagger:"匕首",sword:"近戰武器",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",lumberjack_job:"伐木採集",miner_job:"採礦",farmer_job:"農作",tool:"工具",gem_stone:"符文",fortifier:"強化藥水",unknown:"未收錄"};
-const STAT_ZH={"Defense":"防禦","Max Health":"最大生命","Max Mana":"最大魔力","Max Stamina":"最大體力","Attack Speed":"攻擊速度","Critical Strike Power":"暴擊傷害","Critical Strike Chance":"暴擊率","Skill Critical Strike Power":"技能暴擊傷害","Skill Critical Strike Chance":"技能暴擊率","Movement Speed":"移動速度","Health Regeneration":"生命回復","Mana Regeneration":"魔力回復","Stamina Regeneration":"體力回復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"治療加成","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"吸血","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋強度","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力"};
+const STAT_ZH={"Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"最大生命","Max Mana":"最大魔力","Max Stamina":"最大體力","Attack Speed":"攻擊速度","Critical Strike Power":"暴擊傷害","Critical Strike Chance":"暴擊率","Skill Critical Strike Power":"技能暴擊傷害","Skill Critical Strike Chance":"技能暴擊率","Movement Speed":"移動速度","Health Regeneration":"生命回復","Mana Regeneration":"魔力回復","Stamina Regeneration":"體力回復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"治療加成","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"吸血","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋強度","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力"};
 const CLASS_ZH={guerrier:"戰士",archer:"弓箭手",mage:"法師",assassin:"刺客",shaman:"薩滿"};
 const FLN=f=>`第 ${f} 層`;
 const flBadge=f=>`<span class="fl fl${f}">F${f}</span>`;
@@ -595,6 +599,7 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd></dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
   ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
+  ${(()=>{const h=(window.SAO_HINTS||{})[m.floor]?.[m.name];return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted">${esc(h[1])}${h[2]?"":"・依圖鑑順序推斷對應，可能不準"}</span></div>`:""})()}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
   ${m.dropsLocked&&m.dropsLocked.length?`<div class="note">另有 ${m.dropsLocked.length} 種掉落物在圖鑑上還沒解鎖（${m.dropsLocked.map(d=>pct(d[1])).join("、")}）。</div>`:""}
   ${m.dropSrc?`<div class="note">掉落機率來自遊戲內圖鑑（玩家回報 #${m.dropSrc.issue}）。wiki 原本寫：${m.wikiDrops.map(([i,p])=>esc(i)+" "+pct(p)).join("、")}。</div>`:""}

@@ -54,7 +54,7 @@ const M = [
 ["012","Woodland Mage","Monster","A","putrid",2,[["Enchanted Twig",85],["Spectral Cloth",75],["Wood Heart",35]],"","🍃"],
 ["","Sylvan Mage","Monster","A","putrid",2,[["Enchanted Twig",30],["Spectral Cloth",30],["Wood Heart",20],["Sylvan Mage Staff",1],["Sylvan Shaman Staff",1]],"wiki 未編號，掉落率可能是舊版資料。","🍂"],
 ["013","Guardian Colossal","Boss","A","putrid",2,[["Magic Mycelium",50],["Colossus Hammer",0.5]],"","🗿"],
-["014","Forest Spider","Monster","A","arakhnol",3,[["Spider Thread",85],["Spider Cloth",70],["Leg of Spider",0.5]],"","🕷️"],
+["014","Forest Spider","Monster","A","arakhnol",3,[["Spider Thread",85],["Spider Cloth",70],["Leg of a Spider",0.5]],"","🕷️"],
 ["014-2","Young Spider","Monster","A","hanaka",1,[],"wiki 註記：掉落率未知，但很常掉 Spider Thread 與 Spider Cloth。","🕷️"],
 ["015","Hunting Spider","Monster","A","arakhnolD",3,[],"","🕷️"],
 ["016","Venomous Spider","Monster","A","arakhnolD",3,[],"","🕷️"],
@@ -138,7 +138,7 @@ const RAW = {
 "Sylvan Mage Staff":["Bâton Magique Sylvestre","c",3,"staff_mage","Grâce aux Cœurs de Bois et à des Brindilles Enchantées, un bâton est né.","4",{"Max Mana":1,"Attack Speed":1,"Classe requise":"mage","Skill Critical Strike Power":0.5,"Skill Critical Strike Chance":0.5},20],
 "Magic Mycelium":["Mycélium Magique","b",1,"material","Ingrédient assez rare pour de la haute alchimie ou pour autre chose ?",null,null,21],
 "Colossus Hammer":["Marteau du Colosse","b",5,"sword","Cette arme de destruction sylvestre etait utilisée par les gardiens pour protéger leurs terres","14",{"Defense":2,"Attack Speed":0.9,"Classe requise":"guerrier","Movement Speed":-0.0025,"Arme à deux mains":1,"Cooldown Reduction":2,"Stamina Regeneration":0.2},22],
-"Spider Thread":["Fil d’Araignée","b",1,"material","Petit fil très fragile il peut se casser à tout moment",null,null,-1],
+"Spider Thread":["Fil d’Araignée","b",1,"material","Petit fil très fragile il peut se casser à tout moment",null,null,185],
 "Spider Cloth":["Tissu d’Araignée","c",1,"material","Un tissu fin, mais incroyablement résistant. Idéale pour des équipements légers ou enchantés.",null,null,23],
 "Mountain Stag Hide":["Peau de Cerf des Montagnes","c",1,"material","Un morceau de peau épaisse, rigide, utile pour des armures robustes.",null,null,24],
 "Slime Jelly":["Gelée de Slime","c",1,"material","Une petite et belle gelée gluante qui colle à vos mains pendant longtemps.",null,null,25],
@@ -193,7 +193,7 @@ const RAW = {
 "Unknown Logs":[null,null,null,"unknown",null,null,null,-1],
 "???":[null,null,null,"unknown",null,null,null,-1],
 "Sylvan Shaman Staff":[null,null,null,"unknown",null,null,null,-1],
-"Leg of Spider":[null,null,null,"unknown",null,null,null,-1],
+"Leg of a Spider":[null,"a",7,"artifact","The leg of a giant spider, quick and unpredictable, it dodges as much as it stings",null,{"Critical Strike Chance":1,"Projectile Damage":2,"Dodge":2.5},182],
 "Swordsmans Scroll":[null,null,null,"unknown",null,null,null,-1],
 "Archers Scroll":[null,null,null,"unknown",null,null,null,-1],
 "Skeleton Shaman Staff":[null,null,null,"unknown",null,null,null,-1]
@@ -201,6 +201,8 @@ const RAW = {
 
 // How each item is obtained besides monster drops (source text) and what it is used for (paraphrased from its official description).
 const EXTRA = {
+"Leg of a Spider":{note:"Spider Set（蜘蛛套裝）：2 件 +2.5% 移動速度；3 件 +0.025 攻擊速度；4 件 +2.5% 閃避；5 件 +0.25 攻擊傷害、+1% 暴擊率。名稱、數值、說明取自社群截圖（2026-10-30），法文名稱未知；wiki 原本寫成 Leg of Spider。圖示來自遊戲資源包（patte_araignee），與截圖一致。當時拍賣行最低價約 300 Col。"},
+"Spider Thread":{note:"圖示來自遊戲資源包（drop_fils_blanc），依外觀推斷對應，官方圖鑑沒有圖示。"},
 "Oak Log":{src:"伐木職業（Bûcheron）採集"},
 "Birch Log":{src:"伐木職業（Bûcheron）採集"},
 "Copper Ingot":{src:"採礦職業（Mineur）：由銅礦冶煉而成",use:["鍛造及部分製作會用到"]},
