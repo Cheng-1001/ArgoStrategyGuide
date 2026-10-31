@@ -365,7 +365,16 @@ const QUESTS = [
  Q("Tomoko","candelia",1956,815,[["Ancestral Root",5],["Sylvan Bark",20]],294,1000,null,"5 racines ancestrale + 20 écorces sylvestre"),
  Q("Varn","tob",2068,4291,[["Wolf Fur",4],["Magic Wood Shard",2],["Reinforced Skeleton Bone",1]],146,250,null,"4 fourrures de loup + 2 éclats de bois magique + 1 os renforcé"),
  Q("Yannis","candelia",2014,834,[["Oak Log",32]],146,300,null,"32 bûches de chêne"),
- Q("Zebulgarath","vallhat",499,3050,[["Ancestral Root",3]],439,1000,null,"3 racines ancestrales")
+ Q("Zebulgarath","vallhat",499,3050,[["Ancestral Root",3]],439,1000,null,"3 racines ancestrales"),
+ /* Current-version side quests from the reference map (title, NPC, X/Z, target, count, xp, Col); objective text is ours. */
+ {...Q("Guard Tomas","hanaka",1811,3748,[],300,80,null,"Kill enraged boars (10)",[["Corrupted Boar"],10]),title:"Too Many Boars",src:"ref"},
+ {...Q("Scout Raphael","hanaka",1440,3449,[],550,150,null,"Kill young spiders (15)",[["Young Spider"],15]),title:"Webs to Burn",src:"ref"},
+ {...Q("Sentinel Kael","tolbana",4075,1990,[],700,200,null,"Take down winter golems (10)",[["Ice Golem"],10]),title:"The Citadel's Cold",src:"ref",tnote:"原文是「winter golems」，應該就是雪之城塞的 Ice Golem。"},
+ {...Q("Shepherd Ivo","tolbana",4074,1994,[],350,100,null,"Shoot down frost butterflies (12)",[["Ice Spirit"],12]),title:"Frost Swarm",src:"ref",tnote:"原文是「frost butterflies（霜蝶）」，推測是雪之城塞的 Ice Spirit，未確認。"},
+ {...Q("Shepherd Ivo","tob",2405,4069,[],400,100,null,"Killing White Wolves (12)",[["White Dire Wolf"],12]),title:"Wolves of the Valley",src:"ref"},
+ {...Q("Herbalist Nessa","hanaka",1542,3460,[],450,120,null,"Kill spawn slimes (20)",[["Small Slime","Slime Warrior","Healer Slime","Mage Slime"],20]),title:"Clearing the Marsh",src:"ref",tnote:"原文是「spawn slimes」，沒有指定哪一種史萊姆，Vallhat 的史萊姆合計 20 隻。"},
+ {...Q("Archivist Orin","mizunari",2765,4396,[],600,160,null,"Slay skeleton warriors (20)",[["Skeleton Warrior"],20]),title:"Bone and Dust",src:"ref"},
+ {...Q("Carter Milo","mizunari",3619,3443,[],550,150,null,"Kill highway bandits (15)",[["Bandit Archer","Bandit Assassin","Sturdy Bandit"],15]),title:"The Road Is No Longer Safe",src:"ref",tnote:"原文是「highway bandits」，沒有指定哪一種盜賊，合計 15 隻。"}
 ].map((q,i)=>({...q,id:"q"+i}));
 
 return { MAP, STATUS, ZONES, ZONE_ORDER, M, PHOTO, ITEMS, TOWNS, SPOTS, QUESTS };

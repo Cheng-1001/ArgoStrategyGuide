@@ -80,10 +80,19 @@ with sync_playwright() as p:
     pg.fill("#q", ""); pg.wait_for_timeout(200)
 
     pg.goto(base + "#quests"); pg.wait_for_timeout(400)
-    check(pg.locator(".mq").count() >= 30, "quests tab lists the floor 1 main questline")
-    pg.click("[data-route='15']"); pg.wait_for_timeout(800)
+    check(pg.locator(".qcard").count() >= 30, "quests tab lists the floor 1 main questline")
+    pg.click("[data-go='q|mq1_15']"); pg.wait_for_timeout(400)
+    check(pg.locator("#pBody .qmap svg polyline").count() == 1 and pg.locator("#pBody .mqs li").count() >= 5,
+          "clicking a main quest opens the panel with its steps and a route mini map")
+    pg.click("#pBody [data-route]"); pg.wait_for_timeout(800)
     check(pg.locator(".rstep").count() >= 3 and pg.is_visible("#routeBar"), "main quest route is drawn on the map")
     pg.click("#routeX"); pg.wait_for_timeout(200)
+    pg.goto(base + "#quests"); pg.wait_for_timeout(300)
+    pg.click('#fQKind .chip[data-v="side"]'); pg.wait_for_timeout(300)
+    pg.locator(".qside", has_text="Daiki").first.click(); pg.wait_for_timeout(400)
+    t = pg.inner_text("#pBody")
+    check("收集 Boar Hide ×5" in t and "掉落" in t and pg.locator("#pBody .qmap svg").count() == 1,
+          "side quest panel spells out what to collect, where it drops, and shows the route")
 
     pg.goto(base + "#equip"); pg.wait_for_timeout(500)
     total = pg.locator("#lEq .card").count()
