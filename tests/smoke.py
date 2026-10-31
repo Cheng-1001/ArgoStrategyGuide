@@ -99,10 +99,19 @@ with sync_playwright() as p:
 
     pg.goto(base + "#map"); pg.wait_for_timeout(500)
     check(pg.is_visible("#baseBtn"), "floor 1 shows the base-map button")
-    pg.click("#baseBtn"); pg.wait_for_timeout(400)
-    src = pg.evaluate("document.getElementById('mapImg').src")
-    check(src.endswith("floor1_jm.jpg"), "base-map button switches to the explored map")
+    pg.click("#baseBtn"); pg.wait_for_timeout(600)
+    n0 = pg.evaluate("[...document.querySelectorAll('#tiles img')].filter(i=>i.complete&&i.naturalWidth===256).length")
+    check(n0 >= 9 and pg.is_visible("#tiles"), "base-map button switches to the tiled explored map")
+    for _ in range(4):
+        pg.click("#zin"); pg.wait_for_timeout(150)
+    pg.wait_for_timeout(900)
+    hi = pg.evaluate("[...document.querySelectorAll('#tiles img.hi')].map(i=>i.src.split('/tiles/f1jm/')[1])")
+    check(len(hi) > 0 and len(hi) < 60 and all(h and not h.startswith("0/") for h in hi),
+          "zooming in loads only the visible higher-resolution tiles")
     pg.click("#baseBtn"); pg.wait_for_timeout(200)
+    pg.goto(base + "#f2-map"); pg.wait_for_timeout(400)
+    check(pg.is_hidden("#tiles") and pg.evaluate("document.getElementById('mapImg').style.visibility") != "hidden",
+          "floor 2 still uses its single map image")
 
     pg.goto(base + "#f2-report"); pg.wait_for_timeout(400)
     href = pg.get_attribute("#formGo", "href") or ""

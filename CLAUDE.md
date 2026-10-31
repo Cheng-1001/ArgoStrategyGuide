@@ -38,7 +38,10 @@
 | `hints.js` | 遊戲圖鑑的 LOCATION HINT，對應到 41 隻第 1 層怪物（`sure=0` 表示依順序推斷） |
 | `items.png` | 物品圖示表：64px 一格、一列 8 格，目前用到第 185 格。物品資料的最後一個欄位就是格子編號 |
 | `floor1.jpg`、`floor2.jpg` | wiki 地圖 |
-| `floor1_jm.jpg` | 第 1 層「探索地圖」：使用者的 JourneyMap 疊在變暗的 wiki 地圖上 |
+| `floor1_jm.jpg` | 第 1 層「探索地圖」3000px 預覽：使用者的 JourneyMap 疊在變暗的 wiki 地圖上（網站實際用 `tiles/f1jm`） |
+| `tiles/f1jm/{L}/{c}_{r}.jpg` | 第 1 層探索地圖切片：256px，L0～L3 = 640／1280／2560／5120px，L3 是 1 格 1 像素。由 `tools/jm_tiles.py` 產生 |
+| `tools/jm_tiles.py` | JourneyMap day 圖 → `floor1_jm.jpg` ＋ 切片（用法寫在檔案開頭） |
+| `tools/build_equip.py` | 產生 `equip.js`／`equip.png`。要先在工作目錄準備官網圖鑑 `catalog.json`、`im_index.json`、官方圖示和 3D 截圖（做法見「抓資料的方法」） |
 | `reports/` | 回報截圖 |
 | `google/apps-script.gs` | Google Apps Script（獨立專案）：建立表單和試算表，核准後透過 GitHub API 寫入 `reports.js` 和截圖 |
 | `google/SETUP.md` | 給使用者看的表單、審核設定說明 |
@@ -63,7 +66,7 @@
 - **地圖**：
   - 依點位顯示怪物縮圖；縮小時只顯示最主要的一隻加「+N」。
   - 圖例可以隱藏首領、小首領、一般怪物、村鎮、收購商（存在 localStorage `sao-map-hide`）。收購商（spot `kind:"shop"`）在地圖上只畫 💰 小圖示，名稱放在 title。
-  - 第 1 層可以切換「wiki 地圖 / 探索地圖」（`sao-map-base`）。手機版會把整個圖例藏起來，所以手機上切換不了，還沒處理。
+  - 第 1 層可以切換「wiki 地圖 / 探索地圖」（`sao-map-base`），預設 wiki 地圖。探索地圖用切片載入（`updateTiles`）：L0 一直載入當底，再依縮放倍率 × devicePixelRatio 選層級，只載入畫面內的切片。手機版圖例只留底圖切換按鈕。
 - **座標**：
   - 第 1 層地圖 size 4980，**x0 = z0 = 70**。這是用 SIFT 比對 JourneyMap 和 wiki 地圖得出的，806 組特徵點吻合。原本以為是 0，所有點都偏了約 70 格，已經修正。
   - 第 2 層：size 2124，x0 = z0 = −1062。
@@ -84,13 +87,13 @@
 
 ## 目前狀態和待辦（2026-10-31）
 
-- [ ] 裝備圖示：還有約 340 件沒有圖示（顯示 ⚔️/🛡️/💍），官網 3D 截圖還在補。
-- [ ] 高解析度地圖（使用者選 C1）：用使用者自己的 JourneyMap 原尺寸（1 格 1 像素）重做第 1 層探索地圖，並改成切片地圖（256px 切片、5 個縮放層級）。**雲端工作階段連不到使用者的 Windows 電腦**（Remote Control 不支援 Windows），JourneyMap 資料要另外傳上來。
+- 裝備圖示：只剩官方還沒做模型的幾件（例如 Bottes de l’écume、情人節系列）用 ⚔️/🛡️/💍 佔位。截圖來源依序：官方 16×16 圖示 → 官網搜尋卡片縮圖 `.w-it .ph`（去背）→ 卡片破圖時改截右側檢視器 `.w-stage` 的 three.js 畫面。
+- [x] 高解析度地圖（C1）：2026-10-31 用使用者 JourneyMap 原尺寸重做第 1 層探索地圖並改成切片，探索範圍約 25%。
+- JourneyMap 更新流程：**雲端工作階段連不到使用者的 Windows 電腦**（Remote Control 不支援 Windows）。使用者讓 GPT 在電腦上打包 `jm_export.zip`，用 `gh release create jm-upload-N ... --prerelease` 上傳到 GitHub Release。下載 `https://github.com/Cheng-1001/ArgoStrategyGuide/releases/download/jm-upload-N/jm_export.zip`，第 1 層是 `Triggers_815bd3d6-…/overworld/day`，執行 `tools/jm_tiles.py`，更新 `jmDate`。用完請使用者刪掉 release。
 - [ ] 評估讓玩家回報 JourneyMap（像怪物回報一樣）。
 
 - [ ] **Google 表單第一筆端到端測試還沒做。** 使用者已經執行 setup 和 repair，也給了預先填好樓層的網址；「截圖」上傳題目加了沒、checkSetup 有沒有通過，都還沒確認。測試建議：送 Young Spider LV3（座標 1340, 3569）→ 核准 → 看「處理結果」→ 網站顯示等級 3。截圖縮圖用的是 Drive thumbnailLink（`=s1600`），這部分還沒驗證過；失敗時會改傳原始檔（8 MB 以內）。
 - [ ] 確認表單「回報種類」的分頁跳轉：怪物 → 第 2 區段、物品 → 第 3 區段、地點 → 第 4 區段；第 2、3 區段結束後都跳到第 5 區段（截圖）。
-- [ ] 手機上看不到底圖切換按鈕，要找手機也看得到的位置。
 - [ ] 第 2、3 層預計 **11/4 開放**（遊戲改版）。使用者通知後，重新抓 wiki 和官網資料，比對差異後更新 `data23.js`。第 3 層還沒有地圖。
 - [ ] 物品和地點類型的回報，目前只出現在「已收錄」清單和地圖的回報標記上，還沒整合進物品詳細資料和地圖點位。
 - 已知限制：
