@@ -39,11 +39,11 @@ window.SAO_REPORTS = [
   "floor": 1,
   "name": "Young Spider",
   "date": "2026-11-01",
-  "img": "reports/R0001.png",
+  "img": "reports/R0001.jpg",
   "imgs": [
-   "reports/R0001.png",
-   "reports/R0001-2.png",
-   "reports/R0001-3.png"
+   "reports/R0001.jpg",
+   "reports/R0001-2.jpg",
+   "reports/R0001-3.jpg"
   ],
   "raw": {
    "怪物・截圖種類": "野外截圖（看得到等級和座標）",

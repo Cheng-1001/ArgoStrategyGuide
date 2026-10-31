@@ -92,8 +92,9 @@
 - JourneyMap 更新流程：**雲端工作階段連不到使用者的 Windows 電腦**（Remote Control 不支援 Windows）。使用者讓 GPT 在電腦上打包 `jm_export.zip`，用 `gh release create jm-upload-N ... --prerelease` 上傳到 GitHub Release。下載 `https://github.com/Cheng-1001/ArgoStrategyGuide/releases/download/jm-upload-N/jm_export.zip`，第 1 層是 `Triggers_815bd3d6-…/overworld/day`，執行 `tools/jm_tiles.py`，更新 `jmDate`。用完請使用者刪掉 release。
 - [ ] 評估讓玩家回報 JourneyMap（像怪物回報一樣）。
 
-- [ ] **Google 表單第一筆端到端測試還沒做。** 使用者已經執行 setup 和 repair，也給了預先填好樓層的網址；「截圖」上傳題目加了沒、checkSetup 有沒有通過，都還沒確認。測試建議：送 Young Spider LV3（座標 1340, 3569）→ 核准 → 看「處理結果」→ 網站顯示等級 3。截圖縮圖用的是 Drive thumbnailLink（`=s1600`），這部分還沒驗證過；失敗時會改傳原始檔（8 MB 以內）。
-- [ ] 確認表單「回報種類」的分頁跳轉：怪物 → 第 2 區段、物品 → 第 3 區段、地點 → 第 4 區段；第 2、3 區段結束後都跳到第 5 區段（截圖）。
+- [x] Google 表單端到端測試（2026-11-01）：R0001 Young Spider LV3 核准後自動寫入 `reports.js` 和 3 張截圖，網站顯示等級 3。checkSetup、分頁跳轉都已確認。Drive 縮圖（`=s1600`）可用，但當時存成 PNG（每張 1.7 MB），已手動轉成 JPEG。
+- [ ] 使用者要重新貼上新版 `apps-script.gs` 並執行 `upgradeSheet`（步驟在 SETUP.md「更新到新版程式」）：截圖一律轉 JPEG；試算表加「截圖預覽」（`newCellImage` 嵌 base64 縮圖，Drive 檔案不公開）、「內容摘要」，原始欄位收起來，整列依狀態上色。這部分雲端環境測不到，要等使用者執行後看結果。
+- 可選的升級：獨立的審核網頁（Apps Script Web App）。比試算表好看，但「以擁有者身分執行」時看不到審核員是誰（個人帳號拿不到其他使用者的 email），只能用秘密連結控管，安全性比試算表的 Google 帳號權限弱。
 - [ ] 第 2、3 層預計 **11/4 開放**（遊戲改版）。使用者通知後，重新抓 wiki 和官網資料，比對差異後更新 `data23.js`。第 3 層還沒有地圖。
 - [ ] 物品和地點類型的回報，目前只出現在「已收錄」清單和地圖的回報標記上，還沒整合進物品詳細資料和地圖點位。
 - 已知限制：

@@ -23,6 +23,7 @@ const CFG = {
   // 試算表欄位名稱（前四個是表單題目，後四個是審核用欄位）
   Q_TYPE: '回報種類', Q_FLOOR: '樓層', Q_NAME: '名稱', Q_SHOT: '截圖',
   C_ID: '回報編號', C_STATUS: '狀態', C_NOTE: '審核備註', C_RESULT: '處理結果',
+  C_PREVIEW: '截圖預覽', C_SUMMARY: '內容摘要',   // upgradeSheet() 加的兩欄，只給審核員看，不送到網站
   STATUS: ['待審核', '核准', '退回'],
   SHEET_NAME: '回報'
 };
@@ -176,6 +177,7 @@ function onReportSubmit(e) {
   const col = headers_(sh);
   sh.getRange(row, col[CFG.C_ID]).setValue('R' + String(row - 1).padStart(4, '0'));
   sh.getRange(row, col[CFG.C_STATUS]).setValue('待審核');
+  if (col[CFG.C_PREVIEW]) { try { decorateRow_(sh, row); } catch (err) { console.warn('decorateRow_: ' + err.message); } }
 }
 
 function onReviewEdit(e) {
@@ -220,7 +222,7 @@ function publishRow_(sh, row) {
     const name = get(CFG.Q_NAME);
     if (!type || !floor || !name) throw new Error('回報種類、樓層或名稱沒填好');
 
-    const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT];
+    const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT, CFG.C_PREVIEW, CFG.C_SUMMARY];
     const raw = {};
     hdr.forEach((h, i) => { if (i === 0 || skip.includes(h) || !h) return; const v = String(val[i]).trim(); if (v && v !== '不確定') raw[h] = v; });
 
@@ -258,15 +260,98 @@ function imageBlob_(fileId) {
     if (meta.thumbnailLink) {
       const r = UrlFetchApp.fetch(meta.thumbnailLink.replace(/=s\d+$/, '=s1600'), { headers: auth, muteHttpExceptions: true });
       if (r.getResponseCode() === 200 && r.getBlob().getBytes().length > 5000) {
-        const t = r.getBlob().getContentType() || '';
-        return { blob: r.getBlob(), ext: t.indexOf('png') >= 0 ? 'png' : 'jpg' };
+        return { blob: r.getBlob().getAs(MimeType.JPEG), ext: 'jpg' };
       }
     }
   } catch (e) { /* 改用原始檔 */ }
   const b = file.getBlob();
   if (b.getBytes().length > 8 * 1024 * 1024) throw new Error('截圖超過 8 MB，而且無法縮圖');
+  try { return { blob: b.getAs(MimeType.JPEG), ext: 'jpg' }; } catch (e) { /* 無法轉檔就照原格式 */ }
   const t = b.getContentType() || '';
   return { blob: b, ext: t.indexOf('png') >= 0 ? 'png' : t.indexOf('webp') >= 0 ? 'webp' : 'jpg' };
+}
+
+/* ===================== 審核畫面（試算表） ===================== */
+
+/**
+ * 讓「回報」分頁更好審：在「回報編號」右邊加「截圖預覽」「內容摘要」兩欄，把原始題目欄位收起來，
+ * 狀態用顏色標示（待審核黃、核准綠、退回紅），每一列放大到看得清楚截圖。
+ * 重新貼上程式後在編輯器執行一次；可以重複執行，會重畫所有列。新回報會自動套用。
+ */
+function upgradeSheet() {
+  const sh = sheet_();
+  let col = headers_(sh);
+  if (!col[CFG.C_PREVIEW]) {
+    sh.insertColumnsAfter(col[CFG.C_ID], 2);
+    sh.getRange(1, col[CFG.C_ID] + 1, 1, 2).setValues([[CFG.C_PREVIEW, CFG.C_SUMMARY]]);
+    col = headers_(sh);
+  }
+  const last = sh.getLastColumn();
+  sh.getRange(1, col[CFG.C_ID], 1, last - col[CFG.C_ID] + 1).setFontWeight('bold').setBackground('#fff2cc');
+  // 收起表單原始欄位（時間戳記留著）；內容都整理在「內容摘要」，要看原始答案可以按欄位上方的 + 展開
+  const firstReview = Math.min(col[CFG.C_ID], col[CFG.C_STATUS], col[CFG.C_NOTE], col[CFG.C_RESULT]);
+  if (firstReview > 2) {
+    sh.getColumnGroupDepth(2) > 0 || sh.getRange(1, 2, 1, firstReview - 2).shiftColumnGroupDepth(1);
+    sh.hideColumns(2, firstReview - 2);
+  }
+  sh.setColumnWidth(col[CFG.C_ID], 80);
+  sh.setColumnWidth(col[CFG.C_PREVIEW], 300);
+  sh.setColumnWidth(col[CFG.C_SUMMARY], 320);
+  sh.setColumnWidth(col[CFG.C_STATUS], 90);
+  sh.setColumnWidth(col[CFG.C_NOTE], 200);
+  sh.setColumnWidth(col[CFG.C_RESULT], 260);
+  sh.setFrozenColumns(0);
+  // 狀態顏色：整列（回報編號到最後一欄）
+  const L = (n) => sh.getRange(1, n).getA1Notation().replace(/\d+/, '');
+  const rng = sh.getRange(2, col[CFG.C_ID], sh.getMaxRows() - 1, last - col[CFG.C_ID] + 1);
+  const st = '$' + L(col[CFG.C_STATUS]) + '2';
+  const keep = sh.getConditionalFormatRules().filter(r => !r.getRanges().some(x => x.getA1Notation() === rng.getA1Notation()));
+  sh.setConditionalFormatRules(keep.concat([
+    SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied('=' + st + '="待審核"').setBackground('#fff4cc').setRanges([rng]).build(),
+    SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied('=' + st + '="核准"').setBackground('#dcf3e3').setRanges([rng]).build(),
+    SpreadsheetApp.newConditionalFormatRule().whenFormulaSatisfied('=' + st + '="退回"').setBackground('#fbe0e0').setRanges([rng]).build()
+  ]));
+  sh.getRange(2, col[CFG.C_STATUS], sh.getMaxRows() - 1, 1).setFontWeight('bold').setFontSize(12).setHorizontalAlignment('center');
+  sh.getRange(2, col[CFG.C_SUMMARY], sh.getMaxRows() - 1, 1).setWrap(true).setVerticalAlignment('top');
+  sh.getRange(2, col[CFG.C_RESULT], sh.getMaxRows() - 1, 1).setWrap(true).setVerticalAlignment('top');
+  for (let r = 2; r <= sh.getLastRow(); r++) decorateRow_(sh, r);
+  applySheetRules_(sh);
+  Logger.log('審核畫面已更新：' + Math.max(0, sh.getLastRow() - 1) + ' 筆回報。');
+}
+
+/** 一列的「截圖預覽」（第一張截圖的縮圖，直接嵌在儲存格裡，Drive 檔案不必公開）和「內容摘要」。 */
+function decorateRow_(sh, row) {
+  const col = headers_(sh);
+  const hdr = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
+  const val = sh.getRange(row, 1, 1, sh.getLastColumn()).getValues()[0];
+  const get = h => { const i = hdr.indexOf(h); return i < 0 ? '' : String(val[i]).trim(); };
+  if (!get(CFG.Q_NAME)) return;
+  const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT, CFG.C_PREVIEW, CFG.C_SUMMARY];
+  const lines = [get(CFG.Q_TYPE) + '｜第 ' + get(CFG.Q_FLOOR) + ' 層｜' + get(CFG.Q_NAME), ''];
+  hdr.forEach((h, i) => {
+    if (i === 0 || !h || skip.includes(h)) return;
+    const v = String(val[i]).trim();
+    if (v && v !== '不確定') lines.push(String(h).replace(/^(怪物|物品|地點)・/, '') + '：' + v);
+  });
+  const ids = (get(CFG.Q_SHOT).match(/id=([\w-]+)/g) || []).map(s => s.slice(3));
+  lines.push('', '截圖 ' + ids.length + ' 張' + (ids.length > 1 ? '（預覽只顯示第一張，其他請點「截圖」欄的連結）' : ''));
+  sh.getRange(row, col[CFG.C_SUMMARY]).setValue(lines.join('\n'));
+  const cell = sh.getRange(row, col[CFG.C_PREVIEW]);
+  if (!ids.length) { cell.setValue('（沒有截圖）'); return; }
+  try {
+    const auth = { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() };
+    const meta = JSON.parse(UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + ids[0] + '?fields=thumbnailLink', { headers: auth, muteHttpExceptions: true }).getContentText());
+    if (!meta.thumbnailLink) throw new Error('Drive 還沒產生縮圖');
+    const r = UrlFetchApp.fetch(meta.thumbnailLink.replace(/=s\d+$/, '=s480'), { headers: auth, muteHttpExceptions: true });
+    if (r.getResponseCode() !== 200) throw new Error('縮圖下載失敗 ' + r.getResponseCode());
+    const jpg = r.getBlob().getAs(MimeType.JPEG);
+    const img = SpreadsheetApp.newCellImage().setSourceUrl('data:image/jpeg;base64,' + Utilities.base64Encode(jpg.getBytes()))
+      .setAltTextTitle(get(CFG.C_ID) + ' 截圖').build();
+    cell.setValue(img);
+    sh.setRowHeight(row, 175);
+  } catch (err) {
+    cell.setFormula('=HYPERLINK("https://drive.google.com/file/d/' + ids[0] + '/view","開啟截圖（預覽失敗：' + String(err.message).replace(/"/g, "'").slice(0, 60) + '）")');
+  }
 }
 
 /* ===================== GitHub ===================== */
