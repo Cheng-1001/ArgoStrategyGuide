@@ -48,7 +48,7 @@ with sync_playwright() as p:
         pg.route("https://fonts.gstatic.com/**", lambda r: r.abort())
         pg.on("pageerror", lambda e: errs.append(str(e)))
         for f in (1, 2, 3):
-            for v in ("map", "monsters", "items", "quests", "equip", "bosses", "report"):
+            for v in ("map", "monsters", "items", "props", "quests", "equip", "bosses", "report"):
                 pg.goto(f"{base}#f{f}-{v}")
                 pg.wait_for_timeout(250)
                 if w < 500:

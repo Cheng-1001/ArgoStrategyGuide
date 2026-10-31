@@ -193,8 +193,8 @@ const RAW = {
 "Violet Broken Fragments":["Fragments Cassé Violet","c",1,"material","Fragment trouvé dans les coffres du labyrinthe des Chevaliers Jumeaux.",null,null,65],
 "Ika Armour Set":["Tunique / Jambières / Bottes d’Ika","c",3,"armor_set","Forgée à partir des plaques d’Ika, ces tortues ancestrales confèrent robustesse et stabilité.",null,{"Defense":"0.9 / 0.8 / 0.6","Max Health":"24 / 22.5 / 18.5","Classe requise":"guerrier"},66],
 "Pickaxe":["Pioche（任務未指定種類）","c",1,"tool","Une pioche rudimentaire, fragile mais suffisante pour débuter.",null,{"Max Durability":768},67],
-"Wheat":["Blé","c",1,"farmer_job","Une céréale simple poussant dans les champs abandonnés",null,null,-1],
-"Allium":["Fleur d’Allium","c",1,"farmer_job","Belle fleur violette très utilisée par beaucoup d’alchimiste pour des potions",null,null,-1],
+"Wheat":["Blé","c",1,"farmer_job","Une céréale simple poussant dans les champs abandonnés",null,null,187],
+"Allium":["Fleur d’Allium","c",1,"farmer_job","Belle fleur violette très utilisée par beaucoup d’alchimiste pour des potions",null,null,186],
 // named in quests / bestiary but absent from the official catalogue
 "Curved Bow":[null,null,null,"unknown",null,null,null,-1],
 "Unknown Logs":[null,null,null,"unknown",null,null,null,-1],
@@ -208,14 +208,14 @@ const RAW = {
 
 // How each item is obtained besides monster drops (source text) and what it is used for (paraphrased from its official description).
 const EXTRA = {
-"Leg of a Spider":{note:"Spider Set（蜘蛛套裝）：2 件 +2.5% 移動速度；3 件 +0.025 攻擊速度；4 件 +2.5% 閃避；5 件 +0.25 攻擊傷害、+1% 暴擊率。名稱、數值、說明取自社群截圖（2026-10-30），法文名稱未知；wiki 原本寫成 Leg of Spider。圖示來自遊戲資源包（patte_araignee），與截圖一致。當時拍賣行最低價約 300 Col。"},
+"Leg of a Spider":{set:{name:"Spider Set（蜘蛛套裝）",tiers:[[2,"+2.5% 移動速度"],[3,"+0.025 攻擊速度"],[4,"+2.5% 閃避"],[5,"+0.25 攻擊傷害、+1% 暴擊率"]]},note:"套裝效果的名稱、數值、說明取自社群截圖（2026-10-30），法文名稱未知；wiki 原本寫成 Leg of Spider。圖示來自遊戲資源包（patte_araignee），與截圖一致。當時拍賣行最低價約 300 Col。"},
 "Spider Thread":{note:"圖示來自遊戲資源包（drop_fils_blanc），依外觀推斷對應，官方圖鑑沒有圖示。"},
 "Oak Log":{src:"伐木職業（Bûcheron）採集"},
 "Birch Log":{src:"伐木職業（Bûcheron）採集"},
 "Copper Ingot":{src:"採礦職業（Mineur）：由銅礦冶煉而成",use:["鍛造及部分製作會用到"]},
 "Iron Ore":{src:"採礦職業（Mineur）採集"},
-"Wheat":{src:"農夫職業（Agriculteur）種植",vanilla:true},
-"Allium":{src:"農夫職業（Agriculteur）種植",use:["煉金師常用的藥水材料"],vanilla:true},
+"Wheat":{src:"農夫職業（Agriculteur）種植",vanilla:true,icsrc:"https://zh.minecraft.wiki/w/小麦"},
+"Allium":{src:"農夫職業（Agriculteur）種植",use:["煉金師常用的藥水材料"],vanilla:true,icsrc:"https://zh.minecraft.wiki/w/绒球葱"},
 "Violet Broken Fragments":{src:"墮落者迷宮（雙子騎士迷宮）的寶箱"},
 "Ika Armour Set":{src:"以 Ika 甲殼鍛造（依官方描述，配方未公開）",note:"官方圖鑑有兩個版本，數值以較新的「Tunique / Jambières / Bottes d’Ika」為準；舊版另有 Plastron d'Ika。"},
 "Pickaxe":{src:"工具；圖示與數值以新手鎬 Pioche Fêlée 代表",note:"任務原文只寫「3 pioches」，沒有指定哪一種。"},
