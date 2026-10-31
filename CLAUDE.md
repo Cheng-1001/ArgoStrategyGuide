@@ -37,7 +37,7 @@
 | `equip.js`、`equip.png` | 裝備分頁：官網物品圖鑑的 656 件裝備（武器、盾、防具、飾品），由 scratchpad 的 `build_equip.py` 產生，不要手改。`equip.png` 48px 一格、一列 16 格 |
 | `hints.js` | 遊戲圖鑑的 LOCATION HINT，對應到 41 隻第 1 層怪物（`sure=0` 表示依順序推斷） |
 | `items.png` | 物品圖示表：64px 一格、一列 8 格，目前用到第 185 格。物品資料的最後一個欄位就是格子編號 |
-| `floor1.jpg`、`floor2.jpg` | wiki 地圖。floor1.jpg 原本在 X 1652、Z 2770（腐臭沼澤北邊麥田旁）有一個 wiki 編輯者留下的測試路標「sdsd」，2026-11-01 用 OpenCV inpaint 加周圍紋理修掉，之後換新的 wiki 地圖要再檢查一次 |
+| `floor1.jpg`、`floor2.jpg` | wiki 地圖。floor1.jpg 原本在 X 1652、Z 2770（腐臭沼澤北邊麥田旁）有一個 wiki 編輯者留下的測試路標「sdsd」，另外 X 1917–1967、Z 2412–2495 有一塊黑色 T 形破圖。2026-11-01 修掉：路標那一處用使用者 JourneyMap 的真實地形縮到 wiki 解析度、做色調轉換後貼上；黑色 T 處 JourneyMap 沒資料，改搬旁邊的森林紋理。之後換新的 wiki 地圖要再檢查一次 |
 | `floor1_jm.jpg` | 第 1 層「探索地圖」3000px 預覽：使用者的 JourneyMap 疊在變暗的 wiki 地圖上（網站實際用 `tiles/f1jm`） |
 | `tiles/f1jm/{L}/{c}_{r}.jpg` | 第 1 層探索地圖切片：256px，L0～L3 = 640／1280／2560／5120px，L3 是 1 格 1 像素。由 `tools/jm_tiles.py` 產生 |
 | `tools/jm_tiles.py` | JourneyMap day 圖 → `floor1_jm.jpg` ＋ 切片（用法寫在檔案開頭） |
