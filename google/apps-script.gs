@@ -30,6 +30,9 @@ const CFG = {
 
 const P = () => PropertiesService.getScriptProperties();
 
+/** 表單「截圖」頁的說明：教玩家用遊戲內建的 F2 截圖。upgradeSheet() 會把現有表單的說明換成這段。 */
+const SHOT_HELP = '用遊戲內建截圖就好：在遊戲裡按 F2（有些筆電要按 Fn+F2）。聊天框會出現「Saved screenshot as ….png」，點檔名可以直接打開。\n檔案在：%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots（按 Win+R，貼上這一行按 Enter 就會打開資料夾）。\n按「新增檔案」→「瀏覽」選檔，按住 Ctrl 可以一次選多張（最多 5 張）。不用裁切。\n拍怪物時不要按 F1，F1 會把等級和座標一起藏起來。';
+
 /* ===================== 一次性設定 ===================== */
 
 function setup() {
@@ -77,7 +80,7 @@ function setup() {
   form.addParagraphTextItem().setTitle('地點・說明');
 
   // 截圖（上傳題目要手動加在這一頁，Google 不允許程式建立上傳題目）
-  const pShot = form.addPageBreakItem().setTitle('截圖').setHelpText('上傳遊戲截圖，可以放多張。');
+  const pShot = form.addPageBreakItem().setTitle('截圖').setHelpText(SHOT_HELP);
 
   type.setChoices([type.createChoice('怪物', pMon), type.createChoice('物品', pItem), type.createChoice('地點', pPlace)]);
   pItem.setGoToPage(pShot);   // 怪物頁填完 → 截圖頁
@@ -316,6 +319,12 @@ function upgradeSheet() {
   sh.getRange(2, col[CFG.C_RESULT], sh.getMaxRows() - 1, 1).setWrap(true).setVerticalAlignment('top');
   for (let r = 2; r <= sh.getLastRow(); r++) decorateRow_(sh, r);
   applySheetRules_(sh);
+  // 表單「截圖」頁的說明改成 F2 截圖教學
+  try {
+    const form = FormApp.openById(P().getProperty('FORM_ID'));
+    const pb = form.getItems(FormApp.ItemType.PAGE_BREAK).find(i => i.getTitle() === CFG.Q_SHOT);
+    if (pb) pb.asPageBreakItem().setHelpText(SHOT_HELP);
+  } catch (err) { Logger.log('表單說明沒有更新：' + err.message); }
   Logger.log('審核畫面已更新：' + Math.max(0, sh.getLastRow() - 1) + ' 筆回報。');
 }
 

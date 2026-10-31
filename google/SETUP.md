@@ -109,6 +109,7 @@ Claude 會把它設定到查詢工具的「回報」分頁。玩家按「填寫�
 3. 打開 <https://raw.githubusercontent.com/Cheng-1001/ArgoStrategyGuide/main/google/apps-script.gs>，**Ctrl+A**、**Ctrl+C**，回到編輯區 **Ctrl+V**，再按 **Ctrl+S** 存檔。
 4. 上方函式選單選 **upgradeSheet** → **執行**。如果跳出授權視窗，照步驟二第 7 點按「允許」（這版多用到「在試算表插入圖片」）。
 5. 執行記錄出現「審核畫面已更新：N 筆回報。」就完成了。
+6. 同時，表單「截圖」那一頁的說明也會換成 F2 截圖教學（檔案位置、怎麼一次選多張、不要按 F1）。打開表單預覽就看得到。
 
 ### 審核畫面（執行過 upgradeSheet 之後）
 

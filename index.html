@@ -292,6 +292,8 @@ i.req{font-style:normal;font-size:11px;font-weight:600;color:var(--bad,#d1453b);
 .rdt{display:flex;flex-direction:column;gap:2px;min-width:0}.rdt b{font-size:14px;overflow-wrap:anywhere}.rdt span{font-size:12.5px;color:var(--muted)}
 .rhow summary{cursor:pointer;font-size:13px;color:var(--accent);font-weight:600}
 .rhow ul{margin-top:6px}
+.rform kbd{font-family:var(--f-mono);font-size:11.5px;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 5px;background:var(--panel-2)}
+.rform code{font-family:var(--f-mono);font-size:11.5px;overflow-wrap:anywhere;background:var(--panel-2);padding:1px 4px;border-radius:4px}
 .rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px 14px}
 .rfield{display:flex;flex-direction:column;gap:4px;min-width:0}
 .rfield>span{font-size:13px;font-weight:600}
@@ -1028,7 +1030,15 @@ function buildFormReport(){
   <article class="bcard rform">
     <a class="repbtn big" id="formGo" target="_blank" rel="noopener">填寫回報表單 ↗</a>
     <ol class="steps big">
-      <li><b>先準備截圖</b>：遊戲裡按 F2 存截圖。怪物要拍到名字上方的等級和小地圖座標；或打開圖鑑（Codex）截整頁。</li>
+      <li><b>先準備截圖</b>：用遊戲內建的截圖，在遊戲裡按 <kbd>F2</kbd> 就好。怪物要拍到名字上方的等級和小地圖座標；或打開圖鑑（Codex）截整頁。
+        <details class="rhow"><summary>怎麼用 F2 截圖、檔案在哪裡</summary><ul>
+          <li><b>截圖</b>：按 <kbd>F2</kbd>（有些筆電要按 <kbd>Fn</kbd>＋<kbd>F2</kbd>）。聊天框會出現「Saved screenshot as 2026-11-01_20.15.03.png」，<b>點那個檔名就會直接打開圖片</b>。</li>
+          <li><b>拍怪物</b>：靠近到看得到名字上方的「LV」，畫面上同時要有小地圖座標，再按 F2。<b>不要按 F1</b>，F1 會把介面全部藏起來，等級和座標就拍不到。</li>
+          <li><b>拍圖鑑</b>：打開圖鑑（Codex），點到那隻怪物的頁面再按 F2，編號、區域、掉落機率都會拍進去。</li>
+          <li><b>檔案位置</b>：<code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots</code><br>按 <kbd>Win</kbd>＋<kbd>R</kbd>，貼上這一行按 Enter，就會直接打開資料夾。檔名就是拍攝時間，最新的排在最後面。</li>
+          <li><b>上傳</b>：表單最後一頁按「新增檔案」→「瀏覽」→ 到上面的資料夾選檔。按住 <kbd>Ctrl</kbd> 可以一次選多張（最多 5 張，每張 10 MB 以內，F2 的截圖都在範圍內）。</li>
+          <li>不用裁切，也不用另外壓縮，原圖直接上傳。審核通過後網站會自動縮小。</li>
+        </ul></details></li>
       <li><b>按上面的按鈕</b>，用 Google 帳號登入（上傳截圖需要登入，不會公開你的帳號）。樓層會先幫你填好。</li>
       <li><b>填名稱、選回報種類</b>（怪物、物品、地點），下一頁再填該種類的資料。</li>
       <li><b>最後一頁上傳截圖</b>，按「提交」。</li></ol>
