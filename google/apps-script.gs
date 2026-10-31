@@ -116,6 +116,32 @@ function setup() {
   Logger.log('預先填好樓層的網址（交給 Claude）：' + prefill);
 }
 
+/** 補做 setup 沒完成的部分：自動處理（觸發器）、「設定資訊」分頁、三個網址。可以重複執行，不會重複建立。 */
+function repair() {
+  const props = P().getProperties();
+  if (!props.SHEET_ID || !props.FORM_ID) throw new Error('找不到表單或試算表的記錄，請把執行記錄截圖給 Claude');
+  const ss = SpreadsheetApp.openById(props.SHEET_ID);
+  const form = FormApp.openById(props.FORM_ID);
+  const have = ScriptApp.getProjectTriggers().map(t => t.getHandlerFunction());
+  if (have.indexOf('onReportSubmit') < 0) ScriptApp.newTrigger('onReportSubmit').forSpreadsheet(ss).onFormSubmit().create();
+  if (have.indexOf('onReviewEdit') < 0) ScriptApp.newTrigger('onReviewEdit').forSpreadsheet(ss).onEdit().create();
+  const floor = form.getItems(FormApp.ItemType.TEXT).find(i => i.getTitle() === CFG.Q_FLOOR);
+  const prefill = floor ? form.createResponse().withItemResponse(floor.asTextItem().createResponse('1')).toPrefilledUrl().replace(/=1(&|$)/, '={floor}$1') : '（找不到「樓層」題目）';
+  const info = ss.getSheetByName('設定資訊') || ss.insertSheet('設定資訊');
+  info.getRange(1, 1, 5, 2).setValues([
+    ['表單（給玩家填）', form.getPublishedUrl()],
+    ['表單（編輯）', form.getEditUrl()],
+    ['預先填好樓層的網址（交給 Claude）', prefill],
+    ['試算表', ss.getUrl()],
+    ['說明', '審核員只能改「狀態」和「審核備註」兩欄。把狀態改成「核准」就會自動上線。']
+  ]);
+  info.autoResizeColumns(1, 1);
+  Logger.log('自動處理（觸發器）：' + ScriptApp.getProjectTriggers().map(t => t.getHandlerFunction()).join('、'));
+  Logger.log('表單（編輯）：' + form.getEditUrl());
+  Logger.log('試算表：' + ss.getUrl());
+  Logger.log('預先填好樓層的網址（交給 Claude）：' + prefill);
+}
+
 /** 狀態下拉選單 + 保護：審核員只能改「狀態」「審核備註」。上傳題目加好之後要再執行一次。 */
 function applySheetRules_(sh) {
   const col = headers_(sh);
