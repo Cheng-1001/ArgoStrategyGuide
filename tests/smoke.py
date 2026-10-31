@@ -84,9 +84,15 @@ with sync_playwright() as p:
     pg.click("[data-go='q|mq1_15']"); pg.wait_for_timeout(400)
     check(pg.locator("#pBody .qmap svg polyline").count() == 1 and pg.locator("#pBody .mqs li").count() >= 5,
           "clicking a main quest opens the panel with its steps and a route mini map")
-    pg.click("#pBody [data-route]"); pg.wait_for_timeout(800)
-    check(pg.locator(".rstep").count() >= 3 and pg.is_visible("#routeBar"), "main quest route is drawn on the map")
-    pg.click("#routeX"); pg.wait_for_timeout(200)
+    steps_y = pg.locator("#pBody .mqs").bounding_box()["y"]; map_y = pg.locator("#pBody .qmap").bounding_box()["y"]
+    check(steps_y < map_y, "quest panel lists the steps above the route map")
+    pg.click("#pBody [data-route]"); pg.wait_for_timeout(600)
+    vb0 = pg.get_attribute("#rwSvg", "viewBox")
+    check(pg.is_visible("#rwin") and pg.locator("#rwSvg polyline").count() == 1, "enlarge opens the floating route window")
+    pg.click("#rwIn"); pg.wait_for_timeout(200)
+    check(pg.get_attribute("#rwSvg", "viewBox") != vb0, "the route window zooms")
+    pg.click("#rwX"); pg.wait_for_timeout(200)
+    check(not pg.is_visible("#rwin"), "the route window closes")
     pg.goto(base + "#quests"); pg.wait_for_timeout(300)
     pg.click('#fQKind .chip[data-v="side"]'); pg.wait_for_timeout(300)
     pg.locator(".qside", has_text="Daiki").first.click(); pg.wait_for_timeout(400)
