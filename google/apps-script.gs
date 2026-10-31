@@ -206,6 +206,59 @@ function retryApproved() {
   }
 }
 
+/* ===================== 審核網頁用的佇列 ===================== */
+
+/**
+ * 審核網頁（另一個專案，見 SETUP.md「審核網頁」）只會把「狀態」改成核准／退回；
+ * 用程式改儲存格不會觸發 onReviewEdit，所以由這個函式每分鐘把「核准但還沒處理」的列送上線。
+ * 「處理結果」已經有字（已上線、錯誤…）的列不會重做；錯誤修好後照舊執行 retryApproved。
+ */
+function processQueue() {
+  const sh = sheet_();
+  const col = headers_(sh);
+  const n = sh.getLastRow();
+  if (n < 2) return;
+  const vals = sh.getRange(2, 1, n - 1, sh.getLastColumn()).getValues();
+  vals.forEach((v, i) => {
+    const st = String(v[col[CFG.C_STATUS] - 1]);
+    const res = String(v[col[CFG.C_RESULT] - 1]).trim();
+    if (res) return;
+    if (st === '核准') publishRow_(sh, i + 2);
+    else if (st === '退回') sh.getRange(i + 2, col[CFG.C_RESULT]).setValue('已退回，不會上線');
+  });
+}
+
+/**
+ * 啟用審核網頁：① 建立每分鐘執行 processQueue 的觸發器（只建一次）；
+ * ② 把表單的截圖資料夾以「檢視者」分享給試算表的所有編輯者，審核網頁才看得到截圖。
+ * 之後新增審核員：先在試算表「共用」加他為編輯者，再執行一次這個函式。
+ */
+function enableReviewQueue() {
+  if (!ScriptApp.getProjectTriggers().some(t => t.getHandlerFunction() === 'processQueue')) {
+    ScriptApp.newTrigger('processQueue').timeBased().everyMinutes(1).create();
+  }
+  const sh = sheet_();
+  const me = Session.getEffectiveUser().getEmail();
+  const editors = SpreadsheetApp.openById(P().getProperty('SHEET_ID')).getEditors().map(u => u.getEmail()).filter(e => e && e !== me);
+  const col = headers_(sh);
+  const shots = sh.getRange(2, col[CFG.Q_SHOT], Math.max(1, sh.getLastRow() - 1), 1).getValues().map(r => String(r[0])).join(' ');
+  const roots = {};
+  (shots.match(/id=([\w-]+)/g) || []).slice(0, 20).forEach(s => {
+    try {
+      const q = DriveApp.getFileById(s.slice(3)).getParents();          // 「截圖」題目的資料夾
+      if (!q.hasNext()) return;
+      const qf = q.next(); const up = qf.getParents();                    // 上一層：整份表單的上傳資料夾
+      const root = up.hasNext() ? up.next() : qf;
+      roots[root.getId()] = root;
+    } catch (e) { /* 找不到就略過 */ }
+  });
+  const folders = Object.keys(roots).map(k => roots[k]);
+  if (editors.length) folders.forEach(f => f.addViewers(editors));
+  Logger.log('每分鐘處理佇列：已啟用。');
+  Logger.log(folders.length ? '截圖資料夾「' + folders.map(f => f.getName()).join('、') + '」已分享給：' + (editors.join('、') || '（目前沒有其他編輯者）')
+                            : '還沒找到截圖資料夾（試算表裡還沒有附截圖的回報）。有回報之後再執行一次。');
+}
+
 /* ===================== 上線 ===================== */
 
 function publishRow_(sh, row) {
@@ -215,6 +268,9 @@ function publishRow_(sh, row) {
   const lock = LockService.getScriptLock();
   lock.waitLock(60000);
   try {
+    // 拿到鎖之後再看一次：試算表觸發器和 processQueue 可能同時想處理同一列，先拿到鎖的那次已經上線就不重做。
+    // （這時看到「處理中…」代表之前某次執行中途中斷，持鎖的只有自己，所以照常重試。）
+    if (String(out.getValue()).startsWith('已上線')) return;
     out.setValue('處理中…');
     const hdr = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
     const val = sh.getRange(row, 1, 1, sh.getLastColumn()).getValues()[0];

@@ -44,6 +44,9 @@
 | `tools/build_equip.py` | 產生 `equip.js`／`equip.png`。要先在工作目錄準備官網圖鑑 `catalog.json`、`im_index.json`、官方圖示和 3D 截圖（做法見「抓資料的方法」） |
 | `reports/` | 回報截圖 |
 | `google/apps-script.gs` | Google Apps Script（獨立專案）：建立表單和試算表，核准後透過 GitHub API 寫入 `reports.js` 和截圖 |
+| `google/review.html`、`google/review_server.js` | 審核網頁（另一個 Apps Script 專案）的前端和後端原始檔。改完執行 `python3 tools/build_review.py` 產生 `google/review.gs`（使用者貼這個檔） |
+| `google/review.appsscript.json` | 審核網頁專案的資訊清單：最小權限（spreadsheets、drive.readonly、external_request、userinfo.email），以「存取的使用者」身分執行 |
+| `tests/review_test.py`、`tests/apps_script_test.js` | 審核網頁前端（假的 google.script.run）和 Apps Script 後端（假的試算表）的本機測試 |
 | `google/SETUP.md` | 給使用者看的表單、審核設定說明 |
 | `tools/export_map.bat` | 使用者電腦上用的：把 JourneyMap 地圖複製到沒有「~」的資料夾 |
 | `tests/smoke.py` | Playwright 冒煙測試 |
@@ -95,7 +98,8 @@
 - [x] Google 表單端到端測試（2026-11-01）：R0001 Young Spider LV3 核准後自動寫入 `reports.js` 和 3 張截圖，網站顯示等級 3。checkSetup、分頁跳轉都已確認。Drive 縮圖（`=s1600`）可用，但當時存成 PNG（每張 1.7 MB），已手動轉成 JPEG。
 - [x] 審核畫面（2026-11-01 使用者執行 `upgradeSheet` 確認）：「截圖預覽」用 `newCellImage` 嵌 base64 縮圖可正常顯示（Drive 檔案不公開）、「內容摘要」、原始欄位收起、整列依狀態上色；表單「截圖」頁換成 F2 說明。截圖一律轉 JPEG。注意：Google 會把回應表自動轉成「表格」（Form_Responses），表格標題預設白字，所以標題要明確設深色字。
 - 使用者的 Chrome 會把表單誤判成簡體並自動翻譯（出現「內置」「文件夾」等用詞），原文是繁體，不用改。
-- 可選的升級：獨立的審核網頁（Apps Script Web App）。比試算表好看，但「以擁有者身分執行」時看不到審核員是誰（個人帳號拿不到其他使用者的 email），只能用秘密連結控管，安全性比試算表的 Google 帳號權限弱。
+- [ ] **審核網頁**（2026-11-01 做好，等使用者部署，步驟在 SETUP.md「審核網頁」）。設計：獨立專案、以「存取的使用者」執行，所以審核員用自己的 Google 帳號、權限就是試算表編輯權；網頁只改「狀態」「審核備註」（`apiDecide`，已被處理過的不覆蓋，備註前面加「審核：帳號」）。程式改儲存格不會觸發 onEdit，所以主程式的 `processQueue` 每分鐘把「核准且處理結果空白」的列送上線、「退回」的寫結果；`enableReviewQueue` 建這個觸發器，並把表單截圖資料夾以檢視者分享給所有試算表編輯者（審核網頁用審核員自己的權限讀 Drive 縮圖）。佇列預設怪物、物品優先，再依時間。
+- 改了 `apps-script.gs` 或審核網頁後：`node tests/apps_script_test.js`、`python3 tests/review_test.py` 都要 ALL PASSED。
 - [ ] 第 2、3 層預計 **11/4 開放**（遊戲改版）。使用者通知後，重新抓 wiki 和官網資料，比對差異後更新 `data23.js`。第 3 層還沒有地圖。
 - [ ] 物品和地點類型的回報，目前只出現在「已收錄」清單和地圖的回報標記上，還沒整合進物品詳細資料和地圖點位。
 - 已知限制：
