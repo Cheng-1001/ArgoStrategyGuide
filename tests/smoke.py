@@ -92,6 +92,9 @@ with sync_playwright() as p:
     check(total > 100 and "官方圖鑑 #" in pg.inner_text("#pBody"), "equipment tab lists official items and opens a detail")
 
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
+    zl = pg.inner_text("#zlist")
+    check("傳送點 13" in zl and pg.locator(".town.tp").count() == 7 and pg.locator(".town:not(.tp)").count() == 1,
+          "13 teleport points: 7 towns marked as teleports, Vallhat is not")
     n = pg.locator(".zone.shop").count()
     pg.click(".legend .lgt[data-k=shop]"); pg.wait_for_timeout(300)
     check(n == 16 and pg.locator(".zone.shop").count() == 0, "16 loot buyers on the map and the legend hides them")

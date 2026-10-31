@@ -16,7 +16,7 @@
 :root{
   --bg:#e9eef2; --panel:#f8fafb; --panel-2:#eef2f5; --line:#cfd8df; --fg:#1f2a33; --muted:#5d6b77;
   --accent:#e0811a; --accent-ink:#ffffff; --accent-soft:#fbe7cf;
-  --boss:#d9701a; --mini:#7b55c8; --minion:#8a96a1; --ok:#2f8a5b; --ref:#2b7a9e; --warn:#b7791f; --unk:#8a6f6f; --rare:#2f6fc4;
+  --boss:#d9701a; --mini:#7b55c8; --minion:#8a96a1; --ok:#2f8a5b; --ref:#2b7a9e; --tp:#13909a; --warn:#b7791f; --unk:#8a6f6f; --rare:#2f6fc4;
   --stage:#0b1219; --shadow:0 10px 30px rgba(20,35,50,.22);
   --slot:#2b313a; --slot-edge:#46505c; --slot-ink:#9aa6b2;
   --f-display:"Chakra Petch","Noto Sans TC",system-ui,sans-serif;
@@ -27,11 +27,11 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e161e;--panel:#151f29;--panel-2:#1b2733;--line:#2b3a47;--fg:#e4eaef;--muted:#93a2ae;
   --accent:#f0a040;--accent-ink:#1a1206;--accent-soft:#3a2a14;--boss:#f0953a;--mini:#a888ee;--minion:#7d8a96;
-  --ok:#5cc28c;--ref:#5bb4dc;--warn:#e0aa50;--unk:#b89a9a;--rare:#6fa6f0;--stage:#070c11;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}}
+  --ok:#5cc28c;--ref:#5bb4dc;--tp:#3fd0da;--warn:#e0aa50;--unk:#b89a9a;--rare:#6fa6f0;--stage:#070c11;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0e161e;--panel:#151f29;--panel-2:#1b2733;--line:#2b3a47;--fg:#e4eaef;--muted:#93a2ae;
   --accent:#f0a040;--accent-ink:#1a1206;--accent-soft:#3a2a14;--boss:#f0953a;--mini:#a888ee;--minion:#7d8a96;
-  --ok:#5cc28c;--ref:#5bb4dc;--warn:#e0aa50;--unk:#b89a9a;--rare:#6fa6f0;--stage:#070c11;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}
+  --ok:#5cc28c;--ref:#5bb4dc;--tp:#3fd0da;--warn:#e0aa50;--unk:#b89a9a;--rare:#6fa6f0;--stage:#070c11;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}
 
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -151,6 +151,10 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .world img.map{width:1000px;height:1000px;max-width:none;display:block;user-select:none;-webkit-user-drag:none;pointer-events:none}
 .town{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;cursor:pointer;z-index:2}
 .town .pin{width:12px;height:12px;transform:rotate(45deg);background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.6)}
+.town.tp .pin{background:var(--tp);transform:none;border-radius:50%;width:14px;height:14px;box-shadow:0 0 0 3px rgba(31,182,193,.35),0 1px 4px rgba(0,0,0,.6)}
+.zone .zlabel .tpi{color:var(--tp);font-size:12px}
+.lgtp{display:inline-flex;gap:5px;align-items:center}.lgtp i{width:10px;height:10px;border-radius:50%;background:var(--tp);border:2px solid #fff;display:inline-block}
+.pill.tpp{border-color:var(--tp);color:var(--tp)}
 .town .tname{font-family:var(--f-display);font-weight:600;font-size:12px;color:#fff;letter-spacing:.04em;white-space:nowrap;text-shadow:0 1px 2px #000,0 0 6px rgba(0,0,0,.9)}
 .zone{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:3;display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none}
 .zone .zlabel{pointer-events:auto;cursor:pointer;font-family:var(--f-display);font-family:var(--f-display);font-weight:600;font-size:11.5px;letter-spacing:.05em;white-space:nowrap;background:rgba(10,16,22,.78);color:#fff;border:1px solid rgba(255,255,255,.25);padding:1px 8px;border-radius:3px;display:flex;align-items:center;gap:6px}
@@ -430,7 +434,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="legend" role="group" aria-label="地圖顯示項目">
         <button class="lgt" data-k="boss" aria-pressed="true" title="顯示或隱藏首領"><i class="lg" style="border-color:var(--boss)"></i>首領</button><button class="lgt" data-k="mini" aria-pressed="true" title="顯示或隱藏小首領"><i class="lg" style="border-color:var(--mini)"></i>小首領</button><button class="lgt" data-k="mob" aria-pressed="true" title="顯示或隱藏一般怪物"><i class="lg"></i>一般</button>
         <span><i class="beh-A" style="width:9px;height:9px;border-radius:50%;display:inline-block"></i>主動</span><span><i class="beh-N" style="width:9px;height:9px;border-radius:50%;display:inline-block"></i>中立</span><span><i class="beh-P" style="width:9px;height:9px;border-radius:50%;display:inline-block"></i>被動</span>
-        <button class="lgt" data-k="town" aria-pressed="true" title="顯示或隱藏村鎮"><i style="width:9px;height:9px;transform:rotate(45deg);background:var(--accent);display:inline-block"></i>村鎮</button><button class="lgt" data-k="shop" aria-pressed="true" title="顯示或隱藏收購商">💰 收購商</button>
+        <button class="lgt" data-k="town" aria-pressed="true" title="顯示或隱藏村鎮"><i style="width:9px;height:9px;transform:rotate(45deg);background:var(--accent);display:inline-block"></i>村鎮</button><button class="lgt" data-k="shop" aria-pressed="true" title="顯示或隱藏收購商">💰 收購商</button><span class="lgtp" title="遊戲內傳送選單可以直接傳送的地點"><i></i>🌀 可傳送</span>
         <button class="lgb" id="baseBtn" hidden title="切換底圖：wiki 地圖或 JourneyMap 探索地圖"></button>
       </div>
       <div class="editbar" id="editbar" hidden></div>
@@ -714,7 +718,7 @@ function itemDetail(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id],ga
 function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">這個地點已不存在。</div>`;const st=STATUS[sp.src];const Fx=FLOORS[sp.floor];
   const ms=sp.mons.map(n=>Fx.monByName[n]);
   return`<div class="phead"><span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span><div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(sp.n)}</h2><div class="sub">${esc(sp.zh)}</div></div></div>
-  <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd><dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd></dl>
+  <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd><dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd>${sp.tp?`<dt>傳送</dt><dd><span class="pill tpp">🌀 可傳送</span> 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl>
   ${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}
   <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(m.name)}</b><span>${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
@@ -722,7 +726,7 @@ function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">�
 
 function townDetail(id){const t=townById[id];const qs=ALLQ.filter(x=>x.town===id);
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">🏘️</span><div class="ttl"><div class="num mono">${flBadge(t.floor)} X ${t.x} · Z ${t.z}</div><h2>${esc(t.n)}</h2>${t.en?`<div class="sub">${esc(t.en)}</div>`:""}</div></div>
-  ${soonNote(t.floor)}${t.note?`<div class="note">${esc(t.note)}</div>`:""}
+  ${soonNote(t.floor)}${t.tp?`<div class="note">🌀 <b>可以直接傳送</b>：在遊戲的傳送選單選「${esc(t.tp)}」。</div>`:t.floor===1?`<div class="note">這個村鎮不在遊戲的傳送選單裡，要自己走過去。</div>`:""}${t.note?`<div class="note">${esc(t.note)}</div>`:""}
   <button class="linkbtn" data-town="${id}">在地圖上查看</button>
   <h3 class="sec">支線任務 <span class="c">${qs.length}</span></h3>
   <div style="display:flex;flex-direction:column;gap:10px">${qs.map(qq=>`<div style="border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px">
@@ -1126,13 +1130,13 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin").forEach(n=>n.re
   if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate}，1 格 1 像素，放大會更清楚），其餘為變暗的 wiki 地圖。`}
   if(!mapImg.src.endsWith(want)){const same=mapImg.dataset.f===String(FL);mapImg.src=want;mapImg.dataset.f=String(FL);if(!same)fitted=false}
   if(!HIDE.town)F().towns.forEach(t=>{const b=document.createElement("button");b.className="town";b.style.left=toPxX(t.x)+"px";b.style.top=toPxZ(t.z)+"px";
-    b.innerHTML=`<span class="pin"></span><span class="tname">${esc(t.n)}</span>`;b.setAttribute("aria-label","村鎮 "+t.n);
+    if(t.tp)b.classList.add("tp");b.innerHTML=`<span class="pin"></span><span class="tname">${t.tp?"🌀 ":""}${esc(t.n)}</span>`;b.setAttribute("aria-label",(t.tp?"可傳送的村鎮 ":"村鎮 ")+t.n);if(t.tp)b.title="傳送點："+t.tp;
     b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("t",t.id,"new")});world.appendChild(b)});
   const rank={"Boss":0,"Mini-Boss":1,"Monster":2,"Minion":3};
   spotsOf(FL).forEach(sp=>{if(sp.kind==="shop"&&HIDE.shop)return;const vm=sp.mons.map(n=>F().monByName[n]).filter(m=>!HIDE[typeKey(m)]);if(sp.mons.length&&!vm.length)return;
     const d=document.createElement("div");d.className="zone"+(sp.src==="est"?" est":"")+(sp.mons.length?"":" poi")+(sp.kind==="shop"?" shop":"");d.dataset.s=sp.id;
     d.style.left=toPxX(sp.x)+"px";d.style.top=toPxZ(sp.z)+"px";
-    const lb=document.createElement("button");lb.className="zlabel";lb.innerHTML=sp.kind==="shop"?KIND.shop[1]:`<i style="background:${SRC_COL[sp.src]}"></i>${sp.mons.length?"":KIND[sp.kind][1]+" "}${esc(sp.n)}`;if(sp.kind==="shop"){lb.title=sp.n+"（"+sp.zh+"）";lb.setAttribute("aria-label","收購商 "+sp.n)}
+    const lb=document.createElement("button");lb.className="zlabel";lb.innerHTML=sp.kind==="shop"?KIND.shop[1]:`<i style="background:${SRC_COL[sp.src]}"></i>${sp.tp?'<span class="tpi" title="傳送點">🌀</span>':""}${sp.mons.length?"":KIND[sp.kind][1]+" "}${esc(sp.n)}`;if(sp.tp)lb.title="傳送點："+sp.tp;if(sp.kind==="shop"){lb.title=sp.n+"（"+sp.zh+"）";lb.setAttribute("aria-label","收購商 "+sp.n)}
     lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("s",sp.id,"new")});d.appendChild(lb);
     if(sp.mons.length){const tw=document.createElement("div");tw.className="thumbs";
       vm.sort((a,b)=>rank[a.type]-rank[b.type]).forEach(mm=>tw.appendChild(mapThumb(mm)));
@@ -1143,6 +1147,10 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin").forEach(n=>n.re
 let editing=false,placing=null;
 function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(FL);
   const sec=(title,n)=>{const h=document.createElement("div");h.className="zsec";h.innerHTML=`${title} <span class="mono">${n}</span>`;zl.appendChild(h)};
+  const tps=[...F().towns.filter(t=>t.tp).map(t=>({t,town:1})),...sp.filter(x=>x.tp).map(x=>({t:x,town:0}))];
+  if(tps.length){sec("🌀 傳送點",tps.length);tps.forEach(({t,town})=>{const row=document.createElement("div");row.className="zrow";row.dataset.tp=t.n+" "+t.tp+" "+(t.zh||"");
+    row.innerHTML=`<div class="zhead"><button class="zn">${esc(t.n)}</button><span class="zzh">傳送選單：${esc(t.tp)}</span><span class="pill tpp">${town?"村鎮":"地點"}</span><span class="mono muted" style="font-size:11px;margin-left:auto">X ${t.x} · Z ${t.z}</span></div>`;
+    row.querySelector(".zn").onclick=()=>{if(town){centerOn(t.x,t.z,2.6);openP("t",t.id,"new")}else{focusSpot(t.id);openP("s",t.id,"new")}};zl.appendChild(row)})}
   [["boss","首領"],["dungeon","地下城"],["mob","怪物區"],["poi","地點"],["shop","收購商"]].forEach(([k,title])=>{const g=sp.filter(x=>x.kind===k);if(!g.length)return;sec(title,g.length);
     g.forEach(x=>{const st=STATUS[x.src];const row=document.createElement("div");row.className="zrow";row.dataset.s=x.id;
       row.innerHTML=`<div class="zhead"><button class="zn">${esc(x.n)}</button><span class="zzh">${esc(x.zh)}</span><span class="pill ${st.c}">${st.t}</span><span class="mono muted" style="font-size:11px;margin-left:auto">X ${x.x} · Z ${x.z}</span></div>`;
@@ -1181,7 +1189,7 @@ function filterMap(){const s=Sq();
   document.querySelectorAll("#view-map .th[data-id]").forEach(b=>{const m=monById[b.dataset.id];const hit=monHit(m,s);b.classList.toggle("dim",!hit);b.classList.toggle("hit",!!(s&&hit))});
   const sp=spotsOf(FL);
   document.querySelectorAll(".zone").forEach(z=>{const x=sp.find(y=>y.id===z.dataset.s);z.classList.toggle("dim",!!x&&!spotHit(x,s))});
-  document.querySelectorAll(".zrow").forEach(r=>{if(r.dataset.s){const x=sp.find(y=>y.id===r.dataset.s);r.hidden=!x||!spotHit(x,s)}else r.hidden=!F().M.some(m=>m.zone===r.dataset.z&&!BASE_SPOT[m.id]&&monHit(m,s))});
+  document.querySelectorAll(".zrow").forEach(r=>{if(r.dataset.tp!=null){r.hidden=!!s&&!norm(r.dataset.tp).includes(s)}else if(r.dataset.s){const x=sp.find(y=>y.id===r.dataset.s);r.hidden=!x||!spotHit(x,s)}else r.hidden=!F().M.some(m=>m.zone===r.dataset.z&&!BASE_SPOT[m.id]&&monHit(m,s))});
   document.querySelectorAll(".zsec").forEach(h=>{let n=h.nextElementSibling,any=false;while(n&&!n.classList.contains("zsec")){if(!n.hidden)any=true;n=n.nextElementSibling}h.hidden=!any})}
 const editbar=$("editbar"),editToggle=$("editToggle");
 function updateEditbar(){editbar.hidden=!editing;stage.classList.toggle("edit",editing&&!!placing);
