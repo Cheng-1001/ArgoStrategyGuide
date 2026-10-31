@@ -1,5 +1,5 @@
 blank_issues_enabled: true
 contact_links:
-  - name: 用查詢工具的回報區填寫（比較簡單）
-    url: https://cheng-1001.github.io/ArgoStrategyGuide/#report
-    about: 在工具裡填好欄位、選好截圖，再一鍵送到這裡。
+  - name: 回報遊戲資料（怪物、物品、地點）請用回報表單
+    url: https://docs.google.com/forms/d/e/1FAIpQLSfaQnB3WleBLxKQI5adUUUaik11q00qIopj5lPnDqaApNCgig/viewform
+    about: 不需要 GitHub 帳號。填好資料、上傳截圖，審核員核准後會自動更新到網站。

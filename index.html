@@ -929,7 +929,7 @@ async function loadPending(){if(pendingCache)return pendingCache;
     pendingCache=(await r.json()).filter(x=>!x.pull_request&&/^\[(怪物|物品|地點|其他)\]/.test(x.title));}catch(e){pendingCache="err"}return pendingCache}
 let rFloorShown=null;
 // Google form (filled in after the form exists). FORM_PREFILL contains "{floor}" where the floor number goes.
-const FORM_PREFILL="";
+const FORM_PREFILL="https://docs.google.com/forms/d/e/1FAIpQLSfaQnB3WleBLxKQI5adUUUaik11q00qIopj5lPnDqaApNCgig/viewform?usp=pp_url&entry.380876351={floor}";
 function buildFormReport(){
   $("rWrap").innerHTML=`
   <div class="rhead"><h2>回報區</h2><span class="count">新增或更正資料，每筆都要附遊戲截圖</span></div>
