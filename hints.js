@@ -157,7 +157,7 @@ window.SAO_HINTS={1:{
   "Habitant d'un manoir glacial",
   1
  ],
- "Ice Sprite": [
+ "Ice Spirit": [
   "Spirit of the snowy manor",
   "Esprit du manoir enneigé",
   1
@@ -192,12 +192,12 @@ window.SAO_HINTS={1:{
   "Monte la garde devant la porte scellée depuis des siècles...",
   0
  ],
- "Skeleton Sorcerer": [
+ "Skeleton Wizard": [
   "Whispers spells in the heart of the forgotten ruins...",
   "Murmure des sortilèges au cœur des ruines oubliées...",
   0
  ],
- "Nasgul": [
+ "Cursed Nazgul Protector": [
   "A shiver runs down your spine in a room deep in the ruins",
   "Un frisson vous parcourt l'échine dans une salle au fin fond des ruines",
   0

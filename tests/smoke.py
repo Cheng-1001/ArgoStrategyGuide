@@ -48,7 +48,7 @@ with sync_playwright() as p:
         pg.route("https://fonts.gstatic.com/**", lambda r: r.abort())
         pg.on("pageerror", lambda e: errs.append(str(e)))
         for f in (1, 2, 3):
-            for v in ("map", "monsters", "items", "quests", "bosses", "report"):
+            for v in ("map", "monsters", "items", "quests", "equip", "bosses", "report"):
                 pg.goto(f"{base}#f{f}-{v}")
                 pg.wait_for_timeout(250)
                 if w < 500:
@@ -72,6 +72,24 @@ with sync_playwright() as p:
     pg.fill("#q", "Forest Spider"); pg.wait_for_timeout(300)
     pg.click("#lMon .card >> nth=0"); pg.wait_for_timeout(300)
     check("X 1239 · Z 1374" in pg.inner_text("#pBody"), "Forest Spider sits in Arakh'Nol (reference map)")
+
+    pg.goto(base + "#monsters"); pg.wait_for_timeout(300)
+    pg.fill("#q", "Nasgul"); pg.wait_for_timeout(300)
+    check(pg.locator("#lMon .card").count() >= 1 and "Cursed Nazgul Protector" in pg.inner_text("#lMon"),
+          "old monster name (Nasgul) still finds the renamed monster")
+    pg.fill("#q", ""); pg.wait_for_timeout(200)
+
+    pg.goto(base + "#quests"); pg.wait_for_timeout(400)
+    check(pg.locator(".mq").count() >= 30, "quests tab lists the floor 1 main questline")
+    pg.click("[data-route='15']"); pg.wait_for_timeout(800)
+    check(pg.locator(".rstep").count() >= 3 and pg.is_visible("#routeBar"), "main quest route is drawn on the map")
+    pg.click("#routeX"); pg.wait_for_timeout(200)
+
+    pg.goto(base + "#equip"); pg.wait_for_timeout(500)
+    total = pg.locator("#lEq .card").count()
+    pg.click("#fEqPart .chip[data-v=weapon]"); pg.wait_for_timeout(200)
+    pg.locator("#lEq .card").first.click(); pg.wait_for_timeout(300)
+    check(total > 100 and "官方圖鑑 #" in pg.inner_text("#pBody"), "equipment tab lists official items and opens a detail")
 
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
     n = pg.locator(".zone.shop").count()
