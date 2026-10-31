@@ -68,6 +68,17 @@ with sync_playwright() as p:
     check("Wolf Valley" in t, "Albal shows codex location hint (hints.js)")
     check("35%" in t, "Albal drop rates come from the report")
 
+    pg.goto(base + "#monsters"); pg.wait_for_timeout(300)
+    pg.fill("#q", "Forest Spider"); pg.wait_for_timeout(300)
+    pg.click("#lMon .card >> nth=0"); pg.wait_for_timeout(300)
+    check("X 1239 · Z 1374" in pg.inner_text("#pBody"), "Forest Spider sits in Arakh'Nol (reference map)")
+
+    pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
+    n = pg.locator(".zone.shop").count()
+    pg.click(".legend .lgt[data-k=shop]"); pg.wait_for_timeout(300)
+    check(n == 16 and pg.locator(".zone.shop").count() == 0, "16 loot buyers on the map and the legend hides them")
+    pg.click(".legend .lgt[data-k=shop]"); pg.wait_for_timeout(200)
+
     pg.goto(base + "#map"); pg.wait_for_timeout(500)
     check(pg.is_visible("#baseBtn"), "floor 1 shows the base-map button")
     pg.click("#baseBtn"); pg.wait_for_timeout(400)

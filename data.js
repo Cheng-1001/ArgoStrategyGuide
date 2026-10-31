@@ -3,6 +3,9 @@
    - Monsters, regions, drops: saominecraft.wiki.gg/wiki/Bestiary (live revision)
    - Town / NPC coordinates and quest requirements: saominecraft.wiki.gg/wiki/Quests/Aincrad/Side
    - Item names, rarity, level, stats, descriptions, icons: saominecraft.com/wiki (official item catalogue)
+   - Spots with src:"ref" (Arakh'Nol, dungeons, boss spawns, loot buyers; checked 2026-10-31):
+     DelayedCode's SAO MC Interactive Map, Current Data, floor 1 (github.com/DelayedCode/SAO-MC-Interactive-Map).
+     Only coordinates and place names were taken; that project uses the same Minecraft X / Z as this map.
 */
 window.SAO = (() => {
 const MAP = 4980; // map image spans 4980 blocks; pixel (0,0) = block X0 Z0
@@ -13,7 +16,8 @@ const STATUS = {
   est:   { t: "推估位置", c: "s-est", d: "wiki 沒有座標，依任務或圖鑑的文字描述推估，可能有誤差。" },
   player:{ t: "玩家座標", c: "s-player", d: "座標由使用者提供（遊戲內 X / Z）。" },
   unk:   { t: "位置未知", c: "s-unk", d: "wiki 沒有這個區域的位置資料。到「地圖」分頁開啟「校正未知區域位置」即可自行標上地圖。" },
-  user:  { t: "自行標示", c: "s-user", d: "這是你在本瀏覽器中標示的位置。" }
+  user:  { t: "自行標示", c: "s-user", d: "這是你在本瀏覽器中標示的位置。" },
+  ref:   { t: "參考互動地圖", c: "s-ref", d: "座標取自玩家製作的 SAO MC Interactive Map（DelayedCode，Current Data），還沒有用遊戲截圖核對過。" }
 };
 
 const ZONES = {
@@ -263,14 +267,16 @@ const TOWNS = [
 /* Map spots. Coordinates given by the user (in-game X / Z) unless src says otherwise.
    kind: boss | dungeon | mob | poi ; mons = monster names shown there ; items = items gathered there */
 const SPOTS = [
- {id:"pumba",kind:"mob",n:"Boar Zone / Pumba",zh:"野豬區・Pumba 重生點",x:1828,z:3555,mons:["Corrupted Boar","Pumba"],note:"座標為 Pumba 的位置；地圖上的「Zone Sanglier」標示也在這裡。Corrupted Boar 分布在周圍森林。"},
- {id:"wolf",kind:"mob",n:"Wolf Valley",zh:"狼之谷",x:2445,z:3930,mons:["White Dire Wolf","Black Dire Wolf","Albal"]},
+ {id:"pumba",kind:"mob",n:"Boar Zone / Pumba",zh:"野豬區・Pumba 重生點",x:1828,z:3555,mons:["Corrupted Boar","Pumba"],note:"座標為 Pumba 的位置；地圖上的「Zone Sanglier」標示也在這裡。Corrupted Boar 分布在周圍森林。參考互動地圖標了 5 個 Pumba（Corrupted Pumba）重生點：X 1859 · Z 3606、X 1677 · Z 3581、X 1974 · Z 3583、X 1931 · Z 3515、X 1987 · Z 3636。"},
+ {id:"wolf",kind:"mob",n:"Wolf Valley",zh:"狼之谷",x:2445,z:3930,mons:["White Dire Wolf","Black Dire Wolf"]},
+ {id:"albal",kind:"boss",n:"Albal",zh:"Albal 重生點",x:2513,z:3722,src:"ref",mons:["Albal"],note:"參考互動地圖標了 3 個重生點：X 2513 · Z 3722（目前版本的位置）、X 2617 · Z 3837、X 2512 · Z 3967。舊位置 X 2392 · Z 3832 已不再使用。"},
  {id:"nephentes",kind:"mob",n:"Nephentes",zh:"Mizunari 田野・豬籠草",x:3376,z:3772,mons:["Nephentes"]},
  {id:"swamp",kind:"mob",n:"Treants / Swamp",zh:"腐臭沼澤・樹人",x:1501,z:3207,mons:["Treant Warrior","Elite Treant","Mini Treant","Woodland Mage","Sylvan Mage"]},
- {id:"colossal",kind:"boss",n:"Guardian Colossal",zh:"巨像守護者（樹人首領）",x:1290,z:3158,mons:["Guardian Colossal"]},
+ {id:"colossal",kind:"boss",n:"Guardian Colossal",zh:"巨像守護者（樹人首領）",x:1290,z:3158,mons:["Guardian Colossal"],note:"參考互動地圖另外標了 3 個重生點：沼澤裡的 X 1238 · Z 2972、X 1077 · Z 3252，以及遠在東邊 Tolbana 外的 X 4577 · Z 1612（這一個還沒確認）。"},
  {id:"slimes",kind:"mob",n:"Slimes",zh:"史萊姆區",x:530,z:2922,mons:["Slime Warrior","Small Slime","Healer Slime","Mage Slime"]},
  {id:"gorbel",kind:"boss",n:"Slime King",zh:"史萊姆王 Gorbel",x:293,z:3201,mons:["Gorbel"]},
- {id:"spiders",kind:"mob",n:"Spiders / Forest",zh:"蜘蛛森林",x:1366,z:3618,mons:["Young Spider","Forest Spider"],note:"座標只寫「Spiders / Forest」。圖鑑把 Young Spider 列在 Hanaka、Forest Spider 列在 Arakh'Nol，兩種是否都在這裡未確認。"},
+ {id:"spiders",kind:"mob",n:"Spiders / Forest",zh:"蜘蛛森林（Hanaka 附近）",x:1366,z:3618,mons:["Young Spider"],note:"座標只寫「Spiders / Forest」。圖鑑把 Young Spider 列在 Hanaka；Hanaka 的 Scout Raphael 也有燒蜘蛛網的任務。Forest Spider 改標在北邊的 Arakh'Nol（參考互動地圖的怪物區域）。"},
+ {id:"arakhnol",kind:"mob",n:"Arakh'Nol",zh:"Arakh'Nol 森林・蜘蛛",x:1239,z:1374,src:"ref",mons:["Forest Spider"],note:"參考互動地圖把 Forest Spider 的出沒區域畫在這裡（約 X 1100–1380, Z 1250–1500），和圖鑑寫的 Arakh'Nol 一致。"},
  {id:"virelune",kind:"mob",n:"Virelune & Sharks",zh:"Virelune 湖・鯊魚",x:1492,z:2013,mons:["Shark Fish"]},
  {id:"nymbrea",kind:"boss",n:"Leviathan (Nymbréa)",zh:"利維坦 Nymbréa",x:1387,z:2043,mons:["Nymbréa"],note:"圖鑑把 Nymbréa 的區域寫成 Aepep's Lair。"},
  {id:"deers",kind:"mob",n:"Deers",zh:"山鹿",x:4102,z:1137,mons:["Mountain Deer","Mountain Stag"]},
@@ -280,11 +286,31 @@ const SPOTS = [
  {id:"ika",kind:"mob",n:"Ika Archipelago",zh:"Ika 群島",x:3271,z:4090,mons:["Ika"],note:"圖鑑把 Ika 列在 Geldorak Mine；這裡用使用者提供的 Ika 群島。"},
  {id:"fallen",kind:"dungeon",n:"Fallen Dungeon",zh:"墮落者迷宮",x:2383,z:2414,mons:["Fallen Soldier","Fallen Warrior","Fallen Guardian","Fallen Herald","Fallen Reaper","Ornstein, Fallen Devastator","Smough, Fallen Devastator"],note:"進入需要 Clé des Déchus。打倒 3 位 Fallen 小首領取得 Artefact des Fallens，才能進雙子騎士的首領房。"},
  {id:"ruins",kind:"mob",n:"Cursed Ruins",zh:"詛咒廢墟（圖鑑現稱 Forgotten Ruins）",x:2806,z:4449,mons:["Skeleton Swordsman","Skeleton Warrior","Skeleton Halberdier","Skeleton Archer"]},
+ {id:"xal",kind:"dungeon",n:"Xal'Zirith Dungeon",zh:"Xal'Zirith 聖所（地下城入口）",x:1034,z:1184,src:"ref",mons:["Strangler Spider","Hunting Spider","Venomous Spider","Pricilia","Yula","Jira","Kamilia"],note:"入口在 Arakh'Nol 西北，守衛 NPC 在 X 1013 · Z 1189（進入需要 Clé de Xal'Zirith）。地下的小首領位置（參考互動地圖）：Pricilia X 1232 · Z 1102、Yula X 1102 · Z 1227、Kamilia X 987 · Z 1247、Jira X 1192 · Z 1407。"},
+ {id:"skeld",kind:"dungeon",n:"Nasgul Sub-Dungeon",zh:"骷髏地下城（Nasgul 副本）",x:2782,z:4422,src:"ref",mons:["Skeleton Tank","Skeleton Sorcerer","Narax the Cursed Skeleton","Nasgul"],note:"入口在詛咒廢墟裡。地下的首領位置（參考互動地圖）：Nasgul X 2829 · Z 4247、Narax X 2722 · Z 4332。"},
+ {id:"kobold",kind:"dungeon",n:"Kobold Tower",zh:"狗頭人之塔（樓層首領）",x:3409,z:972,src:"ref",mons:["Illfang the Kobold Lord","Kobold Sentinel","Kobold Warrior","Kobold Lancer","Kobold Sorcerer","Small Kobold","The Mischievous Archer"],note:"Tolbana 北邊的塔，第一層樓層首領 Illfang 在塔頂。"},
  {id:"mine",kind:"poi",n:"Aincrad Mine",zh:"Aincrad 礦坑",x:2396,z:3527,note:"礦坑。"},
  {id:"wood",kind:"poi",n:"Birch & Oak Wood",zh:"樺木・橡木林",x:2641,z:4333,items:["Oak Log","Birch Log"],note:"伐木點。"},
  {id:"harold",kind:"poi",n:"Harold's Quest (Hidden Well)",zh:"Harrold 的任務・隱藏的井",x:4309,z:3697,src:"est",note:"提供的座標是「4309, 36971」，第二個數字超出地圖範圍（最大約 4980），這裡暫時標在 Z 3697。主線「The Chamber Beneath the Fields」：Harrold 說東邊道路上有一口井，夜裡看得到光。"},
  {id:"og",kind:"poi",n:"OG Quarter",zh:"OG Quarter",x:2312,z:3272},
- {id:"garden",kind:"poi",n:"Giant's Garden",zh:"巨人花園",x:379,z:2442,note:"主線「By the Branches of the Ancients」：Zebulgarath 住在巨人花園，提示是「利用水往上爬」。"}
+ {id:"garden",kind:"poi",n:"Giant's Garden",zh:"巨人花園",x:379,z:2442,note:"主線「By the Branches of the Ancients」：Zebulgarath 住在巨人花園，提示是「利用水往上爬」。"},
+ /* Loot buyers: NPCs that buy monster drops and materials (coordinates from the reference map) */
+ {id:"lb1",kind:"shop",n:"Boar and Wolf Loot Buyer",zh:"野豬・狼素材收購商（起始之城）",x:1787,z:4179,src:"ref"},
+ {id:"lb2",kind:"shop",n:"Hanaka Loot Buyer",zh:"Hanaka 收購商",x:1504,z:3396,src:"ref"},
+ {id:"lb3",kind:"shop",n:"Vallhat Loot Buyer",zh:"Vallhat 收購商",x:412,z:3089,src:"ref"},
+ {id:"lb4",kind:"shop",n:"Mizunari Loot Buyer",zh:"Mizunari 收購商",x:3132,z:3704,src:"ref"},
+ {id:"lb5",kind:"shop",n:"Ika Citadel Loot Buyer",zh:"Ika 群島收購商",x:3277,z:4170,src:"ref"},
+ {id:"lb6",kind:"shop",n:"Cursed Ruins Loot Buyer",zh:"詛咒廢墟收購商",x:2857,z:4487,src:"ref"},
+ {id:"lb7",kind:"shop",n:"Cursed Ruins Loot Buyer (2)",zh:"詛咒廢墟收購商（2）",x:2832,z:4709,src:"ref"},
+ {id:"lb8",kind:"shop",n:"Geldorak Mine Dungeon Loot Buyer",zh:"Geldorak 礦坑地下城收購商",x:4280,z:3887,src:"ref"},
+ {id:"lb9",kind:"shop",n:"Labyrinth of the Fallen Loot Buyer",zh:"墮落者迷宮收購商",x:2403,z:2385,src:"ref"},
+ {id:"lb10",kind:"shop",n:"Labyrinth of the Fallen Loot Buyer (2)",zh:"墮落者迷宮收購商（2）",x:2389,z:2408,src:"ref"},
+ {id:"lb11",kind:"shop",n:"Aragorn's Lair Loot Buyer",zh:"Aragorn 巢穴收購商（Arakh'Nol）",x:1020,z:1176,src:"ref"},
+ {id:"lb12",kind:"shop",n:"Virelune Loot Buyer",zh:"Virelune 收購商",x:1604,z:1970,src:"ref"},
+ {id:"lb13",kind:"shop",n:"Magical & Icy Loot Buyer",zh:"魔法・冰系素材收購商（Tolbana）",x:3317,z:1642,src:"ref"},
+ {id:"lb14",kind:"shop",n:"Candelia Loot Buyer",zh:"Candelia 收購商",x:2029,z:790,src:"ref"},
+ {id:"lb15",kind:"shop",n:"Local Lumberjack",zh:"伐木工（收購木材）",x:2467,z:4320,src:"ref"},
+ {id:"lb16",kind:"shop",n:"Local Miner",zh:"礦工（收購礦石）",x:2400,z:3560,src:"ref"}
 ].map(s=>({src:"player",mons:[],items:[],...s}));
 
 /* Side quests. need: [itemId, qty, inferred?] ; kill: [monster name(s), count] ; raw = original condition text (FR) */

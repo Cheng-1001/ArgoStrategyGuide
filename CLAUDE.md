@@ -20,6 +20,7 @@
   - wiki：https://saominecraft.wiki.gg/wiki/Floor_1 、/wiki/Bestiary
   - 官網物品圖鑑：https://saominecraft.com/wiki
   - 官網世界首領：https://saominecraft.com/world-boss
+  - 參考互動地圖（玩家製作，第 1 層 Current Data，和我們一樣用 Minecraft X / Z）：https://delayedcode.github.io/SAO-MC-Interactive-Map/ ，repo https://github.com/DelayedCode/SAO-MC-Interactive-Map 。repo **沒有授權條款**，所以只取座標和地名（事實資料），不複製描述文字、程式碼、區域多邊形。取來的點位在 `data.js` 標 `src:"ref"`，網站顯示「參考互動地圖」。解析它的檔案時只用文字解析，不要執行它的 JS。
 
 ## 檔案結構
 
@@ -56,7 +57,7 @@
 - **網址格式**：`#f{樓層}-{分頁}`，分頁有 map / monsters / items / quests / bosses / report。樓層選擇器支援 1～100 層；不存在的樓層會回到第 1 層。
 - **地圖**：
   - 依點位顯示怪物縮圖；縮小時只顯示最主要的一隻加「+N」。
-  - 圖例可以隱藏首領、小首領、一般怪物、村鎮（存在 localStorage `sao-map-hide`）。
+  - 圖例可以隱藏首領、小首領、一般怪物、村鎮、收購商（存在 localStorage `sao-map-hide`）。收購商（spot `kind:"shop"`）在地圖上只畫 💰 小圖示，名稱放在 title。
   - 第 1 層可以切換「wiki 地圖 / 探索地圖」（`sao-map-base`）。手機版會把整個圖例藏起來，所以手機上切換不了，還沒處理。
 - **座標**：
   - 第 1 層地圖 size 4980，**x0 = z0 = 70**。這是用 SIFT 比對 JourneyMap 和 wiki 地圖得出的，806 組特徵點吻合。原本以為是 0，所有點都偏了約 70 格，已經修正。
@@ -84,7 +85,8 @@
 - [ ] 第 2、3 層預計 **11/4 開放**（遊戲改版）。使用者通知後，重新抓 wiki 和官網資料，比對差異後更新 `data23.js`。第 3 層還沒有地圖。
 - [ ] 物品和地點類型的回報，目前只出現在「已收錄」清單和地圖的回報標記上，還沒整合進物品詳細資料和地圖點位。
 - 已知限制：
-  - 第 1 層有 20 隻、第 2 和第 3 層全部怪物的區域沒有座標。
+  - 第 1 層只剩 Skeleton、Kazor 沒有座標（參考互動地圖的 Current Data 也沒有 Kazor）；第 2 和第 3 層全部怪物的區域沒有座標。
+  - 和參考互動地圖還沒對齊的差異：城鎮座標（起始之城、Castlebrume、Candelia、Virelune 差約 100 格）、多個怪物名稱不同（例如 Black/White Sinister Wolf、Little Slime、Slime Magician、Robust Bandit、Tank Skeleton、Mage Sylvester）、它的 8 個英文支線任務和其他 NPC（飾品鐵匠、鑰匙鐵匠、神秘商人等）。
   - Sissou 任務的「harpies des vents」找不到對應的怪物。
   - 還有幾個未知物品：Arc courbe、bûches de ???、Sac à dos、Sylvan/Skeleton Shaman Staff、兩種 Scroll、Curved Bow。
 
