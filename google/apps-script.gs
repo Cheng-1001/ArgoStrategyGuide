@@ -290,7 +290,8 @@ function upgradeSheet() {
     col = headers_(sh);
   }
   const last = sh.getLastColumn();
-  sh.getRange(1, col[CFG.C_ID], 1, last - col[CFG.C_ID] + 1).setFontWeight('bold').setBackground('#fff2cc');
+  // 表單回應常被 Google 自動轉成「表格」，表格標題預設白字，在淺黃底上看不清楚，所以明確設成深色字
+  sh.getRange(1, col[CFG.C_ID], 1, last - col[CFG.C_ID] + 1).setFontWeight('bold').setBackground('#fff2cc').setFontColor('#3b2f00');
   // 收起表單原始欄位（時間戳記留著）；內容都整理在「內容摘要」，要看原始答案可以按欄位上方的 + 展開
   const firstReview = Math.min(col[CFG.C_ID], col[CFG.C_STATUS], col[CFG.C_NOTE], col[CFG.C_RESULT]);
   if (firstReview > 2) {
