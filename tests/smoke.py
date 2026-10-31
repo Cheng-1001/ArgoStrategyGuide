@@ -114,7 +114,7 @@ with sync_playwright() as p:
           "floor 2 still uses its single map image")
 
     pg.goto(base + "#report"); pg.wait_for_timeout(400)
-    check(pg.inner_text(".rform code") == r"%APPDATA%\.Triggers Client\instances\Sword Art Online\screenshots",
+    check(pg.text_content(".rform code") == r"%APPDATA%\.Triggers Client\instances\Sword Art Online\screenshots",
           "report tab shows the F2 screenshot folder path with its backslashes")
 
     pg.goto(base + "#f2-report"); pg.wait_for_timeout(400)
