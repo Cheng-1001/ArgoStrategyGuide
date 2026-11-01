@@ -7,7 +7,7 @@ window.SAO_RECIPES = {
 "floor": 1,
 "items": [
 [
-null,
+2463,
 "Quality Health Potion I",
 null,
 [
@@ -27,7 +27,7 @@ null,
 "ref"
 ],
 [
-null,
+2464,
 "Quality Health Potion II",
 null,
 [
@@ -51,7 +51,7 @@ null,
 "ref"
 ],
 [
-null,
+2465,
 "Quality Health Potion III",
 null,
 [
@@ -427,7 +427,7 @@ null,
 "floor": 1,
 "items": [
 [
-null,
+1747,
 "Healing Crystal",
 null,
 [
@@ -455,7 +455,7 @@ null,
 "ref"
 ],
 [
-null,
+1749,
 "Mana Crystal",
 null,
 [
@@ -483,7 +483,7 @@ null,
 "ref"
 ],
 [
-null,
+1750,
 "Stamina Crystal",
 null,
 [
@@ -642,7 +642,7 @@ null,
 "floor": 1,
 "items": [
 [
-null,
+1823,
 "Key of the Fallen",
 null,
 [
@@ -667,7 +667,7 @@ null,
 "floor": 1,
 "items": [
 [
-null,
+1821,
 "Forest Key",
 null,
 [
@@ -1724,7 +1724,7 @@ null,
 "floor": 1,
 "items": [
 [
-null,
+2457,
 "Health Potion I",
 null,
 [
@@ -1764,7 +1764,7 @@ null,
 "ref"
 ],
 [
-null,
+2471,
 "Stamina Potion I",
 null,
 [
@@ -1862,7 +1862,7 @@ null,
 "floor": 1,
 "items": [
 [
-null,
+1969,
 "Quality Vitality Fortifier I",
 null,
 [
@@ -1886,7 +1886,7 @@ null,
 "ref"
 ],
 [
-null,
+1970,
 "Quality Ferocity Fortifier I",
 null,
 [
@@ -1910,7 +1910,7 @@ null,
 "ref"
 ],
 [
-null,
+1971,
 "Quality Knowledge Fortifier I",
 null,
 [
@@ -1930,7 +1930,7 @@ null,
 "ref"
 ],
 [
-null,
+1972,
 "Quality Endurance Fortifier I",
 null,
 [
@@ -1946,7 +1946,7 @@ null,
 "ref"
 ],
 [
-null,
+1973,
 "Quality Resistance Fortifier I",
 null,
 [
@@ -1970,7 +1970,7 @@ null,
 "ref"
 ],
 [
-null,
+1974,
 "Quality Patience Fortifier I",
 null,
 [
@@ -2044,7 +2044,7 @@ null,
 "floor": 1,
 "items": [
 [
-null,
+1824,
 "Key of Xal'Zirith",
 null,
 [

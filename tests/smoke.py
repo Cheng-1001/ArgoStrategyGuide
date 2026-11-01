@@ -121,6 +121,8 @@ with sync_playwright() as p:
     t = pg.inner_text("#pBody")
     check(pg.locator("#lRc .rcard.sel").count() == 1 and "Alchemist" in t and "Sylvan Sprout" in t and "× 8" in t,
           "clicking one potion recipe selects only that card and opens its recipe panel")
+    check(pg.locator('#lRc .rcard', has_text="Quality Health Potion I").first.locator(".eslot.empty").count() == 0,
+          "Quality Health Potion I uses the official catalogue icon (Qualité Potion de Vie I)")
     pg.locator("#pBody .lrow", has_text="Allium").first.click(); pg.wait_for_timeout(300)
     check(pg.locator("#pBody .qmap svg").count() == 1 and pg.locator("#pBody .rnum").count() >= 1 and pg.locator("#pBody [data-imap]").count() == 1,
           "material panel (Allium) shows a numbered map of where to get it")

@@ -36,7 +36,7 @@
 | `reports.js` | 已收錄的玩家回報。格式必須維持 `window.SAO_REPORTS = <JSON 陣列>;`，Google 程式會自動讀寫它 |
 | `mainq.js` | 第 1 層主線任務 `window.SAO_MAINQ[1]`：說明取自 wiki 主線表，步驟順序和座標取自參考互動地圖，步驟文字是本站中文改寫。步驟格式 `[文字, x, z, 約略]` |
 | `equip.js`、`equip.png` | 裝備分頁：官網物品圖鑑的 656 件裝備（武器、盾、防具、飾品），由 scratchpad 的 `build_equip.py` 產生，不要手改。`equip.png` 48px 一格、一列 16 格 |
-| `recipes.js` | 第 1 層配方，`tools/build_recipes.py` 產生（不要手改）。key 是 NPC 名稱；每筆 `[官網圖鑑 id 或 null, 遊戲英文名, 秒數, [[材料, 數量]], Col（"Free"；null＝未知）, 稀有度, 分類 weapon/armor/acc/potion/key, 等級, 來源 shot/ref]`。來源：使用者截圖（`SHOTS`，優先）＋參考地圖 eCompendium Current Data 的材料清單（只取事實；鯊魚飾品 4 筆和截圖完全相同）。英文名對官網 id 是人工對照表 `OID`（官網數值改版過，無法用屬性自動配對），材料名對照表 `MAT`（Small Purse＝Small Pouch、Shark Carapace＝Shark Shell、Sylve Shoot＝Sylvan Sprout…）。武器、防具目前只有起始商人賣的新手裝備 |
+| `recipes.js` | 第 1 層配方，`tools/build_recipes.py` 產生（不要手改）。key 是 NPC 名稱；每筆 `[官網圖鑑 id 或 null, 遊戲英文名, 秒數, [[材料, 數量]], Col（"Free"；null＝未知）, 稀有度, 分類 weapon/armor/acc/potion/key, 等級, 來源 shot/ref]`。來源：使用者截圖（`SHOTS`，優先）＋參考地圖 eCompendium Current Data 的材料清單（只取事實；鯊魚飾品 4 筆和截圖完全相同）。英文名對官網 id 是人工對照表 `OID`（官網數值改版過，無法用屬性自動配對；藥水、水晶、強化藥、鑰匙 17 筆在 2026-11-01 補上，名稱和等級都吻合才收。官網沒有的：Mana Potion I、Quality Mana/Stamina Potion I～III、Teleportation Crystal、Kobold Key、Purification Elixir，維持 🧪/🔑 佔位），材料名對照表 `MAT`（Small Purse＝Small Pouch、Shark Carapace＝Shark Shell、Sylve Shoot＝Sylvan Sprout…）。武器、防具目前只有起始商人賣的新手裝備 |
 | `hints.js` | 遊戲圖鑑的 LOCATION HINT，對應到 41 隻第 1 層怪物（`sure=0` 表示依順序推斷） |
 | `items.png` | 物品圖示表：64px 一格、一列 8 格，目前用到第 185 格。物品資料的最後一個欄位就是格子編號 |
 | `floor1.jpg`、`floor2.jpg` | wiki 地圖。floor1.jpg 原本在 X 1652、Z 2770（腐臭沼澤北邊麥田旁）有一個 wiki 編輯者留下的測試路標「sdsd」，另外 X 1917–1967、Z 2412–2495 有一塊黑色 T 形破圖。2026-11-01 修掉：路標那一處用使用者 JourneyMap 的真實地形縮到 wiki 解析度、做色調轉換後貼上；黑色 T 處 JourneyMap 沒資料，改搬旁邊的森林紋理。之後換新的 wiki 地圖要再檢查一次 |
@@ -69,6 +69,7 @@
 - **任務分頁**：主線（依劇情順序，可以在地圖上畫路線：編號步驟加虛線）和支線（wiki）兩種。主線的 `n` 是遊戲任務追蹤上的編號：wiki 主線表寫明 8～18，R0001 截圖證實「24. The Truth About the Seal」，19～23 依順序；25 以後是推算（`nEst`）；The Trader 之前的編號還不確定，不顯示數字。參考地圖把「The Southern Marshes」(14) 併進「The Suspended City」，已拆開；它把 The Truth About the Seal 標在起始之城也不對，Catherine 在墮落者迷宮門口（X 2382、Z 2415；使用者 2026-11-01 確認，R0001 的任務距離 1565 格也吻合）。拿到玩家截圖裡的任務追蹤畫面時，用來校正編號和步驟。
 - **配方分頁**（上方選單的獨立分頁 `#recipes`，在任務和世界王中間）：分類 武器／防具／飾品／藥水／鑰匙、依 NPC 篩選、排序；每張卡片點了開自己的配方面板（type `r`，id 是 `ALLREC` 的索引，所以只會選到一張），面板列 NPC、等級、費用、時間、材料，有對應官網物品時另有「查看裝備／道具資料」按鈕。NPC 資料列「可以製作」，裝備列「製作方式」，材料列「可以拿去製作」。
 - **卡片欄數**：寬螢幕（≥1180px）的卡片格線用 `fixCols()` 固定成「右側面板開著時」的欄數，面板開關都不會重排。
+- **物品面板的取得方式**：`itemMap` 把掉落怪物的怪物區（或首領重生點）和採集點編號，畫成和任務一樣的小地圖（`routeMini(steps,f,true)`，不畫虛線），列表項目前面有同樣的編號，「放大查看取得地點」開浮動地圖視窗（`openRouteWin(…,true)`）。
 - **任務面板**：步驟 → 需要的物品和目標 → 原文 → 來源 → 最下面才是路線小地圖和放大按鈕。
 - **裝備分頁**：依部位、職業、稀有度、等級篩選。名稱和描述是官方法文原文；本站 ITEMS 有同名（`fr` 欄位）的會連過去。只有 16×16 的官方圖片直接當圖示，其他用官網搜尋結果卡片 `.w-it .ph` 的 3D 渲染截圖（去背）。樓層選擇器支援 1～100 層；不存在的樓層會回到第 1 層。
 - **地圖**：

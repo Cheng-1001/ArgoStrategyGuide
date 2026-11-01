@@ -1131,7 +1131,8 @@ function propDetail(id){const e=prById[id];const en=FR2ID[e.name];
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}${rows?`<dl class="stats">${rows}</dl>`:""}
   ${en?`<h3 class="sec">掉落與任務</h3><ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>掉落來源、掉落率、任務需求</span></span><span class="v">›</span></button></li></ul>`:""}
-  <div class="note">官方圖鑑 #${e.oid}。取得方式還沒有資料，歡迎用「回報區」補充。</div>`}
+  ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}`:""}
+  <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式還沒有資料，歡迎用「回報區」補充。"}</div>`}
 
 // ================= bosses tab =================
 const BO=window.SAO_BOSSES;

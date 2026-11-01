@@ -38,7 +38,14 @@ OID = {"Training Sword": 2596, "Training Bow": 1566, "Training Crossbow": 1727, 
        "Iron Gloves": 2042, "Iron Coin": 1457, "Iron Amulet": 1297, "Copper Ring": 2477, "Copper Bracelet": 1591,
        "Copper Gloves": 2039, "Copper Coin": 1452, "Copper Amulet": 1290, "Bracelet of the Sylvan": 1589, "Ring of the Sylve": 2473,
        "Skeleton Skull": 1450, "Belt of the Stags": 1460, "Ring of the Wolf": 2480, "Albal's Necklace": 1296,
-       "Stolen Cloak": 1454, "Sticky Ring": 2479, "Occult Skull": 1461}
+       "Stolen Cloak": 1454, "Sticky Ring": 2479, "Occult Skull": 1461,
+       # potions, crystals, fortifiers, keys (official name and level both match; checked by hand 2026-11-01)
+       "Quality Health Potion I": 2463, "Quality Health Potion II": 2464, "Quality Health Potion III": 2465,
+       "Health Potion I": 2457, "Stamina Potion I": 2471,
+       "Healing Crystal": 1747, "Mana Crystal": 1749, "Stamina Crystal": 1750,
+       "Quality Vitality Fortifier I": 1969, "Quality Ferocity Fortifier I": 1970, "Quality Knowledge Fortifier I": 1971,
+       "Quality Endurance Fortifier I": 1972, "Quality Resistance Fortifier I": 1973, "Quality Patience Fortifier I": 1974,
+       "Forest Key": 1821, "Key of the Fallen": 1823, "Key of Xal'Zirith": 1824}
 CATS = {"weapon": "weapon", "armor": "armor", "accessory": "acc", "consumable": "potion", "dungeon": "key"}
 EXTRA_POTION = {"Purification Elixir"}                      # listed under "material" by the reference map
 
