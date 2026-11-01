@@ -345,12 +345,14 @@ with sync_playwright() as p:
     check(pg.is_visible("#rData") and pg.is_hidden("#rFeedW") and "#report" in pg.url, "協作區: 攻略資料維護 shows the data form")
     # recipe panel <-> codex: 查看圖鑑 / 查看配方 switch tabs and open the entry
     pg.goto(base + "#recipes"); pg.wait_for_timeout(500)
+    pg.fill("#q", ""); pg.click('#fRcCat .chip[data-v="all"]'); pg.wait_for_timeout(300)   # earlier steps left a category filter on
     pg.locator("#lRc .rcard", has_text="Belt of the Stags").first.click(); pg.wait_for_timeout(300)
     check("裝備資料" in pg.inner_text("#pBody") and "最大生命" in pg.inner_text("#pBody"), "the recipe panel shows the crafted item's data")
     pg.click('#pBody [data-goview^="equip"]'); pg.wait_for_timeout(700)
-    check(pg.evaluate("location.hash") == "#equip" and "Ceinture des Cerfs" in pg.inner_text("#pBody") and pg.locator(".card.sel").count() == 1, "查看圖鑑 opens the item in the equipment codex")
+    hh, pt, ns = pg.evaluate("location.hash"), pg.inner_text("#pBody"), pg.locator(".card.sel").count()
+    check(hh.endswith("equip") and "Ceinture des Cerfs" in pt and ns == 1, f"查看圖鑑 opens the item in the equipment codex ({hh}, selected cards {ns})")
     pg.click('#pBody [data-goview^="recipes"]'); pg.wait_for_timeout(700)
-    check(pg.evaluate("location.hash") == "#recipes" and "Belt of the Stags" in pg.inner_text("#pBody"), "查看配方 opens the recipe in the recipes tab")
+    check(pg.evaluate("location.hash").endswith("recipes") and "Belt of the Stags" in pg.inner_text("#pBody"), "查看配方 opens the recipe in the recipes tab")
     # calibration mode is for the owner only (?edit)
     pg.goto(base + "#map"); pg.wait_for_timeout(500)
     check(pg.is_hidden("#editToggle") and pg.is_hidden(".mapfoot"), "players do not see the calibration button")

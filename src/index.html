@@ -1032,7 +1032,13 @@ function bindGo(root){root.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=
   root.querySelectorAll("[data-goview]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [v,t,i]=b.dataset.goview.split("|");goView(v,t,i)})}
 // switch to another tab and open an entry there (查看圖鑑 / 查看配方); the card is scrolled into view
 let viewPending=null;
-function goView(v,t,i){const fn=()=>{openP(t,i,"new");requestAnimationFrame(()=>{const c=document.querySelector(`.card[data-key="${t}|${CSS.escape(String(i))}"]`);if(c)c.scrollIntoView({block:"center"})})};
+function goView(v,t,i){const card=()=>document.querySelector(`#view-${v} .card[data-key="${t}|${CSS.escape(String(i))}"]`);
+  const fn=()=>{if(!card()){   // hidden by the search box or this tab's filters: show everything so the card can be found
+      const sec=$("view-"+v);if($("q").value){$("q").value="";renderCurrent()}
+      sec.querySelectorAll(".chips").forEach(g=>{const a=g.querySelector('.chip[data-v="all"]');if(a&&a.getAttribute("aria-pressed")!=="true")a.click()});
+      sec.querySelectorAll(".lvrange input").forEach(x=>{if(x.value){x.value="";x.dispatchEvent(new Event("input"))}});
+      sec.querySelectorAll("select").forEach(x=>{if([...x.options].some(o=>o.value==="all")&&x.value!=="all"){x.value="all";x.dispatchEvent(new Event("change"))}})}
+    openP(t,i,"new");requestAnimationFrame(()=>{const c=card();if(c)c.scrollIntoView({block:"center"})})};
   if(view===v){fn();return}viewPending=fn;go(v)}
 
 // ================= monsters tab =================
