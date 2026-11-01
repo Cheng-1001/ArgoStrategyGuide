@@ -203,6 +203,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .town.dungeon .pin{width:20px;height:20px;transform:none;border-radius:5px;background:#5b2e91;display:grid;place-items:center;color:#fff;font-size:12px;line-height:1;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.55)}
 .town.dungeon .tname{position:relative;background:#3b1d63;color:#fff;text-shadow:none;font-size:12.5px;font-weight:700;padding:2px 9px 3px;border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,.45)}
 .town.dungeon .tname.moved::after{display:none}
+.town.under-tp{z-index:4}.town.under-tp:hover,.town.under-tp:focus-within{z-index:7}
 .town.dungeon .tname::after{content:"";position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-bottom:0;border-top-color:#3b1d63}
 /* monster areas: no label box, just text over the outline (teleport areas keep their own marker) */
 .zone.mobarea .zlabel,.zone.mobarea.poi .zlabel{background:none;border-color:transparent;color:#fff;text-shadow:0 1px 2px #000,0 0 5px rgba(0,0,0,.95),0 0 9px rgba(0,0,0,.6)}
@@ -1917,13 +1918,13 @@ function declutter(){if(view!=="map"||world.hidden)return;
   const pick=(sel,p,hide)=>[...world.querySelectorAll(sel)].map(e=>({e,p,hide}));
   const labs=[...pick(".town.tp .tname",0),...pick(".town.dungeon .tname",1,true),...pick(".town.wboss .tname,.town.land .tname,.town.gather .tname",2,true),...pick(".zone.mobarea .zlabel",3,true)];
   labs.forEach(l=>{l.e.style.left="";l.e.style.top="";l.e.style.visibility="";l.e.classList.remove("moved")});
-  const pins=[...world.querySelectorAll(".town .pin")].map(e=>({m:e.parentElement,r:e.getBoundingClientRect()}));pins.forEach(p=>p.m.style.zIndex="");
+  const pins=[...world.querySelectorAll(".town .pin")].map(e=>({m:e.parentElement,r:e.getBoundingClientRect()}));pins.forEach(p=>{p.m.style.zIndex="";p.m.classList.remove("under-tp")});
   const placed=[...world.querySelectorAll(".town .pin,.bsp")].map(e=>e.getBoundingClientRect()).filter(r=>r.width);
   // a name may not cover another marker's pin, nor another name; teleport names always stay (highest priority)
   const hit=r=>placed.some(q=>r.left<q.right-1&&r.right>q.left+1&&r.top<q.bottom-1&&r.bottom>q.top+1);
   for(const l of labs){const r=l.e.getBoundingClientRect();if(!r.width)continue;
-    if(l.p===0){placed.push(r);const own=l.e.parentElement;   // a pin under a teleport name is lifted above it
-      pins.forEach(p=>{if(p.m!==own&&r.left<p.r.right&&r.right>p.r.left&&r.top<p.r.bottom&&r.bottom>p.r.top)p.m.style.zIndex=6});continue}
+    if(l.p===0){placed.push(r);const own=l.e.parentElement;   // a pin under a teleport name stays behind it; hovering its own name brings it to the front
+      pins.forEach(p=>{if(p.m!==own&&r.left<p.r.right&&r.right>p.r.left&&r.top<p.r.bottom&&r.bottom>p.r.top)p.m.classList.add("under-tp")});continue}
     const w=r.width,h=r.height,k=r.width/(l.e.offsetWidth||1),gx=w/2+14,gy=h+5;
     // a name with its own pin only moves to a spot touching that pin (below, right, left, above), so it never drifts
     // next to another marker; names without a pin (monster areas) keep the wider search
