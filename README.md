@@ -6,6 +6,11 @@ SAO Minecraft（saominecraft.com）的艾恩葛朗特（Aincrad）樓層查詢�
 
 此攻略由中文玩家社群協力製作，提供中文玩家使用。
 
+## 遊戲官方連結
+
+- 遊戲官網：https://saominecraft.com/
+- 官方 Discord：https://discord.gg/HdHba5awgn （官網上的邀請連結；開放時段異動、維護等公告會發在這裡）
+
 ## 資料來源
 
 | 來源 | 用在哪裡 |
