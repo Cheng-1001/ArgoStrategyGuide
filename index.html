@@ -843,18 +843,24 @@ const panel=$("panel"),pBody=$("pBody");let stack=[];
 function openP(type,id,mode){if(mode==="push"&&!panel.hidden&&stack.length)stack.push({type,id});else stack=[{type,id}];
   renderP();panel.hidden=false;document.body.classList.add("panel-open");pBody.scrollTop=0;markSel();fixCols()}
 let pending=null;
+// a place asked for from a panel / list: on the map tab move the big map; elsewhere open the floating map window
+function showPoints(f,pts,title,onMap){if(view==="map"||!FLOORS[f]||!FLOORS[f].map){goMapThen(f,onMap);return}
+  openRouteWin(title+"・"+pts.map(p=>`X ${p[0]} · Z ${p[1]}`).join("、"),pts.map((p,i)=>[pts.length>1?`${i+1}. X ${p[0]} · Z ${p[1]}`:`X ${p[0]} · Z ${p[1]}`,p[0],p[1]]),f,true)}
 function goMapThen(f,fn){if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
 const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="x"?"版權聲明":s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
 function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");
   pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="x"?legalDetail():cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
-  pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);goMapThen(f,()=>repPin(x,z))}));
+  pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);
+    // outside the map tab, coordinates open in the floating map window (all coordinates listed next to this one, numbered)
+    const par=b.parentElement,grp=par===pBody||!par?[]:[...par.querySelectorAll("[data-rep]")].map(e=>e.dataset.rep.split("|").map(Number)).filter(p=>p[0]===f);
+    showPoints(f,grp.length>1?grp.map(p=>[p[1],p[2]]):[[x,z]],($("pCrumb").textContent.split(" › ").pop()||"位置"),()=>repPin(x,z))}));
   pBody.querySelectorAll("[data-eqcls]").forEach(b=>b.addEventListener("click",()=>openClassEquip(b.dataset.eqcls)));
   pBody.querySelectorAll("[data-imap]").forEach(b=>b.addEventListener("click",()=>{const im=itemMap(b.dataset.imap);openRouteWin(b.dataset.imap+"・取得地點",im.steps,im.f,true)}));
   pBody.querySelectorAll("[data-route]").forEach(b=>b.addEventListener("click",()=>{const Q=questById(b.dataset.route);if(Q)openRouteWin((Q.main?mqLabel(Q.q)+"・":"支線・")+Q.title,Q.steps,Q.f)}));
-  pBody.querySelectorAll("[data-spot]").forEach(b=>b.addEventListener("click",()=>{const sp=spotById(b.dataset.spot);goMapThen(sp.floor,()=>focusSpot(sp.id))}));
-  pBody.querySelectorAll("[data-town]").forEach(b=>b.addEventListener("click",()=>{const t=townById[b.dataset.town];goMapThen(t.floor,()=>centerOn(t.x,t.z,2.6))}));
+  pBody.querySelectorAll("[data-spot]").forEach(b=>b.addEventListener("click",()=>{const sp=spotById(b.dataset.spot);showPoints(sp.floor,[[sp.x,sp.z]],sp.n,()=>focusSpot(sp.id))}));
+  pBody.querySelectorAll("[data-town]").forEach(b=>b.addEventListener("click",()=>{const t=townById[b.dataset.town];showPoints(t.floor,[[t.x,t.z]],t.n,()=>centerOn(t.x,t.z,2.6))}));
 }
 $("pBack").onclick=()=>{stack.pop();renderP();markSel()};
 $("pClose").onclick=closeP;
@@ -1501,7 +1507,7 @@ function renderReport(){
   const done=REPS.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(repKey(b)).localeCompare(String(repKey(a))));$("doneC").textContent=done.length+" 則";
   $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?(monById[r.monId]||FLOORS[r.floor]?.M.find(x=>x.name===r.name||(x.aka||[]).includes(r.name))):null;
       return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span>${repRef(r)}・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}${r.type==="recipe"&&ALLREC.findIndex(x=>x.rep===r.id)>=0?` ・<button class="linkbtn" data-go="r|${ALLREC.findIndex(x=>x.rep===r.id)}">看配方</button>`:""}${r.type==="skill"&&CLS.some(c=>c.reps.includes(r))?` ・<button class="linkbtn" data-go="c|${CLS.find(c=>c.reps.includes(r)).id}">看職業</button>`:""}${r.type==="quest"&&r.qref&&r.qref!=="main"?` ・<button class="linkbtn" data-go="q|${r.qref}">看任務</button>`:""}${r.type==="quest"&&r.qref==="main"?` ・<button class="linkbtn" data-go="q|mq${r.floor}_${MQ(r.floor).findIndex(x=>(x.reps||[]).includes(r))}">看任務</button>`:""}${r.x!=null&&FLOORS[r.floor]?.map?` ・<button class="linkbtn" data-rep="${r.floor}|${r.x}|${r.z}">在地圖上看</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
-  bindGo($("doneL"));$("doneL").querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);goMapThen(f,()=>repPin(x,z))});
+  bindGo($("doneL"));$("doneL").querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);showPoints(f,[[x,z]],b.closest("li")?.querySelector("b")?.textContent||"回報位置",()=>repPin(x,z))});
   if(FORM_PREFILL)return;
   loadPending().then(list=>{const L=$("pendL"),C=$("pendC");if(!L)return;
     if(list==="err"){L.textContent="這裡讀不到 GitHub 的資料，請用下面的連結查看。";return}
