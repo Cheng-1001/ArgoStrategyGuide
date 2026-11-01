@@ -119,6 +119,7 @@
   - 工具裡沒有的怪物，會自動新增成「玩家回報新增」的怪物，放在 zone `rep`。
 - **打包探索地圖**（2026-11-02，`#jmPack`，`jmRun`）：玩家選 JourneyMap 的 `mp` 資料夾（`webkitdirectory`，檔案只在瀏覽器處理）。`jmGroups` 只收 `…/day/x,z.png`、依資料夾分組；`jmAnalyze` 把每張圖以 1/4 畫到 1280px canvas，和 L1 切片（1 px＝4 格）在已探索區塊（`explored.png`）上逐塊比色：重疊 ≥ 20 塊且中位數 ≤ 20 ＝第 1 層（實測：真的 6～7、別處真實地形 29～37、雜訊 65）；`few`＝重疊太少、`other`、`out`。只打包有 ≥ 4 個新區塊的區域，每一份再補重疊的區域到 60 塊（`jmPlan`，伺服器才能再驗證），超過 40 MB 自動分份；`jmZip` 自己寫的 STORE zip（保留資料夾路徑和檔案時間）。參數 `JMP`（測試用 `window.__JMP`），結果 `window.__jm`。
 - **回報分頁**：`FORM_PREFILL`（優先用 `formcfg.js` 的 `SAO_FORM.prefill`）有值時顯示 Google 表單大按鈕，`formUrl(FL)` 把所有 `{floor}` 換成目前樓層；「提出建議」用不帶預填的網址（建議不問樓層）；沒有值時退回舊的 GitHub issue 流程。有未送出的 Google 表單草稿時，用預填連結打開會跳「繼續使用目前的草稿？」（Google 表單的行為）；使用者 2026-11-02 選 A：維持預填，不改。
+- **探索地圖貢獻**（2026-11-02，使用者指定）：底圖切到探索地圖時，底圖按鈕下方 `#jmCredit`（z-index 8）列出貢獻比例。`jmCredits()`：`jmmeta.js` 的 `SAO_JM["1"].chunks`（已探索區塊總數）和 `log[].newChunks`（第一筆 report:null＝站長原本的地圖），名稱依序取 log 的 `by` → reports.js 該回報的暱稱 `by` → 回報名稱（＝表單「探索地圖・貢獻者名稱」，必填）→「未具名玩家」；同名合併，前 5 名＋「其他 N 位」。R0002 是站長測試，log 手動標 `by:"站長"`。`jm_merge.py` 的 `write_meta` 會寫 `chunks`，第一筆缺 `newChunks` 時用總數補。
 - **處理中的回報**（2026-11-02）：`renderQueue` 用 `fetch("pending.js",{cache:"no-store"})` 讀（不用 script 標籤，避免瀏覽器快取；每分鐘最多重讀一次），攻略資料維護右欄「處理中的回報」列非建議的、問題回報及建議右欄「審核中的建議」（`#ideaQ`，沒有就隱藏）列建議。Apps Script 的 `pendingList_`／`syncPending_` 在送出、改狀態、`processQueue`、`retryApproved` 時更新，內容有變（MD5 存在指令碼屬性 `PENDING_SIG`）才 commit；退回保留 `PENDING_REJECT_DAYS`＝14 天；`syncPending` 手動整份重寫。測試：`tests/apps_script_test.js`、`tests/report_types_test.py`。
 
 ## 玩家回報流程（Google 表單）

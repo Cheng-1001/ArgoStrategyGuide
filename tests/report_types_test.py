@@ -114,6 +114,16 @@ with sync_playwright() as p:
     check("R0101・怪物" in q and "11/2 09:05 送出" in q and "待審核" in q and "已核准・上線中" in q and "10/31 退回" in q and "R0104" not in q
           and pg.inner_text("#qC") == "3 則" and "更新時間 2026-11-02 10:00" in q,
           "處理中的回報 lists waiting, approved and rejected reports from pending.js (suggestions are not in this list)")
+    # explored-map contributors under the base toggle (names come from reports.js, shares from jmmeta.js)
+    meta = {"1": {"date": "2026-11-02", "pct": 30.1, "chunks": 1000, "log": [{"report": None, "newChunks": 900}, {"report": "T109", "newChunks": 100}]},
+            "results": {"T109": {"ok": True, "newChunks": 100}}}
+    pg.route("**/jmmeta.js*", lambda r: r.fulfill(status=200, content_type="application/javascript; charset=utf-8", body="window.SAO_JM = " + json.dumps(meta) + ";"))
+    pg.evaluate("localStorage.setItem('sao-map-base','jm')")
+    pg.goto(base + "#map"); pg.reload(); pg.wait_for_timeout(1200)
+    t = pg.inner_text("#jmCredit") if pg.is_visible("#jmCredit") else ""
+    check("探索地圖貢獻" in t and "站長" in t and "90.0%" in t and "My map" in t and "10.0%" in t, f"the explored map lists contributors and their share ({t!r})")
+    pg.click("#baseBtn"); pg.wait_for_timeout(300)
+    check(pg.is_hidden("#jmCredit"), "the contributor list is hidden on the wiki base map")
     pg.goto(base + "#feedback"); pg.wait_for_timeout(400)
     t = pg.inner_text("#ideaL")
     check("Mark my position" in t and "Show where I am on the map" in t and "回覆：已排入待辦" in t and "someone@example.com" not in t,

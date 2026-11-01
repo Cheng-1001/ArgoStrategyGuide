@@ -21,7 +21,7 @@ try:
     os.makedirs(os.path.join(tmp, "tools"))
     shutil.copy(os.path.join(ROOT, "tools", "jm_merge.py"), os.path.join(tmp, "tools"))
     shutil.copytree(os.path.join(ROOT, "tiles", "f1jm"), os.path.join(tmp, "tiles", "f1jm"))
-    for f in ("floor1.jpg", "floor1_jm.jpg", "reports.js"):
+    for f in ("floor1.jpg", "floor1_jm.jpg", "reports.js", "jmmeta.js"):
         shutil.copy(os.path.join(ROOT, f), tmp)
     with open(os.path.join(tmp, "reports.js"), "a", encoding="utf-8"):
         pass
@@ -81,6 +81,10 @@ try:
     check('"date": "2026-11-02"' in meta and '"report": "T900"' in meta, "jmmeta.js records the merge")
     mt = json.loads(meta[meta.index("window.SAO_JM =") + 15:].strip().rstrip(";"))
     check(mt["results"]["T900"]["ok"] is True and mt["1"]["log"][-1]["report"] == "T900", "the merge result is stored under results (reports.js untouched)")
+    mk = Image.open(os.path.join(tmp, "tiles", "f1jm", "explored.png")).convert("L")
+    n_expl = sum(1 for cz in range(4, 316) for cx in range(4, 316) if mk.getpixel((cx, cz)))
+    check(mt["1"]["chunks"] == n_expl and sum(e.get("newChunks", 0) for e in mt["1"]["log"]) == n_expl,
+          f"jmmeta.js keeps the explored chunk total and every contributor's share adds up to it ({mt['1']['chunks']})")
     # 2. another world: random-ish colours over explored chunks -> rejected, nothing changes
     before = open(os.path.join(tmp, "tiles", "f1jm", "3", "6_15.jpg"), "rb").read()
     n = Image.effect_noise((512, 512), 90)

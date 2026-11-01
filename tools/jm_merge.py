@@ -266,7 +266,7 @@ def main(argv):
     res = {"ok": True, "regions": sum(len(g["inside"]) for g in accepted), "newChunks": len(new_chunks),
            "overlap": sum(g["overlap"] for g in accepted), "pct": pct, "date": date,
            "folders": len(accepted), "skipped": len(skipped)}
-    write_meta(report, res)
+    write_meta(report, dict(res, chunks=explored))
     record(report, res)
     out(0, **res)
 
@@ -286,9 +286,14 @@ def save_meta(meta):
 
 
 def write_meta(report, res):
+    """per merge: date, explored share, total explored chunks ("chunks") and a log entry with the chunks it added.
+    The site lists contributors by these numbers (the first log entry is the owner's map, its newChunks = the rest)."""
     meta = load_meta()
     f1 = meta.setdefault("1", {"date": res["date"], "pct": res["pct"], "log": []})
     f1["date"], f1["pct"] = res["date"], res["pct"]
+    f1["chunks"] = res.get("chunks", f1.get("chunks"))
+    if f1["log"] and f1["log"][0].get("report") is None and "newChunks" not in f1["log"][0] and f1.get("chunks"):
+        f1["log"][0]["newChunks"] = f1["chunks"] - res["newChunks"] - sum(e.get("newChunks", 0) for e in f1["log"][1:])
     f1["log"].append({"report": report, "date": res["date"], "regions": res["regions"], "newChunks": res["newChunks"]})
     save_meta(meta)
 

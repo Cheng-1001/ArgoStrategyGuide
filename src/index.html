@@ -412,6 +412,11 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .pill.q-wait{color:var(--muted)} .pill.q-ok{border-color:var(--ok);color:var(--ok)} .pill.q-err{border-color:var(--warn);color:var(--warn)} .pill.q-no{border-color:var(--boss);color:var(--boss)}
 .qlist .lrowx{align-items:center;padding:6px 4px;border-top:1px solid var(--line)} .qlist .lrowx:first-child{border-top:0}
 .qupd{font-size:12px;margin-top:6px}
+.jmcredit{position:absolute;left:12px;top:44px;z-index:8;background:rgba(10,16,22,.78);color:#e8eef3;font-size:11.5px;padding:6px 10px;border-radius:6px;display:flex;flex-direction:column;gap:2px;min-width:150px;max-width:220px}
+.jmcredit b{font-size:11px;letter-spacing:.06em;opacity:.75;font-weight:600;margin-bottom:1px}
+.jmcredit .r{display:flex;justify-content:space-between;gap:14px}.jmcredit .r .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.jmcredit .v{font-family:var(--f-mono);flex:none}.jmcredit .o{opacity:.7}
+@media (min-width:821px){.jmcredit{left:220px}}
 .jmout{display:flex;flex-direction:column;gap:8px;font-size:13px}
 .jmout .jmrow{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:5px 2px;border-top:1px solid var(--line)}
 .jmout .jmrow:first-child{border-top:0}
@@ -532,6 +537,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="world" id="world"><img class="map" id="mapImg" src="floor1.jpg" alt="樓層俯視地圖" draggable="false"><div class="tiles" id="tiles" hidden></div></div>
       <div class="nomap" id="noMap" hidden><b>這一層目前沒有地圖</b><span>wiki 還沒有這一層的地圖。怪物、物品資料可以在其他分頁查詢；右側列出圖鑑上的區域。</span></div>
       <div class="mapnote" id="mapNote" hidden></div>
+      <div class="jmcredit" id="jmCredit" hidden></div>
       <div class="srchint" id="srchHint" hidden role="status"><span id="srchTxt"></span><button class="linkbtn" id="srchClr">清除搜尋</button></div>
       <div class="legend" role="group" aria-label="地圖顯示項目">
         <button class="lgb ghost" id="filterBtn" aria-expanded="false" aria-controls="fpanel">篩選 ▾</button>
@@ -1584,6 +1590,12 @@ function renderQueue(){loadQueue().then(q=>{const ok=q!=="err",all=ok?q.list:[];
     L.innerHTML=!ok?"目前讀不到處理中的回報，請稍後再試。":list.length?queueRows(list)+(q.updated?`<div class="muted qupd">更新時間 ${esc(q.updated)}</div>`:""):"目前沒有處理中的回報。"}
   const I=$("ideaQ");if(I){const list=all.filter(x=>x.type==="idea");I.hidden=!list.length;
     I.innerHTML=list.length?`<h4 class="sec">審核中的建議 <span class="c">${list.length} 則</span></h4>${queueRows(list)}<div class="muted" style="font-size:12.5px">審核員看過後，內容會公開在下面的「玩家建議」。</div>`:""}})}
+// explored-map contributors: jmmeta.js log (first entry = the owner's map) joined with reports.js for names
+function jmCredits(){const j=(window.SAO_JM||{})["1"]||{},log=j.log||[],tot=j.chunks||log.reduce((s,e)=>s+(e.newChunks||0),0);if(!tot)return null;
+  const by={};log.forEach(e=>{if(!e.newChunks)return;let n=e.by;
+    if(!n&&e.report){const r=REPS.find(x=>x.id===e.report);n=r&&(r.by||(r.name&&r.name!=="探索地圖"?r.name:""))}
+    n=n||(e.report?"未具名玩家":"站長");by[n]=(by[n]||0)+e.newChunks});
+  return{tot,rows:Object.entries(by).sort((a,b)=>b[1]-a[1])}}
 // ================= 打包探索地圖 (JourneyMap packer) =================
 // Runs only in the player's browser. The player picks the JourneyMap "mp" folder (one sub-folder per world they
 // visited); for every folder the white-day maps (…/day/x,z.png) are drawn at 1/4 scale and compared with the site's
@@ -1855,6 +1867,11 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
   if(!m){filterMap();return}
   const want=BASE==="jm"&&m.jm&&!m.tiles?m.jm:m.img;$("baseBtn").hidden=!m.jm;mapImg.style.visibility=useTiles()?"hidden":"";if(TL.size&&tilesEl.dataset.f!==String(FL)){tilesEl.innerHTML="";TL.clear()}tilesEl.dataset.f=String(FL);schedTiles();$("baseBtn").textContent=BASE==="jm"&&m.jm?"底圖：探索地圖":"底圖：wiki 地圖";
   if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate} 更新，${m.jmPct?"約佔地圖 "+m.jmPct+"%，":""}${m.jmN?"含 "+m.jmN+" 份玩家上傳，":""}1 格 1 像素，放大會更清楚），其餘為變暗的 wiki 地圖。可以到「協作區」上傳你的 JourneyMap 補上沒探索的地方。`}
+  {const cr=$("jmCredit"),C=BASE==="jm"&&m&&m.jm?jmCredits():null;cr.hidden=!C;   // contributors of the explored map, under the base toggle
+   if(C){const pc=n=>{const p=n/C.tot*100;return p>=0.1?p.toFixed(1)+"%":"<0.1%"},top=C.rows.slice(0,5),rest=C.rows.slice(5);
+     cr.innerHTML=`<b>探索地圖貢獻</b>${top.map(([n,c])=>`<span class="r" title="${esc(n)}：新增 ${c.toLocaleString()} 個區塊"><span class="n">${esc(n)}</span><span class="v">${pc(c)}</span></span>`).join("")}`
+       +(rest.length?`<span class="r o"><span class="n">其他 ${rest.length} 位</span><span class="v">${pc(rest.reduce((s,x)=>s+x[1],0))}</span></span>`:"");
+     cr.title=`依每個人新增的已探索區塊（16×16 格）計算，共 ${C.tot.toLocaleString()} 個區塊`}}
   {const n=$("mapNote");/* desktop: the filter panel stops above the note so the note can stay at the left edge */
    $("stage").style.setProperty("--noteh",n.hidden?"42px":((n.offsetHeight||82)+56)+"px")}
   if(!mapImg.src.endsWith(want)){const same=mapImg.dataset.f===String(FL);mapImg.src=want;mapImg.dataset.f=String(FL);if(!same)fitted=false}

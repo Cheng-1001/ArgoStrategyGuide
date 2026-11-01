@@ -137,11 +137,11 @@ const rows = () => [HDR,
   check(JSON.stringify(titles.slice(0, 2)) === JSON.stringify(['回報者・遊戲內暱稱', '回報種類']) && !titles.includes('樓層') && !titles.includes('名稱'),
     'page 1 asks only the nickname and the report type (old 樓層 / 名稱 removed)');
   const after = (pg, n) => titles.slice(ix(pg) + 1, ix(pg) + 1 + n).join('|');
+  const q = t => list.find(i => i.getTitle() === t)._it;
   check(after('怪物', 2) === '怪物・樓層|怪物・名稱' && after('物品', 2) === '物品・樓層|物品・名稱' && after('地點', 2) === '地點・樓層|地點・名稱'
     && after('配方', 2) === '配方・樓層|配方・物品名稱' && after('任務追蹤', 2) === '任務・樓層|任務・標題' && after('技能', 1) === '技能・名稱'
-    && after('建議', 1) === '建議・標題' && after('探索地圖', 1) === '探索地圖・說明',
-    'each type page starts with its own floor / name questions (skills, suggestions: no floor; explored map: neither)');
-  const q = t => list.find(i => i.getTitle() === t)._it;
+    && after('建議', 1) === '建議・標題' && after('探索地圖', 2) === '探索地圖・貢獻者名稱|探索地圖・說明' && q('探索地圖・貢獻者名稱').req,
+    'each type page starts with its own floor / name questions (skills, suggestions, explored map: no floor; explored map asks a required contributor name)');
   check(q('怪物・樓層').req && !q('物品・樓層').req && q('任務・樓層').req, 'floor is required except for items (shared items leave it empty)');
   const cfg = puts.length ? Buffer.from(puts[puts.length - 1].content, 'base64').toString() : '';
   const pre = (cfg.match(/"prefill": "([^"]+)"/) || [])[1] || '';
@@ -155,7 +155,7 @@ const rows = () => [HDR,
     'every report type opens its own page, then 截圖 (建議 and 探索地圖 go straight to 送出): ' + route.map(r => r.join('→')).join('，'));
   // a form that already got the first three new pages (upgradeForm of 2026-11-02) only gets 探索地圖 added
   const k = list.findIndex(i => i.getTitle() === '探索地圖');
-  list.splice(k, 6);   // 探索地圖 and 建議: page breaks and their questions (2 + 4 items)
+  list.splice(k, 7);   // 探索地圖 and 建議: page breaks and their questions (3 + 4 items)
   type.setChoices(type._it.choices.filter(c => !['探索地圖', '建議'].includes(c.getValue())));
   list.find(i => i.getTitle() === '截圖')._it.goto = null;
   ctx.upgradeForm();
