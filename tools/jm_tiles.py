@@ -1,5 +1,9 @@
 """Rebuild the floor 1 explored map from JourneyMap day tiles, then cut it into map tiles.
 
+WARNING (2026-11-02): players now add their JourneyMap uploads through the report form (tools/jm_merge.py, run by
+.github/workflows/jm_merge.yml). A full rebuild from one person's day folder would erase their parts of the map.
+To add your own map, use  python3 -I tools/jm_merge.py <day folder or zip>  instead (or upload it with the form).
+
 Usage:  python3 tools/jm_tiles.py <journeymap .../overworld/day folder> [--date YYYY-MM-DD]
 
 Input: JourneyMap region images "x,z.png" (512x512, 1 block = 1 px, region x,z starts at block x*512, z*512).

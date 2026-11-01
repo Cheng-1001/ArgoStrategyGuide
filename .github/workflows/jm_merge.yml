@@ -1,0 +1,60 @@
+# Merge a player's JourneyMap upload into the floor 1 explored map.
+# The Google script (google/apps-script.gs, publishJmap_) creates a release "jmap-<report id>" with the player's zip
+# after a reviewer approves an 「探索地圖」 report. This job downloads it, runs tools/jm_merge.py (which checks the zip,
+# rejects uploads from another world and never touches reports.js), commits the new tiles and deletes the release.
+name: 合併玩家的探索地圖
+on:
+  release:
+    types: [published]
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: jm-merge
+  cancel-in-progress: false
+jobs:
+  merge:
+    if: startsWith(github.event.release.tag_name, 'jmap-')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      TAG: ${{ github.event.release.tag_name }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Pillow
+        run: pip install "pillow==11.0.0"
+      - name: Download the upload
+        run: |
+          mkdir -p "$RUNNER_TEMP/up"
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern "*.zip" --dir "$RUNNER_TEMP/up"
+          ls -l "$RUNNER_TEMP/up"
+      - name: Merge (exit 2 = upload rejected, recorded in jmmeta.js)
+        run: |
+          set +e
+          python -I tools/jm_merge.py "$RUNNER_TEMP"/up/*.zip --report "${TAG#jmap-}"
+          code=$?
+          if [ "$code" = "1" ]; then exit 1; fi
+          exit 0
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tiles/f1jm floor1_jm.jpg jmmeta.js
+          git diff --cached --quiet && exit 0
+          git commit -m "探索地圖：合併回報 ${TAG#jmap-}"
+          for i in 1 2 3 4; do
+            git pull --rebase origin main && git push origin HEAD:main && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
+      - name: Ask GitHub Pages to rebuild (pushes made by this job may not start a Pages build by themselves)
+        run: gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" || true
+      - name: Delete the release
+        if: always()
+        run: gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true

@@ -19,7 +19,9 @@ const CFG = {
   REPORTS_FILE: 'reports.js',
   IMG_DIR: 'reports',
   TZ: 'Asia/Taipei',
-  TYPES: { '怪物': 'monster', '物品': 'item', '地點': 'place', '配方': 'recipe', '任務追蹤': 'quest', '技能': 'skill' },
+  TYPES: { '怪物': 'monster', '物品': 'item', '地點': 'place', '配方': 'recipe', '任務追蹤': 'quest', '技能': 'skill', '探索地圖': 'jmap' },
+  Q_JMAP: '探索地圖・壓縮檔',   // 上傳題目，要手動加在「探索地圖」頁（Google 不允許程式建立上傳題目）
+  JMAP_MAX_MB: 45,
   // 試算表欄位名稱（前四個是表單題目，後四個是審核用欄位）
   Q_TYPE: '回報種類', Q_FLOOR: '樓層', Q_NAME: '名稱', Q_SHOT: '截圖',
   C_ID: '回報編號', C_STATUS: '狀態', C_NOTE: '審核備註', C_RESULT: '處理結果',
@@ -29,15 +31,17 @@ const CFG = {
 };
 
 const P = () => PropertiesService.getScriptProperties();
+/** 「處理結果」表示已經完成（上線，或探索地圖已交給 GitHub 合併），不再重做。 */
+const done_ = v => /^(已上線|已送去合併)/.test(String(v || ''));
 
 /** 表單「截圖」頁的說明：教玩家用遊戲內建的 F2 截圖。upgradeSheet() 會把現有表單的說明換成這段。 */
 const SHOT_HELP = '用遊戲內建截圖就好：在遊戲裡按 F2（有些筆電要按 Fn+F2）。聊天框會出現「Saved screenshot as ….png」，點檔名可以直接打開。\n檔案在：%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots（按 Win+R，貼上這一行按 Enter 就會打開資料夾）。\n按「新增檔案」→「瀏覽」選檔，按住 Ctrl 可以一次選多張（最多 5 張）。不用裁切。\n拍怪物時不要按 F1，F1 會把等級和座標一起藏起來。';
 
-const FORM_DESC = '回報 SAO Minecraft 的怪物、物品、地點、配方、任務追蹤、技能資料。每筆都要附遊戲截圖，審核員核對後會更新到查詢工具網站。工具裡還沒有的也可以回報。';
+const FORM_DESC = '回報 SAO Minecraft 的怪物、物品、地點、配方、任務追蹤、技能資料，或上傳 JourneyMap 探索地圖。每筆都要附遊戲截圖，審核員核對後會更新到查詢工具網站。工具裡還沒有的也可以回報。';
 const NAME_HELP = '照遊戲裡的名稱寫，例如怪物 Young Spider、物品 Leg of a Spider、配方填做出來的物品名稱、任務填任務標題、技能填技能名稱。地點可以寫中文。';
 const PLACE_KINDS = ['村鎮', '傳送點', 'NPC', '採集點', '地下城或礦坑', '首領位置', '怪物區', '怪物重生點', '其他'];
 const NPC_KINDS = ['鍊金術士', '收購商', '鑰匙鐵匠', '飾品鐵匠', '伐木工', '武器收購商', '旅行商人', '裝備商人', '工具商人', '飾品商人', '神秘商人', '消耗品商人', '武器鐵匠', '防具鐵匠', '金屬錠鐵匠', '材料工匠', '裝備鐵匠', '隱藏飾品鐵匠', '其他'];
-const NEW_TYPES = ['配方', '任務追蹤', '技能'];
+const NEW_TYPES = ['配方', '任務追蹤', '技能', '探索地圖'];
 const NUM = () => FormApp.createTextValidation().requireWholeNumber().setHelpText('只填數字').build();
 
 /** 地點頁在座標後面多的三題。 */
@@ -49,10 +53,10 @@ function addPlaceExtras_(form) {
   ];
 }
 
-/** 配方、任務追蹤、技能三頁。回傳 {種類: 分頁}。 */
-function addNewPages_(form) {
-  const pages = {};
-  pages['配方'] = form.addPageBreakItem().setTitle('配方')
+/** 新種類的分頁，每頁一個函式。回傳那一頁的分頁。 */
+const PAGE_BUILDERS = {
+  '配方': form => {
+  const pg = form.addPageBreakItem().setTitle('配方')
     .setHelpText('打開 NPC 的製作或購買選單，點到那個物品按 F2 截圖（要看得到材料、數量、費用、時間）。「名稱」填做出來的物品名稱。');
   form.addTextItem().setTitle('配方・NPC').setRequired(true).setHelpText('製作選單上方的 NPC 名稱，照抄原文，例如 Bandit Accessories');
   form.addListItem().setTitle('配方・分類').setChoiceValues(['武器', '防具', '飾品', '藥水', '鑰匙', '其他']);
@@ -62,8 +66,10 @@ function addNewPages_(form) {
   form.addTextItem().setTitle('配方・需求等級').setValidation(NUM());
   form.addListItem().setTitle('配方・稀有度').setChoiceValues(['不確定', '普通', '稀有', '史詩', '傳說']);
   form.addParagraphTextItem().setTitle('配方・備註');
-
-  pages['任務追蹤'] = form.addPageBreakItem().setTitle('任務追蹤')
+  return pg;
+  },
+  '任務追蹤': form => {
+  const pg = form.addPageBreakItem().setTitle('任務追蹤')
     .setHelpText('任務追蹤畫面（右側 Tracked quest）或任務選單按 F2 截圖。「名稱」填任務標題，不含前面的數字，例如 The Truth About the Seal。');
   form.addListItem().setTitle('任務・種類').setRequired(true).setChoiceValues(['主線', '支線']);
   form.addTextItem().setTitle('任務・編號').setHelpText('追蹤畫面上任務標題前面的數字，例如「24. The Truth About the Seal」就填 24').setValidation(NUM());
@@ -72,8 +78,10 @@ function addNewPages_(form) {
   form.addTextItem().setTitle('任務・座標 x, z').setHelpText('步驟目標的位置（小地圖座標），例如 2382, 2415');
   form.addTextItem().setTitle('任務・獎勵');
   form.addParagraphTextItem().setTitle('任務・備註');
-
-  pages['技能'] = form.addPageBreakItem().setTitle('技能')
+  return pg;
+  },
+  '技能': form => {
+  const pg = form.addPageBreakItem().setTitle('技能')
     .setHelpText('打開技能選單，點到那個技能按 F2 截圖。「名稱」填技能名稱原文，例如 Combinaison Brutale。');
   form.addListItem().setTitle('技能・職業').setRequired(true).setChoiceValues(['Guerrier', 'Assassin', 'Mage', 'Shaman', 'Archer', 'Martial Artist']);
   form.addListItem().setTitle('技能・主動或被動').setChoiceValues(['不確定', '主動', '被動']);
@@ -81,6 +89,25 @@ function addNewPages_(form) {
   form.addParagraphTextItem().setTitle('技能・說明原文').setHelpText('照抄遊戲裡的技能說明');
   form.addTextItem().setTitle('技能・冷卻或消耗').setHelpText('例如 冷卻 12 秒、魔力 30');
   form.addParagraphTextItem().setTitle('技能・備註');
+  return pg;
+  },
+  '探索地圖': form => {
+  const pg = form.addPageBreakItem().setTitle('探索地圖')
+    .setHelpText('上傳 JourneyMap 記錄的地圖，網站會自動合併到「探索地圖」。\n' +
+      '1. 打開資料夾：按 Win+R，貼上 %APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data\\mp 按 Enter。\n' +
+      '2. 進入伺服器的資料夾（名稱以 Triggers_ 開頭）→ overworld，找到 day 資料夾。\n' +
+      '3. 在 day 資料夾上按右鍵 →「壓縮成 ZIP 檔案」（Windows 10 是「傳送到 → 壓縮的資料夾」）。\n' +
+      '4. 把 zip 上傳到下面的「探索地圖・壓縮檔」（' + CFG.JMAP_MAX_MB + ' MB 以內）。最後一頁的截圖請拍 JourneyMap 的全螢幕地圖（按 J 打開，再按 F2）。\n' +
+      '目前只合併第 1 層；「名稱」填你的遊戲名稱或「探索地圖」都可以。');
+  form.addParagraphTextItem().setTitle('探索地圖・說明').setHelpText('例如這次新探索的地方（可不填）');
+  return pg;
+  }
+};
+
+/** 建立所有新種類的分頁（setup 用）。回傳 {種類: 分頁}。 */
+function addNewPages_(form) {
+  const pages = {};
+  NEW_TYPES.forEach(n => { pages[n] = PAGE_BUILDERS[n](form); });
   return pages;
 }
 
@@ -110,16 +137,16 @@ function upgradeForm() {
     added.forEach(it => { form.moveItem(it.getIndex(), at); at++; });
   }
 
-  // 三個新頁面放在截圖頁前面
-  let pages = {};
-  if (!byTitle('配方', FormApp.ItemType.PAGE_BREAK)) {
+  // 新種類的頁面依序放在截圖頁前面；已經有的頁面不重複新增
+  const pages = {};
+  NEW_TYPES.forEach(n => {
+    const have = byTitle(n, FormApp.ItemType.PAGE_BREAK);
+    if (have) { pages[n] = have.asPageBreakItem(); return; }
     const before = items().length;
-    pages = addNewPages_(form);
+    pages[n] = PAGE_BUILDERS[n](form);
     const created = items().slice(before);   // 新增的題目都在最後面，依序搬到截圖頁前面
     created.forEach(it => form.moveItem(it.getIndex(), byTitle(CFG.Q_SHOT, FormApp.ItemType.PAGE_BREAK).getIndex()));
-  } else {
-    NEW_TYPES.forEach(n => { pages[n] = byTitle(n, FormApp.ItemType.PAGE_BREAK).asPageBreakItem(); });
-  }
+  });
   const pShot = byTitle(CFG.Q_SHOT, FormApp.ItemType.PAGE_BREAK).asPageBreakItem();
   NEW_TYPES.forEach(n => pages[n].setGoToPage(pShot));   // 前一頁（地點、配方、任務追蹤）填完 → 截圖頁
 
@@ -130,6 +157,7 @@ function upgradeForm() {
   const pageOf = n => old[n] || byTitle(n, FormApp.ItemType.PAGE_BREAK).asPageBreakItem();
   mc.setChoices(['怪物', '物品', '地點'].concat(NEW_TYPES).map(n => mc.createChoice(n, pageOf(n))));
   Logger.log('表單已更新：回報種類 ' + mc.getChoices().map(c => c.getValue()).join('、') + '；共 ' + items().length + ' 題');
+  if (!byTitle(CFG.Q_JMAP)) Logger.log('還要手動在「探索地圖」頁加上傳題目「' + CFG.Q_JMAP + '」，步驟在 SETUP.md。');
 }
 
 /* ===================== 一次性設定 ===================== */
@@ -305,7 +333,7 @@ function retryApproved() {
   for (let r = 2; r <= n; r++) {
     const st = sh.getRange(r, col[CFG.C_STATUS]).getValue();
     const res = String(sh.getRange(r, col[CFG.C_RESULT]).getValue());
-    if (st === '核准' && !res.startsWith('已上線')) publishRow_(sh, r);
+    if (st === '核准' && !done_(res)) publishRow_(sh, r);
   }
 }
 
@@ -367,13 +395,13 @@ function enableReviewQueue() {
 function publishRow_(sh, row) {
   const col = headers_(sh);
   const out = sh.getRange(row, col[CFG.C_RESULT]);
-  if (String(out.getValue()).startsWith('已上線')) return;
+  if (done_(out.getValue())) return;
   const lock = LockService.getScriptLock();
   lock.waitLock(60000);
   try {
     // 拿到鎖之後再看一次：試算表觸發器和 processQueue 可能同時想處理同一列，先拿到鎖的那次已經上線就不重做。
     // （這時看到「處理中…」代表之前某次執行中途中斷，持鎖的只有自己，所以照常重試。）
-    if (String(out.getValue()).startsWith('已上線')) return;
+    if (done_(out.getValue())) return;
     out.setValue('處理中…');
     const hdr = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
     const val = sh.getRange(row, 1, 1, sh.getLastColumn()).getValues()[0];
@@ -384,7 +412,10 @@ function publishRow_(sh, row) {
     const name = get(CFG.Q_NAME);
     if (!type || !floor || !name) throw new Error('回報種類、樓層或名稱沒填好');
 
-    const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT, CFG.C_PREVIEW, CFG.C_SUMMARY];
+    const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.Q_JMAP, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT, CFG.C_PREVIEW, CFG.C_SUMMARY];
+    const zipIds = type === 'jmap' ? (get(CFG.Q_JMAP).match(/id=([\w-]+)/g) || []).map(s => s.slice(3)) : [];
+    if (type === 'jmap' && !zipIds.length) throw new Error('探索地圖回報沒有附壓縮檔（' + CFG.Q_JMAP + '）');
+    if (type === 'jmap' && floor !== 1) throw new Error('探索地圖目前只合併第 1 層；第 ' + floor + ' 層的地圖還沒有探索地圖可以合併');
     const raw = {};
     hdr.forEach((h, i) => { if (i === 0 || skip.includes(h) || !h) return; const v = String(val[i]).trim(); if (v && v !== '不確定') raw[h] = v; });
 
@@ -406,6 +437,11 @@ function publishRow_(sh, row) {
     };
     if (get(CFG.C_NOTE)) entry.review = get(CFG.C_NOTE);
     const sha = upsertReport_(entry);
+    if (type === 'jmap') {
+      publishJmap_(id, zipIds[0]);
+      out.setValue('已送去合併 ' + Utilities.formatDate(new Date(), CFG.TZ, 'yyyy-MM-dd HH:mm') + '（GitHub 約 3～5 分鐘自動合併；結果會顯示在網站回報區的這筆回報上）');
+      return;
+    }
     out.setValue('已上線 ' + Utilities.formatDate(new Date(), CFG.TZ, 'yyyy-MM-dd HH:mm') + '（網站約 1～3 分鐘後更新，' + sha.slice(0, 7) + '）');
   } catch (err) {
     out.setValue('錯誤：' + err.message + '（修正後在程式編輯器執行 retryApproved 重試）');
@@ -500,7 +536,7 @@ function decorateRow_(sh, row) {
   hdr.forEach((h, i) => {
     if (i === 0 || !h || skip.includes(h)) return;
     const v = String(val[i]).trim();
-    if (v && v !== '不確定') lines.push(String(h).replace(/^(怪物|物品|地點|配方|任務|技能)・/, '') + '：' + v);
+    if (v && v !== '不確定') lines.push(String(h).replace(/^(怪物|物品|地點|配方|任務|技能|探索地圖)・/, '') + '：' + v);
   });
   const ids = (get(CFG.Q_SHOT).match(/id=([\w-]+)/g) || []).map(s => s.slice(3));
   lines.push('', '截圖 ' + ids.length + ' 張' + (ids.length > 1 ? '（預覽只顯示第一張，其他請點「截圖」欄的連結）' : ''));
@@ -524,6 +560,26 @@ function decorateRow_(sh, row) {
 }
 
 /* ===================== GitHub ===================== */
+
+/**
+ * 探索地圖：把玩家上傳的 zip 放到 GitHub Release「jmap-回報編號」，GitHub Actions（.github/workflows/jm_merge.yml）
+ * 會下載、檢查、合併到網站的探索地圖，然後刪掉這個 Release。重試時同一個 Release 不會重複上傳。
+ */
+function publishJmap_(id, fileId) {
+  const blob = DriveApp.getFileById(fileId).getBlob();
+  const mb = blob.getBytes().length / 1048576;
+  if (mb > CFG.JMAP_MAX_MB) throw new Error('壓縮檔 ' + mb.toFixed(1) + ' MB，超過 ' + CFG.JMAP_MAX_MB + ' MB。請玩家只壓縮第 1 層的 day 資料夾，或分成兩次回報');
+  const tag = 'jmap-' + id;
+  let rel = gh_('GET', '/releases/tags/' + tag, null, true);
+  if (!rel) rel = gh_('POST', '/releases', { tag_name: tag, target_commitish: CFG.BRANCH, name: '探索地圖 ' + id, prerelease: true,
+    body: '玩家回報 ' + id + ' 的 JourneyMap 地圖。GitHub Actions 合併完會自動刪除這個 Release。' });
+  if ((rel.assets || []).length) return rel;
+  const r = UrlFetchApp.fetch(String(rel.upload_url).replace(/\{.*\}$/, '') + '?name=' + encodeURIComponent(id + '.zip'), {
+    method: 'post', contentType: 'application/zip', payload: blob.getBytes(), muteHttpExceptions: true,
+    headers: { Authorization: 'Bearer ' + P().getProperty('GITHUB_TOKEN'), Accept: 'application/vnd.github+json' } });
+  if (r.getResponseCode() >= 300) throw new Error('上傳探索地圖到 GitHub 失敗 ' + r.getResponseCode() + '：' + r.getContentText().slice(0, 150));
+  return rel;
+}
 
 function gh_(method, path, body, allow404) {
   const token = P().getProperty('GITHUB_TOKEN');

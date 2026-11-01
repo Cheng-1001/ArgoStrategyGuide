@@ -44,7 +44,9 @@
 | `floor1.jpg`、`floor2.jpg` | wiki 地圖。floor1.jpg 原本在 X 1652、Z 2770（腐臭沼澤北邊麥田旁）有一個 wiki 編輯者留下的測試路標「sdsd」，另外 X 1917–1967、Z 2412–2495 有一塊黑色 T 形破圖。2026-11-01 修掉：路標那一處用使用者 JourneyMap 的真實地形縮到 wiki 解析度、做色調轉換後貼上；黑色 T 處 JourneyMap 沒資料，改搬旁邊的森林紋理。之後換新的 wiki 地圖要再檢查一次 |
 | `floor1_jm.jpg` | 第 1 層「探索地圖」3000px 預覽：使用者的 JourneyMap 疊在變暗的 wiki 地圖上（網站實際用 `tiles/f1jm`） |
 | `tiles/f1jm/{L}/{c}_{r}.jpg` | 第 1 層探索地圖切片：256px，L0～L3 = 640／1280／2560／5120px，L3 是 1 格 1 像素。由 `tools/jm_tiles.py` 產生 |
-| `tools/jm_tiles.py` | JourneyMap day 圖 → `floor1_jm.jpg` ＋ 切片（用法寫在檔案開頭） |
+| `tools/jm_tiles.py` | JourneyMap day 圖 → `floor1_jm.jpg` ＋ 切片，**整張重做**（2026-11-02 起不要再用，會蓋掉玩家合併的部分） |
+| `tools/jm_merge.py`、`tiles/f1jm/explored.png`、`jmmeta.js` | **探索地圖的合併**：玩家上傳的 day 資料夾 zip（或本機資料夾）疊到現有切片上。`explored.png` 是已探索的 16×16 區塊（1 px＝1 區塊，世界座標；2026-11-02 用 `--init-mask` 從切片推算，直方圖雙峰、門檻 9）。和已探索區塊重疊處顏色差異中位數 > 32 就拒絕（別的樓層／世界）；只接受 `x,z.png`、512×512、≤ 600 張、每張 ≤ 4 MB。只重寫碰到的 L3 切片，L0～L2 和 `floor1_jm.jpg` 由 L3 重產。結果寫在 `jmmeta.js`（`SAO_JM["1"]` 日期、探索比例、合併紀錄；`results[回報編號]`），**不碰 `reports.js`**（避免和 Apps Script 衝突）。測試 `tests/jm_merge_test.py` |
+| `.github/workflows/jm_merge.yml` | release `jmap-回報編號` 發佈時執行：下載 zip → `jm_merge.py` → commit 切片和 `jmmeta.js` → 要求 Pages 重建 → 刪掉 release |
 | `tools/build_equip.py` | 產生 `equip.js`／`equip.png`。要先在工作目錄準備官網圖鑑 `catalog.json`、`im_index.json`、官方圖示和 3D 截圖（做法見「抓資料的方法」） |
 | `reports/` | 回報截圖 |
 | `google/apps-script.gs` | Google Apps Script（獨立專案）：建立表單和試算表，核准後透過 GitHub API 寫入 `reports.js` 和截圖 |
@@ -54,6 +56,7 @@
 | `google/SETUP.md` | 給使用者看的表單、審核設定說明 |
 | `tools/export_map.bat` | 使用者電腦上用的：把 JourneyMap 地圖複製到沒有「~」的資料夾 |
 | `tests/smoke.py` | Playwright 冒煙測試 |
+| `tests/jm_merge_test.py` | `tools/jm_merge.py` 在暫存複本上的測試（正常合併、別的世界被擋、壞檔被擋） |
 | `tests/report_types_test.py` | 新回報種類（配方、任務追蹤、技能、地點擴充）的整合測試，用假的已核准回報 |
 | `.github/ISSUE_TEMPLATE/` | 舊的 GitHub 回報表單，保留但已不是主要管道 |
 
@@ -74,6 +77,8 @@
 - **職業分頁版面**：卡片固定 3 欄（`#lCls`，`fixCols` 略過它）；點職業開加寬面板（`panel-xwide`，880px），內容分兩欄 `.cls2`：左＝能力傾向、起始屬性和成長，右＝技能、天賦樹。「查看這個職業可用的裝備（另開視窗）」開浮動視窗 `#cwin`（和任務路線視窗同樣的拖曳、調整大小），可依部位篩選；點裝備在**同一個視窗**顯示詳細資料（`showCWItem`，有「← 回到裝備清單」），右側職業面板不變。原則：右側面板的關聯內容一律用浮動視窗，不取代面板。面板裡的座標、「在地圖上查看」：在地圖分頁時移動大地圖；在其他分頁時用 `showPoints` 開浮動地圖視窗（同一欄的多個座標一起標號，例如首領的所有重生點），不切換分頁。
 - **配方分頁**（上方選單的獨立分頁 `#recipes`，在任務和世界王中間）：分類 武器／防具／飾品／藥水／鑰匙、依 NPC 篩選、排序；每張卡片點了開自己的配方面板（type `r`，id 是 `ALLREC` 的索引，所以只會選到一張），面板列 NPC、等級、費用、時間、材料，有對應官網物品時另有「查看裝備／道具資料」按鈕。NPC 資料列「可以製作」，裝備列「製作方式」，材料列「可以拿去製作」。
 - **卡片欄數**：寬螢幕（≥1180px）的卡片格線用 `fixCols()` 固定成「右側面板開著時」的欄數，面板開關都不會重排。
+- **路線／地點小地圖的編號**：步驟的第 5 欄（`step[4]`）可以指定標籤；同一個來源的多個點（例如首領的 4 個重生點）都用同一個編號，同一位置的相同標籤只畫一次。
+- **地圖搜尋提示**：右上搜尋有字時，地圖上方（手機在下方）出現提示條「正在搜尋…符合的 N 個位置亮著，其他變淡」和「清除搜尋」；首領重生點也會依搜尋變淡。
 - **物品面板的取得方式**：`itemMap` 把掉落怪物的怪物區（或首領重生點）和採集點編號，畫成和任務一樣的小地圖（`routeMini(steps,f,true)`，不畫虛線），列表項目前面有同樣的編號，「放大查看取得地點」開浮動地圖視窗（`openRouteWin(…,true)`）。
 - **任務面板**：步驟 → 需要的物品和目標 → 原文 → 來源 → 最下面才是路線小地圖和放大按鈕。
 - **裝備分頁**：依部位、職業、稀有度、等級篩選。名稱和描述是官方法文原文；本站 ITEMS 有同名（`fr` 欄位）的會連過去。只有 16×16 的官方圖片直接當圖示，其他用官網搜尋結果卡片 `.w-it .ph` 的 3D 渲染截圖（去背）。樓層選擇器支援 1～100 層；不存在的樓層會回到第 1 層。
@@ -108,7 +113,8 @@
 
 ## 玩家回報流程（Google 表單）
 
-1. 玩家填 Google 表單，必須登入 Google 才能上傳截圖。回報種類有怪物、物品、地點、配方、任務追蹤、技能（後三種 2026-11-02 加，使用者要執行一次 `upgradeForm`，步驟在 SETUP.md），最後一頁是上傳題目「截圖」。
+1. 玩家填 Google 表單，必須登入 Google 才能上傳截圖。回報種類有怪物、物品、地點、配方、任務追蹤、技能、探索地圖（後四種 2026-11-02 加，使用者要執行 `upgradeForm`，探索地圖還要手動加上傳題目「探索地圖・壓縮檔」，步驟在 SETUP.md），最後一頁是上傳題目「截圖」。
+   - **探索地圖**（`jmap`）：核准後 `publishJmap_` 把 zip（≤ 45 MB、只收第 1 層）放到 GitHub Release `jmap-回報編號`，「處理結果」寫「已送去合併」（`done_` 視為完成，不會重做）；之後由 GitHub Actions 合併。網站回報清單從 `jmmeta.js` 的 `results` 顯示「合併中／已合併／沒有合併：原因」。
 2. 回報進到使用者 Google 帳號裡的試算表「Aincrad 查詢工具・回報審核」的「回報」分頁。程式自動填上回報編號 R0001…，狀態設為「待審核」。
 3. 審核員（試算表編輯者，只能改「狀態」和「審核備註」）把狀態改成「核准」。**一個人核准就上線。**
 4. Apps Script 的觸發器會縮小截圖，存到 `reports/R000N.jpg`，把資料加進 `reports.js`，再寫回「處理結果」欄。
@@ -119,8 +125,9 @@
 
 - 裝備圖示：只剩官方還沒做模型的幾件（例如 Bottes de l’écume、情人節系列）用 ⚔️/🛡️/💍 佔位。截圖來源依序：官方 16×16 圖示 → 官網搜尋卡片縮圖 `.w-it .ph`（去背）→ 卡片破圖時改截右側檢視器 `.w-stage` 的 three.js 畫面。
 - [x] 高解析度地圖（C1）：2026-10-31 用使用者 JourneyMap 原尺寸重做第 1 層探索地圖並改成切片。2026-11-01 用 jm-upload-2 更新（62 張，島上探索範圍 32.4% → 38.2%，新增 Virelune 往北經 Candelia 到 Kobold Tower 的路線）。之後使用者會改用本機 Claude Code 直接執行 `tools/jm_tiles.py` 並 push，不再走 release。
-- JourneyMap 更新流程：**雲端工作階段連不到使用者的 Windows 電腦**（Remote Control 不支援 Windows）。使用者讓 GPT 在電腦上打包 `jm_export.zip`，用 `gh release create jm-upload-N ... --prerelease` 上傳到 GitHub Release。下載 `https://github.com/Cheng-1001/ArgoStrategyGuide/releases/download/jm-upload-N/jm_export.zip`，第 1 層是 `Triggers_815bd3d6-…/overworld/day`，執行 `tools/jm_tiles.py`，更新 `jmDate`。用完請使用者刪掉 release。
-- [ ] 評估讓玩家回報 JourneyMap（像怪物回報一樣）。
+- **2026-11-02 起 JourneyMap 一律走合併**：玩家和站長都用表單「探索地圖」上傳（或本機 `python3 -I tools/jm_merge.py <day 資料夾>` 後 commit 切片、`explored.png`、`jmmeta.js`），不要再用 `jm_tiles.py` 整張重做。以下是舊流程，僅供參考。
+- JourneyMap 更新流程（舊）：**雲端工作階段連不到使用者的 Windows 電腦**（Remote Control 不支援 Windows）。使用者讓 GPT 在電腦上打包 `jm_export.zip`，用 `gh release create jm-upload-N ... --prerelease` 上傳到 GitHub Release。下載 `https://github.com/Cheng-1001/ArgoStrategyGuide/releases/download/jm-upload-N/jm_export.zip`，第 1 層是 `Triggers_815bd3d6-…/overworld/day`，執行 `tools/jm_tiles.py`，更新 `jmDate`。用完請使用者刪掉 release。
+- [x] 玩家回報 JourneyMap（2026-11-02 做好，使用者選 A：表單上傳 zip，全自動合併）。[ ] 等使用者執行 `upgradeForm`、手動加上傳題目「探索地圖・壓縮檔」，再用自己的地圖測試一次。
 
 - [x] Google 表單端到端測試（2026-11-01）：R0001 Young Spider LV3 核准後自動寫入 `reports.js` 和 3 張截圖，網站顯示等級 3。checkSetup、分頁跳轉都已確認。Drive 縮圖（`=s1600`）可用，但當時存成 PNG（每張 1.7 MB），已手動轉成 JPEG。
 - [x] 審核畫面（2026-11-01 使用者執行 `upgradeSheet` 確認）：「截圖預覽」用 `newCellImage` 嵌 base64 縮圖可正常顯示（Drive 檔案不公開）、「內容摘要」、原始欄位收起、整列依狀態上色；表單「截圖」頁換成 F2 說明。截圖一律轉 JPEG。注意：Google 會把回應表自動轉成「表格」（Form_Responses），表格標題預設白字，所以標題要明確設深色字。
@@ -129,7 +136,7 @@
 - 改了 `apps-script.gs` 或審核網頁後：`node tests/apps_script_test.js`（含假表單上的 `upgradeForm` 測試）、`python3 tests/review_test.py` 都要 ALL PASSED。改了回報解讀要跑 `python3 tests/report_types_test.py`、`tests/report_rules_test.py`。
 - [ ] 第 2、3 層預計 **11/4 開放**（遊戲改版）。使用者通知後，重新抓 wiki 和官網資料，比對差異後更新 `data23.js`。第 3 層還沒有地圖。
 - [ ] 物品類型的回報，目前只出現在「已收錄」清單，還沒整合進物品詳細資料（地點回報 2026-11-02 已整合成地圖點位）。
-- [ ] 等使用者執行 `upgradeForm`（表單加配方、任務追蹤、技能）。
+- [ ] 等使用者執行 `upgradeForm`（表單加配方、任務追蹤、技能、探索地圖）。
 - 已知限制：
   - 第 1 層只剩 Skeleton、Kazor 沒有座標（參考互動地圖的 Current Data 也沒有 Kazor）；第 2 和第 3 層全部怪物的區域沒有座標。
   - 和參考互動地圖還沒對齊的差異：城鎮座標（起始之城、Castlebrume、Candelia、Virelune 差約 100 格）、多個怪物名稱不同（例如 Black/White Sinister Wolf、Little Slime、Slime Magician、Robust Bandit、Tank Skeleton、Mage Sylvester）、它的 8 個英文支線任務和其他 NPC（飾品鐵匠、鑰匙鐵匠、神秘商人等）。

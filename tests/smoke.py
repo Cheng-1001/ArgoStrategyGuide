@@ -144,6 +144,11 @@ with sync_playwright() as p:
     check(pg.is_visible("#rwin") and pg.locator("#rwSvg polyline").count() == 0, "enlarged item map opens without a route line")
     pg.click("#rwX") if pg.locator("#rwX").count() else None; pg.wait_for_timeout(150)
     pg.click("#pClose"); pg.wait_for_timeout(150)
+    pg.goto(base + "#items"); pg.wait_for_timeout(300); pg.fill("#q", "Magic Mycelium"); pg.wait_for_timeout(300)
+    pg.locator("#lItem .card").first.click(); pg.wait_for_timeout(300)
+    labels = pg.eval_on_selector_all("#pBody .qmap svg text", "e=>e.map(x=>x.textContent)")
+    check(labels and set(labels) == {"1"}, f"one source with several spawn points (Guardian Colossal) is numbered 1 at every point ({labels})")
+    pg.fill("#q", ""); pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
     pg.fill("#q", "Albal"); pg.wait_for_timeout(250)
     pg.locator("#lMon .card", has_text="Albal").first.click(); pg.wait_for_timeout(300)
@@ -256,6 +261,10 @@ with sync_playwright() as p:
     pg.click("#zfit"); pg.wait_for_timeout(200)
     check(pg.locator(".bsp").count() == 23 and pg.locator('.bsp[title*="Pumba"]').count() == 5, "23 boss spawn points drawn (Pumba has 5)")
     check(pg.is_visible("#fpanel") and pg.locator("#fpanel").bounding_box()["width"] <= 200, "filter panel stays open on the left and is narrow")
+    pg.fill("#q", "Magic Mycelium"); pg.wait_for_timeout(300)
+    check(pg.is_visible("#srchHint") and "Magic Mycelium" in pg.inner_text("#srchHint") and pg.locator(".zone.dim").count() > 0, "searching on the map shows a hint (things not matching are dimmed)")
+    pg.click("#srchClr"); pg.wait_for_timeout(300)
+    check(pg.is_hidden("#srchHint") and pg.locator(".zone.dim").count() == 0 and pg.input_value("#q") == "", "清除搜尋 clears the search and the dimming")
     pg.eval_on_selector('.bsp[title*="Nazgul"]', 'e=>e.click()'); pg.wait_for_timeout(300)
     t = pg.inner_text("#pBody")
     check("8 遊戲截圖" in t and "Behind the Great Door" in t and "兩個階段" in t, "Cursed Nazgul Protector: LV 8 from a screenshot and its two phases")
@@ -305,8 +314,10 @@ with sync_playwright() as p:
           "floor 2 still uses its single map image")
 
     pg.goto(base + "#report"); pg.wait_for_timeout(400)
-    check(pg.text_content(".rform code") == r"%APPDATA%\.Triggers Client\instances\Sword Art Online\screenshots",
-          "report tab shows the F2 screenshot folder path with its backslashes")
+    codes = pg.eval_on_selector_all(".rform code", "e=>e.map(x=>x.textContent)")
+    check(r"%APPDATA%\.Triggers Client\instances\Sword Art Online\screenshots" in codes
+          and r"%APPDATA%\.Triggers Client\instances\Sword Art Online\journeymap\data\mp" in codes,
+          "report tab shows the F2 screenshot and JourneyMap folder paths with their backslashes")
 
     pg.goto(base + "#f2-report"); pg.wait_for_timeout(400)
     href = pg.get_attribute("#formGo", "href") or ""

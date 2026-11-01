@@ -111,7 +111,40 @@ const rows = () => [HDR,
   const pages = list.filter(i => i.getType() === T.PAGE_BREAK);
   const nextAfter = pg => { const k = pages.indexOf(pg); const nx = pages[k + 1]; return nx ? (nx._it.goto || nx) : null; };
   const route = type._it.choices.map(c => [c.getValue(), c.getGotoPage().getTitle(), nextAfter(c.getGotoPage()).getTitle()]);
-  check(route.length === 6 && route.every(([v, pg, nx]) => v === pg && nx === '截圖'), 'every report type opens its own page and then goes to 截圖: ' + route.map(r => r.join('→')).join('，'));
+  check(route.length === 7 && route.every(([v, pg, nx]) => v === pg && nx === '截圖'), 'every report type opens its own page and then goes to 截圖: ' + route.map(r => r.join('→')).join('，'));
+  // a form that already got the first three new pages (upgradeForm of 2026-11-02) only gets 探索地圖 added
+  const k = list.findIndex(i => i.getTitle() === '探索地圖');
+  list.splice(k, 2);   // the page break and its one question
+  type.setChoices(type._it.choices.filter(c => c.getValue() !== '探索地圖'));
+  ctx.upgradeForm();
+  const t2 = list.map(i => i.getTitle());
+  check(t2.indexOf('技能・備註') < t2.indexOf('探索地圖') && t2.indexOf('探索地圖') < t2.indexOf('截圖') && list.length === n1 && type._it.choices.length === 7,
+    'running the new upgradeForm on an already upgraded form adds only the 探索地圖 page, before 截圖');
+}
+// ---- publishJmap_: zip to a GitHub release (created once), size limit; processQueue does not redo it ----
+{
+  const calls = [];
+  let release = null;
+  const resp = (code, obj) => ({ getResponseCode: () => code, getContentText: () => JSON.stringify(obj || {}) });
+  const ctx = { console, Logger: { log: () => {} }, PropertiesService: { getScriptProperties: () => ({ getProperty: k => k === 'GITHUB_TOKEN' ? 'tok' : 'X' }) },
+    DriveApp: { getFileById: id => ({ getBlob: () => ({ getBytes: () => ({ length: id === 'BIG' ? 46 * 1048576 : 1000 }) }) }) },
+    UrlFetchApp: { fetch: (url, opt) => {
+      calls.push([opt.method || 'get', url.replace('https://api.github.com/repos/Cheng-1001/ArgoStrategyGuide', '')]);
+      if (url.includes('/releases/tags/')) return release ? resp(200, release) : resp(404);
+      if (url.endsWith('/releases')) { release = { upload_url: 'https://uploads.github.com/repos/x/y/releases/9/assets{?name,label}', assets: [] }; return resp(201, release); }
+      if (url.includes('uploads.github.com')) { release.assets.push({}); return resp(201, {}); }
+      return resp(500);
+    } } };
+  vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'google', 'apps-script.gs'), 'utf8') + '\nthis.publishJmap_=publishJmap_;this.done_=done_;', ctx);
+  ctx.publishJmap_('R0009', 'ZIP');
+  check(calls.map(c => c[0].toLowerCase() + ' ' + c[1]).join(' | ') === 'get /releases/tags/jmap-R0009 | post /releases | post https://uploads.github.com/repos/x/y/releases/9/assets?name=R0009.zip',
+    'publishJmap_ creates release jmap-R0009 and uploads R0009.zip');
+  calls.length = 0; ctx.publishJmap_('R0009', 'ZIP');
+  check(calls.length === 1, 'a retry does not upload the zip twice');
+  let err = ''; try { ctx.publishJmap_('R0010', 'BIG'); } catch (e) { err = e.message; }
+  check(/超過 45 MB/.test(err), 'zips over 45 MB are refused with a clear message');
+  check(ctx.done_('已送去合併 2026-11-02 10:00') && ctx.done_('已上線 x') && !ctx.done_('錯誤：x') && !ctx.done_(''), 'done_: sent-to-merge counts as done, errors do not');
 }
 console.log('\n' + (fails ? fails + ' FAILED' : 'ALL PASSED'));
 process.exit(fails ? 1 : 0);

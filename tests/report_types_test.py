@@ -22,6 +22,7 @@ reports += [
     rep("T106", "place", "Test Gate", {"地點・種類": "傳送點", "地點・座標 x, z": "2000, 3000", "地點・傳送選單名稱": "Porte de Test"}),
     rep("T107", "place", "Pumba", {"地點・種類": "首領位置", "地點・座標 x, z": "1900, 3550", "地點・在地下嗎": "地下（要從入口走下去）"}),
     rep("T108", "place", "Putrid Swamp", {"地點・種類": "怪物區", "地點・座標 x, z": "1400, 3100"}),
+    rep("T109", "jmap", "My map", {"探索地圖・說明": "north road"}),
 ]
 body = m.group(1) + json.dumps(reports, ensure_ascii=False) + ";\n"
 
@@ -92,6 +93,7 @@ with sync_playwright() as p:
     t = pg.inner_text("#doneL")
     check("配方・Iron Sword" in t and "技能・Boule de Feu" in t and "任務・A New World" in t and "看配方" in t and "看職業" in t and "看任務" in t,
           "received list labels the new types and links to them")
+    check("探索地圖・My map" in t and "合併中" in t, "an approved JourneyMap upload shows as merging until jmmeta.js has its result")
     check(not errs, "no page errors" + ("" if not errs else ": " + errs[0]))
     b.close()
 srv.shutdown()
