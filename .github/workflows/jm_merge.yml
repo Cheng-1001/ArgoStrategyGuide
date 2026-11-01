@@ -31,10 +31,16 @@ jobs:
       - name: Install Pillow
         run: pip install "pillow==11.0.0"
       - name: Download the upload
+        id: dl
         run: |
+          # the Google script publishes the release only after uploading, but wait a little in case the asset is late
           mkdir -p "$RUNNER_TEMP/up"
-          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern "*.zip" --dir "$RUNNER_TEMP/up"
+          for i in 1 2 3 4 5 6; do
+            gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern "*.zip" --dir "$RUNNER_TEMP/up" --clobber && break
+            sleep 15
+          done
           ls -l "$RUNNER_TEMP/up"
+          ls "$RUNNER_TEMP"/up/*.zip
       - name: Merge (exit 2 = upload rejected, recorded in jmmeta.js)
         run: |
           set +e
@@ -56,6 +62,6 @@ jobs:
           exit 1
       - name: Ask GitHub Pages to rebuild (pushes made by this job may not start a Pages build by themselves)
         run: gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" || true
-      - name: Delete the release
-        if: always()
+      - name: Delete the release (kept when the download failed, so a retry from the Google script can reuse it)
+        if: always() && steps.dl.outcome == 'success'
         run: gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true

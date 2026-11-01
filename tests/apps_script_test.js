@@ -253,19 +253,24 @@ const rows = () => [HDR,
   const ctx = { console, Logger: { log: () => {} }, PropertiesService: { getScriptProperties: () => ({ getProperty: k => k === 'GITHUB_TOKEN' ? 'tok' : 'X' }) },
     DriveApp: { getFileById: id => ({ getBlob: () => ({ getBytes: () => ({ length: id === 'BIG' ? 46 * 1048576 : 1000 }) }) }) },
     UrlFetchApp: { fetch: (url, opt) => {
-      calls.push([opt.method || 'get', url.replace('https://api.github.com/repos/Cheng-1001/ArgoStrategyGuide', '')]);
-      if (url.includes('/releases/tags/')) return release ? resp(200, release) : resp(404);
-      if (url.endsWith('/releases')) { release = { upload_url: 'https://uploads.github.com/repos/x/y/releases/9/assets{?name,label}', assets: [] }; return resp(201, release); }
-      if (url.includes('uploads.github.com')) { release.assets.push({}); return resp(201, {}); }
+      const m = (opt.method || 'get').toLowerCase();
+      calls.push(m + ' ' + url.replace('https://api.github.com/repos/Cheng-1001/ArgoStrategyGuide', '') + (m === 'patch' ? ' ' + opt.payload : ''));
+      if (url.includes('/releases?per_page')) return resp(200, release ? [release] : []);
+      if (url.endsWith('/releases') && m === 'post') { release = { id: 9, tag_name: 'jmap-R0009', draft: JSON.parse(opt.payload).draft, upload_url: 'https://uploads.github.com/repos/x/y/releases/9/assets{?name,label}', assets: [] }; return resp(201, release); }
+      if (url.includes('uploads.github.com')) { if (release.draft !== true) return resp(500, { m: 'published before the upload' }); release.assets.push({}); return resp(201, {}); }
+      if (url.endsWith('/releases/9') && m === 'patch') { release.draft = false; return resp(200, release); }
       return resp(500);
     } } };
   vm.createContext(ctx);
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'google', 'apps-script.gs'), 'utf8') + '\nthis.publishJmap_=publishJmap_;this.done_=done_;', ctx);
   ctx.publishJmap_('R0009', 'ZIP');
-  check(calls.map(c => c[0].toLowerCase() + ' ' + c[1]).join(' | ') === 'get /releases/tags/jmap-R0009 | post /releases | post https://uploads.github.com/repos/x/y/releases/9/assets?name=R0009.zip',
-    'publishJmap_ creates release jmap-R0009 and uploads R0009.zip');
+  check(calls.join(' | ') === 'get /releases?per_page=100 | post /releases | post https://uploads.github.com/repos/x/y/releases/9/assets?name=R0009.zip | patch /releases/9 {"draft":false}',
+    'publishJmap_ creates a draft release, uploads R0009.zip, then publishes it (GitHub Actions starts only after the upload): ' + calls.join(' | '));
   calls.length = 0; ctx.publishJmap_('R0009', 'ZIP');
   check(calls.length === 1, 'a retry does not upload the zip twice');
+  // a retry after a failure between upload and publish: the draft already has the zip -> only publish
+  release.draft = true; calls.length = 0; ctx.publishJmap_('R0009', 'ZIP');
+  check(calls.join(' | ') === 'get /releases?per_page=100 | patch /releases/9 {"draft":false}', 'a draft that already has the zip is just published');
   let err = ''; try { ctx.publishJmap_('R0010', 'BIG'); } catch (e) { err = e.message; }
   check(/超過 45 MB/.test(err), 'zips over 45 MB are refused with a clear message');
   check(ctx.done_('已送去合併 2026-11-02 10:00') && ctx.done_('已上線 x') && !ctx.done_('錯誤：x') && !ctx.done_(''), 'done_: sent-to-merge counts as done, errors do not');
