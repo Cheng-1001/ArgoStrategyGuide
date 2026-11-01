@@ -62,7 +62,10 @@ with sync_playwright() as p:
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
     check(pg.eval_on_selector_all("#fpCats .fchip", "e=>e.filter(b=>!b.dataset.k.includes(':')&&b.getAttribute('aria-pressed')==='true').map(b=>b.dataset.k).join(',')") == "tp,land,area,mobs"
           and pg.locator(".bsp").count() == 0 and pg.locator(".town.dungeon").count() == 0, "default map filter: teleports, landmarks, monster areas, regular monsters")
-    pg.evaluate("localStorage.setItem('sao-map-filter-v2','{}')")   # the rest of the tests start with everything on
+    pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
+    on = pg.eval_on_selector_all("#fpFly .fchip", "e=>e.filter(b=>b.getAttribute('aria-pressed')==='true').map(b=>b.dataset.k).join(',')")
+    check(on == "npc:alchemist,npc:lootBuyers,npc:keyBlacksmith,npc:accessoriesBlacksmith", f"default NPC sub-categories: the 4 chosen ones ({on})")
+    pg.evaluate("localStorage.setItem('sao-map-filter-v3','{}')")   # the rest of the tests start with everything on
     pg.reload(); pg.wait_for_timeout(300)
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
@@ -183,7 +186,6 @@ with sync_playwright() as p:
     check(n >= 70 and pg.locator(".zone.npc").count() == 0 and "🧑 NPC" not in pg.inner_text("#zlist"),
           "NPCs on the map; the filter hides them on the map and in the list")
     pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
-    pg.click("#fpNpcWrap summary"); pg.wait_for_timeout(150)
     pg.click('#fpNpc .fchip[data-k="npc:lootBuyers"]'); pg.wait_for_timeout(300)
     check(pg.locator(".zone.npc").count() == n - 16, "NPC sub-filter hides the 16 loot buyers only")
     pg.click("#fpAll"); pg.wait_for_timeout(200)
@@ -232,12 +234,14 @@ with sync_playwright() as p:
     pg.click("#pClose"); pg.wait_for_timeout(150)
     check(pg.evaluate("document.querySelector('#fpCats .fchip[data-k=npc]').nextElementSibling.id") == "fpNpcWrap",
           "NPC sub-categories sit right under the NPC chip")
-    pg.evaluate("document.getElementById('fpNpcWrap').open=true"); pg.wait_for_timeout(200)
     fb, pb = pg.locator("#fpFly").bounding_box(), pg.locator("#fpanel").bounding_box()
-    check(pg.is_visible("#fpFly") and fb["x"] >= pb["x"] + pb["width"] and pg.locator("#fpFly .fchip").count() >= 10,
-          "desktop: NPC sub-categories open in a flyout to the right of the filter panel")
-    pg.click("#fpFlyX"); pg.wait_for_timeout(150)
-    check(pg.is_hidden("#fpFly"), "flyout closes")
+    top4 = pg.eval_on_selector_all("#fpFly .fchip", "e=>e.slice(0,4).map(b=>b.dataset.k).join(',')")
+    check(pg.is_visible("#fpFly") and fb["x"] >= pb["x"] + pb["width"] and pg.locator("#fpFly .fchip").count() >= 10
+          and top4 == "npc:alchemist,npc:lootBuyers,npc:keyBlacksmith,npc:accessoriesBlacksmith",
+          f"desktop: NPC sub-categories shown on the right as soon as NPC is on, the 4 main ones first ({top4})")
+    pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
+    check(pg.is_hidden("#fpFly"), "turning NPC off hides the sub-categories")
+    pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
     pg.wait_for_timeout(300)
     ov = pg.evaluate("""(()=>{const L=[...document.querySelectorAll('.town .tname,.zone.mobarea .zlabel')].filter(e=>e.offsetParent&&getComputedStyle(e).visibility!=='hidden').map(e=>[e.textContent.trim(),e.getBoundingClientRect(),!!e.closest('.town.tp')]);
       const P=[...document.querySelectorAll('.town .pin')].map(e=>e.getBoundingClientRect());const bad=[];
