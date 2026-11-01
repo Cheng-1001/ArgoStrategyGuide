@@ -106,6 +106,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .mqh{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
 .mqn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:600 13px var(--f-mono)}
 .rcard .mats{display:flex;gap:4px 6px;align-items:center;flex-wrap:wrap;font-size:12.5px}
+.spawnl{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;margin-top:4px}
 .recipes .mats{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}.recipes .mats .slot{vertical-align:middle}.recipes .v{text-align:right;line-height:1.3}
 .mqn.est{background:none;color:var(--accent);border:2px dashed var(--accent)}.mqn.nonum{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
 .mqt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.mqt b{font-family:var(--f-display);font-size:15px;font-weight:600;overflow-wrap:anywhere}.mqt span{font-size:12px;color:var(--muted)}
@@ -126,6 +127,8 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .rwbody{flex:1;min-height:0;background:#0d1218;position:relative}.rwbody svg{display:block;width:100%;height:100%;touch-action:none;cursor:grab}.rwbody svg.drag{cursor:grabbing}
 @media (max-width:820px){.rwhead .muted{display:none}}
 .areas path{stroke-width:var(--areaw,1.8)}
+.bsp{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:4;width:28px;height:28px;border-radius:50%;border:3px solid var(--boss);background:radial-gradient(circle at 35% 30%,#fff,#dfe6ec);display:grid;place-items:center;font-size:15px;padding:0;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.55);overflow:hidden}
+.bsp.mini{border-color:var(--mini)}.bsp.ug{border-style:dashed}.bsp img.face{width:100%;height:100%;object-fit:cover}
 .areas{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;z-index:1;overflow:visible}
 .route{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;z-index:5;overflow:visible}
 .rstep{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:7;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:#e8a23a;color:#1b1206;border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.35);font:700 11.5px var(--f-mono);display:grid;place-items:center;white-space:nowrap;pointer-events:none}
@@ -193,7 +196,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .hud{position:absolute;left:12px;bottom:12px;z-index:5}
 .hud .coord{font-family:var(--f-mono);font-size:12px;color:#e8eef3;background:rgba(10,16,22,.78);padding:4px 9px;border-radius:4px}
 .zoombtns{position:absolute;right:12px;bottom:12px;display:flex;flex-direction:column;gap:6px;z-index:5}
-@media (min-width:821px){body.panel-open[data-view="map"] .zoombtns{right:auto;bottom:auto;left:12px;top:52px}}
+@media (min-width:821px){body.panel-open[data-view="map"] .zoombtns{right:62px}}
 .zoombtns button{width:36px;height:36px;border-radius:6px;border:1px solid rgba(255,255,255,.25);background:rgba(10,16,22,.8);color:#fff;font-size:18px;cursor:pointer}
 .legend{position:absolute;left:12px;top:12px;z-index:5;display:flex;gap:10px;flex-wrap:wrap;background:rgba(10,16,22,.72);color:#e8eef3;font-size:11.5px;padding:5px 10px;border-radius:6px;max-width:calc(100% - 24px)}
 .legend span,.legend .lgt{display:inline-flex;gap:5px;align-items:center}
@@ -202,12 +205,15 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .world .tiles img.l0{z-index:0}.world .tiles img.hi{z-index:1}
 .legend .lgt{background:none;border:1px solid rgba(255,255,255,.28);color:inherit;border-radius:999px;padding:1px 8px 1px 6px;cursor:pointer;font-size:11.5px}
 .legend .lgt:hover{border-color:#fff}
+@media (min-width:821px){.legend{left:220px}}
 .legend .lgb.ghost{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35)}
-.fpanel{position:absolute;left:12px;top:46px;z-index:9;width:min(430px,calc(100% - 24px));max-height:calc(100% - 60px);overflow:auto;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.35);padding:12px;display:flex;flex-direction:column;gap:12px}
+.fpanel{position:absolute;left:12px;top:46px;z-index:9;width:min(196px,calc(100% - 24px));max-height:calc(100% - 100px);overflow:auto;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.35);padding:12px;display:flex;flex-direction:column;gap:12px}
 .fpanel[hidden]{display:none}
 .fphead,.fpsubh{display:flex;gap:10px;align-items:center}.fphead b,.fpsubh b{flex:1;font-family:var(--f-display)}
-.fpcats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.fpnpc{display:flex;flex-wrap:wrap;gap:6px}
-.fchip{display:flex;gap:6px;align-items:center;border:1px solid var(--line);background:var(--panel-2);border-radius:8px;padding:5px 9px;cursor:pointer;font-size:13px;text-align:left;color:var(--fg)}
+.fpcats{display:flex;flex-direction:column;gap:5px}.fpgrp{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-top:4px}.fpnpc{display:flex;flex-direction:column;gap:4px;margin-top:6px}
+.fpsub summary{cursor:pointer;list-style:none;font-size:12.5px}.fpsub summary::after{content:" ▸";color:var(--muted)}.fpsub[open] summary::after{content:" ▾"}
+@media (min-width:821px){#filterBtn,#fpX{display:none}.fpanel{padding:10px;gap:8px;font-size:13px}}
+.fchip{display:flex;gap:6px;align-items:center;border:1px solid var(--line);background:var(--panel-2);border-radius:8px;padding:4px 8px;cursor:pointer;font-size:13px;text-align:left;color:var(--fg)}
 .fchip .n{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
 .fchip[aria-pressed="false"]{opacity:.45;text-decoration:line-through;border-style:dashed}
 .fpnpc .fchip{padding:3px 8px;font-size:12px}
@@ -473,9 +479,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
         <button class="lgb" id="baseBtn" hidden title="切換底圖：wiki 地圖或 JourneyMap 探索地圖"></button>
       </div>
       <div class="fpanel" id="fpanel" hidden role="dialog" aria-label="地圖篩選">
-        <div class="fphead"><b>顯示在地圖上</b><button class="linkbtn" id="fpAll">全部顯示</button><button class="iconbtn" id="fpX" aria-label="關閉">✕</button></div>
+        <div class="fphead"><b>篩選</b><button class="linkbtn" id="fpAll">全部顯示</button><button class="iconbtn" id="fpX" aria-label="關閉">✕</button></div>
         <div class="fpcats" id="fpCats"></div>
-        <div class="fpsub" id="fpNpcWrap"><div class="fpsubh"><b>NPC 類別</b><button class="linkbtn" id="fpNpcAll">全選</button><button class="linkbtn" id="fpNpcNone">全不選</button></div><div class="fpnpc" id="fpNpc"></div></div>
+        <details class="fpsub" id="fpNpcWrap"><summary class="fpsubh"><b>NPC 類別</b></summary><div class="fpsubh"><button class="linkbtn" id="fpNpcAll">全選</button><button class="linkbtn" id="fpNpcNone">全不選</button></div><div class="fpnpc" id="fpNpc"></div></details>
         <div class="fpleg">怪物縮圖右下角的點：<span><i class="beh-A"></i>主動攻擊</span><span><i class="beh-N"></i>中立</span><span><i class="beh-P"></i>被動</span></div>
       </div>
       <div class="editbar" id="editbar" hidden></div>
@@ -686,24 +692,32 @@ const posKey=f=>f===1?"sao-f1-zone-pos":"sao-f"+f+"-zone-pos";
 const userPos={};FL_KEYS.forEach(f=>{try{userPos[f]=JSON.parse(localStorage.getItem(posKey(f))||"{}")||{}}catch(e){userPos[f]={}}});
 const savePos=f=>{try{localStorage.setItem(posKey(f),JSON.stringify(userPos[f]))}catch(e){}};
 const BASE_SPOT={};ALLS.forEach(sp=>sp.mons.forEach(n=>BASE_SPOT[FLOORS[sp.floor].monByName[n].id]=sp));
+// boss / mini-boss spawn points (floor 1); a monster with spawns is drawn at each spawn instead of inside an area
+const SPAWNS=f=>f===1?(S1.BOSS_SPAWNS||[]).map(([n,x,z,u],i)=>({i,m:FLOORS[1].monByName[n],x,z,u:!!u})).filter(p=>p.m):[];
+const SPAWN_OF={};FL_KEYS.forEach(f=>SPAWNS(f).forEach(p=>(SPAWN_OF[p.m.id]=SPAWN_OF[p.m.id]||[]).push(p)));
+const HAS_POS=id=>!!(BASE_SPOT[id]||SPAWN_OF[id]);
+const isBossT=m=>m.type==="Boss"||m.type==="Mini-Boss";
+const showMon=m=>isBossT(m)?(catOn("boss")&&!SPAWN_OF[m.id]):catOn("mobs");
 const KIND={boss:["區域首領","👑"],dungeon:["地下城","⚔️"],mob:["怪物區","🐾"],poi:["地標","📍"],gather:["採集點","⛏️"],wboss:["世界王","🌋"]};
 const GT={crop:["作物","🌾"],ore:["礦物","⛏️"],wood:["木材","🪵"]};
-const MAPCAT=[["tp","傳送點","🌀"],["land","地標","📍"],["mob","怪物區","🐾"],["gather","採集點","⛏️"],["dungeon","地下城","⚔️"],["wboss","世界王","🌋"],["boss","區域首領","👑"],["npc","NPC","🧑"]];
+const MAPGRP=[["地點",[["tp","傳送點","🌀"],["land","地標","📍"],["gather","採集點","⛏️"],["npc","NPC","🧑"]]],["戰鬥",[["wboss","世界王","🌋"],["dungeon","地下城","⚔️"],["area","怪物區","🐾"],["boss","區域首領","👑"],["mobs","一般怪物","👾"]]]];
+const MAPCAT=MAPGRP.flatMap(g=>g[1]);
 const NPCCAT={alchemist:["鍊金術士","⚗️"],lumberjack:["伐木工","🪓"],lootBuyers:["收購商","💰"],weaponSellers:["武器收購商","🗡️"],travelingMerchants:["旅行商人","🧳"],equipmentMerchants:["裝備商人","🛡️"],toolMerchants:["工具商人","🔧"],accessoriesMerchants:["飾品商人","💍"],occultMerchants:["神秘商人","🔮"],consumablesMerchants:["消耗品商人","🧪"],weaponsmith:["武器鐵匠","⚔️"],armorBlacksmith:["防具鐵匠","🦺"],ingotBlacksmith:["金屬錠鐵匠","🧱"],keyBlacksmith:["鑰匙鐵匠","🗝️"],materialsBlacksmith:["材料工匠","🪵"],accessoriesBlacksmith:["飾品鐵匠","📿"],equipmentBlacksmith:["裝備鐵匠","🔨"],secretAccessoryBlacksmith:["隱藏飾品鐵匠","✨"]};
 const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:!!r[5]}));
 const npcById=id=>{const f=+id.slice(1).split("_")[0];return NPCS(f).find(n=>n.id===id)};
 let FILT={};try{FILT=JSON.parse(localStorage.getItem("sao-map-filter")||"{}")||{}}catch(e){FILT={}}
 const saveFilt=()=>{try{localStorage.setItem("sao-map-filter",JSON.stringify(FILT))}catch(e){}};
 const catOn=k=>!FILT[k];
-const spotCat=sp=>sp.kind==="poi"?(sp.tp?"tp":"land"):sp.kind;
-const spotVisible=sp=>catOn(spotCat(sp))||(sp.tp&&catOn("tp"));
+const spotCat=sp=>sp.kind==="poi"?(sp.tp?"tp":"land"):sp.kind==="mob"?"area":sp.kind;
+const spotVisible=sp=>catOn(spotCat(sp))||(sp.tp&&catOn("tp"))||(sp.kind==="mob"&&catOn("mobs"));
 const townCat=t=>t.tp?"tp":"land";
 const npcVisible=n=>catOn("npc")&&!FILT["npc:"+n.c];
 const spotsOf=f=>{const Fx=FLOORS[f];return Fx.spots.concat(Object.entries(userPos[f]).filter(([z])=>Fx.zones[z]).map(([z,p])=>({id:"u"+f+"-"+z,floor:f,zone:z,kind:"mob",n:Fx.zones[z].n,zh:Fx.zones[z].zh,x:p.x,z:p.z,src:"user",items:[],
-  mons:Fx.M.filter(m=>m.zone===z&&!BASE_SPOT[m.id]).map(m=>m.name)})).filter(sp=>sp.mons.length||sp.items.length))};
+  mons:Fx.M.filter(m=>m.zone===z&&!HAS_POS(m.id)).map(m=>m.name)})).filter(sp=>sp.mons.length||sp.items.length))};
 const spotById=id=>{for(const f of FL_KEYS){const s=spotsOf(f).find(x=>x.id===id);if(s)return s}return null};
-const monPos=m=>{const sp=spotsOf(m.floor).find(x=>x.mons.some(n=>n===m.name||(m.aka||[]).includes(n)));return sp?{x:sp.x,z:sp.z,s:sp.src,spot:sp}:{x:null,z:null,s:"unk"}};
-const unknownZones=f=>FLOORS[f].order.filter(z=>FLOORS[f].M.some(m=>m.zone===z&&!BASE_SPOT[m.id]));
+const monPos=m=>{const sp=spotsOf(m.floor).find(x=>x.mons.some(n=>n===m.name||(m.aka||[]).includes(n)));if(sp)return{x:sp.x,z:sp.z,s:sp.src,spot:sp};
+  const w=SPAWN_OF[m.id];return w?{x:w[0].x,z:w[0].z,s:"ref",spot:null,spawns:w}:{x:null,z:null,s:"unk"}};
+const unknownZones=f=>FLOORS[f].order.filter(z=>FLOORS[f].M.some(m=>m.zone===z&&!HAS_POS(m.id)));
 
 // ---------- labels ----------
 const TYPE_ZH={"Boss":"首領","Mini-Boss":"小首領","Monster":"一般怪物","Minion":"嘍囉"};
@@ -767,7 +781,7 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   ${soonNote(m.floor)}
   <dl class="facts"><dt>等級</dt><dd>${lvOf(m)!=null?`<b class="mono">${lvOf(m)}</b> <span class="pill rep">玩家回報</span>`:`<span class="muted">未回報</span>`}</dd><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
   <dt>圖鑑區域</dt><dd>${m.codexRegion?`${esc(m.codexRegion)} <span class="pill rep">遊戲圖鑑</span><br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`:`${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`}</dd>
-  <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd></dl>
+  <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${SPAWN_OF[m.id]?"":p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd>${SPAWN_OF[m.id]?`<dt>重生點</dt><dd>${SPAWN_OF[m.id].map(w=>`<button class="linkbtn mono" data-rep="${m.floor}|${w.x}|${w.z}">X ${w.x} · Z ${w.z}${w.u?"（地下）":""}</button>`).join("<br>")}</dd>`:""}</dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
   ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
   ${(()=>{const H=(window.SAO_HINTS||{})[m.floor]||{};const h=H[m.name]||(m.aka||[]).map(a=>H[a]).find(Boolean);return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted">${esc(h[1])}${h[2]?"":"・依圖鑑順序推斷對應，可能不準"}</span></div>`:""})()}
@@ -1358,10 +1372,11 @@ let BASE="wiki";try{BASE=localStorage.getItem("sao-map-base")||"wiki"}catch(e){}
 $("baseBtn").addEventListener("click",ev=>{ev.stopPropagation();BASE=BASE==="jm"?"wiki":"jm";try{localStorage.setItem("sao-map-base",BASE)}catch(e){};renderMap()});
 // ---- map filter panel ----
 function mapCounts(){const sp=spotsOf(FL),tw=F().towns,np=NPCS(FL);const c={tp:tw.filter(t=>t.tp).length+sp.filter(x=>x.tp).length,land:tw.filter(t=>!t.tp).length+sp.filter(x=>x.kind==="poi"&&!x.tp).length,npc:np.length};
-  ["mob","gather","dungeon","wboss","boss"].forEach(k=>c[k]=sp.filter(x=>x.kind===k).length);return c}
+  ["gather","dungeon","wboss"].forEach(k=>c[k]=sp.filter(x=>x.kind===k).length);c.area=sp.filter(x=>x.kind==="mob").length;c.boss=SPAWNS(FL).length;
+  c.mobs=new Set(sp.flatMap(x=>x.mons.map(n=>F().monByName[n]).filter(m=>m&&!isBossT(m)).map(m=>m.id))).size;return c}
 function renderFilter(){const c=mapCounts();const np=NPCS(FL);const off=MAPCAT.filter(([k])=>!catOn(k)).length+Object.keys(FILT).filter(k=>k.startsWith("npc:")&&FILT[k]).length;
   $("filterBtn").textContent=off?`篩選（已隱藏 ${off} 類）▾`:"篩選 ▾";
-  $("fpCats").innerHTML=MAPCAT.map(([k,l,ic])=>`<button class="fchip" data-k="${k}" aria-pressed="${catOn(k)}">${ic} ${l}<span class="n">${c[k]||0}</span></button>`).join("");
+  $("fpCats").innerHTML=MAPGRP.map(([g,cs])=>`<div class="fpgrp">${g}</div>`+cs.map(([k,l,ic])=>`<button class="fchip" data-k="${k}" aria-pressed="${catOn(k)}">${ic} ${l}<span class="n">${c[k]||0}</span></button>`).join("")).join("");
   const cats=Object.keys(NPCCAT).filter(k=>np.some(n=>n.c===k));$("fpNpcWrap").hidden=!catOn("npc")||!cats.length;
   $("fpNpc").innerHTML=cats.map(k=>`<button class="fchip" data-k="npc:${k}" aria-pressed="${!FILT["npc:"+k]}">${NPCCAT[k][1]} ${NPCCAT[k][0]}<span class="n">${np.filter(n=>n.c===k).length}</span></button>`).join("");
   $("fpanel").querySelectorAll(".fchip").forEach(b=>b.onclick=ev=>{ev.stopPropagation();const k=b.dataset.k;if(FILT[k])delete FILT[k];else FILT[k]=1;saveFilt();renderFilter();renderMap();renderZoneList()})}
@@ -1369,6 +1384,9 @@ const setNpcAll=on=>{Object.keys(NPCCAT).forEach(k=>{if(on)delete FILT["npc:"+k]
 $("fpNpcAll").onclick=ev=>{ev.stopPropagation();setNpcAll(true)};$("fpNpcNone").onclick=ev=>{ev.stopPropagation();setNpcAll(false)};
 $("fpAll").onclick=ev=>{ev.stopPropagation();FILT={};saveFilt();renderFilter();renderMap();renderZoneList()};
 $("filterBtn").onclick=ev=>{ev.stopPropagation();const o=$("fpanel").hidden;$("fpanel").hidden=!o;$("filterBtn").setAttribute("aria-expanded",o);if(o)renderFilter()};
+// desktop: the filter panel is always open on the left; phones open it with the 篩選 button
+const deskFilter=matchMedia("(min-width:821px)");const syncFilter=()=>{if(deskFilter.matches){$("fpanel").hidden=false;renderFilter()}else $("fpanel").hidden=true};
+deskFilter.addEventListener("change",syncFilter);setTimeout(syncFilter,0);
 $("fpX").onclick=ev=>{ev.stopPropagation();$("fpanel").hidden=true;$("filterBtn").setAttribute("aria-expanded",false)};
 $("fpanel").addEventListener("pointerdown",ev=>ev.stopPropagation());$("fpanel").addEventListener("wheel",ev=>ev.stopPropagation(),{passive:true});
 const SRC_COL={label:"var(--ok)",npc:"var(--ok)",player:"var(--ok)",quest:"var(--ok)",est:"var(--warn)",user:"var(--accent)",ref:"var(--ref)"};
@@ -1381,14 +1399,14 @@ const AREA_COL=["#e8a23a","#5fb8e8","#7bd37b","#e0709a","#b48cf0","#f0d050","#62
 function smoothPath(pts){const n=pts.length;let d=`M${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
   for(let i=0;i<n;i++){const p0=pts[(i-1+n)%n],p1=pts[i],p2=pts[(i+1)%n],p3=pts[(i+2)%n];
     d+=`C${(p1[0]+(p2[0]-p0[0])/6).toFixed(1)},${(p1[1]+(p2[1]-p0[1])/6).toFixed(1)} ${(p2[0]-(p3[0]-p1[0])/6).toFixed(1)},${(p2[1]-(p3[1]-p1[1])/6).toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`}return d+"Z"}
-function drawAreas(){world.querySelectorAll(".areas").forEach(n=>n.remove());if(!MP()||!catOn("mob"))return;
+function drawAreas(){world.querySelectorAll(".areas").forEach(n=>n.remove());if(!MP()||!catOn("area"))return;
   const sp=spotsOf(FL).filter(x=>x.area&&spotVisible(x));if(!sp.length)return;const ns="http://www.w3.org/2000/svg";
   const sv=document.createElementNS(ns,"svg");sv.setAttribute("class","areas");sv.setAttribute("viewBox","0 0 1000 1000");sv.setAttribute("aria-hidden","true");
   sp.forEach((x,i)=>{const c=AREA_COL[i%AREA_COL.length];const pa=document.createElementNS(ns,"path");pa.setAttribute("d",smoothPath(x.area.map(([bx,bz])=>[toPxX(bx),toPxZ(bz)])));
     pa.setAttribute("fill",c);pa.setAttribute("fill-opacity",".13");pa.setAttribute("stroke",c);pa.setAttribute("stroke-opacity",".95");
     pa.setAttribute("vector-effect","non-scaling-stroke");pa.setAttribute("stroke-linejoin","round");pa.dataset.s=x.id;sv.appendChild(pa)});
   world.insertBefore(sv,world.querySelector(".zone,.town")||null)}
-function renderMap(){world.querySelectorAll(".zone,.town,.rpin").forEach(n=>n.remove());
+function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=>n.remove());
   const m=MP();$("noMap").hidden=!!m;world.hidden=!m;document.querySelector(".zoombtns").hidden=!m;document.querySelector(".hud").hidden=!m;document.querySelector(".legend").hidden=!m;
   $("mapNote").hidden=!(m&&m.note);if(m&&m.note)$("mapNote").textContent=m.note;
   if(!m){filterMap();return}
@@ -1400,7 +1418,8 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin").forEach(n=>n.re
     b.classList.add(t.tp?"tp":"land");b.innerHTML=`<span class="pin"></span><span class="tname">${esc(t.n)}</span>`;b.setAttribute("aria-label",(t.tp?"可傳送的村鎮 ":"村鎮 ")+t.n);if(t.tp)b.title="傳送點："+t.tp;
     b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("t",t.id,"new")});world.appendChild(b)});
   const rank={"Boss":0,"Mini-Boss":1,"Monster":2,"Minion":3};
-  spotsOf(FL).forEach(sp=>{if(!spotVisible(sp))return;const own=catOn(spotCat(sp));const vm=own?sp.mons.map(n=>F().monByName[n]).filter(Boolean):[];
+  spotsOf(FL).forEach(sp=>{if(!spotVisible(sp))return;const own=catOn(spotCat(sp));const vm=(sp.kind==="dungeon"&&!own)||(sp.tp&&sp.kind!=="mob"&&!own)?[]:sp.mons.map(n=>F().monByName[n]).filter(m=>m&&showMon(m));
+    if(sp.kind==="mob"&&!own&&!vm.length&&!(sp.tp&&catOn("tp")))return;
     const mk=sp.tp?"tp":sp.kind==="poi"?"land":sp.kind==="gather"?"gather":sp.kind==="wboss"?"wboss":"";
     if(mk){const b=document.createElement("button");b.className="town "+mk;b.dataset.s=sp.id;b.style.left=toPxX(sp.x)+"px";b.style.top=toPxZ(sp.z)+"px";
       b.innerHTML=`<span class="pin"></span><span class="tname">${sp.gt?GT[sp.gt][1]+" ":mk==="wboss"?"🌋 ":""}${esc(sp.n)}</span>`;b.title=(sp.tp?"傳送點："+sp.tp+"・":"")+sp.zh;b.setAttribute("aria-label",(KIND[sp.kind]||["地點"])[0]+" "+sp.n);
@@ -1408,13 +1427,16 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin").forEach(n=>n.re
     const d=document.createElement("div");d.className="zone"+(sp.src==="est"?" est":"")+(vm.length?"":" poi")+(mk?" under":"");d.dataset.s=sp.id;
     d.style.left=toPxX(sp.x)+"px";d.style.top=toPxZ(sp.z)+"px";
     const lb=document.createElement("button");lb.className="zlabel";lb.innerHTML=`<i style="background:${SRC_COL[sp.src]}"></i>${sp.tp?'<span class="tpi" title="傳送點">🌀</span>':""}${vm.length?"":(sp.gt?GT[sp.gt][1]:sp.tp?"":KIND[sp.kind][1])+" "}${esc(sp.n)}`;if(sp.tp)lb.title="傳送點："+sp.tp;if(sp.kind==="shop"){lb.title=sp.n+"（"+sp.zh+"）";lb.setAttribute("aria-label","收購商 "+sp.n)}
-    lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("s",sp.id,"new")});if(!mk)d.appendChild(lb);
+    lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("s",sp.id,"new")});if(!mk&&(sp.kind!=="mob"||own))d.appendChild(lb);
     if(vm.length){const tw=document.createElement("div");tw.className="thumbs";
       vm.sort((a,b)=>rank[a.type]-rank[b.type]).forEach(mm=>tw.appendChild(mapThumb(mm)));
       if(vm.length>1){const mo=document.createElement("span");mo.className="more";mo.textContent="+"+(vm.length-1);tw.appendChild(mo)}
       d.appendChild(tw)}
     world.appendChild(d);if(!mk)zoneEls[sp.id]=d});
   drawAreas();
+  if(catOn("boss"))SPAWNS(FL).forEach(w=>{const m=w.m;const b=document.createElement("button");b.className="bsp "+cls(m.type)+(w.u?" ug":"");b.dataset.id=m.id;b.dataset.key="m|"+m.id;
+    b.style.left=toPxX(w.x)+"px";b.style.top=toPxZ(w.z)+"px";b.innerHTML=face(m);b.title=`${m.name}・重生點 X ${w.x} · Z ${w.z}${w.u?"（地下）":""}`;b.setAttribute("aria-label",b.title);
+    b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("m",m.id,"new")});world.appendChild(b)});
   NPCS(FL).forEach(n=>{if(!npcVisible(n))return;const d=document.createElement("div");d.className="zone poi shop npc";d.dataset.n=n.id;d.style.left=toPxX(n.x)+"px";d.style.top=toPxZ(n.z)+"px";
     const lb=document.createElement("button");lb.className="zlabel";lb.textContent=NPCCAT[n.c][1];lb.title=`${NPCCAT[n.c][0]}：${n.n}${n.u?"（地下）":""}`;lb.setAttribute("aria-label",lb.title);
     lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("n",n.id,"new")});d.appendChild(lb);world.appendChild(d)});
@@ -1435,7 +1457,11 @@ function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(F
   if(catOn("tp")){if(tpT.length){sec("🌀 傳送點－城鎮",tpT.length);tpT.forEach(townRow)}if(tpS.length){sec("🌀 傳送點－地標",tpS.length);tpS.forEach(x=>spotRow(x,true))}}
   const lT=F().towns.filter(t=>!t.tp),lS=sp.filter(x=>x.kind==="poi"&&!x.tp);
   if(catOn("land")&&lT.length+lS.length){sec("📍 地標（無法傳送）",lT.length+lS.length);lT.forEach(townRow);lS.forEach(x=>spotRow(x))}
-  [["boss","👑 區域首領"],["wboss","🌋 世界王"],["dungeon","⚔️ 地下城"],["mob","🐾 怪物區"],["gather","⛏️ 採集點"]].forEach(([k,title])=>{if(!catOn(k))return;const g=sp.filter(x=>x.kind===k);if(!g.length)return;sec(title,g.length);g.forEach(x=>spotRow(x))});
+  [["gather","⛏️ 採集點"],["wboss","🌋 世界王"],["dungeon","⚔️ 地下城"],["mob","🐾 怪物區"]].forEach(([k,title])=>{if(!catOn(k==="mob"?"area":k))return;const g=sp.filter(x=>x.kind===k);if(!g.length)return;sec(title,g.length);g.forEach(x=>spotRow(x))});
+  const bossM=[...new Set(SPAWNS(FL).map(w=>w.m))];
+  if(catOn("boss")&&bossM.length){sec("👑 區域首領",bossM.length);bossM.forEach(m=>{const ws=SPAWN_OF[m.id];const row=document.createElement("div");row.className="zrow";row.dataset.tp=m.name+" "+(m.aka||[]).join(" ");
+    row.innerHTML=`<div class="zhead"><button class="zn">${esc(m.name)}</button><span class="zzh">${TYPE_ZH[m.type]}・${ws.length} 個重生點${ws.some(w=>w.u)?"・地下":""}</span></div><div class="spawnl">${ws.map(w=>`<button class="linkbtn mono" data-x="${w.x}" data-z="${w.z}">X ${w.x} · Z ${w.z}</button>`).join("")}</div>`;
+    row.querySelector(".zn").onclick=()=>{centerOn(ws[0].x,ws[0].z,2.6);openP("m",m.id,"new")};row.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>repPin(+b.dataset.x,+b.dataset.z));zl.appendChild(row)})}
   const np=NPCS(FL).filter(npcVisible);
   if(np.length){sec("🧑 NPC",np.length);Object.keys(NPCCAT).forEach(c=>{np.filter(n=>n.c===c).forEach(n=>{const row=document.createElement("div");row.className="zrow npcrow";row.dataset.tp=n.n+" "+NPCCAT[c][0];
     row.innerHTML=`<div class="zhead"><button class="zn">${NPCCAT[c][1]} ${esc(n.n)}</button><span class="zzh">${NPCCAT[c][0]}${n.u?"・地下":""}${n.src==="beta"?"・測試版資料":""}</span>${coord(n.x,n.z)}</div>`;
@@ -1444,7 +1470,7 @@ function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(F
   if(uz.length){sec("位置未知",uz.length);
     uz.forEach(z=>{const row=document.createElement("div");row.className="zrow";row.dataset.z=z;
       row.innerHTML=`<div class="zhead"><span class="zn" style="cursor:default">${esc(F().zones[z].n)}</span><span class="zzh">${esc(F().zones[z].zh)}</span><span class="pill s-unk">位置未知</span>${editing&&MP()?`<button class="place" aria-pressed="${placing===z}">${placing===z?"點地圖放置…":"放到地圖"}</button>`:""}</div>`;
-      const tw=document.createElement("div");tw.className="thumbs";F().M.filter(m=>m.zone===z&&!BASE_SPOT[m.id]).forEach(m=>{const b=mapThumb(m);b.classList.remove("mapth");tw.appendChild(b)});row.appendChild(tw);
+      const tw=document.createElement("div");tw.className="thumbs";F().M.filter(m=>m.zone===z&&!HAS_POS(m.id)).forEach(m=>{const b=mapThumb(m);b.classList.remove("mapth");tw.appendChild(b)});row.appendChild(tw);
       const pl=row.querySelector(".place");if(pl)pl.onclick=()=>{placing=placing===z?null:z;updateEditbar();renderZoneList()};
       zl.appendChild(row)})}
   $("editToggle").hidden=!MP();

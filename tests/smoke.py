@@ -128,27 +128,26 @@ with sync_playwright() as p:
     check(pg.locator(".areas path").count() >= 13 and pg.get_attribute(".areas path", "vector-effect") == "non-scaling-stroke",
           "monster areas are outlined with a zoom-independent line width")
     n = pg.locator(".zone.npc").count()
-    pg.click("#filterBtn"); pg.wait_for_timeout(200)
     pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(300)
     check(n >= 70 and pg.locator(".zone.npc").count() == 0 and "🧑 NPC" not in pg.inner_text("#zlist"),
           "NPCs on the map; the filter hides them on the map and in the list")
     pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
+    pg.click("#fpNpcWrap summary"); pg.wait_for_timeout(150)
     pg.click('#fpNpc .fchip[data-k="npc:lootBuyers"]'); pg.wait_for_timeout(300)
     check(pg.locator(".zone.npc").count() == n - 16, "NPC sub-filter hides the 16 loot buyers only")
     pg.click("#fpAll"); pg.wait_for_timeout(200)
-    pg.click('#fpCats .fchip[data-k="mob"]'); pg.wait_for_timeout(300)
+    pg.click('#fpCats .fchip[data-k="area"]'); pg.click('#fpCats .fchip[data-k="mobs"]'); pg.wait_for_timeout(300)
     check(pg.locator('.zone[data-s="slimes"]').count() == 0 and pg.locator('.town.tp[data-s="wolf"]').count() == 1,
           "hiding monster areas keeps an area that is also a teleport (Wolf Valley)")
     check(pg.locator(".areas path").count() == 0, "hiding monster areas hides their outlines")
-    pg.click("#fpAll"); pg.click("#fpX"); pg.wait_for_timeout(200)
-    pg.click("#filterBtn"); pg.wait_for_timeout(200)
-    for k in ("land", "mob", "gather", "dungeon", "wboss", "boss", "npc"):
+    pg.click("#fpAll"); pg.wait_for_timeout(200)
+    for k in ("land", "area", "mobs", "gather", "dungeon", "wboss", "boss", "npc"):
         pg.click(f'#fpCats .fchip[data-k="{k}"]'); pg.wait_for_timeout(80)
     pg.wait_for_timeout(300)
     check(pg.locator('.zone[data-s="wolf"] .thumbs').count() == 0 and pg.locator('.town.tp[data-s="wolf"]').count() == 1
           and pg.locator('#zlist .zrow[data-s="wolf"] .thumbs').count() == 0,
           "teleports only: Wolf Valley shows without monsters on the map and in the list")
-    pg.click("#fpAll"); pg.click("#fpX"); pg.wait_for_timeout(200)
+    pg.click("#fpAll"); pg.wait_for_timeout(200)
     if pg.is_visible("#pClose"):
         pg.click("#pClose"); pg.wait_for_timeout(200)
     pg.locator("#zlist .npcrow", has_text="Bandit Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
@@ -170,6 +169,11 @@ with sync_playwright() as p:
     w1 = pg.evaluate("getComputedStyle(document.querySelector('.areas path')).strokeWidth")
     check(sz1 < sz0 and float(w1.rstrip("px")) < float(w0.rstrip("px")), f"zooming in shrinks markers ({sz0:.1f}->{sz1:.1f}px) and area lines ({w0}->{w1})")
     pg.click("#zfit"); pg.wait_for_timeout(200)
+    check(pg.locator(".bsp").count() == 23 and pg.locator('.bsp[title*="Pumba"]').count() == 5, "23 boss spawn points drawn (Pumba has 5)")
+    check(pg.is_visible("#fpanel") and pg.locator("#fpanel").bounding_box()["width"] <= 200, "filter panel stays open on the left and is narrow")
+    pg.click('#fpCats .fchip[data-k="boss"]'); pg.wait_for_timeout(200)
+    check(pg.locator(".bsp").count() == 0, "区域首領 filter hides spawn points")
+    pg.click('#fpCats .fchip[data-k="boss"]'); pg.wait_for_timeout(200)
     check("⛏️ 採集點 4" in pg.inner_text("#zlist") and "🌾 Farm" in pg.inner_text("#zlist"), "gathering spots listed with their type")
 
     pg.goto(base + "#map"); pg.wait_for_timeout(500)

@@ -274,18 +274,14 @@ const TOWNS = [
 const SPOTS = [
  {id:"pumba",area:[[1650,3480],[1740,3420],[1880,3410],[2000,3440],[2060,3530],[2050,3640],[1960,3700],[1800,3700],[1680,3650],[1640,3560]],kind:"mob",n:"Boar Zone / Pumba",zh:"野豬區・Pumba 重生點",x:1828,z:3555,mons:["Corrupted Boar","Pumba"],note:"座標為 Pumba 的位置；地圖上的「Zone Sanglier」標示也在這裡。Corrupted Boar 分布在周圍森林。參考互動地圖標了 5 個 Pumba（Corrupted Pumba）重生點：X 1859 · Z 3606、X 1677 · Z 3581、X 1974 · Z 3583、X 1931 · Z 3515、X 1987 · Z 3636。"},
  {id:"wolf",area:[[2360,3700],[2440,3650],[2580,3640],[2690,3680],[2710,3780],[2660,3900],[2600,3990],[2470,4010],[2390,3960],[2350,3860]],tp:"Vallée des Loups",kind:"mob",n:"Wolf Valley",zh:"狼之谷",x:2445,z:3930,mons:["White Dire Wolf","Black Dire Wolf"]},
- {id:"albal",kind:"boss",n:"Albal",zh:"Albal 重生點",x:2513,z:3722,src:"ref",mons:["Albal"],note:"參考互動地圖標了 3 個重生點：X 2513 · Z 3722（目前版本的位置）、X 2617 · Z 3837、X 2512 · Z 3967。舊位置 X 2392 · Z 3832 已不再使用。"},
  {id:"nephentes",area:[[3300,3730],[3380,3715],[3425,3770],[3405,3835],[3330,3845],[3290,3790]],kind:"mob",n:"Nephentes",zh:"Mizunari 田野・豬籠草",x:3376,z:3772,mons:["Nephentes"]},
  {id:"swamp",area:[[1010,3000],[1100,2930],[1300,2890],[1450,2870],[1640,2880],[1700,2990],[1700,3180],[1610,3270],[1400,3280],[1200,3270],[1040,3230],[1000,3110]],kind:"mob",n:"Treants / Swamp",zh:"腐臭沼澤・樹人",x:1501,z:3207,mons:["Treant Warrior","Elite Treant","Mini Treant","Woodland Mage"]},
- {id:"colossal",kind:"boss",n:"Guardian Colossal",zh:"巨像守護者（樹人首領）",x:1290,z:3158,mons:["Guardian Colossal"],note:"參考互動地圖另外標了 3 個重生點：沼澤裡的 X 1238 · Z 2972、X 1077 · Z 3252，以及遠在東邊 Tolbana 外的 X 4577 · Z 1612（這一個還沒確認）。"},
  {id:"slimes",area:[[160,2840],[300,2800],[470,2810],[570,2860],[590,3000],[560,3120],[430,3160],[290,3140],[180,3060],[150,2950]],kind:"mob",n:"Slimes",zh:"史萊姆區",x:530,z:2922,mons:["Slime Warrior","Small Slime","Healer Slime","Mage Slime"]},
- {id:"gorbel",kind:"boss",n:"Slime King",zh:"史萊姆王 Gorbel",x:293,z:3201,mons:["Gorbel"]},
  {id:"spiders",area:[[1290,3500],[1400,3480],[1445,3560],[1410,3645],[1310,3655],[1270,3580]],kind:"mob",n:"Spiders / Forest",zh:"蜘蛛森林（Hanaka 附近）",x:1366,z:3618,mons:["Young Spider"],note:"座標只寫「Spiders / Forest」。圖鑑把 Young Spider 列在 Hanaka；Hanaka 的 Scout Raphael 也有燒蜘蛛網的任務。Forest Spider 改標在北邊的 Arakh'Nol（參考互動地圖的怪物區域）。"},
  {id:"arakhnol",area:[[1080,1150],[1250,1130],[1420,1180],[1500,1290],[1545,1370],[1540,1460],[1450,1510],[1340,1600],[1170,1570],[1080,1440],[1050,1280]],kind:"mob",n:"Arakh'Nol",zh:"Arakh'Nol 森林・蜘蛛",x:1239,z:1374,src:"ref",mons:["Forest Spider"],note:"參考互動地圖把 Forest Spider 的出沒區域畫在這裡（約 X 1100–1380, Z 1250–1500），和圖鑑寫的 Arakh'Nol 一致。"},
  {id:"virelune",area:[[1290,1960],[1450,1890],[1610,1890],[1660,1990],[1640,2120],[1500,2160],[1330,2120],[1280,2040]],kind:"mob",n:"Virelune & Sharks",zh:"Virelune 湖・鯊魚",x:1492,z:2013,mons:["Shark Fish"]},
- {id:"nymbrea",kind:"boss",n:"Leviathan (Nymbréa)",zh:"利維坦 Nymbréa",x:1387,z:2043,mons:["Nymbréa"],note:"圖鑑把 Nymbréa 的區域寫成 Aepep's Lair。"},
  {id:"deers",area:[[3900,950],[4100,920],[4260,980],[4300,1150],[4220,1320],[4040,1350],[3920,1250],[3880,1080]],kind:"mob",n:"Deers",zh:"山鹿",x:4102,z:1137,mons:["Mountain Deer"]},
- {id:"icefort",area:[[3900,1900],[4060,1880],[4110,1990],[4080,2110],[3950,2120],[3880,2020]],kind:"boss",n:"Ice Bear / Ice Fortress",zh:"冰熊・冰之要塞",x:4013,z:2007,mons:["Ice Bear","Ice Golem","Ice Spirit"],note:"圖鑑把這三隻的區域寫成 Snow Citadel（雪之城塞），應該就是這座冰之要塞。"},
+ {id:"icefort",area:[[3900,1900],[4060,1880],[4110,1990],[4080,2110],[3950,2120],[3880,2020]],kind:"mob",n:"Ice Fortress",zh:"冰之要塞（Snow Citadel）",x:4013,z:2007,mons:["Ice Golem","Ice Spirit"],note:"圖鑑把這三隻的區域寫成 Snow Citadel（雪之城塞），應該就是這座冰之要塞。"},
  {id:"bandits",area:[[4060,3820],[4220,3790],[4320,3850],[4310,3980],[4170,4020],[4060,3960]],kind:"mob",n:"Bandits",zh:"盜賊",x:4156,z:3889,mons:["Bandit Archer","Bandit Assassin","Sturdy Bandit"],note:"圖鑑把盜賊列在 Geldorak Mine，就在礦坑地下城旁。"},
  {id:"geldorak",tp:"Mine de Geldorak",kind:"dungeon",n:"Geldorak Mine / Dungeon",zh:"Geldorak 礦坑・地下城",x:4267,z:3894,mons:["Devouring Plant","Forest Treant","Evil Forest Treant","Forest Brute","Forest Devouring Plant","Fallen Mauler","Vyrmos, the Royal Thorn","Tornak"],note:"進入地下城需要 Clé de la Forêt（森林之鑰）。"},
  {id:"ika",area:[[3200,4040],[3300,4000],[3400,4040],[3420,4160],[3330,4220],[3220,4180]],kind:"mob",n:"Ika Archipelago",zh:"Ika 群島",x:3271,z:4090,mons:["Ika"],note:"圖鑑把 Ika 列在 Geldorak Mine；這裡用使用者提供的 Ika 群島。"},
@@ -306,6 +302,33 @@ const SPOTS = [
 ].map(s=>({src:"player",mons:[],items:[],...s}));
 
 /* Side quests. need: [itemId, qty, inferred?] ; kill: [monster name(s), count] ; raw = original condition text (FR) */
+/* Boss and mini-boss spawn points [monster, x, z, underground?], from the reference map's Current Data bossSpawns
+   (re-read 2026-11-01; its Illfang entry at 2,2 is a placeholder and is left out: Illfang is in the Kobold Tower). */
+const BOSS_SPAWNS = [
+ ["Pumba",1859,3606],
+ ["Pumba",1677,3581],
+ ["Pumba",1974,3583],
+ ["Pumba",1931,3515],
+ ["Pumba",1987,3636],
+ ["Guardian Colossal",1238,2972],
+ ["Guardian Colossal",1274,3150],
+ ["Guardian Colossal",1077,3252],
+ ["Guardian Colossal",4577,1612],
+ ["Gorbel",302,3202],
+ ["Albal",2617,3837],
+ ["Albal",2512,3967],
+ ["Albal",2513,3722],
+ ["Cursed Nazgul Protector",2829,4247,1],
+ ["Narax the Cursed Skeleton",2722,4332,1],
+ ["Ice Bear",4002,2007],
+ ["Pricilia",1232,1102,1],
+ ["Yula",1102,1227,1],
+ ["Kamilia",987,1247,1],
+ ["Jira",1192,1407,1],
+ ["Vyrmos, the Royal Thorn",4252,3857,1],
+ ["Tornak",4302,3972,1],
+ ["Nymbréa",1412,2142,1]
+];
 const Q = (npc,town,x,z,need,xp,money,bonus,raw,kill) => ({npc,town,x,z,need:need||[],xp,money,bonus,raw,kill});
 const QUESTS = [
  Q("Ayaka","vallhat",479,3014,[["Magic Mycelium",5,1],["Sylvan Sprout",20,1]],434,750,null,"5 mycélium + 20 pousse de sylvestre"),
@@ -362,5 +385,5 @@ const QUESTS = [
  {...Q("Carter Milo","mizunari",3619,3443,[],550,150,null,"Kill highway bandits (15)",[["Bandit Archer","Bandit Assassin","Sturdy Bandit"],15]),title:"The Road Is No Longer Safe",src:"ref",tnote:"原文是「highway bandits」，沒有指定哪一種盜賊，合計 15 隻。"}
 ].map((q,i)=>({...q,id:"q"+i}));
 
-return { MAP, STATUS, ZONES, ZONE_ORDER, M, PHOTO, ITEMS, TOWNS, SPOTS, QUESTS };
+return { BOSS_SPAWNS, MAP, STATUS, ZONES, ZONE_ORDER, M, PHOTO, ITEMS, TOWNS, SPOTS, QUESTS };
 })();
