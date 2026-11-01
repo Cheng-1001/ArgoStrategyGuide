@@ -296,7 +296,7 @@ const SPOTS = [
  {id:"skeld",kind:"dungeon",n:"Skeleton Dungeon",zh:"骷髏地下城（Nazgul 副本）",x:2782,z:4422,src:"ref",mons:["Skeleton Tank","Skeleton Wizard","Narax the Cursed Skeleton","Cursed Nazgul Protector"],note:"入口在詛咒廢墟裡。地下的首領位置（參考互動地圖）：Cursed Nazgul Protector X 2829 · Z 4247、Narax X 2722 · Z 4332。"},
  {id:"kobold",kind:"dungeon",n:"Kobold Tower",zh:"狗頭人之塔（樓層首領）",x:3409,z:972,src:"ref",mons:["Illfang the Kobold Lord","Kobold Sentinel","Kobold Warrior","Kobold Lancer","Kobold Sorcerer","Small Kobold","The Mischievous Archer"],note:"Tolbana 北邊的塔，第一層樓層首領 Illfang 在塔頂。"},
  {id:"guild",tp:"Guilde Marchand",kind:"poi",n:"Merchant Guild",zh:"商人公會",x:4772,z:2422,src:"ref",note:"商人公會總部，在東北邊的山上。座標取自參考互動地圖。"},
- {id:"mine",kind:"poi",n:"艾恩葛朗特礦坑",zh:"Aincrad Mine",x:2396,z:3527,note:"礦坑。"},
+ {id:"mine",kind:"poi",n:"Aincrad Mine",zh:"Aincrad 礦坑",x:2396,z:3527,note:"礦坑。"},
  {id:"wood",kind:"poi",n:"Birch & Oak Wood",zh:"樺木・橡木林",x:2641,z:4333,items:["Oak Log","Birch Log"],note:"伐木點。"},
  {id:"harold",kind:"poi",n:"Harold's Quest (Hidden Well)",zh:"Harrold 的任務・隱藏的井",x:4309,z:3697,src:"est",note:"提供的座標是「4309, 36971」，第二個數字超出地圖範圍（最大約 4980），這裡暫時標在 Z 3697。主線「The Chamber Beneath the Fields」：Harrold 說東邊道路上有一口井，夜裡看得到光。"},
  {id:"og",tp:"Quartier OG",kind:"poi",n:"OG Quarter",zh:"OG Quarter",x:2312,z:3272},
