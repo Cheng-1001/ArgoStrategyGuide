@@ -155,6 +155,11 @@ with sync_playwright() as p:
     pg.locator("#pBody [data-rep]").first.click(); pg.wait_for_timeout(500)
     check(pg.is_visible("#rwin") and "#monsters" in pg.url and pg.locator("#rwSvg g").count() == 3 and pg.locator("#rwSvg polyline").count() == 0,
           "codex: a spawn coordinate opens the floating map window (all 3 Albal spawns), the codex stays")
+    pg.click("#rwX"); pg.wait_for_timeout(150)
+    pg.locator("#pBody [data-rep]").nth(1).click(); pg.wait_for_timeout(500)
+    sel = pg.eval_on_selector_all("#rwSvg g.rwsel text", "e=>e.map(x=>x.textContent)")
+    check(sel == ["2"] and "第 2 點（共 3 點）" in pg.inner_text("#rwTitle")
+          and pg.locator("#pBody .rnum").count() == 3, "the clicked spawn is highlighted and named in the title; the panel numbers match the map")
     pg.click("#rwX"); pg.click("#pClose"); pg.fill("#q", ""); pg.wait_for_timeout(150)
     pg.goto(base + "#quests"); pg.wait_for_timeout(400)
     pg.click('#fQKind .chip[data-v="main"]'); pg.wait_for_timeout(200)
