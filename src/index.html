@@ -413,6 +413,7 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .pill.q-wait{color:var(--muted)} .pill.q-ok{border-color:var(--ok);color:var(--ok)} .pill.q-err{border-color:var(--warn);color:var(--warn)} .pill.q-no{border-color:var(--boss);color:var(--boss)}
 .qlist .lrowx{align-items:center;padding:6px 4px;border-top:1px solid var(--line)} .qlist .lrowx:first-child{border-top:0}
 .qupd{font-size:12px;margin-top:6px}
+.gobtns{display:flex;flex-wrap:wrap;gap:8px}.gobtns .btn{flex:1 1 140px}
 .jmcredit{position:absolute;left:12px;top:44px;z-index:8;background:rgba(10,16,22,.9);color:#e8eef3;font-size:11.5px;padding:6px 10px;border-radius:6px;display:flex;flex-direction:column;gap:2px;min-width:150px;max-width:220px}
 .jmcredit b{font-size:11px;letter-spacing:.06em;opacity:.75;font-weight:600;margin-bottom:1px}
 .jmcredit .r{display:flex;justify-content:space-between;gap:14px}.jmcredit .r .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -891,6 +892,7 @@ function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");
   pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
+  pBody.querySelectorAll("[data-goview]").forEach(b=>b.addEventListener("click",()=>{const [v,t,i]=b.dataset.goview.split("|");goView(v,t,i)}));
   pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);
     // a quest step: the whole route in the floating window, zoomed to this step
     const rt=b.closest(".mqs")&&pBody.querySelector("[data-route]");if(rt&&view!=="map"){const Q=questById(rt.dataset.route);if(Q){openRouteWin((Q.main?mqLabel(Q.q)+"・":"支線・")+Q.title,Q.steps,Q.f);rwFocus(x,z);return}}
@@ -1026,7 +1028,12 @@ Object.values(window.SAO_MAINQ||{}).forEach(L=>L.forEach(q=>{if(!q.rw)return;con
 // ================= shared filter chips =================
 const chipsInto=(el,opts,get,set,cb)=>{el.innerHTML=opts.map(([v,l])=>`<button class="chip" data-v="${v}" aria-pressed="${get()===v}">${l}</button>`).join("");
   el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{set(c.dataset.v);el.querySelectorAll(".chip").forEach(o=>o.setAttribute("aria-pressed",o===c));cb()})};
-function bindGo(root){root.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [t,i]=b.dataset.go.split("|");openP(t,i,"new")})}
+function bindGo(root){root.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [t,i]=b.dataset.go.split("|");openP(t,i,"new")});
+  root.querySelectorAll("[data-goview]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [v,t,i]=b.dataset.goview.split("|");goView(v,t,i)})}
+// switch to another tab and open an entry there (查看圖鑑 / 查看配方); the card is scrolled into view
+let viewPending=null;
+function goView(v,t,i){const fn=()=>{openP(t,i,"new");requestAnimationFrame(()=>{const c=document.querySelector(`.card[data-key="${t}|${CSS.escape(String(i))}"]`);if(c)c.scrollIntoView({block:"center"})})};
+  if(view===v){fn();return}viewPending=fn;go(v)}
 
 // ================= monsters tab =================
 let monType="all";
@@ -1135,6 +1142,9 @@ const RECIPE_BY_EQ={},RECIPE_BY_MAT={};Object.entries(RECIPES).forEach(([npc,r])
 const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
 const matText=mats=>mats.map(([m,q])=>`${ITEMS[m]?slot(m,22):""}<span>${esc(m)} ×${q}</span>`).join("・");
 const costText=c=>c==="Free"||c==="0"?"免費":c==null?"費用未知":esc(c)+" Col";
+// 查看配方 buttons under 製作方式 in the codex panels (one per NPC when several can make it)
+const recGoBtns=rows=>{const b=rows.map(x=>[x,ALLREC.findIndex(y=>y.npc===x.npc&&y.en===x.en)]).filter(([,ri])=>ri>=0);
+  return b.length?`<div class="gobtns">${b.map(([x,ri])=>`<button class="btn" data-goview="recipes|r|${ri}">查看配方${b.length>1?"："+esc(x.npc):""}</button>`).join("")}</div>`:""};
 function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=>{const e=eqById[String(r.oid)];const n=npcByName(r.f,r.npc);
   const ri=r.i!=null?r.i:ALLREC.findIndex(x=>x.npc===r.npc&&x.en===r.en);
   const go=showNpc?(n?"n|"+n.id:""):(e?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid:ri>=0?"r|"+ri:"");const rar=e?e.r:r.r;const tag=go?"button":"div";
@@ -1261,7 +1271,8 @@ function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
   ${e.dmg||rows?`<dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>`:""}
   ${en?`<ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>${isE?"掉落來源、任務需求":"掉落來源、掉落率、任務需求"}</span></span><span class="v">›</span></button></li></ul>`:""}
-  ${other.length?`<h3 class="sec">其他製作地點</h3>${recipeTable(other,true)}`:""}`}
+  ${other.length?`<h3 class="sec">其他製作地點</h3>${recipeTable(other,true)}`:""}
+  <div class="gobtns"><button class="btn" data-goview="${isE?"equip|e":"props|p"}|${e.oid}">查看圖鑑</button></div>`}
 function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找不到這個配方。</div>`;
   const e=eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),rar=e?e.r:r.r,isE=!!eqById[String(r.oid)];
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} 配方・${RC_CAT[r.cat][0]}</div><h2>${esc(r.en)}</h2>${e?`<div class="sub">${esc(e.name)}</div>`:""}</div></div>
@@ -1349,8 +1360,8 @@ function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
   <dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
   ${en?`<h3 class="sec">本站物品資料</h3><ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>掉落來源、任務需求</span></span><span class="v">›</span></button></li></ul>`:""}
-  ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}`:""}
-  <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"配方取自玩家的遊戲截圖。":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}</div>`}
+  ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
+  <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
 // ================= props tab (official catalogue, non-equipment) =================
 const PR=(window.SAO_PROPS||[]).map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
@@ -1379,7 +1390,7 @@ function propDetail(id){const e=prById[id];const en=FR2ID[e.name];
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}${rows?`<dl class="stats">${rows}</dl>`:""}
   ${en?`<h3 class="sec">掉落與任務</h3><ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>掉落來源、掉落率、任務需求</span></span><span class="v">›</span></button></li></ul>`:""}
-  ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}`:""}
+  ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
 // ================= bosses tab =================
@@ -2063,7 +2074,7 @@ function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   const ab=$("aboutBtn");ab.href="#"+hashFor("about",FL);if(view==="about")ab.setAttribute("aria-current","page");else ab.removeAttribute("aria-current");
   if(view==="map")requestAnimationFrame(()=>{syncNpcFly();if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
-  renderCurrent()}
+  renderCurrent();if(viewPending){const fn=viewPending;viewPending=null;requestAnimationFrame(fn)}}
 function renderCurrent(){requestAnimationFrame(fixCols);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="about")renderAbout();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="classes")renderClasses();else renderQuests()}
 window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
