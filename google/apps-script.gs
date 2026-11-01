@@ -19,7 +19,7 @@ const CFG = {
   REPORTS_FILE: 'reports.js',
   IMG_DIR: 'reports',
   TZ: 'Asia/Taipei',
-  TYPES: { '怪物': 'monster', '物品': 'item', '地點': 'place' },
+  TYPES: { '怪物': 'monster', '物品': 'item', '地點': 'place', '配方': 'recipe', '任務追蹤': 'quest', '技能': 'skill' },
   // 試算表欄位名稱（前四個是表單題目，後四個是審核用欄位）
   Q_TYPE: '回報種類', Q_FLOOR: '樓層', Q_NAME: '名稱', Q_SHOT: '截圖',
   C_ID: '回報編號', C_STATUS: '狀態', C_NOTE: '審核備註', C_RESULT: '處理結果',
@@ -33,21 +33,119 @@ const P = () => PropertiesService.getScriptProperties();
 /** 表單「截圖」頁的說明：教玩家用遊戲內建的 F2 截圖。upgradeSheet() 會把現有表單的說明換成這段。 */
 const SHOT_HELP = '用遊戲內建截圖就好：在遊戲裡按 F2（有些筆電要按 Fn+F2）。聊天框會出現「Saved screenshot as ….png」，點檔名可以直接打開。\n檔案在：%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots（按 Win+R，貼上這一行按 Enter 就會打開資料夾）。\n按「新增檔案」→「瀏覽」選檔，按住 Ctrl 可以一次選多張（最多 5 張）。不用裁切。\n拍怪物時不要按 F1，F1 會把等級和座標一起藏起來。';
 
+const FORM_DESC = '回報 SAO Minecraft 的怪物、物品、地點、配方、任務追蹤、技能資料。每筆都要附遊戲截圖，審核員核對後會更新到查詢工具網站。工具裡還沒有的也可以回報。';
+const NAME_HELP = '照遊戲裡的名稱寫，例如怪物 Young Spider、物品 Leg of a Spider、配方填做出來的物品名稱、任務填任務標題、技能填技能名稱。地點可以寫中文。';
+const PLACE_KINDS = ['村鎮', '傳送點', 'NPC', '採集點', '地下城或礦坑', '首領位置', '怪物區', '怪物重生點', '其他'];
+const NPC_KINDS = ['鍊金術士', '收購商', '鑰匙鐵匠', '飾品鐵匠', '伐木工', '武器收購商', '旅行商人', '裝備商人', '工具商人', '飾品商人', '神秘商人', '消耗品商人', '武器鐵匠', '防具鐵匠', '金屬錠鐵匠', '材料工匠', '裝備鐵匠', '隱藏飾品鐵匠', '其他'];
+const NEW_TYPES = ['配方', '任務追蹤', '技能'];
+const NUM = () => FormApp.createTextValidation().requireWholeNumber().setHelpText('只填數字').build();
+
+/** 地點頁在座標後面多的三題。 */
+function addPlaceExtras_(form) {
+  return [
+    form.addListItem().setTitle('地點・在地下嗎').setChoiceValues(['不確定', '地面', '地下（要從入口走下去）']),
+    form.addTextItem().setTitle('地點・傳送選單名稱').setHelpText('種類是「傳送點」才填：遊戲傳送選單上顯示的名稱，照抄原文，例如 Vallée des Loups'),
+    form.addListItem().setTitle('地點・NPC 類別').setHelpText('種類是「NPC」才填').setChoiceValues(NPC_KINDS)
+  ];
+}
+
+/** 配方、任務追蹤、技能三頁。回傳 {種類: 分頁}。 */
+function addNewPages_(form) {
+  const pages = {};
+  pages['配方'] = form.addPageBreakItem().setTitle('配方')
+    .setHelpText('打開 NPC 的製作或購買選單，點到那個物品按 F2 截圖（要看得到材料、數量、費用、時間）。「名稱」填做出來的物品名稱。');
+  form.addTextItem().setTitle('配方・NPC').setRequired(true).setHelpText('製作選單上方的 NPC 名稱，照抄原文，例如 Bandit Accessories');
+  form.addListItem().setTitle('配方・分類').setChoiceValues(['武器', '防具', '飾品', '藥水', '鑰匙', '其他']);
+  form.addParagraphTextItem().setTitle('配方・材料').setRequired(true).setHelpText('一行一個「名稱 數量」，例如：\nShark Shell 8\nBirch String 1');
+  form.addTextItem().setTitle('配方・費用 Col').setHelpText('免費寫 0').setValidation(NUM());
+  form.addTextItem().setTitle('配方・製作時間（秒）').setValidation(NUM());
+  form.addTextItem().setTitle('配方・需求等級').setValidation(NUM());
+  form.addListItem().setTitle('配方・稀有度').setChoiceValues(['不確定', '普通', '稀有', '史詩', '傳說']);
+  form.addParagraphTextItem().setTitle('配方・備註');
+
+  pages['任務追蹤'] = form.addPageBreakItem().setTitle('任務追蹤')
+    .setHelpText('任務追蹤畫面（右側 Tracked quest）或任務選單按 F2 截圖。「名稱」填任務標題，不含前面的數字，例如 The Truth About the Seal。');
+  form.addListItem().setTitle('任務・種類').setRequired(true).setChoiceValues(['主線', '支線']);
+  form.addTextItem().setTitle('任務・編號').setHelpText('追蹤畫面上任務標題前面的數字，例如「24. The Truth About the Seal」就填 24').setValidation(NUM());
+  form.addParagraphTextItem().setTitle('任務・目前步驟').setHelpText('照抄追蹤畫面上的步驟原文，例如 Speak with Catherine to continue the main story');
+  form.addTextItem().setTitle('任務・NPC');
+  form.addTextItem().setTitle('任務・座標 x, z').setHelpText('步驟目標的位置（小地圖座標），例如 2382, 2415');
+  form.addTextItem().setTitle('任務・獎勵');
+  form.addParagraphTextItem().setTitle('任務・備註');
+
+  pages['技能'] = form.addPageBreakItem().setTitle('技能')
+    .setHelpText('打開技能選單，點到那個技能按 F2 截圖。「名稱」填技能名稱原文，例如 Combinaison Brutale。');
+  form.addListItem().setTitle('技能・職業').setRequired(true).setChoiceValues(['Guerrier', 'Assassin', 'Mage', 'Shaman', 'Archer', 'Martial Artist']);
+  form.addListItem().setTitle('技能・主動或被動').setChoiceValues(['不確定', '主動', '被動']);
+  form.addTextItem().setTitle('技能・解鎖等級').setValidation(NUM());
+  form.addParagraphTextItem().setTitle('技能・說明原文').setHelpText('照抄遊戲裡的技能說明');
+  form.addTextItem().setTitle('技能・冷卻或消耗').setHelpText('例如 冷卻 12 秒、魔力 30');
+  form.addParagraphTextItem().setTitle('技能・備註');
+  return pages;
+}
+
+/**
+ * 更新「已經建立好」的表單：加入配方、任務追蹤、技能三頁，地點頁多三題、種類多「傳送點」「怪物區」。
+ * 只要執行一次；重複執行也不會重複新增。舊題目和已收到的回報都不會動。
+ */
+function upgradeForm() {
+  const form = FormApp.openById(P().getProperty('FORM_ID'));
+  const items = () => form.getItems();
+  const byTitle = (t, type) => items().find(i => i.getTitle() === t && (!type || i.getType() === type));
+  const shot = byTitle(CFG.Q_SHOT, FormApp.ItemType.PAGE_BREAK);
+  if (!shot) throw new Error('找不到「截圖」分頁');
+  const typeQ = byTitle(CFG.Q_TYPE, FormApp.ItemType.MULTIPLE_CHOICE);
+  if (!typeQ) throw new Error('找不到「回報種類」題目');
+  form.setDescription(FORM_DESC);
+  const nameQ = byTitle(CFG.Q_NAME, FormApp.ItemType.TEXT);
+  if (nameQ) nameQ.setHelpText(NAME_HELP);
+
+  // 地點頁：種類選項、三個新題目放在座標後面
+  const kind = byTitle('地點・種類', FormApp.ItemType.LIST);
+  if (kind) kind.asListItem().setChoiceValues(PLACE_KINDS);
+  if (!byTitle('地點・在地下嗎')) {
+    const coords = byTitle('地點・座標 x, z');
+    const added = addPlaceExtras_(form);
+    let at = coords ? coords.getIndex() + 1 : shot.getIndex();
+    added.forEach(it => { form.moveItem(it.getIndex(), at); at++; });
+  }
+
+  // 三個新頁面放在截圖頁前面
+  let pages = {};
+  if (!byTitle('配方', FormApp.ItemType.PAGE_BREAK)) {
+    const before = items().length;
+    pages = addNewPages_(form);
+    const created = items().slice(before);   // 新增的題目都在最後面，依序搬到截圖頁前面
+    created.forEach(it => form.moveItem(it.getIndex(), byTitle(CFG.Q_SHOT, FormApp.ItemType.PAGE_BREAK).getIndex()));
+  } else {
+    NEW_TYPES.forEach(n => { pages[n] = byTitle(n, FormApp.ItemType.PAGE_BREAK).asPageBreakItem(); });
+  }
+  const pShot = byTitle(CFG.Q_SHOT, FormApp.ItemType.PAGE_BREAK).asPageBreakItem();
+  NEW_TYPES.forEach(n => pages[n].setGoToPage(pShot));   // 前一頁（地點、配方、任務追蹤）填完 → 截圖頁
+
+  // 回報種類：保留原本三個選項的跳頁，再加三個新的
+  const mc = typeQ.asMultipleChoiceItem();
+  const old = {};
+  mc.getChoices().forEach(c => { old[c.getValue()] = c.getGotoPage(); });
+  const pageOf = n => old[n] || byTitle(n, FormApp.ItemType.PAGE_BREAK).asPageBreakItem();
+  mc.setChoices(['怪物', '物品', '地點'].concat(NEW_TYPES).map(n => mc.createChoice(n, pageOf(n))));
+  Logger.log('表單已更新：回報種類 ' + mc.getChoices().map(c => c.getValue()).join('、') + '；共 ' + items().length + ' 題');
+}
+
 /* ===================== 一次性設定 ===================== */
 
 function setup() {
   if (P().getProperty('SHEET_ID')) throw new Error('已經設定過了。要重新設定，請先到「專案設定 → 指令碼屬性」刪掉 SHEET_ID 和 FORM_ID。');
 
   const form = FormApp.create('Aincrad 查詢工具・資料回報');
-  form.setDescription('回報 SAO Minecraft 的怪物、物品、地點資料。每筆都要附遊戲截圖，審核員核對後會更新到查詢工具網站。工具裡還沒有的也可以回報。')
+  form.setDescription(FORM_DESC)
     .setCollectEmail(false).setAllowResponseEdits(false).setProgressBar(true)
     .setConfirmationMessage('收到了，謝謝！審核員核對截圖後，資料會自動更新到查詢工具網站。');
 
   // 第 1 頁：共同題目
   const floor = form.addTextItem().setTitle(CFG.Q_FLOOR).setHelpText('只填數字，例如 1').setRequired(true)
     .setValidation(FormApp.createTextValidation().requireNumberBetween(1, 100).setHelpText('請填 1 到 100 的數字').build());
-  form.addTextItem().setTitle(CFG.Q_NAME).setRequired(true)
-    .setHelpText('照遊戲裡的英文名稱寫，例如 Young Spider、Leg of a Spider。地點可以寫中文。');
+  form.addTextItem().setTitle(CFG.Q_NAME).setRequired(true).setHelpText(NAME_HELP);
   const type = form.addMultipleChoiceItem().setTitle(CFG.Q_TYPE).setRequired(true);
 
   // 怪物
@@ -75,16 +173,21 @@ function setup() {
 
   // 地點
   const pPlace = form.addPageBreakItem().setTitle('地點');
-  form.addListItem().setTitle('地點・種類').setRequired(true).setChoiceValues(['村鎮', 'NPC', '採集點', '地下城或礦坑', '首領位置', '怪物重生點', '其他']);
+  form.addListItem().setTitle('地點・種類').setRequired(true).setChoiceValues(PLACE_KINDS);
   form.addTextItem().setTitle('地點・座標 x, z').setRequired(true).setHelpText('小地圖上的座標，例如 4309, 3697');
+  addPlaceExtras_(form);
   form.addParagraphTextItem().setTitle('地點・說明');
+
+  // 配方、任務追蹤、技能
+  const extra = addNewPages_(form);
 
   // 截圖（上傳題目要手動加在這一頁，Google 不允許程式建立上傳題目）
   const pShot = form.addPageBreakItem().setTitle('截圖').setHelpText(SHOT_HELP);
 
-  type.setChoices([type.createChoice('怪物', pMon), type.createChoice('物品', pItem), type.createChoice('地點', pPlace)]);
-  pItem.setGoToPage(pShot);   // 怪物頁填完 → 截圖頁
-  pPlace.setGoToPage(pShot);  // 物品頁填完 → 截圖頁
+  type.setChoices([type.createChoice('怪物', pMon), type.createChoice('物品', pItem), type.createChoice('地點', pPlace)]
+    .concat(NEW_TYPES.map(n => type.createChoice(n, extra[n]))));
+  // 每個種類的頁面填完都跳到截圖頁：「下一個分頁」的 setGoToPage 決定前一頁填完要去哪裡
+  [pItem, pPlace].concat(NEW_TYPES.map(n => extra[n])).forEach(pb => pb.setGoToPage(pShot));
 
   // 試算表
   const ss = SpreadsheetApp.create('Aincrad 查詢工具・回報審核');
@@ -397,7 +500,7 @@ function decorateRow_(sh, row) {
   hdr.forEach((h, i) => {
     if (i === 0 || !h || skip.includes(h)) return;
     const v = String(val[i]).trim();
-    if (v && v !== '不確定') lines.push(String(h).replace(/^(怪物|物品|地點)・/, '') + '：' + v);
+    if (v && v !== '不確定') lines.push(String(h).replace(/^(怪物|物品|地點|配方|任務|技能)・/, '') + '：' + v);
   });
   const ids = (get(CFG.Q_SHOT).match(/id=([\w-]+)/g) || []).map(s => s.slice(3));
   lines.push('', '截圖 ' + ids.length + ' 張' + (ids.length > 1 ? '（預覽只顯示第一張，其他請點「截圖」欄的連結）' : ''));

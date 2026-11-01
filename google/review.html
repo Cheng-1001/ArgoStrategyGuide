@@ -71,7 +71,7 @@ kbd{font:11.5px ui-monospace,monospace;border:1px solid var(--line);border-botto
     <div class="chips" id="fType"></div>
     <select id="fFloor" aria-label="樓層"></select>
     <select id="fSort" aria-label="排序">
-      <option value="pri">優先：怪物、物品先，再依時間</option>
+      <option value="pri">優先：怪物、物品、配方、任務追蹤先，再依時間</option>
       <option value="old">最舊優先</option>
       <option value="new">最新優先</option>
     </select>
@@ -81,8 +81,10 @@ kbd{font:11.5px ui-monospace,monospace;border:1px solid var(--line);border-botto
 <main id="main"><div class="empty">載入中…</div></main>
 <script>
 var MAPS={1:{img:"https://cheng-1001.github.io/ArgoStrategyGuide/floor1.jpg",x0:70,size:4980},2:{img:"https://cheng-1001.github.io/ArgoStrategyGuide/floor2.jpg",x0:-1062,size:2124}};
-var ICON={"怪物":"🐾","物品":"🎒","地點":"📍"};
-var PRI={"怪物":0,"物品":0};
+var ICON={"怪物":"🐾","物品":"🎒","地點":"📍","配方":"⚒️","任務追蹤":"📜","技能":"✨"};
+var PRI={"怪物":0,"物品":0,"配方":0,"任務追蹤":0};
+var TYPES=["怪物","物品","地點","配方","任務追蹤","技能"];
+var SITE_TAB={"物品":"items","地點":"map","配方":"recipes","任務追蹤":"quests","技能":"classes"};
 var S={items:[],view:"wait",type:"all",floor:"all",sort:"pri",cur:null,shotIdx:0,busy:false};
 var shotCache={};
 function $(id){return document.getElementById(id)}
@@ -98,13 +100,13 @@ function filtered(){var a=S.items.filter(function(x){return(S.view==="wait"?pend
   a.sort(function(x,y){if(S.view==="done")return t(y)-t(x);if(S.sort==="new")return t(y)-t(x);if(S.sort==="old")return t(x)-t(y);
     var px=PRI[x.type]===0?0:1,py=PRI[y.type]===0?0:1;return px-py||t(x)-t(y)});return a}
 function coords(x){for(var i=0;i<x.fields.length;i++){if(/座標/.test(x.fields[i][0])){var m=x.fields[i][1].match(/(-?\d+)[^\d-]+(-?\d+)/);if(m)return{x:+m[1],z:+m[2]}}}return null}
-function label(h){return String(h).replace(/^(怪物|物品|地點)・/,"")}
+function label(h){return String(h).replace(/^(怪物|物品|地點|配方|任務|技能)・/,"")}
 function render(){
   var base=S.items.filter(function(x){return S.view==="wait"?pending(x):!pending(x)});
   var nWait=S.items.filter(pending).length;
   chips($("fView"),[["wait","待審核 <b>"+nWait+"</b>"],["done","已處理 <b>"+(S.items.length-nWait)+"</b>"]],function(){return S.view},function(v){S.view=v});
   var cnt=function(t){return base.filter(function(x){return x.type===t}).length};
-  chips($("fType"),[["all","全部 <b>"+base.length+"</b>"],["怪物","🐾 怪物 <b>"+cnt("怪物")+"</b>"],["物品","🎒 物品 <b>"+cnt("物品")+"</b>"],["地點","📍 地點 <b>"+cnt("地點")+"</b>"]],function(){return S.type},function(v){S.type=v});
+  chips($("fType"),[["all","全部 <b>"+base.length+"</b>"]].concat(TYPES.map(function(t){return[t,ICON[t]+" "+t+" <b>"+cnt(t)+"</b>"]})),function(){return S.type},function(v){S.type=v});
   var fl=[];S.items.forEach(function(x){if(fl.indexOf(String(x.floor))<0)fl.push(String(x.floor))});fl.sort(function(a,b){return a-b});
   $("fFloor").innerHTML='<option value="all">全部樓層</option>'+fl.map(function(f){return'<option value="'+esc(f)+'"'+(S.floor===f?" selected":"")+'>第 '+esc(f)+' 層</option>'}).join("");
   $("fSort").disabled=S.view==="done";
@@ -129,7 +131,7 @@ function renderCard(a){
     +'<div class="cbody"><div><div class="shot" id="shot">'+(x.shots.length?"截圖載入中…":"這筆回報沒有截圖")+'</div>'
     +(x.shots.length>1?'<div class="thumbs">'+x.shots.map(function(s,k){return'<button type="button" data-k="'+k+'" aria-pressed="'+(k===S.shotIdx)+'">第 '+(k+1)+' 張</button>'}).join("")+'</div>':"")+'</div>'
     +'<div style="display:flex;flex-direction:column;gap:12px;min-width:0"><dl>'+dl+'</dl>'+map
-    +'<a class="muted" href="https://cheng-1001.github.io/ArgoStrategyGuide/#f'+encodeURIComponent(x.floor)+'-'+(x.type==="物品"?"items":x.type==="地點"?"map":"monsters")+'" target="_blank" rel="noopener">在網站上看目前的資料 ↗</a></div></div>'
+    +'<a class="muted" href="https://cheng-1001.github.io/ArgoStrategyGuide/#f'+encodeURIComponent(x.floor)+'-'+(SITE_TAB[x.type]||"monsters")+'" target="_blank" rel="noopener">在網站上看目前的資料 ↗</a></div></div>'
     +(wait?'<div class="act"><textarea id="note" placeholder="審核備註（可不填）。退回時寫原因；如果這隻其實是舊怪物改名，寫「舊名：原本的名字」，例如 舊名：Young Spider"></textarea><button class="btn ok" id="bOk" type="button">✅ 核准</button><button class="btn bad" id="bNo" type="button">❌ 退回</button></div>'
       :'<div class="result"><b>處理結果</b>\n'+esc(x.result||(x.status==="核准"?"等待上線（約 1 分鐘內）":"—"))+(x.note?'\n\n<b>審核備註</b>\n'+esc(x.note):"")+'</div>')
     +'<div class="nav"><button class="btn ghost" id="bPrev" type="button"'+(i<=0?" disabled":"")+'>← 上一筆</button><button class="btn ghost" id="bNext" type="button"'+(i>=a.length-1?" disabled":"")+'>下一筆 →</button><span class="muted">'+(i+1)+' / '+a.length+'</span>'

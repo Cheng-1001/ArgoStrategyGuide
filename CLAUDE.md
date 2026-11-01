@@ -54,6 +54,7 @@
 | `google/SETUP.md` | 給使用者看的表單、審核設定說明 |
 | `tools/export_map.bat` | 使用者電腦上用的：把 JourneyMap 地圖複製到沒有「~」的資料夾 |
 | `tests/smoke.py` | Playwright 冒煙測試 |
+| `tests/report_types_test.py` | 新回報種類（配方、任務追蹤、技能、地點擴充）的整合測試，用假的已核准回報 |
 | `.github/ISSUE_TEMPLATE/` | 舊的 GitHub 回報表單，保留但已不是主要管道 |
 
 ## 修改和發佈流程
@@ -96,14 +97,18 @@
 - 城鎮名稱用英文（`n`），中文放 `zh` 當副標，例如 Town of Beginnings（起始之城），比照 SPOTS 的 Wolf Valley（狼之谷）。
 - **怪物詳細資料**：顯示等級（玩家回報優先；沒有回報時用 M 第 11 欄 `lvShot`，來自使用者的遊戲截圖，標「遊戲截圖」。目前只有 Cursed Nazgul Protector LV 8，牠的兩階段打法寫在說明欄）、圖鑑出沒提示、掉落物、相關任務、回報截圖。
 - **回報對應到哪隻怪物**（`findMon`／`renameMon`，遊戲圖鑑截圖優先於 wiki）：① 審核備註有「舊名：X」→ 對應 X 並改成回報的名字；② 正式三位數圖鑑編號（#018）→ 對應同編號的怪物，名字不同就改名（`014-2` 這種非正式編號不拿來比對）；③ 名稱或舊名（aka）相同；④ 都對不上才新增「玩家回報新增」。改名時舊名進 aka，搜尋、地圖位置、圖鑑提示都照常；回報的圖鑑區域顯示在怪物資料上，正式編號會補上沒有編號的怪物。測試：`tests/report_rules_test.py`。
-- **玩家回報的處理**（`normRep`）：表單送來的 `raw`（題目名稱 → 答案）在網頁端解讀成等級、座標、圖鑑編號、掉落物等欄位。
+- **玩家回報的處理**（`normRep`）：表單送來的 `raw`（題目名稱 → 答案）在網頁端解讀成等級、座標、圖鑑編號、掉落物等欄位。新種類（測試 `tests/report_types_test.py`）：
+  - 配方（`recipe`，題目「配方・NPC／分類／材料／費用 Col／製作時間（秒）／需求等級／稀有度」）：建 `RECIPES` 前合併，同 NPC＋同名物品取代（保留官網 id），否則新增；來源 `rep`，第 10 欄是回報編號。材料名用 `REP_MAT` 對照（同 build_recipes 的 MAT）。
+  - 任務追蹤（`quest`，「任務・種類／編號／目前步驟／NPC／座標／獎勵」）：主線用名稱對 `SAO_MAINQ`，有編號就設 `n`、清掉 `nEst`、記 `nRep`；回報列在任務面板「玩家回報」。支線用標題或 NPC 對。
+  - 技能（`skill`，「技能・職業／主動或被動／解鎖等級／說明原文／冷卻或消耗」）：`CLS[].reps`，職業面板「技能（玩家回報）」。
+  - 地點（「地點・種類」加了 傳送點、怪物區；「地點・在地下嗎／傳送選單名稱／NPC 類別」）：NPC → `SAO_NPCS` 新列（類別中文對 key，對不上用 `other`）；首領位置＋對得上怪物（第 1 層）→ `BOSS_SPAWNS`；其他新增成 SPOTS（`src:"rep"`、`rep` 回報編號、`u` 地下）；地圖上已有同名地點／城鎮的只掛 `reps`（面板顯示回報座標），不移動。
   - 掉落物名稱全部對得上物品資料時，才取代 wiki 的掉落表；對不上就以文字列出。
   - 工具裡沒有的怪物，會自動新增成「玩家回報新增」的怪物，放在 zone `rep`。
 - **回報分頁**：`FORM_PREFILL` 有值時顯示 Google 表單大按鈕，並把目前樓層帶入表單；沒有值時退回舊的 GitHub issue 流程。
 
 ## 玩家回報流程（Google 表單）
 
-1. 玩家填 Google 表單，必須登入 Google 才能上傳截圖。回報種類有怪物、物品、地點，最後一頁是上傳題目「截圖」。
+1. 玩家填 Google 表單，必須登入 Google 才能上傳截圖。回報種類有怪物、物品、地點、配方、任務追蹤、技能（後三種 2026-11-02 加，使用者要執行一次 `upgradeForm`，步驟在 SETUP.md），最後一頁是上傳題目「截圖」。
 2. 回報進到使用者 Google 帳號裡的試算表「Aincrad 查詢工具・回報審核」的「回報」分頁。程式自動填上回報編號 R0001…，狀態設為「待審核」。
 3. 審核員（試算表編輯者，只能改「狀態」和「審核備註」）把狀態改成「核准」。**一個人核准就上線。**
 4. Apps Script 的觸發器會縮小截圖，存到 `reports/R000N.jpg`，把資料加進 `reports.js`，再寫回「處理結果」欄。
@@ -121,9 +126,10 @@
 - [x] 審核畫面（2026-11-01 使用者執行 `upgradeSheet` 確認）：「截圖預覽」用 `newCellImage` 嵌 base64 縮圖可正常顯示（Drive 檔案不公開）、「內容摘要」、原始欄位收起、整列依狀態上色；表單「截圖」頁換成 F2 說明。截圖一律轉 JPEG。注意：Google 會把回應表自動轉成「表格」（Form_Responses），表格標題預設白字，所以標題要明確設深色字。
 - 使用者的 Chrome 會把表單誤判成簡體並自動翻譯（出現「內置」「文件夾」等用詞），原文是繁體，不用改。
 - [ ] **審核網頁**（2026-11-01 做好，等使用者部署，步驟在 SETUP.md「審核網頁」）。設計：獨立專案、以「存取的使用者」執行，所以審核員用自己的 Google 帳號、權限就是試算表編輯權；網頁只改「狀態」「審核備註」（`apiDecide`，已被處理過的不覆蓋，備註前面加「審核：帳號」）。程式改儲存格不會觸發 onEdit，所以主程式的 `processQueue` 每分鐘把「核准且處理結果空白」的列送上線、「退回」的寫結果；`enableReviewQueue` 建這個觸發器，並把表單截圖資料夾以檢視者分享給所有試算表編輯者（審核網頁用審核員自己的權限讀 Drive 縮圖）。佇列預設怪物、物品優先，再依時間。
-- 改了 `apps-script.gs` 或審核網頁後：`node tests/apps_script_test.js`、`python3 tests/review_test.py` 都要 ALL PASSED。
+- 改了 `apps-script.gs` 或審核網頁後：`node tests/apps_script_test.js`（含假表單上的 `upgradeForm` 測試）、`python3 tests/review_test.py` 都要 ALL PASSED。改了回報解讀要跑 `python3 tests/report_types_test.py`、`tests/report_rules_test.py`。
 - [ ] 第 2、3 層預計 **11/4 開放**（遊戲改版）。使用者通知後，重新抓 wiki 和官網資料，比對差異後更新 `data23.js`。第 3 層還沒有地圖。
-- [ ] 物品和地點類型的回報，目前只出現在「已收錄」清單和地圖的回報標記上，還沒整合進物品詳細資料和地圖點位。
+- [ ] 物品類型的回報，目前只出現在「已收錄」清單，還沒整合進物品詳細資料（地點回報 2026-11-02 已整合成地圖點位）。
+- [ ] 等使用者執行 `upgradeForm`（表單加配方、任務追蹤、技能）。
 - 已知限制：
   - 第 1 層只剩 Skeleton、Kazor 沒有座標（參考互動地圖的 Current Data 也沒有 Kazor）；第 2 和第 3 層全部怪物的區域沒有座標。
   - 和參考互動地圖還沒對齊的差異：城鎮座標（起始之城、Castlebrume、Candelia、Virelune 差約 100 格）、多個怪物名稱不同（例如 Black/White Sinister Wolf、Little Slime、Slime Magician、Robust Bandit、Tank Skeleton、Mage Sylvester）、它的 8 個英文支線任務和其他 NPC（飾品鐵匠、鑰匙鐵匠、神秘商人等）。

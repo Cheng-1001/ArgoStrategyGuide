@@ -52,7 +52,7 @@ with sync_playwright() as p:
         if tag == "desk":
             check(order == ["Albal", "Wolf Fangs", "Bull", "Hidden Well", "Urbus Shop"], f"pending queue: monsters/items first, oldest first ({order})")
             check("待審核 5" in pg.inner_text("#fView") and "已處理 1" in pg.inner_text("#fView"), "view chips show pending/done counts")
-            check("怪物 2" in pg.inner_text("#fType") and "地點 2" in pg.inner_text("#fType"), "type chips show counts")
+            check("怪物 2" in pg.inner_text("#fType") and "地點 2" in pg.inner_text("#fType") and "配方 0" in pg.inner_text("#fType") and "技能 0" in pg.inner_text("#fType"), "type chips show counts, new types included")
             pg.wait_for_timeout(200)
             check(pg.locator("#shot img").count() == 1, "screenshot loads into the card")
             check(pg.locator(".map i").count() == 1, "coordinates are marked on the floor map")

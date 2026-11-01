@@ -60,5 +60,58 @@ const rows = () => [HDR,
   check(JSON.stringify(published) === '[3]', 'processQueue publishes approved rows whose result is empty (not R0001, already online)');
   check(sh.g.rows[3][12] === '已退回，不會上線', 'processQueue marks rejected rows');
 }
+
+// ---- upgradeForm on a fake Google Form shaped like the live one (built by the old setup) ----
+{
+  const T = { TEXT: 'TEXT', PARAGRAPH_TEXT: 'PARAGRAPH_TEXT', LIST: 'LIST', MULTIPLE_CHOICE: 'MULTIPLE_CHOICE', PAGE_BREAK: 'PAGE_BREAK', FILE_UPLOAD: 'FILE_UPLOAD' };
+  const list = [];
+  const mk = (type, title) => {
+    const it = { type, title, help: '', choices: [], goto: null };
+    const self = {
+      _it: it, getTitle: () => it.title, getType: () => it.type, getIndex: () => list.indexOf(self),
+      setTitle: v => { it.title = v; return self; }, setHelpText: v => { it.help = v; return self; }, setRequired: () => self,
+      setValidation: () => self, setChoiceValues: v => { it.choices = v.map(x => ({ getValue: () => x, getGotoPage: () => null })); return self; },
+      setGoToPage: pg => { it.goto = pg; return self; }, getChoices: () => it.choices, setChoices: c => { it.choices = c; return self; },
+      createChoice: (v, pg) => ({ getValue: () => v, getGotoPage: () => pg }),
+      asListItem: () => self, asPageBreakItem: () => self, asMultipleChoiceItem: () => self, asTextItem: () => self,
+    };
+    list.push(self); return self;
+  };
+  const form = {
+    getItems: ty => ty ? list.filter(i => i.getType() === ty) : list.slice(), setDescription: () => form,
+    addTextItem: () => mk(T.TEXT, ''), addParagraphTextItem: () => mk(T.PARAGRAPH_TEXT, ''), addListItem: () => mk(T.LIST, ''),
+    addMultipleChoiceItem: () => mk(T.MULTIPLE_CHOICE, ''), addPageBreakItem: () => mk(T.PAGE_BREAK, ''),
+    moveItem: (from, to) => { const [x] = list.splice(from, 1); list.splice(to, 0, x); },
+  };
+  // the live form
+  mk(T.TEXT, '樓層'); mk(T.TEXT, '名稱'); const type = mk(T.MULTIPLE_CHOICE, '回報種類');
+  const pMon = mk(T.PAGE_BREAK, '怪物'); mk(T.TEXT, '怪物・等級');
+  const pItem = mk(T.PAGE_BREAK, '物品'); mk(T.LIST, '物品・怎麼拿到的');
+  const pPlace = mk(T.PAGE_BREAK, '地點'); mk(T.LIST, '地點・種類'); mk(T.TEXT, '地點・座標 x, z'); mk(T.PARAGRAPH_TEXT, '地點・說明');
+  const pShot = mk(T.PAGE_BREAK, '截圖'); mk(T.FILE_UPLOAD, '截圖');
+  type.setChoices([type.createChoice('怪物', pMon), type.createChoice('物品', pItem), type.createChoice('地點', pPlace)]);
+  pItem.setGoToPage(pShot); pPlace.setGoToPage(pShot);
+  const val = { requireWholeNumber: () => val, requireNumberBetween: () => val, setHelpText: () => val, build: () => ({}) };
+  const ctx = { console, Logger: { log: () => {} }, PropertiesService: { getScriptProperties: () => ({ getProperty: () => 'F' }) },
+    FormApp: { ItemType: T, openById: () => form, createTextValidation: () => val } };
+  vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'google', 'apps-script.gs'), 'utf8') + '\nthis.upgradeForm=upgradeForm;', ctx);
+  ctx.upgradeForm();
+  const n1 = list.length;
+  ctx.upgradeForm();
+  check(list.length === n1, 'upgradeForm can run twice without adding anything twice (' + n1 + ' items)');
+  const titles = list.map(i => i.getTitle());
+  const ix = s => titles.indexOf(s);
+  check(ix('地點・座標 x, z') < ix('地點・在地下嗎') && ix('地點・NPC 類別') < ix('地點・說明') && ix('地點・說明') < ix('配方'),
+    'place page: the three new questions sit after the coordinates');
+  check(ix('配方') < ix('任務追蹤') && ix('任務追蹤') < ix('技能') && ix('技能') < ix('截圖') && titles[titles.length - 1] === '截圖' && list[list.length - 1].getType() === T.FILE_UPLOAD,
+    'new pages are placed before the screenshot page; the upload question stays last');
+  check(list.find(i => i.getTitle() === '地點・種類')._it.choices.map(c => c.getValue()).includes('傳送點'), 'place kinds include 傳送點');
+  // walk the form: choose a type, fill its page, the next page must be 截圖
+  const pages = list.filter(i => i.getType() === T.PAGE_BREAK);
+  const nextAfter = pg => { const k = pages.indexOf(pg); const nx = pages[k + 1]; return nx ? (nx._it.goto || nx) : null; };
+  const route = type._it.choices.map(c => [c.getValue(), c.getGotoPage().getTitle(), nextAfter(c.getGotoPage()).getTitle()]);
+  check(route.length === 6 && route.every(([v, pg, nx]) => v === pg && nx === '截圖'), 'every report type opens its own page and then goes to 截圖: ' + route.map(r => r.join('→')).join('，'));
+}
 console.log('\n' + (fails ? fails + ' FAILED' : 'ALL PASSED'));
 process.exit(fails ? 1 : 0);

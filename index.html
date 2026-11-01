@@ -627,7 +627,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <section class="view browse" id="view-classes" hidden>
     <div class="filters">
       <div class="note">職業介紹、角色定位、難度、能力星等、專精和技能名稱取自 <a href="https://saominecraft.wiki.gg/wiki/Classes" target="_blank" rel="noopener">wiki 的 Classes 頁</a>，說明是本站的中文改寫。起始屬性、每級成長和天賦樹數值取自參考互動地圖的配裝計算器資料。可用武器依官方物品圖鑑的「職業限制」統計。</div>
-      <div class="note warn">除了戰士以外，wiki 上各職業的技能圖示都是佔位圖，那份技能清單可能是開服前的預定內容，和遊戲實際不同。有遊戲裡的技能畫面截圖，歡迎用「回報區」回報。</div>
+      <div class="note warn">除了戰士以外，wiki 上各職業的技能圖示都是佔位圖，那份技能清單可能是開服前的預定內容，和遊戲實際不同。有遊戲裡的技能畫面截圖，歡迎到「回報區」選回報種類「技能」回報。</div>
     </div>
     <div class="results"><div class="rhead"><h2>職業</h2><span class="count" id="cCls"></span></div><div class="grid" id="lCls"></div></div>
   </section>
@@ -663,7 +663,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 const S1=window.SAO,S23=window.SAO23;
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const STATUS={...S1.STATUS,quest:{t:"任務座標",c:"s-player",d:"座標寫在 wiki 的任務說明裡。"}};
+const STATUS={...S1.STATUS,quest:{t:"任務座標",c:"s-player",d:"座標寫在 wiki 的任務說明裡。"},rep:{t:"玩家回報",c:"s-player",d:"位置來自核准的玩家回報（附遊戲截圖）。"}};
+// material names used in game / by players -> this site's item names (same table as tools/build_recipes.py MAT)
+const REP_MAT={"Shark Carapace":"Shark Shell","Soul of the Ruins":"Souls of the Ruins","Sylve Shoot":"Sylvan Sprout","Hard Glacial Hide":"Glacial Hardhide","Essence of Gorbel":"Gorbel Essence","Heart of Nymbrea":"Nymbréa's Heart","Fragment of the Bear's Soul":"Bear Soul Fragment","Small Purse":"Small Pouch"};
 
 // ---------- floors ----------
 const FLOORS={
@@ -685,9 +687,35 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
   ["codexNo","region","desc","kind","beh","from","how","notes"].forEach(k=>{const v=g(RAWF[k]);if(v)o[k]=v});
   const dl=g(RAWF.drops).split(/\n+/).map(l=>l.trim()).filter(Boolean);
   if(dl.length){const parsed=dl.map(l=>{const m=l.match(/^(.+?)[\s:：x×]*(\d+(?:\.\d+)?)\s*%?$/);return m?[m[1].trim(),+m[2]]:[l,null]});o.dropsText=dl;if(parsed.every(d=>d[1]!=null))o.drops=parsed}
+  if(r.type==="recipe"){o.npc=g(/配方・NPC/);o.rcat=g(/配方・分類/);o.rar=g(/配方・稀有度/);o.cost=g(/配方・費用/);
+    o.sec=+(g(/配方・製作時間/).match(/\d+/)||[])[0]||null;o.rlv=+(g(/配方・需求等級/).match(/\d+/)||[])[0]||null;delete o.level;
+    o.mats=g(/配方・材料/).split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{const m=l.match(/^(.+?)[\s:：x×*]*(\d+)\s*$/);const n=(m?m[1]:l).trim();return[REP_MAT[n]||n,m?+m[2]:1]});
+    o.summary=[o.npc,o.mats.length?"材料 "+o.mats.length+" 種":"",o.cost!==""?(+o.cost?o.cost+" Col":"免費"):"",o.sec?o.sec+" 秒":""].filter(Boolean).join("・")}
+  if(r.type==="quest"){o.qkind=g(/任務・種類/);o.qno=+(g(/任務・編號/).match(/\d+/)||[])[0]||null;o.step=g(/任務・目前步驟/);o.qnpc=g(/任務・NPC/);o.reward=g(/任務・獎勵/);
+    o.summary=[o.qkind+(o.qno?" #"+o.qno:""),o.step].filter(Boolean).join("・")}
+  if(r.type==="skill"){o.cls=g(/技能・職業/);o.stype=g(/技能・主動或被動/);o.unlock=+(g(/技能・解鎖等級/).match(/\d+/)||[])[0]||null;o.sdesc=g(/技能・說明原文/);o.scost=g(/技能・冷卻或消耗/);delete o.level;
+    o.summary=[o.cls,o.stype,o.unlock?"Lv "+o.unlock+" 解鎖":""].filter(Boolean).join("・")}
+  if(r.type==="place"){o.ug=/地下/.test(g(/地點・在地下嗎/));o.tpName=g(/地點・傳送選單名稱/);o.npcCat=g(/地點・NPC 類別/)}
   if(!o.summary){const t=[];if(o.level!=null)t.push("等級 "+o.level);if(o.codexNo)t.push("圖鑑 "+o.codexNo);if(o.drops)t.push("掉落物 "+o.drops.length+" 種");if(o.how)t.push(o.how+(o.from?"："+o.from:""));if(o.kind&&r.type==="place")t.push(o.kind);o.summary=t.join("・")}
   return o}
 window.SAO_REPORTS=(window.SAO_REPORTS||[]).map(normRep);
+// approved place reports become map points; a name the map already has only gets the report attached
+{const nrm=s=>String(s||"").toLowerCase().trim();
+ const NPC_ZH={"鍊金術士":"alchemist","收購商":"lootBuyers","鑰匙鐵匠":"keyBlacksmith","飾品鐵匠":"accessoriesBlacksmith","伐木工":"lumberjack","武器收購商":"weaponSellers","旅行商人":"travelingMerchants","裝備商人":"equipmentMerchants","工具商人":"toolMerchants","飾品商人":"accessoriesMerchants","神秘商人":"occultMerchants","消耗品商人":"consumablesMerchants","武器鐵匠":"weaponsmith","防具鐵匠":"armorBlacksmith","金屬錠鐵匠":"ingotBlacksmith","材料工匠":"materialsBlacksmith","裝備鐵匠":"equipmentBlacksmith","隱藏飾品鐵匠":"secretAccessoryBlacksmith"};
+ window.SAO_REPORTS.forEach(r=>{if(r.type!=="place"||r.x==null||!FLOORS[r.floor])return;const Fx=FLOORS[r.floor],f=r.floor,k=r.kind||"";
+  if(k==="NPC"){const L=(window.SAO_NPCS=window.SAO_NPCS||{})[f]=(window.SAO_NPCS[f]||[]);if(!L.some(n=>nrm(n[1])===nrm(r.name)))L.push([NPC_ZH[r.npcCat]||"other",r.name,r.x,r.z,"rep",r.ug?1:0,r.id]);return}
+  const m=findMon(Fx,r.name);
+  if(/首領/.test(k)&&m&&f===1){(S1.BOSS_SPAWNS=S1.BOSS_SPAWNS||[]).push([m.name,r.x,r.z,r.ug?1:0,r.id]);return}
+  const same=Fx.spots.find(s=>nrm(s.n)===nrm(r.name))||Fx.towns.find(s=>nrm(s.n)===nrm(r.name));
+  if(same){(same.reps=same.reps||[]).push(r);return}
+  const kind=k==="採集點"?"gather":/地下城/.test(k)?"dungeon":/怪物/.test(k)&&m?"mob":"poi";
+  const tp=k==="傳送點"?(r.tpName||r.name):(r.tpName||null);
+  Fx.spots.push({id:"rp-"+r.id,floor:f,kind,n:r.name,zh:k+(r.ug?"・地下":""),x:r.x,z:r.z,mons:kind==="mob"&&m?[m.name]:[],items:[],src:"rep",tp,u:r.ug,rep:r.id,note:(r.notes||"")})})}
+// approved quest reports: the tracker number replaces an unknown or estimated one; the report is shown on the quest
+window.SAO_REPORTS.forEach(r=>{if(r.type!=="quest")return;const nrm=s=>String(s||"").toLowerCase().replace(/^\s*\d+\s*[.、]\s*/,"").trim();
+  if(/主線/.test(r.qkind||"")){const q=((window.SAO_MAINQ||{})[r.floor]||[]).find(x=>nrm(x.t)===nrm(r.name));if(!q)return;
+    if(r.qno){q.n=r.qno;q.nEst=false;q.nRep=r.id}(q.reps=q.reps||[]).push(r);r.qref="main";return}
+  const q=(FLOORS[r.floor]?.quests||[]).find(x=>nrm(x.title)===nrm(r.name)||(!x.title&&nrm(x.npc)===nrm(r.qnpc)));if(q){(q.reps=q.reps||[]).push(r);r.qref=q.id}});
 // ---- which monster does a report belong to? (codex screenshots win over the wiki) ----
 // 1. reviewer note "舊名：X" -> the monster called X (name or alias), renamed to the reported name
 // 2. official 3-digit codex number (#018) -> the monster with that number, renamed if the name differs
@@ -758,8 +786,8 @@ const KIND={boss:["區域首領","👑"],dungeon:["地下城","⚔️"],mob:["�
 const GT={crop:["作物","🌾"],ore:["礦物","⛏️"],wood:["木材","🪵"]};
 const MAPGRP=[["地點",[["tp","傳送點","🌀"],["land","地標","📍"],["gather","採集點","⛏️"],["npc","NPC","🧑"]]],["戰鬥",[["wboss","世界王","🌋"],["dungeon","地下城","⚔️"],["area","怪物區","🐾"],["boss","區域首領","👑"],["mobs","一般怪物","👾"]]]];
 const MAPCAT=MAPGRP.flatMap(g=>g[1]);
-const NPCCAT={alchemist:["鍊金術士","⚗️"],lumberjack:["伐木工","🪓"],lootBuyers:["收購商","💰"],weaponSellers:["武器收購商","🗡️"],travelingMerchants:["旅行商人","🧳"],equipmentMerchants:["裝備商人","🛡️"],toolMerchants:["工具商人","🔧"],accessoriesMerchants:["飾品商人","💍"],occultMerchants:["神秘商人","🔮"],consumablesMerchants:["消耗品商人","🧪"],weaponsmith:["武器鐵匠","⚔️"],armorBlacksmith:["防具鐵匠","🦺"],ingotBlacksmith:["金屬錠鐵匠","🧱"],keyBlacksmith:["鑰匙鐵匠","🗝️"],materialsBlacksmith:["材料工匠","🪵"],accessoriesBlacksmith:["飾品鐵匠","📿"],equipmentBlacksmith:["裝備鐵匠","🔨"],secretAccessoryBlacksmith:["隱藏飾品鐵匠","✨"]};
-const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:!!r[5]}));
+const NPCCAT={alchemist:["鍊金術士","⚗️"],lumberjack:["伐木工","🪓"],lootBuyers:["收購商","💰"],weaponSellers:["武器收購商","🗡️"],travelingMerchants:["旅行商人","🧳"],equipmentMerchants:["裝備商人","🛡️"],toolMerchants:["工具商人","🔧"],accessoriesMerchants:["飾品商人","💍"],occultMerchants:["神秘商人","🔮"],consumablesMerchants:["消耗品商人","🧪"],weaponsmith:["武器鐵匠","⚔️"],armorBlacksmith:["防具鐵匠","🦺"],ingotBlacksmith:["金屬錠鐵匠","🧱"],keyBlacksmith:["鑰匙鐵匠","🗝️"],materialsBlacksmith:["材料工匠","🪵"],accessoriesBlacksmith:["飾品鐵匠","📿"],equipmentBlacksmith:["裝備鐵匠","🔨"],secretAccessoryBlacksmith:["隱藏飾品鐵匠","✨"],other:["其他 NPC","🧑"]};
+const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:!!r[5],rep:r[6]}));
 const npcById=id=>{const f=+id.slice(1).split("_")[0];return NPCS(f).find(n=>n.id===id)};
 // default (owner, 2026-11-01): teleports, landmarks, monster areas and regular monsters on; the rest off.
 // NPC sub-categories: only alchemist, loot buyers, key smith and accessory smith on (listed first: NPC_TOP).
@@ -914,7 +942,8 @@ function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">�
     :sp.nsrc==="site"?`<dt>名稱</dt><dd>本站命名<br><span class="muted" style="font-size:12.5px">wiki 圖鑑把這裡的怪物歸在「${rz.map(esc).join("、")}」，和附近的地點同名，所以另取名字區分</span></dd>`:"";
   return`<div class="phead"><span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span><div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(sp.n)}</h2><div class="sub">${esc(sp.zh)}</div></div></div>
   <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd>${nameRow}<dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd>${sp.tp?`<dt>傳送</dt><dd><span class="pill tpp">🌀 可傳送</span> 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl>
-  ${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}
+  ${sp.u?`<div class="note">在地下，要從入口走下去。</div>`:""}${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}${sp.rep?`<div class="note">這個地點來自核准的玩家回報（${esc(sp.rep)}）。</div>`:""}
+  ${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${esc(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}
   <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(m.name)}</b><span>${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
   ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(i)}</b><span>${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}`}
@@ -1032,7 +1061,14 @@ $("rwIn").onclick=()=>rwZoom(1.4);$("rwOut").onclick=()=>rwZoom(1/1.4);$("rwFit"
 new ResizeObserver(()=>rwRender()).observe($("rwBody"));
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("rwin").hidden){$("rwin").hidden=true;RW=null}});
 const RECIPES=window.SAO_RECIPES||{};
-const recRow=(npc,f,it)=>({npc,f,oid:it[0],en:it[1],sec:it[2],mats:it[3],cost:it[4],r:it[5],cat:it[6]||"acc",lv:it[7],src:it[8]||"shot"});
+// approved recipe reports replace the same NPC + item (keeping the catalogue link) or add a new row
+{const RC_ZH={"武器":"weapon","防具":"armor","飾品":"acc","藥水":"potion","鑰匙":"key","其他":"other"},RAR_ZH=Object.fromEntries(Object.entries(RAR).map(([k,v])=>[v[0],k]));
+ (window.SAO_REPORTS||[]).forEach(r=>{if(r.type!=="recipe"||!r.npc)return;const Rn=RECIPES[r.npc]=RECIPES[r.npc]||{floor:r.floor,items:[]};
+  const i=Rn.items.findIndex(it=>norm(it[1])===norm(r.name)),o=i>=0?Rn.items[i]:[null,r.name,null,[],null,null,"acc",null];
+  const cost=r.cost===""||r.cost==null?o[4]:(+r.cost?String(+r.cost):"Free");
+  const row=[o[0],o[1],r.sec??o[2],r.mats.length?r.mats:o[3],cost,RAR_ZH[r.rar]||o[5],RC_ZH[r.rcat]||o[6],r.rlv??o[7],"rep",r.id];
+  if(i>=0)Rn.items[i]=row;else Rn.items.push(row)})}
+const recRow=(npc,f,it)=>({npc,f,oid:it[0],en:it[1],sec:it[2],mats:it[3],cost:it[4],r:it[5],cat:it[6]||"acc",lv:it[7],src:it[8]||"shot",rep:it[9]});
 const RECIPE_BY_EQ={},RECIPE_BY_MAT={};Object.entries(RECIPES).forEach(([npc,r])=>r.items.forEach(it=>{const row=recRow(npc,r.floor,it);
   if(it[0]!=null)(RECIPE_BY_EQ[it[0]]=RECIPE_BY_EQ[it[0]]||[]).push(row);it[3].forEach(([m])=>(RECIPE_BY_MAT[m]=RECIPE_BY_MAT[m]||[]).push(row))}));
 const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
@@ -1043,7 +1079,7 @@ function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=
   const go=showNpc?(n?"n|"+n.id:""):(e?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid:ri>=0?"r|"+ri:"");const rar=e?e.r:r.r;const tag=go?"button":"div";
   return`<li><${tag} class="lrow"${go?` data-go="${go}"`:""}>${showNpc?`<span class="th sm" style="--ring:var(--ref)" aria-hidden="true">${NPCCAT[n?n.c:"accessoriesBlacksmith"][1]}</span>`:recIcon(r,34)}
     <span class="t"><b>${showNpc?esc(r.npc):esc(r.en)}</b><span>${showNpc?"":(e?esc(e.name)+"・":"")+(RAR[rar]?RAR[rar][0]+"・":"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}></li>`}).join("")}</ul>`}
-const RC_CAT={weapon:["武器","⚔️"],armor:["防具","🛡️"],acc:["飾品","💍"],potion:["藥水","🧪"],key:["鑰匙","🗝️"]};
+const RC_CAT={weapon:["武器","⚔️"],armor:["防具","🛡️"],acc:["飾品","💍"],potion:["藥水","🧪"],key:["鑰匙","🗝️"],other:["其他","📦"]};
 const ALLREC=Object.entries(RECIPES).flatMap(([npc,r])=>r.items.map(it=>recRow(npc,r.floor,it)));ALLREC.forEach((r,i)=>r.i=i);
 let rcCat="all";
 chipsInto($("fRcCat"),[["all",`全部 <b>${ALLREC.length}</b>`],...Object.entries(RC_CAT).map(([k,[l,ic]])=>[k,`${ic} ${l} <b>${ALLREC.filter(r=>r.cat===k).length}</b>`])],()=>rcCat,v=>rcCat=v,renderRecipes);
@@ -1059,17 +1095,18 @@ function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value
   $("cRc").textContent=`${a.length} / ${ALLREC.length} 筆`;
   $("lRc").innerHTML=a.length?a.map(r=>{const e=eqById[String(r.oid)]||prById[String(r.oid)];const go=recGo(r);const rar=e?e.r:r.r;const tag="button";
     return`<${tag} class="card rcard" data-go="r|${r.i}" data-key="r|${r.i}"><div class="chead">${recIcon(r)}<div class="cname"><b>${esc(r.en)}</b><span>${e?esc(e.name)+"・":""}${esc(r.npc)}</span></div></div>
-    <div class="cmeta">${RAR[rar]?`<span class="pill ${RAR[rar][1]}">${RAR[rar][0]}</span>`:""}<span>${RC_CAT[r.cat][0]}</span>${r.lv?`<span>· 等級 ${r.lv}</span>`:""}<span>· ${costText(r.cost)}</span>${r.sec?`<span>· ${r.sec} 秒</span>`:""}${r.src==="shot"?'<span class="pill rep">遊戲截圖</span>':""}</div>
+    <div class="cmeta">${RAR[rar]?`<span class="pill ${RAR[rar][1]}">${RAR[rar][0]}</span>`:""}<span>${RC_CAT[r.cat][0]}</span>${r.lv?`<span>· 等級 ${r.lv}</span>`:""}<span>· ${costText(r.cost)}</span>${r.sec?`<span>· ${r.sec} 秒</span>`:""}${r.src==="shot"?'<span class="pill rep">遊戲截圖</span>':r.src==="rep"?'<span class="pill rep">玩家回報</span>':""}</div>
     <div class="mats">${r.mats.length?matText(r.mats):'<span class="muted">只要 Col</span>'}</div></${tag}>`}).join(""):`<div class="empty-note">沒有符合條件的配方。</div>`;
   bindGo($("lRc"));markSel()}
 // ================= classes / skills tab =================
 const CLS=window.SAO_CLASSES||[];
+CLS.forEach(c=>{c.reps=(window.SAO_REPORTS||[]).filter(r=>r.type==="skill"&&norm(r.cls)===norm(c.name)).sort((a,b)=>(a.unlock||99)-(b.unlock||99))});
 const clsWeap=c=>Object.entries(c.weapons).map(([k,n])=>`${EQ_CAT[k]||k}（${n}）`).join("、");
 const clsSoon=c=>!Object.keys(c.weapons).length&&!c.base.length;
 function renderClasses(){const s=Sq();const a=CLS.filter(c=>!s||norm([c.name,c.zh,c.role,...c.subs.map(x=>x[0]),...c.skills.map(x=>x[0])].join(" ")).includes(s));
   $("cCls").textContent=`${a.length} 個職業`;
   $("lCls").innerHTML=a.map(c=>`<button class="card" data-go="c|${c.id}" data-key="c|${c.id}"><div class="chead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="cname"><b>${esc(c.name)}</b><span>${esc(c.zh)}・${esc(c.role)}</span></div></div>
-    <div class="cmeta">${stars(c.diff)}${clsSoon(c)?'<span class="pill">可能尚未開放</span>':""}${c.skillsSure?"":'<span class="pill">技能待確認</span>'}</div>
+    <div class="cmeta">${stars(c.diff)}${clsSoon(c)?'<span class="pill">可能尚未開放</span>':""}${c.reps.length?`<span class="pill rep">技能回報 ${c.reps.length}</span>`:c.skillsSure?"":'<span class="pill">技能待確認</span>'}</div>
     <div class="muted" style="font-size:12.5px">${clsWeap(c)?"武器："+clsWeap(c):"官方圖鑑還沒有這個職業的裝備"}</div>
     <div class="muted" style="font-size:12.5px">Lv 30 專精：${c.subs.map(x=>esc(x[0])).join(" / ")}</div></button>`).join("")||`<div class="empty-note">沒有符合的職業。</div>`;
   bindGo($("lCls"));markSel()}
@@ -1086,7 +1123,8 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
   <h3 class="sec">能力傾向 <span class="c">wiki 星等</span></h3>${tbl(c.stars.map(([k,n])=>`<tr><th>${esc(k)}</th><td>${n?bar(n):'<span class="muted">—</span>'}</td></tr>`).join(""),null)}
   ${keys.length?`<h3 class="sec">起始屬性和成長 <span class="c">參考互動地圖</span></h3>${tbl(keys.map(k=>`<tr><th>${esc(k)}</th><td class="mono">${esc(stat(c.base,k)??"—")}</td><td class="mono">${stat(c.perLv,k)!=null?"+"+esc(stat(c.perLv,k)):"—"}</td></tr>`).join(""),["屬性","Lv 1","每升 1 級"])}`:""}
   </div><div>
-  <h3 class="sec">技能 <span class="c">${c.skills.length}</span></h3>
+  ${c.reps.length?`<h3 class="sec">技能（玩家回報） <span class="c">${c.reps.length}</span></h3><ul class="rows">${c.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:${/被動/.test(r.stype)?"var(--ok)":"var(--accent)"}" aria-hidden="true">${r.unlock||"?"}</span><span class="t"><b>${esc(r.name)}</b><span>${r.unlock?"Lv "+r.unlock+"・":""}${esc(r.stype||"")}${r.scost?"・"+esc(r.scost):""}${r.sdesc?"・原文："+esc(r.sdesc):""}</span></span><span class="v">${esc(r.id)}</span></div></li>`).join("")}</ul>`:""}
+  <h3 class="sec">技能${c.reps.length?"（wiki）":""} <span class="c">${c.skills.length}</span></h3>
   ${c.skillsSure?"":`<div class="note warn">wiki 上這些技能的圖示都是佔位圖，清單可能是開服前的預定內容，和遊戲實際不同。</div>`}
   <ul class="rows">${c.skills.map(([n,ty,lv,d])=>`<li><div class="lrow"><span class="th sm" style="--ring:${ty==="被動"?"var(--ok)":"var(--accent)"}" aria-hidden="true">${lv}</span><span class="t"><b>${esc(n)}</b><span>Lv ${lv}・${ty}・${esc(d)}</span></span></div></li>`).join("")}</ul>
   ${c.talents.length?`<h3 class="sec">天賦樹（被動點數） <span class="c">參考互動地圖</span></h3>${tbl(c.talents.map(([n,st,a,u,k])=>`<tr><th>${esc(n)}</th><td>${esc(st)} +${a}${u}／點</td><td class="mono">× ${k}</td></tr>`).join(""),["節點","效果","數量"])}<div class="muted" style="font-size:12px">同名節點合併計算；數值是參考互動地圖配裝計算器的資料，還沒有用遊戲畫面核對。</div>`:""}
@@ -1132,13 +1170,13 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   <dl class="facts"><dt>在哪裡做</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button>`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}</dd>`:""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
   <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span>點了看哪裡拿得到</span></span><span class="v">× ${q}</span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:'<div class="muted">只要 Col，不用材料。</div>'}
   ${go&&!go.startsWith("n|")?`<button class="btn" data-go="${go}">查看${isE?"裝備":"道具"}資料</button>`:""}
-  <div class="note">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":"玩家的遊戲截圖"}。</div>`}
+  <div class="note">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${esc(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const c=NPCCAT[n.c];
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u?"・在地下":""}</div></div></div>
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
-  ${RECIPES[n.n]?`<h3 class="sec">可以製作 <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":"玩家的遊戲截圖"))].join("、")}</div>`
+  ${RECIPES[n.n]?`<h3 class="sec">可以製作 <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
     :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「回報區」回報就能補上。</div>`:""}
-  <div class="note">${n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「回報區」回報地點。</div>`}
+  <div class="note">${n.src==="rep"?`位置和類別來自核准的玩家回報（${esc(n.rep)}）。`:n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「回報區」回報地點。</div>`}
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
   const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv],["獎勵",qq.rw]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")
     :`<dt>NPC</dt><dd>${esc(qq.npc)}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?t.n:"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq)}</dd>`;
@@ -1149,6 +1187,7 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
   ${!Q.main&&(qq.need.length||qq.kill)?`<h3 class="sec">需要的物品和目標</h3><div class="reqs">${reqChips(qq)}</div>`:""}
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
   <div class="note">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。":qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
+  ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${esc(r.id)}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
   ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}`}
 function mqCard(qq,i){const meta=[qq.npc&&("NPC "+qq.npc),qq.lv&&("等級 "+qq.lv),qq.rw&&("獎勵 "+qq.rw)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
   return`<button class="card qcard" data-key="q|${id}" data-go="q|${id}"><div class="mqh"><span class="mqn${qq.n?"":" nonum"}${qq.nEst?" est":""}" title="${qq.n?(qq.nEst?"遊戲任務編號（依順序推算）":"遊戲任務編號"):"遊戲編號未確認"}">${qq.n?qq.n:"·"}</span><div class="mqt"><b>${esc(qq.t)}</b>${meta?`<span>${meta}</span>`:""}</div></div>
@@ -1303,7 +1342,7 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
 
 // ================= report tab =================
 // The form lives here; GitHub only receives it. Field ids match .github/ISSUE_TEMPLATE/*.yml so GitHub can prefill them.
-const RT_ZH={monster:"怪物",item:"物品",place:"地點",other:"其他"};
+const RT_ZH={monster:"怪物",item:"物品",place:"地點",recipe:"配方",quest:"任務",skill:"技能",other:"其他"};
 const RF={
  monster:{f:"1-monster.yml",ic:"👾",t:"怪物",d:"新怪物，或已知怪物的等級、位置、掉落物",name:"怪物名稱（英文，和遊戲裡一樣）",ph:"Woodland Mage",list:"monster",
   fields:[
@@ -1438,14 +1477,17 @@ function buildFormReport(){
           <li><b>截圖</b>：按 <kbd>F2</kbd>（有些筆電要按 <kbd>Fn</kbd>＋<kbd>F2</kbd>）。聊天框會出現「Saved screenshot as 2026-11-01_20.15.03.png」，<b>點那個檔名就會直接打開圖片</b>。</li>
           <li><b>拍怪物</b>：靠近到看得到名字上方的「LV」，畫面上同時要有小地圖座標，再按 F2。<b>不要按 F1</b>，F1 會把介面全部藏起來，等級和座標就拍不到。</li>
           <li><b>拍圖鑑</b>：打開圖鑑（Codex），點到那隻怪物的頁面再按 F2，編號、區域、掉落機率都會拍進去。</li>
+          <li><b>拍配方</b>：打開 NPC 的製作或購買選單，點到那個物品再按 F2，材料、數量、費用、時間都要看得到。</li>
+          <li><b>拍任務追蹤</b>：畫面右側的任務追蹤（Tracked quest）有任務編號和目前步驟，直接按 F2。</li>
+          <li><b>拍技能</b>：打開技能選單，點到那個技能再按 F2，名稱、解鎖等級、說明都要看得到。</li>
           <li><b>檔案位置</b>：<code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots</code><br>按 <kbd>Win</kbd>＋<kbd>R</kbd>，貼上這一行按 Enter，就會直接打開資料夾。檔名就是拍攝時間，最新的排在最後面。</li>
           <li><b>上傳</b>：表單最後一頁按「新增檔案」→「瀏覽」→ 到上面的資料夾選檔。按住 <kbd>Ctrl</kbd> 可以一次選多張（最多 5 張，每張 10 MB 以內，F2 的截圖都在範圍內）。</li>
           <li>不用裁切，也不用另外壓縮，原圖直接上傳。審核通過後網站會自動縮小。</li>
         </ul></details></li>
       <li><b>按上面的按鈕</b>，用 Google 帳號登入（上傳截圖需要登入，不會公開你的帳號）。樓層會先幫你填好。</li>
-      <li><b>填名稱、選回報種類</b>（怪物、物品、地點），下一頁再填該種類的資料。</li>
+      <li><b>填名稱、選回報種類</b>（怪物、物品、地點、配方、任務追蹤、技能），下一頁再填該種類的資料。</li>
       <li><b>最後一頁上傳截圖</b>，按「提交」。</li></ol>
-    <div class="note">審核員核對截圖後按「核准」，網站會在幾分鐘內自動更新。工具裡還沒有的怪物、物品、地點也可以回報。</div>
+    <div class="note">審核員核對截圖後按「核准」，網站會在幾分鐘內自動更新。工具裡還沒有的怪物、物品、地點、配方、技能也可以回報；配方會直接更新配方分頁，任務追蹤會校正主線編號，技能會列在職業資料裡。</div>
   </article>
   <article class="bcard"><h4 class="sec">審核流程</h4>
     <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線。</li></ol>
@@ -1458,7 +1500,7 @@ function renderReport(){
   else{if(!rBuilt)buildReport();if(rFloorShown!==FL){$("rf_floor").value=FL;rFloorShown=FL;if(RF[rType].list==="monster")rDrawFields()}}
   const done=REPS.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(repKey(b)).localeCompare(String(repKey(a))));$("doneC").textContent=done.length+" 則";
   $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?(monById[r.monId]||FLOORS[r.floor]?.M.find(x=>x.name===r.name||(x.aka||[]).includes(r.name))):null;
-      return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span>${repRef(r)}・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}${r.x!=null&&FLOORS[r.floor]?.map?` ・<button class="linkbtn" data-rep="${r.floor}|${r.x}|${r.z}">在地圖上看</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
+      return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span>${repRef(r)}・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}${r.type==="recipe"&&ALLREC.findIndex(x=>x.rep===r.id)>=0?` ・<button class="linkbtn" data-go="r|${ALLREC.findIndex(x=>x.rep===r.id)}">看配方</button>`:""}${r.type==="skill"&&CLS.some(c=>c.reps.includes(r))?` ・<button class="linkbtn" data-go="c|${CLS.find(c=>c.reps.includes(r)).id}">看職業</button>`:""}${r.type==="quest"&&r.qref&&r.qref!=="main"?` ・<button class="linkbtn" data-go="q|${r.qref}">看任務</button>`:""}${r.type==="quest"&&r.qref==="main"?` ・<button class="linkbtn" data-go="q|mq${r.floor}_${MQ(r.floor).findIndex(x=>(x.reps||[]).includes(r))}">看任務</button>`:""}${r.x!=null&&FLOORS[r.floor]?.map?` ・<button class="linkbtn" data-rep="${r.floor}|${r.x}|${r.z}">在地圖上看</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
   bindGo($("doneL"));$("doneL").querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);goMapThen(f,()=>repPin(x,z))});
   if(FORM_PREFILL)return;
   loadPending().then(list=>{const L=$("pendL"),C=$("pendC");if(!L)return;
@@ -1530,7 +1572,7 @@ function renderFilter(){const c=mapCounts();const np=NPCS(FL);const off=MAPCAT.f
 const deskFilter=matchMedia("(min-width:821px)");
 // desktop: shown whenever the NPC category is on, no extra click
 function syncNpcFly(){const w=$("fpNpcWrap"),body=$("fpNpcBody"),fly=$("fpFly");const on=deskFilter.matches&&!w.hidden&&!$("fpanel").hidden;
-  if(on){if(body.parentNode!==fly)fly.appendChild(body);fly.hidden=false;const st=fly.offsetParent.getBoundingClientRect(),r=($("fpCats").querySelector('[data-k="npc"]')||w).getBoundingClientRect();
+  if(on){if(body.parentNode!==fly)fly.appendChild(body);fly.hidden=false;if(!fly.offsetParent)return;const st=fly.offsetParent.getBoundingClientRect(),r=($("fpCats").querySelector('[data-k="npc"]')||w).getBoundingClientRect();
     fly.style.top=Math.max(8,Math.min(r.top-st.top-40,st.height-fly.offsetHeight-60))+"px"}
   else{if(body.parentNode!==w)w.appendChild(body);fly.hidden=true}}
 $("fpNpcWrap").addEventListener("toggle",syncNpcFly);
@@ -1723,7 +1765,7 @@ function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
   document.querySelectorAll("nav.tabs a,#codexTabs a").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
-  if(view==="map")requestAnimationFrame(()=>{if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
+  if(view==="map")requestAnimationFrame(()=>{syncNpcFly();if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
   renderCurrent()}
 function renderCurrent(){requestAnimationFrame(fixCols);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="classes")renderClasses();else renderQuests()}
 window.addEventListener("hashchange",show);
