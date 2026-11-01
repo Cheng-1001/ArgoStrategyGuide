@@ -143,6 +143,19 @@ with sync_playwright() as p:
     check("Combinaison Brutale" in t and "Paladin" in t and "起始屬性" in t and "Physical Might" in t and "佔位圖" not in t,
           "Guerrier panel: skills, specialisations, base stats and talents")
     check(pg.locator("#pBody img").count() == 0, "no class or skill pictures")
+    cols = pg.evaluate("getComputedStyle(document.getElementById('lCls')).gridTemplateColumns.split(' ').length")
+    pw = pg.locator("#panel").bounding_box()["width"]
+    two = pg.evaluate("getComputedStyle(document.querySelector('#pBody .cls2')).gridTemplateColumns.split(' ').length")
+    check(cols == 3 and pw > 700 and two == 2, f"classes: 3 columns ({cols}), wide panel ({pw:.0f}px) split in two ({two})")
+    pg.click("#pBody [data-eqcls]"); pg.wait_for_timeout(300)
+    n = pg.locator("#cwBody .card").count()
+    check(pg.is_visible("#cwin") and n > 50 and "#equip" not in pg.url, f"equipment window opens over the classes tab ({n} items)")
+    pg.locator("#cwBody .card").first.click(); pg.wait_for_timeout(300)
+    check("官方圖鑑 #" in pg.inner_text("#cwBody") and "Guerrier" in pg.inner_text("#pCrumb"), "item detail opens inside the window; the class panel stays")
+    pg.click("#cwBack"); pg.wait_for_timeout(200)
+    check(pg.locator("#cwBody .card").count() == n, "back to the equipment list")
+    pg.click("#cwX"); pg.wait_for_timeout(150)
+    pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.locator("#lCls .card", has_text="Martial Artist").click(); pg.wait_for_timeout(300)
     check("可能還沒開放" in pg.inner_text("#pBody") and "佔位圖" in pg.inner_text("#pBody"), "Martial Artist flagged as possibly unreleased, skills unconfirmed")
     pg.click("#pClose"); pg.wait_for_timeout(150)
@@ -220,6 +233,12 @@ with sync_playwright() as p:
           "desktop: NPC sub-categories open in a flyout to the right of the filter panel")
     pg.click("#fpFlyX"); pg.wait_for_timeout(150)
     check(pg.is_hidden("#fpFly"), "flyout closes")
+    pg.wait_for_timeout(300)
+    ov = pg.evaluate("""(()=>{const L=[...document.querySelectorAll('.town .tname,.zone.mobarea .zlabel')].filter(e=>e.offsetParent&&getComputedStyle(e).visibility!=='hidden').map(e=>[e.textContent.trim(),e.getBoundingClientRect(),!!e.closest('.town.tp')]);
+      const P=[...document.querySelectorAll('.town .pin')].map(e=>e.getBoundingClientRect());const bad=[];
+      for(const [n,r,tp] of L){if(tp)continue;for(const q of P){if(r.left<q.right-1&&r.right>q.left+1&&r.top<q.bottom-1&&r.bottom>q.top+1)bad.push(n)}}
+      for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const a=L[i][1],b=L[j][1];if(a.left<b.right-1&&a.right>b.left+1&&a.top<b.bottom-1&&a.bottom>b.top+1)bad.push(L[i][0]+'/'+L[j][0])}return bad})()""")
+    check(not ov, f"map names do not cover each other; only teleport names may sit over a pin ({ov[:4]})")
     names = pg.eval_on_selector_all(".zone.mobarea .zlabel", "e=>e.map(x=>x.textContent.trim())")
     check("Putrid Swamp" in names and "Boar Zone" in names and "Treants / Swamp" not in names, "monster areas use the wiki region names where one exists")
     st = pg.evaluate("""(()=>{const d=document.querySelector('.town.dungeon[data-s="fallen"]');const z=document.querySelector('.zone.mobarea .zlabel');

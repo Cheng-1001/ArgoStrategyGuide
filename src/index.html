@@ -122,6 +122,14 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .routebar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.routebar .iconbtn{height:26px;min-width:26px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;border:0}
 .rwin{position:fixed;z-index:40;left:max(10px,calc(50% - 420px));top:calc(var(--head-h) + 30px);width:min(720px,calc(100vw - 20px));height:min(560px,calc(100vh - var(--head-h) - 40px));min-width:280px;min-height:240px;max-width:calc(100vw - 10px);max-height:calc(100vh - 10px);resize:both;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.35);display:flex;flex-direction:column}
 .rwin[hidden]{display:none}
+.cwbody{flex:1;overflow:auto;padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
+.cwbody .chips{margin-bottom:2px}.cwbody .grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
+/* classes: 3 columns, wide two-column panel */
+@media (min-width:821px){#lCls{grid-template-columns:repeat(3,minmax(0,1fr))}body.panel-xwide #panel{width:min(880px,calc(100vw - 40px))}}
+@media (min-width:1800px){body.panel-open.panel-xwide .results{padding-right:900px}}
+@media (min-width:1180px) and (max-width:1799px){body.panel-open.panel-xwide .results{padding-right:0}}
+.cls2{display:grid;gap:4px 24px}@media (min-width:821px){.cls2{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}}
+.cls2>div{min-width:0}
 .rwhead{display:flex;gap:8px;align-items:center;padding:6px 8px 6px 14px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
 .rwhead b{font-family:var(--f-display);font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .rwhead .muted{font-size:11.5px;white-space:nowrap}.rwhead .iconbtn{cursor:pointer}
@@ -129,7 +137,8 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 @media (max-width:820px){.rwhead .muted{display:none}}
 .areas path{stroke-width:var(--areaw,1.8)}
 .bsp{position:absolute;transform:translate(-50%,-50%) scale(calc(var(--inv) * var(--tk,1)));z-index:4;width:50px;height:50px;border-radius:50%;border:3.5px solid var(--boss);background:radial-gradient(circle at 35% 30%,#fff,#dfe6ec);display:grid;place-items:center;font-size:15px;padding:0;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.55);overflow:hidden}
-.bsp.boss{box-shadow:0 0 0 3px rgba(217,112,26,.35),0 2px 7px rgba(0,0,0,.6)}.bsp.mini{width:44px;height:44px;border-color:var(--mini);box-shadow:0 0 0 3px rgba(123,85,200,.3),0 2px 6px rgba(0,0,0,.55)}.bsp{overflow:visible}.bsp img.face,.bsp>span{border-radius:50%;overflow:hidden}.bsp.ug::after{content:"⤓";position:absolute;left:-5px;bottom:-5px;width:18px;height:18px;border-radius:50%;background:#2a2f36;color:#fff;font:700 12px/18px system-ui;text-align:center;border:2px solid #fff}.bsp img.face{width:100%;height:100%;object-fit:cover}
+.bsp.boss{box-shadow:0 0 0 3px rgba(217,112,26,.35),0 2px 7px rgba(0,0,0,.6)}.bsp.mini{width:44px;height:44px;border-color:var(--mini);box-shadow:0 0 0 3px rgba(123,85,200,.3),0 2px 6px rgba(0,0,0,.55)}.bsp{overflow:visible}.bsp img.face,.bsp>span{border-radius:50%;overflow:hidden}.fpleg .ugb{display:inline-grid;place-items:center;width:16px;height:16px;border-radius:50%;background:#2a2f36;color:#fff;font-size:11px;border:1.5px solid #fff;vertical-align:-3px}
+.bsp.ug::after{content:"⤓";position:absolute;left:-5px;bottom:-5px;width:18px;height:18px;border-radius:50%;background:#2a2f36;color:#fff;font:700 12px/18px system-ui;text-align:center;border:2px solid #fff}.bsp img.face{width:100%;height:100%;object-fit:cover}
 .areas{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;z-index:1;overflow:visible}
 .route{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;z-index:5;overflow:visible}
 .rstep{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:7;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:#e8a23a;color:#1b1206;border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.35);font:700 11.5px var(--f-mono);display:grid;place-items:center;white-space:nowrap;pointer-events:none}
@@ -169,17 +178,18 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .stage.dragging{cursor:grabbing} .stage.edit{cursor:crosshair}
 .world{position:absolute;left:0;top:0;width:1000px;height:1000px;transform-origin:0 0;--inv:1}
 .world img.map{width:1000px;height:1000px;max-width:none;display:block;user-select:none;-webkit-user-drag:none;pointer-events:none}
-.town{position:absolute;transform:translate(-50%,-8px) scale(var(--inv));transform-origin:50% 8px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;cursor:pointer;z-index:2}
+.town{position:absolute;transform:translate(-50%,-8px) scale(var(--inv));transform-origin:50% 8px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;cursor:pointer;z-index:5}
 .town .pin{box-sizing:border-box;width:16px;height:16px;transform:rotate(45deg) scale(.82);background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.6)}
 /* teleport points look like the in-game teleport map: white name box with a pointer, orange dot on the coordinate */
-.town.tp{z-index:4;flex-direction:column-reverse;gap:3px;transform:translate(-50%,calc(-100% + 8px)) scale(var(--inv));transform-origin:50% calc(100% - 8px)}
+.town.tp{z-index:5;flex-direction:column-reverse;gap:3px;transform:translate(-50%,calc(-100% + 8px)) scale(var(--inv));transform-origin:50% calc(100% - 8px)}
 .town.tp .pin{background:#f3a51c;transform:none;border-radius:50%;border:2.5px solid #fff;box-shadow:0 0 0 1px rgba(60,40,0,.55),0 1px 4px rgba(0,0,0,.55)}
 .town.tp .tname{position:relative;background:#fff;color:#2a2e33;text-shadow:none;font-size:12.5px;font-weight:700;letter-spacing:.02em;padding:2px 9px 3px;border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,.45)}
 .town.tp .tname::after{content:"";position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-bottom:0;border-top-color:#fff}
 /* dungeons: dark-purple label with a pointer above a crossed-swords pin on the entrance */
-.town.dungeon{z-index:4;flex-direction:column-reverse;gap:3px;transform:translate(-50%,calc(-100% + 10px)) scale(var(--inv));transform-origin:50% calc(100% - 10px)}
+.town.dungeon{z-index:5;flex-direction:column-reverse;gap:3px;transform:translate(-50%,calc(-100% + 10px)) scale(var(--inv));transform-origin:50% calc(100% - 10px)}
 .town.dungeon .pin{width:20px;height:20px;transform:none;border-radius:5px;background:#5b2e91;display:grid;place-items:center;color:#fff;font-size:12px;line-height:1;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 1px 4px rgba(0,0,0,.55)}
 .town.dungeon .tname{position:relative;background:#3b1d63;color:#fff;text-shadow:none;font-size:12.5px;font-weight:700;padding:2px 9px 3px;border-radius:2px;box-shadow:0 1px 4px rgba(0,0,0,.45)}
+.town.dungeon .tname.moved::after{display:none}
 .town.dungeon .tname::after{content:"";position:absolute;left:50%;bottom:-5px;margin-left:-5px;border:5px solid transparent;border-bottom:0;border-top-color:#3b1d63}
 /* monster areas: no label box, just text over the outline (teleport areas keep their own marker) */
 .zone.mobarea .zlabel,.zone.mobarea.poi .zlabel{background:none;border-color:transparent;color:#fff;text-shadow:0 1px 2px #000,0 0 5px rgba(0,0,0,.95),0 0 9px rgba(0,0,0,.6)}
@@ -505,6 +515,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
         <div class="fpcats" id="fpCats"></div>
         <details class="fpsub" id="fpNpcWrap"><summary class="fpsubh"><b>NPC 類別</b></summary><div id="fpNpcBody"><div class="fpsubh"><button class="linkbtn" id="fpNpcAll">全選</button><button class="linkbtn" id="fpNpcNone">全不選</button></div><div class="fpnpc" id="fpNpc"></div></div></details>
         <div class="fpleg">怪物縮圖右下角的點：<span><i class="beh-A"></i>主動攻擊</span><span><i class="beh-N"></i>中立</span><span><i class="beh-P"></i>被動</span></div>
+        <div class="fpleg"><span><b class="ugb">⤓</b>首領頭像左下角：重生點在地下，要從地下城或洞窟入口走下去</span></div>
       </div>
       <div class="fpfly" id="fpFly" hidden role="group" aria-label="NPC 類別"><div class="fphead"><b>NPC 類別</b><button class="iconbtn" id="fpFlyX" aria-label="收起 NPC 類別">✕</button></div></div>
       <div class="editbar" id="editbar" hidden></div>
@@ -618,6 +629,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <section class="view bossview" id="view-report" hidden><div class="bwrap" id="rWrap"></div></section>
 </div>
 
+<div class="rwin" id="cwin" hidden role="dialog" aria-label="職業可用的裝備"><div class="rwhead" id="cwHead"><b id="cwTitle"></b><span class="muted">拖曳標題移動・拉右下角調整大小</span><button class="iconbtn" id="cwX" aria-label="關閉">✕</button></div><div class="cwbody" id="cwBody"></div></div>
 <div class="rwin" id="rwin" hidden role="dialog" aria-label="任務路線"><div class="rwhead" id="rwHead"><b id="rwTitle"></b><span class="muted">滾輪縮放・拖曳移動・拉右下角調整大小</span><button class="iconbtn" id="rwIn" aria-label="放大">＋</button><button class="iconbtn" id="rwOut" aria-label="縮小">－</button><button class="iconbtn" id="rwFit" aria-label="顯示整條路線">⤢</button><button class="iconbtn" id="rwX" aria-label="關閉">✕</button></div><div class="rwbody" id="rwBody"><svg id="rwSvg" role="img" aria-label="任務路線圖"></svg></div></div>
 <aside id="panel" hidden aria-live="polite">
   <div class="ptop"><button class="iconbtn" id="pBack" aria-label="上一頁" hidden>←</button><span class="crumb" id="pCrumb"></span><button class="iconbtn" id="pClose" aria-label="關閉">✕</button></div>
@@ -790,12 +802,12 @@ function openP(type,id,mode){if(mode==="push"&&!panel.hidden&&stack.length)stack
 let pending=null;
 function goMapThen(f,fn){if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
 const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="x"?"版權聲明":s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
-function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");
+function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");
   pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="x"?legalDetail():cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
   pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);goMapThen(f,()=>repPin(x,z))}));
-  pBody.querySelectorAll("[data-eqcls]").forEach(b=>b.addEventListener("click",()=>{eqClass=b.dataset.eqcls;$("fEqClass").querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===eqClass));go("equip")}));
+  pBody.querySelectorAll("[data-eqcls]").forEach(b=>b.addEventListener("click",()=>openClassEquip(b.dataset.eqcls)));
   pBody.querySelectorAll("[data-imap]").forEach(b=>b.addEventListener("click",()=>{const im=itemMap(b.dataset.imap);openRouteWin(b.dataset.imap+"・取得地點",im.steps,im.f,true)}));
   pBody.querySelectorAll("[data-route]").forEach(b=>b.addEventListener("click",()=>{const Q=questById(b.dataset.route);if(Q)openRouteWin((Q.main?mqLabel(Q.q)+"・":"支線・")+Q.title,Q.steps,Q.f)}));
   pBody.querySelectorAll("[data-spot]").forEach(b=>b.addEventListener("click",()=>{const sp=spotById(b.dataset.spot);goMapThen(sp.floor,()=>focusSpot(sp.id))}));
@@ -1054,14 +1066,39 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
   <p class="lore" style="font-style:normal">${esc(c.about)}</p>
   ${clsSoon(c)?`<div class="note warn">官方物品圖鑑沒有這個職業的裝備，參考互動地圖也沒有它的屬性資料，可能還沒開放。下面只有 wiki 的介紹。</div>`:""}
   <dl class="facts"><dt>難度</dt><dd>${stars(c.diff)}</dd><dt>可用武器</dt><dd>${clsWeap(c)||'<span class="muted">官方圖鑑沒有資料</span>'}</dd><dt>Lv 30 專精</dt><dd>${c.subs.map(x=>`<b>${esc(x[0])}</b>：${esc(x[1])}`).join("<br>")}<br><span class="muted" style="font-size:12px">wiki 註明專精還在準備中。</span></dd></dl>
-  ${Object.keys(c.weapons).length&&CLASS_ZH[c.id]?`<button class="btn" data-eqcls="${c.id}">查看這個職業可用的裝備</button>`:""}
+  ${Object.keys(c.weapons).length&&CLASS_ZH[c.id]?`<button class="btn" data-eqcls="${c.id}">查看這個職業可用的裝備（另開視窗）</button>`:""}
+  <div class="cls2"><div>
   <h3 class="sec">能力傾向 <span class="c">wiki 星等</span></h3>${tbl(c.stars.map(([k,n])=>`<tr><th>${esc(k)}</th><td>${n?bar(n):'<span class="muted">—</span>'}</td></tr>`).join(""),null)}
   ${keys.length?`<h3 class="sec">起始屬性和成長 <span class="c">參考互動地圖</span></h3>${tbl(keys.map(k=>`<tr><th>${esc(k)}</th><td class="mono">${esc(stat(c.base,k)??"—")}</td><td class="mono">${stat(c.perLv,k)!=null?"+"+esc(stat(c.perLv,k)):"—"}</td></tr>`).join(""),["屬性","Lv 1","每升 1 級"])}`:""}
+  </div><div>
   <h3 class="sec">技能 <span class="c">${c.skills.length}</span></h3>
   ${c.skillsSure?"":`<div class="note warn">wiki 上這些技能的圖示都是佔位圖，清單可能是開服前的預定內容，和遊戲實際不同。</div>`}
   <ul class="rows">${c.skills.map(([n,ty,lv,d])=>`<li><div class="lrow"><span class="th sm" style="--ring:${ty==="被動"?"var(--ok)":"var(--accent)"}" aria-hidden="true">${lv}</span><span class="t"><b>${esc(n)}</b><span>Lv ${lv}・${ty}・${esc(d)}</span></span></div></li>`).join("")}</ul>
   ${c.talents.length?`<h3 class="sec">天賦樹（被動點數） <span class="c">參考互動地圖</span></h3>${tbl(c.talents.map(([n,st,a,u,k])=>`<tr><th>${esc(n)}</th><td>${esc(st)} +${a}${u}／點</td><td class="mono">× ${k}</td></tr>`).join(""),["節點","效果","數量"])}<div class="muted" style="font-size:12px">同名節點合併計算；數值是參考互動地圖配裝計算器的資料，還沒有用遊戲畫面核對。</div>`:""}
+  </div></div>
   <div class="note">介紹和技能名稱來自 wiki（<a href="https://saominecraft.wiki.gg/wiki/${encodeURIComponent(c.name.replace(/ /g,"_"))}" target="_blank" rel="noopener">${esc(c.name)} 頁</a>），說明是本站改寫；本站不使用職業或技能的圖片。</div>`}
+// floating window: equipment a class can use (like the quest route window)
+let CW=null;
+function openClassEquip(cid,part){const c=CLS.find(x=>x.id===cid);if(!c)return;CW={cid,part:part||"all",view};
+  const all=EQ.filter(e=>eqClasses(e).includes(cid)).sort((x,y)=>x.lv-y.lv||x.name.localeCompare(y.name));
+  const cats=[...new Set(all.map(e=>e.cat))];const a=CW.part==="all"?all:all.filter(e=>e.cat===CW.part);
+  $("cwTitle").textContent=`${c.name}（${c.zh}）可用的裝備・${a.length} 件`;
+  $("cwBody").innerHTML=`<div class="chips">${[["all","全部"],...cats.map(k=>[k,EQ_CAT[k]||k])].map(([v,l])=>`<button class="chip" data-cwp="${v}" aria-pressed="${CW.part===v}">${l}</button>`).join("")}</div>
+    <div class="muted" style="font-size:12px">只列官方物品圖鑑標了「職業限制」是 ${esc(CLASS_ZH[cid]||c.zh)} 的武器和防具；沒有職業限制的飾品不列。點裝備在右側看詳細資料。</div>
+    <div class="grid">${a.map(e=>`<button class="card" data-key="e|${e.oid}" data-cwe="${e.oid}"><div class="chead">${eslot(e,40)}<div class="cname"><b>${esc(e.name)}</b><span>${esc(eqCat(e))}</span></div></div>
+    <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span>等級 ${e.lv}</span></div></button>`).join("")}</div>`;
+  $("cwBody").querySelectorAll("[data-cwp]").forEach(b=>b.onclick=()=>openClassEquip(cid,b.dataset.cwp));
+  $("cwBody").querySelectorAll("[data-cwe]").forEach(b=>b.onclick=()=>showCWItem(b.dataset.cwe));
+  $("cwin").hidden=false;$("cwBody").scrollTop=CW.scroll||0}
+// item detail inside the floating window: the right panel (the class) stays as it is
+function showCWItem(oid){CW.scroll=$("cwBody").scrollTop;$("cwBody").innerHTML=`<button class="linkbtn" id="cwBack">← 回到裝備清單</button>${equipDetail(oid)}`;
+  $("cwBack").onclick=()=>openClassEquip(CW.cid,CW.part);bindGo($("cwBody"));$("cwBody").scrollTop=0}
+const closeCW=()=>{$("cwin").hidden=true;CW=null};
+$("cwX").onclick=closeCW;
+{let d=null;const w=$("cwin"),h=$("cwHead");h.addEventListener("pointerdown",e=>{if(e.target.closest("button"))return;const r=w.getBoundingClientRect();d={x:e.clientX-r.left,y:e.clientY-r.top};h.setPointerCapture(e.pointerId)});
+ h.addEventListener("pointermove",e=>{if(!d)return;w.style.left=Math.max(0,Math.min(innerWidth-80,e.clientX-d.x))+"px";w.style.top=Math.max(0,Math.min(innerHeight-40,e.clientY-d.y))+"px"});
+ h.addEventListener("pointerup",()=>d=null)}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("cwin").hidden)closeCW()});
 // copyright / non-affiliation notice (owner chose option C on 2026-11-01: keep the content, state the rights and offer removal)
 function legalDetail(){const iss="https://github.com/Cheng-1001/ArgoStrategyGuide/issues";
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">©</span><div class="ttl"><h2>版權聲明</h2><div class="sub">非官方玩家攻略</div></div></div>
@@ -1437,7 +1474,7 @@ function updateTiles(){tileRaf=0;const m=MP();if(!useTiles()){if(TL.size){tilesE
   clearTimeout(tileGC);tileGC=setTimeout(()=>{TL.forEach((im,k)=>{if(!want.has(k)&&!k.startsWith("0/")){im.remove();TL.delete(k)}})},700)}
 const schedTiles=()=>{if(!tileRaf)tileRaf=requestAnimationFrame(updateTiles)};
 window.addEventListener("resize",schedTiles);
-function apply(){schedTiles();world.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;const zr=fitSc()/sc;const k=Math.max(.8,Math.min(1,fitSc()/.75)),screen=k*Math.max(.92,Math.min(1.08,1.08*Math.pow(zr,.12)));world.style.setProperty("--inv",screen/sc);world.style.setProperty("--tk",Math.max(.62,Math.min(1,.62*Math.pow(1/zr,.23))).toFixed(3));world.style.setProperty("--areaw",Math.max(.7,Math.min(2,2*Math.pow(zr,.5))).toFixed(2));world.classList.toggle("compact",sc<fitSc()*1.9)}
+function apply(){schedTiles();declutterSoon();world.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;const zr=fitSc()/sc;const k=Math.max(.8,Math.min(1,fitSc()/.75)),screen=k*Math.max(.92,Math.min(1.08,1.08*Math.pow(zr,.12)));world.style.setProperty("--inv",screen/sc);world.style.setProperty("--tk",Math.max(.62,Math.min(1,.62*Math.pow(1/zr,.23))).toFixed(3));world.style.setProperty("--areaw",Math.max(.7,Math.min(2,2*Math.pow(zr,.5))).toFixed(2));world.classList.toggle("compact",sc<fitSc()*1.9)}
 function fit(){const r=stage.getBoundingClientRect();if(!r.width)return;sc=fitSc();tx=(r.width-1000*sc)/2;ty=(r.height-1000*sc)/2;apply();fitted=true}
 function zoomAt(f,cx,cy){const ns=Math.max(fitSc()*.8,Math.min(fitSc()*10,sc*f));const k=ns/sc;tx=cx-(cx-tx)*k;ty=cy-(cy-ty)*k;sc=ns;apply()}
 function centerOn(bx,bz,minZoom){if(!MP())return;if(!fitted)fit();const r=stage.getBoundingClientRect();sc=Math.max(sc,fitSc()*(minZoom||2.2));
@@ -1542,7 +1579,26 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
   NPCS(FL).forEach(n=>{if(!npcVisible(n))return;const d=document.createElement("div");d.className="zone poi shop npc";d.dataset.n=n.id;d.style.left=toPxX(n.x)+"px";d.style.top=toPxZ(n.z)+"px";
     const lb=document.createElement("button");lb.className="zlabel";lb.textContent=NPCCAT[n.c][1];lb.title=`${NPCCAT[n.c][0]}：${n.n}${n.u?"（地下）":""}`;lb.setAttribute("aria-label",lb.title);
     lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("n",n.id,"new")});d.appendChild(lb);world.appendChild(d)});
-  drawRoute();filterMap();markSel()}
+  drawRoute();filterMap();markSel();requestAnimationFrame(declutter)}
+// label collision: teleport / dungeon names stay put; other names try nearby free spots (screen px), monster-area
+// names that find none are hidden at this zoom. Re-run after rendering and when zooming settles.
+let dcT=0;const declutterSoon=()=>{clearTimeout(dcT);dcT=setTimeout(declutter,140)};
+function declutter(){if(view!=="map"||world.hidden)return;
+  const pick=(sel,p,hide)=>[...world.querySelectorAll(sel)].map(e=>({e,p,hide}));
+  const labs=[...pick(".town.tp .tname",0),...pick(".town.dungeon .tname",1,true),...pick(".town.wboss .tname,.town.land .tname,.town.gather .tname",2,true),...pick(".zone.mobarea .zlabel",3,true)];
+  labs.forEach(l=>{l.e.style.left="";l.e.style.top="";l.e.style.visibility="";l.e.classList.remove("moved")});
+  const pins=[...world.querySelectorAll(".town .pin")].map(e=>({m:e.parentElement,r:e.getBoundingClientRect()}));pins.forEach(p=>p.m.style.zIndex="");
+  const placed=[...world.querySelectorAll(".town .pin,.bsp")].map(e=>e.getBoundingClientRect()).filter(r=>r.width);
+  // a name may not cover another marker's pin, nor another name; teleport names always stay (highest priority)
+  const hit=r=>placed.some(q=>r.left<q.right-1&&r.right>q.left+1&&r.top<q.bottom-1&&r.bottom>q.top+1);
+  for(const l of labs){const r=l.e.getBoundingClientRect();if(!r.width)continue;
+    if(l.p===0){placed.push(r);const own=l.e.parentElement;   // a pin under a teleport name is lifted above it
+      pins.forEach(p=>{if(p.m!==own&&r.left<p.r.right&&r.right>p.r.left&&r.top<p.r.bottom&&r.bottom>p.r.top)p.m.style.zIndex=6});continue}
+    const w=r.width,h=r.height,k=r.width/(l.e.offsetWidth||1),gx=w/2+14,gy=h+5;
+    let ok=null;for(const [dx,dy] of [[0,0],[0,-gy],[0,gy],[gx,0],[-gx,0],[gx,-gy],[-gx,-gy],[gx,gy],[-gx,gy],[0,-2*gy],[0,2*gy]]){
+      const q={left:r.left+dx,right:r.right+dx,top:r.top+dy,bottom:r.bottom+dy};if(!hit(q)){ok=[dx,dy,q];break}}
+    if(ok){if(ok[0]||ok[1]){l.e.style.position="relative";l.e.style.left=ok[0]/k+"px";l.e.style.top=ok[1]/k+"px";l.e.classList.add("moved")}placed.push(ok[2])}
+    else if(l.hide)l.e.style.visibility="hidden";else placed.push(r)}}
 let editing=false,placing=null;
 function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(FL);
   const sec=(title,n)=>{const h=document.createElement("div");h.className="zsec";h.innerHTML=`${title} <span class="mono">${n}</span>`;zl.appendChild(h)};
@@ -1647,7 +1703,7 @@ function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
 function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report)$/);
   view=mm?mm[2]:"map";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
-  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if((view==="report"||view==="bosses")&&!panel.hidden)closeP();
+  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses")&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
   document.querySelectorAll("nav.tabs a,#codexTabs a").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
@@ -1658,7 +1714,7 @@ window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
 
 // card grids keep the column count they have with the side panel open, so opening or closing it never reflows the list
-function fixCols(){const wide=innerWidth>=1180;document.querySelectorAll(".browse .grid").forEach(g=>{if(!wide||!g.offsetParent){g.style.gridTemplateColumns="";return}
+function fixCols(){const wide=innerWidth>=1180;document.querySelectorAll(".browse .grid").forEach(g=>{if(!wide||!g.offsetParent||g.id==="lCls"){g.style.gridTemplateColumns="";return}
   const pr=parseFloat(getComputedStyle(g.parentElement).paddingRight)||0;const w=g.clientWidth-(document.body.classList.contains("panel-open")?0:Math.max(0,430-pr));g.style.gridTemplateColumns=`repeat(${Math.max(1,Math.floor((w+10)/260))},minmax(0,1fr))`})}
 window.addEventListener("resize",fixCols);
 const setHead=()=>document.documentElement.style.setProperty("--head-h",$("top").getBoundingClientRect().height+"px");
