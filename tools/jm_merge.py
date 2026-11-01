@@ -1,20 +1,27 @@
 """Merge a player's JourneyMap upload into the floor 1 explored map (tiles/f1jm) without a full rebuild.
 
 Usage:
-  python3 -I tools/jm_merge.py <upload.zip | day folder> [--report R0005] [--date YYYY-MM-DD]
+  python3 -I tools/jm_merge.py <upload.zip | folder> [--report R0005] [--date YYYY-MM-DD] [--min-overlap 20]
   python3 -I tools/jm_merge.py --init-mask        (one-off: derive the explored mask from the current tiles)
 
-The upload is the JourneyMap "day" folder of the floor 1 world: region images "x,z.png" (512 x 512, 1 block = 1 px,
-region x,z starts at block x*512, z*512). Run by .github/workflows/jm_merge.yml after a reviewer approves a
-「探索地圖」 report, or by the owner locally (use this instead of jm_tiles.py so other players' data is kept).
+The upload holds JourneyMap "day" folders: region images "x,z.png" (512 x 512, 1 block = 1 px, region x,z starts at
+block x*512, z*512). The site's 「打包探索地圖」 tool builds it from the player's whole journeymap/data/mp folder
+(one sub-folder per world the player visited; only the floor 1 ones are packed), but a hand-made zip works too:
+images are grouped by the folder they are in and only folders named "day" (or the zip root) are used, so night /
+topo / cave layers are ignored. Run by .github/workflows/jm_merge.yml for every 「探索地圖」 report (approved
+automatically: the checks below are the review), or by the owner locally (use this instead of jm_tiles.py so other
+players' data is kept).
 
 What it does
   1. Rebuilds the 5120 px full-resolution canvas from the level 3 tiles (tiles/f1jm/3, 1 px = 1 block, frame starts
      at block 70) and reads tiles/f1jm/explored.png (1 px per 16 x 16 chunk, world chunk coordinates).
   2. Checks the upload: only "x,z.png" entries (other files are ignored), at most 600 regions, 4 MB each, 512 x 512.
-     Where the upload overlaps chunks that are already explored, the colours must match the current map (median
-     difference <= 32); otherwise it is a different world / floor and nothing is changed.
-  3. Pastes the regions (their transparent parts keep the current map), marks the chunks as explored, rewrites the
+     Each folder is checked on its own: it must overlap at least --min-overlap (20) chunks that are already explored
+     and the colours there must match the current map (median difference <= 32). A folder that overlaps too little
+     cannot be confirmed as floor 1 and a folder that does not match is another world / floor; both are skipped.
+     If no folder passes, nothing is changed.
+  3. Pastes the passing folders oldest first (newest data wins where they overlap; transparent parts keep the
+     current map), marks the chunks as explored, rewrites the
      level 3 tiles it touched, regenerates levels 0-2 and floor1_jm.jpg and updates jmmeta.js. The result (merged or
      rejected, with the reason) is stored in jmmeta.js under results[report]; reports.js is never touched, so this
      cannot conflict with the Google script that appends reports.
@@ -32,6 +39,7 @@ X0, SIZE, FULL, T, CH, MW = 70, 4980, 5120, 256, 16, 320
 BG = (7, 12, 17)
 NAME = re.compile(r"(?:^|/)(-?\d+),(-?\d+)\.png$")
 MAX_REGIONS, MAX_BYTES = 600, 4 * 1024 * 1024
+MIN_OVERLAP = 20   # explored chunks a folder must cover (with matching colours) before it is accepted as floor 1
 C0, C1 = X0 // CH, (X0 + SIZE - 1) // CH          # chunk range inside the frame (inclusive)
 
 
@@ -83,66 +91,79 @@ def init_mask():
     print(json.dumps({"ok": True, "explored_chunks": n, "frame_chunks": len(diffs), "diff_histogram_0_40_by_4": hist}))
 
 
+def folder_label(d):
+    """a short name for a folder of the upload (the JourneyMap world folder if there is one)"""
+    parts = [p for p in d.replace("\\", "/").split("/") if p]
+    for p in parts:
+        if p.lower().startswith("triggers"):
+            return p
+    return "/".join(parts) or "（壓縮檔根目錄）"
+
+
 def read_upload(src):
-    """[(rx, rz, RGBA image)]; raises ValueError with a reason players can understand"""
-    items = []
+    """[{"name", "date", "regions": [(rx, rz, RGBA image)]}], one entry per folder; raises ValueError with a reason
+    players can understand. Only images directly in a folder named "day" (or at the top level) are used."""
+    found = {}   # folder -> [(rx, rz, bytes, mtime)]
+
+    def take(folder, name, size, read, mtime):
+        parent = os.path.basename(folder.rstrip("/"))
+        if folder and parent.lower() != "day":
+            return
+        m = NAME.search("/" + name)
+        if not m:
+            return
+        if size > MAX_BYTES:
+            raise ValueError(f"{name} 超過 4 MB，不像 JourneyMap 的地圖圖片")
+        found.setdefault(folder, []).append((int(m[1]), int(m[2]), read, mtime))
+
     if os.path.isdir(src):
-        for f in sorted(os.listdir(src)):
-            m = NAME.search(f)
-            if m and os.path.getsize(os.path.join(src, f)) <= MAX_BYTES:
-                items.append((int(m[1]), int(m[2]), open(os.path.join(src, f), "rb").read()))
+        for dirpath, _, files in os.walk(src):
+            rel = os.path.relpath(dirpath, src).replace(os.sep, "/")
+            rel = "" if rel == "." else rel
+            for f in sorted(files):
+                fp = os.path.join(dirpath, f)
+                take(rel, f, os.path.getsize(fp), (lambda fp=fp: open(fp, "rb").read()), os.path.getmtime(fp))
     else:
         with zipfile.ZipFile(src) as z:
-            infos = [i for i in z.infolist() if not i.is_dir() and NAME.search(i.filename) and "__MACOSX" not in i.filename]
-            if len(infos) > MAX_REGIONS:
-                raise ValueError(f"壓縮檔裡有 {len(infos)} 張地圖圖片，超過上限 {MAX_REGIONS}")
-            for i in infos:
-                if i.file_size > MAX_BYTES:
-                    raise ValueError(f"{i.filename} 超過 4 MB，不像 JourneyMap 的地圖圖片")
-                m = NAME.search(i.filename)
-                items.append((int(m[1]), int(m[2]), z.read(i)))
-    if not items:
-        raise ValueError("壓縮檔裡沒有 JourneyMap 的地圖圖片（檔名像 3,7.png）。請壓縮 overworld 裡的 day 資料夾")
-    regions = []
-    for rx, rz, data in items:
-        try:
-            im = Image.open(io.BytesIO(data))
-            im.load()
-        except Exception:
-            raise ValueError(f"{rx},{rz}.png 不是正常的 PNG 圖片")
-        if im.size != (512, 512):
-            raise ValueError(f"{rx},{rz}.png 的大小是 {im.size[0]}x{im.size[1]}，JourneyMap 的地圖圖片應該是 512x512")
-        regions.append((rx, rz, im.convert("RGBA")))
-    return regions
+            for i in z.infolist():
+                if i.is_dir() or "__MACOSX" in i.filename:
+                    continue
+                folder, name = os.path.split(i.filename.replace("\\", "/"))
+                take(folder, name, i.file_size, (lambda i=i: z.read(i)), datetime.datetime(*i.date_time).timestamp())
+            total = sum(len(v) for v in found.values())
+            if total > MAX_REGIONS:
+                raise ValueError(f"壓縮檔裡有 {total} 張地圖圖片，超過上限 {MAX_REGIONS}")
+            found = {k: [(rx, rz, rd(), t) for rx, rz, rd, t in v] for k, v in found.items()}
+    if os.path.isdir(src):
+        found = {k: [(rx, rz, rd(), t) for rx, rz, rd, t in v] for k, v in found.items()}
+        if sum(len(v) for v in found.values()) > MAX_REGIONS:
+            raise ValueError(f"資料夾裡有超過 {MAX_REGIONS} 張地圖圖片")
+    if not found:
+        raise ValueError("壓縮檔裡沒有 JourneyMap 的白天地圖（day 資料夾裡 3,7.png 這種檔案）。請用網站協作區的「打包探索地圖」產生壓縮檔")
+    groups = []
+    for folder, items in found.items():
+        regions = []
+        for rx, rz, data, _ in items:
+            try:
+                im = Image.open(io.BytesIO(data))
+                im.load()
+            except Exception:
+                raise ValueError(f"{rx},{rz}.png 不是正常的 PNG 圖片")
+            if im.size != (512, 512):
+                raise ValueError(f"{rx},{rz}.png 的大小是 {im.size[0]}x{im.size[1]}，JourneyMap 的地圖圖片應該是 512x512")
+            regions.append((rx, rz, im.convert("RGBA")))
+        groups.append({"name": folder_label(folder), "date": max(t for *_, t in items), "regions": regions})
+    return groups
 
 
 def save_tile(im, path):
     im.save(path, quality=80, optimize=True, progressive=True)
 
 
-def main(argv):
-    if "--init-mask" in argv:
-        return init_mask()
-    opt = {argv[i]: argv[i + 1] for i in range(len(argv) - 1) if argv[i].startswith("--")}
-    args = [a for i, a in enumerate(argv) if not a.startswith("--") and not (i and argv[i - 1] in opt)]
-    report, date = opt.get("--report"), opt.get("--date") or datetime.date.today().isoformat()
-    if not args:
-        sys.exit(__doc__)
-    try:
-        regions = read_upload(args[0])
-    except (ValueError, zipfile.BadZipFile) as e:
-        record(report, {"ok": False, "reason": str(e) if not isinstance(e, zipfile.BadZipFile) else "檔案不是正常的 zip 壓縮檔"})
-        out(2, ok=False, reason=str(e))
-    cv = load_canvas()
-    mask = Image.open(MASK).convert("L")
-    inside = [(rx, rz, im) for rx, rz, im in regions
-              if rx * 512 < X0 + SIZE and rz * 512 < X0 + SIZE and rx * 512 + 512 > X0 and rz * 512 + 512 > X0]
-    if not inside:
-        reason = "地圖圖片都在第 1 層的範圍外，可能選錯世界資料夾（要選第 1 層的 overworld\\day）"
-        record(report, {"ok": False, "reason": reason})
-        out(2, ok=False, reason=reason)
-    # overlap check against chunks that are already explored
-    diffs, new_chunks, touched = [], set(), set()
+def check_group(inside, cv, mask):
+    """colour difference of every chunk that is already explored and fully covered by the upload, and the set of
+    chunks the upload adds"""
+    diffs, new = [], set()
     for rx, rz, im in inside:
         alpha = im.getchannel("A")
         for lz in range(0, 512, CH):
@@ -159,18 +180,71 @@ def main(argv):
                                    lx + bx[2] - (cx * CH - X0), lz + bx[3] - (cz * CH - X0))).convert("RGB")
                     diffs.append(mean_diff(cut, cv.crop(bx)))
                 elif not mask.getpixel((cx, cz)):
-                    new_chunks.add((cx, cz))
-    med = statistics.median(diffs) if diffs else None
-    if len(diffs) >= 20 and med > 32:
-        reason = f"和目前地圖重疊的 {len(diffs)} 個區塊顏色對不上（差異 {med:.0f}），可能是別的樓層或別的世界資料夾"
+                    new.add((cx, cz))
+    return diffs, new
+
+
+def new_in(rx, rz, im, mask):
+    """chunks of one region that have map data and are not explored yet"""
+    alpha, new = im.getchannel("A"), set()
+    for lz in range(0, 512, CH):
+        for lx in range(0, 512, CH):
+            cx, cz = (rx * 512 + lx) // CH, (rz * 512 + lz) // CH
+            if C0 <= cx <= C1 and C0 <= cz <= C1 and not mask.getpixel((cx, cz)) \
+                    and alpha.crop((lx, lz, lx + CH, lz + CH)).getextrema()[1] > 0:
+                new.add((cx, cz))
+    return new
+
+
+def main(argv):
+    if "--init-mask" in argv:
+        return init_mask()
+    opt = {argv[i]: argv[i + 1] for i in range(len(argv) - 1) if argv[i].startswith("--")}
+    args = [a for i, a in enumerate(argv) if not a.startswith("--") and not (i and argv[i - 1] in opt)]
+    report, date = opt.get("--report"), opt.get("--date") or datetime.date.today().isoformat()
+    if not args:
+        sys.exit(__doc__)
+    min_overlap = int(opt.get("--min-overlap", MIN_OVERLAP))
+    try:
+        groups = read_upload(args[0])
+    except (ValueError, zipfile.BadZipFile) as e:
+        record(report, {"ok": False, "reason": str(e) if not isinstance(e, zipfile.BadZipFile) else "檔案不是正常的 zip 壓縮檔"})
+        out(2, ok=False, reason=str(e))
+    cv = load_canvas()
+    mask = Image.open(MASK).convert("L")
+    accepted, skipped = [], []
+    for g in groups:
+        inside = [(rx, rz, im) for rx, rz, im in g["regions"]
+                  if rx * 512 < X0 + SIZE and rz * 512 < X0 + SIZE and rx * 512 + 512 > X0 and rz * 512 + 512 > X0]
+        if not inside:
+            skipped.append((g["name"], "地圖圖片都在第 1 層的範圍外"))
+            continue
+        diffs, new = check_group(inside, cv, mask)
+        med = statistics.median(diffs) if diffs else None
+        if len(diffs) >= 20 and med > 32:
+            skipped.append((g["name"], f"和目前地圖重疊的 {len(diffs)} 個區塊顏色對不上（差異 {med:.0f}），可能是別的樓層或別的世界"))
+        elif len(diffs) < min_overlap:
+            skipped.append((g["name"], f"和網站現有的地圖只重疊 {len(diffs)} 個區塊（至少要 {min_overlap} 個），無法確認是第 1 層"))
+        else:
+            accepted.append(dict(g, inside=inside, overlap=len(diffs)))
+    if not accepted:
+        if len(skipped) == 1:
+            reason = skipped[0][1]
+        else:
+            reason = f"{len(skipped)} 個資料夾都不是第 1 層的地圖：" + "；".join(f"{n}：{r}" for n, r in skipped[:3]) + ("…" if len(skipped) > 3 else "")
+        if all("範圍外" in r for _, r in skipped):
+            reason += "（可能選錯世界資料夾）"
         record(report, {"ok": False, "reason": reason})
-        out(2, ok=False, reason=reason, overlap=len(diffs), median=round(med, 1))
-    for rx, rz, im in inside:
-        ox, oz = rx * 512 - X0, rz * 512 - X0
-        cv.paste(im.convert("RGB"), (ox, oz), im.getchannel("A"))
-        for ty in range(max(0, oz) // T, min(SIZE - 1, oz + 511) // T + 1):
-            for tx in range(max(0, ox) // T, min(SIZE - 1, ox + 511) // T + 1):
-                touched.add((tx, ty))
+        out(2, ok=False, reason=reason, skipped=[n for n, _ in skipped])
+    new_chunks, touched = set(), set()
+    for g in sorted(accepted, key=lambda g: g["date"]):          # oldest first: the newest data ends up on top
+        for rx, rz, im in g["inside"]:
+            new_chunks |= new_in(rx, rz, im, mask)
+            ox, oz = rx * 512 - X0, rz * 512 - X0
+            cv.paste(im.convert("RGB"), (ox, oz), im.getchannel("A"))
+            for ty in range(max(0, oz) // T, min(SIZE - 1, oz + 511) // T + 1):
+                for tx in range(max(0, ox) // T, min(SIZE - 1, ox + 511) // T + 1):
+                    touched.add((tx, ty))
     # anything outside the frame that the paste wrote must stay background
     cv.paste(Image.new("RGB", (FULL - SIZE, FULL), BG), (SIZE, 0))
     cv.paste(Image.new("RGB", (FULL, FULL - SIZE), BG), (0, SIZE))
@@ -189,7 +263,9 @@ def main(argv):
     cv.crop((0, 0, SIZE, SIZE)).resize((3000, 3000), Image.LANCZOS).save(os.path.join(ROOT, "floor1_jm.jpg"), quality=85, optimize=True)
     explored = sum(1 for cz in range(C0, C1 + 1) for cx in range(C0, C1 + 1) if mask.getpixel((cx, cz)))
     pct = round(100 * explored / (C1 - C0 + 1) ** 2, 1)
-    res = {"ok": True, "regions": len(inside), "newChunks": len(new_chunks), "overlap": len(diffs), "pct": pct, "date": date}
+    res = {"ok": True, "regions": sum(len(g["inside"]) for g in accepted), "newChunks": len(new_chunks),
+           "overlap": sum(g["overlap"] for g in accepted), "pct": pct, "date": date,
+           "folders": len(accepted), "skipped": len(skipped)}
     write_meta(report, res)
     record(report, res)
     out(0, **res)

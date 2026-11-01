@@ -17,6 +17,7 @@ reports += [
                                           "配方・費用 Col": "31", "配方・製作時間（秒）": "20", "回報者・遊戲內暱稱": "Kirito_TW"}),
     rep("T102", "recipe", "Iron Sword", {"配方・NPC": "Weaponsmith", "配方・分類": "武器", "配方・材料": "Iron Ingot 3", "配方・費用 Col": "0", "配方・稀有度": "稀有"}),
     rep("T103", "quest", "A New World", {"任務・種類": "主線", "任務・編號": "1", "任務・目前步驟": "Talk to Yui", "任務・座標 x, z": "1700, 4300"}),
+    {**rep("T111", "item", "Health Potion I", {"物品・怎麼拿到的": "商店購買"}), "floor": None},
     rep("T104", "skill", "Boule de Feu", {"技能・職業": "Mage", "技能・主動或被動": "主動", "技能・解鎖等級": "1", "技能・說明原文": "Lance une boule de feu"}),
     rep("T105", "place", "Test Smith", {"地點・種類": "NPC", "地點・座標 x, z": "1800, 4100", "地點・NPC 類別": "武器鐵匠"}),
     rep("T106", "place", "Test Gate", {"地點・種類": "傳送點", "地點・座標 x, z": "2000, 3000", "地點・傳送選單名稱": "Porte de Test"}),
@@ -54,6 +55,8 @@ with sync_playwright() as p:
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.route("**/reports.js*", lambda r: r.fulfill(status=200, content_type="application/javascript; charset=utf-8", body=body))
     pg.add_init_script("localStorage.setItem('sao-map-filter-v4','{}')")
+    pg.route("**/formcfg.js*", lambda r: r.fulfill(status=200, content_type="application/javascript; charset=utf-8",
+             body='window.SAO_FORM={"prefill":"https://docs.google.com/forms/d/e/X/viewform?usp=pp_url&entry.11={floor}&entry.22={floor}"};'))
     pend = {"updated": "2026-11-02 10:00", "list": [
         {"id": "R0101", "type": "monster", "floor": 1, "date": "2026-11-02 09:05", "status": "pending"},
         {"id": "R0102", "type": "recipe", "floor": 1, "date": "2026-11-02 09:30", "status": "approved"},
@@ -104,6 +107,9 @@ with sync_playwright() as p:
     check("探索地圖・My map" in t and "合併中" in t, "an approved JourneyMap upload shows as merging until jmmeta.js has its result")
     check("Mark my position" not in t, "suggestions are not listed with the data reports")
     check("Kirito_TW 提供" in t, "the reporter's in-game nickname is shown with the report")
+    check("通用 物品・Health Potion I" in t and "Fnull" not in t and "FNone" not in t, "an item reported without a floor is listed as shared by all floors")
+    check(pg.get_attribute("#formGo", "href") == "https://docs.google.com/forms/d/e/X/viewform?usp=pp_url&entry.11=1&entry.22=1",
+          "the form button uses formcfg.js and fills every floor question")
     q = pg.inner_text("#qL")
     check("R0101・怪物" in q and "11/2 09:05 送出" in q and "待審核" in q and "已核准・上線中" in q and "10/31 退回" in q and "R0104" not in q
           and pg.inner_text("#qC") == "3 則" and "更新時間 2026-11-02 10:00" in q,
@@ -115,7 +121,7 @@ with sync_playwright() as p:
     check("Asuna 提出" in t, "the suggestion shows who proposed it (nickname)")
     q = pg.inner_text("#ideaQ")
     check(pg.is_visible("#ideaQ") and "審核中的建議" in q and "R0104・建議" in q and "R0101" not in q, "suggestions waiting for review are listed on the feedback page")
-    check("viewform" in (pg.get_attribute("#ideaGo", "href") or ""), "提出建議 opens the Google form")
+    check((pg.get_attribute("#ideaGo", "href") or "") == "https://docs.google.com/forms/d/e/X/viewform", "提出建議 opens the Google form without prefill (suggestions have no floor)")
     check(not errs, "no page errors" + ("" if not errs else ": " + errs[0]))
     b.close()
 srv.shutdown()

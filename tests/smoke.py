@@ -344,9 +344,9 @@ with sync_playwright() as p:
     pg.click('.csub a[data-sub="data"]'); pg.wait_for_timeout(300)
     check(pg.is_visible("#rData") and pg.is_hidden("#rFeedW") and "#report" in pg.url, "協作區: 攻略資料維護 shows the data form")
     pg.goto(base + "#report"); pg.wait_for_timeout(400)
-    codes = pg.eval_on_selector_all(".rform code", "e=>e.map(x=>x.textContent)")
+    codes = pg.eval_on_selector_all(".rform code, #jmPack code", "e=>e.map(x=>x.textContent)")
     check(r"%APPDATA%\.Triggers Client\instances\Sword Art Online\screenshots" in codes
-          and r"%APPDATA%\.Triggers Client\instances\Sword Art Online\journeymap\data\mp" in codes,
+          and r"%APPDATA%\.Triggers Client\instances\Sword Art Online\journeymap\data" in codes,
           "report tab shows the F2 screenshot and JourneyMap folder paths with their backslashes")
 
     pg.goto(base + "#f2-report"); pg.wait_for_timeout(400)

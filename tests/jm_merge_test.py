@@ -92,7 +92,42 @@ try:
     mt = json.loads(meta[meta.index("window.SAO_JM =") + 15:].strip().rstrip(";"))
     check(mt["results"]["T901"]["ok"] is False and "對不上" in mt["results"]["T901"]["reason"] and mt["1"]["log"][-1]["report"] == "T900",
           "a rejection is recorded with its reason and is not in the merge log")
-    # 3. broken uploads
+    # 3. a folder that only covers unexplored land cannot be confirmed as floor 1 -> rejected (it used to slip through)
+    mask_now = Image.open(os.path.join(tmp, "tiles", "f1jm", "explored.png")).convert("L")
+    def explored_in(rx, rz):
+        return sum(1 for cz in range(rz * 32, rz * 32 + 32) for cx in range(rx * 32, rx * 32 + 32)
+                   if 0 <= cx < 320 and 0 <= cz < 320 and mask_now.getpixel((cx, cz)))
+    lone = next((rx, rz) for rz in range(1, 9) for rx in range(1, 9) if explored_in(rx, rz) == 0)
+    code, res = run(zipped({"Triggers_x/overworld/day/%d,%d.png" % lone: region(*lone, wiki)}), "--report", "T902")
+    check(code == 2 and "重疊" in res["reason"] and "無法確認" in res["reason"], f"a folder with no overlap is not trusted ({res.get('reason')})")
+    # 4. the whole journeymap mp folder: floor 1 folder merged, another world skipped, night / cave layers ignored
+    cv2 = canvas()
+    noise = Image.merge("RGB", (n, n.point(lambda v: 255 - v), n)).convert("RGBA")
+    older = region(3, 6, cv2)
+    newer = region(3, 6, cv2)
+    patch = Image.new("RGBA", (40, 40), (255, 0, 255, 255))
+    older.paste(Image.new("RGBA", (40, 40), (0, 255, 255, 255)), (300, 300)); newer.paste(patch, (300, 300))
+    b = io.BytesIO()
+    with zipfile.ZipFile(b, "w") as z:
+        def put(name, im, when):
+            s2 = io.BytesIO(); im.save(s2, "PNG")
+            z.writestr(zipfile.ZipInfo(name, date_time=when), s2.getvalue())
+        put("mp/Triggers_old/overworld/day/3,6.png", older, (2026, 10, 28, 12, 0, 0))
+        put("mp/Triggers_new/overworld/day/3,6.png", newer, (2026, 10, 31, 12, 0, 0))
+        put("mp/Triggers_new/overworld/night/3,7.png", noise, (2026, 10, 31, 12, 0, 0))
+        put("mp/Triggers_new/overworld/0/3,7.png", noise, (2026, 10, 31, 12, 0, 0))
+        put("mp/Triggers_floor2/overworld/day/3,7.png", noise, (2026, 10, 30, 12, 0, 0))
+    multi = os.path.join(tmp, "multi.zip"); open(multi, "wb").write(b.getvalue())
+    before37 = canvas().crop((3 * 512 - 70, 7 * 512 - 70, 3 * 512 + 442, 7 * 512 + 442))
+    code, res = run(multi, "--report", "T903")
+    check(code == 0 and res.get("folders") == 2 and res.get("skipped") == 1, f"mp folder: both floor 1 folders merged, the other world skipped ({res})")
+    cv3 = canvas()
+    px = cv3.getpixel((3 * 512 + 320 - 70, 6 * 512 + 320 - 70))
+    check(px[0] > 180 and px[1] < 90 and px[2] > 180, f"where two floor 1 folders overlap, the newer one wins ({px})")
+    after37 = cv3.crop((3 * 512 - 70, 7 * 512 - 70, 3 * 512 + 442, 7 * 512 + 442))
+    from PIL import ImageChops as IC
+    check(max(IC.difference(before37, after37).getextrema()[i][1] for i in range(3)) < 40, "night / cave layers and the skipped folder change nothing")
+    # 5. broken uploads
     code, res = run(zipped({"notes.txt": b"hello"}))
     check(code == 2 and "沒有 JourneyMap" in res["reason"], "a zip without map images is rejected")
     code, res = run(zipped({"3,7.png": Image.new("RGBA", (100, 100))}))

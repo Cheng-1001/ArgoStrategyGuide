@@ -1,7 +1,8 @@
 # Merge a player's JourneyMap upload into the floor 1 explored map.
 # The Google script (google/apps-script.gs, publishJmap_) creates a release "jmap-<report id>" with the player's zip
-# after a reviewer approves an 「探索地圖」 report. This job downloads it, runs tools/jm_merge.py (which checks the zip,
-# rejects uploads from another world and never touches reports.js), commits the new tiles and deletes the release.
+# as soon as an 「探索地圖」 report is submitted (approved automatically: this check is the review). This job downloads
+# it, runs tools/jm_merge.py (checks every world folder in the zip against the explored map, skips other worlds and
+# folders that overlap too little, never touches reports.js), commits the new tiles and deletes the release.
 name: 合併玩家的探索地圖
 on:
   release:

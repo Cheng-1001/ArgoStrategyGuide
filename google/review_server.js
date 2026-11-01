@@ -17,6 +17,9 @@ const H = {
   ID: '回報編號', STATUS: '狀態', NOTE: '審核備註', RESULT: '處理結果', PREVIEW: '截圖預覽', SUMMARY: '內容摘要'
 };
 const SHEET_NAME = '回報';
+// 2026-11-02 起樓層、名稱在各種類頁（主程式 CFG.HEAD）；舊回報在第 1 頁的「樓層」「名稱」
+const HEAD_FLOOR = ['怪物・樓層', '物品・樓層', '地點・樓層', '配方・樓層', '任務・樓層'];
+const HEAD_NAME = ['怪物・名稱', '物品・名稱', '地點・名稱', '配方・物品名稱', '任務・標題', '技能・名稱', '建議・標題'];
 
 function sheet_() {
   const m = String(SHEET_URL).match(/\/d\/([\w-]+)/);
@@ -42,7 +45,8 @@ function apiList() {
   const vals = sh.getDataRange().getDisplayValues();
   const hdr = vals[0];
   const ix = n => hdr.indexOf(n);
-  const skip = Object.keys(H).map(k => H[k]);
+  const skip = Object.keys(H).map(k => H[k]).concat(HEAD_FLOOR, HEAD_NAME);
+  const first = (v, list, old) => { for (const h of list) { const x = ix(h) < 0 ? '' : String(v[ix(h)]).trim(); if (x) return x; } return ix(old) < 0 ? '' : String(v[ix(old)]).trim(); };
   const items = [];
   for (let r = 1; r < vals.length; r++) {
     const v = vals[r];
@@ -55,7 +59,8 @@ function apiList() {
       if (x && x !== '不確定') fields.push([String(h), x]);
     });
     items.push({
-      row: r + 1, id: id, time: v[0], type: v[ix(H.TYPE)], floor: v[ix(H.FLOOR)], name: v[ix(H.NAME)],
+      row: r + 1, id: id, time: v[0], type: v[ix(H.TYPE)], floor: first(v, HEAD_FLOOR, H.FLOOR) || (v[ix(H.TYPE)] === '探索地圖' ? '1' : ''),
+      name: first(v, HEAD_NAME, H.NAME) || (v[ix(H.TYPE)] === '探索地圖' ? '探索地圖' : ''),
       fields: fields, shots: (String(v[ix(H.SHOT)]).match(/id=([\w-]+)/g) || []).map(s => s.slice(3)),
       status: v[ix(H.STATUS)], note: v[ix(H.NOTE)], result: v[ix(H.RESULT)]
     });

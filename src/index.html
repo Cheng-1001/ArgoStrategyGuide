@@ -412,6 +412,12 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .pill.q-wait{color:var(--muted)} .pill.q-ok{border-color:var(--ok);color:var(--ok)} .pill.q-err{border-color:var(--warn);color:var(--warn)} .pill.q-no{border-color:var(--boss);color:var(--boss)}
 .qlist .lrowx{align-items:center;padding:6px 4px;border-top:1px solid var(--line)} .qlist .lrowx:first-child{border-top:0}
 .qupd{font-size:12px;margin-top:6px}
+.jmout{display:flex;flex-direction:column;gap:8px;font-size:13px}
+.jmout .jmrow{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:5px 2px;border-top:1px solid var(--line)}
+.jmout .jmrow:first-child{border-top:0}
+.jmout .jmrow .t{display:flex;flex-direction:column;min-width:0}.jmout .jmrow .t b{font-family:var(--f-mono);font-size:12px;overflow-wrap:anywhere}.jmout .jmrow .t span{font-size:11.5px;color:var(--muted)}
+.jmout .pill.ok{border-color:var(--ok);color:var(--ok)} .jmout .pill.no{color:var(--muted)}
+.jmdl{display:flex;flex-wrap:wrap;gap:8px}
 .pill.rep{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
 .repbtn{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;border:1px solid var(--accent)}
 .repbtn.ghost{background:transparent;color:var(--accent)}
@@ -669,6 +675,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="npcs.js"></script>
 <script src="recipes.js"></script>
 <script src="jmmeta.js"></script>
+<script src="formcfg.js"></script>
 <script src="classes.js"></script>
 <script src="recicons.js"></script>
 <script>
@@ -1533,8 +1540,11 @@ async function loadPending(){if(pendingCache)return pendingCache;
   try{const r=await fetch("https://api.github.com/repos/Cheng-1001/ArgoStrategyGuide/issues?state=open&per_page=100");if(!r.ok)throw 0;
     pendingCache=(await r.json()).filter(x=>!x.pull_request&&/^\[(怪物|物品|地點|其他)\]/.test(x.title));}catch(e){pendingCache="err"}return pendingCache}
 let rFloorShown=null;
-// Google form (filled in after the form exists). FORM_PREFILL contains "{floor}" where the floor number goes.
-const FORM_PREFILL="https://docs.google.com/forms/d/e/1FAIpQLSfaQnB3WleBLxKQI5adUUUaik11q00qIopj5lPnDqaApNCgig/viewform?usp=pp_url&entry.380876351={floor}";
+// Google form. FORM_PREFILL contains "{floor}" wherever the floor number goes (one per type page since 2026-11-02);
+// formcfg.js is written by the Apps Script upgradeForm, the literal below is only the fallback.
+const FORM_PREFILL=((window.SAO_FORM||{}).prefill)||"https://docs.google.com/forms/d/e/1FAIpQLSfaQnB3WleBLxKQI5adUUUaik11q00qIopj5lPnDqaApNCgig/viewform?usp=pp_url&entry.380876351={floor}";
+const formUrl=f=>FORM_PREFILL.split("{floor}").join(f);
+const FORM_PLAIN=FORM_PREFILL.replace(/\?.*$/,"");   // suggestions have no floor question: no prefill (and no draft prompt);
 // 協作區 = two parts: 攻略資料維護 (the data report form, #report) and 問題回報及建議 (site bugs and ideas, #feedback)
 let rSub="data";
 const GH_ISSUES="https://github.com/Cheng-1001/ArgoStrategyGuide/issues";
@@ -1574,6 +1584,103 @@ function renderQueue(){loadQueue().then(q=>{const ok=q!=="err",all=ok?q.list:[];
     L.innerHTML=!ok?"目前讀不到處理中的回報，請稍後再試。":list.length?queueRows(list)+(q.updated?`<div class="muted qupd">更新時間 ${esc(q.updated)}</div>`:""):"目前沒有處理中的回報。"}
   const I=$("ideaQ");if(I){const list=all.filter(x=>x.type==="idea");I.hidden=!list.length;
     I.innerHTML=list.length?`<h4 class="sec">審核中的建議 <span class="c">${list.length} 則</span></h4>${queueRows(list)}<div class="muted" style="font-size:12.5px">審核員看過後，內容會公開在下面的「玩家建議」。</div>`:""}})}
+// ================= 打包探索地圖 (JourneyMap packer) =================
+// Runs only in the player's browser. The player picks the JourneyMap "mp" folder (one sub-folder per world they
+// visited); for every folder the white-day maps (…/day/x,z.png) are drawn at 1/4 scale and compared with the site's
+// level 1 tiles (1 px = 4 blocks) on chunks that are already explored (tiles/f1jm/explored.png). Folders that match are
+// floor 1. Only regions that add unexplored chunks are packed, plus a few overlapping ones so tools/jm_merge.py can
+// verify the folder again (it needs >= 20 matching chunks). The zip (stored, not compressed: PNGs are compressed
+// already) keeps each folder's path so the server checks every world on its own.
+const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576};window.__JMP=JMP;   // exposed for tests/jm_pack_test.py
+const JMV=()=>{const j=(window.SAO_JM||{})["1"]||{};return encodeURIComponent(String(j.date||"")+"-"+String(j.pct||""))};
+let JMREF=null;
+const jmLoadImg=src=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=()=>no(new Error(src));im.src=src});
+async function jmRef(){if(JMREF)return JMREF;
+  const v=JMV(),c=document.createElement("canvas");c.width=c.height=1280;const x=c.getContext("2d",{willReadFrequently:true});
+  x.fillStyle="#070c11";x.fillRect(0,0,1280,1280);
+  const jobs=[];for(let r=0;r<5;r++)for(let k=0;k<5;k++)jobs.push(jmLoadImg(`tiles/f1jm/1/${k}_${r}.jpg?v=${v}`).then(im=>x.drawImage(im,k*256,r*256)).catch(()=>{}));
+  const mim=await jmLoadImg(`tiles/f1jm/explored.png?v=${v}`);await Promise.all(jobs);
+  const mc=document.createElement("canvas");mc.width=mim.width;mc.height=mim.height;const mx=mc.getContext("2d",{willReadFrequently:true});mx.drawImage(mim,0,0);
+  const md=mx.getImageData(0,0,mc.width,mc.height).data,mw=mc.width;
+  JMREF={px:x.getImageData(0,0,1280,1280).data,mask:(cx,cz)=>cx>=0&&cz>=0&&cx<mw&&cz<mw&&md[(cz*mw+cx)*4]>127};return JMREF}
+// group the picked files by folder; only "x,z.png" directly inside a folder named "day"
+function jmGroups(files){const g=new Map();
+  for(const f of files){const p=(f.webkitRelativePath||f.name).split("/"),m=/^(-?\d+),(-?\d+)\.png$/i.exec(p[p.length-1]);
+    if(!m||p.length<2||p[p.length-2].toLowerCase()!=="day")continue;
+    const key=p.slice(0,-1).join("/");if(!g.has(key))g.set(key,{key,label:p.find(s=>/^triggers/i.test(s))||key,files:[],latest:0});
+    const e=g.get(key);e.files.push({f,rx:+m[1],rz:+m[2]});e.latest=Math.max(e.latest,f.lastModified||0)}
+  return[...g.values()].sort((a,b)=>b.latest-a.latest)}
+async function jmAnalyze(g,ref,cv){const x=cv.getContext("2d",{willReadFrequently:true});x.clearRect(0,0,1280,1280);x.imageSmoothingQuality="high";
+  const {X0,SIZE}=JMP,inFrame=[];
+  for(const it of g.files){const x0=it.rx*512,z0=it.rz*512;if(x0>=X0+SIZE||z0>=X0+SIZE||x0+512<=X0||z0+512<=X0)continue;
+    try{const bm=await createImageBitmap(it.f);if(bm.width===512&&bm.height===512){x.drawImage(bm,(x0-X0)/4,(z0-X0)/4,128,128);inFrame.push(it)}bm.close&&bm.close()}catch(e){}}
+  g.inFrame=inFrame;if(!inFrame.length){g.state="out";return g}
+  const d=x.getImageData(0,0,1280,1280).data,R=ref.px,chunks=new Map(),lim=Math.ceil(SIZE/4);
+  for(const it of inFrame){const px0=Math.max(0,Math.floor((it.rx*512-X0)/4)),pz0=Math.max(0,Math.floor((it.rz*512-X0)/4));
+    const px1=Math.min(lim,Math.ceil((it.rx*512+512-X0)/4)),pz1=Math.min(lim,Math.ceil((it.rz*512+512-X0)/4));it.ov=new Set();const nw=new Set();
+    for(let py=pz0;py<pz1;py++)for(let px=px0;px<px1;px++){const i=(py*1280+px)*4,a=d[i+3];if(!a)continue;
+      const cx=(X0+px*4+2)>>4,cz=(X0+py*4+2)>>4;
+      if(!ref.mask(cx,cz)){if(a>=128)nw.add(cz*1000+cx);continue}
+      if(a<250)continue;const k=cz*1000+cx;let c=chunks.get(k);if(!c){c={s:0,n:0};chunks.set(k,c)}
+      c.s+=(Math.abs(d[i]-R[i])+Math.abs(d[i+1]-R[i+1])+Math.abs(d[i+2]-R[i+2]))/3;c.n++;it.ov.add(k)}
+    it.newChunks=nw.size;it.isNew=nw.size>=4}   // a few stray chunks at the edge of the explored area are not worth uploading
+  const diffs=[];for(const c of chunks.values())if(c.n>=6)diffs.push(c.s/c.n);diffs.sort((a,b)=>a-b);
+  g.overlap=diffs.length;g.med=diffs.length?diffs[diffs.length>>1]:null;
+  g.state=g.overlap<JMP.MIN?"few":g.med>JMP.MED?"other":"f1";g.news=inFrame.filter(it=>it.isNew);return g}
+// split the selected regions into zips of at most BUDGET bytes; each part of a folder gets overlapping regions of that
+// folder until it covers ANCHOR explored chunks, so tools/jm_merge.py can verify every part on its own
+function jmPlan(sel){const parts=[];
+  for(const g of sel){const byOv=g.inFrame.filter(it=>it.ov.size).sort((a,b)=>b.ov.size-a.ov.size);let batch=[],bb=0;
+    const close=()=>{if(!batch.length)return;const items=batch.slice();let ov=items.reduce((s,it)=>s+it.ov.size,0);
+      for(const it of byOv){if(ov>=JMP.ANCHOR)break;if(items.includes(it))continue;items.push(it);ov+=it.ov.size}
+      parts.push({items:items.map(it=>({g,it})),bytes:items.reduce((s,it)=>s+it.f.size,0),ov});batch=[];bb=0};
+    for(const it of g.news){if(batch.length&&bb+it.f.size>JMP.BUDGET)close();batch.push(it);bb+=it.f.size}close()}
+  const out=[];   // put small parts (usually different folders) together while they fit
+  for(const p of parts){const last=out[out.length-1];
+    if(last&&last.bytes+p.bytes<=JMP.BUDGET){for(const x of p.items)if(!last.items.some(y=>y.it===x.it)){last.items.push(x);last.bytes+=x.it.f.size}last.ov=Math.min(last.ov,p.ov)}
+    else out.push({items:p.items.slice(),bytes:p.bytes,ov:p.ov})}
+  return out}
+const JM_CRC=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+const jmCrc=b=>{let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=JM_CRC[(c^b[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0};
+async function jmZip(entries){const enc=new TextEncoder(),body=[],cen=[];let off=0;
+  for(const e of entries){const data=new Uint8Array(await e.file.arrayBuffer()),nm=enc.encode(e.name),crc=jmCrc(data);
+    const t=new Date(e.file.lastModified||Date.now()),y=Math.max(1980,t.getFullYear());
+    const tm=(t.getHours()<<11)|(t.getMinutes()<<5)|(t.getSeconds()>>1),dt=((y-1980)<<9)|((t.getMonth()+1)<<5)|t.getDate();
+    const h=new DataView(new ArrayBuffer(30));h.setUint32(0,0x04034b50,true);h.setUint16(4,20,true);h.setUint16(6,0x0800,true);
+    h.setUint16(10,tm,true);h.setUint16(12,dt,true);h.setUint32(14,crc,true);h.setUint32(18,data.length,true);h.setUint32(22,data.length,true);h.setUint16(26,nm.length,true);
+    const c=new DataView(new ArrayBuffer(46));c.setUint32(0,0x02014b50,true);c.setUint16(4,20,true);c.setUint16(6,20,true);c.setUint16(8,0x0800,true);
+    c.setUint16(12,tm,true);c.setUint16(14,dt,true);c.setUint32(16,crc,true);c.setUint32(20,data.length,true);c.setUint32(24,data.length,true);c.setUint16(28,nm.length,true);c.setUint32(42,off,true);
+    body.push(h,nm,data);cen.push(c,nm);off+=30+nm.length+data.length}
+  const cs=cen.reduce((s,v)=>s+v.byteLength,0),e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);
+  e.setUint16(8,entries.length,true);e.setUint16(10,entries.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
+  return new Blob([...body,...cen,e],{type:"application/zip"})}
+const JM_ST={f1:["第 1 層","ok"],other:["不是第 1 層","no"],few:["和網站地圖重疊太少，無法確認","no"],out:["不在第 1 層的範圍","no"]};
+const mb=b=>(b/1048576).toFixed(1)+" MB";
+async function jmRun(files){const O=$("jmOut");window.__jm=null;
+  const groups=jmGroups(files);
+  if(!groups.length){O.innerHTML=`<div class="note warn">選的資料夾裡找不到 JourneyMap 的白天地圖（<code>day</code> 資料夾裡 <code>3,7.png</code> 這種檔案）。請確認選的是 <code>journeymap\\data\\mp</code>。</div>`;return}
+  O.innerHTML=`<div class="muted">找到 ${groups.length} 個世界資料夾，正在和網站地圖比對…</div>`;
+  let ref;try{ref=await jmRef()}catch(e){O.innerHTML=`<div class="note warn">讀不到網站的地圖資料，請重新整理頁面再試一次。</div>`;return}
+  const cv=document.createElement("canvas");cv.width=cv.height=1280;
+  for(let i=0;i<groups.length;i++){O.firstElementChild.textContent=`正在比對第 ${i+1}／${groups.length} 個資料夾（${groups[i].files.length} 張地圖）…`;await jmAnalyze(groups[i],ref,cv)}
+  const f1=groups.filter(g=>g.state==="f1"),sel=f1.filter(g=>g.news.length),parts=jmPlan(sel);
+  window.__jm={groups:groups.map(g=>({label:g.label,state:g.state,overlap:g.overlap,med:g.med,files:g.files.length,news:(g.news||[]).length})),parts:parts.map(p=>({n:p.items.length,bytes:p.bytes,ov:p.ov}))};
+  const order={f1:0,few:1,other:2,out:3};
+  const rows=groups.slice().sort((a,b)=>order[a.state]-order[b.state]||b.latest-a.latest).map(g=>{const [t,c]=JM_ST[g.state];
+    const extra=g.state==="f1"?(g.news.length?`・網站還沒有的區域 ${g.news.length} 張`:"・網站都已經有了"):"";
+    return`<div class="jmrow"><span class="t"><b title="${esc(g.key)}">${esc(g.label.length>22?g.label.slice(0,22)+"…":g.label)}</b><span>${g.files.length} 張地圖${g.latest?"・最後更新 "+new Date(g.latest).toLocaleDateString("zh-TW"):""}${extra}</span></span><span class="pill ${c}">${t}</span></div>`}).join("");
+  let head;
+  if(!f1.length)head=`<div class="note warn">沒有找到第 1 層的地圖。可能你還沒在第 1 層探索過，或探索的地方和網站現有地圖完全沒有重疊（網站要靠重疊的部分確認是第 1 層）。</div>`;
+  else if(!parts.length)head=`<div class="note ok">找到第 1 層的地圖，但你探索過的地方網站都已經有了，不用上傳。謝謝！</div>`;
+  else head=`<div class="note ok">找到 ${f1.length} 個第 1 層的資料夾，要上傳 ${parts.reduce((s,p)=>s+p.items.length,0)} 張地圖（含幾張和網站重疊、用來確認位置的）。${parts.length>1?`檔案比較大，分成 ${parts.length} 份，<b>每一份都要各送出一次表單</b>。`:""}</div>
+    <div class="jmdl">${parts.map((p,i)=>`<button class="repbtn" data-jmpart="${i}">⬇ 下載壓縮檔${parts.length>1?` ${i+1}／${parts.length}`:""}（${mb(p.bytes)}）</button>`).join("")}</div>`;
+  O.innerHTML=head+`<div>${rows}</div>`;
+  O.querySelectorAll("[data-jmpart]").forEach(b=>b.onclick=async()=>{const i=+b.dataset.jmpart,p=parts[i];b.disabled=true;const t0=b.textContent;b.textContent="打包中…";
+    try{const blob=await jmZip(p.items.map(({g,it})=>({name:g.key+"/"+it.f.name,file:it.f})));
+      const d=new Date(),stamp=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
+      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`探索地圖-第1層-${stamp}${parts.length>1?"-"+(i+1):""}.zip`;document.body.appendChild(a);a.click();a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href),60000);window.__jmBlob=blob}
+    finally{b.disabled=false;b.textContent=t0}})}
 let fbCache=null;
 async function loadFeedback(){if(fbCache)return fbCache;
   try{const r=await fetch(GH_ISSUES.replace("github.com","api.github.com/repos")+"?state=open&per_page=100");if(!r.ok)throw 0;
@@ -1581,7 +1688,7 @@ async function loadFeedback(){if(fbCache)return fbCache;
 function showCollab(){const w=$("rWrap");if(!w.querySelector(".csub"))return;
   w.querySelectorAll(".csub a").forEach(a=>{a.href="#"+hashFor(a.dataset.sub==="data"?"report":"feedback",FL);if(a.dataset.sub===rSub)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   $("rData").hidden=rSub!=="data";$("rFeedW").hidden=rSub!=="feedback";
-  if(FORM_PREFILL)$("ideaGo").href=FORM_PREFILL.replace("{floor}",FL);
+  if(FORM_PREFILL)$("ideaGo").href=FORM_PLAIN;
   const ideas=REPS.filter(r=>r.type==="idea").sort((a,b)=>String(b.date).localeCompare(String(a.date)));$("ideaC").textContent=ideas.length+" 則";
   $("ideaL").innerHTML=ideas.length?`<ul class="rows">${ideas.map(r=>`<li class="lrowx"><span class="t"><b>💡 ${esc(r.name)}</b><span style="white-space:pre-wrap">${esc(r.idea||"")}</span><span>${esc(r.date||"")}${r.ipage?"・"+esc(r.ipage):""}・${esc(r.id||"")}${r.by?`・<span class="repby">${esc(r.by)}</span> 提出`:""}</span>${r.reply?`<span class="ideareply">回覆：${esc(r.reply)}</span>`:""}</span></li>`).join("")}</ul>`:`<div class="muted">還沒有公開的建議。按左邊「💡 提出建議」用 Google 帳號送出，審核後會出現在這裡。</div>`;
   if(rSub==="feedback")loadFeedback().then(list=>{const L=$("fbL");if(!L)return;
@@ -1604,15 +1711,26 @@ function buildFormReport(){
           <li><b>拍配方</b>：打開 NPC 的製作或購買選單，點到那個物品再按 F2，材料、數量、費用、時間都要看得到。</li>
           <li><b>拍任務追蹤</b>：畫面右側的任務追蹤（Tracked quest）有任務編號和目前步驟，直接按 F2。</li>
           <li><b>拍技能</b>：打開技能選單，點到那個技能再按 F2，名稱、解鎖等級、說明都要看得到。</li>
-          <li><b>上傳探索地圖（JourneyMap）</b>：按 <kbd>Win</kbd>＋<kbd>R</kbd>，貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data\\mp</code> 按 Enter → 進入 <code>Triggers_</code> 開頭的資料夾 → <code>overworld</code> → 在 <code>day</code> 資料夾按右鍵「壓縮成 ZIP 檔案」，回報種類選「探索地圖」上傳這個 zip（45 MB 以內）。截圖請拍 JourneyMap 的全螢幕地圖（按 <kbd>J</kbd>，再按 F2）。核准後網站會自動把你探索過的地方合併進「探索地圖」，目前只合併第 1 層。</li>
+          <li><b>上傳探索地圖（JourneyMap）</b>：不用截圖，用下面的「打包探索地圖」產生壓縮檔，回報種類選「探索地圖」上傳。送出後自動檢查、合併，目前只合併第 1 層。</li>
           <li><b>檔案位置</b>：<code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots</code><br>按 <kbd>Win</kbd>＋<kbd>R</kbd>，貼上這一行按 Enter，就會直接打開資料夾。檔名就是拍攝時間，最新的排在最後面。</li>
           <li><b>上傳</b>：表單最後一頁按「新增檔案」→「瀏覽」→ 到上面的資料夾選檔。按住 <kbd>Ctrl</kbd> 可以一次選多張（最多 5 張，每張 10 MB 以內，F2 的截圖都在範圍內）。</li>
           <li>不用裁切，也不用另外壓縮，原圖直接上傳。審核通過後網站會自動縮小。</li>
         </ul></details></li>
       <li><b>按上面的按鈕</b>，用 Google 帳號登入（上傳截圖需要登入，不會公開你的帳號）。樓層會先幫你填好。</li>
-      <li><b>填名稱、選回報種類</b>（怪物、物品、地點、配方、任務追蹤、技能、探索地圖），下一頁再填該種類的資料。</li>
-      <li><b>最後一頁上傳截圖</b>，按「提交」。</li></ol>
+      <li><b>選回報種類</b>（怪物、物品、地點、配方、任務追蹤、技能、探索地圖），下一頁填樓層、名稱和這個種類的資料。各樓層都拿得到的通用道具不用填樓層，技能不分樓層。</li>
+      <li><b>最後一頁上傳截圖</b>，按「提交」。探索地圖不用截圖。</li></ol>
     <div class="note">審核員核對截圖後按「核准」，網站會在幾分鐘內自動更新。工具裡還沒有的怪物、物品、地點、配方、技能也可以回報；配方會直接更新配方分頁，任務追蹤會校正主線編號，技能會列在職業資料裡。</div>
+  </article>
+  <article class="bcard" id="jmPack"><h4 class="sec">🗺️ 打包探索地圖（JourneyMap）</h4>
+    <p style="margin:0">把你的 JourneyMap 地圖整理成可以上傳的壓縮檔，網站會把你探索過、網站還沒有的地方合併進「探索地圖」。<b>檔案只在你的瀏覽器裡處理，不會傳到任何地方</b>，直到你自己把壓縮檔上傳到表單。目前只收第 1 層。</p>
+    <ol class="steps">
+      <li>按下面的按鈕。在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。</li>
+      <li>瀏覽器會問「要將 N 個檔案上傳到這個網站嗎？」，按「上傳」。這只是讓網頁讀取，檔案不會被送出。</li>
+      <li>工具會自動找出第 1 層的地圖（mp 裡每個 <code>Triggers_</code> 資料夾是一個世界，不用自己挑），只留網站還沒有的區域，按「下載壓縮檔」。</li>
+      <li>按上面的「填寫回報表單」，回報種類選 <b>探索地圖</b>，上傳這個壓縮檔後送出。<b>不用截圖</b>，送出後會自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
+    <label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden>
+    <div class="muted" style="font-size:12.5px">要在電腦上用 Chrome 或 Edge。</div>
+    <div id="jmOut" class="jmout" aria-live="polite"></div>
   </article>
   <article class="bcard"><h4 class="sec">審核流程</h4>
     <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表，幾分鐘內會出現在右邊的「處理中的回報」。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線；「處理中的回報」會標「退回」。想補截圖可以重新回報一次。</li></ol>
@@ -1621,13 +1739,14 @@ function buildFormReport(){
   <article class="bcard" id="qCard"><h4 class="sec">處理中的回報 <span class="c" id="qC"></span></h4><div id="qL" class="muted">讀取中…</div>
     <div class="muted" style="font-size:12.5px">為了不公開還沒審核的內容，這裡只列回報編號、種類、樓層和送出時間，請用送出時間找你的回報。核准後名稱和內容會出現在下面的「已收錄」；退回的回報保留 14 天。</div></article>
   <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article></div></div></div>`;
+  $("jmDir").onchange=e=>{const fs=[...(e.target.files||[])];e.target.value="";if(fs.length)jmRun(fs)};
   rBuilt=true}
 function renderReport(){
-  if(FORM_PREFILL){if(!rBuilt)buildFormReport();$("formGo").href=FORM_PREFILL.replace("{floor}",FL);showCollab()}
+  if(FORM_PREFILL){if(!rBuilt)buildFormReport();$("formGo").href=formUrl(FL);showCollab()}
   else{if(!rBuilt)buildReport();if(rFloorShown!==FL){$("rf_floor").value=FL;rFloorShown=FL;if(RF[rType].list==="monster")rDrawFields()}}
   const done=REPS.filter(r=>r.type!=="idea").sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(repKey(b)).localeCompare(String(repKey(a))));$("doneC").textContent=done.length+" 則";
   $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?(monById[r.monId]||FLOORS[r.floor]?.M.find(x=>x.name===r.name||(x.aka||[]).includes(r.name))):null;
-      return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span>${repRef(r)}・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}${r.type==="recipe"&&ALLREC.findIndex(x=>x.rep===r.id)>=0?` ・<button class="linkbtn" data-go="r|${ALLREC.findIndex(x=>x.rep===r.id)}">看配方</button>`:""}${r.type==="skill"&&CLS.some(c=>c.reps.includes(r))?` ・<button class="linkbtn" data-go="c|${CLS.find(c=>c.reps.includes(r)).id}">看職業</button>`:""}${r.type==="quest"&&r.qref&&r.qref!=="main"?` ・<button class="linkbtn" data-go="q|${r.qref}">看任務</button>`:""}${r.type==="quest"&&r.qref==="main"?` ・<button class="linkbtn" data-go="q|mq${r.floor}_${MQ(r.floor).findIndex(x=>(x.reps||[]).includes(r))}">看任務</button>`:""}${r.x!=null&&FLOORS[r.floor]?.map?` ・<button class="linkbtn" data-rep="${r.floor}|${r.x}|${r.z}">在地圖上看</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
+      return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${r.floor?flBadge(r.floor):r.type==="item"?'<span class="fl">通用</span>':""} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span>${repRef(r)}・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}${r.type==="recipe"&&ALLREC.findIndex(x=>x.rep===r.id)>=0?` ・<button class="linkbtn" data-go="r|${ALLREC.findIndex(x=>x.rep===r.id)}">看配方</button>`:""}${r.type==="skill"&&CLS.some(c=>c.reps.includes(r))?` ・<button class="linkbtn" data-go="c|${CLS.find(c=>c.reps.includes(r)).id}">看職業</button>`:""}${r.type==="quest"&&r.qref&&r.qref!=="main"?` ・<button class="linkbtn" data-go="q|${r.qref}">看任務</button>`:""}${r.type==="quest"&&r.qref==="main"?` ・<button class="linkbtn" data-go="q|mq${r.floor}_${MQ(r.floor).findIndex(x=>(x.reps||[]).includes(r))}">看任務</button>`:""}${r.x!=null&&FLOORS[r.floor]?.map?` ・<button class="linkbtn" data-rep="${r.floor}|${r.x}|${r.z}">在地圖上看</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
   bindGo($("doneL"));$("doneL").querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);showPoints(f,[[x,z]],b.closest("li")?.querySelector("b")?.textContent||"回報位置",()=>repPin(x,z))});
   if(FORM_PREFILL){renderQueue();return}
   loadPending().then(list=>{const L=$("pendL"),C=$("pendC");if(!L)return;

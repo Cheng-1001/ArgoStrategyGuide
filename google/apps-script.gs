@@ -26,7 +26,18 @@ const CFG = {
   Q_JMAP: '探索地圖・壓縮檔',   // 上傳題目，要手動加在「探索地圖」頁（Google 不允許程式建立上傳題目）
   JMAP_MAX_MB: 45,
   // 試算表欄位名稱（前四個是表單題目，後四個是審核用欄位）
-  Q_TYPE: '回報種類', Q_FLOOR: '樓層', Q_NAME: '名稱', Q_SHOT: '截圖',
+  Q_TYPE: '回報種類', Q_FLOOR: '樓層', Q_NAME: '名稱', Q_SHOT: '截圖',   // 樓層、名稱：舊表單第 1 頁的題目（舊回報還在這兩欄）
+  // 2026-11-02 起第 1 頁只問暱稱和回報種類，樓層、名稱放在各種類頁的開頭。floor: [題目, 必填]，null＝這個種類不問。
+  HEAD: {
+    '怪物': { floor: ['怪物・樓層', true], name: ['怪物・名稱', '照遊戲裡的名稱寫，例如 Young Spider'] },
+    '物品': { floor: ['物品・樓層', false], name: ['物品・名稱', '照遊戲裡的名稱寫，例如 Leg of a Spider'] },
+    '地點': { floor: ['地點・樓層', true], name: ['地點・名稱', '例如 Wolf Valley，可以寫中文'] },
+    '配方': { floor: ['配方・樓層', true], name: ['配方・物品名稱', '做出來的物品名稱，例如 Quality Health Potion I'] },
+    '任務追蹤': { floor: ['任務・樓層', true], name: ['任務・標題', '任務標題，不含前面的數字，例如 The Truth About the Seal'] },
+    '技能': { floor: null, name: ['技能・名稱', '技能名稱原文，例如 Combinaison Brutale'] },
+    '探索地圖': { floor: null, name: null },   // 固定第 1 層；名稱用「探索地圖」
+    '建議': { floor: null, name: ['建議・標題', '一句話的標題，例如「地圖可以標記自己的位置」'] }
+  },
   C_ID: '回報編號', C_STATUS: '狀態', C_NOTE: '審核備註', C_RESULT: '處理結果',
   C_PREVIEW: '截圖預覽', C_SUMMARY: '內容摘要',   // upgradeSheet() 加的兩欄，只給審核員看，不送到網站
   STATUS: ['待審核', '核准', '退回'],
@@ -41,12 +52,36 @@ const done_ = v => /^(已上線|已送去合併)/.test(String(v || ''));
 const SHOT_HELP = '用遊戲內建截圖就好：在遊戲裡按 F2（有些筆電要按 Fn+F2）。聊天框會出現「Saved screenshot as ….png」，點檔名可以直接打開。\n檔案在：%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots（按 Win+R，貼上這一行按 Enter 就會打開資料夾）。\n按「新增檔案」→「瀏覽」選檔，按住 Ctrl 可以一次選多張（最多 5 張）。不用裁切。\n拍怪物時不要按 F1，F1 會把等級和座標一起藏起來。';
 
 const FORM_DESC = '回報 SAO Minecraft 的怪物、物品、地點、配方、任務追蹤、技能資料，或上傳 JourneyMap 探索地圖。每筆都要附遊戲截圖，審核員核對後會更新到查詢工具網站。工具裡還沒有的也可以回報。';
+const FLOOR_HELP = '只填數字，例如 1';
+const FLOOR_OPT_HELP = '只填數字。各樓層都拿得到的通用道具（例如藥水、水晶）不用填。';
 const NAME_HELP = '照遊戲裡的名稱寫，例如怪物 Young Spider、物品 Leg of a Spider、配方填做出來的物品名稱、任務填任務標題、技能填技能名稱。地點可以寫中文。';
 const PLACE_KINDS = ['村鎮', '傳送點', 'NPC', '採集點', '地下城或礦坑', '首領位置', '怪物區', '怪物重生點', '其他'];
 const NPC_KINDS = ['鍊金術士', '收購商', '鑰匙鐵匠', '飾品鐵匠', '伐木工', '武器收購商', '旅行商人', '裝備商人', '工具商人', '飾品商人', '神秘商人', '消耗品商人', '武器鐵匠', '防具鐵匠', '金屬錠鐵匠', '材料工匠', '裝備鐵匠', '隱藏飾品鐵匠', '其他'];
 const NEW_TYPES = ['配方', '任務追蹤', '技能', '探索地圖', '建議'];   // 建議一定要放最後：它填完直接送出，不經過截圖頁
 const NICK_HELP = '選填。填了會顯示在網站上，表示這筆資料是你提供的；不想公開就留空。請不要填 Google 帳號或真實姓名。';
 const NUM = () => FormApp.createTextValidation().requireWholeNumber().setHelpText('只填數字').build();
+const FLOOR_VAL = () => FormApp.createTextValidation().requireNumberBetween(1, 100).setHelpText('請填 1 到 100 的數字').build();
+/** 所有種類頁的樓層、名稱題目（摘要和送到網站的原始欄位都略過它們，因為已經是 floor、name）。 */
+const HEAD_TITLES = Object.keys(CFG.HEAD).reduce((a, k) => a.concat([CFG.HEAD[k].floor, CFG.HEAD[k].name].filter(Boolean).map(x => x[0])), []);
+
+/** 一列回報的樓層和名稱：先看這個種類頁的題目，沒有再看舊表單第 1 頁的「樓層」「名稱」。get(題目) 回傳那一欄的文字。 */
+function headOf_(get, typeLabel) {
+  const h = CFG.HEAD[typeLabel] || {};
+  let floor = parseInt((h.floor && get(h.floor[0])) || get(CFG.Q_FLOOR), 10) || null;
+  let name = (h.name && get(h.name[0])) || get(CFG.Q_NAME);
+  if (typeLabel === '探索地圖') { floor = 1; name = name || '探索地圖'; }
+  return { floor: floor, name: name, needFloor: !!(h.floor && h.floor[1]), needName: typeLabel !== '探索地圖' };
+}
+
+/** 種類頁開頭的樓層、名稱題目（新增在表單最後面，呼叫的人再搬到定位）。 */
+function addHead_(form, typeLabel) {
+  const h = CFG.HEAD[typeLabel];
+  return [h.floor && addHeadQ_(form, h.floor, true), h.name && addHeadQ_(form, h.name, false)].filter(Boolean);
+}
+function addHeadQ_(form, q, isFloor) {
+  if (isFloor) return form.addTextItem().setTitle(q[0]).setRequired(q[1]).setHelpText(q[1] ? FLOOR_HELP : FLOOR_OPT_HELP).setValidation(FLOOR_VAL());
+  return form.addTextItem().setTitle(q[0]).setRequired(true).setHelpText(q[1]);
+}
 
 /** 地點頁在座標後面多的三題。 */
 function addPlaceExtras_(form) {
@@ -57,11 +92,28 @@ function addPlaceExtras_(form) {
   ];
 }
 
+/** 各種類頁的說明（upgradeForm 會把現有表單的說明換成這些）。 */
+const PAGE_HELP = {
+  '怪物': '野外截圖才看得到等級（名字上方的 LV）；圖鑑（Codex）截圖看得到編號、區域、掉落機率，但沒有等級。',
+  '物品': '各樓層都拿得到的通用道具（例如藥水、水晶）「樓層」不用填。',
+  '地點': '',
+  '配方': '打開 NPC 的製作或購買選單，點到那個物品按 F2 截圖（要看得到材料、數量、費用、時間）。',
+  '任務追蹤': '任務追蹤畫面（右側 Tracked quest）或任務選單按 F2 截圖。',
+  '技能': '打開技能選單，點到那個技能按 F2 截圖。技能和樓層無關，不用填樓層。',
+  '探索地圖': '上傳 JourneyMap 記錄的地圖，網站會自動檢查並合併到「探索地圖」，不用截圖、不用等審核。\n' +
+    '1. 到查詢工具網站「協作區 → 攻略資料維護」，用「打包探索地圖」選 JourneyMap 的 mp 資料夾，它會自動找出第 1 層、只留網站還沒有的區域，下載壓縮檔。\n' +
+    '2. 把壓縮檔上傳到下面的「探索地圖・壓縮檔」，送出。\n' +
+    '結果（合併了多少、或為什麼沒合併）會顯示在網站協作區的「已收錄」。目前只合併第 1 層。',
+  '建議': '對查詢工具網站的建議：想要的新功能、版面或操作上的改善、任何讓攻略更好用的想法。不用截圖，填完直接送出。\n' +
+    '審核員看過後會公開在網站「協作區 → 問題回報及建議」，你的 Google 帳號不會公開。'
+};
+
 /** 新種類的分頁，每頁一個函式。回傳那一頁的分頁。 */
 const PAGE_BUILDERS = {
   '配方': form => {
   const pg = form.addPageBreakItem().setTitle('配方')
-    .setHelpText('打開 NPC 的製作或購買選單，點到那個物品按 F2 截圖（要看得到材料、數量、費用、時間）。「名稱」填做出來的物品名稱。');
+    .setHelpText(PAGE_HELP['配方']);
+  addHead_(form, '配方');
   form.addTextItem().setTitle('配方・NPC').setRequired(true).setHelpText('製作選單上方的 NPC 名稱，照抄原文，例如 Bandit Accessories');
   form.addListItem().setTitle('配方・分類').setChoiceValues(['武器', '防具', '飾品', '藥水', '鑰匙', '其他']);
   form.addParagraphTextItem().setTitle('配方・材料').setRequired(true).setHelpText('一行一個「名稱 數量」，例如：\nShark Shell 8\nBirch String 1');
@@ -74,7 +126,8 @@ const PAGE_BUILDERS = {
   },
   '任務追蹤': form => {
   const pg = form.addPageBreakItem().setTitle('任務追蹤')
-    .setHelpText('任務追蹤畫面（右側 Tracked quest）或任務選單按 F2 截圖。「名稱」填任務標題，不含前面的數字，例如 The Truth About the Seal。');
+    .setHelpText(PAGE_HELP['任務追蹤']);
+  addHead_(form, '任務追蹤');
   form.addListItem().setTitle('任務・種類').setRequired(true).setChoiceValues(['主線', '支線']);
   form.addTextItem().setTitle('任務・編號').setHelpText('追蹤畫面上任務標題前面的數字，例如「24. The Truth About the Seal」就填 24').setValidation(NUM());
   form.addParagraphTextItem().setTitle('任務・目前步驟').setHelpText('照抄追蹤畫面上的步驟原文，例如 Speak with Catherine to continue the main story');
@@ -86,7 +139,8 @@ const PAGE_BUILDERS = {
   },
   '技能': form => {
   const pg = form.addPageBreakItem().setTitle('技能')
-    .setHelpText('打開技能選單，點到那個技能按 F2 截圖。「名稱」填技能名稱原文，例如 Combinaison Brutale。');
+    .setHelpText(PAGE_HELP['技能']);
+  addHead_(form, '技能');
   form.addListItem().setTitle('技能・職業').setRequired(true).setChoiceValues(['Guerrier', 'Assassin', 'Mage', 'Shaman', 'Archer', 'Martial Artist']);
   form.addListItem().setTitle('技能・主動或被動').setChoiceValues(['不確定', '主動', '被動']);
   form.addTextItem().setTitle('技能・解鎖等級').setValidation(NUM());
@@ -96,20 +150,13 @@ const PAGE_BUILDERS = {
   return pg;
   },
   '探索地圖': form => {
-  const pg = form.addPageBreakItem().setTitle('探索地圖')
-    .setHelpText('上傳 JourneyMap 記錄的地圖，網站會自動合併到「探索地圖」。\n' +
-      '1. 打開資料夾：按 Win+R，貼上 %APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data\\mp 按 Enter。\n' +
-      '2. 進入伺服器的資料夾（名稱以 Triggers_ 開頭）→ overworld，找到 day 資料夾。\n' +
-      '3. 在 day 資料夾上按右鍵 →「壓縮成 ZIP 檔案」（Windows 10 是「傳送到 → 壓縮的資料夾」）。\n' +
-      '4. 把 zip 上傳到下面的「探索地圖・壓縮檔」（' + CFG.JMAP_MAX_MB + ' MB 以內）。最後一頁的截圖請拍 JourneyMap 的全螢幕地圖（按 J 打開，再按 F2）。\n' +
-      '目前只合併第 1 層；「名稱」填你的遊戲名稱或「探索地圖」都可以。');
+  const pg = form.addPageBreakItem().setTitle('探索地圖').setHelpText(PAGE_HELP['探索地圖']);
   form.addParagraphTextItem().setTitle('探索地圖・說明').setHelpText('例如這次新探索的地方（可不填）');
   return pg;
   },
   '建議': form => {
-  const pg = form.addPageBreakItem().setTitle('建議')
-    .setHelpText('對查詢工具網站的建議：想要的新功能、版面或操作上的改善、任何讓攻略更好用的想法。不用截圖，填完直接送出。\n' +
-      '「名稱」填一句話的標題，例如「地圖可以標記自己的位置」。審核員看過後會公開在網站「協作區 → 問題回報及建議」，你的 Google 帳號不會公開。');
+  const pg = form.addPageBreakItem().setTitle('建議').setHelpText(PAGE_HELP['建議']);
+  addHead_(form, '建議');
   form.addParagraphTextItem().setTitle('建議・內容').setRequired(true).setHelpText('想要什麼、在哪裡、為什麼有幫助');
   form.addTextItem().setTitle('建議・相關頁面').setHelpText('例如 地圖、圖鑑、任務、配方（可不填）');
   return pg;
@@ -136,13 +183,10 @@ function upgradeForm() {
   const typeQ = byTitle(CFG.Q_TYPE, FormApp.ItemType.MULTIPLE_CHOICE);
   if (!typeQ) throw new Error('找不到「回報種類」題目');
   form.setDescription(FORM_DESC);
-  const nameQ = byTitle(CFG.Q_NAME, FormApp.ItemType.TEXT);
-  if (nameQ) nameQ.setHelpText(NAME_HELP);
-  // 第 1 頁：選填的遊戲內暱稱，放在「名稱」後面
-  if (!byTitle(CFG.Q_NICK)) {
-    const nick = form.addTextItem().setTitle(CFG.Q_NICK).setHelpText(NICK_HELP);
-    if (nameQ) form.moveItem(nick.getIndex(), nameQ.getIndex() + 1);
-  }
+  // 第 1 頁：選填的遊戲內暱稱，放在「回報種類」前面
+  if (!byTitle(CFG.Q_NICK)) form.addTextItem().setTitle(CFG.Q_NICK).setHelpText(NICK_HELP);
+  const nick = byTitle(CFG.Q_NICK);
+  if (nick.getIndex() > typeQ.getIndex()) form.moveItem(nick.getIndex(), typeQ.getIndex());
 
   // 地點頁：種類選項、三個新題目放在座標後面
   const kind = byTitle('地點・種類', FormApp.ItemType.LIST);
@@ -167,6 +211,20 @@ function upgradeForm() {
   const pShot = byTitle(CFG.Q_SHOT, FormApp.ItemType.PAGE_BREAK).asPageBreakItem();
   NEW_TYPES.forEach(n => pages[n].setGoToPage(pShot));   // 前一頁（地點、配方、任務追蹤…）填完 → 截圖頁
   pShot.setGoToPage(FormApp.PageNavigationType.SUBMIT);   // 截圖頁前面一頁是「建議」：建議填完直接送出，不用截圖
+  pages['建議'].setGoToPage(FormApp.PageNavigationType.SUBMIT);   // 建議頁前面一頁是「探索地圖」：填完直接送出，不用截圖
+
+  // 樓層、名稱搬到各種類頁的開頭（2026-11-02）；舊的第 1 頁題目刪掉（試算表裡的舊欄位和資料會留著）
+  Object.keys(CFG.HEAD).forEach(n => {
+    const h = CFG.HEAD[n];
+    [[h.floor, true], [h.name, false]].filter(x => x[0]).forEach(([q, isFloor], k) => {
+      if (byTitle(q[0])) return;
+      const it = addHeadQ_(form, q, isFloor);
+      form.moveItem(it.getIndex(), byTitle(n, FormApp.ItemType.PAGE_BREAK).getIndex() + 1 + k);
+    });
+    const pb = byTitle(n, FormApp.ItemType.PAGE_BREAK);
+    if (pb && PAGE_HELP[n] !== undefined) pb.asPageBreakItem().setHelpText(PAGE_HELP[n]);
+  });
+  [CFG.Q_FLOOR, CFG.Q_NAME].forEach(t => { const it = byTitle(t, FormApp.ItemType.TEXT); if (it) form.deleteItem(it); });
 
   // 回報種類：保留原本三個選項的跳頁，再加三個新的
   const mc = typeQ.asMultipleChoiceItem();
@@ -175,6 +233,7 @@ function upgradeForm() {
   const pageOf = n => old[n] || byTitle(n, FormApp.ItemType.PAGE_BREAK).asPageBreakItem();
   mc.setChoices(['怪物', '物品', '地點'].concat(NEW_TYPES).map(n => mc.createChoice(n, pageOf(n))));
   Logger.log('表單已更新：回報種類 ' + mc.getChoices().map(c => c.getValue()).join('、') + '；共 ' + items().length + ' 題');
+  publishFormConfig_(form);
   if (!byTitle(CFG.Q_JMAP)) Logger.log('還要手動在「探索地圖」頁加上傳題目「' + CFG.Q_JMAP + '」，步驟在 SETUP.md。');
 }
 
@@ -188,16 +247,13 @@ function setup() {
     .setCollectEmail(false).setAllowResponseEdits(false).setProgressBar(true)
     .setConfirmationMessage('收到了，謝謝！審核員核對截圖後，資料會自動更新到查詢工具網站。');
 
-  // 第 1 頁：共同題目
-  const floor = form.addTextItem().setTitle(CFG.Q_FLOOR).setHelpText('只填數字，例如 1').setRequired(true)
-    .setValidation(FormApp.createTextValidation().requireNumberBetween(1, 100).setHelpText('請填 1 到 100 的數字').build());
-  form.addTextItem().setTitle(CFG.Q_NAME).setRequired(true).setHelpText(NAME_HELP);
+  // 第 1 頁：暱稱和回報種類（樓層、名稱在各種類頁的開頭）
   form.addTextItem().setTitle(CFG.Q_NICK).setHelpText(NICK_HELP);
   const type = form.addMultipleChoiceItem().setTitle(CFG.Q_TYPE).setRequired(true);
 
   // 怪物
-  const pMon = form.addPageBreakItem().setTitle('怪物')
-    .setHelpText('野外截圖才看得到等級（名字上方的 LV）；圖鑑（Codex）截圖看得到編號、區域、掉落機率，但沒有等級。');
+  const pMon = form.addPageBreakItem().setTitle('怪物').setHelpText(PAGE_HELP['怪物']);
+  addHead_(form, '怪物');
   form.addMultipleChoiceItem().setTitle('怪物・截圖種類').setRequired(true)
     .setChoiceValues(['野外截圖（看得到等級和座標）', '圖鑑截圖（Codex）', '兩種都有']);
   form.addTextItem().setTitle('怪物・等級').setHelpText('只填數字；每隻怪物只有一個等級。圖鑑截圖不用填。')
@@ -212,7 +268,8 @@ function setup() {
   form.addParagraphTextItem().setTitle('怪物・備註');
 
   // 物品
-  const pItem = form.addPageBreakItem().setTitle('物品');
+  const pItem = form.addPageBreakItem().setTitle('物品').setHelpText(PAGE_HELP['物品']);
+  addHead_(form, '物品');
   form.addListItem().setTitle('物品・怎麼拿到的').setRequired(true).setChoiceValues(['怪物掉落', '採集', '任務獎勵', '商店購買', '合成或鍛造', '其他']);
   form.addTextItem().setTitle('物品・來源').setHelpText('怪物名稱、NPC 或地點');
   form.addTextItem().setTitle('物品・座標 x, z');
@@ -220,6 +277,7 @@ function setup() {
 
   // 地點
   const pPlace = form.addPageBreakItem().setTitle('地點');
+  addHead_(form, '地點');
   form.addListItem().setTitle('地點・種類').setRequired(true).setChoiceValues(PLACE_KINDS);
   form.addTextItem().setTitle('地點・座標 x, z').setRequired(true).setHelpText('小地圖上的座標，例如 4309, 3697');
   addPlaceExtras_(form);
@@ -236,6 +294,7 @@ function setup() {
   // 每個種類的頁面填完都跳到截圖頁：「下一個分頁」的 setGoToPage 決定前一頁填完要去哪裡
   [pItem, pPlace].concat(NEW_TYPES.map(n => extra[n])).forEach(pb => pb.setGoToPage(pShot));
   pShot.setGoToPage(FormApp.PageNavigationType.SUBMIT);   // 截圖頁前面是「建議」頁：建議填完直接送出
+  extra['建議'].setGoToPage(FormApp.PageNavigationType.SUBMIT);   // 建議頁前面是「探索地圖」頁：填完直接送出，不用截圖
 
   // 試算表
   const ss = SpreadsheetApp.create('Aincrad 查詢工具・回報審核');
@@ -251,7 +310,7 @@ function setup() {
   sh.setFrozenRows(1);
   applySheetRules_(sh);
 
-  const prefill = form.createResponse().withItemResponse(floor.createResponse('1')).toPrefilledUrl().replace(/=1(&|$)/, '={floor}$1');
+  const prefill = prefillUrl_(form);
 
   P().setProperties({ SHEET_ID: ss.getId(), FORM_ID: form.getId() });
   ScriptApp.newTrigger('onReportSubmit').forSpreadsheet(ss).onFormSubmit().create();
@@ -271,6 +330,46 @@ function setup() {
   Logger.log('預先填好樓層的網址（交給 Claude）：' + prefill);
 }
 
+/**
+ * 網站「填寫回報表單」按鈕用的網址：各種類頁的必填樓層題目都先填好目前樓層（網站把 {floor} 換成樓層）。
+ * 物品的樓層是選填（通用道具不填），所以不預填。
+ */
+function prefillUrl_(form) {
+  const r = form.createResponse();
+  const texts = form.getItems(FormApp.ItemType.TEXT);
+  let n = 0;
+  Object.keys(CFG.HEAD).forEach(k => {
+    const f = CFG.HEAD[k].floor;
+    if (!f || !f[1]) return;
+    const it = texts.find(i => i.getTitle() === f[0]);
+    if (it) { r.withItemResponse(it.asTextItem().createResponse('1')); n++; }
+  });
+  if (!n) {   // 舊表單：第 1 頁的「樓層」
+    const old = texts.find(i => i.getTitle() === CFG.Q_FLOOR);
+    if (!old) return '';
+    r.withItemResponse(old.asTextItem().createResponse('1'));
+  }
+  return r.toPrefilledUrl().replace(/=1(?=&|$)/g, '={floor}');
+}
+
+/** 把預填網址寫到 GitHub 的 formcfg.js，網站的「填寫回報表單」按鈕會自動用新網址（不用再手動交給 Claude）。 */
+function publishFormConfig_(form) {
+  const url = prefillUrl_(form);
+  if (!url) return;
+  try {
+    const info = SpreadsheetApp.openById(P().getProperty('SHEET_ID')).getSheetByName('設定資訊');
+    if (info) info.getRange(3, 1, 1, 2).setValues([['預先填好樓層的網址（已自動寫到網站）', url]]);
+  } catch (e) { /* 設定資訊分頁不在也沒關係 */ }
+  const text = '// 回報表單的預填網址（{floor} 會換成目前樓層）。Google Apps Script 的 upgradeForm 自動產生，不要手改。\n'
+    + 'window.SAO_FORM = ' + JSON.stringify({ prefill: url, updated: Utilities.formatDate(new Date(), CFG.TZ, 'yyyy-MM-dd HH:mm') }, null, 1) + ';\n';
+  try {
+    putFile_('formcfg.js', Utilities.base64Encode(text, Utilities.Charset.UTF_8), '回報表單：更新預填網址');
+    Logger.log('網站的表單網址已更新（formcfg.js）：' + url);
+  } catch (e) {
+    Logger.log('formcfg.js 沒有寫成（' + e.message + '），請把這個網址交給 Claude：' + url);
+  }
+}
+
 /** 補做 setup 沒完成的部分：自動處理（觸發器）、「設定資訊」分頁、三個網址。可以重複執行，不會重複建立。 */
 function repair() {
   const props = P().getProperties();
@@ -280,8 +379,7 @@ function repair() {
   const have = ScriptApp.getProjectTriggers().map(t => t.getHandlerFunction());
   if (have.indexOf('onReportSubmit') < 0) ScriptApp.newTrigger('onReportSubmit').forSpreadsheet(ss).onFormSubmit().create();
   if (have.indexOf('onReviewEdit') < 0) ScriptApp.newTrigger('onReviewEdit').forSpreadsheet(ss).onEdit().create();
-  const floor = form.getItems(FormApp.ItemType.TEXT).find(i => i.getTitle() === CFG.Q_FLOOR);
-  const prefill = floor ? form.createResponse().withItemResponse(floor.asTextItem().createResponse('1')).toPrefilledUrl().replace(/=1(&|$)/, '={floor}$1') : '（找不到「樓層」題目）';
+  const prefill = prefillUrl_(form) || '（找不到樓層題目）';
   const info = ss.getSheetByName('設定資訊') || ss.insertSheet('設定資訊');
   info.getRange(1, 1, 5, 2).setValues([
     ['表單（給玩家填）', form.getPublishedUrl()],
@@ -315,7 +413,7 @@ function applySheetRules_(sh) {
 function checkSetup() {
   const sh = sheet_();
   const col = headers_(sh);
-  const miss = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT].filter(h => !col[h]);
+  const miss = [CFG.Q_TYPE, CFG.Q_SHOT, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT].filter(h => !col[h]);
   applySheetRules_(sh);
   if (!P().getProperty('GITHUB_TOKEN')) miss.push('指令碼屬性 GITHUB_TOKEN');
   else gh_('GET', ''); // 金鑰無效會在這裡報錯
@@ -332,6 +430,12 @@ function onReportSubmit(e) {
   sh.getRange(row, col[CFG.C_ID]).setValue('R' + String(row - 1).padStart(4, '0'));
   sh.getRange(row, col[CFG.C_STATUS]).setValue('待審核');
   if (col[CFG.C_PREVIEW]) { try { decorateRow_(sh, row); } catch (err) { console.warn('decorateRow_: ' + err.message); } }
+  // 探索地圖不用人工審核：審核員看不出 zip 裡是哪個世界，真正的檢查是 tools/jm_merge.py 和網站地圖的比對
+  if (CFG.TYPES[String(sh.getRange(row, col[CFG.Q_TYPE]).getValue()).trim()] === 'jmap') {
+    sh.getRange(row, col[CFG.C_STATUS]).setValue('核准');
+    sh.getRange(row, col[CFG.C_NOTE]).setValue('自動核准：探索地圖由程式比對網站地圖檢查');
+    publishRow_(sh, row);
+  }
   syncPending_();
 }
 
@@ -389,7 +493,8 @@ function pendingList_(sh, now) {
     const id = String(at(CFG.C_ID)).trim();
     if (!/^R\d+$/.test(id)) return;
     const st = String(at(CFG.C_STATUS)).trim(), res = String(at(CFG.C_RESULT)).trim();
-    const e = { id: id, type: CFG.TYPES[String(at(CFG.Q_TYPE)).trim()] || 'other', floor: parseInt(at(CFG.Q_FLOOR), 10) || null, date: stamp_(v[0]) };
+    const tl = String(at(CFG.Q_TYPE)).trim();
+    const e = { id: id, type: CFG.TYPES[tl] || 'other', floor: headOf_(h => String(at(h)).trim(), tl).floor, date: stamp_(v[0]) };
     if (st === '退回') {
       const m = res.match(/\d{4}-\d{2}-\d{2}/);
       e.rdate = m ? m[0] : e.date.slice(0, 10);
@@ -503,20 +608,20 @@ function publishRow_(sh, row) {
     const get = h => { const i = hdr.indexOf(h); return i < 0 ? '' : String(val[i]).trim(); };
     const id = get(CFG.C_ID) || ('R' + String(row - 1).padStart(4, '0'));
     const type = CFG.TYPES[get(CFG.Q_TYPE)];
-    const floor = parseInt(get(CFG.Q_FLOOR), 10);
-    const name = get(CFG.Q_NAME);
-    if (!type || !floor || !name) throw new Error('回報種類、樓層或名稱沒填好');
+    if (!type) throw new Error('回報種類沒填好');
+    const head = headOf_(get, get(CFG.Q_TYPE));
+    const floor = head.floor, name = head.name;
+    if ((head.needFloor && !floor) || (head.needName && !name)) throw new Error('樓層或名稱沒填好');
 
-    const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.Q_JMAP, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT, CFG.C_PREVIEW, CFG.C_SUMMARY];
+    const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.Q_JMAP, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT, CFG.C_PREVIEW, CFG.C_SUMMARY].concat(HEAD_TITLES);
     const zipIds = type === 'jmap' ? (get(CFG.Q_JMAP).match(/id=([\w-]+)/g) || []).map(s => s.slice(3)) : [];
     if (type === 'jmap' && !zipIds.length) throw new Error('探索地圖回報沒有附壓縮檔（' + CFG.Q_JMAP + '）');
-    if (type === 'jmap' && floor !== 1) throw new Error('探索地圖目前只合併第 1 層；第 ' + floor + ' 層的地圖還沒有探索地圖可以合併');
     const raw = {};
     hdr.forEach((h, i) => { if (i === 0 || skip.includes(h) || !h) return; const v = String(val[i]).trim(); if (v && v !== '不確定') raw[h] = v; });
 
     // 截圖：Google Drive 上的檔案 → 縮成約 1600px 的 JPEG → 存進網站的 reports 資料夾
     const ids = (get(CFG.Q_SHOT).match(/id=([\w-]+)/g) || []).map(s => s.slice(3));
-    if (!ids.length && type !== 'idea') throw new Error('沒有截圖');
+    if (!ids.length && type !== 'idea' && type !== 'jmap') throw new Error('沒有截圖');
     const imgs = [];
     ids.forEach((fid, k) => {
       const img = imageBlob_(fid);
@@ -625,9 +730,10 @@ function decorateRow_(sh, row) {
   const hdr = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
   const val = sh.getRange(row, 1, 1, sh.getLastColumn()).getValues()[0];
   const get = h => { const i = hdr.indexOf(h); return i < 0 ? '' : String(val[i]).trim(); };
-  if (!get(CFG.Q_NAME)) return;
-  const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT, CFG.C_PREVIEW, CFG.C_SUMMARY];
-  const lines = [get(CFG.Q_TYPE) + '｜第 ' + get(CFG.Q_FLOOR) + ' 層｜' + get(CFG.Q_NAME), ''];
+  if (!get(CFG.Q_TYPE)) return;
+  const head = headOf_(get, get(CFG.Q_TYPE));
+  const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT, CFG.C_PREVIEW, CFG.C_SUMMARY].concat(HEAD_TITLES);
+  const lines = [get(CFG.Q_TYPE) + '｜' + (head.floor ? '第 ' + head.floor + ' 層' : get(CFG.Q_TYPE) === '物品' ? '各層通用' : '不分樓層') + '｜' + head.name, ''];
   hdr.forEach((h, i) => {
     if (i === 0 || !h || skip.includes(h)) return;
     const v = String(val[i]).trim();

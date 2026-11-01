@@ -45,7 +45,9 @@
 | `floor1_jm.jpg` | 第 1 層「探索地圖」3000px 預覽：使用者的 JourneyMap 疊在變暗的 wiki 地圖上（網站實際用 `tiles/f1jm`） |
 | `tiles/f1jm/{L}/{c}_{r}.jpg` | 第 1 層探索地圖切片：256px，L0～L3 = 640／1280／2560／5120px，L3 是 1 格 1 像素。由 `tools/jm_tiles.py` 產生 |
 | `tools/jm_tiles.py` | JourneyMap day 圖 → `floor1_jm.jpg` ＋ 切片，**整張重做**（2026-11-02 起不要再用，會蓋掉玩家合併的部分） |
-| `tools/jm_merge.py`、`tiles/f1jm/explored.png`、`jmmeta.js` | **探索地圖的合併**：玩家上傳的 day 資料夾 zip（或本機資料夾）疊到現有切片上。`explored.png` 是已探索的 16×16 區塊（1 px＝1 區塊，世界座標；2026-11-02 用 `--init-mask` 從切片推算，直方圖雙峰、門檻 9）。和已探索區塊重疊處顏色差異中位數 > 32 就拒絕（別的樓層／世界）；只接受 `x,z.png`、512×512、≤ 600 張、每張 ≤ 4 MB。只重寫碰到的 L3 切片，L0～L2 和 `floor1_jm.jpg` 由 L3 重產。結果寫在 `jmmeta.js`（`SAO_JM["1"]` 日期、探索比例、合併紀錄；`results[回報編號]`），**不碰 `reports.js`**（避免和 Apps Script 衝突）。測試 `tests/jm_merge_test.py` |
+| `tools/jm_merge.py`、`tiles/f1jm/explored.png`、`jmmeta.js` | **探索地圖的合併**：玩家上傳的 zip（網站「打包探索地圖」產生，或本機資料夾）疊到現有切片上。**依資料夾分組，只收名叫 `day` 的資料夾（或 zip 根目錄）的圖**（夜間、地形、洞穴層不收）；**每個資料夾各自檢查**：和已探索區塊重疊至少 `--min-overlap`（20）塊且顏色對得上才合併，重疊太少（無法確認是第 1 層）或對不上就略過；多個資料夾依檔案日期舊→新貼上（新的蓋舊的）；結果有 `folders`／`skipped`。`explored.png` 是已探索的 16×16 區塊（1 px＝1 區塊，世界座標；2026-11-02 用 `--init-mask` 從切片推算，直方圖雙峰、門檻 9）。和已探索區塊重疊處顏色差異中位數 > 32 就拒絕（別的樓層／世界）；只接受 `x,z.png`、512×512、≤ 600 張、每張 ≤ 4 MB。只重寫碰到的 L3 切片，L0～L2 和 `floor1_jm.jpg` 由 L3 重產。結果寫在 `jmmeta.js`（`SAO_JM["1"]` 日期、探索比例、合併紀錄；`results[回報編號]`），**不碰 `reports.js`**（避免和 Apps Script 衝突）。測試 `tests/jm_merge_test.py` |
+| `formcfg.js` | 回報表單預填網址 `window.SAO_FORM = {prefill, updated}`，**Apps Script 的 `upgradeForm` 自動寫入，不要手改**（`{floor}` 每個必填樓層題各一個，網站全部替換） |
+| `tests/jm_pack_test.py` | 網站打包工具端到端測試：假的 mp 資料夾（第 1 層＋新區域、別處真實地形、雜訊、只有新區域、範圍外、夜間層）→ 瀏覽器判斷 → 下載 zip → `jm_merge.py` 合併；也測分份 |
 | `.github/workflows/jm_merge.yml` | release `jmap-回報編號` 發佈時執行：下載 zip → `jm_merge.py` → commit 切片和 `jmmeta.js` → 要求 Pages 重建 → 刪掉 release |
 | `tools/build_equip.py` | 產生 `equip.js`／`equip.png`。要先在工作目錄準備官網圖鑑 `catalog.json`、`im_index.json`、官方圖示和 3D 截圖（做法見「抓資料的方法」） |
 | `pending.js` | 處理中的回報 `window.SAO_PENDING = {updated, list}`，**Google Apps Script 自動寫入，不要手改**。每筆只有 `id`、`type`、`floor`、`date`（送出時間 yyyy-MM-dd HH:mm）、`status`（pending／approved／error／rejected）、退回的 `rdate`；不放名稱、內容、暱稱、截圖、審核備註（使用者 2026-11-02 選 A，只公開這幾欄） |
@@ -115,19 +117,20 @@
   - 地點（「地點・種類」加了 傳送點、怪物區；「地點・在地下嗎／傳送選單名稱／NPC 類別」）：NPC → `SAO_NPCS` 新列（類別中文對 key，對不上用 `other`）；首領位置＋對得上怪物（第 1 層）→ `BOSS_SPAWNS`；其他新增成 SPOTS（`src:"rep"`、`rep` 回報編號、`u` 地下）；地圖上已有同名地點／城鎮的只掛 `reps`（面板顯示回報座標），不移動。
   - 掉落物名稱全部對得上物品資料時，才取代 wiki 的掉落表；對不上就以文字列出。
   - 工具裡沒有的怪物，會自動新增成「玩家回報新增」的怪物，放在 zone `rep`。
-- **回報分頁**：`FORM_PREFILL` 有值時顯示 Google 表單大按鈕，並把目前樓層帶入表單；沒有值時退回舊的 GitHub issue 流程。有未送出的 Google 表單草稿時，用預填連結打開會跳「繼續使用目前的草稿？」（Google 表單的行為）；使用者 2026-11-02 選 A：維持預填，不改。
+- **打包探索地圖**（2026-11-02，`#jmPack`，`jmRun`）：玩家選 JourneyMap 的 `mp` 資料夾（`webkitdirectory`，檔案只在瀏覽器處理）。`jmGroups` 只收 `…/day/x,z.png`、依資料夾分組；`jmAnalyze` 把每張圖以 1/4 畫到 1280px canvas，和 L1 切片（1 px＝4 格）在已探索區塊（`explored.png`）上逐塊比色：重疊 ≥ 20 塊且中位數 ≤ 20 ＝第 1 層（實測：真的 6～7、別處真實地形 29～37、雜訊 65）；`few`＝重疊太少、`other`、`out`。只打包有 ≥ 4 個新區塊的區域，每一份再補重疊的區域到 60 塊（`jmPlan`，伺服器才能再驗證），超過 40 MB 自動分份；`jmZip` 自己寫的 STORE zip（保留資料夾路徑和檔案時間）。參數 `JMP`（測試用 `window.__JMP`），結果 `window.__jm`。
+- **回報分頁**：`FORM_PREFILL`（優先用 `formcfg.js` 的 `SAO_FORM.prefill`）有值時顯示 Google 表單大按鈕，`formUrl(FL)` 把所有 `{floor}` 換成目前樓層；「提出建議」用不帶預填的網址（建議不問樓層）；沒有值時退回舊的 GitHub issue 流程。有未送出的 Google 表單草稿時，用預填連結打開會跳「繼續使用目前的草稿？」（Google 表單的行為）；使用者 2026-11-02 選 A：維持預填，不改。
 - **處理中的回報**（2026-11-02）：`renderQueue` 用 `fetch("pending.js",{cache:"no-store"})` 讀（不用 script 標籤，避免瀏覽器快取；每分鐘最多重讀一次），攻略資料維護右欄「處理中的回報」列非建議的、問題回報及建議右欄「審核中的建議」（`#ideaQ`，沒有就隱藏）列建議。Apps Script 的 `pendingList_`／`syncPending_` 在送出、改狀態、`processQueue`、`retryApproved` 時更新，內容有變（MD5 存在指令碼屬性 `PENDING_SIG`）才 commit；退回保留 `PENDING_REJECT_DAYS`＝14 天；`syncPending` 手動整份重寫。測試：`tests/apps_script_test.js`、`tests/report_types_test.py`。
 
 ## 玩家回報流程（Google 表單）
 
-1. 玩家填 Google 表單，必須登入 Google 才能上傳截圖。回報種類有怪物、物品、地點、配方、任務追蹤、技能、探索地圖、建議（後五種 2026-11-02 加；「建議」一定在最後、截圖頁的 goto 是 SUBMIT，所以建議填完直接送出、核准時不需要截圖；使用者要執行 `upgradeForm`，探索地圖還要手動加上傳題目「探索地圖・壓縮檔」，步驟在 SETUP.md），最後一頁是上傳題目「截圖」。
-   - **探索地圖**（`jmap`）：核准後 `publishJmap_` 把 zip（≤ 45 MB、只收第 1 層）放到 GitHub Release `jmap-回報編號`，「處理結果」寫「已送去合併」（`done_` 視為完成，不會重做）；之後由 GitHub Actions 合併。網站回報清單從 `jmmeta.js` 的 `results` 顯示「合併中／已合併／沒有合併：原因」。
-   - **回報者暱稱**（2026-11-02）：第 1 頁「名稱」後面的選填題「回報者・遊戲內暱稱」（`CFG.Q_NICK`，`upgradeForm` 會補）。網站 `normRep` 讀成 `r.by`（最多 32 字），`repRef` 顯示「暱稱 提供」，玩家建議顯示「暱稱 提出」，任務／技能回報列也會帶上。
+1. 玩家填 Google 表單，必須登入 Google 才能上傳截圖。**第 1 頁只有「回報者・遊戲內暱稱」「回報種類」**（2026-11-02 使用者指定）；樓層、名稱在各種類頁開頭（`CFG.HEAD`：怪物／物品／地點／配方／任務 X・樓層＋X・名稱（配方・物品名稱、任務・標題），物品樓層選填＝各層通用（`floor: null`，網站顯示「通用」），技能、建議只有名稱（技能・名稱、建議・標題），探索地圖都沒有＝第 1 層、名稱「探索地圖」）。`headOf_` 先讀種類頁的題目，沒有再讀舊第 1 頁的「樓層」「名稱」（舊回報；試算表這兩欄不要刪）；審核網頁 `HEAD_FLOOR`／`HEAD_NAME` 同樣。回報種類有怪物、物品、地點、配方、任務追蹤、技能、探索地圖、建議（「建議」一定在最後；截圖頁和建議頁的 goto 是 SUBMIT，所以**建議和探索地圖填完直接送出**）。`upgradeForm` 負責搬題目、刪舊題、寫 `formcfg.js`；探索地圖的上傳題目「探索地圖・壓縮檔」要手動加。最後一頁是上傳題目「截圖」。
+   - **探索地圖**（`jmap`）：**送出時 `onReportSubmit` 自動核准**（審核備註「自動核准：探索地圖由程式比對網站地圖檢查」，不用截圖；使用者 2026-11-02 指出人工審核看不出 zip 是哪個世界，選 A：網站打包工具＋程式檢查）。`publishJmap_` 把 zip（≤ 45 MB、只收第 1 層）放到 GitHub Release `jmap-回報編號`，「處理結果」寫「已送去合併」（`done_` 視為完成，不會重做）；之後由 GitHub Actions 合併。網站回報清單從 `jmmeta.js` 的 `results` 顯示「合併中／已合併／沒有合併：原因」。
+   - **回報者暱稱**（2026-11-02）：第 1 頁「回報種類」前面的選填題「回報者・遊戲內暱稱」（`CFG.Q_NICK`，`upgradeForm` 會補）。網站 `normRep` 讀成 `r.by`（最多 32 字），`repRef` 顯示「暱稱 提供」，玩家建議顯示「暱稱 提出」，任務／技能回報列也會帶上。
 2. 回報進到使用者 Google 帳號裡的試算表「Aincrad 查詢工具・回報審核」的「回報」分頁。程式自動填上回報編號 R0001…，狀態設為「待審核」。
 3. 審核員（試算表編輯者，只能改「狀態」和「審核備註」）把狀態改成「核准」。**一個人核准就上線。**
 4. Apps Script 的觸發器會縮小截圖，存到 `reports/R000N.jpg`，把資料加進 `reports.js`，再寫回「處理結果」欄。
 5. GitHub 金鑰是 fine-grained token，只限這個 repo 的 Contents 讀寫。存在 Apps Script 的指令碼屬性 `GITHUB_TOKEN`。**不要叫使用者把金鑰貼到對話裡。** 金鑰到期後換新，再執行 `retryApproved`。
-6. 之後改表單：網站靠題目名稱判斷內容（例如「怪物・等級」），所以題目改名要同步修改 `RAWF`（在 `src/index.html`）。「回報種類」「樓層」「名稱」「截圖」以及試算表的四個審核欄位，名稱都不要改。
+6. 之後改表單：網站靠題目名稱判斷內容（例如「怪物・等級」），所以題目改名要同步修改 `RAWF`（在 `src/index.html`）。「回報種類」「截圖」「探索地圖・壓縮檔」、`CFG.HEAD` 的樓層／名稱題目，以及試算表的四個審核欄位，名稱都不要改。
 
 ## 目前狀態和待辦（2026-10-31）
 
@@ -135,7 +138,7 @@
 - [x] 高解析度地圖（C1）：2026-10-31 用使用者 JourneyMap 原尺寸重做第 1 層探索地圖並改成切片。2026-11-01 用 jm-upload-2 更新（62 張，島上探索範圍 32.4% → 38.2%，新增 Virelune 往北經 Candelia 到 Kobold Tower 的路線）。之後使用者會改用本機 Claude Code 直接執行 `tools/jm_tiles.py` 並 push，不再走 release。
 - **2026-11-02 起 JourneyMap 一律走合併**：玩家和站長都用表單「探索地圖」上傳（或本機 `python3 -I tools/jm_merge.py <day 資料夾>` 後 commit 切片、`explored.png`、`jmmeta.js`），不要再用 `jm_tiles.py` 整張重做。以下是舊流程，僅供參考。
 - JourneyMap 更新流程（舊）：**雲端工作階段連不到使用者的 Windows 電腦**（Remote Control 不支援 Windows）。使用者讓 GPT 在電腦上打包 `jm_export.zip`，用 `gh release create jm-upload-N ... --prerelease` 上傳到 GitHub Release。下載 `https://github.com/Cheng-1001/ArgoStrategyGuide/releases/download/jm-upload-N/jm_export.zip`，第 1 層是 `Triggers_815bd3d6-…/overworld/day`，執行 `tools/jm_tiles.py`，更新 `jmDate`。用完請使用者刪掉 release。
-- [x] 玩家回報 JourneyMap（2026-11-02 做好，使用者選 A：表單上傳 zip，全自動合併）。`upgradeForm` 已執行；[ ] 手動加上傳題目「探索地圖・壓縮檔」，再用自己的地圖測試一次。
+- [x] 玩家回報 JourneyMap（2026-11-02 做好，使用者選 A：表單上傳 zip，全自動合併；同日改成網站打包工具＋送出自動核准）。
 
 - [x] Google 表單端到端測試（2026-11-01）：R0001 Young Spider LV3 核准後自動寫入 `reports.js` 和 3 張截圖，網站顯示等級 3。checkSetup、分頁跳轉都已確認。Drive 縮圖（`=s1600`）可用，但當時存成 PNG（每張 1.7 MB），已手動轉成 JPEG。
 - [x] 審核畫面（2026-11-01 使用者執行 `upgradeSheet` 確認）：「截圖預覽」用 `newCellImage` 嵌 base64 縮圖可正常顯示（Drive 檔案不公開）、「內容摘要」、原始欄位收起、整列依狀態上色；表單「截圖」頁換成 F2 說明。截圖一律轉 JPEG。注意：Google 會把回應表自動轉成「表格」（Form_Responses），表格標題預設白字，所以標題要明確設深色字。
@@ -144,7 +147,8 @@
 - 改了 `apps-script.gs` 或審核網頁後：`node tests/apps_script_test.js`（含假表單上的 `upgradeForm` 測試）、`python3 tests/review_test.py` 都要 ALL PASSED。改了回報解讀要跑 `python3 tests/report_types_test.py`、`tests/report_rules_test.py`。
 - [ ] 第 2、3 層預計 **11/4 開放**（遊戲改版）。使用者通知後，重新抓 wiki 和官網資料，比對差異後更新 `data23.js`。第 3 層還沒有地圖。
 - [ ] 物品類型的回報，目前只出現在「已收錄」清單，還沒整合進物品詳細資料（地點回報 2026-11-02 已整合成地圖點位）。
-- [x] 使用者執行 `upgradeForm`（2026-11-01 22:05，執行記錄：回報種類 8 個、共 58 題）。[ ] 手動加上傳題目「探索地圖・壓縮檔」、再執行 `upgradeSheet`、用自己的地圖測試探索地圖上傳。
+- [x] 使用者執行 `upgradeForm`（2026-11-01 22:05，執行記錄：回報種類 8 個、共 58 題）。
+- [ ] 2026-11-02 表單改版＋探索地圖改成打包工具／自動核准：等使用者貼新版 `apps-script.gs`、再執行 `upgradeForm`（搬樓層名稱、寫 `formcfg.js`）、手動加上傳題目「探索地圖・壓縮檔」、`upgradeSheet`、用自己的 mp 資料夾測試（SETUP.md「表單改版＋探索地圖」）。也要重貼審核網頁的 `review.gs`（認得新欄位）。
 - [x] 使用者貼上新版 `apps-script.gs` 並執行 `syncPending`（2026-11-01 21:57，Apps Script commit「處理中的回報：0 則」）。
 - 已知限制：
   - 第 1 層只剩 Skeleton、Kazor 沒有座標（參考互動地圖的 Current Data 也沒有 Kazor）；第 2 和第 3 層全部怪物的區域沒有座標。

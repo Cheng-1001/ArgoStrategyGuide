@@ -95,6 +95,7 @@ function stCls(s){return s==="核准"?"ok":s==="退回"?"bad":"wait"}
 function pending(x){return x.status==="待審核"||!x.status}
 function chips(el,opts,get,set){el.innerHTML=opts.map(function(o){return'<button class="chip" type="button" data-v="'+esc(o[0])+'" aria-pressed="'+(get()===o[0])+'">'+o[1]+'</button>'}).join("");
   [].forEach.call(el.querySelectorAll(".chip"),function(b){b.onclick=function(){set(b.dataset.v);S.cur=null;render()}})}
+function flTxt(x){return x.floor?'第 '+esc(x.floor)+' 層':x.type==='物品'?'各層通用':'不分樓層'}
 function filtered(){var a=S.items.filter(function(x){return(S.view==="wait"?pending(x):!pending(x))&&(S.type==="all"||x.type===S.type)&&(S.floor==="all"||String(x.floor)===S.floor)});
   var t=function(x){return x.row};
   a.sort(function(x,y){if(S.view==="done")return t(y)-t(x);if(S.sort==="new")return t(y)-t(x);if(S.sort==="old")return t(x)-t(y);
@@ -108,14 +109,14 @@ function render(){
   var cnt=function(t){return base.filter(function(x){return x.type===t}).length};
   chips($("fType"),[["all","全部 <b>"+base.length+"</b>"]].concat(TYPES.map(function(t){return[t,ICON[t]+" "+t+" <b>"+cnt(t)+"</b>"]})),function(){return S.type},function(v){S.type=v});
   var fl=[];S.items.forEach(function(x){if(fl.indexOf(String(x.floor))<0)fl.push(String(x.floor))});fl.sort(function(a,b){return a-b});
-  $("fFloor").innerHTML='<option value="all">全部樓層</option>'+fl.map(function(f){return'<option value="'+esc(f)+'"'+(S.floor===f?" selected":"")+'>第 '+esc(f)+' 層</option>'}).join("");
+  $("fFloor").innerHTML='<option value="all">全部樓層</option>'+fl.map(function(f){return'<option value="'+esc(f)+'"'+(S.floor===f?" selected":"")+'>'+(f?'第 '+esc(f)+' 層':'不分樓層／通用')+'</option>'}).join("");
   $("fSort").disabled=S.view==="done";
   var a=filtered();
   if(!a.length){$("main").innerHTML='<div class="empty" style="grid-column:1/-1">'+(S.view==="wait"?"🎉 這個分類沒有待審核的回報。":"還沒有處理過的回報。")+'</div>';return}
   if(!S.cur||!a.some(function(x){return x.id===S.cur}))S.cur=a[0].id;
   var q=a.map(function(x){return'<button class="qi" type="button" data-id="'+esc(x.id)+'" aria-current="'+(x.id===S.cur)+'"><span class="ic">'+(ICON[x.type]||"❔")+'</span><span class="nm">'+esc(x.name)+'</span>'
     +(S.view==="wait"?(PRI[x.type]===0?'<span class="tag pri">優先</span>':'<span class="tag"></span>'):'<span class="tag st '+stCls(x.status)+'">'+esc(x.status)+'</span>')
-    +'<span class="sub">'+esc(x.id)+'・第 '+esc(x.floor)+' 層・'+esc(String(x.time).slice(0,16))+'</span></button>'}).join("");
+    +'<span class="sub">'+esc(x.id)+'・'+flTxt(x)+'・'+esc(String(x.time).slice(0,16))+'</span></button>'}).join("");
   $("main").innerHTML='<nav class="queue" aria-label="回報清單">'+q+'</nav><section class="card" id="card"></section>';
   [].forEach.call(document.querySelectorAll(".qi"),function(b){b.onclick=function(){S.cur=b.dataset.id;S.shotIdx=0;render()}});
   renderCard(a);
@@ -126,12 +127,12 @@ function renderCard(a){
   var map="";
   if(c&&mp){var px=(c.x-mp.x0)/mp.size*100,pz=(c.z-mp.x0)/mp.size*100;map='<div><div class="muted" style="margin-bottom:4px">位置</div><div class="map"><img src="'+mp.img+'" alt="第 '+esc(x.floor)+' 層地圖"><i style="left:'+px+'%;top:'+pz+'%"></i><span>X '+c.x+' · Z '+c.z+'</span></div></div>'}
   var wait=pending(x);
-  $("card").innerHTML='<div class="ctop"><span style="font-size:24px">'+(ICON[x.type]||"❔")+'</span><h2>'+esc(x.name)+'</h2><span class="badge">'+esc(x.type)+'</span><span class="badge">第 '+esc(x.floor)+' 層</span><span class="badge">'+esc(x.id)+'</span>'
+  $("card").innerHTML='<div class="ctop"><span style="font-size:24px">'+(ICON[x.type]||"❔")+'</span><h2>'+esc(x.name)+'</h2><span class="badge">'+esc(x.type)+'</span><span class="badge">'+flTxt(x)+'</span><span class="badge">'+esc(x.id)+'</span>'
     +(wait?(PRI[x.type]===0?'<span class="pri">優先</span>':""):'<span class="st '+stCls(x.status)+'">'+esc(x.status)+'</span>')+'<span class="muted">'+esc(x.time)+'</span></div>'
     +'<div class="cbody"><div><div class="shot" id="shot">'+(x.shots.length?"截圖載入中…":"這筆回報沒有截圖")+'</div>'
     +(x.shots.length>1?'<div class="thumbs">'+x.shots.map(function(s,k){return'<button type="button" data-k="'+k+'" aria-pressed="'+(k===S.shotIdx)+'">第 '+(k+1)+' 張</button>'}).join("")+'</div>':"")+'</div>'
     +'<div style="display:flex;flex-direction:column;gap:12px;min-width:0"><dl>'+dl+'</dl>'+map
-    +'<a class="muted" href="https://cheng-1001.github.io/ArgoStrategyGuide/#f'+encodeURIComponent(x.floor)+'-'+(SITE_TAB[x.type]||"monsters")+'" target="_blank" rel="noopener">在網站上看目前的資料 ↗</a></div></div>'
+    +'<a class="muted" href="https://cheng-1001.github.io/ArgoStrategyGuide/#f'+encodeURIComponent(x.floor||1)+'-'+(SITE_TAB[x.type]||"monsters")+'" target="_blank" rel="noopener">在網站上看目前的資料 ↗</a></div></div>'
     +(wait?'<div class="act"><textarea id="note" placeholder="審核備註（可不填）。退回時寫原因；如果這隻其實是舊怪物改名，寫「舊名：原本的名字」，例如 舊名：Young Spider"></textarea><button class="btn ok" id="bOk" type="button">✅ 核准</button><button class="btn bad" id="bNo" type="button">❌ 退回</button></div>'
       :'<div class="result"><b>處理結果</b>\n'+esc(x.result||(x.status==="核准"?"等待上線（約 1 分鐘內）":"—"))+(x.note?'\n\n<b>審核備註</b>\n'+esc(x.note):"")+'</div>')
     +'<div class="nav"><button class="btn ghost" id="bPrev" type="button"'+(i<=0?" disabled":"")+'>← 上一筆</button><button class="btn ghost" id="bNext" type="button"'+(i>=a.length-1?" disabled":"")+'>下一筆 →</button><span class="muted">'+(i+1)+' / '+a.length+'</span>'
