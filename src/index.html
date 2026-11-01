@@ -143,7 +143,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .route{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;z-index:5;overflow:visible}
 .rstep{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:7;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:#e8a23a;color:#1b1206;border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.35);font:700 11.5px var(--f-mono);display:grid;place-items:center;white-space:nowrap;pointer-events:none}
 .reward .xp{color:var(--ok);font-family:var(--f-mono)}
-.reward .col{color:var(--warn);font-family:var(--f-mono)}
+.reward .col{color:var(--warn);font-family:var(--f-mono)}.mqh .reward{margin-left:auto;align-self:flex-start;padding-left:10px}
 .inf{color:var(--warn);font-size:11px}
 
 /* ---------- shared bits ---------- */
@@ -826,7 +826,7 @@ const q=$("q");const norm=s=>String(s||"").toLowerCase().normalize("NFD").replac
 const Sq=()=>norm(q.value.trim());
 function itemHit(id,s,shallow){if(!s)return true;const it=ITEMS[id];if(norm(id).includes(s)||norm(it.fr).includes(s))return true;if(shallow)return false;return!!(CAT_ZH[it.cat]&&CAT_ZH[it.cat].includes(q.value.trim()))}
 const monHit=(m,s)=>{if(!s)return true;const z=FLOORS[m.floor].zones[m.zone];return norm(m.name).includes(s)||(m.aka||[]).some(a=>norm(a).includes(s))||m.num.includes(s)||norm(z.n+" "+z.zh).includes(s)||m.drops.some(d=>itemHit(d[0],s,true))};
-const questHit=(qq,s)=>{if(!s)return true;const t=townById[qq.town];return norm(qq.npc).includes(s)||norm(t.n+" "+(t.zh||"")+" "+(t.en||"")).includes(s)||norm(qq.raw).includes(s)||norm(qq.task).includes(s)||qq.need.some(n=>itemHit(n[0],s,true))||(qq.kill&&qq.kill[0].some(k=>norm(k).includes(s)))};
+const questHit=(qq,s)=>{if(!s)return true;const t=townById[qq.town];return norm([qq.title,qq.bonus,qq.tnote,...sideSteps(qq).map(x=>x[0]),...(qq.reps||[]).map(r=>r.step)].join(" ")).includes(s)||norm(qq.npc).includes(s)||norm(t.n+" "+(t.zh||"")+" "+(t.en||"")).includes(s)||norm(qq.raw).includes(s)||norm(qq.task).includes(s)||qq.need.some(n=>itemHit(n[0],s,true))||(qq.kill&&qq.kill[0].some(k=>norm(k).includes(s)))};
 
 // ================= detail drawer =================
 const panel=$("panel"),pBody=$("pBody");let stack=[];
@@ -843,6 +843,8 @@ function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.
   pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="x"?legalDetail():cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
   pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);
+    // a quest step: the whole route in the floating window, zoomed to this step
+    const rt=b.closest(".mqs")&&pBody.querySelector("[data-route]");if(rt&&view!=="map"){const Q=questById(rt.dataset.route);if(Q){openRouteWin((Q.main?mqLabel(Q.q)+"・":"支線・")+Q.title,Q.steps,Q.f);rwFocus(x,z);return}}
     // outside the map tab, coordinates open in the floating map window (all coordinates listed next to this one, numbered)
     const par=b.parentElement,grp=par===pBody||!par?[]:[...par.querySelectorAll("[data-rep]")].map(e=>e.dataset.rep.split("|").map(Number)).filter(p=>p[0]===f);
     showPoints(f,grp.length>1?grp.map(p=>[p[1],p[2]]):[[x,z]],($("pCrumb").textContent.split(" › ").pop()||"位置"),()=>repPin(x,z))}));
@@ -959,7 +961,10 @@ function reqChips(qq){const Fx=FLOORS[qq.floor];const a=qq.need.map(([id,n,inf])
   if(qq.kill)qq.kill[0].forEach(n=>a.push(`<button class="req kill" data-go="m|${Fx.monByName[n].id}">⚔️ <span>擊殺 ${esc(n)}</span><span class="qty">× ${qq.kill[1]}${qq.kill[0].length>1&&!qq.kill[2]?"（合計）":""}</span></button>`));
   if(qq.task)a.push(`<span class="req task">📝 <span>${esc(qq.task)}</span></span>`);
   return a.join("")}
-const rewardText=qq=>[qq.xp?`<span style="color:var(--ok);font-family:var(--f-mono)">${qq.xp} xp</span>`:"",qq.money?`<span style="color:var(--warn);font-family:var(--f-mono)">${money(qq.money)} Col</span>`:"",qq.bonus?`獎勵：${esc(qq.bonus)}`:""].filter(Boolean).join(" · ")||'<span class="muted">wiki 未記錄獎勵</span>';
+// one reward format for main and side quests: "100 xp · 120 Col · 🎁 item"
+const rewardText=qq=>[qq.xp?`<span class="xp">${money(qq.xp)} xp</span>`:"",qq.money?`<span class="col">${money(qq.money)} Col</span>`:"",qq.bonus?`<span class="rwi">🎁 ${esc(qq.bonus)}</span>`:""].filter(Boolean).join(" · ")||'<span class="muted">獎勵未記錄</span>';
+Object.values(window.SAO_MAINQ||{}).forEach(L=>L.forEach(q=>{if(!q.rw)return;const n=re=>{const m=q.rw.match(re);return m?+m[1].replace(/,/g,""):0};
+  q.xp=q.xp||n(/([\d,]+)\s*(?:經驗|xp)/i);q.money=q.money||n(/([\d,]+)\s*Col/i)}));
 
 // ================= shared filter chips =================
 const chipsInto=(el,opts,get,set,cb)=>{el.innerHTML=opts.map(([v,l])=>`<button class="chip" data-v="${v}" aria-pressed="${get()===v}">${l}</button>`).join("");
@@ -1006,7 +1011,7 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=$("fItemAll").ch
 let qTown="all",qKind="main";const MQ=f=>(window.SAO_MAINQ||{})[f]||[];
 chipsInto($("fQKind"),[["main","主線"],["side","支線"]],()=>qKind,v=>qKind=v,renderQuests);
 const mqNo=qq=>qq.n?`#${qq.n}${qq.nEst?"?":""}`:"";const mqLabel=qq=>qq.n?`主線 #${qq.n}${qq.nEst?"（推算）":""}`:"主線";
-const mqHit=(qq,s)=>!s||norm([qq.t,qq.npc,qq.d,...qq.s.map(x=>x[0])].join(" ")).includes(s);
+const mqHit=(qq,s)=>!s||norm([qq.t,qq.npc,qq.d,qq.rw,qq.bonus,...qq.s.map(x=>x[0]),...(qq.reps||[]).map(r=>r.step)].join(" ")).includes(s);
 function questById(id){if(id.startsWith("mq")){const [f,i]=id.slice(2).split("_").map(Number);const qq=MQ(f)[i];return qq?{main:1,f,i,q:qq,title:qq.t,steps:qq.s}:null}
   const qq=ALLQ.find(x=>x.id===id);return qq?{main:0,f:qq.floor,q:qq,title:qq.title||`${qq.npc} 的委託`,steps:sideSteps(qq)}:null}
 function bestSource(id,floor){const it=ITEMS[id];
@@ -1043,6 +1048,8 @@ function rwRender(){if(!RW)return;const m=FLOORS[RW.f].map;const r=rwSvg.getBoun
     return`<g><title>${esc(ns.map(n=>n+". "+RW.steps[n-1][0]).join("\n"))}</title><rect x="${X(bx)-ww/2}" y="${Z(bz)-R}" width="${ww}" height="${R*2}" rx="${R}" fill="#e8a23a" stroke="#fff" stroke-width="${2*k}"/><text x="${X(bx)}" y="${Z(bz)+fs*0.36}" font-size="${fs}" text-anchor="middle" font-weight="700" fill="#1b1206" font-family="monospace">${lab}</text></g>`}).join("");
   rwSvg.setAttribute("viewBox",`${x} ${y} ${w} ${h}`);
   rwSvg.innerHTML=`<image href="${BASE==="jm"&&m.jm?m.jm:m.img}" x="0" y="0" width="1000" height="1000" preserveAspectRatio="none"/>${RW.noLine?"":`<polyline points="${pts.map(p=>X(p[1]).toFixed(1)+","+Z(p[2]).toFixed(1)).join(" ")}" fill="none" stroke="#e8a23a" stroke-width="${3.5*k}" stroke-dasharray="${10*k} ${7*k}" stroke-linejoin="round" stroke-linecap="round"/>`}${dots}`}
+function rwFocus(x,z){requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!RW)return;const m=FLOORS[RW.f].map;const r=rwSvg.getBoundingClientRect();if(!r.width)return;
+  const w=160,h=w*r.height/r.width,px=(x-m.x0)/m.size*1000,pz=(z-m.z0)/m.size*1000;RW.vb=[px-w/2,pz-h/2,w,h];rwRender()}))}
 function openRouteWin(title,steps,f,noLine){RW={steps,f,noLine:!!noLine,view,vb:[0,0,1000,1000]};$("rwTitle").textContent=title;$("rwin").hidden=false;requestAnimationFrame(()=>{rwFitBox();rwRender()})}
 function rwZoom(fac,cx,cy){if(!RW)return;const r=rwSvg.getBoundingClientRect();const [x,y,w,h]=RW.vb;const px=x+(cx??r.width/2)/r.width*w,py=y+(cy??r.height/2)/r.height*h;
   const nw=Math.min(1400,Math.max(25,w/fac)),nh=nw*h/w;RW.vb=[px-(px-x)*nw/w,py-(py-y)*nh/h,nw,nh];rwRender()}
@@ -1174,7 +1181,7 @@ function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不
     :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「回報區」回報就能補上。</div>`:""}
   <div class="note">${n.src==="rep"?`位置和類別來自核准的玩家回報（${esc(n.rep)}）。`:n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「回報區」回報地點。</div>`}
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
-  const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv],["獎勵",qq.rw]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")
+  const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")+`<dt>獎勵</dt><dd class="reward" style="text-align:left">${rewardText(qq)}</dd>`
     :`<dt>NPC</dt><dd>${esc(qq.npc)}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?t.n:"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq)}</dd>`;
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">📜</span><div class="ttl"><div class="num">${flBadge(f)} ${Q.main?mqLabel(qq):"支線"}</div><h2>${esc(Q.title)}</h2>${!Q.main&&qq.src==="ref"?`<div class="sub">目前版本的支線（參考互動地圖）</div>`:""}</div></div>
   <dl class="facts">${facts}</dl>${Q.main&&qq.d?`<p class="lore" style="font-style:normal">${esc(qq.d)}</p>`:""}
@@ -1185,8 +1192,8 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
   <div class="note">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。":qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
   ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${esc(r.id)}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
   ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}`}
-function mqCard(qq,i){const meta=[qq.npc&&("NPC "+qq.npc),qq.lv&&("等級 "+qq.lv),qq.rw&&("獎勵 "+qq.rw)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
-  return`<button class="card qcard" data-key="q|${id}" data-go="q|${id}"><div class="mqh"><span class="mqn${qq.n?"":" nonum"}${qq.nEst?" est":""}" title="${qq.n?(qq.nEst?"遊戲任務編號（依順序推算）":"遊戲任務編號"):"遊戲編號未確認"}">${qq.n?qq.n:"·"}</span><div class="mqt"><b>${esc(qq.t)}</b>${meta?`<span>${meta}</span>`:""}</div></div>
+function mqCard(qq,i){const meta=[qq.npc&&("NPC "+qq.npc),qq.lv&&("等級 "+qq.lv)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
+  return`<button class="card qcard" data-key="q|${id}" data-go="q|${id}"><div class="mqh"><span class="mqn${qq.n?"":" nonum"}${qq.nEst?" est":""}" title="${qq.n?(qq.nEst?"遊戲任務編號（依順序推算）":"遊戲任務編號"):"遊戲編號未確認"}">${qq.n?qq.n:"·"}</span><div class="mqt"><b>${esc(qq.t)}</b>${meta?`<span>${meta}</span>`:""}</div><div class="reward">${rewardText(qq)}</div></div>
   ${qq.d?`<p class="qd">${esc(qq.d)}</p>`:""}<span class="muted" style="font-size:12px">${qq.s.length} 個步驟${qq.s.some(x=>x[1]!=null)?"・有路線圖":""}</span></button>`}
 function renderMainQ(s){const all=MQ(FL);const idx=all.map((qq,i)=>[qq,i]).filter(([qq])=>mqHit(qq,s));
   $("cQ").textContent=all.length?`${idx.length} / ${all.length} 段`:"";
