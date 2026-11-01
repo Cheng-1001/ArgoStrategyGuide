@@ -343,6 +343,11 @@ with sync_playwright() as p:
           and pg.locator('#rFeedW a[href*="template=6-idea.yml"]').count() == 1, "協作區: #feedback opens 問題回報及建議 with the bug and idea buttons")
     pg.click('.csub a[data-sub="data"]'); pg.wait_for_timeout(300)
     check(pg.is_visible("#rData") and pg.is_hidden("#rFeedW") and "#report" in pg.url, "協作區: 攻略資料維護 shows the data form")
+    # calibration mode is for the owner only (?edit)
+    pg.goto(base + "#map"); pg.wait_for_timeout(500)
+    check(pg.is_hidden("#editToggle") and pg.is_hidden(".mapfoot"), "players do not see the calibration button")
+    pg.goto(base + "?edit#map"); pg.wait_for_timeout(800)
+    check(pg.is_visible("#editToggle"), "?edit shows the calibration button")
     pg.goto(base + "#report"); pg.wait_for_timeout(400)
     codes = pg.eval_on_selector_all(".rform code, #jmPack code", "e=>e.map(x=>x.textContent)")
     check(r"%APPDATA%\.Triggers Client\instances\Sword Art Online\screenshots" in codes

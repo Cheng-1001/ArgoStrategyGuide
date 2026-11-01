@@ -814,7 +814,10 @@ let FL=1;const F=()=>FLOORS[FL];
 
 // ---------- user-placed zone positions (per floor, per browser) ----------
 const posKey=f=>f===1?"sao-f1-zone-pos":"sao-f"+f+"-zone-pos";
-const userPos={};FL_KEYS.forEach(f=>{try{userPos[f]=JSON.parse(localStorage.getItem(posKey(f))||"{}")||{}}catch(e){userPos[f]={}}});
+// 校正模式（把位置未知的區域放到地圖上、匯出座標給 Claude）只給站長用：網址要有 ?edit（例如 …/ArgoStrategyGuide/?edit#f2-map）。
+// 放好的位置只存在這個瀏覽器，所以一般模式不套用，玩家不會看到只有自己看得到的點（使用者 2026-11-02 選 A）
+const EDIT_MODE=/(?:^|[?&])edit(?:[=&]|$)/.test(location.search);
+const userPos={};FL_KEYS.forEach(f=>{try{userPos[f]=EDIT_MODE?JSON.parse(localStorage.getItem(posKey(f))||"{}")||{}:{}}catch(e){userPos[f]={}}});
 const savePos=f=>{try{localStorage.setItem(posKey(f),JSON.stringify(userPos[f]))}catch(e){}};
 const BASE_SPOT={};ALLS.forEach(sp=>sp.mons.forEach(n=>BASE_SPOT[FLOORS[sp.floor].monByName[n].id]=sp));
 // boss / mini-boss spawn points (floor 1); a monster with spawns is drawn at each spawn instead of inside an area
@@ -1966,7 +1969,7 @@ function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(F
       const tw=document.createElement("div");tw.className="thumbs";F().M.filter(m=>m.zone===z&&!HAS_POS(m.id)).forEach(m=>{const b=mapThumb(m);b.classList.remove("mapth");tw.appendChild(b)});row.appendChild(tw);
       const pl=row.querySelector(".place");if(pl)pl.onclick=()=>{placing=placing===z?null:z;updateEditbar();renderZoneList()};
       zl.appendChild(row)})}
-  $("editToggle").hidden=!MP();
+  $("editToggle").hidden=!MP()||!EDIT_MODE;
   filterMap();markSel()}
 let ROUTE=null;
 function clearRoute(){ROUTE=null;world.querySelectorAll(".route,.rstep").forEach(n=>n.remove());$("routeBar").hidden=true}
@@ -2004,6 +2007,7 @@ function updateEditbar(){editbar.hidden=!editing;stage.classList.toggle("edit",e
 function setEditing(v){editing=v;placing=null;editToggle.setAttribute("aria-pressed",editing);editToggle.classList.toggle("on",editing);
   editToggle.textContent=editing?"結束校正":"校正未知區域位置";$("exportBtn").hidden=!editing;$("resetBtn").hidden=!editing;if(!editing)$("exportBox").hidden=true;updateEditbar();renderZoneList()}
 editToggle.onclick=()=>setEditing(!editing);
+editToggle.closest(".mapfoot").hidden=!EDIT_MODE;
 stage.addEventListener("click",e=>{if(!editing||!placing||moved>4||!MP())return;if(e.target.closest(".zoombtns,.th,.town,.zlabel"))return;
   const r=stage.getBoundingClientRect();let [bx,bz]=fromPx((e.clientX-r.left-tx)/sc,(e.clientY-r.top-ty)/sc);bx=Math.round(bx);bz=Math.round(bz);const m=MP();
   if(bx<m.x0||bz<m.z0||bx>m.x0+m.size||bz>m.z0+m.size)return;userPos[FL][placing]={x:bx,z:bz};savePos(FL);placing=null;updateEditbar();renderMap();renderZoneList()});

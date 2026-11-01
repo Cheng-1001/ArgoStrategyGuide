@@ -39,7 +39,7 @@ NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR 
 
 ## 回報資料
 
-到網站的「協作區 → 攻略資料維護」填 Google 表單（需附遊戲截圖），審核員核准後自動更新到網站。設定方式見 [google/SETUP.md](google/SETUP.md)。
+到網站的「協作區 → 攻略資料維護」填 Google 表單（需附遊戲截圖），審核員核准後自動更新到網站。表單和審核的設定方式見 [google/SETUP.md](google/SETUP.md)（站長和審核員用的設定說明，玩家不用看）。
 
 ## 開發
 
