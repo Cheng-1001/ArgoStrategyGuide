@@ -1,0 +1,13 @@
+{
+  "_help": "Recipe name (as in recipes.js) -> path of its texture inside sao.zip. Fill with `python tools/recipe_icons.py find`, then run `build`.",
+  "Mana Potion I": "",
+  "Quality Mana Potion I": "",
+  "Quality Mana Potion II": "",
+  "Quality Mana Potion III": "",
+  "Quality Stamina Potion I": "",
+  "Quality Stamina Potion II": "",
+  "Quality Stamina Potion III": "",
+  "Teleportation Crystal": "",
+  "Kobold Key": "",
+  "Purification Elixir": ""
+}

@@ -630,6 +630,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js"></script>
 <script src="npcs.js"></script>
 <script src="recipes.js"></script>
+<script src="recicons.js"></script>
 <script>
 (()=>{
 const S1=window.SAO,S23=window.SAO23;
@@ -1015,7 +1016,8 @@ let rcCat="all";
 chipsInto($("fRcCat"),[["all",`全部 <b>${ALLREC.length}</b>`],...Object.entries(RC_CAT).map(([k,[l,ic]])=>[k,`${ic} ${l} <b>${ALLREC.filter(r=>r.cat===k).length}</b>`])],()=>rcCat,v=>rcCat=v,renderRecipes);
 $("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(ALLREC.map(r=>r.npc))].sort().map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
 $("fRcNpc").onchange=renderRecipes;$("fRcSort").onchange=renderRecipes;
-const recIcon=(r,s=44)=>{const e=eqById[String(r.oid)];if(e)return eslot(e,s);const p=prById[String(r.oid)];if(p)return pslot(p,s);return`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${RC_CAT[r.cat][1]}</span>`};
+const RECIC=window.SAO_RECICONS||{};
+const recIcon=(r,s=44)=>{const e=eqById[String(r.oid)];if(e)return eslot(e,s);const p=prById[String(r.oid)];if(p)return pslot(p,s);if(RECIC[r.en])return`<span class="eslot empty" style="--s:${s}px" aria-hidden="true"><img src="${esc(RECIC[r.en])}" alt="" style="width:80%;height:80%;image-rendering:pixelated"></span>`;return`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${RC_CAT[r.cat][1]}</span>`};
 const recGo=r=>eqById[String(r.oid)]?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid:(npcByName(r.f,r.npc)?"n|"+npcByName(r.f,r.npc).id:"");
 const recHit=(r,s)=>!s||norm([r.en,r.npc,(eqById[String(r.oid)]||prById[String(r.oid)]||{}).name||"",...r.mats.map(m=>m[0])].join(" ")).includes(s);
 function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value;
