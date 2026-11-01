@@ -62,7 +62,19 @@ nav.tabs a{font-family:var(--f-display);font-weight:600;font-size:14px;letter-sp
 nav.tabs a[aria-current="page"]{background:var(--panel);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
 nav.tabs a .ts{display:none}
 nav.tabs a .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
-.gsearch{position:relative;flex:1;min-width:180px;max-width:460px;margin-left:auto}
+.gsearch{position:relative;flex:1;min-width:150px;max-width:460px;margin-left:auto}
+.aboutbtn{margin-left:auto;flex:none;display:flex;align-items:center;gap:5px;text-decoration:none;color:var(--muted);font-family:var(--f-display);font-weight:600;font-size:13.5px;padding:6px 11px;border:1px solid var(--line);border-radius:8px;background:var(--panel-2);white-space:nowrap}
+.aboutbtn:hover{color:var(--fg);border-color:var(--accent)}
+.aboutbtn[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.aboutbtn .i{font-size:15px;line-height:1}
+.aboutbtn+.gsearch{margin-left:0}
+.srcl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.srcl li{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr);gap:4px 16px;padding:9px 0;border-top:1px solid var(--line)}
+.srcl li:first-child{border-top:0;padding-top:2px}
+.srcl .w{color:var(--muted);font-size:13px}
+.srcl .w small{display:block;margin-top:3px}
+.olinks{display:flex;flex-wrap:wrap;gap:8px}
+@media (max-width:820px){.srcl li{grid-template-columns:minmax(0,1fr)}}
 .gsearch input{width:100%;padding:8px 12px 8px 34px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2)}
 .gsearch svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted)}
 
@@ -238,7 +250,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .world .tiles img.l0{z-index:0}.world .tiles img.hi{z-index:1}
 .legend .lgt{background:none;border:1px solid rgba(255,255,255,.28);color:inherit;border-radius:999px;padding:1px 8px 1px 6px;cursor:pointer;font-size:11.5px}
 .legend .lgt:hover{border-color:#fff}
-@media (min-width:821px){.legend{left:220px}}
+@media (min-width:821px){.legend{left:220px;top:12px;padding:0;background:none}}
 .legend .lgb.ghost{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35)}
 .fpanel{position:absolute;left:12px;top:46px;z-index:9;width:min(196px,calc(100% - 24px));max-height:calc(100% - 100px);overflow:auto;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.35);padding:12px;display:flex;flex-direction:column;gap:12px}
 .fpanel[hidden]{display:none}
@@ -247,7 +259,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .fphead,.fpsubh{display:flex;gap:10px;align-items:center}.fphead b,.fpsubh b{flex:1;font-family:var(--f-display)}
 .fpcats{display:flex;flex-direction:column;gap:5px}.fpgrp{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-top:4px}.fpnpc{display:flex;flex-direction:column;gap:4px;margin-top:6px}
 .fpsub{margin:-1px 0 2px 10px;padding:4px 0 4px 10px;border-left:2px solid var(--line)}.fpsub summary{cursor:pointer;list-style:none;font-size:12.5px}.fpsub summary::after{content:" ▸";color:var(--muted)}.fpsub[open] summary::after{content:" ▾"}
-@media (min-width:821px){#filterBtn,#fpX{display:none}.fpanel{padding:10px;gap:8px;font-size:13px}}
+@media (min-width:821px){#filterBtn,#fpX{display:none}.fpanel{padding:10px;gap:8px;font-size:13px;top:12px;max-height:calc(100% - 66px)}}
 .fchip{display:flex;gap:6px;align-items:center;border:1px solid var(--line);background:var(--panel-2);border-radius:8px;padding:4px 8px;cursor:pointer;font-size:13px;text-align:left;color:var(--fg)}
 .fchip .n{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
 .fchip[aria-pressed="false"]{opacity:.45;text-decoration:line-through;border-style:dashed}
@@ -318,7 +330,8 @@ aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:
 .srchint{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:8;display:flex;gap:10px;align-items:center;max-width:calc(100% - 24px);background:#fff4d6;color:#4a3500;border:1px solid #e8b44a;border-radius:8px;padding:5px 12px;font-size:12.5px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
 .srchint[hidden]{display:none}
 .csub{padding:0 0 12px;background:none}.repby{font-weight:600;color:var(--fg)}.ideareply{color:var(--ok)!important;margin-top:2px}.repbtn.ghost{background:var(--panel);color:var(--fg);border:1px solid var(--line)}.fbbtns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.fbbtns .repbtn{flex:1;min-width:180px;text-align:center}@media (max-width:820px){.srchint{top:auto;bottom:52px;left:10px;right:56px;transform:none;font-size:12px;padding:5px 9px}}.bsp.dim{opacity:.25;filter:grayscale(1)}.srchint .linkbtn{color:#a35a00;font-weight:600;white-space:nowrap}
-.mapnote{position:absolute;left:12px;bottom:46px;z-index:5;max-width:min(420px,calc(100% - 70px));background:rgba(10,16,22,.78);color:#e8eef3;font-size:11.5px;padding:5px 9px;border-radius:5px}
+.mapnote{position:absolute;left:12px;bottom:46px;z-index:5;max-width:min(280px,calc(100% - 70px));background:rgba(10,16,22,.78);color:#e8eef3;font-size:11.5px;padding:5px 9px;border-radius:5px}
+@media (min-width:821px){.mapnote{left:220px}}
 
 /* bosses */
 .bossview{overflow:auto}
@@ -501,6 +514,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <a href="#bosses" data-v="bosses">世界王</a>
       <a href="#report" data-v="report">協作區</a>
     </nav>
+    <a class="aboutbtn" id="aboutBtn" href="#about" title="本站說明、資料來源、版權聲明"><span class="i" aria-hidden="true">ⓘ</span>說明</a>
     <label class="gsearch" for="q">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
       <input id="q" type="search" placeholder="搜尋怪物、物品（英文或法文）、NPC、地區" autocomplete="off">
@@ -642,6 +656,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 
   <!-- REPORT -->
   <section class="view bossview" id="view-report" hidden><div class="bwrap" id="rWrap"></div></section>
+  <section class="view bossview" id="view-about" hidden><div class="bwrap" id="aWrap"></div></section>
 </div>
 
 <div class="rwin" id="cwin" hidden role="dialog" aria-label="職業可用的裝備"><div class="rwhead" id="cwHead"><b id="cwTitle"></b><span class="muted">拖曳標題移動・拉右下角調整大小</span><button class="iconbtn" id="cwX" aria-label="關閉">✕</button></div><div class="cwbody" id="cwBody"></div></div>
@@ -861,10 +876,10 @@ function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[
   openRouteWin(pts.length>1&&s!=null?`${title}・第 ${s+1} 點（共 ${pts.length} 點）${c(pts[s])}`:`${title}・${pts.map(c).join("、")}`,
     pts.map((p,i)=>[pts.length>1?`${i+1}. ${c(p)}`:c(p),p[0],p[1]]),f,true);if(s!=null&&pts.length>1)RW.sel=s+1}
 function goMapThen(f,fn){if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
-const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="x"?"版權聲明":s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
+const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
 function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");
-  pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="x"?legalDetail():cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
+  pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
   pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);
     // a quest step: the whole route in the floating window, zoomed to this step
@@ -1188,9 +1203,34 @@ $("cwX").onclick=closeCW;
  h.addEventListener("pointermove",e=>{if(!d)return;w.style.left=Math.max(0,Math.min(innerWidth-80,e.clientX-d.x))+"px";w.style.top=Math.max(0,Math.min(innerHeight-40,e.clientY-d.y))+"px"});
  h.addEventListener("pointerup",()=>d=null)}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("cwin").hidden)closeCW()});
-// copyright / non-affiliation notice (owner chose option C on 2026-11-01: keep the content, state the rights and offer removal)
-function legalDetail(){const iss="https://github.com/Cheng-1001/ArgoStrategyGuide/issues";
-  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">©</span><div class="ttl"><h2>版權聲明</h2><div class="sub">非官方玩家攻略</div></div></div>
+// about page: official links, data sources, copyright / non-affiliation notice
+// (notice: owner chose option C on 2026-11-01: keep the content, state the rights and offer removal)
+const ABOUT_SRC=[
+  ['<a href="https://saominecraft.wiki.gg/" target="_blank" rel="noopener">SAO Minecraft Wiki</a>','怪物圖鑑、掉落物、樓層地圖、支線任務、主線任務表與編號 8～18','玩家維護的 wiki'],
+  ['<a href="https://saominecraft.com/wiki" target="_blank" rel="noopener">官方物品圖鑑</a>','物品與裝備的名稱（法文原文）、稀有度、數值、描述、圖示與 3D 預覽截圖',''],
+  ['<a href="https://saominecraft.com/world-boss" target="_blank" rel="noopener">官方世界首領頁</a>','世界王 Galiath、獨特怪物 Seraphel',''],
+  ['<a href="https://delayedcode.github.io/SAO-MC-Interactive-Map/" target="_blank" rel="noopener">SAO MC Interactive Map</a>','第 1 層的座標與地名、NPC 位置與類別、首領重生點、配方材料、主線任務步驟順序','DelayedCode 製作的參考互動地圖。它沒有授權條款，所以只取座標、名稱、數量這類事實資料，不使用它的描述文字、程式碼或區域範圍；網站上標示「參考互動地圖」'],
+  ['遊戲內畫面（玩家截圖）','傳送點清單、配方（製作時間、材料、價格）、任務追蹤上的主線編號、怪物改名','網站上標示「遊戲截圖」'],
+  ['遊戲模組的圖鑑提示','怪物的出沒提示文字','只取文字，不放遊戲素材'],
+  ['JourneyMap 探索紀錄','第 1 層「探索地圖」底圖、修補 wiki 地圖的破損處','站長的紀錄，加上玩家在協作區上傳、自動合併的部分'],
+  ['玩家回報（協作區的 Google 表單）','怪物等級、座標、圖鑑編號與區域、掉落物、配方、任務、技能、地點、回報截圖','審核員核准後才收錄；網站上標示回報編號（R0001…）和回報者暱稱'],
+  ['<a href="https://zh.minecraft.wiki/" target="_blank" rel="noopener">Minecraft Wiki</a>','少數原版 Minecraft 物品圖示（Allium、Wheat）',''],
+];
+let aboutJump=null;
+function renderAbout(){const iss=GH_ISSUES;
+  $("aWrap").innerHTML=`<div class="rhead"><h2>說明</h2><span class="count">關於本站・資料來源・版權聲明</span></div>
+  <article class="bcard" id="aboutSite"><h4 class="sec">關於本站</h4>
+    <p>艾恩葛朗特（Aincrad）查詢工具：把 SAO Minecraft 的地圖、怪物、裝備、配方、任務、職業技能、世界王互相連結，點任何名稱都能跳到相關資料。</p>
+    <p>此攻略由中文玩家社群協力製作，提供中文玩家使用。資料有錯或缺漏，歡迎到<a href="#report">協作區</a>回報。</p>
+    <h4 class="sec">遊戲官方連結</h4>
+    <div class="olinks"><a class="repbtn ghost" href="https://saominecraft.com/" target="_blank" rel="noopener">🌐 遊戲官網 ↗</a><a class="repbtn ghost" href="https://discord.gg/HdHba5awgn" target="_blank" rel="noopener">💬 官方 Discord ↗</a></div>
+    <div class="note">開放時段異動、維護等公告會發在官方 Discord 和遊戲內。本站的原始碼與更新紀錄在 <a href="https://github.com/Cheng-1001/ArgoStrategyGuide" target="_blank" rel="noopener">GitHub</a>。</div>
+  </article>
+  <article class="bcard" id="aboutSrc"><h4 class="sec">資料來源 <span class="c">每筆資料旁也會標示來源</span></h4>
+    <ul class="srcl">${ABOUT_SRC.map(([n,u,w])=>`<li><b>${n}</b><span class="w">${u}${w?`<small>${w}</small>`:""}</span></li>`).join("")}</ul>
+    <div class="note">怪物名稱以遊戲內圖鑑為準；wiki 或參考地圖的舊名會保留成別名，搜尋時仍找得到。第 2、3 層是開放前的 wiki 資料，開放後可能變動。</div>
+  </article>
+  <article class="bcard" id="legal"><h4 class="sec">版權聲明 <span class="c">非官方玩家攻略</span></h4>
   <ul class="uses">
   <li>本攻略由中文玩家社群協力製作，提供中文玩家使用。</li>
   <li>本站是玩家自製的非官方攻略，免費、沒有廣告、不販售任何東西。</li>
@@ -1199,7 +1239,9 @@ function legalDetail(){const iss="https://github.com/Cheng-1001/ArgoStrategyGuid
   <li>權利人要求移除任何內容時，我們會立即下架。請在 <a href="${iss}" target="_blank" rel="noopener">GitHub Issues</a> 留言。</li>
   </ul>
   <div class="note" lang="fr">Guide communautaire non officiel, réalisé de façon collaborative par la communauté sinophone pour les joueurs chinois ; gratuit et sans publicité. Il n’est ni affilié à Triggers SAO ni approuvé par Triggers SAO. Les contenus du jeu (icônes, noms, descriptions, captures) appartiennent à Triggers SAO ou à leurs titulaires respectifs. Sur simple demande des ayants droit, tout élément sera retiré : <a href="${iss}" target="_blank" rel="noopener">GitHub Issues</a>.</div>
-  <div class="note">NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</div>`}
+  <div class="note">NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</div>
+  </article>`;
+  const sv=$("view-about");if(aboutJump){const el=$(aboutJump);aboutJump=null;if(el)requestAnimationFrame(()=>el.scrollIntoView({block:"start"}))}else sv.scrollTop=0}
 function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找不到這個配方。</div>`;
   const e=eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),rar=e?e.r:r.r,isE=!!eqById[String(r.oid)];
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} 配方・${RC_CAT[r.cat][0]}</div><h2>${esc(r.en)}</h2>${e?`<div class="sub">${esc(e.name)}</div>`:""}</div></div>
@@ -1813,11 +1855,12 @@ $("exportBtn").onclick=async()=>{const out={};Object.entries(userPos[FL]).forEac
 $("resetBtn").onclick=()=>{userPos[FL]={};savePos(FL);renderMap();renderZoneList()};
 
 // ================= floor switch + routing =================
-const VIEWS=["map","monsters","items","props","recipes","quests","equip","classes","bosses","report"];let view="map";
+const VIEWS=["map","monsters","items","props","recipes","quests","equip","classes","bosses","report","about"];let view="map";
 const CODEX=["monsters","equip","items","props"];let lastCodex="monsters";
 const hashFor=(v,f)=>(f===1?"":"f"+f+"-")+v;
 function go(v,f){location.hash=hashFor(v,f??FL)}
 document.querySelectorAll("nav.tabs a,#codexTabs a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v==="codex"?lastCodex:a.dataset.v)}));
+$("aboutBtn").addEventListener("click",e=>{e.preventDefault();if(view==="about")$("view-about").scrollTop=0;else go("about")});
 // floor picker: 100 floors; only floors with data can be opened
 const TOTAL=100;const flTrig=$("flTrig"),flPop=$("flPop");
 const flState=f=>FLOORS[f]?(FLOORS[f].status==="soon"?"soon":"open"):"lock";
@@ -1836,19 +1879,20 @@ $("flForm").onsubmit=e=>{e.preventDefault();pickFloor(parseInt($("flJump").value
 function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.ready=1;
   $("flNo").textContent=f+"F";$("flNm").textContent=F().name;
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
-  const Fx=F();$("floorInfo").innerHTML=`<b>${FLN(f)}・${esc(Fx.name)}</b><span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/4 開放・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>openP("x","legal","new");
+  const Fx=F();$("floorInfo").innerHTML=`<b>${FLN(f)}・${esc(Fx.name)}</b><span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/4 開放・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PR.length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
   $("nItem").textContent=Object.keys(ITEMS).filter(id=>itemFloors(id).includes(f)).length;
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
-function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback)$/);
+function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback|about)$/);
   view=mm?mm[2]:"map";if(view==="feedback"){view="report";rSub="feedback"}else if(view==="report")rSub="data";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
-  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses")&&!panel.hidden)closeP();
+  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about")&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
   document.querySelectorAll("nav.tabs a,#codexTabs a").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  const ab=$("aboutBtn");ab.href="#"+hashFor("about",FL);if(view==="about")ab.setAttribute("aria-current","page");else ab.removeAttribute("aria-current");
   if(view==="map")requestAnimationFrame(()=>{syncNpcFly();if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
   renderCurrent()}
-function renderCurrent(){requestAnimationFrame(fixCols);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="classes")renderClasses();else renderQuests()}
+function renderCurrent(){requestAnimationFrame(fixCols);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="about")renderAbout();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="classes")renderClasses();else renderQuests()}
 window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
 

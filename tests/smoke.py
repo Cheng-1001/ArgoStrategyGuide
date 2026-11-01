@@ -124,10 +124,17 @@ with sync_playwright() as p:
     check(pg.locator('nav.tabs a[data-v="recipes"][aria-current="page"]').count() == 1 and pg.is_hidden("#codexTabs")
           and pg.eval_on_selector_all("nav.tabs a", "e=>e.map(a=>a.dataset.v).join(',')") == "map,codex,quests,recipes,classes,bosses,report",
           "recipes is its own top tab between quests and world bosses")
-    pg.click("#legalBtn"); pg.wait_for_timeout(250)
-    t = pg.inner_text("#pBody")
-    check("非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t and "中文玩家社群協力製作" in t, "copyright / non-affiliation notice opens from the floor bar")
-    pg.click("#pClose"); pg.wait_for_timeout(150)
+    pg.click("#legalBtn"); pg.wait_for_timeout(350)
+    t = pg.inner_text("#legal")
+    check("about" in pg.url and pg.is_visible("#view-about") and "非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t and "中文玩家社群協力製作" in t,
+          "floor-bar copyright link opens the notice on the about page")
+    box_a = pg.locator("#aboutBtn").bounding_box(); box_q = pg.locator(".gsearch").bounding_box()
+    t = pg.inner_text("#aWrap")
+    check(pg.locator('#aboutBtn[aria-current="page"]').count() == 1 and box_a["x"] + box_a["width"] <= box_q["x"] and abs(box_a["y"] - box_q["y"]) < 20
+          and "資料來源" in t and "SAO MC Interactive Map" in t and "Minecraft Wiki" in t
+          and pg.locator('#aWrap a[href="https://discord.gg/HdHba5awgn"]').count() == 1 and pg.locator('#aWrap a[href="https://saominecraft.com/"]').count() == 1,
+          "about button sits left of the search box; about page lists official links, data sources and the notice")
+    pg.goto(base + "#recipes"); pg.wait_for_timeout(400)
     pg.click('#fRcCat .chip[data-v="potion"]'); pg.wait_for_timeout(200)
     pg.locator("#lRc .rcard", has_text="Quality Health Potion I").first.click(); pg.wait_for_timeout(300)
     t = pg.inner_text("#pBody")
