@@ -761,8 +761,11 @@ const MAPCAT=MAPGRP.flatMap(g=>g[1]);
 const NPCCAT={alchemist:["鍊金術士","⚗️"],lumberjack:["伐木工","🪓"],lootBuyers:["收購商","💰"],weaponSellers:["武器收購商","🗡️"],travelingMerchants:["旅行商人","🧳"],equipmentMerchants:["裝備商人","🛡️"],toolMerchants:["工具商人","🔧"],accessoriesMerchants:["飾品商人","💍"],occultMerchants:["神秘商人","🔮"],consumablesMerchants:["消耗品商人","🧪"],weaponsmith:["武器鐵匠","⚔️"],armorBlacksmith:["防具鐵匠","🦺"],ingotBlacksmith:["金屬錠鐵匠","🧱"],keyBlacksmith:["鑰匙鐵匠","🗝️"],materialsBlacksmith:["材料工匠","🪵"],accessoriesBlacksmith:["飾品鐵匠","📿"],equipmentBlacksmith:["裝備鐵匠","🔨"],secretAccessoryBlacksmith:["隱藏飾品鐵匠","✨"]};
 const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:!!r[5]}));
 const npcById=id=>{const f=+id.slice(1).split("_")[0];return NPCS(f).find(n=>n.id===id)};
-let FILT={};try{FILT=JSON.parse(localStorage.getItem("sao-map-filter")||"{}")||{}}catch(e){FILT={}}
-const saveFilt=()=>{try{localStorage.setItem("sao-map-filter",JSON.stringify(FILT))}catch(e){}};
+// default (owner, 2026-11-01): teleports, landmarks, monster areas and regular monsters on; the rest off.
+// FILT lists the categories that are switched off. The key has a version so the new default reaches everyone once.
+const FILT_DEF={gather:1,npc:1,wboss:1,dungeon:1,boss:1};
+let FILT={...FILT_DEF};try{const s=localStorage.getItem("sao-map-filter-v2");if(s)FILT=JSON.parse(s)||{...FILT_DEF}}catch(e){FILT={...FILT_DEF}}
+const saveFilt=()=>{try{localStorage.setItem("sao-map-filter-v2",JSON.stringify(FILT))}catch(e){}};
 const catOn=k=>!FILT[k];
 const spotCat=sp=>sp.kind==="poi"?(sp.tp?"tp":"land"):sp.kind==="mob"?"area":sp.kind;
 const spotVisible=sp=>catOn(spotCat(sp))||(sp.tp&&catOn("tp"))||(sp.kind==="mob"&&catOn("mobs"));

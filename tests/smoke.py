@@ -59,6 +59,11 @@ with sync_playwright() as p:
     check(not errs, "no page errors on any tab" + ("" if not errs else ": " + errs[0]))
 
     pg = b.new_page(viewport={"width": 1280, "height": 900})
+    pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
+    check(pg.eval_on_selector_all("#fpCats .fchip", "e=>e.filter(b=>!b.dataset.k.includes(':')&&b.getAttribute('aria-pressed')==='true').map(b=>b.dataset.k).join(',')") == "tp,land,area,mobs"
+          and pg.locator(".bsp").count() == 0 and pg.locator(".town.dungeon").count() == 0, "default map filter: teleports, landmarks, monster areas, regular monsters")
+    pg.evaluate("localStorage.setItem('sao-map-filter-v2','{}')")   # the rest of the tests start with everything on
+    pg.reload(); pg.wait_for_timeout(300)
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
     pg.fill("#q", "Albal"); pg.wait_for_timeout(300)
