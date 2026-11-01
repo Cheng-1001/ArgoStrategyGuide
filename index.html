@@ -791,10 +791,11 @@ const SPAWNS=f=>f===1?(S1.BOSS_SPAWNS||[]).map(([n,x,z,u],i)=>({i,m:FLOORS[1].mo
 const SPAWN_OF={};FL_KEYS.forEach(f=>SPAWNS(f).forEach(p=>(SPAWN_OF[p.m.id]=SPAWN_OF[p.m.id]||[]).push(p)));
 const HAS_POS=id=>!!(BASE_SPOT[id]||SPAWN_OF[id]);
 const isBossT=m=>m.type==="Boss"||m.type==="Mini-Boss";
-const showMon=m=>isBossT(m)?(catOn("boss")&&!SPAWN_OF[m.id]):catOn("mobs");
-const KIND={boss:["區域首領","👑"],dungeon:["地下城","⚔️"],mob:["怪物區","🐾"],poi:["地標","📍"],gather:["採集點","⛏️"],wboss:["世界王","🌋"]};
+const bossCat=m=>m.type==="Mini-Boss"?"mini":"boss";   // map filter key of a boss, same split as the codex tags
+const showMon=m=>isBossT(m)?(catOn(bossCat(m))&&!SPAWN_OF[m.id]):catOn("mobs");
+const KIND={boss:["首領","👑"],dungeon:["地下城","⚔️"],mob:["怪物區","🐾"],poi:["地標","📍"],gather:["採集點","⛏️"],wboss:["世界王","🌋"]};
 const GT={crop:["作物","🌾"],ore:["礦物","⛏️"],wood:["木材","🪵"]};
-const MAPGRP=[["地點",[["tp","傳送點","🌀"],["land","地標","📍"],["gather","採集點","⛏️"],["npc","NPC","🧑"]]],["戰鬥",[["wboss","世界王","🌋"],["dungeon","地下城","⚔️"],["area","怪物區","🐾"],["boss","區域首領","👑"],["mobs","一般怪物","👾"]]]];
+const MAPGRP=[["地點",[["tp","傳送點","🌀"],["land","地標","📍"],["gather","採集點","⛏️"],["npc","NPC","🧑"]]],["戰鬥",[["wboss","世界王","🌋"],["dungeon","地下城","⚔️"],["area","怪物區","🐾"],["boss","首領","👑"],["mini","小首領","🎖️"],["mobs","一般怪物","👾"]]]];
 const MAPCAT=MAPGRP.flatMap(g=>g[1]);
 const NPCCAT={alchemist:["鍊金術士","⚗️"],lumberjack:["伐木工","🪓"],lootBuyers:["收購商","💰"],weaponSellers:["武器收購商","🗡️"],travelingMerchants:["旅行商人","🧳"],equipmentMerchants:["裝備商人","🛡️"],toolMerchants:["工具商人","🔧"],accessoriesMerchants:["飾品商人","💍"],occultMerchants:["神秘商人","🔮"],consumablesMerchants:["消耗品商人","🧪"],weaponsmith:["武器鐵匠","⚔️"],armorBlacksmith:["防具鐵匠","🦺"],ingotBlacksmith:["金屬錠鐵匠","🧱"],keyBlacksmith:["鑰匙鐵匠","🗝️"],materialsBlacksmith:["材料工匠","🪵"],accessoriesBlacksmith:["飾品鐵匠","📿"],equipmentBlacksmith:["裝備鐵匠","🔨"],secretAccessoryBlacksmith:["隱藏飾品鐵匠","✨"],other:["其他 NPC","🧑"]};
 const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:!!r[5],rep:r[6]}));
@@ -803,9 +804,9 @@ const npcById=id=>{const f=+id.slice(1).split("_")[0];return NPCS(f).find(n=>n.i
 // NPC sub-categories: only alchemist, loot buyers, key smith and accessory smith on (listed first: NPC_TOP).
 // FILT lists the categories that are switched off. The key has a version so a new default reaches everyone once.
 const NPC_TOP=["alchemist","lootBuyers","keyBlacksmith","accessoriesBlacksmith"];
-const FILT_DEF={gather:1,npc:1,wboss:1,dungeon:1,boss:1,...Object.fromEntries(["lumberjack","weaponSellers","travelingMerchants","equipmentMerchants","toolMerchants","accessoriesMerchants","occultMerchants","consumablesMerchants","weaponsmith","armorBlacksmith","ingotBlacksmith","materialsBlacksmith","equipmentBlacksmith","secretAccessoryBlacksmith"].map(k=>["npc:"+k,1]))};
-let FILT={...FILT_DEF};try{const s=localStorage.getItem("sao-map-filter-v3");if(s)FILT=JSON.parse(s)||{...FILT_DEF}}catch(e){FILT={...FILT_DEF}}
-const saveFilt=()=>{try{localStorage.setItem("sao-map-filter-v3",JSON.stringify(FILT))}catch(e){}};
+const FILT_DEF={gather:1,npc:1,wboss:1,dungeon:1,boss:1,mini:1,...Object.fromEntries(["lumberjack","weaponSellers","travelingMerchants","equipmentMerchants","toolMerchants","accessoriesMerchants","occultMerchants","consumablesMerchants","weaponsmith","armorBlacksmith","ingotBlacksmith","materialsBlacksmith","equipmentBlacksmith","secretAccessoryBlacksmith"].map(k=>["npc:"+k,1]))};
+let FILT={...FILT_DEF};try{const s=localStorage.getItem("sao-map-filter-v4");if(s)FILT=JSON.parse(s)||{...FILT_DEF}}catch(e){FILT={...FILT_DEF}}
+const saveFilt=()=>{try{localStorage.setItem("sao-map-filter-v4",JSON.stringify(FILT))}catch(e){}};
 const catOn=k=>!FILT[k];
 const spotCat=sp=>sp.kind==="poi"?(sp.tp?"tp":"land"):sp.kind==="mob"?"area":sp.kind;
 const spotVisible=sp=>catOn(spotCat(sp))||(sp.tp&&catOn("tp"))||(sp.kind==="mob"&&catOn("mobs"));
@@ -1634,7 +1635,7 @@ let BASE="wiki";try{BASE=localStorage.getItem("sao-map-base")||"wiki"}catch(e){}
 $("baseBtn").addEventListener("click",ev=>{ev.stopPropagation();BASE=BASE==="jm"?"wiki":"jm";try{localStorage.setItem("sao-map-base",BASE)}catch(e){};renderMap()});
 // ---- map filter panel ----
 function mapCounts(){const sp=spotsOf(FL),tw=F().towns,np=NPCS(FL);const c={tp:tw.filter(t=>t.tp).length+sp.filter(x=>x.tp).length,land:tw.filter(t=>!t.tp).length+sp.filter(x=>x.kind==="poi"&&!x.tp).length,npc:np.length};
-  ["gather","dungeon","wboss"].forEach(k=>c[k]=sp.filter(x=>x.kind===k).length);c.area=sp.filter(x=>x.kind==="mob").length;c.boss=SPAWNS(FL).length;
+  ["gather","dungeon","wboss"].forEach(k=>c[k]=sp.filter(x=>x.kind===k).length);c.area=sp.filter(x=>x.kind==="mob").length;c.boss=SPAWNS(FL).filter(w=>bossCat(w.m)==="boss").length;c.mini=SPAWNS(FL).length-c.boss;
   c.mobs=new Set(sp.flatMap(x=>x.mons.map(n=>F().monByName[n]).filter(m=>m&&!isBossT(m)).map(m=>m.id))).size;return c}
 function renderFilter(){const c=mapCounts();const np=NPCS(FL);const off=MAPCAT.filter(([k])=>!catOn(k)).length+Object.keys(FILT).filter(k=>k.startsWith("npc:")&&FILT[k]).length;
   $("filterBtn").textContent=off?`篩選（已隱藏 ${off} 類）▾`:"篩選 ▾";
@@ -1706,7 +1707,7 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
       d.appendChild(tw)}
     world.appendChild(d);if(!mk)zoneEls[sp.id]=d});
   drawAreas();
-  if(catOn("boss"))SPAWNS(FL).forEach(w=>{const m=w.m;const b=document.createElement("button");b.className="bsp "+cls(m.type)+(w.u?" ug":"");b.dataset.id=m.id;b.dataset.key="m|"+m.id;
+  SPAWNS(FL).filter(w=>catOn(bossCat(w.m))).forEach(w=>{const m=w.m;const b=document.createElement("button");b.className="bsp "+cls(m.type)+(w.u?" ug":"");b.dataset.id=m.id;b.dataset.key="m|"+m.id;
     b.style.left=toPxX(w.x)+"px";b.style.top=toPxZ(w.z)+"px";b.innerHTML=face(m);b.title=`${m.name}・重生點 X ${w.x} · Z ${w.z}${w.u?"（地下）":""}`;b.setAttribute("aria-label",b.title);
     b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("m",m.id,"new")});world.appendChild(b)});
   NPCS(FL).forEach(n=>{if(!npcVisible(n))return;const d=document.createElement("div");d.className="zone poi shop npc";d.dataset.n=n.id;d.style.left=toPxX(n.x)+"px";d.style.top=toPxZ(n.z)+"px";
@@ -1750,9 +1751,9 @@ function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(F
   if(catOn("land")&&lT.length+lS.length){sec("📍 地標（無法傳送）",lT.length+lS.length);lT.forEach(townRow);lS.forEach(x=>spotRow(x))}
   [["gather","⛏️ 採集點"],["wboss","🌋 世界王"],["dungeon","⚔️ 地下城"],["mob","🐾 怪物區"]].forEach(([k,title])=>{if(!catOn(k==="mob"?"area":k))return;const g=sp.filter(x=>x.kind===k);if(!g.length)return;sec(title,g.length);g.forEach(x=>spotRow(x))});
   const bossM=[...new Set(SPAWNS(FL).map(w=>w.m))];
-  if(catOn("boss")&&bossM.length){sec("👑 區域首領",bossM.length);bossM.forEach(m=>{const ws=SPAWN_OF[m.id];const row=document.createElement("div");row.className="zrow";row.dataset.tp=m.name+" "+(m.aka||[]).join(" ");
+  [["boss","👑 首領"],["mini","🎖️ 小首領"]].forEach(([k,title])=>{const g=bossM.filter(m=>bossCat(m)===k);if(!catOn(k)||!g.length)return;sec(title,g.length);g.forEach(m=>{const ws=SPAWN_OF[m.id];const row=document.createElement("div");row.className="zrow";row.dataset.tp=m.name+" "+(m.aka||[]).join(" ");
     row.innerHTML=`<div class="zhead"><button class="zn">${esc(m.name)}</button><span class="zzh">${TYPE_ZH[m.type]}・${ws.length} 個重生點${ws.some(w=>w.u)?"・地下":""}</span></div><div class="spawnl">${ws.map(w=>`<button class="linkbtn mono" data-x="${w.x}" data-z="${w.z}">X ${w.x} · Z ${w.z}</button>`).join("")}</div>`;
-    row.querySelector(".zn").onclick=()=>{centerOn(ws[0].x,ws[0].z,2.6);openP("m",m.id,"new")};row.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>repPin(+b.dataset.x,+b.dataset.z));zl.appendChild(row)})}
+    row.querySelector(".zn").onclick=()=>{centerOn(ws[0].x,ws[0].z,2.6);openP("m",m.id,"new")};row.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>repPin(+b.dataset.x,+b.dataset.z));zl.appendChild(row)})});
   const np=NPCS(FL).filter(npcVisible);
   if(np.length){sec("🧑 NPC",np.length);Object.keys(NPCCAT).forEach(c=>{np.filter(n=>n.c===c).forEach(n=>{const row=document.createElement("div");row.className="zrow npcrow";row.dataset.tp=n.n+" "+NPCCAT[c][0];
     row.innerHTML=`<div class="zhead"><button class="zn">${NPCCAT[c][1]} ${esc(n.n)}</button><span class="zzh">${NPCCAT[c][0]}${n.u?"・地下":""}${n.src==="beta"?"・測試版資料":""}</span>${coord(n.x,n.z)}</div>`;
@@ -1794,7 +1795,7 @@ function filterMap(){const s=Sq();
   // searching dims everything that does not match: say so on the map, with a way out
   document.querySelectorAll(".bsp").forEach(b=>{const m=monById[b.dataset.id];b.classList.toggle("dim",!!s&&!monHit(m,s))});
   $("srchHint").hidden=!s;if(s){const n=sp.filter(x=>spotHit(x,s)).length+SPAWNS(FL).filter(w=>monHit(w.m,s)).length;
-    $("srchTxt").textContent=`正在搜尋「${q.value.trim()}」：${n?`符合的 ${n} 個位置亮著，`:"地圖上沒有符合的位置，"}其他變淡${n&&!catOn("boss")&&SPAWNS(FL).some(w=>monHit(w.m,s))?"（符合的首領重生點要開「區域首領」才看得到）":""}`}}
+    $("srchTxt").textContent=`正在搜尋「${q.value.trim()}」：${n?`符合的 ${n} 個位置亮著，`:"地圖上沒有符合的位置，"}其他變淡${n&&SPAWNS(FL).some(w=>monHit(w.m,s)&&!catOn(bossCat(w.m)))?"（符合的首領重生點要開「首領」或「小首領」才看得到）":""}`}}
 $("srchClr").onclick=()=>{q.value="";q.dispatchEvent(new Event("input"))};
 const editbar=$("editbar"),editToggle=$("editToggle");
 function updateEditbar(){editbar.hidden=!editing;stage.classList.toggle("edit",editing&&!!placing);

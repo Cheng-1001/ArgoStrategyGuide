@@ -65,7 +65,7 @@ with sync_playwright() as p:
     pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
     on = pg.eval_on_selector_all("#fpFly .fchip", "e=>e.filter(b=>b.getAttribute('aria-pressed')==='true').map(b=>b.dataset.k).join(',')")
     check(on == "npc:alchemist,npc:lootBuyers,npc:keyBlacksmith,npc:accessoriesBlacksmith", f"default NPC sub-categories: the 4 chosen ones ({on})")
-    pg.evaluate("localStorage.setItem('sao-map-filter-v3','{}')")   # the rest of the tests start with everything on
+    pg.evaluate("localStorage.setItem('sao-map-filter-v4','{}')")   # the rest of the tests start with everything on
     pg.reload(); pg.wait_for_timeout(300)
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
@@ -237,7 +237,7 @@ with sync_playwright() as p:
           "hiding monster areas keeps an area that is also a teleport (Wolf Valley)")
     check(pg.locator(".areas path").count() == 0, "hiding monster areas hides their outlines")
     pg.click("#fpAll"); pg.wait_for_timeout(200)
-    for k in ("land", "area", "mobs", "gather", "dungeon", "wboss", "boss", "npc"):
+    for k in ("land", "area", "mobs", "gather", "dungeon", "wboss", "boss", "mini", "npc"):
         pg.click(f'#fpCats .fchip[data-k="{k}"]'); pg.wait_for_timeout(80)
     pg.wait_for_timeout(300)
     check(pg.locator('.zone[data-s="wolf"] .thumbs').count() == 0 and pg.locator('.town.tp[data-s="wolf"]').count() == 1
@@ -302,9 +302,16 @@ with sync_playwright() as p:
     check(st[0] and st[1] == "rgba(0, 0, 0, 0)" and st[2], "dungeons have a pin on the entrance, monster-area names have no box, boss rings are all solid")
     sz = pg.evaluate("""(()=>{const w=s=>{const e=document.querySelector(s);return e?e.getBoundingClientRect().width:0};return [w('.bsp.boss'),w('.bsp.mini'),w('.zone .mapth:not(.boss):not(.mini):not(.minion)')]})()""")
     check(sz[0] > sz[1] > sz[2] > 0, f"bosses drawn bigger than mini-bosses and monsters ({sz[0]:.0f} > {sz[1]:.0f} > {sz[2]:.0f}px)")
+    labels = pg.eval_on_selector_all('#fpCats .fchip[data-k="boss"], #fpCats .fchip[data-k="mini"]', "e=>e.map(x=>x.textContent.replace(/\\d+/g,'').trim())")
+    check(labels == ["👑 首領", "🎖️ 小首領"] and "區域首領" not in pg.inner_text("#fpanel"), f"map filters use the codex words 首領 / 小首領 ({labels})")
+    nb, nm = pg.locator(".bsp.boss").count(), pg.locator(".bsp.mini").count()
     pg.click('#fpCats .fchip[data-k="boss"]'); pg.wait_for_timeout(200)
-    check(pg.locator(".bsp").count() == 0, "区域首領 filter hides spawn points")
-    pg.click('#fpCats .fchip[data-k="boss"]'); pg.wait_for_timeout(200)
+    check(pg.locator(".bsp.boss").count() == 0 and pg.locator(".bsp.mini").count() == nm > 0, f"首領 filter hides only boss spawns ({nb} bosses, {nm} mini-bosses)")
+    pg.click('#fpCats .fchip[data-k="mini"]'); pg.wait_for_timeout(200)
+    check(pg.locator(".bsp").count() == 0, "小首領 filter hides the mini-boss spawns")
+    pg.click('#fpCats .fchip[data-k="boss"]'); pg.click('#fpCats .fchip[data-k="mini"]'); pg.wait_for_timeout(200)
+    zl = pg.inner_text("#zlist")
+    check("👑 首領" in zl and "🎖️ 小首領" in zl and "區域首領" not in zl, "side list splits 首領 and 小首領")
     check("⛏️ 採集點 4" in pg.inner_text("#zlist") and "🌾 Farm" in pg.inner_text("#zlist"), "gathering spots listed with their type")
 
     pg.goto(base + "#map"); pg.wait_for_timeout(500)
