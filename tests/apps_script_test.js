@@ -107,6 +107,8 @@ const rows = () => [HDR,
   check(ix('配方') < ix('任務追蹤') && ix('任務追蹤') < ix('技能') && ix('技能') < ix('截圖') && titles[titles.length - 1] === '截圖' && list[list.length - 1].getType() === T.FILE_UPLOAD,
     'new pages are placed before the screenshot page; the upload question stays last');
   check(list.find(i => i.getTitle() === '地點・種類')._it.choices.map(c => c.getValue()).includes('傳送點'), 'place kinds include 傳送點');
+  check(titles.indexOf('回報者・遊戲內暱稱') === titles.indexOf('名稱') + 1 && titles.indexOf('回報者・遊戲內暱稱') < titles.indexOf('回報種類'),
+    'the optional in-game nickname is added on page 1 right after 名稱');
   // walk the form: choose a type, fill its page, the next page must be 截圖
   const pages = list.filter(i => i.getType() === T.PAGE_BREAK);
   const nextAfter = pg => { const k = pages.indexOf(pg); const nx = pages[k + 1]; const g = nx ? (nx._it.goto || nx) : null; return g === 'SUBMIT' ? '送出' : g.getTitle(); };

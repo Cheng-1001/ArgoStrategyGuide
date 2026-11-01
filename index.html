@@ -316,7 +316,7 @@ aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:
 .nomap span{max-width:36ch;font-size:13px}
 .srchint{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:8;display:flex;gap:10px;align-items:center;max-width:calc(100% - 24px);background:#fff4d6;color:#4a3500;border:1px solid #e8b44a;border-radius:8px;padding:5px 12px;font-size:12.5px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
 .srchint[hidden]{display:none}
-.csub{padding:0 0 12px;background:none}.ideareply{color:var(--ok)!important;margin-top:2px}.repbtn.ghost{background:var(--panel);color:var(--fg);border:1px solid var(--line)}.fbbtns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.fbbtns .repbtn{flex:1;min-width:180px;text-align:center}@media (max-width:820px){.srchint{top:auto;bottom:52px;left:10px;right:56px;transform:none;font-size:12px;padding:5px 9px}}.bsp.dim{opacity:.25;filter:grayscale(1)}.srchint .linkbtn{color:#a35a00;font-weight:600;white-space:nowrap}
+.csub{padding:0 0 12px;background:none}.repby{font-weight:600;color:var(--fg)}.ideareply{color:var(--ok)!important;margin-top:2px}.repbtn.ghost{background:var(--panel);color:var(--fg);border:1px solid var(--line)}.fbbtns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.fbbtns .repbtn{flex:1;min-width:180px;text-align:center}@media (max-width:820px){.srchint{top:auto;bottom:52px;left:10px;right:56px;transform:none;font-size:12px;padding:5px 9px}}.bsp.dim{opacity:.25;filter:grayscale(1)}.srchint .linkbtn{color:#a35a00;font-weight:600;white-space:nowrap}
 .mapnote{position:absolute;left:12px;bottom:46px;z-index:5;max-width:min(420px,calc(100% - 70px));background:rgba(10,16,22,.78);color:#e8eef3;font-size:11.5px;padding:5px 9px;border-radius:5px}
 
 /* bosses */
@@ -700,6 +700,7 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
     o.summary=[o.qkind+(o.qno?" #"+o.qno:""),o.step].filter(Boolean).join("・")}
   if(r.type==="skill"){o.cls=g(/技能・職業/);o.stype=g(/技能・主動或被動/);o.unlock=+(g(/技能・解鎖等級/).match(/\d+/)||[])[0]||null;o.sdesc=g(/技能・說明原文/);o.scost=g(/技能・冷卻或消耗/);delete o.level;
     o.summary=[o.cls,o.stype,o.unlock?"Lv "+o.unlock+" 解鎖":""].filter(Boolean).join("・")}
+  o.by=g(/遊戲內暱稱/).slice(0,32);
   if(r.type==="idea"){o.idea=g(/建議・內容/);o.ipage=g(/建議・相關頁面/);o.reply=String(r.review||"").replace(/^審核[:：][^｜|]*[｜|]?/,"").trim();o.summary=o.idea}
   if(r.type==="jmap"){const res=((window.SAO_JM||{}).results||{})[r.id];o.merge=res;
     o.summary=!res?"合併中（核准後約 3～5 分鐘）":res.ok?`已合併：新增 ${res.newChunks} 個區塊，地圖探索約 ${res.pct}%`:`沒有合併：${res.reason}`}
@@ -903,7 +904,8 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
 // ---- player reports ----
 const REPO="https://github.com/Cheng-1001/ArgoStrategyGuide";
 const REPS=(window.SAO_REPORTS||[]);
-const repRef=r=>r.issue?`<a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">回報 #${r.issue}</a>`:`回報 ${esc(r.id||"")}`;
+// report reference; the reporter's optional in-game nickname is shown with it
+const repRef=r=>(r.issue?`<a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">回報 #${r.issue}</a>`:`回報 ${esc(r.id||"")}`)+(r.by?`・<span class="repby">${esc(r.by)}</span> 提供`:"");
 const repKey=r=>r.issue?"#"+r.issue:(r.id||"");
 const repsOf=m=>REPS.filter(r=>r.type==="monster"&&r.floor===m.floor&&(r.monId?r.monId===m.id:(r.name===m.name||(m.aka||[]).includes(r.name))));
 const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:m.lvShot!=null?m.lvShot:null};
@@ -1144,7 +1146,7 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
   <h3 class="sec">能力傾向 <span class="c">wiki 星等</span></h3>${tbl(c.stars.map(([k,n])=>`<tr><th>${esc(k)}</th><td>${n?bar(n):'<span class="muted">—</span>'}</td></tr>`).join(""),null)}
   ${keys.length?`<h3 class="sec">起始屬性和成長 <span class="c">參考互動地圖</span></h3>${tbl(keys.map(k=>`<tr><th>${esc(k)}</th><td class="mono">${esc(stat(c.base,k)??"—")}</td><td class="mono">${stat(c.perLv,k)!=null?"+"+esc(stat(c.perLv,k)):"—"}</td></tr>`).join(""),["屬性","Lv 1","每升 1 級"])}`:""}
   </div><div>
-  ${c.reps.length?`<h3 class="sec">技能（玩家回報） <span class="c">${c.reps.length}</span></h3><ul class="rows">${c.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:${/被動/.test(r.stype)?"var(--ok)":"var(--accent)"}" aria-hidden="true">${r.unlock||"?"}</span><span class="t"><b>${esc(r.name)}</b><span>${r.unlock?"Lv "+r.unlock+"・":""}${esc(r.stype||"")}${r.scost?"・"+esc(r.scost):""}${r.sdesc?"・原文："+esc(r.sdesc):""}</span></span><span class="v">${esc(r.id)}</span></div></li>`).join("")}</ul>`:""}
+  ${c.reps.length?`<h3 class="sec">技能（玩家回報） <span class="c">${c.reps.length}</span></h3><ul class="rows">${c.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:${/被動/.test(r.stype)?"var(--ok)":"var(--accent)"}" aria-hidden="true">${r.unlock||"?"}</span><span class="t"><b>${esc(r.name)}</b><span>${r.unlock?"Lv "+r.unlock+"・":""}${esc(r.stype||"")}${r.scost?"・"+esc(r.scost):""}${r.sdesc?"・原文："+esc(r.sdesc):""}</span></span><span class="v">${esc(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>`:""}
   <h3 class="sec">技能${c.reps.length?"（wiki）":""} <span class="c">${c.skills.length}</span></h3>
   ${c.skillsSure?"":`<div class="note warn">wiki 上這些技能的圖示都是佔位圖，清單可能是開服前的預定內容，和遊戲實際不同。</div>`}
   <ul class="rows">${c.skills.map(([n,ty,lv,d])=>`<li><div class="lrow"><span class="th sm" style="--ring:${ty==="被動"?"var(--ok)":"var(--accent)"}" aria-hidden="true">${lv}</span><span class="t"><b>${esc(n)}</b><span>Lv ${lv}・${ty}・${esc(d)}</span></span></div></li>`).join("")}</ul>
@@ -1208,7 +1210,7 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
   ${!Q.main&&(qq.need.length||qq.kill)?`<h3 class="sec">需要的物品和目標</h3><div class="reqs">${reqChips(qq)}</div>`:""}
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
   <div class="note">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。":qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
-  ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${esc(r.id)}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
+  ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${esc(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
   ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}`}
 function mqCard(qq,i){const meta=[qq.npc&&("NPC "+qq.npc),qq.lv&&("等級 "+qq.lv)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
   return`<button class="card qcard" data-key="q|${id}" data-go="q|${id}"><div class="mqh"><span class="mqn${qq.n?"":" nonum"}${qq.nEst?" est":""}" title="${qq.n?(qq.nEst?"遊戲任務編號（依順序推算）":"遊戲任務編號"):"遊戲編號未確認"}">${qq.n?qq.n:"·"}</span><div class="mqt"><b>${esc(qq.t)}</b>${meta?`<span>${meta}</span>`:""}</div><div class="reward">${rewardText(qq)}</div></div>
@@ -1519,7 +1521,7 @@ function showCollab(){const w=$("rWrap");if(!w.querySelector(".csub"))return;
   $("rData").hidden=rSub!=="data";$("rFeedW").hidden=rSub!=="feedback";
   if(FORM_PREFILL)$("ideaGo").href=FORM_PREFILL.replace("{floor}",FL);
   const ideas=REPS.filter(r=>r.type==="idea").sort((a,b)=>String(b.date).localeCompare(String(a.date)));$("ideaC").textContent=ideas.length+" 則";
-  $("ideaL").innerHTML=ideas.length?`<ul class="rows">${ideas.map(r=>`<li class="lrowx"><span class="t"><b>💡 ${esc(r.name)}</b><span style="white-space:pre-wrap">${esc(r.idea||"")}</span><span>${esc(r.date||"")}${r.ipage?"・"+esc(r.ipage):""}・${esc(r.id||"")}</span>${r.reply?`<span class="ideareply">回覆：${esc(r.reply)}</span>`:""}</span></li>`).join("")}</ul>`:`<div class="muted">還沒有公開的建議。按左邊「💡 提出建議」用 Google 帳號送出，審核後會出現在這裡。</div>`;
+  $("ideaL").innerHTML=ideas.length?`<ul class="rows">${ideas.map(r=>`<li class="lrowx"><span class="t"><b>💡 ${esc(r.name)}</b><span style="white-space:pre-wrap">${esc(r.idea||"")}</span><span>${esc(r.date||"")}${r.ipage?"・"+esc(r.ipage):""}・${esc(r.id||"")}${r.by?`・<span class="repby">${esc(r.by)}</span> 提出`:""}</span>${r.reply?`<span class="ideareply">回覆：${esc(r.reply)}</span>`:""}</span></li>`).join("")}</ul>`:`<div class="muted">還沒有公開的建議。按左邊「💡 提出建議」用 Google 帳號送出，審核後會出現在這裡。</div>`;
   if(rSub==="feedback")loadFeedback().then(list=>{const L=$("fbL");if(!L)return;
     if(list==="err"){L.textContent="這裡讀不到 GitHub 的資料，請用下面的連結查看。";return}
     $("fbC").textContent=list.length+" 則";

@@ -20,6 +20,7 @@ const CFG = {
   IMG_DIR: 'reports',
   TZ: 'Asia/Taipei',
   TYPES: { '怪物': 'monster', '物品': 'item', '地點': 'place', '配方': 'recipe', '任務追蹤': 'quest', '技能': 'skill', '探索地圖': 'jmap', '建議': 'idea' },
+  Q_NICK: '回報者・遊戲內暱稱',   // 選填，會公開顯示在網站上
   Q_JMAP: '探索地圖・壓縮檔',   // 上傳題目，要手動加在「探索地圖」頁（Google 不允許程式建立上傳題目）
   JMAP_MAX_MB: 45,
   // 試算表欄位名稱（前四個是表單題目，後四個是審核用欄位）
@@ -42,6 +43,7 @@ const NAME_HELP = '照遊戲裡的名稱寫，例如怪物 Young Spider、物品
 const PLACE_KINDS = ['村鎮', '傳送點', 'NPC', '採集點', '地下城或礦坑', '首領位置', '怪物區', '怪物重生點', '其他'];
 const NPC_KINDS = ['鍊金術士', '收購商', '鑰匙鐵匠', '飾品鐵匠', '伐木工', '武器收購商', '旅行商人', '裝備商人', '工具商人', '飾品商人', '神秘商人', '消耗品商人', '武器鐵匠', '防具鐵匠', '金屬錠鐵匠', '材料工匠', '裝備鐵匠', '隱藏飾品鐵匠', '其他'];
 const NEW_TYPES = ['配方', '任務追蹤', '技能', '探索地圖', '建議'];   // 建議一定要放最後：它填完直接送出，不經過截圖頁
+const NICK_HELP = '選填。填了會顯示在網站上，表示這筆資料是你提供的；不想公開就留空。請不要填 Google 帳號或真實姓名。';
 const NUM = () => FormApp.createTextValidation().requireWholeNumber().setHelpText('只填數字').build();
 
 /** 地點頁在座標後面多的三題。 */
@@ -134,6 +136,11 @@ function upgradeForm() {
   form.setDescription(FORM_DESC);
   const nameQ = byTitle(CFG.Q_NAME, FormApp.ItemType.TEXT);
   if (nameQ) nameQ.setHelpText(NAME_HELP);
+  // 第 1 頁：選填的遊戲內暱稱，放在「名稱」後面
+  if (!byTitle(CFG.Q_NICK)) {
+    const nick = form.addTextItem().setTitle(CFG.Q_NICK).setHelpText(NICK_HELP);
+    if (nameQ) form.moveItem(nick.getIndex(), nameQ.getIndex() + 1);
+  }
 
   // 地點頁：種類選項、三個新題目放在座標後面
   const kind = byTitle('地點・種類', FormApp.ItemType.LIST);
@@ -183,6 +190,7 @@ function setup() {
   const floor = form.addTextItem().setTitle(CFG.Q_FLOOR).setHelpText('只填數字，例如 1').setRequired(true)
     .setValidation(FormApp.createTextValidation().requireNumberBetween(1, 100).setHelpText('請填 1 到 100 的數字').build());
   form.addTextItem().setTitle(CFG.Q_NAME).setRequired(true).setHelpText(NAME_HELP);
+  form.addTextItem().setTitle(CFG.Q_NICK).setHelpText(NICK_HELP);
   const type = form.addMultipleChoiceItem().setTitle(CFG.Q_TYPE).setRequired(true);
 
   // 怪物
