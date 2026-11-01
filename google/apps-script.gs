@@ -439,7 +439,7 @@ function publishRow_(sh, row) {
     const sha = upsertReport_(entry);
     if (type === 'jmap') {
       publishJmap_(id, zipIds[0]);
-      out.setValue('已送去合併 ' + Utilities.formatDate(new Date(), CFG.TZ, 'yyyy-MM-dd HH:mm') + '（GitHub 約 3～5 分鐘自動合併；結果會顯示在網站回報區的這筆回報上）');
+      out.setValue('已送去合併 ' + Utilities.formatDate(new Date(), CFG.TZ, 'yyyy-MM-dd HH:mm') + '（GitHub 約 3～5 分鐘自動合併；結果會顯示在網站協作區的這筆回報上）');
       return;
     }
     out.setValue('已上線 ' + Utilities.formatDate(new Date(), CFG.TZ, 'yyyy-MM-dd HH:mm') + '（網站約 1～3 分鐘後更新，' + sha.slice(0, 7) + '）');

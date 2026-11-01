@@ -315,7 +315,8 @@ aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:
 .nomap b{font-family:var(--f-display);font-size:20px;color:#fff}
 .nomap span{max-width:36ch;font-size:13px}
 .srchint{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:8;display:flex;gap:10px;align-items:center;max-width:calc(100% - 24px);background:#fff4d6;color:#4a3500;border:1px solid #e8b44a;border-radius:8px;padding:5px 12px;font-size:12.5px;box-shadow:0 4px 14px rgba(0,0,0,.3)}
-.srchint[hidden]{display:none}@media (max-width:820px){.srchint{top:auto;bottom:52px;left:10px;right:56px;transform:none;font-size:12px;padding:5px 9px}}.bsp.dim{opacity:.25;filter:grayscale(1)}.srchint .linkbtn{color:#a35a00;font-weight:600;white-space:nowrap}
+.srchint[hidden]{display:none}
+.csub{padding:0 0 12px;background:none}.fbbtns{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}.fbbtns .repbtn{flex:1;min-width:180px;text-align:center}@media (max-width:820px){.srchint{top:auto;bottom:52px;left:10px;right:56px;transform:none;font-size:12px;padding:5px 9px}}.bsp.dim{opacity:.25;filter:grayscale(1)}.srchint .linkbtn{color:#a35a00;font-weight:600;white-space:nowrap}
 .mapnote{position:absolute;left:12px;bottom:46px;z-index:5;max-width:min(420px,calc(100% - 70px));background:rgba(10,16,22,.78);color:#e8eef3;font-size:11.5px;padding:5px 9px;border-radius:5px}
 
 /* bosses */
@@ -497,7 +498,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <a href="#recipes" data-v="recipes">配方 <span class="n" id="nRec"></span></a>
       <a href="#classes" data-v="classes"><span class="tl">職業／技能</span><span class="ts">職業</span></a>
       <a href="#bosses" data-v="bosses">世界王</a>
-      <a href="#report" data-v="report">回報區</a>
+      <a href="#report" data-v="report">協作區</a>
     </nav>
     <label class="gsearch" for="q">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
@@ -630,7 +631,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <section class="view browse" id="view-classes" hidden>
     <div class="filters">
       <div class="note">職業介紹、角色定位、難度、能力星等、專精和技能名稱取自 <a href="https://saominecraft.wiki.gg/wiki/Classes" target="_blank" rel="noopener">wiki 的 Classes 頁</a>，說明是本站的中文改寫。起始屬性、每級成長和天賦樹數值取自參考互動地圖的配裝計算器資料。可用武器依官方物品圖鑑的「職業限制」統計。</div>
-      <div class="note warn">除了戰士以外，wiki 上各職業的技能圖示都是佔位圖，那份技能清單可能是開服前的預定內容，和遊戲實際不同。有遊戲裡的技能畫面截圖，歡迎到「回報區」選回報種類「技能」回報。</div>
+      <div class="note warn">除了戰士以外，wiki 上各職業的技能圖示都是佔位圖，那份技能清單可能是開服前的預定內容，和遊戲實際不同。有遊戲裡的技能畫面截圖，歡迎到「協作區」選回報種類「技能」回報。</div>
     </div>
     <div class="results"><div class="rhead"><h2>職業</h2><span class="count" id="cCls"></span></div><div class="grid" id="lCls"></div></div>
   </section>
@@ -1194,8 +1195,8 @@ function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u?"・在地下":""}</div></div></div>
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
   ${RECIPES[n.n]?`<h3 class="sec">可以製作 <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
-    :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「回報區」回報就能補上。</div>`:""}
-  <div class="note">${n.src==="rep"?`位置和類別來自核准的玩家回報（${esc(n.rep)}）。`:n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「回報區」回報地點。</div>`}
+    :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「協作區」回報就能補上。</div>`:""}
+  <div class="note">${n.src==="rep"?`位置和類別來自核准的玩家回報（${esc(n.rep)}）。`:n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
   const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")+`<dt>獎勵</dt><dd class="reward" style="text-align:left">${rewardText(qq)}</dd>`
     :`<dt>NPC</dt><dd>${esc(qq.npc)}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?t.n:"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq)}</dd>`;
@@ -1271,7 +1272,7 @@ function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
   <dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
   ${en?`<h3 class="sec">本站物品資料</h3><ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>掉落來源、任務需求</span></span><span class="v">›</span></button></li></ul>`:""}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}`:""}
-  <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"配方取自玩家的遊戲截圖。":"取得方式和合成材料還沒有資料，歡迎用「回報區」補充。"}</div>`}
+  <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"配方取自玩家的遊戲截圖。":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
 // ================= props tab (official catalogue, non-equipment) =================
 const PR=(window.SAO_PROPS||[]).map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
@@ -1301,7 +1302,7 @@ function propDetail(id){const e=prById[id];const en=FR2ID[e.name];
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}${rows?`<dl class="stats">${rows}</dl>`:""}
   ${en?`<h3 class="sec">掉落與任務</h3><ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>掉落來源、掉落率、任務需求</span></span><span class="v">›</span></button></li></ul>`:""}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}`:""}
-  <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式還沒有資料，歡迎用「回報區」補充。"}</div>`}
+  <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
 // ================= bosses tab =================
 const BO=window.SAO_BOSSES;
@@ -1415,7 +1416,7 @@ function rCheck(v){const T=RF[rType];const miss=[];if(!/^\d{1,3}$/.test(v.floor)
   T.fields.forEach(f=>{const lab=$("rf_more").querySelector(`[data-id="${f.id}"]`);if(f.req&&!(lab&&lab.hidden)&&!v[f.id])miss.push(f.l)});
   if(v.level&&!/^\d{1,3}$/.test(v.level))miss.push("等級只能填數字");if(!rShot)miss.push("截圖");return miss}
 const SHOT_MARK="（在這一行按 Ctrl+V 貼上截圖，這行字可以刪掉）";
-function rBody(v,T){const L=[`<!-- 由查詢工具的回報區產生 -->`,`**種類**：${RT_ZH[rType]}`,`**樓層**：${v.floor}`,`**${T.name.replace(/（.*）/,"")}**：${v.name}`];
+function rBody(v,T){const L=[`<!-- 由查詢工具的協作區產生 -->`,`**種類**：${RT_ZH[rType]}`,`**樓層**：${v.floor}`,`**${T.name.replace(/（.*）/,"")}**：${v.name}`];
   T.fields.forEach(f=>{const lab=$("rf_more").querySelector(`[data-id="${f.id}"]`);if(!v[f.id]||(lab&&lab.hidden))return;
     if(f.type==="area")L.push("",`**${f.l}**：`,"```",v[f.id],"```");else L.push(`**${f.l}**：${v[f.id]}`)});
   L.push("","### 截圖",SHOT_MARK,"");return L.join("\n")}
@@ -1440,7 +1441,7 @@ async function rSubmit(){const v=rVals();RV[rType]=v;const miss=rCheck(v);if(mis
 function rResetShot(){$("rf_drop").classList.remove("has");$("rf_prev").hidden=true;$("rf_prev").removeAttribute("src");$("rf_droptxt").innerHTML=`<b>點這裡選截圖，或把圖片拖進來</b><span>也可以先複製截圖，再在這個頁面按 Ctrl+V</span>`;$("rf_file").value=""}
 function buildReport(){
   $("rWrap").innerHTML=`
-  <div class="rhead"><h2>回報區</h2><span class="count">新增或更正資料，每筆都要附遊戲截圖</span></div>
+  <div class="rhead"><h2>協作區</h2><span class="count">新增或更正資料，每筆都要附遊戲截圖</span></div>
   <article class="bcard" id="rf_card">
    <div id="rf_form" class="rform">
     <div class="rstep"><b>1</b> 要回報什麼</div>
@@ -1484,9 +1485,39 @@ async function loadPending(){if(pendingCache)return pendingCache;
 let rFloorShown=null;
 // Google form (filled in after the form exists). FORM_PREFILL contains "{floor}" where the floor number goes.
 const FORM_PREFILL="https://docs.google.com/forms/d/e/1FAIpQLSfaQnB3WleBLxKQI5adUUUaik11q00qIopj5lPnDqaApNCgig/viewform?usp=pp_url&entry.380876351={floor}";
+// 協作區 = two parts: 攻略資料維護 (the data report form, #report) and 問題回報及建議 (site bugs and ideas, #feedback)
+let rSub="data";
+const GH_ISSUES="https://github.com/Cheng-1001/ArgoStrategyGuide/issues";
+function collabHead(){return`<div class="rhead"><h2>協作區</h2><span class="count">大家一起維護攻略：補資料、回報問題、提建議</span></div>
+  <nav class="subtabs csub" aria-label="協作區"><a href="#report" data-sub="data">📝 攻略資料維護</a><a href="#feedback" data-sub="feedback">💬 問題回報及建議</a></nav>`}
+function feedbackHTML(){return`<div class="rgrid" id="rFeed"><div class="rcol">
+  <article class="bcard"><h4 class="sec">回報網站問題、提出建議</h4>
+    <p style="margin:0 0 6px">這裡收的是和網站本身有關的事：</p>
+    <ul class="uses" style="margin-top:0"><li><b>網站問題</b>：顯示錯誤、按鈕或連結沒反應、手機版跑版、搜尋找不到、地圖點位明顯不對。</li>
+      <li><b>功能建議</b>：想要的新功能、版面或操作上的改善。</li><li><b>其他意見</b>：任何想讓攻略更好用的想法。</li></ul>
+    <div class="note">有遊戲截圖的資料（怪物、物品、配方、任務、技能、地點、探索地圖）請到「📝 攻略資料維護」用表單回報，審核後會自動更新到網站，比較快。</div>
+    <div class="fbbtns"><a class="repbtn" href="${GH_ISSUES}/new?template=5-bug.yml" target="_blank" rel="noopener">🐞 回報網站問題 ↗</a><a class="repbtn" href="${GH_ISSUES}/new?template=6-idea.yml" target="_blank" rel="noopener">💡 提出建議 ↗</a></div>
+    <ol class="steps"><li>按上面的按鈕，會開到 GitHub 的問題追蹤頁。需要 GitHub 帳號（免費註冊）。</li>
+      <li>照欄位填寫；網站問題請寫出在哪一頁、做了什麼、看到什麼，可以貼截圖。</li>
+      <li>送出後所有人都看得到，請不要寫帳號密碼等個人資料。處理後會在那一頁回覆並關閉。</li></ol>
+  </article></div><div class="rcol">
+  <article class="bcard"><h4 class="sec">處理中的問題與建議 <span class="c" id="fbC"></span></h4><div id="fbL" class="muted">讀取中…</div>
+    <a class="linkbtn" href="${GH_ISSUES}?q=is%3Aissue+%5B%E5%95%8F%E9%A1%8C%5D+OR+%5B%E5%BB%BA%E8%AD%B0%5D" target="_blank" rel="noopener">看全部（含已處理）↗</a></article></div></div>`}
+let fbCache=null;
+async function loadFeedback(){if(fbCache)return fbCache;
+  try{const r=await fetch(GH_ISSUES.replace("github.com","api.github.com/repos")+"?state=open&per_page=100");if(!r.ok)throw 0;
+    fbCache=(await r.json()).filter(x=>!x.pull_request&&/^\[(問題|建議)\]/.test(x.title))}catch(e){fbCache="err"}return fbCache}
+function showCollab(){const w=$("rWrap");if(!w.querySelector(".csub"))return;
+  w.querySelectorAll(".csub a").forEach(a=>{a.href="#"+hashFor(a.dataset.sub==="data"?"report":"feedback",FL);if(a.dataset.sub===rSub)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  $("rData").hidden=rSub!=="data";$("rFeedW").hidden=rSub!=="feedback";
+  if(rSub==="feedback")loadFeedback().then(list=>{const L=$("fbL");if(!L)return;
+    if(list==="err"){L.textContent="這裡讀不到 GitHub 的資料，請用下面的連結查看。";return}
+    $("fbC").textContent=list.length+" 則";
+    L.innerHTML=list.length?`<ul class="rows">${list.map(x=>`<li class="lrowx"><span class="t"><b><a href="${esc(x.html_url)}" target="_blank" rel="noopener">${esc(x.title)}</a></b><span>#${x.number}・${new Date(x.created_at).toLocaleDateString("zh-TW")}${x.comments?"・"+x.comments+" 則回覆":""}</span></span></li>`).join("")}</ul>`:"目前沒有處理中的問題或建議。";
+    L.classList.remove("muted")})}
 function buildFormReport(){
-  $("rWrap").innerHTML=`
-  <div class="rhead"><h2>回報區</h2><span class="count">新增或更正資料，每筆都要附遊戲截圖</span></div>
+  $("rWrap").innerHTML=collabHead()+`<div id="rFeedW" hidden>${feedbackHTML()}</div>
+  <div id="rData">
   <div class="rgrid"><div class="rcol">
   <article class="bcard rform">
     <a class="repbtn big" id="formGo" target="_blank" rel="noopener">填寫回報表單 ↗</a>
@@ -1513,10 +1544,10 @@ function buildFormReport(){
     <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線。</li></ol>
     <div class="muted" style="font-size:12.5px">想當審核員？請聯絡網站管理者。</div></article>
   </div><div class="rcol">
-  <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article></div></div>`;
+  <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article></div></div></div>`;
   rBuilt=true}
 function renderReport(){
-  if(FORM_PREFILL){if(!rBuilt)buildFormReport();$("formGo").href=FORM_PREFILL.replace("{floor}",FL)}
+  if(FORM_PREFILL){if(!rBuilt)buildFormReport();$("formGo").href=FORM_PREFILL.replace("{floor}",FL);showCollab()}
   else{if(!rBuilt)buildReport();if(rFloorShown!==FL){$("rf_floor").value=FL;rFloorShown=FL;if(RF[rType].list==="monster")rDrawFields()}}
   const done=REPS.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(repKey(b)).localeCompare(String(repKey(a))));$("doneC").textContent=done.length+" 則";
   $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?(monById[r.monId]||FLOORS[r.floor]?.M.find(x=>x.name===r.name||(x.aka||[]).includes(r.name))):null;
@@ -1628,7 +1659,7 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
   $("mapNote").hidden=!(m&&m.note);if(m&&m.note)$("mapNote").textContent=m.note;
   if(!m){filterMap();return}
   const want=BASE==="jm"&&m.jm&&!m.tiles?m.jm:m.img;$("baseBtn").hidden=!m.jm;mapImg.style.visibility=useTiles()?"hidden":"";if(TL.size&&tilesEl.dataset.f!==String(FL)){tilesEl.innerHTML="";TL.clear()}tilesEl.dataset.f=String(FL);schedTiles();$("baseBtn").textContent=BASE==="jm"&&m.jm?"底圖：探索地圖":"底圖：wiki 地圖";
-  if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate} 更新，${m.jmPct?"約佔地圖 "+m.jmPct+"%，":""}${m.jmN?"含 "+m.jmN+" 份玩家上傳，":""}1 格 1 像素，放大會更清楚），其餘為變暗的 wiki 地圖。可以到「回報區」上傳你的 JourneyMap 補上沒探索的地方。`}
+  if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate} 更新，${m.jmPct?"約佔地圖 "+m.jmPct+"%，":""}${m.jmN?"含 "+m.jmN+" 份玩家上傳，":""}1 格 1 像素，放大會更清楚），其餘為變暗的 wiki 地圖。可以到「協作區」上傳你的 JourneyMap 補上沒探索的地方。`}
   if(!mapImg.src.endsWith(want)){const same=mapImg.dataset.f===String(FL);mapImg.src=want;mapImg.dataset.f=String(FL);if(!same)fitted=false}
   renderFilter();
   F().towns.forEach(t=>{if(!catOn(townCat(t)))return;const b=document.createElement("button");b.className="town";b.style.left=toPxX(t.x)+"px";b.style.top=toPxZ(t.z)+"px";
@@ -1784,8 +1815,8 @@ function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PR.length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
   $("nItem").textContent=Object.keys(ITEMS).filter(id=>itemFloors(id).includes(f)).length;
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
-function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report)$/);
-  view=mm?mm[2]:"map";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
+function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback)$/);
+  view=mm?mm[2]:"map";if(view==="feedback"){view="report";rSub="feedback"}else if(view==="report")rSub="data";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
   VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses")&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
   document.querySelectorAll("nav.tabs a,#codexTabs a").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);

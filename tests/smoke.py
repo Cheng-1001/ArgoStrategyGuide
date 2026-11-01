@@ -313,6 +313,12 @@ with sync_playwright() as p:
     check(pg.is_hidden("#tiles") and pg.evaluate("document.getElementById('mapImg').style.visibility") != "hidden",
           "floor 2 still uses its single map image")
 
+    pg.goto(base + "#feedback"); pg.wait_for_timeout(500)
+    check(pg.locator('nav.tabs a[data-v="report"]').inner_text().strip() == "協作區" and pg.locator('nav.tabs a[data-v="report"][aria-current="page"]').count() == 1
+          and pg.is_visible("#rFeedW") and pg.is_hidden("#rData") and pg.locator('#rFeedW a[href*="template=5-bug.yml"]').count() == 1
+          and pg.locator('#rFeedW a[href*="template=6-idea.yml"]').count() == 1, "協作區: #feedback opens 問題回報及建議 with the bug and idea buttons")
+    pg.click('.csub a[data-sub="data"]'); pg.wait_for_timeout(300)
+    check(pg.is_visible("#rData") and pg.is_hidden("#rFeedW") and "#report" in pg.url, "協作區: 攻略資料維護 shows the data form")
     pg.goto(base + "#report"); pg.wait_for_timeout(400)
     codes = pg.eval_on_selector_all(".rform code", "e=>e.map(x=>x.textContent)")
     check(r"%APPDATA%\.Triggers Client\instances\Sword Art Online\screenshots" in codes

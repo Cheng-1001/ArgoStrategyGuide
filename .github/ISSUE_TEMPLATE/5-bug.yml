@@ -1,0 +1,29 @@
+name: 網站問題
+description: 查詢工具網站本身的問題：顯示錯誤、按鈕或連結沒反應、手機版跑版、搜尋找不到、地圖點位明顯不對
+title: "[問題] "
+labels: ["網站問題"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        謝謝回報！有遊戲截圖的**遊戲資料**（怪物、物品、配方、任務、技能、地點、探索地圖）請改用網站「協作區 → 攻略資料維護」的表單，審核後會自動更新。
+        這裡送出後所有人都看得到，請不要寫帳號密碼等個人資料。
+  - type: input
+    id: where
+    attributes:
+      label: 在哪一頁
+      description: 例如「地圖」「圖鑑・怪物」「任務・支線 Nacht」，或貼上網址
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: 發生了什麼
+      description: 做了什麼、看到什麼、原本以為會怎樣。可以直接把截圖拖進這個框。
+    validations:
+      required: true
+  - type: dropdown
+    id: device
+    attributes:
+      label: 用什麼裝置
+      options: [電腦, 手機, 平板, 不確定]

@@ -1,0 +1,15 @@
+name: 建議
+description: 想要的新功能、版面或操作上的改善、任何讓攻略更好用的想法
+title: "[建議] "
+labels: ["建議"]
+body:
+  - type: markdown
+    attributes:
+      value: 謝謝你的建議！送出後所有人都看得到，也歡迎在別人的建議下面留言補充。
+  - type: textarea
+    id: idea
+    attributes:
+      label: 建議內容
+      description: 想要什麼、在哪裡、為什麼有幫助。可以貼截圖或參考網站。
+    validations:
+      required: true

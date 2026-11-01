@@ -58,7 +58,7 @@
 | `tests/smoke.py` | Playwright 冒煙測試 |
 | `tests/jm_merge_test.py` | `tools/jm_merge.py` 在暫存複本上的測試（正常合併、別的世界被擋、壞檔被擋） |
 | `tests/report_types_test.py` | 新回報種類（配方、任務追蹤、技能、地點擴充）的整合測試，用假的已核准回報 |
-| `.github/ISSUE_TEMPLATE/` | 舊的 GitHub 回報表單，保留但已不是主要管道 |
+| `.github/ISSUE_TEMPLATE/` | 1～4 是舊的 GitHub 遊戲資料回報（保留但已不是主要管道）；5-bug、6-idea 是協作區「問題回報及建議」用的網站問題／建議範本 |
 
 ## 修改和發佈流程
 
@@ -70,7 +70,8 @@
 
 ## 網站功能（`src/index.html`）
 
-- **網址格式**：`#f{樓層}-{分頁}`，分頁有 map / monsters / equip / items / props（圖鑑的子分頁）、quests、recipes、classes、bosses、report。上方選單：地圖／圖鑑／任務／配方／職業／技能（手機顯示「職業」）／世界王／回報區。
+- **網址格式**：`#f{樓層}-{分頁}`，分頁有 map / monsters / equip / items / props（圖鑑的子分頁）、quests、recipes、classes、bosses、report（協作區・攻略資料維護）、feedback（協作區・問題回報及建議）。上方選單：地圖／圖鑑／任務／配方／職業／技能（手機顯示「職業」）／世界王／協作區。
+- **協作區**（2026-11-02 由「回報區」改名，view 仍是 `report`）：子分頁「📝 攻略資料維護」（`#report`，回報表單＋審核流程＋已收錄）和「💬 問題回報及建議」（`#feedback`，`rSub`）。後者給網站問題和功能建議，按鈕開 GitHub Issues 範本 `.github/ISSUE_TEMPLATE/5-bug.yml`（標題 `[問題]`）、`6-idea.yml`（`[建議]`），右欄用 GitHub API 列出標題以 [問題]／[建議] 開頭的未關閉 issue（`loadFeedback`）。需要 GitHub 帳號；有截圖的遊戲資料一律走表單。
 - **版權聲明**：樓層列的「非官方攻略・版權聲明」→ `legalDetail()`；第一句是「本攻略由中文玩家社群協力製作，提供中文玩家使用」（使用者 2026-11-01 指定）。README 同步。**不要放 SAO 原作的圖片、圖示、標誌**，即使官方網站或遊戲有用（官方沒有原作授權）。
 - **怪物名稱以官方為準**：以遊戲內圖鑑為準（wiki 圖鑑表顯示的名稱跟著遊戲內圖鑑；wiki 寫成 `[[舊名|新名]]` 時用新名）。改名的怪物把舊名放在 M 的第 10 欄 `aka`，搜尋、回報、圖鑑提示都認舊名。參考互動地圖的怪物名稱是舊名，不要拿來用。
 - **任務分頁**：主線（依劇情順序，可以在地圖上畫路線：編號步驟加虛線）和支線（wiki）兩種。主線的 `n` 是遊戲任務追蹤上的編號：wiki 主線表寫明 8～18，R0001 截圖證實「24. The Truth About the Seal」，19～23 依順序；25 以後是推算（`nEst`）；The Trader 之前的編號還不確定，不顯示數字。參考地圖把「The Southern Marshes」(14) 併進「The Suspended City」，已拆開；它把 The Truth About the Seal 標在起始之城也不對，Catherine 在墮落者迷宮門口（X 2382、Z 2415；使用者 2026-11-01 確認，R0001 的任務距離 1565 格也吻合）。拿到玩家截圖裡的任務追蹤畫面時，用來校正編號和步驟。
