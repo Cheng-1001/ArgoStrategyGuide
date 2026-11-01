@@ -97,7 +97,7 @@
 ## 目前狀態和待辦（2026-10-31）
 
 - 裝備圖示：只剩官方還沒做模型的幾件（例如 Bottes de l’écume、情人節系列）用 ⚔️/🛡️/💍 佔位。截圖來源依序：官方 16×16 圖示 → 官網搜尋卡片縮圖 `.w-it .ph`（去背）→ 卡片破圖時改截右側檢視器 `.w-stage` 的 three.js 畫面。
-- [x] 高解析度地圖（C1）：2026-10-31 用使用者 JourneyMap 原尺寸重做第 1 層探索地圖並改成切片，探索範圍約 25%。
+- [x] 高解析度地圖（C1）：2026-10-31 用使用者 JourneyMap 原尺寸重做第 1 層探索地圖並改成切片。2026-11-01 用 jm-upload-2 更新（62 張，島上探索範圍 32.4% → 38.2%，新增 Virelune 往北經 Candelia 到 Kobold Tower 的路線）。之後使用者會改用本機 Claude Code 直接執行 `tools/jm_tiles.py` 並 push，不再走 release。
 - JourneyMap 更新流程：**雲端工作階段連不到使用者的 Windows 電腦**（Remote Control 不支援 Windows）。使用者讓 GPT 在電腦上打包 `jm_export.zip`，用 `gh release create jm-upload-N ... --prerelease` 上傳到 GitHub Release。下載 `https://github.com/Cheng-1001/ArgoStrategyGuide/releases/download/jm-upload-N/jm_export.zip`，第 1 層是 `Triggers_815bd3d6-…/overworld/day`，執行 `tools/jm_tiles.py`，更新 `jmDate`。用完請使用者刪掉 release。
 - [ ] 評估讓玩家回報 JourneyMap（像怪物回報一樣）。
 
