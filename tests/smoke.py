@@ -206,6 +206,8 @@ with sync_playwright() as p:
           "desktop: NPC sub-categories open in a flyout to the right of the filter panel")
     pg.click("#fpFlyX"); pg.wait_for_timeout(150)
     check(pg.is_hidden("#fpFly"), "flyout closes")
+    names = pg.eval_on_selector_all(".zone.mobarea .zlabel", "e=>e.map(x=>x.textContent.trim())")
+    check("Putrid Swamp" in names and "Boar Zone" in names and "Treants / Swamp" not in names, "monster areas use the wiki region names where one exists")
     st = pg.evaluate("""(()=>{const d=document.querySelector('.town.dungeon[data-s="fallen"]');const z=document.querySelector('.zone.mobarea .zlabel');
       return [!!d&&!!d.querySelector('.pin'),z?getComputedStyle(z).backgroundColor:'none',[...document.querySelectorAll('.bsp')].every(b=>getComputedStyle(b).borderTopStyle==='solid')]})()""")
     check(st[0] and st[1] == "rgba(0, 0, 0, 0)" and st[2], "dungeons have a pin on the entrance, monster-area names have no box, boss rings are all solid")

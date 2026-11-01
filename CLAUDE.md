@@ -79,7 +79,7 @@
   - SPOTS 的 kind：mob（怪物區）、dungeon、poi（地標）、gather（採集點，`gt` = crop／ore／wood，標籤前畫 🌾／⛏️／🪵）、wboss（世界王：參考地圖的 Floor 1 World Event）。Ice Fortress 是 mob（Ice Golem、Ice Spirit），不是首領。
   - **區域首領重生點**：`data.js` 的 `BOSS_SPAWNS`（[名稱, x, z, 地下=1]，取自參考地圖 bossSpawns，23 點；Illfang 的 (2,2) 是佔位值，略過）。一隻首領可以有多個重生點（Pumba 5、Guardian Colossal 4、Albal 3）。地圖上畫成怪物頭像圓框 `.bsp`（框線一律實線），地下的在左下角加「⤓」小徽章；怪物資料列「重生點」座標。原本 kind boss 的 SPOTS（albal、colossal、gorbel、nymbrea）已移除，改用這份資料。
   - **地下城**（kind dungeon，非傳送點）：深紫色名稱框加小箭頭在上、⚔ 方點在入口座標上（`.town.dungeon`），怪物縮圖畫在點的下方。
-  - **怪物區名稱**（kind mob，非傳送點）：不畫底框，只有白字加陰影（`.zone.mobarea`），有沒有開「一般怪物」都同一個樣式。名稱是本站自訂的描述性名稱，不是遊戲內的區域名。
+  - **怪物區名稱**（kind mob，非傳送點）：不畫底框，只有白字加陰影（`.zone.mobarea`），有沒有開「一般怪物」都同一個樣式。名稱（2026-11-01 使用者選 B）：有 wiki 圖鑑表區域名的改用它（Boar Zone、Mizunari Fields、Putrid Swamp、Virelune Lake、Tolbana Mountains、Snow Citadel；`nsrc:"wiki"`，舊名放 `old`，搜尋認舊名）；wiki 區域和附近地點同名的（Spiders→Hanaka、Slimes→Vallhat、Bandits／Ika→Geldorak Mine）保留本站命名（`nsrc:"site"`）。**之後要改成遊戲圖鑑的區域原文（使用者選的 A）**：拿到遊戲圖鑑各區域名稱的截圖後照改。
   - **怪物區框線**：SPOTS 的 `area`（[[x,z],…]）是依探索地圖的地形自己描的大略範圍（沒有用參考地圖的多邊形），用 Catmull-Rom 平滑曲線畫在 `.areas` SVG，`vector-effect:non-scaling-stroke` 讓線寬不隨縮放改變。「怪物區」篩選關掉時一起隱藏。
   - **標記樣式**（`.town` 元素，點的中心正好在座標上）：傳送點（城鎮和地標一律）仿遊戲傳送地圖：白色名稱框加向下小箭頭在上、橘色圓點（白框）在座標上，z-index 高於 NPC 圖示；地標（無法傳送）橘色菱形、採集點棕色方點、世界王紅點，這三種的名字寫在點下面。有怪物的傳送地標，怪物縮圖畫在點的下方（`.zone.under`）。`apply()` 的 `--inv` = 螢幕倍率 ÷ 縮放（文字標籤：1.08（整張地圖）→ 0.92（放到最大），手機再乘 0.8）；怪物縮圖和重生點再乘 `--tk`（整張地圖 0.62 → 放大後最多 1，用 CSS `zoom`），所以縮小時圖示小、放大時圖示變大但比地圖慢；框線寬度 `--areaw`。地圖上的怪物大小依類型：首領 50px ＞ 小首領 44px ＞ 一般 38px ＞ 嘍囉 32px（重生點 `.bsp` 也一樣）。NPC 圖示 27px。
   - 只開「傳送點」時，傳送地標（狼之谷、Geldorak、詛咒廢墟）只畫名稱不畫怪物；右側「傳送點－地標」清單也不列怪物。怪物只在它本身的分類（怪物區、地下城）開著時顯示。

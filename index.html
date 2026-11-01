@@ -875,9 +875,11 @@ function itemDetail(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id],ga
   <div class="note warn">配方：公開資料尚未提供鍛造或合成配方（wiki 鍛造頁標示為「待補」），以上用途只來自任務需求與物品描述。</div>`}
 
 function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">這個地點已不存在。</div>`;const st=STATUS[sp.src];const Fx=FLOORS[sp.floor];
-  const ms=sp.mons.map(n=>Fx.monByName[n]);
+  const ms=sp.mons.map(n=>Fx.monByName[n]);const rz=[...new Set(ms.filter(Boolean).map(m=>Fx.zones[m.zone].n))];
+  const nameRow=sp.nsrc==="wiki"?`<dt>名稱</dt><dd>wiki 圖鑑表的區域名${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`
+    :sp.nsrc==="site"?`<dt>名稱</dt><dd>本站命名<br><span class="muted" style="font-size:12.5px">wiki 圖鑑把這裡的怪物歸在「${rz.map(esc).join("、")}」，和附近的地點同名，所以另取名字區分</span></dd>`:"";
   return`<div class="phead"><span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span><div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(sp.n)}</h2><div class="sub">${esc(sp.zh)}</div></div></div>
-  <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd><dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd>${sp.tp?`<dt>傳送</dt><dd><span class="pill tpp">🌀 可傳送</span> 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl>
+  <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd>${nameRow}<dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd>${sp.tp?`<dt>傳送</dt><dd><span class="pill tpp">🌀 可傳送</span> 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl>
   ${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}
   <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(m.name)}</b><span>${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
@@ -1546,7 +1548,7 @@ function showRoute(qq,i){ROUTE={q:qq,i};if(matchMedia("(max-width:820px)").match
   tx=r.width/2-toPxX((x0+x1)/2)*sc;ty=r.height/2-toPxZ((z0+z1)/2)*sc;apply()}
 function repPin(x,z){world.querySelectorAll(".rpin").forEach(n=>n.remove());const d=document.createElement("div");d.className="rpin";d.style.left=toPxX(x)+"px";d.style.top=toPxZ(z)+"px";d.innerHTML=`<span></span><b>X ${x} · Z ${z}</b>`;world.appendChild(d);centerOn(x,z,2.4)}
 function focusSpot(id){const sp=spotById(id);if(!sp)return;centerOn(sp.x,sp.z,2.4);const el=zoneEls[id];if(el){el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1300)}}
-const spotHit=(sp,s)=>!s||norm(sp.n+" "+sp.zh).includes(s)||sp.mons.some(n=>monHit(FLOORS[sp.floor].monByName[n],s))||sp.items.some(i=>itemHit(i,s,true));
+const spotHit=(sp,s)=>!s||norm(sp.n+" "+sp.zh+" "+(sp.old||"")).includes(s)||sp.mons.some(n=>monHit(FLOORS[sp.floor].monByName[n],s))||sp.items.some(i=>itemHit(i,s,true));
 function filterMap(){const s=Sq();
   document.querySelectorAll("#view-map .th[data-id]").forEach(b=>{const m=monById[b.dataset.id];const hit=monHit(m,s);b.classList.toggle("dim",!hit);b.classList.toggle("hit",!!(s&&hit))});
   const sp=spotsOf(FL);
