@@ -44,8 +44,9 @@ function apiList() {
   }
   const vals = sh.getDataRange().getDisplayValues();
   const hdr = vals[0];
-  const ix = n => hdr.indexOf(n);
-  const skip = Object.keys(H).map(k => H[k]).concat(HEAD_FLOOR, HEAD_NAME);
+  const hn = x => String(x == null ? '' : x).replace(/[\s\u3000]+/g, '').replace(/[·･‧•⋅]/g, '・');   // 忽略空白和中點寫法
+  const ix = n => hdr.findIndex(x => hn(x) === hn(n));
+  const skip = Object.keys(H).map(k => H[k]).concat(HEAD_FLOOR, HEAD_NAME).map(x => String(x).replace(/[\s\u3000]+/g, ''));
   const first = (v, list, old) => { for (const h of list) { const x = ix(h) < 0 ? '' : String(v[ix(h)]).trim(); if (x) return x; } return ix(old) < 0 ? '' : String(v[ix(old)]).trim(); };
   const items = [];
   for (let r = 1; r < vals.length; r++) {
@@ -54,9 +55,9 @@ function apiList() {
     if (!id) continue;
     const fields = [];
     hdr.forEach((h, i) => {
-      if (!h || i === 0 || skip.indexOf(h) >= 0) return;
+      if (!h || i === 0 || skip.indexOf(hn(h)) >= 0) return;
       const x = String(v[i]).trim();
-      if (x && x !== '不確定') fields.push([String(h), x]);
+      if (x && x !== '不確定') fields.push([String(h).trim(), x]);
     });
     items.push({
       row: r + 1, id: id, time: v[0], type: v[ix(H.TYPE)], floor: first(v, HEAD_FLOOR, H.FLOOR) || (v[ix(H.TYPE)] === '探索地圖' ? '1' : ''),

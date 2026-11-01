@@ -45,6 +45,8 @@ const CFG = {
 };
 
 const P = () => PropertiesService.getScriptProperties();
+/** 比對題目／欄位名稱用：忽略空白（手動加題目時常多打空白）和不同寫法的中點。 */
+const hn_ = s => String(s == null ? '' : s).replace(/[\s\u3000]+/g, '').replace(/[·･‧•⋅]/g, '・');
 /** 「處理結果」表示已經完成（上線，或探索地圖已交給 GitHub 合併），不再重做。 */
 const done_ = v => /^(已上線|已送去合併)/.test(String(v || ''));
 
@@ -605,7 +607,7 @@ function publishRow_(sh, row) {
     out.setValue('處理中…');
     const hdr = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
     const val = sh.getRange(row, 1, 1, sh.getLastColumn()).getValues()[0];
-    const get = h => { const i = hdr.indexOf(h); return i < 0 ? '' : String(val[i]).trim(); };
+    const get = h => { const i = hdr.findIndex(x => hn_(x) === hn_(h)); return i < 0 ? '' : String(val[i]).trim(); };
     const id = get(CFG.C_ID) || ('R' + String(row - 1).padStart(4, '0'));
     const type = CFG.TYPES[get(CFG.Q_TYPE)];
     if (!type) throw new Error('回報種類沒填好');
@@ -617,7 +619,8 @@ function publishRow_(sh, row) {
     const zipIds = type === 'jmap' ? (get(CFG.Q_JMAP).match(/id=([\w-]+)/g) || []).map(s => s.slice(3)) : [];
     if (type === 'jmap' && !zipIds.length) throw new Error('探索地圖回報沒有附壓縮檔（' + CFG.Q_JMAP + '）');
     const raw = {};
-    hdr.forEach((h, i) => { if (i === 0 || skip.includes(h) || !h) return; const v = String(val[i]).trim(); if (v && v !== '不確定') raw[h] = v; });
+    const skipN = skip.map(hn_);
+    hdr.forEach((h, i) => { if (i === 0 || skipN.includes(hn_(h)) || !h) return; const v = String(val[i]).trim(); if (v && v !== '不確定') raw[String(h).trim()] = v; });
 
     // 截圖：Google Drive 上的檔案 → 縮成約 1600px 的 JPEG → 存進網站的 reports 資料夾
     const ids = (get(CFG.Q_SHOT).match(/id=([\w-]+)/g) || []).map(s => s.slice(3));
@@ -729,15 +732,15 @@ function decorateRow_(sh, row) {
   const col = headers_(sh);
   const hdr = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
   const val = sh.getRange(row, 1, 1, sh.getLastColumn()).getValues()[0];
-  const get = h => { const i = hdr.indexOf(h); return i < 0 ? '' : String(val[i]).trim(); };
+  const get = h => { const i = hdr.findIndex(x => hn_(x) === hn_(h)); return i < 0 ? '' : String(val[i]).trim(); };
   if (!get(CFG.Q_TYPE)) return;
   const head = headOf_(get, get(CFG.Q_TYPE));
-  const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT, CFG.C_PREVIEW, CFG.C_SUMMARY].concat(HEAD_TITLES);
+  const skip = [CFG.Q_TYPE, CFG.Q_FLOOR, CFG.Q_NAME, CFG.Q_SHOT, CFG.C_ID, CFG.C_STATUS, CFG.C_NOTE, CFG.C_RESULT, CFG.C_PREVIEW, CFG.C_SUMMARY].concat(HEAD_TITLES).map(hn_);
   const lines = [get(CFG.Q_TYPE) + '｜' + (head.floor ? '第 ' + head.floor + ' 層' : get(CFG.Q_TYPE) === '物品' ? '各層通用' : '不分樓層') + '｜' + head.name, ''];
   hdr.forEach((h, i) => {
-    if (i === 0 || !h || skip.includes(h)) return;
+    if (i === 0 || !h || skip.includes(hn_(h))) return;
     const v = String(val[i]).trim();
-    if (v && v !== '不確定') lines.push(String(h).replace(/^(怪物|物品|地點|配方|任務|技能|探索地圖|建議)・/, '') + '：' + v);
+    if (v && v !== '不確定') lines.push(String(h).trim().replace(/^(怪物|物品|地點|配方|任務|技能|探索地圖|建議)・/, '') + '：' + v);
   });
   const ids = (get(CFG.Q_SHOT).match(/id=([\w-]+)/g) || []).map(s => s.slice(3));
   lines.push('', '截圖 ' + ids.length + ' 張' + (ids.length > 1 ? '（預覽只顯示第一張，其他請點「截圖」欄的連結）' : ''));
@@ -843,5 +846,7 @@ function headers_(sh) {
   const h = sh.getRange(1, 1, 1, sh.getLastColumn()).getValues()[0];
   const o = {};
   h.forEach((v, i) => { if (v && !o[v]) o[v] = i + 1; });
+  // 名稱多了空白或中點寫法不同也找得到（例如手動加的「探索地圖・壓縮檔 」）
+  Object.keys(CFG).forEach(k => { const t = CFG[k]; if (typeof t !== 'string' || o[t]) return; const i = h.findIndex(v => hn_(v) === hn_(t)); if (i >= 0) o[t] = i + 1; });
   return o;
 }

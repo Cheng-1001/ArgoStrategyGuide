@@ -210,7 +210,7 @@ const rows = () => [HDR,
 // ---- publishRow_ with the new per-type floor / name questions (and the old page-1 ones); explored maps are auto-approved ----
 {
   const H2 = ['時間戳記', '樓層', '名稱', '回報者・遊戲內暱稱', '回報種類', '怪物・樓層', '怪物・名稱', '怪物・等級', '物品・樓層', '物品・名稱', '物品・怎麼拿到的',
-    '技能・名稱', '技能・職業', '探索地圖・說明', '探索地圖・壓縮檔', '截圖', '回報編號', '截圖預覽', '內容摘要', '狀態', '審核備註', '處理結果'];
+    '技能・名稱', '技能・職業', '探索地圖・說明', ' 探索地圖・壓縮檔 ', '截圖', '回報編號', '截圖預覽', '內容摘要', '狀態', '審核備註', '處理結果'];   // the upload question was added by hand with stray spaces (R0002)
   const row = o => H2.map(h => o[h] ?? '');
   const sh = fakeSheet([H2,
     row({ '時間戳記': '2026/11/01 0:20', '樓層': '1', '名稱': 'Young Spider', '回報種類': '怪物', '怪物・等級': '3', '截圖': 'https://drive.google.com/open?id=A1', '回報編號': 'R0001', '狀態': '核准' }),
@@ -218,7 +218,7 @@ const rows = () => [HDR,
     row({ '時間戳記': '2026/11/02 9:10', '回報種類': '物品', '物品・名稱': 'Health Potion I', '物品・怎麼拿到的': '商店購買', '截圖': 'https://drive.google.com/open?id=A3', '回報編號': 'R0003', '狀態': '核准' }),
     row({ '時間戳記': '2026/11/02 9:20', '回報種類': '技能', '技能・名稱': 'Combinaison Brutale', '技能・職業': 'Guerrier', '截圖': 'https://drive.google.com/open?id=A4', '回報編號': 'R0004', '狀態': '核准' }),
     row({ '時間戳記': '2026/11/02 9:30', '回報種類': '怪物', '怪物・名稱': 'No Floor', '截圖': 'https://drive.google.com/open?id=A5', '回報編號': 'R0005', '狀態': '核准' }),
-    row({ '時間戳記': '2026/11/02 9:40', '回報者・遊戲內暱稱': 'Kirito_TW', '回報種類': '探索地圖', '探索地圖・壓縮檔': 'https://drive.google.com/open?id=Z1', '回報編號': '' })]);
+    row({ '時間戳記': '2026/11/02 9:40', '回報者・遊戲內暱稱': 'Kirito_TW', '回報種類': '探索地圖', ' 探索地圖・壓縮檔 ': 'https://drive.google.com/open?id=Z1', '回報編號': '' })]);
   const entries = [], jm = [];
   const ctx = { console, Logger: { log: () => {} }, PropertiesService: { getScriptProperties: () => ({ getProperty: () => 'X' }) },
     SpreadsheetApp: { openById: () => ({ getSheetByName: () => sh }) },
@@ -242,7 +242,8 @@ const rows = () => [HDR,
   const r7 = sh.g.rows[6];
   check(r7[col('回報編號')] === 'R0006' && r7[col('狀態')] === '核准' && /自動核准/.test(r7[col('審核備註')]) && jm.length === 1 && jm[0][1] === 'Z1'
     && E('R0006') && E('R0006').floor === 1 && E('R0006').name === '探索地圖' && E('R0006').img === null && /^已送去合併/.test(r7[col('處理結果')]),
-    'an explored-map report is approved on submit and sent to merge without a screenshot (floor 1)');
+    'an explored-map report is approved on submit and sent to merge without a screenshot (floor 1), even with spaces around the upload question title');
+  check(!Object.keys(E('R0006').raw).some(k => /壓縮檔/.test(k)), 'the zip link is not published in raw');
 }
 // ---- publishJmap_: zip to a GitHub release (created once), size limit; processQueue does not redo it ----
 {
