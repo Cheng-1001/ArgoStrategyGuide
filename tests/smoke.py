@@ -121,6 +121,14 @@ with sync_playwright() as p:
     t = pg.inner_text("#pBody")
     check(pg.locator("#lRc .rcard.sel").count() == 1 and "Alchemist" in t and "Sylvan Sprout" in t and "× 8" in t,
           "clicking one potion recipe selects only that card and opens its recipe panel")
+    pg.locator("#pBody .lrow", has_text="Allium").first.click(); pg.wait_for_timeout(300)
+    check(pg.locator("#pBody .qmap svg").count() == 1 and pg.locator("#pBody .rnum").count() >= 1 and pg.locator("#pBody [data-imap]").count() == 1,
+          "material panel (Allium) shows a numbered map of where to get it")
+    icons = pg.eval_on_selector_all("#pBody .recipes .lrow .eslot.empty", "e=>e.map(x=>x.textContent.trim())")
+    check(icons and "💍" not in icons, f"potion recipes under 可以拿去製作 use the potion icon ({set(icons)})")
+    pg.click("#pBody [data-imap]"); pg.wait_for_timeout(400)
+    check(pg.is_visible("#rwin") and pg.locator("#rwSvg polyline").count() == 0, "enlarged item map opens without a route line")
+    pg.click("#rwX") if pg.locator("#rwX").count() else None; pg.wait_for_timeout(150)
     pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
     c0 = pg.evaluate("getComputedStyle(document.getElementById('lMon')).gridTemplateColumns.split(' ').length")
