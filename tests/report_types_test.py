@@ -54,6 +54,13 @@ with sync_playwright() as p:
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.route("**/reports.js*", lambda r: r.fulfill(status=200, content_type="application/javascript; charset=utf-8", body=body))
     pg.add_init_script("localStorage.setItem('sao-map-filter-v4','{}')")
+    pend = {"updated": "2026-11-02 10:00", "list": [
+        {"id": "R0101", "type": "monster", "floor": 1, "date": "2026-11-02 09:05", "status": "pending"},
+        {"id": "R0102", "type": "recipe", "floor": 1, "date": "2026-11-02 09:30", "status": "approved"},
+        {"id": "R0103", "type": "item", "floor": 2, "date": "2026-10-30 20:00", "status": "rejected", "rdate": "2026-10-31"},
+        {"id": "R0104", "type": "idea", "floor": 1, "date": "2026-11-02 09:40", "status": "pending"}]}
+    pg.route("**/pending.js*", lambda r: r.fulfill(status=200, content_type="application/javascript; charset=utf-8",
+             body="// x = y\nwindow.SAO_PENDING = " + json.dumps(pend) + ";\n"))
     base = f"http://127.0.0.1:{PORT}/index.html"
     # recipes
     pg.goto(base + "#recipes"); pg.wait_for_timeout(500)
@@ -97,11 +104,17 @@ with sync_playwright() as p:
     check("探索地圖・My map" in t and "合併中" in t, "an approved JourneyMap upload shows as merging until jmmeta.js has its result")
     check("Mark my position" not in t, "suggestions are not listed with the data reports")
     check("Kirito_TW 提供" in t, "the reporter's in-game nickname is shown with the report")
+    q = pg.inner_text("#qL")
+    check("R0101・怪物" in q and "11/2 09:05 送出" in q and "待審核" in q and "已核准・上線中" in q and "10/31 退回" in q and "R0104" not in q
+          and pg.inner_text("#qC") == "3 則" and "更新時間 2026-11-02 10:00" in q,
+          "處理中的回報 lists waiting, approved and rejected reports from pending.js (suggestions are not in this list)")
     pg.goto(base + "#feedback"); pg.wait_for_timeout(400)
     t = pg.inner_text("#ideaL")
     check("Mark my position" in t and "Show where I am on the map" in t and "回覆：已排入待辦" in t and "someone@example.com" not in t,
           "approved suggestions are listed under 玩家建議 with the reviewer's reply (reviewer account hidden)")
     check("Asuna 提出" in t, "the suggestion shows who proposed it (nickname)")
+    q = pg.inner_text("#ideaQ")
+    check(pg.is_visible("#ideaQ") and "審核中的建議" in q and "R0104・建議" in q and "R0101" not in q, "suggestions waiting for review are listed on the feedback page")
     check("viewform" in (pg.get_attribute("#ideaGo", "href") or ""), "提出建議 opens the Google form")
     check(not errs, "no page errors" + ("" if not errs else ": " + errs[0]))
     b.close()

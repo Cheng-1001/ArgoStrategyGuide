@@ -48,6 +48,7 @@
 | `tools/jm_merge.py`、`tiles/f1jm/explored.png`、`jmmeta.js` | **探索地圖的合併**：玩家上傳的 day 資料夾 zip（或本機資料夾）疊到現有切片上。`explored.png` 是已探索的 16×16 區塊（1 px＝1 區塊，世界座標；2026-11-02 用 `--init-mask` 從切片推算，直方圖雙峰、門檻 9）。和已探索區塊重疊處顏色差異中位數 > 32 就拒絕（別的樓層／世界）；只接受 `x,z.png`、512×512、≤ 600 張、每張 ≤ 4 MB。只重寫碰到的 L3 切片，L0～L2 和 `floor1_jm.jpg` 由 L3 重產。結果寫在 `jmmeta.js`（`SAO_JM["1"]` 日期、探索比例、合併紀錄；`results[回報編號]`），**不碰 `reports.js`**（避免和 Apps Script 衝突）。測試 `tests/jm_merge_test.py` |
 | `.github/workflows/jm_merge.yml` | release `jmap-回報編號` 發佈時執行：下載 zip → `jm_merge.py` → commit 切片和 `jmmeta.js` → 要求 Pages 重建 → 刪掉 release |
 | `tools/build_equip.py` | 產生 `equip.js`／`equip.png`。要先在工作目錄準備官網圖鑑 `catalog.json`、`im_index.json`、官方圖示和 3D 截圖（做法見「抓資料的方法」） |
+| `pending.js` | 處理中的回報 `window.SAO_PENDING = {updated, list}`，**Google Apps Script 自動寫入，不要手改**。每筆只有 `id`、`type`、`floor`、`date`（送出時間 yyyy-MM-dd HH:mm）、`status`（pending／approved／error／rejected）、退回的 `rdate`；不放名稱、內容、暱稱、截圖、審核備註（使用者 2026-11-02 選 A，只公開這幾欄） |
 | `reports/` | 回報截圖 |
 | `google/apps-script.gs` | Google Apps Script（獨立專案）：建立表單和試算表，核准後透過 GitHub API 寫入 `reports.js` 和截圖 |
 | `google/review.html`、`google/review_server.js` | 審核網頁（另一個 Apps Script 專案）的前端和後端原始檔。改完執行 `python3 tools/build_review.py` 產生 `google/review.gs`（使用者貼這個檔） |
@@ -115,6 +116,7 @@
   - 掉落物名稱全部對得上物品資料時，才取代 wiki 的掉落表；對不上就以文字列出。
   - 工具裡沒有的怪物，會自動新增成「玩家回報新增」的怪物，放在 zone `rep`。
 - **回報分頁**：`FORM_PREFILL` 有值時顯示 Google 表單大按鈕，並把目前樓層帶入表單；沒有值時退回舊的 GitHub issue 流程。
+- **處理中的回報**（2026-11-02）：`renderQueue` 用 `fetch("pending.js",{cache:"no-store"})` 讀（不用 script 標籤，避免瀏覽器快取；每分鐘最多重讀一次），攻略資料維護右欄「處理中的回報」列非建議的、問題回報及建議右欄「審核中的建議」（`#ideaQ`，沒有就隱藏）列建議。Apps Script 的 `pendingList_`／`syncPending_` 在送出、改狀態、`processQueue`、`retryApproved` 時更新，內容有變（MD5 存在指令碼屬性 `PENDING_SIG`）才 commit；退回保留 `PENDING_REJECT_DAYS`＝14 天；`syncPending` 手動整份重寫。測試：`tests/apps_script_test.js`、`tests/report_types_test.py`。
 
 ## 玩家回報流程（Google 表單）
 
@@ -143,6 +145,7 @@
 - [ ] 第 2、3 層預計 **11/4 開放**（遊戲改版）。使用者通知後，重新抓 wiki 和官網資料，比對差異後更新 `data23.js`。第 3 層還沒有地圖。
 - [ ] 物品類型的回報，目前只出現在「已收錄」清單，還沒整合進物品詳細資料（地點回報 2026-11-02 已整合成地圖點位）。
 - [ ] 等使用者執行 `upgradeForm`（表單加配方、任務追蹤、技能、探索地圖）。
+- [ ] 等使用者貼上新版 `apps-script.gs` 並執行 `syncPending`（網站顯示處理中的回報，SETUP.md「網站顯示「處理中的回報」」）。
 - 已知限制：
   - 第 1 層只剩 Skeleton、Kazor 沒有座標（參考互動地圖的 Current Data 也沒有 Kazor）；第 2 和第 3 層全部怪物的區域沒有座標。
   - 和參考互動地圖還沒對齊的差異：城鎮座標（起始之城、Castlebrume、Candelia、Virelune 差約 100 格）、多個怪物名稱不同（例如 Black/White Sinister Wolf、Little Slime、Slime Magician、Robust Bandit、Tank Skeleton、Mage Sylvester）、它的 8 個英文支線任務和其他 NPC（飾品鐵匠、鑰匙鐵匠、神秘商人等）。

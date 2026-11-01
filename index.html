@@ -416,6 +416,9 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .hint .hk{font-size:11.5px;color:var(--accent);font-weight:600;letter-spacing:.06em}
 .hint b{font-size:14px;font-weight:600}.hint .muted{font-size:12px}
 /* player reports */
+.pill.q-wait{color:var(--muted)} .pill.q-ok{border-color:var(--ok);color:var(--ok)} .pill.q-err{border-color:var(--warn);color:var(--warn)} .pill.q-no{border-color:var(--boss);color:var(--boss)}
+.qlist .lrowx{align-items:center;padding:6px 4px;border-top:1px solid var(--line)} .qlist .lrowx:first-child{border-top:0}
+.qupd{font-size:12px;margin-top:6px}
 .pill.rep{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
 .repbtn{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;border:1px solid var(--accent)}
 .repbtn.ghost{background:transparent;color:var(--accent)}
@@ -1563,9 +1566,24 @@ function feedbackHTML(){return`<div class="rgrid" id="rFeed"><div class="rcol">
       <li>寫出在哪一頁、做了什麼、看到什麼，可以貼截圖。送出後所有人都看得到，請不要寫個人資料。處理後會在那一頁回覆並關閉。</li></ol>
     <div class="muted" style="font-size:12.5px">有 GitHub 帳號的話，建議也可以<a href="${GH_ISSUES}/new?template=6-idea.yml" target="_blank" rel="noopener">在 GitHub 提出</a>。</div>
   </article></div><div class="rcol">
+  <article class="bcard qlist" id="ideaQ" hidden></article>
   <article class="bcard"><h4 class="sec">玩家建議 <span class="c" id="ideaC"></span></h4><div id="ideaL"></div></article>
   <article class="bcard"><h4 class="sec">處理中的問題與建議（GitHub） <span class="c" id="fbC"></span></h4><div id="fbL" class="muted">讀取中…</div>
     <a class="linkbtn" href="${GH_ISSUES}?q=is%3Aissue+%5B%E5%95%8F%E9%A1%8C%5D+OR+%5B%E5%BB%BA%E8%AD%B0%5D" target="_blank" rel="noopener">看全部（含已處理）↗</a></article></div></div>`}
+// 處理中的回報：pending.js 由 Google Apps Script 寫入（只有編號、種類、樓層、送出時間、狀態）。不用瀏覽器快取，每分鐘最多重讀一次
+let queueCache=null,queueAt=0;
+async function loadQueue(){if(queueCache&&queueCache!=="err"&&Date.now()-queueAt<60000)return queueCache;
+  try{const r=await fetch("pending.js",{cache:"no-store"});if(!r.ok)throw 0;const m=(await r.text()).match(/window\.SAO_PENDING\s*=\s*([\s\S]*?);?\s*$/);
+    const q=JSON.parse(m[1]);if(!Array.isArray(q.list))throw 0;queueCache=q;queueAt=Date.now()}catch(e){queueCache="err"}return queueCache}
+const Q_ST={pending:["待審核","q-wait"],approved:["已核准・上線中","q-ok"],error:["上線出錯・處理中","q-err"],rejected:["退回","q-no"]};
+const fmtSent=d=>{const m=String(d||"").match(/^(\d{4})-(\d{2})-(\d{2})(?: (\d{2}:\d{2}))?/);return m?`${+m[2]}/${+m[3]}${m[4]?" "+m[4]:""}`:esc(d||"")};
+const queueRows=list=>`<ul class="rows qlist">${list.map(x=>{const [t,c]=Q_ST[x.status]||[esc(x.status),""];
+  return`<li class="lrowx"><span class="t"><b>${esc(x.id)}・${RT_ZH[x.type]||"其他"}${x.floor?" "+flBadge(+x.floor):""}</b><span>${fmtSent(x.date)} 送出${x.status==="rejected"&&x.rdate?`・${fmtSent(x.rdate)} 退回`:""}</span></span><span class="pill ${c}">${t}</span></li>`}).join("")}</ul>`;
+function renderQueue(){loadQueue().then(q=>{const ok=q!=="err",all=ok?q.list:[];
+  const L=$("qL");if(L){const list=all.filter(x=>x.type!=="idea");$("qC").textContent=ok?list.length+" 則":"";L.classList.remove("muted");
+    L.innerHTML=!ok?"目前讀不到處理中的回報，請稍後再試。":list.length?queueRows(list)+(q.updated?`<div class="muted qupd">更新時間 ${esc(q.updated)}</div>`:""):"目前沒有處理中的回報。"}
+  const I=$("ideaQ");if(I){const list=all.filter(x=>x.type==="idea");I.hidden=!list.length;
+    I.innerHTML=list.length?`<h4 class="sec">審核中的建議 <span class="c">${list.length} 則</span></h4>${queueRows(list)}<div class="muted" style="font-size:12.5px">審核員看過後，內容會公開在下面的「玩家建議」。</div>`:""}})}
 let fbCache=null;
 async function loadFeedback(){if(fbCache)return fbCache;
   try{const r=await fetch(GH_ISSUES.replace("github.com","api.github.com/repos")+"?state=open&per_page=100");if(!r.ok)throw 0;
@@ -1607,9 +1625,11 @@ function buildFormReport(){
     <div class="note">審核員核對截圖後按「核准」，網站會在幾分鐘內自動更新。工具裡還沒有的怪物、物品、地點、配方、技能也可以回報；配方會直接更新配方分頁，任務追蹤會校正主線編號，技能會列在職業資料裡。</div>
   </article>
   <article class="bcard"><h4 class="sec">審核流程</h4>
-    <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線。</li></ol>
+    <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表，幾分鐘內會出現在右邊的「處理中的回報」。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線；「處理中的回報」會標「退回」。想補截圖可以重新回報一次。</li></ol>
     <div class="muted" style="font-size:12.5px">想當審核員？請聯絡網站管理者。</div></article>
   </div><div class="rcol">
+  <article class="bcard" id="qCard"><h4 class="sec">處理中的回報 <span class="c" id="qC"></span></h4><div id="qL" class="muted">讀取中…</div>
+    <div class="muted" style="font-size:12.5px">為了不公開還沒審核的內容，這裡只列回報編號、種類、樓層和送出時間，請用送出時間找你的回報。核准後名稱和內容會出現在下面的「已收錄」；退回的回報保留 14 天。</div></article>
   <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article></div></div></div>`;
   rBuilt=true}
 function renderReport(){
@@ -1619,7 +1639,7 @@ function renderReport(){
   $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?(monById[r.monId]||FLOORS[r.floor]?.M.find(x=>x.name===r.name||(x.aka||[]).includes(r.name))):null;
       return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span>${repRef(r)}・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}${r.type==="recipe"&&ALLREC.findIndex(x=>x.rep===r.id)>=0?` ・<button class="linkbtn" data-go="r|${ALLREC.findIndex(x=>x.rep===r.id)}">看配方</button>`:""}${r.type==="skill"&&CLS.some(c=>c.reps.includes(r))?` ・<button class="linkbtn" data-go="c|${CLS.find(c=>c.reps.includes(r)).id}">看職業</button>`:""}${r.type==="quest"&&r.qref&&r.qref!=="main"?` ・<button class="linkbtn" data-go="q|${r.qref}">看任務</button>`:""}${r.type==="quest"&&r.qref==="main"?` ・<button class="linkbtn" data-go="q|mq${r.floor}_${MQ(r.floor).findIndex(x=>(x.reps||[]).includes(r))}">看任務</button>`:""}${r.x!=null&&FLOORS[r.floor]?.map?` ・<button class="linkbtn" data-rep="${r.floor}|${r.x}|${r.z}">在地圖上看</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
   bindGo($("doneL"));$("doneL").querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);showPoints(f,[[x,z]],b.closest("li")?.querySelector("b")?.textContent||"回報位置",()=>repPin(x,z))});
-  if(FORM_PREFILL)return;
+  if(FORM_PREFILL){renderQueue();return}
   loadPending().then(list=>{const L=$("pendL"),C=$("pendC");if(!L)return;
     if(list==="err"){L.textContent="這裡讀不到 GitHub 的資料，請用下面的連結查看。";return}
     C.textContent=list.length+" 則";

@@ -17,6 +17,8 @@ const CFG = {
   REPO: 'ArgoStrategyGuide',
   BRANCH: 'main',
   REPORTS_FILE: 'reports.js',
+  PENDING_FILE: 'pending.js',   // 網站「處理中的回報」：只有編號、種類、樓層、送出時間、狀態
+  PENDING_REJECT_DAYS: 14,      // 退回的回報在網站上留幾天
   IMG_DIR: 'reports',
   TZ: 'Asia/Taipei',
   TYPES: { '怪物': 'monster', '物品': 'item', '地點': 'place', '配方': 'recipe', '任務追蹤': 'quest', '技能': 'skill', '探索地圖': 'jmap', '建議': 'idea' },
@@ -330,6 +332,7 @@ function onReportSubmit(e) {
   sh.getRange(row, col[CFG.C_ID]).setValue('R' + String(row - 1).padStart(4, '0'));
   sh.getRange(row, col[CFG.C_STATUS]).setValue('待審核');
   if (col[CFG.C_PREVIEW]) { try { decorateRow_(sh, row); } catch (err) { console.warn('decorateRow_: ' + err.message); } }
+  syncPending_();
 }
 
 function onReviewEdit(e) {
@@ -340,7 +343,8 @@ function onReviewEdit(e) {
   const v = String(e.range.getValue());
   const row = e.range.getRow();
   if (v === '核准') publishRow_(sh, row);
-  else if (v === '退回') sh.getRange(row, col[CFG.C_RESULT]).setValue('已退回，不會上線');
+  else if (v === '退回') sh.getRange(row, col[CFG.C_RESULT]).setValue(rejectText_());
+  syncPending_();
 }
 
 /** 手動重試：處理所有「核准」但還沒成功上線的列（在編輯器選這個函式按「執行」）。 */
@@ -353,6 +357,78 @@ function retryApproved() {
     const res = String(sh.getRange(r, col[CFG.C_RESULT]).getValue());
     if (st === '核准' && !done_(res)) publishRow_(sh, r);
   }
+  syncPending_();
+}
+
+/* ===================== 網站上的「處理中的回報」 ===================== */
+
+const rejectText_ = () => '已退回，不會上線 ' + Utilities.formatDate(new Date(), CFG.TZ, 'yyyy-MM-dd');
+
+/** 表單的時間戳記（Date 或「2026/11/01 0:20」這種文字）→ yyyy-MM-dd HH:mm（玩家用送出時間認出自己的回報） */
+function stamp_(v) {
+  if (v instanceof Date) return Utilities.formatDate(v, CFG.TZ, 'yyyy-MM-dd HH:mm');
+  const m = String(v || '').match(/(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})(?:\D+(\d{1,2}):(\d{2}))?/);
+  if (!m) return '';
+  return m[1] + '-' + m[2].padStart(2, '0') + '-' + m[3].padStart(2, '0') + (m[4] ? ' ' + m[4].padStart(2, '0') + ':' + m[5] : '');
+}
+
+/**
+ * 從試算表整理出還沒上線的回報。為了不公開沒審核過的文字，只放：
+ * 回報編號、種類、樓層、送出時間、狀態（pending 待審核／approved 已核准、上線中／error 核准但上線出錯／rejected 退回）。
+ * 不放名稱、內容、暱稱、截圖、審核備註（備註裡有審核員帳號）。已上線的不列（網站的「已收錄」會顯示）。
+ */
+function pendingList_(sh, now) {
+  const col = headers_(sh);
+  const n = sh.getLastRow();
+  if (n < 2) return [];
+  const t = (now || new Date()).getTime();
+  const vals = sh.getRange(2, 1, n - 1, sh.getLastColumn()).getValues();
+  const out = [];
+  vals.forEach(v => {
+    const at = h => col[h] ? v[col[h] - 1] : '';
+    const id = String(at(CFG.C_ID)).trim();
+    if (!/^R\d+$/.test(id)) return;
+    const st = String(at(CFG.C_STATUS)).trim(), res = String(at(CFG.C_RESULT)).trim();
+    const e = { id: id, type: CFG.TYPES[String(at(CFG.Q_TYPE)).trim()] || 'other', floor: parseInt(at(CFG.Q_FLOOR), 10) || null, date: stamp_(v[0]) };
+    if (st === '退回') {
+      const m = res.match(/\d{4}-\d{2}-\d{2}/);
+      e.rdate = m ? m[0] : e.date.slice(0, 10);
+      if (!e.rdate || t - new Date(e.rdate + 'T00:00:00+08:00').getTime() > CFG.PENDING_REJECT_DAYS * 864e5) return;
+      e.status = 'rejected';
+    } else if (st === '核准') {
+      if (done_(res)) return;
+      e.status = /^錯誤/.test(res) ? 'error' : 'approved';
+    } else e.status = 'pending';
+    out.push(e);
+  });
+  return out;
+}
+
+/** 有變動才寫進 GitHub 的 pending.js（每分鐘的 processQueue 也會呼叫，沒變就不會產生 commit）。失敗不影響審核流程。 */
+function syncPending_() {
+  try {
+    const list = pendingList_(sheet_());
+    const json = JSON.stringify(list);
+    const sig = Utilities.base64Encode(Utilities.computeDigest(Utilities.DigestAlgorithm.MD5, json, Utilities.Charset.UTF_8));
+    if (P().getProperty('PENDING_SIG') === sig) return;
+    const text = '// 處理中的玩家回報。Google Apps Script 自動產生，不要手改。\n'
+      + '// 只公開回報編號、種類、樓層、送出時間、狀態；名稱和內容要等審核員核准後，才會出現在 reports.js。\n'
+      + 'window.SAO_PENDING = ' + JSON.stringify({ updated: Utilities.formatDate(new Date(), CFG.TZ, 'yyyy-MM-dd HH:mm'), list: list }, null, 1) + ';\n';
+    for (let attempt = 0; ; attempt++) {
+      try { putFile_(CFG.PENDING_FILE, Utilities.base64Encode(text, Utilities.Charset.UTF_8), '處理中的回報：' + list.length + ' 則'); break; }
+      catch (e) { if ((e.code === 409 || e.code === 422) && attempt < 2) { Utilities.sleep(1500); continue; } throw e; }
+    }
+    P().setProperty('PENDING_SIG', sig);
+  } catch (err) {
+    console.warn('syncPending_: ' + err.message);
+  }
+}
+
+/** 手動更新網站上的「處理中的回報」（第一次設定時在編輯器選這個函式按「執行」）。 */
+function syncPending() {
+  P().deleteProperty('PENDING_SIG');
+  syncPending_();
+  Logger.log('已更新 ' + CFG.PENDING_FILE + '：' + pendingList_(sheet_()).length + ' 則處理中的回報。');
 }
 
 /* ===================== 審核網頁用的佇列 ===================== */
@@ -373,8 +449,9 @@ function processQueue() {
     const res = String(v[col[CFG.C_RESULT] - 1]).trim();
     if (res) return;
     if (st === '核准') publishRow_(sh, i + 2);
-    else if (st === '退回') sh.getRange(i + 2, col[CFG.C_RESULT]).setValue('已退回，不會上線');
+    else if (st === '退回') sh.getRange(i + 2, col[CFG.C_RESULT]).setValue(rejectText_());
   });
+  syncPending_();
 }
 
 /**

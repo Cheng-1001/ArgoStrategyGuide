@@ -52,13 +52,15 @@ const rows = () => [HDR,
   sh.g.rows[3][10] = '退回';
   const published = [];
   const ctx = { console, PropertiesService: { getScriptProperties: () => ({ getProperty: () => 'X' }) },
-    SpreadsheetApp: { openById: () => ({ getSheetByName: () => sh }) } };
+    SpreadsheetApp: { openById: () => ({ getSheetByName: () => sh }) },
+    Utilities: { formatDate: () => '2026-11-01' } };
   vm.createContext(ctx);
   const src = fs.readFileSync(path.join(ROOT, 'google', 'apps-script.gs'), 'utf8');
-  vm.runInContext(src + '\nthis.processQueue=processQueue;publishRow_=function(s,r){__pub.push(r)};', Object.assign(ctx, { __pub: published }));
+  vm.runInContext(src + '\nthis.processQueue=processQueue;publishRow_=function(s,r){__pub.push(r)};syncPending_=function(){__sync.n++};', Object.assign(ctx, { __pub: published, __sync: { n: 0 } }));
   ctx.processQueue();
   check(JSON.stringify(published) === '[3]', 'processQueue publishes approved rows whose result is empty (not R0001, already online)');
-  check(sh.g.rows[3][12] === '已退回，不會上線', 'processQueue marks rejected rows');
+  check(sh.g.rows[3][12] === '已退回，不會上線 2026-11-01', 'processQueue marks rejected rows with the date');
+  check(ctx.__sync.n === 1, 'processQueue refreshes the public pending list');
 }
 
 // ---- upgradeForm on a fake Google Form shaped like the live one (built by the old setup) ----
@@ -125,6 +127,48 @@ const rows = () => [HDR,
   check(t2.indexOf('技能・備註') < t2.indexOf('探索地圖') && t2.indexOf('探索地圖') < t2.indexOf('建議') && t2.indexOf('建議') < t2.indexOf('截圖')
     && list.length === n1 && type._it.choices.length === 8 && list.find(i => i.getTitle() === '截圖')._it.goto === 'SUBMIT',
     'running the new upgradeForm on an already upgraded form adds only the missing pages (探索地圖, 建議) before 截圖; 建議 submits directly');
+}
+// ---- pending.js: only id, type, floor, date and status are published; written only when something changed ----
+{
+  const sh = fakeSheet([HDR.concat(['回報者・遊戲內暱稱']),
+    ['2026/11/01 0:20', '1', 'Young Spider', '怪物', '3', '', 'x', 'R0001', '', '', '核准', '', '已上線 x', ''],
+    ['2026/11/01 1:00', '1', 'Albal', '怪物', '8', '', 'x', 'R0002', '', '', '待審核', '', '', 'Kirito_TW'],
+    ['2026/11/2 9:05', '2', 'Hidden Well', '地點', '', '', 'x', 'R0003', '', '', '核准', '審核：someone@gmail.com｜ok', '處理中…', ''],
+    ['2026/10/01 1:00', '1', 'Old', '物品', '', '', 'x', 'R0004', '', '', '退回', '', '已退回，不會上線 2026-10-01', ''],
+    ['2026/10/30 1:00', '1', 'Bad shot', '物品', '', '', 'x', 'R0005', '', '', '退回', '審核：a@b.c｜看不清楚', '已退回，不會上線 2026-10-31', ''],
+    ['2026/11/01 2:00', '1', 'My map', '探索地圖', '', '', '', 'R0006', '', '', '核准', '', '已送去合併 2026-11-01', ''],
+    ['2026/11/01 3:00', '1', 'Iron Sword', '配方', '', '', 'x', 'R0007', '', '', '核准', '', '錯誤：GitHub 金鑰無效', ''],
+    ['2026/11/01 4:00', '1', 'Mark my position', '建議', '', '', '', 'R0008', '', '', '', '', '', '']]);
+  const props = {}, puts = [];
+  const resp = (code, obj) => ({ getResponseCode: () => code, getContentText: () => JSON.stringify(obj || {}) });
+  const ctx = { console, Logger: { log: () => {} },
+    PropertiesService: { getScriptProperties: () => ({ getProperty: k => k === 'GITHUB_TOKEN' ? 'tok' : k === 'SHEET_ID' ? 'S' : props[k] ?? null,
+      setProperty: (k, v) => { props[k] = v; }, deleteProperty: k => { delete props[k]; } }) },
+    SpreadsheetApp: { openById: () => ({ getSheetByName: () => sh }) },
+    Utilities: { formatDate: () => '2026-11-02 10:00', base64Encode: x => Buffer.from(String(x)).toString('base64'), sleep() {},
+      computeDigest: (a, x) => [...require('crypto').createHash('md5').update(String(x)).digest()], DigestAlgorithm: { MD5: 'MD5' }, Charset: { UTF_8: 'UTF-8' } },
+    UrlFetchApp: { fetch: (url, opt) => { if ((opt.method || 'get').toLowerCase() === 'put') { puts.push(JSON.parse(opt.payload)); return resp(200, { commit: { sha: 'abc' } }); } return resp(404); } } };
+  vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'google', 'apps-script.gs'), 'utf8') + '\nthis.pendingList_=pendingList_;this.syncPending_=syncPending_;this.syncPending=syncPending;', ctx);
+  const L = ctx.pendingList_(sh, new Date('2026-11-02T12:00:00+08:00'));
+  check(L.map(x => x.id + ':' + x.status).join(',') === 'R0002:pending,R0003:approved,R0005:rejected,R0007:error,R0008:pending',
+    'pending list: waiting, approved-not-online, recently rejected and failed reports; online, merged and old rejections are left out');
+  check(JSON.stringify(L[0]) === JSON.stringify({ id: 'R0002', type: 'monster', floor: 1, date: '2026-11-01 01:00', status: 'pending' }) && L[1].date === '2026-11-02 09:05' && L[2].rdate === '2026-10-31',
+    'each entry has only id, type, floor, submit time and status (plus the rejection date)');
+  const txt = JSON.stringify(L);
+  check(!/Albal|Kirito|someone|gmail|看不清楚|Bad shot/.test(txt), 'no names, nicknames, review notes or reviewer accounts are published');
+  ctx.syncPending_();
+  const body = puts.length === 1 ? Buffer.from(puts[0].content, 'base64').toString() : '';
+  const m = body.match(/window\.SAO_PENDING = ([\s\S]*);\n$/);
+  check(puts.length === 1 && puts[0].message === '處理中的回報：' + JSON.parse(m[1]).list.length + ' 則' && JSON.parse(m[1]).updated === '2026-11-02 10:00',
+    'syncPending_ writes pending.js as window.SAO_PENDING = {updated, list}');
+  ctx.syncPending_();
+  check(puts.length === 1, 'syncPending_ does not commit again when nothing changed');
+  sh.g.rows[2][10] = '退回'; sh.g.rows[2][12] = '已退回，不會上線 2026-11-02';
+  ctx.syncPending_();
+  check(puts.length === 2 && /"R0002"[\s\S]*?"rejected"/.test(Buffer.from(puts[1].content, 'base64').toString()), 'a status change is written again');
+  ctx.syncPending();
+  check(puts.length === 3, 'syncPending (manual) always rewrites the file');
 }
 // ---- publishJmap_: zip to a GitHub release (created once), size limit; processQueue does not redo it ----
 {
