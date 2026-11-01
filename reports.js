@@ -52,5 +52,17 @@ window.SAO_REPORTS = [
    "怪物・行為": "主動攻擊（看到就打）"
   },
   "source": "form"
+ },
+ {
+  "id": "R0002",
+  "type": "jmap",
+  "floor": 1,
+  "name": "探索地圖",
+  "date": "2026-11-02",
+  "img": null,
+  "imgs": [],
+  "raw": {},
+  "source": "form",
+  "review": "自動核准：探索地圖由程式比對網站地圖檢查"
  }
 ];
