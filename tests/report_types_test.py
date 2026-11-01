@@ -53,7 +53,7 @@ with sync_playwright() as p:
     errs = []
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.route("**/reports.js*", lambda r: r.fulfill(status=200, content_type="application/javascript; charset=utf-8", body=body))
-    pg.add_init_script("localStorage.setItem('sao-map-filter-v3','{}')")
+    pg.add_init_script("localStorage.setItem('sao-map-filter-v4','{}')")
     base = f"http://127.0.0.1:{PORT}/index.html"
     # recipes
     pg.goto(base + "#recipes"); pg.wait_for_timeout(500)
