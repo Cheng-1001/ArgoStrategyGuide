@@ -294,6 +294,8 @@ aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:
   padding-block:5px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .floorinfo b{font-family:var(--f-display);color:var(--fg);font-size:13.5px}
 .floorinfo .soon{color:var(--warn)}
+.floorinfo .legal{font-size:12px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer;font-family:inherit}
+.floorinfo .legal:hover{color:var(--accent)}
 .fl{display:inline-grid;place-items:center;font-family:var(--f-mono);font-size:10.5px;font-weight:600;padding:0 5px;border-radius:4px;border:1px solid var(--line);color:var(--muted);line-height:16px;vertical-align:1px}
 .fl.fl2{border-color:var(--rare);color:var(--rare)} .fl.fl3{border-color:var(--mini);color:var(--mini)}
 .rows .fsep{font-size:12px;color:var(--muted);padding:6px 4px 0;display:flex;gap:6px;align-items:center}
@@ -784,10 +786,10 @@ function openP(type,id,mode){if(mode==="push"&&!panel.hidden&&stack.length)stack
   renderP();panel.hidden=false;document.body.classList.add("panel-open");pBody.scrollTop=0;markSel();fixCols()}
 let pending=null;
 function goMapThen(f,fn){if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
-const nameOf=s=>s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
+const nameOf=s=>s.type==="x"?"版權聲明":s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
 function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");
-  pBody.innerHTML=cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
+  pBody.innerHTML=cur.type==="x"?legalDetail():cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
   pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);goMapThen(f,()=>repPin(x,z))}));
   pBody.querySelectorAll("[data-imap]").forEach(b=>b.addEventListener("click",()=>{const im=itemMap(b.dataset.imap);openRouteWin(b.dataset.imap+"・取得地點",im.steps,im.f,true)}));
@@ -1029,6 +1031,17 @@ function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value
     <div class="cmeta">${RAR[rar]?`<span class="pill ${RAR[rar][1]}">${RAR[rar][0]}</span>`:""}<span>${RC_CAT[r.cat][0]}</span>${r.lv?`<span>· 等級 ${r.lv}</span>`:""}<span>· ${costText(r.cost)}</span>${r.sec?`<span>· ${r.sec} 秒</span>`:""}${r.src==="shot"?'<span class="pill rep">遊戲截圖</span>':""}</div>
     <div class="mats">${r.mats.length?matText(r.mats):'<span class="muted">只要 Col</span>'}</div></${tag}>`}).join(""):`<div class="empty-note">沒有符合條件的配方。</div>`;
   bindGo($("lRc"));markSel()}
+// copyright / non-affiliation notice (owner chose option C on 2026-11-01: keep the content, state the rights and offer removal)
+function legalDetail(){const iss="https://github.com/Cheng-1001/ArgoStrategyGuide/issues";
+  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">©</span><div class="ttl"><h2>版權聲明</h2><div class="sub">非官方玩家攻略</div></div></div>
+  <ul class="uses">
+  <li>本站是玩家自製的非官方攻略，免費、沒有廣告、不販售任何東西。</li>
+  <li>本站與 SAO Minecraft 的營運方 Triggers Studio（TRIGGERS SAO）沒有關係，也沒有經過他們認可；同樣與 Mojang、Microsoft 及《刀劍神域》的權利人無關。</li>
+  <li>遊戲裡的物品圖示、名稱、描述、截圖等內容，權利屬於 Triggers SAO 或各自的權利人。本站引用是為了讓玩家辨認物品，來源標示在各資料旁（主要是<a href="https://saominecraft.com/wiki" target="_blank" rel="noopener">官方物品圖鑑</a>）。</li>
+  <li>權利人要求移除任何內容時，我們會立即下架。請在 <a href="${iss}" target="_blank" rel="noopener">GitHub Issues</a> 留言。</li>
+  </ul>
+  <div class="note" lang="fr">Guide communautaire non officiel, gratuit et sans publicité. Il n’est ni affilié à Triggers SAO ni approuvé par Triggers SAO. Les contenus du jeu (icônes, noms, descriptions, captures) appartiennent à Triggers SAO ou à leurs titulaires respectifs. Sur simple demande des ayants droit, tout élément sera retiré : <a href="${iss}" target="_blank" rel="noopener">GitHub Issues</a>.</div>
+  <div class="note">NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</div>`}
 function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找不到這個配方。</div>`;
   const e=eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),rar=e?e.r:r.r,isE=!!eqById[String(r.oid)];
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} 配方・${RC_CAT[r.cat][0]}</div><h2>${esc(r.en)}</h2>${e?`<div class="sub">${esc(e.name)}</div>`:""}</div></div>
@@ -1596,7 +1609,7 @@ $("flForm").onsubmit=e=>{e.preventDefault();pickFloor(parseInt($("flJump").value
 function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.ready=1;
   $("flNo").textContent=f+"F";$("flNm").textContent=F().name;
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
-  const Fx=F();$("floorInfo").innerHTML=`<b>${FLN(f)}・${esc(Fx.name)}</b><span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/4 開放・wiki 現有資料，開放後可能變動</span>`:""}`;
+  const Fx=F();$("floorInfo").innerHTML=`<b>${FLN(f)}・${esc(Fx.name)}</b><span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/4 開放・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>openP("x","legal","new");
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PR.length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
   $("nItem").textContent=Object.keys(ITEMS).filter(id=>itemFloors(id).includes(f)).length;
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}

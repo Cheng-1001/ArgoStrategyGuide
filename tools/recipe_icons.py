@@ -1,7 +1,7 @@
 """Small icons for recipes the official item catalogue does not have, taken from the server resource pack.
 
-ON HOLD (2026-11-01): the server's Terms of Use (art. 5) forbid copying, extracting or reproducing any part of
-the Services without written authorisation. Do not run this until the owner has decided (see CLAUDE.md).
+Owner's decision (2026-11-01), after reading the server's Terms of Use (art. 5 forbids copying/extracting without
+written authorisation): the pack is analysed on the owner's PC only; GitHub gets nothing but the chosen 48 px icons.
 
 Run on the owner's PC (local Claude Code). The cloud session cannot reach the pack.
 The pack (resourcepacks/sao.zip) holds paid assets: copy ONLY the icons listed in tools/recipe_icons.json,

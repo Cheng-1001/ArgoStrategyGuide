@@ -116,6 +116,10 @@ with sync_playwright() as p:
     check(pg.locator('nav.tabs a[data-v="recipes"][aria-current="page"]').count() == 1 and pg.is_hidden("#codexTabs")
           and pg.eval_on_selector_all("nav.tabs a", "e=>e.map(a=>a.dataset.v).join(',')") == "map,codex,quests,recipes,bosses,report",
           "recipes is its own top tab between quests and world bosses")
+    pg.click("#legalBtn"); pg.wait_for_timeout(250)
+    t = pg.inner_text("#pBody")
+    check("非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t, "copyright / non-affiliation notice opens from the floor bar")
+    pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.click('#fRcCat .chip[data-v="potion"]'); pg.wait_for_timeout(200)
     pg.locator("#lRc .rcard", has_text="Quality Health Potion I").first.click(); pg.wait_for_timeout(300)
     t = pg.inner_text("#pBody")

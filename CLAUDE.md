@@ -139,7 +139,7 @@
 - 圖鑑資料（掉落率、描述）是伺服器即時傳送的，電腦上沒有存檔，只能靠截圖或回報取得。
 - `mods/SAOUI-*.jar` 裡的 `assets/saoui/codex/hints.json` 是圖鑑提示文字。資源包 `resourcepacks/sao.zip` 只拿來比對圖示，**不要把原始素材放上網站**，裡面很多是伺服器買來的付費素材。只放工具需要的小圖示。
 - 讀資源包時只讀資料檔，不反編譯程式碼。
-- **官網使用條款（2026-11-01 查，saominecraft.com/fr/legal/conditions-utilisation，2026-10-24 版，法文版為準）**：第 5 條「禁止複製、擷取、重製（copier, extraire, reproduire）全部或部分服務，除非有書面授權或法律明文的例外」；第 8 條「軟體、介面、文字、資料庫、圖像元素等屬於 Triggers SAO 或各權利人」。沒有給攻略站、粉絲站或 wiki 的素材使用規定，也沒有「小圖示可以用」的例外。聯絡信箱 contact@triggersstudio.com。所以上面「只放小圖示」只是降低風險的自訂做法，**不是條款允許的**。`tools/recipe_icons.py`（從 sao.zip 取圖示）在使用者決定前**暫停執行**。
+- **官網使用條款（2026-11-01 查，saominecraft.com/fr/legal/conditions-utilisation，2026-10-24 版，法文版為準）**：第 5 條「禁止複製、擷取、重製（copier, extraire, reproduire）全部或部分服務，除非有書面授權或法律明文的例外」；第 8 條「軟體、介面、文字、資料庫、圖像元素等屬於 Triggers SAO 或各權利人」。沒有給攻略站、粉絲站或 wiki 的素材使用規定，也沒有「小圖示可以用」的例外。聯絡信箱 contact@triggersstudio.com。所以上面「只放小圖示」只是降低風險的自訂做法，**不是條款允許的**。使用者 2026-11-01 了解條款後決定：網站加版權聲明（選項 C：樓層列「非官方攻略・版權聲明」→ `legalDetail()`、README「版權聲明」），**不寄信**；`tools/recipe_icons.py` 可以執行，但**資源包只在使用者電腦本機分析，GitHub 只放選定的 48px 圖示**（不放資源包、其他貼圖、候選對照圖）。
 
 ## 抓資料的方法
 

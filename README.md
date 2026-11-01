@@ -22,6 +22,14 @@ SAO Minecraft（saominecraft.com）的艾恩葛朗特（Aincrad）樓層查詢�
 
 第 2、3 層為開放前的 wiki 資料，開放後可能變動。
 
+## 版權聲明
+
+本站是玩家自製的非官方攻略，免費、沒有廣告、不販售任何東西，與 SAO Minecraft 的營運方 Triggers Studio（TRIGGERS SAO）沒有關係，也沒有經過他們認可；同樣與 Mojang、Microsoft 及《刀劍神域》的權利人無關。遊戲裡的物品圖示、名稱、描述、截圖等內容，權利屬於 Triggers SAO 或各自的權利人。權利人要求移除任何內容時，我們會立即下架，請在 [Issues](https://github.com/Cheng-1001/ArgoStrategyGuide/issues) 留言。
+
+*Guide communautaire non officiel, gratuit et sans publicité, ni affilié à Triggers SAO ni approuvé par Triggers SAO. Les contenus du jeu appartiennent à Triggers SAO ou à leurs titulaires respectifs ; tout élément sera retiré sur simple demande des ayants droit.*
+
+NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.
+
 ## 回報資料
 
 到網站的「回報」分頁填 Google 表單（需附遊戲截圖），審核員核准後自動更新到網站。設定方式見 [google/SETUP.md](google/SETUP.md)。
