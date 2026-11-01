@@ -17,7 +17,7 @@
   --bg:#e9eef2; --panel:#f8fafb; --panel-2:#eef2f5; --line:#cfd8df; --fg:#1f2a33; --muted:#5d6b77;
   --accent:#e0811a; --accent-ink:#ffffff; --accent-soft:#fbe7cf;
   --boss:#d9701a; --mini:#7b55c8; --minion:#8a96a1; --ok:#2f8a5b; --ref:#2b7a9e; --tp:#13909a; --warn:#b7791f; --unk:#8a6f6f; --rare:#2f6fc4;
-  --stage:#000; --shadow:0 10px 30px rgba(20,35,50,.22);
+  --stage:#0b1219; --shadow:0 10px 30px rgba(20,35,50,.22);
   --slot:#2b313a; --slot-edge:#46505c; --slot-ink:#9aa6b2;
   --f-display:"Chakra Petch","Noto Sans TC",system-ui,sans-serif;
   --f-body:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",sans-serif;
@@ -27,11 +27,11 @@
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0e161e;--panel:#151f29;--panel-2:#1b2733;--line:#2b3a47;--fg:#e4eaef;--muted:#93a2ae;
   --accent:#f0a040;--accent-ink:#1a1206;--accent-soft:#3a2a14;--boss:#f0953a;--mini:#a888ee;--minion:#7d8a96;
-  --ok:#5cc28c;--ref:#5bb4dc;--tp:#3fd0da;--warn:#e0aa50;--unk:#b89a9a;--rare:#6fa6f0;--stage:#000;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}}
+  --ok:#5cc28c;--ref:#5bb4dc;--tp:#3fd0da;--warn:#e0aa50;--unk:#b89a9a;--rare:#6fa6f0;--stage:#070c11;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0e161e;--panel:#151f29;--panel-2:#1b2733;--line:#2b3a47;--fg:#e4eaef;--muted:#93a2ae;
   --accent:#f0a040;--accent-ink:#1a1206;--accent-soft:#3a2a14;--boss:#f0953a;--mini:#a888ee;--minion:#7d8a96;
-  --ok:#5cc28c;--ref:#5bb4dc;--tp:#3fd0da;--warn:#e0aa50;--unk:#b89a9a;--rare:#6fa6f0;--stage:#000;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}
+  --ok:#5cc28c;--ref:#5bb4dc;--tp:#3fd0da;--warn:#e0aa50;--unk:#b89a9a;--rare:#6fa6f0;--stage:#070c11;--shadow:0 10px 30px rgba(0,0,0,.55);color-scheme:dark}
 
 [hidden]{display:none!important}
 html,body{height:100%}
@@ -706,7 +706,7 @@ const REP_MAT={"Shark Carapace":"Shark Shell","Soul of the Ruins":"Souls of the 
 
 // ---------- floors ----------
 const FLOORS={
-  1:{name:"Town of Beginnings",lv:"1–5",boss:"Illfang",status:"open",map:{img:"floor1.jpg",size:S1.MAP,x0:70,z0:70,jm:"floor1_jm.jpg",jmDate:((window.SAO_JM||{})["1"]||{}).date||"2026-11-01",jmPct:((window.SAO_JM||{})["1"]||{}).pct,jmN:(((window.SAO_JM||{})["1"]||{}).log||[]).filter(x=>x.report).length,tiles:"tiles/f1jm",tileFull:5120},
+  1:{name:"Town of Beginnings",lv:"1–5",boss:"Illfang",status:"open",map:{img:"floor1.jpg",size:S1.MAP,x0:70,z0:70,clip:{c:500,r:499.5},jm:"floor1_jm.jpg",jmDate:((window.SAO_JM||{})["1"]||{}).date||"2026-11-01",jmPct:((window.SAO_JM||{})["1"]||{}).pct,jmN:(((window.SAO_JM||{})["1"]||{}).log||[]).filter(x=>x.report).length,tiles:"tiles/f1jm",tileFull:5120},
      zones:S1.ZONES,order:S1.ZONE_ORDER,M:S1.M,towns:S1.TOWNS,spots:S1.SPOTS,quests:S1.QUESTS},
   2:S23.floors[2],3:S23.floors[3]
 };
@@ -1889,6 +1889,8 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
      cr.title=`依每個人新增的已探索區塊（16×16 格）計算，共 ${C.tot.toLocaleString()} 個區塊`}}
   {const n=$("mapNote");/* desktop: the filter panel stops above the note so the note can stay at the left edge */
    $("stage").style.setProperty("--noteh",n.hidden?"42px":((n.offsetHeight||82)+56)+"px")}
+  {const c=m&&m.clip,mk=c?`radial-gradient(circle ${c.r}px at ${c.c}px ${c.c}px,#000 ${c.r-1.5}px,transparent ${c.r}px)`:"";
+   [mapImg,$("tiles")].forEach(e=>{e.style.maskImage=mk;e.style.webkitMaskImage=mk})}   // floor 1 is a round island: hide the image corners (no square edge)
   if(!mapImg.src.endsWith(want)){const same=mapImg.dataset.f===String(FL);mapImg.src=want;mapImg.dataset.f=String(FL);if(!same)fitted=false}
   renderFilter();
   F().towns.forEach(t=>{if(!catOn(townCat(t)))return;const b=document.createElement("button");b.className="town";b.style.left=toPxX(t.x)+"px";b.style.top=toPxZ(t.z)+"px";
