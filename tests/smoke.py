@@ -113,6 +113,15 @@ with sync_playwright() as p:
     tot = pg.locator("#lRc .rcard").count()
     pg.click('#fRcCat .chip[data-v="key"]'); pg.wait_for_timeout(200)
     check(tot >= 100 and pg.locator("#lRc .rcard").count() == 4 and "Forest Key" in pg.inner_text("#lRc"), "recipes tab: 100+ recipes, key filter shows the 4 dungeon keys")
+    check(pg.locator('nav.tabs a[data-v="recipes"][aria-current="page"]').count() == 1 and pg.is_hidden("#codexTabs")
+          and pg.eval_on_selector_all("nav.tabs a", "e=>e.map(a=>a.dataset.v).join(',')") == "map,codex,quests,recipes,bosses,report",
+          "recipes is its own top tab between quests and world bosses")
+    pg.click('#fRcCat .chip[data-v="potion"]'); pg.wait_for_timeout(200)
+    pg.locator("#lRc .rcard", has_text="Quality Health Potion I").first.click(); pg.wait_for_timeout(300)
+    t = pg.inner_text("#pBody")
+    check(pg.locator("#lRc .rcard.sel").count() == 1 and "Alchemist" in t and "Sylvan Sprout" in t and "× 8" in t,
+          "clicking one potion recipe selects only that card and opens its recipe panel")
+    pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
     c0 = pg.evaluate("getComputedStyle(document.getElementById('lMon')).gridTemplateColumns.split(' ').length")
     pg.locator("#lMon .card").first.click(); pg.wait_for_timeout(300)
@@ -161,6 +170,10 @@ with sync_playwright() as p:
       const w=document.getElementById('world').getBoundingClientRect();const k=w.width/1000;
       const x=w.left+(2351-70)/4980*1000*k, y=w.top+(3662-70)/4980*1000*k;return Math.hypot(b.left+b.width/2-x,b.top+b.height/2-y)})()""")
     check(off < 2, f"gathering-spot pin is centred on its coordinate (off by {off:.1f}px)")
+    tp = pg.evaluate("""(()=>{const e=[...document.querySelectorAll('.town.tp')].find(x=>x.textContent.trim()==='Hanaka');const b=e.querySelector('.pin').getBoundingClientRect(),n=e.querySelector('.tname').getBoundingClientRect();
+      const w=document.getElementById('world').getBoundingClientRect();const k=w.width/1000;
+      const x=w.left+(1492-70)/4980*1000*k, y=w.top+(3453-70)/4980*1000*k;return [Math.hypot(b.left+b.width/2-x,b.top+b.height/2-y),n.bottom<=b.top+1,getComputedStyle(e.querySelector('.tname')).backgroundColor]})()""")
+    check(tp[0] < 2 and tp[1] and tp[2] == "rgb(255, 255, 255)", f"teleport point: dot on the coordinate (off {tp[0]:.1f}px), white name box above it")
     sz0 = pg.evaluate("document.querySelector('.town.tp .pin').getBoundingClientRect().width")
     w0 = pg.evaluate("getComputedStyle(document.querySelector('.areas path')).strokeWidth")
     for _ in range(4):
