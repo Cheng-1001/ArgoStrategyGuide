@@ -1262,12 +1262,22 @@ function renderAbout(){const iss=GH_ISSUES;
   <div class="note">NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</div>
   </article>`;
   const sv=$("view-about");if(aboutJump){const el=$(aboutJump);aboutJump=null;if(el)requestAnimationFrame(()=>el.scrollIntoView({block:"start"}))}else sv.scrollTop=0}
+// the crafted item's own data, shown right in the recipe panel (no extra click; 使用者 2026-11-02)
+function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
+  const rows=Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
+  const other=(RECIPE_BY_EQ[e.oid]||[]).filter(x=>x.npc!==r.npc);
+  return`<h3 class="sec">${isE?"裝備":"道具"}資料 <span class="c">官方圖鑑 #${e.oid}</span></h3>
+  <div class="muted" style="font-size:12.5px">${esc(isE?eqCat(e):PR_CAT[e.cat]||e.cat)}${e.lv>1?"・等級 "+e.lv:""}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):""}</div>
+  ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
+  ${e.dmg||rows?`<dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>`:""}
+  ${en?`<ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>${isE?"掉落來源、任務需求":"掉落來源、掉落率、任務需求"}</span></span><span class="v">›</span></button></li></ul>`:""}
+  ${other.length?`<h3 class="sec">其他製作地點</h3>${recipeTable(other,true)}`:""}`}
 function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找不到這個配方。</div>`;
   const e=eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),rar=e?e.r:r.r,isE=!!eqById[String(r.oid)];
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} 配方・${RC_CAT[r.cat][0]}</div><h2>${esc(r.en)}</h2>${e?`<div class="sub">${esc(e.name)}</div>`:""}</div></div>
   <dl class="facts"><dt>在哪裡做</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button>`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}</dd>`:""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
   <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span>點了看哪裡拿得到</span></span><span class="v">× ${q}</span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:'<div class="muted">只要 Col，不用材料。</div>'}
-  ${go&&!go.startsWith("n|")?`<button class="btn" data-go="${go}">查看${isE?"裝備":"道具"}資料</button>`:""}
+  ${e?recItemInfo(r,e,isE):""}
   <div class="note">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${esc(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const c=NPCCAT[n.c];
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u?"・在地下":""}</div></div></div>
