@@ -113,6 +113,8 @@ with sync_playwright() as p:
     zl = pg.inner_text("#zlist")
     check("傳送點－城鎮 7" in zl and "傳送點－地標 6" in zl and pg.locator(".town.tp").count() == 7 and pg.locator(".town:not(.tp)").count() == 1,
           "teleports split into 7 towns and 6 landmarks; Vallhat is not a teleport")
+    check(pg.locator(".areas path").count() >= 13 and pg.get_attribute(".areas path", "vector-effect") == "non-scaling-stroke",
+          "monster areas are outlined with a zoom-independent line width")
     n = pg.locator(".zone.npc").count()
     pg.click("#filterBtn"); pg.wait_for_timeout(200)
     pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(300)
@@ -125,6 +127,7 @@ with sync_playwright() as p:
     pg.click('#fpCats .fchip[data-k="mob"]'); pg.wait_for_timeout(300)
     check(pg.locator('.zone[data-s="slimes"]').count() == 0 and pg.locator('.zone[data-s="wolf"]').count() == 1,
           "hiding monster areas keeps an area that is also a teleport (Wolf Valley)")
+    check(pg.locator(".areas path").count() == 0, "hiding monster areas hides their outlines")
     pg.click("#fpAll"); pg.click("#fpX"); pg.wait_for_timeout(200)
     check("⛏️ 採集點 4" in pg.inner_text("#zlist") and "🌾 Farm" in pg.inner_text("#zlist"), "gathering spots listed with their type")
 
