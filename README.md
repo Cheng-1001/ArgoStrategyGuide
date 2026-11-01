@@ -1,8 +1,10 @@
 # ArgoStrategyGuide
 
-SAO Minecraft（saominecraft.com）的艾恩葛朗特（Aincrad）樓層查詢工具：地圖、怪物、裝備、配方、任務、世界王互相連結。
+SAO Minecraft（saominecraft.com）的艾恩葛朗特（Aincrad）樓層查詢工具：地圖、怪物、裝備、配方、任務、職業技能、世界王互相連結。
 
 網站：https://cheng-1001.github.io/ArgoStrategyGuide/
+
+此攻略由中文玩家社群協力製作，提供中文玩家使用。
 
 ## 資料來源
 
@@ -24,9 +26,9 @@ SAO Minecraft（saominecraft.com）的艾恩葛朗特（Aincrad）樓層查詢�
 
 ## 版權聲明
 
-本站是玩家自製的非官方攻略，免費、沒有廣告、不販售任何東西，與 SAO Minecraft 的營運方 Triggers Studio（TRIGGERS SAO）沒有關係，也沒有經過他們認可；同樣與 Mojang、Microsoft 及《刀劍神域》的權利人無關。遊戲裡的物品圖示、名稱、描述、截圖等內容，權利屬於 Triggers SAO 或各自的權利人。權利人要求移除任何內容時，我們會立即下架，請在 [Issues](https://github.com/Cheng-1001/ArgoStrategyGuide/issues) 留言。
+本攻略由中文玩家社群協力製作，提供中文玩家使用。本站是玩家自製的非官方攻略，免費、沒有廣告、不販售任何東西，與 SAO Minecraft 的營運方 Triggers Studio（TRIGGERS SAO）沒有關係，也沒有經過他們認可；同樣與 Mojang、Microsoft 及《刀劍神域》的權利人無關。遊戲裡的物品圖示、名稱、描述、截圖等內容，權利屬於 Triggers SAO 或各自的權利人。權利人要求移除任何內容時，我們會立即下架，請在 [Issues](https://github.com/Cheng-1001/ArgoStrategyGuide/issues) 留言。
 
-*Guide communautaire non officiel, gratuit et sans publicité, ni affilié à Triggers SAO ni approuvé par Triggers SAO. Les contenus du jeu appartiennent à Triggers SAO ou à leurs titulaires respectifs ; tout élément sera retiré sur simple demande des ayants droit.*
+*Guide communautaire non officiel, réalisé de façon collaborative par la communauté sinophone pour les joueurs chinois, gratuit et sans publicité, ni affilié à Triggers SAO ni approuvé par Triggers SAO. Les contenus du jeu appartiennent à Triggers SAO ou à leurs titulaires respectifs ; tout élément sera retiré sur simple demande des ayants droit.*
 
 NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.
 

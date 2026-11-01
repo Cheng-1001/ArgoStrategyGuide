@@ -48,7 +48,7 @@ with sync_playwright() as p:
         pg.route("https://fonts.gstatic.com/**", lambda r: r.abort())
         pg.on("pageerror", lambda e: errs.append(str(e)))
         for f in (1, 2, 3):
-            for v in ("map", "monsters", "items", "props", "recipes", "quests", "equip", "bosses", "report"):
+            for v in ("map", "monsters", "items", "props", "recipes", "quests", "equip", "classes", "bosses", "report"):
                 pg.goto(f"{base}#f{f}-{v}")
                 pg.wait_for_timeout(250)
                 if w < 500:
@@ -114,11 +114,11 @@ with sync_playwright() as p:
     pg.click('#fRcCat .chip[data-v="key"]'); pg.wait_for_timeout(200)
     check(tot >= 100 and pg.locator("#lRc .rcard").count() == 4 and "Forest Key" in pg.inner_text("#lRc"), "recipes tab: 100+ recipes, key filter shows the 4 dungeon keys")
     check(pg.locator('nav.tabs a[data-v="recipes"][aria-current="page"]').count() == 1 and pg.is_hidden("#codexTabs")
-          and pg.eval_on_selector_all("nav.tabs a", "e=>e.map(a=>a.dataset.v).join(',')") == "map,codex,quests,recipes,bosses,report",
+          and pg.eval_on_selector_all("nav.tabs a", "e=>e.map(a=>a.dataset.v).join(',')") == "map,codex,quests,recipes,classes,bosses,report",
           "recipes is its own top tab between quests and world bosses")
     pg.click("#legalBtn"); pg.wait_for_timeout(250)
     t = pg.inner_text("#pBody")
-    check("非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t, "copyright / non-affiliation notice opens from the floor bar")
+    check("非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t and "中文玩家社群協力製作" in t, "copyright / non-affiliation notice opens from the floor bar")
     pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.click('#fRcCat .chip[data-v="potion"]'); pg.wait_for_timeout(200)
     pg.locator("#lRc .rcard", has_text="Quality Health Potion I").first.click(); pg.wait_for_timeout(300)
@@ -135,6 +135,16 @@ with sync_playwright() as p:
     pg.click("#pBody [data-imap]"); pg.wait_for_timeout(400)
     check(pg.is_visible("#rwin") and pg.locator("#rwSvg polyline").count() == 0, "enlarged item map opens without a route line")
     pg.click("#rwX") if pg.locator("#rwX").count() else None; pg.wait_for_timeout(150)
+    pg.click("#pClose"); pg.wait_for_timeout(150)
+    pg.goto(base + "#classes"); pg.wait_for_timeout(400)
+    check(pg.locator("#lCls .card").count() == 6 and pg.is_hidden("#codexTabs"), "classes tab lists the 6 classes")
+    pg.locator("#lCls .card", has_text="Guerrier").click(); pg.wait_for_timeout(300)
+    t = pg.inner_text("#pBody")
+    check("Combinaison Brutale" in t and "Paladin" in t and "起始屬性" in t and "Physical Might" in t and "佔位圖" not in t,
+          "Guerrier panel: skills, specialisations, base stats and talents")
+    check(pg.locator("#pBody img").count() == 0, "no class or skill pictures")
+    pg.locator("#lCls .card", has_text="Martial Artist").click(); pg.wait_for_timeout(300)
+    check("可能還沒開放" in pg.inner_text("#pBody") and "佔位圖" in pg.inner_text("#pBody"), "Martial Artist flagged as possibly unreleased, skills unconfirmed")
     pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
     c0 = pg.evaluate("getComputedStyle(document.getElementById('lMon')).gridTemplateColumns.split(' ').length")

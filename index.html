@@ -59,6 +59,7 @@ nav.tabs a{font-family:var(--f-display);font-weight:600;font-size:14px;letter-sp
 .subtabs a .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
 .subtabs a[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:#fff}.subtabs a[aria-current="page"] .n{color:#fff}
 nav.tabs a[aria-current="page"]{background:var(--panel);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+nav.tabs a .ts{display:none}
 nav.tabs a .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
 .gsearch{position:relative;flex:1;min-width:180px;max-width:460px;margin-left:auto}
 .gsearch input{width:100%;padding:8px 12px 8px 34px;border-radius:8px;border:1px solid var(--line);background:var(--panel-2)}
@@ -454,6 +455,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   .gsearch{order:3;max-width:none;flex-basis:100%;margin-left:0}
   nav.tabs{order:2;flex-basis:100%}
   nav.tabs a{flex:1;justify-content:center;padding:6px 4px;white-space:nowrap}
+  nav.tabs a .tl{display:none} nav.tabs a .ts{display:inline}
   nav.tabs a .n{display:none}
   #panel{top:auto;left:0;right:0;bottom:0;width:auto;max-width:none;height:78vh;border-radius:14px 14px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
   .legend{background:none;padding:0;gap:6px}
@@ -481,6 +483,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <a href="#monsters" data-v="codex">圖鑑</a>
       <a href="#quests" data-v="quests">任務 <span class="n" id="nQuest"></span></a>
       <a href="#recipes" data-v="recipes">配方 <span class="n" id="nRec"></span></a>
+      <a href="#classes" data-v="classes"><span class="tl">職業／技能</span><span class="ts">職業</span></a>
       <a href="#bosses" data-v="bosses">世界王</a>
       <a href="#report" data-v="report">回報區</a>
     </nav>
@@ -609,6 +612,15 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
     <div class="results"><div class="rhead"><h2>配方</h2><span class="count" id="cRc"></span></div><div class="grid" id="lRc"></div></div>
   </section>
 
+  <!-- CLASSES -->
+  <section class="view browse" id="view-classes" hidden>
+    <div class="filters">
+      <div class="note">職業介紹、角色定位、難度、能力星等、專精和技能名稱取自 <a href="https://saominecraft.wiki.gg/wiki/Classes" target="_blank" rel="noopener">wiki 的 Classes 頁</a>，說明是本站的中文改寫。起始屬性、每級成長和天賦樹數值取自參考互動地圖的配裝計算器資料。可用武器依官方物品圖鑑的「職業限制」統計。</div>
+      <div class="note warn">除了戰士以外，wiki 上各職業的技能圖示都是佔位圖，那份技能清單可能是開服前的預定內容，和遊戲實際不同。有遊戲裡的技能畫面截圖，歡迎用「回報區」回報。</div>
+    </div>
+    <div class="results"><div class="rhead"><h2>職業</h2><span class="count" id="cCls"></span></div><div class="grid" id="lCls"></div></div>
+  </section>
+
   <!-- BOSSES -->
   <section class="view bossview" id="view-bosses" hidden><div class="bwrap" id="bWrap"></div></section>
 
@@ -632,6 +644,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js"></script>
 <script src="npcs.js"></script>
 <script src="recipes.js"></script>
+<script src="classes.js"></script>
 <script src="recicons.js"></script>
 <script>
 (()=>{
@@ -786,12 +799,13 @@ function openP(type,id,mode){if(mode==="push"&&!panel.hidden&&stack.length)stack
   renderP();panel.hidden=false;document.body.classList.add("panel-open");pBody.scrollTop=0;markSel();fixCols()}
 let pending=null;
 function goMapThen(f,fn){if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
-const nameOf=s=>s.type==="x"?"版權聲明":s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
+const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="x"?"版權聲明":s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
 function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");
-  pBody.innerHTML=cur.type==="x"?legalDetail():cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
+  pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="x"?legalDetail():cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
   pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);goMapThen(f,()=>repPin(x,z))}));
+  pBody.querySelectorAll("[data-eqcls]").forEach(b=>b.addEventListener("click",()=>{eqClass=b.dataset.eqcls;$("fEqClass").querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x.dataset.v===eqClass));go("equip")}));
   pBody.querySelectorAll("[data-imap]").forEach(b=>b.addEventListener("click",()=>{const im=itemMap(b.dataset.imap);openRouteWin(b.dataset.imap+"・取得地點",im.steps,im.f,true)}));
   pBody.querySelectorAll("[data-route]").forEach(b=>b.addEventListener("click",()=>{const Q=questById(b.dataset.route);if(Q)openRouteWin((Q.main?mqLabel(Q.q)+"・":"支線・")+Q.title,Q.steps,Q.f)}));
   pBody.querySelectorAll("[data-spot]").forEach(b=>b.addEventListener("click",()=>{const sp=spotById(b.dataset.spot);goMapThen(sp.floor,()=>focusSpot(sp.id))}));
@@ -1031,16 +1045,44 @@ function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value
     <div class="cmeta">${RAR[rar]?`<span class="pill ${RAR[rar][1]}">${RAR[rar][0]}</span>`:""}<span>${RC_CAT[r.cat][0]}</span>${r.lv?`<span>· 等級 ${r.lv}</span>`:""}<span>· ${costText(r.cost)}</span>${r.sec?`<span>· ${r.sec} 秒</span>`:""}${r.src==="shot"?'<span class="pill rep">遊戲截圖</span>':""}</div>
     <div class="mats">${r.mats.length?matText(r.mats):'<span class="muted">只要 Col</span>'}</div></${tag}>`}).join(""):`<div class="empty-note">沒有符合條件的配方。</div>`;
   bindGo($("lRc"));markSel()}
+// ================= classes / skills tab =================
+const CLS=window.SAO_CLASSES||[];
+const clsWeap=c=>Object.entries(c.weapons).map(([k,n])=>`${EQ_CAT[k]||k}（${n}）`).join("、");
+const clsSoon=c=>!Object.keys(c.weapons).length&&!c.base.length;
+function renderClasses(){const s=Sq();const a=CLS.filter(c=>!s||norm([c.name,c.zh,c.role,...c.subs.map(x=>x[0]),...c.skills.map(x=>x[0])].join(" ")).includes(s));
+  $("cCls").textContent=`${a.length} 個職業`;
+  $("lCls").innerHTML=a.map(c=>`<button class="card" data-go="c|${c.id}" data-key="c|${c.id}"><div class="chead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="cname"><b>${esc(c.name)}</b><span>${esc(c.zh)}・${esc(c.role)}</span></div></div>
+    <div class="cmeta">${stars(c.diff)}${clsSoon(c)?'<span class="pill">可能尚未開放</span>':""}${c.skillsSure?"":'<span class="pill">技能待確認</span>'}</div>
+    <div class="muted" style="font-size:12.5px">${clsWeap(c)?"武器："+clsWeap(c):"官方圖鑑還沒有這個職業的裝備"}</div>
+    <div class="muted" style="font-size:12.5px">Lv 30 專精：${c.subs.map(x=>esc(x[0])).join(" / ")}</div></button>`).join("")||`<div class="empty-note">沒有符合的職業。</div>`;
+  bindGo($("lCls"));markSel()}
+function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class="note">找不到這個職業。</div>`;
+  const bar=n=>`<span class="stars">${"★".repeat(n)}<span class="off">${"★".repeat(5-n)}</span></span>`;
+  const tbl=(rows,head)=>`<table class="settbl">${head?`<thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`:""}<tbody>${rows}</tbody></table>`;
+  const stat=(arr,k)=>(arr.find(x=>x[0]===k)||[])[1];const keys=[...new Set([...c.base.map(x=>x[0]),...c.perLv.map(x=>x[0])])];
+  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="ttl"><div class="num">職業</div><h2>${esc(c.name)}</h2><div class="sub">${esc(c.zh)}・${esc(c.role)}</div></div></div>
+  <p class="lore" style="font-style:normal">${esc(c.about)}</p>
+  ${clsSoon(c)?`<div class="note warn">官方物品圖鑑沒有這個職業的裝備，參考互動地圖也沒有它的屬性資料，可能還沒開放。下面只有 wiki 的介紹。</div>`:""}
+  <dl class="facts"><dt>難度</dt><dd>${stars(c.diff)}</dd><dt>可用武器</dt><dd>${clsWeap(c)||'<span class="muted">官方圖鑑沒有資料</span>'}</dd><dt>Lv 30 專精</dt><dd>${c.subs.map(x=>`<b>${esc(x[0])}</b>：${esc(x[1])}`).join("<br>")}<br><span class="muted" style="font-size:12px">wiki 註明專精還在準備中。</span></dd></dl>
+  ${Object.keys(c.weapons).length&&CLASS_ZH[c.id]?`<button class="btn" data-eqcls="${c.id}">查看這個職業可用的裝備</button>`:""}
+  <h3 class="sec">能力傾向 <span class="c">wiki 星等</span></h3>${tbl(c.stars.map(([k,n])=>`<tr><th>${esc(k)}</th><td>${n?bar(n):'<span class="muted">—</span>'}</td></tr>`).join(""),null)}
+  ${keys.length?`<h3 class="sec">起始屬性和成長 <span class="c">參考互動地圖</span></h3>${tbl(keys.map(k=>`<tr><th>${esc(k)}</th><td class="mono">${esc(stat(c.base,k)??"—")}</td><td class="mono">${stat(c.perLv,k)!=null?"+"+esc(stat(c.perLv,k)):"—"}</td></tr>`).join(""),["屬性","Lv 1","每升 1 級"])}`:""}
+  <h3 class="sec">技能 <span class="c">${c.skills.length}</span></h3>
+  ${c.skillsSure?"":`<div class="note warn">wiki 上這些技能的圖示都是佔位圖，清單可能是開服前的預定內容，和遊戲實際不同。</div>`}
+  <ul class="rows">${c.skills.map(([n,ty,lv,d])=>`<li><div class="lrow"><span class="th sm" style="--ring:${ty==="被動"?"var(--ok)":"var(--accent)"}" aria-hidden="true">${lv}</span><span class="t"><b>${esc(n)}</b><span>Lv ${lv}・${ty}・${esc(d)}</span></span></div></li>`).join("")}</ul>
+  ${c.talents.length?`<h3 class="sec">天賦樹（被動點數） <span class="c">參考互動地圖</span></h3>${tbl(c.talents.map(([n,st,a,u,k])=>`<tr><th>${esc(n)}</th><td>${esc(st)} +${a}${u}／點</td><td class="mono">× ${k}</td></tr>`).join(""),["節點","效果","數量"])}<div class="muted" style="font-size:12px">同名節點合併計算；數值是參考互動地圖配裝計算器的資料，還沒有用遊戲畫面核對。</div>`:""}
+  <div class="note">介紹和技能名稱來自 wiki（<a href="https://saominecraft.wiki.gg/wiki/${encodeURIComponent(c.name.replace(/ /g,"_"))}" target="_blank" rel="noopener">${esc(c.name)} 頁</a>），說明是本站改寫；本站不使用職業或技能的圖片。</div>`}
 // copyright / non-affiliation notice (owner chose option C on 2026-11-01: keep the content, state the rights and offer removal)
 function legalDetail(){const iss="https://github.com/Cheng-1001/ArgoStrategyGuide/issues";
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">©</span><div class="ttl"><h2>版權聲明</h2><div class="sub">非官方玩家攻略</div></div></div>
   <ul class="uses">
+  <li>本攻略由中文玩家社群協力製作，提供中文玩家使用。</li>
   <li>本站是玩家自製的非官方攻略，免費、沒有廣告、不販售任何東西。</li>
   <li>本站與 SAO Minecraft 的營運方 Triggers Studio（TRIGGERS SAO）沒有關係，也沒有經過他們認可；同樣與 Mojang、Microsoft 及《刀劍神域》的權利人無關。</li>
   <li>遊戲裡的物品圖示、名稱、描述、截圖等內容，權利屬於 Triggers SAO 或各自的權利人。本站引用是為了讓玩家辨認物品，來源標示在各資料旁（主要是<a href="https://saominecraft.com/wiki" target="_blank" rel="noopener">官方物品圖鑑</a>）。</li>
   <li>權利人要求移除任何內容時，我們會立即下架。請在 <a href="${iss}" target="_blank" rel="noopener">GitHub Issues</a> 留言。</li>
   </ul>
-  <div class="note" lang="fr">Guide communautaire non officiel, gratuit et sans publicité. Il n’est ni affilié à Triggers SAO ni approuvé par Triggers SAO. Les contenus du jeu (icônes, noms, descriptions, captures) appartiennent à Triggers SAO ou à leurs titulaires respectifs. Sur simple demande des ayants droit, tout élément sera retiré : <a href="${iss}" target="_blank" rel="noopener">GitHub Issues</a>.</div>
+  <div class="note" lang="fr">Guide communautaire non officiel, réalisé de façon collaborative par la communauté sinophone pour les joueurs chinois ; gratuit et sans publicité. Il n’est ni affilié à Triggers SAO ni approuvé par Triggers SAO. Les contenus du jeu (icônes, noms, descriptions, captures) appartiennent à Triggers SAO ou à leurs titulaires respectifs. Sur simple demande des ayants droit, tout élément sera retiré : <a href="${iss}" target="_blank" rel="noopener">GitHub Issues</a>.</div>
   <div class="note">NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</div>`}
 function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找不到這個配方。</div>`;
   const e=eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),rar=e?e.r:r.r,isE=!!eqById[String(r.oid)];
@@ -1586,7 +1628,7 @@ $("exportBtn").onclick=async()=>{const out={};Object.entries(userPos[FL]).forEac
 $("resetBtn").onclick=()=>{userPos[FL]={};savePos(FL);renderMap();renderZoneList()};
 
 // ================= floor switch + routing =================
-const VIEWS=["map","monsters","items","props","recipes","quests","equip","bosses","report"];let view="map";
+const VIEWS=["map","monsters","items","props","recipes","quests","equip","classes","bosses","report"];let view="map";
 const CODEX=["monsters","equip","items","props"];let lastCodex="monsters";
 const hashFor=(v,f)=>(f===1?"":"f"+f+"-")+v;
 function go(v,f){location.hash=hashFor(v,f??FL)}
@@ -1613,7 +1655,7 @@ function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PR.length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
   $("nItem").textContent=Object.keys(ITEMS).filter(id=>itemFloors(id).includes(f)).length;
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
-function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|bosses|report)$/);
+function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report)$/);
   view=mm?mm[2]:"map";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
   VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if((view==="report"||view==="bosses")&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
@@ -1621,7 +1663,7 @@ function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   if(view==="map")requestAnimationFrame(()=>{if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
   renderCurrent()}
-function renderCurrent(){requestAnimationFrame(fixCols);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else renderQuests()}
+function renderCurrent(){requestAnimationFrame(fixCols);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="classes")renderClasses();else renderQuests()}
 window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
 
