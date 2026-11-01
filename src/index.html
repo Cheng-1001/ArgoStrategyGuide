@@ -38,6 +38,7 @@ button,input,select{font:inherit;color:inherit}
 .app{height:100%;display:grid;grid-template-rows:auto auto auto minmax(0,1fr)}
 .app:has(#codexTabs[hidden]){grid-template-rows:auto auto minmax(0,1fr)}
 .subtabs[hidden]{display:none!important}
+@media (min-width:821px){#codexTabs{padding-left:266px;background:linear-gradient(90deg,var(--panel) 0 249px,var(--line) 249px 250px,var(--bg) 250px)}}
 /* ---------- header ---------- */
 header.top{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;background:var(--panel);border-bottom:1px solid var(--line);
   padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));position:relative;z-index:20}
@@ -976,7 +977,13 @@ function reqChips(qq){const Fx=FLOORS[qq.floor];const a=qq.need.map(([id,n,inf])
   if(qq.task)a.push(`<span class="req task">📝 <span>${esc(qq.task)}</span></span>`);
   return a.join("")}
 // one reward format for main and side quests: "100 xp · 120 Col · 🎁 item"
-const rewardText=qq=>[qq.xp?`<span class="xp">${money(qq.xp)} xp</span>`:"",qq.money?`<span class="col">${money(qq.money)} Col</span>`:"",qq.bonus?`<span class="rwi">🎁 ${esc(qq.bonus)}</span>`:""].filter(Boolean).join(" · ")||'<span class="muted">獎勵未記錄</span>';
+// item reward -> the codex entry with that name (site item, equipment or prop; French or English name), if any
+const rewardGo=b=>{const m=String(b||"").match(/^(?:(\d+)\s*[x×]?\s+)?(.+)$/);const n=norm(m?m[2]:b).trim();if(!n)return"";
+  const it=Object.keys(ITEMS).find(k=>norm(k)===n||norm(ITEMS[k].fr)===n);if(it)return"i|"+it;
+  const e=EQ.find(x=>norm(x.name)===n);if(e)return"e|"+e.oid;const p=PR.find(x=>norm(x.name)===n);return p?"p|"+p.oid:""};
+// one reward format for main and side quests: "100 xp · 120 Col · 🎁 item"; link=true (panels) makes known items clickable
+const rewardText=(qq,link)=>[qq.xp?`<span class="xp">${money(qq.xp)} xp</span>`:"",qq.money?`<span class="col">${money(qq.money)} Col</span>`:"",
+  qq.bonus?(link&&rewardGo(qq.bonus)?`<span class="rwi">🎁 <button class="linkbtn" data-go="${rewardGo(qq.bonus)}">${esc(qq.bonus)}</button></span>`:`<span class="rwi">🎁 ${esc(qq.bonus)}</span>`):""].filter(Boolean).join(" · ")||'<span class="muted">獎勵未記錄</span>';
 Object.values(window.SAO_MAINQ||{}).forEach(L=>L.forEach(q=>{if(!q.rw)return;const n=re=>{const m=q.rw.match(re);return m?+m[1].replace(/,/g,""):0};
   q.xp=q.xp||n(/([\d,]+)\s*(?:經驗|xp)/i);q.money=q.money||n(/([\d,]+)\s*Col/i)}));
 
@@ -1196,8 +1203,8 @@ function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不
     :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「協作區」回報就能補上。</div>`:""}
   <div class="note">${n.src==="rep"?`位置和類別來自核准的玩家回報（${esc(n.rep)}）。`:n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
-  const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")+`<dt>獎勵</dt><dd class="reward" style="text-align:left">${rewardText(qq)}</dd>`
-    :`<dt>NPC</dt><dd>${esc(qq.npc)}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?t.n:"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq)}</dd>`;
+  const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")+`<dt>獎勵</dt><dd class="reward" style="text-align:left">${rewardText(qq,true)}</dd>`
+    :`<dt>NPC</dt><dd>${esc(qq.npc)}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?t.n:"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq,true)}</dd>`;
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">📜</span><div class="ttl"><div class="num">${flBadge(f)} ${Q.main?mqLabel(qq):"支線"}</div><h2>${esc(Q.title)}</h2>${!Q.main&&qq.src==="ref"?`<div class="sub">目前版本的支線（參考互動地圖）</div>`:""}</div></div>
   <dl class="facts">${facts}</dl>${Q.main&&qq.d?`<p class="lore" style="font-style:normal">${esc(qq.d)}</p>`:""}
   <h3 class="sec">步驟</h3><ol class="mqs">${Q.steps.map(x=>`<li>${esc(x[0])}${x[1]!=null&&FLOORS[f].map?`<button class="linkbtn" data-rep="${f}|${x[1]}|${x[2]}">${x[3]?"約 ":""}X ${x[1]} · Z ${x[2]}</button>`:""}</li>`).join("")}</ol>

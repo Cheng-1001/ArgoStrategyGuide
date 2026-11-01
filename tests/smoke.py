@@ -172,6 +172,9 @@ with sync_playwright() as p:
     check("100 xp" in pg.locator("#view-quests .card", has_text="Show Me").first.inner_text(), "main quest reward in the same format as side quests")
     pg.click('#fQKind .chip[data-v="side"]'); pg.fill("#q", "Pinceau Magique"); pg.wait_for_timeout(300)
     check(pg.locator("#view-quests .card").count() == 1 and "Nacht" in pg.inner_text("#view-quests"), "quest search finds an item reward")
+    pg.locator("#view-quests .card", has_text="Nacht").first.click(); pg.wait_for_timeout(300)
+    check(pg.locator('#pBody .rwi [data-go="p|2165"]').count() == 1, "a reward item that is in the codex links to it (Pinceau Magique)")
+    pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.fill("#q", "Skeleton Warrior"); pg.wait_for_timeout(300)
     check("Bone and Dust" in pg.inner_text("#view-quests"), "quest search finds kill targets in the steps")
     pg.fill("#q", ""); pg.click('#fQKind .chip[data-v="main"]'); pg.wait_for_timeout(200)
@@ -206,6 +209,8 @@ with sync_playwright() as p:
     check("可能還沒開放" in pg.inner_text("#pBody") and "佔位圖" in pg.inner_text("#pBody"), "Martial Artist flagged as possibly unreleased, skills unconfirmed")
     pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
+    tx, gx = pg.locator("#codexTabs a").first.bounding_box()["x"], pg.locator("#lMon").bounding_box()["x"]
+    check(abs(tx - gx) < 4, f"codex sub-tabs start above the middle column ({tx:.0f} vs {gx:.0f})")
     c0 = pg.evaluate("getComputedStyle(document.getElementById('lMon')).gridTemplateColumns.split(' ').length")
     pg.locator("#lMon .card").first.click(); pg.wait_for_timeout(300)
     c1 = pg.evaluate("getComputedStyle(document.getElementById('lMon')).gridTemplateColumns.split(' ').length")
