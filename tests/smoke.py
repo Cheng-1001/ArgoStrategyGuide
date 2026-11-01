@@ -48,7 +48,7 @@ with sync_playwright() as p:
         pg.route("https://fonts.gstatic.com/**", lambda r: r.abort())
         pg.on("pageerror", lambda e: errs.append(str(e)))
         for f in (1, 2, 3):
-            for v in ("map", "monsters", "items", "props", "quests", "equip", "bosses", "report"):
+            for v in ("map", "monsters", "items", "props", "recipes", "quests", "equip", "bosses", "report"):
                 pg.goto(f"{base}#f{f}-{v}")
                 pg.wait_for_timeout(250)
                 if w < 500:
@@ -87,8 +87,8 @@ with sync_playwright() as p:
     pg.click("[data-go='q|mq1_15']"); pg.wait_for_timeout(400)
     check(pg.locator("#pBody .qmap svg polyline").count() == 1 and pg.locator("#pBody .mqs li").count() >= 5,
           "clicking a main quest opens the panel with its steps and a route mini map")
-    steps_y = pg.locator("#pBody .mqs").bounding_box()["y"]; map_y = pg.locator("#pBody .qmap").bounding_box()["y"]
-    check(steps_y < map_y, "quest panel lists the steps above the route map")
+    check(pg.evaluate("(()=>{const b=document.getElementById('pBody');const m=b.querySelector('.qmap');return [...b.children].slice([...b.children].indexOf(m)+1).every(e=>e.matches('[data-route]'))})()"),
+          "quest panel: the route map is the last block (only the enlarge button after it)")
     pg.click("#pBody [data-route]"); pg.wait_for_timeout(600)
     vb0 = pg.get_attribute("#rwSvg", "viewBox")
     check(pg.is_visible("#rwin") and pg.locator("#rwSvg polyline").count() == 1, "enlarge opens the floating route window")
@@ -108,6 +108,18 @@ with sync_playwright() as p:
     pg.click("#fEqPart .chip[data-v=weapon]"); pg.wait_for_timeout(200)
     pg.locator("#lEq .card").first.click(); pg.wait_for_timeout(300)
     check(total > 100 and "官方圖鑑 #" in pg.inner_text("#pBody"), "equipment tab lists official items and opens a detail")
+
+    pg.goto(base + "#recipes"); pg.wait_for_timeout(400)
+    tot = pg.locator("#lRc .rcard").count()
+    pg.click('#fRcCat .chip[data-v="key"]'); pg.wait_for_timeout(200)
+    check(tot >= 100 and pg.locator("#lRc .rcard").count() == 4 and "Forest Key" in pg.inner_text("#lRc"), "recipes tab: 100+ recipes, key filter shows the 4 dungeon keys")
+    pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
+    c0 = pg.evaluate("getComputedStyle(document.getElementById('lMon')).gridTemplateColumns.split(' ').length")
+    pg.locator("#lMon .card").first.click(); pg.wait_for_timeout(300)
+    c1 = pg.evaluate("getComputedStyle(document.getElementById('lMon')).gridTemplateColumns.split(' ').length")
+    pg.click("#pClose"); pg.wait_for_timeout(300)
+    c2 = pg.evaluate("getComputedStyle(document.getElementById('lMon')).gridTemplateColumns.split(' ').length")
+    check(c0 == c1 == c2, f"monster grid keeps its column count when the side panel opens and closes ({c0}/{c1}/{c2})")
 
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
     zl = pg.inner_text("#zlist")
@@ -141,7 +153,7 @@ with sync_playwright() as p:
         pg.click("#pClose"); pg.wait_for_timeout(200)
     pg.locator("#zlist .npcrow", has_text="Bandit Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")
-    check("可以製作\n4" in t and "Bandit Coin" in t and "Small Pouch ×24" in t, "Bandit Accessories lists its 4 recipes")
+    check("可以製作\n5" in t and "Bandit Coin" in t and "Stolen Cloak" in t and "Small Pouch ×24" in t, "Bandit Accessories lists its 5 recipes (4 from screenshots, 1 from the reference map)")
     pg.click("#pClose"); pg.wait_for_timeout(200)
     pg.locator("#zlist .npcrow", has_text="Shark Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")

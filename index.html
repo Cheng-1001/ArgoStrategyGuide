@@ -54,7 +54,7 @@ header.top{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;backgrou
 nav.tabs{display:flex;gap:4px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px}
 nav.tabs a{font-family:var(--f-display);font-weight:600;font-size:14px;letter-spacing:.04em;text-decoration:none;color:var(--muted);padding:5px 11px;border-radius:7px;display:flex;gap:5px;align-items:center}
 @media (max-width:1360px) and (min-width:821px){nav.tabs a .n{display:none}}
-.subtabs{display:flex;gap:6px;padding:8px max(16px,env(safe-area-inset-left,0px)) 0;background:var(--bg);overflow-x:auto}
+.subtabs{display:flex;flex-wrap:wrap;gap:6px;padding:8px max(16px,env(safe-area-inset-left,0px)) 0;background:var(--bg);overflow-x:auto}
 .subtabs a{flex:none;text-decoration:none;color:var(--muted);font-family:var(--f-display);font-weight:600;font-size:13.5px;padding:5px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel);display:flex;gap:6px;align-items:center}
 .subtabs a .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
 .subtabs a[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:#fff}.subtabs a[aria-current="page"] .n{color:#fff}
@@ -112,6 +112,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .mq{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .mqh{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
 .mqn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:600 13px var(--f-mono)}
+.rcard .mats{display:flex;gap:4px 6px;align-items:center;flex-wrap:wrap;font-size:12.5px}
 .recipes .mats{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}.recipes .mats .slot{vertical-align:middle}.recipes .v{text-align:right;line-height:1.3}
 .mqn.est{background:none;color:var(--accent);border:2px dashed var(--accent)}.mqn.nonum{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
 .mqt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.mqt b{font-family:var(--f-display);font-size:15px;font-weight:600;overflow-wrap:anywhere}.mqt span{font-size:12px;color:var(--muted)}
@@ -468,6 +469,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
     <a href="#equip" data-v="equip">裝備 <span class="n" id="nEquip"></span></a>
     <a href="#items" data-v="items">掉落物 <span class="n" id="nItem"></span></a>
     <a href="#props" data-v="props">道具 <span class="n" id="nProp"></span></a>
+    <a href="#recipes" data-v="recipes">配方 <span class="n" id="nRec"></span></a>
   </nav>
 
   <!-- MAP -->
@@ -567,6 +569,18 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="note">官網物品圖鑑裡裝備以外的全部物品（材料、採集、消耗品、藥水、符文、鑰匙、活動物品），名稱和描述是官方法文原文。和怪物掉落、任務有關的物品請看「掉落物」，那裡有掉落率和任務需求。</div>
     </div>
     <div class="results"><div class="rhead"><h2>道具</h2><span class="count" id="cPr"></span></div><div class="grid" id="lPr"></div></div>
+  </section>
+
+  <!-- RECIPES -->
+  <section class="view browse" id="view-recipes" hidden>
+    <div class="filters">
+      <div class="fgroup"><span class="flabel">分類</span><div class="chips" id="fRcCat"></div></div>
+      <div class="fgroup"><span class="flabel">在哪裡做</span><select class="sel" id="fRcNpc" aria-label="NPC"></select></div>
+      <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fRcSort" aria-label="排序">
+        <option value="npc">依 NPC</option><option value="lv">等級（低→高）</option><option value="name">名稱</option></select></div>
+      <div class="note">材料、數量、費用來自玩家的遊戲截圖（標「遊戲截圖」）和參考互動地圖的資料。參考地圖的鯊魚飾品配方和遊戲截圖完全相同。武器、防具目前只有起始商人賣的新手裝備，武器鐵匠和防具鐵匠的配方還沒有資料，歡迎在遊戲裡打開製作選單、按 F2 截圖回報。</div>
+    </div>
+    <div class="results"><div class="rhead"><h2>配方</h2><span class="count" id="cRc"></span></div><div class="grid" id="lRc"></div></div>
   </section>
 
   <!-- BOSSES -->
@@ -734,7 +748,7 @@ const questHit=(qq,s)=>{if(!s)return true;const t=townById[qq.town];return norm(
 // ================= detail drawer =================
 const panel=$("panel"),pBody=$("pBody");let stack=[];
 function openP(type,id,mode){if(mode==="push"&&!panel.hidden&&stack.length)stack.push({type,id});else stack=[{type,id}];
-  renderP();panel.hidden=false;document.body.classList.add("panel-open");pBody.scrollTop=0;markSel()}
+  renderP();panel.hidden=false;document.body.classList.add("panel-open");pBody.scrollTop=0;markSel();fixCols()}
 let pending=null;
 function goMapThen(f,fn){if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
 const nameOf=s=>s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
@@ -749,7 +763,7 @@ function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.
 }
 $("pBack").onclick=()=>{stack.pop();renderP();markSel()};
 $("pClose").onclick=closeP;
-function closeP(){panel.hidden=true;stack=[];document.body.classList.remove("panel-open");markSel()}
+function closeP(){panel.hidden=true;stack=[];document.body.classList.remove("panel-open");markSel();fixCols()}
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!panel.hidden)closeP()});
 function markSel(){const cur=!panel.hidden&&stack[stack.length-1];
   document.querySelectorAll(".card.sel").forEach(e=>e.classList.remove("sel"));document.querySelectorAll(".th.selm").forEach(e=>e.classList.remove("selm"));
@@ -943,20 +957,38 @@ $("rwIn").onclick=()=>rwZoom(1.4);$("rwOut").onclick=()=>rwZoom(1/1.4);$("rwFit"
 new ResizeObserver(()=>rwRender()).observe($("rwBody"));
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("rwin").hidden){$("rwin").hidden=true;RW=null}});
 const RECIPES=window.SAO_RECIPES||{};
-const recRow=(npc,f,it)=>({npc,f,oid:it[0],en:it[1],sec:it[2],mats:it[3],cost:it[4],r:it[5]});
+const recRow=(npc,f,it)=>({npc,f,oid:it[0],en:it[1],sec:it[2],mats:it[3],cost:it[4],r:it[5],cat:it[6]||"acc",lv:it[7],src:it[8]||"shot"});
 const RECIPE_BY_EQ={},RECIPE_BY_MAT={};Object.entries(RECIPES).forEach(([npc,r])=>r.items.forEach(it=>{const row=recRow(npc,r.floor,it);
   if(it[0]!=null)(RECIPE_BY_EQ[it[0]]=RECIPE_BY_EQ[it[0]]||[]).push(row);it[3].forEach(([m])=>(RECIPE_BY_MAT[m]=RECIPE_BY_MAT[m]||[]).push(row))}));
 const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
 const matText=mats=>mats.map(([m,q])=>`${ITEMS[m]?slot(m,22):""}<span>${esc(m)} ×${q}</span>`).join("・");
-const costText=c=>c==="Free"||c==="0"?"免費":esc(c)+" Col";
+const costText=c=>c==="Free"||c==="0"?"免費":c==null?"費用未知":esc(c)+" Col";
 function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=>{const e=eqById[String(r.oid)];const n=npcByName(r.f,r.npc);
   const go=showNpc?(n?"n|"+n.id:""):(e?"e|"+r.oid:"");const rar=e?e.r:r.r;const tag=go?"button":"div";
   return`<li><${tag} class="lrow"${go?` data-go="${go}"`:""}>${showNpc?`<span class="th sm" style="--ring:var(--ref)" aria-hidden="true">${NPCCAT[n?n.c:"accessoriesBlacksmith"][1]}</span>`:(e?eslot(e,34):`<span class="eslot empty" style="--s:34px" aria-hidden="true">💍</span>`)}
-    <span class="t"><b>${showNpc?esc(r.npc):esc(r.en)}</b><span>${showNpc?"":(e?esc(e.name)+"・":"")+(RAR[rar]?RAR[rar][0]+"・":"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${r.sec} 秒<br><span class="muted">${costText(r.cost)}</span></span></${tag}></li>`}).join("")}</ul>`}
+    <span class="t"><b>${showNpc?esc(r.npc):esc(r.en)}</b><span>${showNpc?"":(e?esc(e.name)+"・":"")+(RAR[rar]?RAR[rar][0]+"・":"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}></li>`}).join("")}</ul>`}
+const RC_CAT={weapon:["武器","⚔️"],armor:["防具","🛡️"],acc:["飾品","💍"],potion:["藥水","🧪"],key:["鑰匙","🗝️"]};
+const ALLREC=Object.entries(RECIPES).flatMap(([npc,r])=>r.items.map(it=>recRow(npc,r.floor,it)));
+let rcCat="all";
+chipsInto($("fRcCat"),[["all",`全部 <b>${ALLREC.length}</b>`],...Object.entries(RC_CAT).map(([k,[l,ic]])=>[k,`${ic} ${l} <b>${ALLREC.filter(r=>r.cat===k).length}</b>`])],()=>rcCat,v=>rcCat=v,renderRecipes);
+$("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(ALLREC.map(r=>r.npc))].sort().map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
+$("fRcNpc").onchange=renderRecipes;$("fRcSort").onchange=renderRecipes;
+const recIcon=(r,s=44)=>{const e=eqById[String(r.oid)];if(e)return eslot(e,s);const p=prById[String(r.oid)];if(p)return pslot(p,s);return`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${RC_CAT[r.cat][1]}</span>`};
+const recGo=r=>eqById[String(r.oid)]?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid:(npcByName(r.f,r.npc)?"n|"+npcByName(r.f,r.npc).id:"");
+const recHit=(r,s)=>!s||norm([r.en,r.npc,(eqById[String(r.oid)]||prById[String(r.oid)]||{}).name||"",...r.mats.map(m=>m[0])].join(" ")).includes(s);
+function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value;
+  let a=ALLREC.filter(r=>(rcCat==="all"||r.cat===rcCat)&&(np==="all"||r.npc===np)&&recHit(r,s));
+  a.sort((x,y)=>so==="lv"?(x.lv||0)-(y.lv||0)||x.en.localeCompare(y.en):so==="name"?x.en.localeCompare(y.en):x.npc.localeCompare(y.npc)||(x.lv||0)-(y.lv||0));
+  $("cRc").textContent=`${a.length} / ${ALLREC.length} 筆`;
+  $("lRc").innerHTML=a.length?a.map(r=>{const e=eqById[String(r.oid)]||prById[String(r.oid)];const go=recGo(r);const rar=e?e.r:r.r;const tag=go?"button":"div";
+    return`<${tag} class="card rcard"${go?` data-go="${go}" data-key="${go}"`:""}><div class="chead">${recIcon(r)}<div class="cname"><b>${esc(r.en)}</b><span>${e?esc(e.name)+"・":""}${esc(r.npc)}</span></div></div>
+    <div class="cmeta">${RAR[rar]?`<span class="pill ${RAR[rar][1]}">${RAR[rar][0]}</span>`:""}<span>${RC_CAT[r.cat][0]}</span>${r.lv?`<span>· 等級 ${r.lv}</span>`:""}<span>· ${costText(r.cost)}</span>${r.sec?`<span>· ${r.sec} 秒</span>`:""}${r.src==="shot"?'<span class="pill rep">遊戲截圖</span>':""}</div>
+    <div class="mats">${r.mats.length?matText(r.mats):'<span class="muted">只要 Col</span>'}</div></${tag}>`}).join(""):`<div class="empty-note">沒有符合條件的配方。</div>`;
+  bindGo($("lRc"));markSel()}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const c=NPCCAT[n.c];
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u?"・在地下":""}</div></div></div>
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
-  ${RECIPES[n.n]?`<h3 class="sec">可以製作 <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${esc(RECIPES[n.n].src)}</div>`
+  ${RECIPES[n.n]?`<h3 class="sec">可以製作 <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":"玩家的遊戲截圖"))].join("、")}</div>`
     :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「回報區」回報就能補上。</div>`:""}
   <div class="note">${n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「回報區」回報地點。</div>`}
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
@@ -965,10 +997,11 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">📜</span><div class="ttl"><div class="num">${flBadge(f)} ${Q.main?mqLabel(qq):"支線"}</div><h2>${esc(Q.title)}</h2>${!Q.main&&qq.src==="ref"?`<div class="sub">目前版本的支線（參考互動地圖）</div>`:""}</div></div>
   <dl class="facts">${facts}</dl>${Q.main&&qq.d?`<p class="lore" style="font-style:normal">${esc(qq.d)}</p>`:""}
   <h3 class="sec">步驟</h3><ol class="mqs">${Q.steps.map(x=>`<li>${esc(x[0])}${x[1]!=null&&FLOORS[f].map?`<button class="linkbtn" data-rep="${f}|${x[1]}|${x[2]}">${x[3]?"約 ":""}X ${x[1]} · Z ${x[2]}</button>`:""}</li>`).join("")}</ol>
-  ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}
+
   ${!Q.main&&(qq.need.length||qq.kill)?`<h3 class="sec">需要的物品和目標</h3><div class="reqs">${reqChips(qq)}</div>`:""}
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
-  <div class="note">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。":qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>`}
+  <div class="note">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。":qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
+  ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}`}
 function mqCard(qq,i){const meta=[qq.npc&&("NPC "+qq.npc),qq.lv&&("等級 "+qq.lv),qq.rw&&("獎勵 "+qq.rw)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
   return`<button class="card qcard" data-key="q|${id}" data-go="q|${id}"><div class="mqh"><span class="mqn${qq.n?"":" nonum"}${qq.nEst?" est":""}" title="${qq.n?(qq.nEst?"遊戲任務編號（依順序推算）":"遊戲任務編號"):"遊戲編號未確認"}">${qq.n?qq.n:"·"}</span><div class="mqt"><b>${esc(qq.t)}</b>${meta?`<span>${meta}</span>`:""}</div></div>
   ${qq.d?`<p class="qd">${esc(qq.d)}</p>`:""}<span class="muted" style="font-size:12px">${qq.s.length} 個步驟${qq.s.some(x=>x[1]!=null)?"・有路線圖":""}</span></button>`}
@@ -1467,8 +1500,8 @@ $("exportBtn").onclick=async()=>{const out={};Object.entries(userPos[FL]).forEac
 $("resetBtn").onclick=()=>{userPos[FL]={};savePos(FL);renderMap();renderZoneList()};
 
 // ================= floor switch + routing =================
-const VIEWS=["map","monsters","items","props","quests","equip","bosses","report"];let view="map";
-const CODEX=["monsters","equip","items","props"];let lastCodex="monsters";
+const VIEWS=["map","monsters","items","props","recipes","quests","equip","bosses","report"];let view="map";
+const CODEX=["monsters","equip","items","props","recipes"];let lastCodex="monsters";
 const hashFor=(v,f)=>(f===1?"":"f"+f+"-")+v;
 function go(v,f){location.hash=hashFor(v,f??FL)}
 document.querySelectorAll("nav.tabs a,#codexTabs a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v==="codex"?lastCodex:a.dataset.v)}));
@@ -1491,10 +1524,10 @@ function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.
   $("flNo").textContent=f+"F";$("flNm").textContent=F().name;
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
   const Fx=F();$("floorInfo").innerHTML=`<b>${FLN(f)}・${esc(Fx.name)}</b><span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/4 開放・wiki 現有資料，開放後可能變動</span>`:""}`;
-  $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PR.length;if(ROUTE)clearRoute();
+  $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PR.length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
   $("nItem").textContent=Object.keys(ITEMS).filter(id=>itemFloors(id).includes(f)).length;
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
-function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|quests|equip|bosses|report)$/);
+function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|bosses|report)$/);
   view=mm?mm[2]:"map";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
   VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(view!=="quests"&&RW){$("rwin").hidden=true;RW=null}if((view==="report"||view==="bosses")&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
@@ -1502,10 +1535,14 @@ function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   if(view==="map")requestAnimationFrame(()=>{if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
   renderCurrent()}
-function renderCurrent(){if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else renderQuests()}
+function renderCurrent(){requestAnimationFrame(fixCols);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else renderQuests()}
 window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
 
+// card grids keep the column count they have with the side panel open, so opening or closing it never reflows the list
+function fixCols(){const wide=innerWidth>=1180;document.querySelectorAll(".browse .grid").forEach(g=>{if(!wide||!g.offsetParent){g.style.gridTemplateColumns="";return}
+  const pr=parseFloat(getComputedStyle(g.parentElement).paddingRight)||0;const w=g.clientWidth-(document.body.classList.contains("panel-open")?0:Math.max(0,430-pr));g.style.gridTemplateColumns=`repeat(${Math.max(1,Math.floor((w+10)/260))},minmax(0,1fr))`})}
+window.addEventListener("resize",fixCols);
 const setHead=()=>document.documentElement.style.setProperty("--head-h",$("top").getBoundingClientRect().height+"px");
 new ResizeObserver(setHead).observe($("top"));
 let lastW=0;new ResizeObserver(()=>{const w=Math.round(stage.getBoundingClientRect().width);if(w&&w!==lastW&&MP()){const first=!lastW;lastW=w;if(!first||!fitted)fit()}}).observe(stage);
