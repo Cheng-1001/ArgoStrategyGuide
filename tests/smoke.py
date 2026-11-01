@@ -184,6 +184,10 @@ with sync_playwright() as p:
     pg.click("#zfit"); pg.wait_for_timeout(200)
     check(pg.locator(".bsp").count() == 23 and pg.locator('.bsp[title*="Pumba"]').count() == 5, "23 boss spawn points drawn (Pumba has 5)")
     check(pg.is_visible("#fpanel") and pg.locator("#fpanel").bounding_box()["width"] <= 200, "filter panel stays open on the left and is narrow")
+    check(pg.evaluate("document.querySelector('#fpCats .fchip[data-k=npc]').nextElementSibling.id") == "fpNpcWrap",
+          "NPC sub-categories sit right under the NPC chip")
+    sz = pg.evaluate("""(()=>{const w=s=>{const e=document.querySelector(s);return e?e.getBoundingClientRect().width:0};return [w('.bsp.boss'),w('.bsp.mini'),w('.zone .mapth:not(.boss):not(.mini):not(.minion)')]})()""")
+    check(sz[0] > sz[1] > sz[2] > 0, f"bosses drawn bigger than mini-bosses and monsters ({sz[0]:.0f} > {sz[1]:.0f} > {sz[2]:.0f}px)")
     pg.click('#fpCats .fchip[data-k="boss"]'); pg.wait_for_timeout(200)
     check(pg.locator(".bsp").count() == 0, "区域首領 filter hides spawn points")
     pg.click('#fpCats .fchip[data-k="boss"]'); pg.wait_for_timeout(200)

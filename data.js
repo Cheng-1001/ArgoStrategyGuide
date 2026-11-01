@@ -257,7 +257,7 @@ for (const [id, r] of Object.entries(RAW)) {
    13 teleport destinations on floor 1: 7 towns below (Vallhat is NOT one: it is reached by the teleporter at the
    foot of the island) and 6 spots (wolf, geldorak, ruins, og, garden, guild). */
 const TOWNS = [
- { id:"tob", tp:"Ville de Départ", n:"起始之城", en:"Town of Beginnings", x:1700, z:4300 },
+ { id:"tob", tp:"Ville de Départ", n:"Town of Beginnings", zh:"起始之城", x:1700, z:4300 },
  { id:"hanaka", tp:"Hanaka", n:"Hanaka", x:1492, z:3453 },
  { id:"vallhat", n:"Vallhat", x:470, z:3045 },
  { id:"mizunari", tp:"Mizunari", n:"Mizunari", x:3133, z:3673 },

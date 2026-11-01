@@ -127,8 +127,8 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .rwbody{flex:1;min-height:0;background:#0d1218;position:relative}.rwbody svg{display:block;width:100%;height:100%;touch-action:none;cursor:grab}.rwbody svg.drag{cursor:grabbing}
 @media (max-width:820px){.rwhead .muted{display:none}}
 .areas path{stroke-width:var(--areaw,1.8)}
-.bsp{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:4;width:28px;height:28px;border-radius:50%;border:3px solid var(--boss);background:radial-gradient(circle at 35% 30%,#fff,#dfe6ec);display:grid;place-items:center;font-size:15px;padding:0;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.55);overflow:hidden}
-.bsp.mini{border-color:var(--mini)}.bsp.ug{border-style:dashed}.bsp img.face{width:100%;height:100%;object-fit:cover}
+.bsp{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:4;width:50px;height:50px;border-radius:50%;border:3.5px solid var(--boss);background:radial-gradient(circle at 35% 30%,#fff,#dfe6ec);display:grid;place-items:center;font-size:15px;padding:0;cursor:pointer;box-shadow:0 1px 5px rgba(0,0,0,.55);overflow:hidden}
+.bsp.boss{box-shadow:0 0 0 3px rgba(217,112,26,.35),0 2px 7px rgba(0,0,0,.6)}.bsp.mini{width:44px;height:44px;border-color:var(--mini);box-shadow:0 0 0 3px rgba(123,85,200,.3),0 2px 6px rgba(0,0,0,.55)}.bsp.ug{border-style:dashed}.bsp img.face{width:100%;height:100%;object-fit:cover}
 .areas{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;z-index:1;overflow:visible}
 .route{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;z-index:5;overflow:visible}
 .rstep{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:7;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:#e8a23a;color:#1b1206;border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.35);font:700 11.5px var(--f-mono);display:grid;place-items:center;white-space:nowrap;pointer-events:none}
@@ -188,7 +188,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .zone.est .zlabel{border-style:dashed}
 .zone .thumbs{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;max-width:186px;pointer-events:auto}
 .zone.poi .zlabel{background:rgba(255,255,255,.9);color:#1f2a33;border-color:rgba(0,0,0,.25)}
-.zone.shop{z-index:2} .zone.shop .zlabel{padding:0;width:22px;height:22px;border-radius:50%;justify-content:center;font-size:12px;letter-spacing:0;background:rgba(255,248,225,.92);border-color:rgba(120,90,20,.55)}
+.zone.shop{z-index:2} .zone.shop .zlabel{padding:0;width:27px;height:27px;border-radius:50%;justify-content:center;font-size:15px;letter-spacing:0;background:rgba(255,248,225,.92);border-color:rgba(120,90,20,.55)}
 .zsec{font-family:var(--f-display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:14px 0 2px}
 .zsec[hidden]{display:none}
 .zone .more{display:none;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:999px;background:rgba(10,16,22,.82);color:#fff;font-family:var(--f-mono);font-size:11px;align-self:center;pointer-events:none}
@@ -196,6 +196,8 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .world.compact .zone .more{display:inline-grid}
 .zone.dim{opacity:.25} .zone.flash .zlabel{background:var(--accent);color:var(--accent-ink)}
 .mapth{cursor:pointer;transition:transform .12s}
+/* on the map: bosses > mini-bosses > monsters > minions */
+.mapth.minion{width:32px;height:32px;font-size:17px}.mapth.mini{width:44px;height:44px;font-size:23px}.mapth.boss{width:50px;height:50px;font-size:26px}
 .mapth:hover{transform:scale(1.12)}
 .mapth.dim{opacity:.22;filter:grayscale(1)} .mapth.hit{box-shadow:0 0 0 3px var(--accent),0 2px 8px rgba(0,0,0,.5)} .th.selm{outline:3px solid #fff;outline-offset:2px}
 .hud{position:absolute;left:12px;bottom:12px;z-index:5}
@@ -216,7 +218,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .fpanel[hidden]{display:none}
 .fphead,.fpsubh{display:flex;gap:10px;align-items:center}.fphead b,.fpsubh b{flex:1;font-family:var(--f-display)}
 .fpcats{display:flex;flex-direction:column;gap:5px}.fpgrp{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-top:4px}.fpnpc{display:flex;flex-direction:column;gap:4px;margin-top:6px}
-.fpsub summary{cursor:pointer;list-style:none;font-size:12.5px}.fpsub summary::after{content:" ▸";color:var(--muted)}.fpsub[open] summary::after{content:" ▾"}
+.fpsub{margin:-1px 0 2px 10px;padding:4px 0 4px 10px;border-left:2px solid var(--line)}.fpsub summary{cursor:pointer;list-style:none;font-size:12.5px}.fpsub summary::after{content:" ▸";color:var(--muted)}.fpsub[open] summary::after{content:" ▾"}
 @media (min-width:821px){#filterBtn,#fpX{display:none}.fpanel{padding:10px;gap:8px;font-size:13px}}
 .fchip{display:flex;gap:6px;align-items:center;border:1px solid var(--line);background:var(--panel-2);border-radius:8px;padding:4px 8px;cursor:pointer;font-size:13px;text-align:left;color:var(--fg)}
 .fchip .n{margin-left:auto;font-family:var(--f-mono);font-size:11px;color:var(--muted)}
@@ -752,7 +754,7 @@ const q=$("q");const norm=s=>String(s||"").toLowerCase().normalize("NFD").replac
 const Sq=()=>norm(q.value.trim());
 function itemHit(id,s,shallow){if(!s)return true;const it=ITEMS[id];if(norm(id).includes(s)||norm(it.fr).includes(s))return true;if(shallow)return false;return!!(CAT_ZH[it.cat]&&CAT_ZH[it.cat].includes(q.value.trim()))}
 const monHit=(m,s)=>{if(!s)return true;const z=FLOORS[m.floor].zones[m.zone];return norm(m.name).includes(s)||(m.aka||[]).some(a=>norm(a).includes(s))||m.num.includes(s)||norm(z.n+" "+z.zh).includes(s)||m.drops.some(d=>itemHit(d[0],s,true))};
-const questHit=(qq,s)=>{if(!s)return true;const t=townById[qq.town];return norm(qq.npc).includes(s)||norm(t.n+" "+(t.en||"")).includes(s)||norm(qq.raw).includes(s)||norm(qq.task).includes(s)||qq.need.some(n=>itemHit(n[0],s,true))||(qq.kill&&qq.kill[0].some(k=>norm(k).includes(s)))};
+const questHit=(qq,s)=>{if(!s)return true;const t=townById[qq.town];return norm(qq.npc).includes(s)||norm(t.n+" "+(t.zh||"")+" "+(t.en||"")).includes(s)||norm(qq.raw).includes(s)||norm(qq.task).includes(s)||qq.need.some(n=>itemHit(n[0],s,true))||(qq.kill&&qq.kill[0].some(k=>norm(k).includes(s)))};
 
 // ================= detail drawer =================
 const panel=$("panel"),pBody=$("pBody");let stack=[];
@@ -854,7 +856,7 @@ function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">�
   ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(i)}</b><span>${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}`}
 
 function townDetail(id){const t=townById[id];const qs=ALLQ.filter(x=>x.town===id);
-  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">🏘️</span><div class="ttl"><div class="num mono">${flBadge(t.floor)} X ${t.x} · Z ${t.z}</div><h2>${esc(t.n)}</h2>${t.en?`<div class="sub">${esc(t.en)}</div>`:""}</div></div>
+  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">🏘️</span><div class="ttl"><div class="num mono">${flBadge(t.floor)} X ${t.x} · Z ${t.z}</div><h2>${esc(t.n)}</h2>${t.zh||t.en?`<div class="sub">${esc(t.zh||t.en)}</div>`:""}</div></div>
   ${soonNote(t.floor)}${t.tp?`<div class="note">🌀 <b>可以直接傳送</b>：在遊戲的傳送選單選「${esc(t.tp)}」。</div>`:t.floor===1?`<div class="note">這個村鎮不在遊戲的傳送選單裡，要自己走過去。</div>`:""}${t.note?`<div class="note">${esc(t.note)}</div>`:""}
   <button class="linkbtn" data-town="${id}">在地圖上查看</button>
   <h3 class="sec">支線任務 <span class="c">${qs.length}</span></h3>
@@ -1356,7 +1358,7 @@ function updateTiles(){tileRaf=0;const m=MP();if(!useTiles()){if(TL.size){tilesE
   clearTimeout(tileGC);tileGC=setTimeout(()=>{TL.forEach((im,k)=>{if(!want.has(k)&&!k.startsWith("0/")){im.remove();TL.delete(k)}})},700)}
 const schedTiles=()=>{if(!tileRaf)tileRaf=requestAnimationFrame(updateTiles)};
 window.addEventListener("resize",schedTiles);
-function apply(){schedTiles();world.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;const zr=fitSc()/sc;const screen=Math.max(.72,Math.min(1.35,1.35*Math.pow(zr,.3)));world.style.setProperty("--inv",screen/sc*fitSc());world.style.setProperty("--areaw",Math.max(.7,Math.min(2,2*Math.pow(zr,.5))).toFixed(2));world.classList.toggle("compact",sc<fitSc()*1.9)}
+function apply(){schedTiles();world.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;const zr=fitSc()/sc;const k=Math.max(.8,Math.min(1,fitSc()/.75)),screen=k*Math.max(.92,Math.min(1.08,1.08*Math.pow(zr,.12)));world.style.setProperty("--inv",screen/sc);world.style.setProperty("--areaw",Math.max(.7,Math.min(2,2*Math.pow(zr,.5))).toFixed(2));world.classList.toggle("compact",sc<fitSc()*1.9)}
 function fit(){const r=stage.getBoundingClientRect();if(!r.width)return;sc=fitSc();tx=(r.width-1000*sc)/2;ty=(r.height-1000*sc)/2;apply();fitted=true}
 function zoomAt(f,cx,cy){const ns=Math.max(fitSc()*.8,Math.min(fitSc()*10,sc*f));const k=ns/sc;tx=cx-(cx-tx)*k;ty=cy-(cy-ty)*k;sc=ns;apply()}
 function centerOn(bx,bz,minZoom){if(!MP())return;if(!fitted)fit();const r=stage.getBoundingClientRect();sc=Math.max(sc,fitSc()*(minZoom||2.2));
@@ -1388,8 +1390,9 @@ function mapCounts(){const sp=spotsOf(FL),tw=F().towns,np=NPCS(FL);const c={tp:t
   c.mobs=new Set(sp.flatMap(x=>x.mons.map(n=>F().monByName[n]).filter(m=>m&&!isBossT(m)).map(m=>m.id))).size;return c}
 function renderFilter(){const c=mapCounts();const np=NPCS(FL);const off=MAPCAT.filter(([k])=>!catOn(k)).length+Object.keys(FILT).filter(k=>k.startsWith("npc:")&&FILT[k]).length;
   $("filterBtn").textContent=off?`篩選（已隱藏 ${off} 類）▾`:"篩選 ▾";
+  const nw=$("fpNpcWrap");$("fpanel").appendChild(nw);
   $("fpCats").innerHTML=MAPGRP.map(([g,cs])=>`<div class="fpgrp">${g}</div>`+cs.map(([k,l,ic])=>`<button class="fchip" data-k="${k}" aria-pressed="${catOn(k)}">${ic} ${l}<span class="n">${c[k]||0}</span></button>`).join("")).join("");
-  const cats=Object.keys(NPCCAT).filter(k=>np.some(n=>n.c===k));$("fpNpcWrap").hidden=!catOn("npc")||!cats.length;
+  const cats=Object.keys(NPCCAT).filter(k=>np.some(n=>n.c===k));nw.hidden=!catOn("npc")||!cats.length;$("fpCats").querySelector('[data-k="npc"]').after(nw);
   $("fpNpc").innerHTML=cats.map(k=>`<button class="fchip" data-k="npc:${k}" aria-pressed="${!FILT["npc:"+k]}">${NPCCAT[k][1]} ${NPCCAT[k][0]}<span class="n">${np.filter(n=>n.c===k).length}</span></button>`).join("");
   $("fpanel").querySelectorAll(".fchip").forEach(b=>b.onclick=ev=>{ev.stopPropagation();const k=b.dataset.k;if(FILT[k])delete FILT[k];else FILT[k]=1;saveFilt();renderFilter();renderMap();renderZoneList()})}
 const setNpcAll=on=>{Object.keys(NPCCAT).forEach(k=>{if(on)delete FILT["npc:"+k];else FILT["npc:"+k]=1});saveFilt();renderFilter();renderMap();renderZoneList()};
@@ -1457,8 +1460,8 @@ let editing=false,placing=null;
 function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(FL);
   const sec=(title,n)=>{const h=document.createElement("div");h.className="zsec";h.innerHTML=`${title} <span class="mono">${n}</span>`;zl.appendChild(h)};
   const coord=(x,z)=>`<span class="mono muted" style="font-size:11px;margin-left:auto">X ${x} · Z ${z}</span>`;
-  const townRow=t=>{const row=document.createElement("div");row.className="zrow";row.dataset.tp=t.n+" "+(t.tp||"")+" "+(t.en||"");
-    row.innerHTML=`<div class="zhead"><button class="zn">${esc(t.n)}</button><span class="zzh">${t.tp?"傳送選單："+esc(t.tp):"村鎮・無法傳送"}</span>${coord(t.x,t.z)}</div>`;
+  const townRow=t=>{const row=document.createElement("div");row.className="zrow";row.dataset.tp=t.n+" "+(t.tp||"")+" "+(t.zh||"")+" "+(t.en||"");
+    row.innerHTML=`<div class="zhead"><button class="zn">${esc(t.n)}</button><span class="zzh">${t.tp?"傳送選單："+esc(t.tp):"村鎮・無法傳送"}${t.zh?"・"+esc(t.zh):""}</span>${coord(t.x,t.z)}</div>`;
     row.querySelector(".zn").onclick=()=>{centerOn(t.x,t.z,2.6);openP("t",t.id,"new")};zl.appendChild(row)};
   const spotRow=(x,noMons)=>{const st=STATUS[x.src];const row=document.createElement("div");row.className="zrow";row.dataset.s=x.id;
     row.innerHTML=`<div class="zhead"><button class="zn">${x.gt?GT[x.gt][1]+" ":""}${esc(x.n)}</button><span class="zzh">${x.tp?"傳送選單："+esc(x.tp)+"・":""}${esc(x.zh)}</span>${x.gt?`<span class="pill">${GT[x.gt][0]}</span>`:""}<span class="pill ${st.c}">${st.t}</span>${coord(x.x,x.z)}</div>`;
