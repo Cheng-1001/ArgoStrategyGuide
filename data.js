@@ -293,29 +293,15 @@ const SPOTS = [
  {id:"xal",kind:"dungeon",n:"Xal'Zirith Dungeon",zh:"Xal'Zirith 聖所（地下城入口）",x:1034,z:1184,src:"ref",mons:["Strangler Spider","Hunting Spider","Venomous Spider","Pricilia","Yula","Jira","Kamilia"],note:"入口在 Arakh'Nol 西北，守衛 NPC 在 X 1013 · Z 1189（進入需要 Clé de Xal'Zirith）。地下的小首領位置（參考互動地圖）：Pricilia X 1232 · Z 1102、Yula X 1102 · Z 1227、Kamilia X 987 · Z 1247、Jira X 1192 · Z 1407。"},
  {id:"skeld",kind:"dungeon",n:"Skeleton Dungeon",zh:"骷髏地下城（Nazgul 副本）",x:2782,z:4422,src:"ref",mons:["Skeleton Tank","Skeleton Wizard","Narax the Cursed Skeleton","Cursed Nazgul Protector"],note:"入口在詛咒廢墟裡。地下的首領位置（參考互動地圖）：Cursed Nazgul Protector X 2829 · Z 4247、Narax X 2722 · Z 4332。"},
  {id:"kobold",kind:"dungeon",n:"Kobold Tower",zh:"狗頭人之塔（樓層首領）",x:3409,z:972,src:"ref",mons:["Illfang the Kobold Lord","Kobold Sentinel","Kobold Warrior","Kobold Lancer","Kobold Sorcerer","Small Kobold","The Mischievous Archer"],note:"Tolbana 北邊的塔，第一層樓層首領 Illfang 在塔頂。"},
+ {id:"wevent",kind:"wboss",n:"Floor 1 World Event",zh:"第 1 層世界事件",x:1947,z:1990,src:"ref",note:"參考互動地圖標的「Floor 1 World Event」位置。世界王 Galiath 本身要在破碎的地下世界做出祭壇才能進入（見「世界王」分頁），這裡是第 1 層的世界事件地點。"},
  {id:"guild",tp:"Guilde Marchand",kind:"poi",n:"Merchant Guild",zh:"商人公會",x:4772,z:2422,src:"ref",note:"商人公會總部，在東北邊的山上。座標取自參考互動地圖。"},
- {id:"mine",kind:"poi",n:"Aincrad Mine",zh:"Aincrad 礦坑",x:2396,z:3527,note:"礦坑。"},
- {id:"wood",kind:"poi",n:"Birch & Oak Wood",zh:"樺木・橡木林",x:2641,z:4333,items:["Oak Log","Birch Log"],note:"伐木點。"},
+ {id:"mine",kind:"gather",gt:"ore",n:"Aincrad Mine",zh:"Aincrad 礦坑（東礦坑）",x:2396,z:3527,items:["Iron Ore","Copper Ingot"],note:"礦坑。參考互動地圖稱為 East Mines（X 2399 · Z 3510），可採 Coal Ore、Copper、Iron。"},
+ {id:"westmine",kind:"gather",gt:"ore",n:"West Mines",zh:"西礦坑",x:986,z:3491,src:"ref",items:["Iron Ore","Copper Ingot"],note:"可採 Coal Ore、Copper、Iron（參考互動地圖）。"},
+ {id:"farm",kind:"gather",gt:"crop",n:"Farm",zh:"農田",x:2351,z:3662,src:"ref",items:["Allium","Wheat"],note:"可採 Allium、Wheat（參考互動地圖）。主線 The Essentials 也要你在城鎮東北的田裡採這兩種。"},
+ {id:"wood",kind:"gather",gt:"wood",n:"Birch & Oak Wood",zh:"樺木・橡木林",x:2641,z:4333,items:["Oak Log","Birch Log"],note:"伐木點。"},
  {id:"harold",kind:"poi",n:"Harold's Quest (Hidden Well)",zh:"Harrold 的任務・隱藏的井",x:4309,z:3697,src:"est",note:"提供的座標是「4309, 36971」，第二個數字超出地圖範圍（最大約 4980），這裡暫時標在 Z 3697。主線「The Chamber Beneath the Fields」：Harrold 說東邊道路上有一口井，夜裡看得到光。"},
  {id:"og",tp:"Quartier OG",kind:"poi",n:"OG Quarter",zh:"OG Quarter",x:2312,z:3272},
- {id:"garden",tp:"Jardin des Géants",kind:"poi",n:"Giant's Garden",zh:"巨人花園",x:379,z:2442,note:"主線「By the Branches of the Ancients」：Zebulgarath 住在巨人花園，提示是「利用水往上爬」。"},
- /* Loot buyers: NPCs that buy monster drops and materials (coordinates from the reference map) */
- {id:"lb1",kind:"shop",n:"Boar and Wolf Loot Buyer",zh:"野豬・狼素材收購商（起始之城）",x:1787,z:4179,src:"ref"},
- {id:"lb2",kind:"shop",n:"Hanaka Loot Buyer",zh:"Hanaka 收購商",x:1504,z:3396,src:"ref"},
- {id:"lb3",kind:"shop",n:"Vallhat Loot Buyer",zh:"Vallhat 收購商",x:412,z:3089,src:"ref"},
- {id:"lb4",kind:"shop",n:"Mizunari Loot Buyer",zh:"Mizunari 收購商",x:3132,z:3704,src:"ref"},
- {id:"lb5",kind:"shop",n:"Ika Citadel Loot Buyer",zh:"Ika 群島收購商",x:3277,z:4170,src:"ref"},
- {id:"lb6",kind:"shop",n:"Cursed Ruins Loot Buyer",zh:"詛咒廢墟收購商",x:2857,z:4487,src:"ref"},
- {id:"lb7",kind:"shop",n:"Cursed Ruins Loot Buyer (2)",zh:"詛咒廢墟收購商（2）",x:2832,z:4709,src:"ref"},
- {id:"lb8",kind:"shop",n:"Geldorak Mine Dungeon Loot Buyer",zh:"Geldorak 礦坑地下城收購商",x:4280,z:3887,src:"ref"},
- {id:"lb9",kind:"shop",n:"Labyrinth of the Fallen Loot Buyer",zh:"墮落者迷宮收購商",x:2403,z:2385,src:"ref"},
- {id:"lb10",kind:"shop",n:"Labyrinth of the Fallen Loot Buyer (2)",zh:"墮落者迷宮收購商（2）",x:2389,z:2408,src:"ref"},
- {id:"lb11",kind:"shop",n:"Aragorn's Lair Loot Buyer",zh:"Aragorn 巢穴收購商（Arakh'Nol）",x:1020,z:1176,src:"ref"},
- {id:"lb12",kind:"shop",n:"Virelune Loot Buyer",zh:"Virelune 收購商",x:1604,z:1970,src:"ref"},
- {id:"lb13",kind:"shop",n:"Magical & Icy Loot Buyer",zh:"魔法・冰系素材收購商（Tolbana）",x:3317,z:1642,src:"ref"},
- {id:"lb14",kind:"shop",n:"Candelia Loot Buyer",zh:"Candelia 收購商",x:2029,z:790,src:"ref"},
- {id:"lb15",kind:"shop",n:"Local Lumberjack",zh:"伐木工（收購木材）",x:2467,z:4320,src:"ref"},
- {id:"lb16",kind:"shop",n:"Local Miner",zh:"礦工（收購礦石）",x:2400,z:3560,src:"ref"}
+ {id:"garden",tp:"Jardin des Géants",kind:"poi",n:"Giant's Garden",zh:"巨人花園",x:379,z:2442,note:"主線「By the Branches of the Ancients」：Zebulgarath 住在巨人花園，提示是「利用水往上爬」。"}
 ].map(s=>({src:"player",mons:[],items:[],...s}));
 
 /* Side quests. need: [itemId, qty, inferred?] ; kill: [monster name(s), count] ; raw = original condition text (FR) */

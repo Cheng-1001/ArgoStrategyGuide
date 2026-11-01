@@ -111,12 +111,22 @@ with sync_playwright() as p:
 
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
     zl = pg.inner_text("#zlist")
-    check("傳送點 13" in zl and pg.locator(".town.tp").count() == 7 and pg.locator(".town:not(.tp)").count() == 1,
-          "13 teleport points: 7 towns marked as teleports, Vallhat is not")
-    n = pg.locator(".zone.shop").count()
-    pg.click(".legend .lgt[data-k=shop]"); pg.wait_for_timeout(300)
-    check(n == 16 and pg.locator(".zone.shop").count() == 0, "16 loot buyers on the map and the legend hides them")
-    pg.click(".legend .lgt[data-k=shop]"); pg.wait_for_timeout(200)
+    check("傳送點－城鎮 7" in zl and "傳送點－地標 6" in zl and pg.locator(".town.tp").count() == 7 and pg.locator(".town:not(.tp)").count() == 1,
+          "teleports split into 7 towns and 6 landmarks; Vallhat is not a teleport")
+    n = pg.locator(".zone.npc").count()
+    pg.click("#filterBtn"); pg.wait_for_timeout(200)
+    pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(300)
+    check(n >= 70 and pg.locator(".zone.npc").count() == 0 and "🧑 NPC" not in pg.inner_text("#zlist"),
+          "NPCs on the map; the filter hides them on the map and in the list")
+    pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
+    pg.click('#fpNpc .fchip[data-k="npc:lootBuyers"]'); pg.wait_for_timeout(300)
+    check(pg.locator(".zone.npc").count() == n - 16, "NPC sub-filter hides the 16 loot buyers only")
+    pg.click("#fpAll"); pg.wait_for_timeout(200)
+    pg.click('#fpCats .fchip[data-k="mob"]'); pg.wait_for_timeout(300)
+    check(pg.locator('.zone[data-s="slimes"]').count() == 0 and pg.locator('.zone[data-s="wolf"]').count() == 1,
+          "hiding monster areas keeps an area that is also a teleport (Wolf Valley)")
+    pg.click("#fpAll"); pg.click("#fpX"); pg.wait_for_timeout(200)
+    check("⛏️ 採集點 4" in pg.inner_text("#zlist") and "🌾 Farm" in pg.inner_text("#zlist"), "gathering spots listed with their type")
 
     pg.goto(base + "#map"); pg.wait_for_timeout(500)
     check(pg.is_visible("#baseBtn"), "floor 1 shows the base-map button")
