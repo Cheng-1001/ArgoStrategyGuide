@@ -124,6 +124,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .rwhead .muted{font-size:11.5px;white-space:nowrap}.rwhead .iconbtn{cursor:pointer}
 .rwbody{flex:1;min-height:0;background:#0d1218;position:relative}.rwbody svg{display:block;width:100%;height:100%;touch-action:none;cursor:grab}.rwbody svg.drag{cursor:grabbing}
 @media (max-width:820px){.rwhead .muted{display:none}}
+.areas path{stroke-width:var(--areaw,1.8)}
 .areas{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;z-index:1;overflow:visible}
 .route{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;z-index:5;overflow:visible}
 .rstep{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));z-index:7;min-width:22px;height:22px;padding:0 5px;border-radius:999px;background:#e8a23a;color:#1b1206;border:2px solid #fff;box-shadow:0 0 0 2px rgba(0,0,0,.35);font:700 11.5px var(--f-mono);display:grid;place-items:center;white-space:nowrap;pointer-events:none}
@@ -163,9 +164,11 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .stage.dragging{cursor:grabbing} .stage.edit{cursor:crosshair}
 .world{position:absolute;left:0;top:0;width:1000px;height:1000px;transform-origin:0 0;--inv:1}
 .world img.map{width:1000px;height:1000px;max-width:none;display:block;user-select:none;-webkit-user-drag:none;pointer-events:none}
-.town{position:absolute;transform:translate(-50%,-50%) scale(var(--inv));display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;cursor:pointer;z-index:2}
-.town .pin{width:12px;height:12px;transform:rotate(45deg);background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.6)}
-.town.tp .pin{background:var(--tp);transform:none;border-radius:50%;width:14px;height:14px;box-shadow:0 0 0 3px rgba(31,182,193,.35),0 1px 4px rgba(0,0,0,.6)}
+.town{position:absolute;transform:translate(-50%,-8px) scale(var(--inv));transform-origin:50% 8px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;cursor:pointer;z-index:2}
+.town .pin{box-sizing:border-box;width:16px;height:16px;transform:rotate(45deg) scale(.82);background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.6)}
+.town.tp .pin{background:var(--tp);transform:none;border-radius:50%;box-shadow:0 0 0 3px rgba(31,182,193,.35),0 1px 4px rgba(0,0,0,.6)}
+.town.gather .pin{background:#9a6b34;transform:none;border-radius:4px}.town.wboss .pin{background:#d23b3b;transform:none;border-radius:50%;box-shadow:0 0 0 3px rgba(210,59,59,.35),0 1px 4px rgba(0,0,0,.6)}
+.zone.under{transform:translate(-50%,22px) scale(var(--inv));transform-origin:50% -22px}
 .zone .zlabel .tpi{color:var(--tp);font-size:12px}
 .lgtp{display:inline-flex;gap:5px;align-items:center}.lgtp i{width:10px;height:10px;border-radius:50%;background:var(--tp);border:2px solid #fff;display:inline-block}
 .pill.tpp{border-color:var(--tp);color:var(--tp)}
@@ -1294,7 +1297,7 @@ function updateTiles(){tileRaf=0;const m=MP();if(!useTiles()){if(TL.size){tilesE
   clearTimeout(tileGC);tileGC=setTimeout(()=>{TL.forEach((im,k)=>{if(!want.has(k)&&!k.startsWith("0/")){im.remove();TL.delete(k)}})},700)}
 const schedTiles=()=>{if(!tileRaf)tileRaf=requestAnimationFrame(updateTiles)};
 window.addEventListener("resize",schedTiles);
-function apply(){schedTiles();world.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;world.style.setProperty("--inv",Math.max(.55,Math.min(1.4,1/sc*fitSc()*1.35)));world.classList.toggle("compact",sc<fitSc()*1.9)}
+function apply(){schedTiles();world.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;const zr=fitSc()/sc;const screen=Math.max(.72,Math.min(1.35,1.35*Math.pow(zr,.3)));world.style.setProperty("--inv",screen/sc*fitSc());world.style.setProperty("--areaw",Math.max(.7,Math.min(2,2*Math.pow(zr,.5))).toFixed(2));world.classList.toggle("compact",sc<fitSc()*1.9)}
 function fit(){const r=stage.getBoundingClientRect();if(!r.width)return;sc=fitSc();tx=(r.width-1000*sc)/2;ty=(r.height-1000*sc)/2;apply();fitted=true}
 function zoomAt(f,cx,cy){const ns=Math.max(fitSc()*.8,Math.min(fitSc()*10,sc*f));const k=ns/sc;tx=cx-(cx-tx)*k;ty=cy-(cy-ty)*k;sc=ns;apply()}
 function centerOn(bx,bz,minZoom){if(!MP())return;if(!fitted)fit();const r=stage.getBoundingClientRect();sc=Math.max(sc,fitSc()*(minZoom||2.2));
@@ -1349,7 +1352,7 @@ function drawAreas(){world.querySelectorAll(".areas").forEach(n=>n.remove());if(
   const sp=spotsOf(FL).filter(x=>x.area&&spotVisible(x));if(!sp.length)return;const ns="http://www.w3.org/2000/svg";
   const sv=document.createElementNS(ns,"svg");sv.setAttribute("class","areas");sv.setAttribute("viewBox","0 0 1000 1000");sv.setAttribute("aria-hidden","true");
   sp.forEach((x,i)=>{const c=AREA_COL[i%AREA_COL.length];const pa=document.createElementNS(ns,"path");pa.setAttribute("d",smoothPath(x.area.map(([bx,bz])=>[toPxX(bx),toPxZ(bz)])));
-    pa.setAttribute("fill",c);pa.setAttribute("fill-opacity",".13");pa.setAttribute("stroke",c);pa.setAttribute("stroke-width","1.8");pa.setAttribute("stroke-opacity",".95");
+    pa.setAttribute("fill",c);pa.setAttribute("fill-opacity",".13");pa.setAttribute("stroke",c);pa.setAttribute("stroke-opacity",".95");
     pa.setAttribute("vector-effect","non-scaling-stroke");pa.setAttribute("stroke-linejoin","round");pa.dataset.s=x.id;sv.appendChild(pa)});
   world.insertBefore(sv,world.querySelector(".zone,.town")||null)}
 function renderMap(){world.querySelectorAll(".zone,.town,.rpin").forEach(n=>n.remove());
@@ -1361,19 +1364,23 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin").forEach(n=>n.re
   if(!mapImg.src.endsWith(want)){const same=mapImg.dataset.f===String(FL);mapImg.src=want;mapImg.dataset.f=String(FL);if(!same)fitted=false}
   renderFilter();
   F().towns.forEach(t=>{if(!catOn(townCat(t)))return;const b=document.createElement("button");b.className="town";b.style.left=toPxX(t.x)+"px";b.style.top=toPxZ(t.z)+"px";
-    if(t.tp)b.classList.add("tp");b.innerHTML=`<span class="pin"></span><span class="tname">${t.tp?"🌀 ":""}${esc(t.n)}</span>`;b.setAttribute("aria-label",(t.tp?"可傳送的村鎮 ":"村鎮 ")+t.n);if(t.tp)b.title="傳送點："+t.tp;
+    b.classList.add(t.tp?"tp":"land");b.innerHTML=`<span class="pin"></span><span class="tname">${esc(t.n)}</span>`;b.setAttribute("aria-label",(t.tp?"可傳送的村鎮 ":"村鎮 ")+t.n);if(t.tp)b.title="傳送點："+t.tp;
     b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("t",t.id,"new")});world.appendChild(b)});
   const rank={"Boss":0,"Mini-Boss":1,"Monster":2,"Minion":3};
   spotsOf(FL).forEach(sp=>{if(!spotVisible(sp))return;const own=catOn(spotCat(sp));const vm=own?sp.mons.map(n=>F().monByName[n]).filter(Boolean):[];
-    const d=document.createElement("div");d.className="zone"+(sp.src==="est"?" est":"")+(vm.length?"":" poi");d.dataset.s=sp.id;
+    const mk=sp.tp?"tp":sp.kind==="poi"?"land":sp.kind==="gather"?"gather":sp.kind==="wboss"?"wboss":"";
+    if(mk){const b=document.createElement("button");b.className="town "+mk;b.dataset.s=sp.id;b.style.left=toPxX(sp.x)+"px";b.style.top=toPxZ(sp.z)+"px";
+      b.innerHTML=`<span class="pin"></span><span class="tname">${sp.gt?GT[sp.gt][1]+" ":mk==="wboss"?"🌋 ":""}${esc(sp.n)}</span>`;b.title=(sp.tp?"傳送點："+sp.tp+"・":"")+sp.zh;b.setAttribute("aria-label",(KIND[sp.kind]||["地點"])[0]+" "+sp.n);
+      b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("s",sp.id,"new")});world.appendChild(b);zoneEls[sp.id]=b;if(!vm.length)return}
+    const d=document.createElement("div");d.className="zone"+(sp.src==="est"?" est":"")+(vm.length?"":" poi")+(mk?" under":"");d.dataset.s=sp.id;
     d.style.left=toPxX(sp.x)+"px";d.style.top=toPxZ(sp.z)+"px";
     const lb=document.createElement("button");lb.className="zlabel";lb.innerHTML=`<i style="background:${SRC_COL[sp.src]}"></i>${sp.tp?'<span class="tpi" title="傳送點">🌀</span>':""}${vm.length?"":(sp.gt?GT[sp.gt][1]:sp.tp?"":KIND[sp.kind][1])+" "}${esc(sp.n)}`;if(sp.tp)lb.title="傳送點："+sp.tp;if(sp.kind==="shop"){lb.title=sp.n+"（"+sp.zh+"）";lb.setAttribute("aria-label","收購商 "+sp.n)}
-    lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("s",sp.id,"new")});d.appendChild(lb);
+    lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("s",sp.id,"new")});if(!mk)d.appendChild(lb);
     if(vm.length){const tw=document.createElement("div");tw.className="thumbs";
       vm.sort((a,b)=>rank[a.type]-rank[b.type]).forEach(mm=>tw.appendChild(mapThumb(mm)));
       if(vm.length>1){const mo=document.createElement("span");mo.className="more";mo.textContent="+"+(vm.length-1);tw.appendChild(mo)}
       d.appendChild(tw)}
-    world.appendChild(d);zoneEls[sp.id]=d});
+    world.appendChild(d);if(!mk)zoneEls[sp.id]=d});
   drawAreas();
   NPCS(FL).forEach(n=>{if(!npcVisible(n))return;const d=document.createElement("div");d.className="zone poi shop npc";d.dataset.n=n.id;d.style.left=toPxX(n.x)+"px";d.style.top=toPxZ(n.z)+"px";
     const lb=document.createElement("button");lb.className="zlabel";lb.textContent=NPCCAT[n.c][1];lb.title=`${NPCCAT[n.c][0]}：${n.n}${n.u?"（地下）":""}`;lb.setAttribute("aria-label",lb.title);
@@ -1431,7 +1438,7 @@ const spotHit=(sp,s)=>!s||norm(sp.n+" "+sp.zh).includes(s)||sp.mons.some(n=>monH
 function filterMap(){const s=Sq();
   document.querySelectorAll("#view-map .th[data-id]").forEach(b=>{const m=monById[b.dataset.id];const hit=monHit(m,s);b.classList.toggle("dim",!hit);b.classList.toggle("hit",!!(s&&hit))});
   const sp=spotsOf(FL);
-  document.querySelectorAll(".zone").forEach(z=>{const x=sp.find(y=>y.id===z.dataset.s);z.classList.toggle("dim",!!x&&!spotHit(x,s))});
+  document.querySelectorAll(".zone,.town[data-s]").forEach(z=>{const x=sp.find(y=>y.id===z.dataset.s);z.classList.toggle("dim",!!x&&!spotHit(x,s))});
   document.querySelectorAll(".zrow").forEach(r=>{if(r.dataset.tp!=null){r.hidden=!!s&&!norm(r.dataset.tp).includes(s)}else if(r.dataset.s){const x=sp.find(y=>y.id===r.dataset.s);r.hidden=!x||!spotHit(x,s)}else r.hidden=!F().M.some(m=>m.zone===r.dataset.z&&!BASE_SPOT[m.id]&&monHit(m,s))});
   document.querySelectorAll(".zsec").forEach(h=>{let n=h.nextElementSibling,any=false;while(n&&!n.classList.contains("zsec")){if(!n.hidden)any=true;n=n.nextElementSibling}h.hidden=!any})}
 const editbar=$("editbar"),editToggle=$("editToggle");

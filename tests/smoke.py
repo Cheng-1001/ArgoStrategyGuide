@@ -111,8 +111,8 @@ with sync_playwright() as p:
 
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
     zl = pg.inner_text("#zlist")
-    check("傳送點－城鎮 7" in zl and "傳送點－地標 6" in zl and pg.locator(".town.tp").count() == 7 and pg.locator(".town:not(.tp)").count() == 1,
-          "teleports split into 7 towns and 6 landmarks; Vallhat is not a teleport")
+    check("傳送點－城鎮 7" in zl and "傳送點－地標 6" in zl and pg.locator(".town.tp").count() == 13 and pg.locator(".town.land").count() == 2,
+          "13 teleports (7 towns, 6 landmarks) share one marker style; landmarks (Vallhat, hidden well) another")
     check(pg.locator(".areas path").count() >= 13 and pg.get_attribute(".areas path", "vector-effect") == "non-scaling-stroke",
           "monster areas are outlined with a zoom-independent line width")
     n = pg.locator(".zone.npc").count()
@@ -125,7 +125,7 @@ with sync_playwright() as p:
     check(pg.locator(".zone.npc").count() == n - 16, "NPC sub-filter hides the 16 loot buyers only")
     pg.click("#fpAll"); pg.wait_for_timeout(200)
     pg.click('#fpCats .fchip[data-k="mob"]'); pg.wait_for_timeout(300)
-    check(pg.locator('.zone[data-s="slimes"]').count() == 0 and pg.locator('.zone[data-s="wolf"]').count() == 1,
+    check(pg.locator('.zone[data-s="slimes"]').count() == 0 and pg.locator('.town.tp[data-s="wolf"]').count() == 1,
           "hiding monster areas keeps an area that is also a teleport (Wolf Valley)")
     check(pg.locator(".areas path").count() == 0, "hiding monster areas hides their outlines")
     pg.click("#fpAll"); pg.click("#fpX"); pg.wait_for_timeout(200)
@@ -133,7 +133,7 @@ with sync_playwright() as p:
     for k in ("land", "mob", "gather", "dungeon", "wboss", "boss", "npc"):
         pg.click(f'#fpCats .fchip[data-k="{k}"]'); pg.wait_for_timeout(80)
     pg.wait_for_timeout(300)
-    check(pg.locator('.zone[data-s="wolf"] .thumbs').count() == 0 and pg.locator('.zone[data-s="wolf"]').count() == 1
+    check(pg.locator('.zone[data-s="wolf"] .thumbs').count() == 0 and pg.locator('.town.tp[data-s="wolf"]').count() == 1
           and pg.locator('#zlist .zrow[data-s="wolf"] .thumbs').count() == 0,
           "teleports only: Wolf Valley shows without monsters on the map and in the list")
     pg.click("#fpAll"); pg.click("#fpX"); pg.wait_for_timeout(200)
@@ -146,6 +146,18 @@ with sync_playwright() as p:
     pg.locator("#zlist .npcrow", has_text="Shark Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")
     check("Shark Fang" in t and "Wolf Fangs ×8" in t and "33 Col" in t, "Shark Accessories lists its recipes with cost")
+    off = pg.evaluate("""(()=>{const b=document.querySelector('.town.gather[data-s="farm"] .pin').getBoundingClientRect();
+      const w=document.getElementById('world').getBoundingClientRect();const k=w.width/1000;
+      const x=w.left+(2351-70)/4980*1000*k, y=w.top+(3662-70)/4980*1000*k;return Math.hypot(b.left+b.width/2-x,b.top+b.height/2-y)})()""")
+    check(off < 2, f"gathering-spot pin is centred on its coordinate (off by {off:.1f}px)")
+    sz0 = pg.evaluate("document.querySelector('.town.tp .pin').getBoundingClientRect().width")
+    w0 = pg.evaluate("getComputedStyle(document.querySelector('.areas path')).strokeWidth")
+    for _ in range(4):
+        pg.click("#zin"); pg.wait_for_timeout(120)
+    sz1 = pg.evaluate("document.querySelector('.town.tp .pin').getBoundingClientRect().width")
+    w1 = pg.evaluate("getComputedStyle(document.querySelector('.areas path')).strokeWidth")
+    check(sz1 < sz0 and float(w1.rstrip("px")) < float(w0.rstrip("px")), f"zooming in shrinks markers ({sz0:.1f}->{sz1:.1f}px) and area lines ({w0}->{w1})")
+    pg.click("#zfit"); pg.wait_for_timeout(200)
     check("⛏️ 採集點 4" in pg.inner_text("#zlist") and "🌾 Farm" in pg.inner_text("#zlist"), "gathering spots listed with their type")
 
     pg.goto(base + "#map"); pg.wait_for_timeout(500)
