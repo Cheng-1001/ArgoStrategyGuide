@@ -1925,7 +1925,13 @@ function declutter(){if(view!=="map"||world.hidden)return;
     if(l.p===0){placed.push(r);const own=l.e.parentElement;   // a pin under a teleport name is lifted above it
       pins.forEach(p=>{if(p.m!==own&&r.left<p.r.right&&r.right>p.r.left&&r.top<p.r.bottom&&r.bottom>p.r.top)p.m.style.zIndex=6});continue}
     const w=r.width,h=r.height,k=r.width/(l.e.offsetWidth||1),gx=w/2+14,gy=h+5;
-    let ok=null;for(const [dx,dy] of [[0,0],[0,-gy],[0,gy],[gx,0],[-gx,0],[gx,-gy],[-gx,-gy],[gx,gy],[-gx,gy],[0,-2*gy],[0,2*gy]]){
+    // a name with its own pin only moves to a spot touching that pin (below, right, left, above), so it never drifts
+    // next to another marker; names without a pin (monster areas) keep the wider search
+    const pe=l.e.parentElement&&l.e.parentElement.querySelector(":scope > .pin"),pr=pe&&pe.getBoundingClientRect();
+    const cand=pr&&pr.width?(()=>{const cx=(pr.left+pr.right)/2,cy=(pr.top+pr.bottom)/2,g=3;
+      return[[0,0],[cx-w/2-r.left,pr.bottom+g-r.top],[pr.right+g+2-r.left,cy-h/2-r.top],[pr.left-g-2-w-r.left,cy-h/2-r.top],[cx-w/2-r.left,pr.top-g-h-r.top]]})()
+      :[[0,0],[0,-gy],[0,gy],[gx,0],[-gx,0],[gx,-gy],[-gx,-gy],[gx,gy],[-gx,gy],[0,-2*gy],[0,2*gy]];
+    let ok=null;for(const [dx,dy] of cand){
       const q={left:r.left+dx,right:r.right+dx,top:r.top+dy,bottom:r.bottom+dy};if(!hit(q)){ok=[dx,dy,q];break}}
     if(ok){if(ok[0]||ok[1]){l.e.style.position="relative";l.e.style.left=ok[0]/k+"px";l.e.style.top=ok[1]/k+"px";l.e.classList.add("moved")}placed.push(ok[2])}
     else if(l.hide)l.e.style.visibility="hidden";else placed.push(r)}}
