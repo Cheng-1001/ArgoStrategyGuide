@@ -65,7 +65,7 @@ window.SAO_MAINQ = {1: [
  {t:"Behind the Great Door", n:23, npc:"—",
   s:[["穿過解封的大門（地下）",2848,4254,1],["打倒 Cursed Nazgul Protector",null,null],["取得遠古封印的第三塊碎片",null,null],["和 A 的回聲對話，封印重新成形",null,null],["走通道離開",null,null],["前往墮落者迷宮",2382,2415]]},
  {t:"The Truth About the Seal", n:24, npc:"Catherine",
-  s:[["和 Catherine 對話（在墮落者迷宮一帶；依玩家截圖：在 X 1362、Z 3595 時任務指引顯示 1565 格）",2382,2415,1]]},
+  s:[["到墮落者迷宮門口和 Catherine 對話",2382,2415]]},
  {t:"The Calamity", n:25, nEst:1, npc:"The Master Swordsman",
   s:[["和劍術大師對話",1809,4289],["告訴他迷宮裡發生的事，選擇繼續或放棄",1809,4289],["問 Tolbana 的第 1 位法師",3321,1619],["問第 2 位法師",3200,1447],["問第 3 位法師",3198,1469],["去找 Mephisto",3260,1403]]},
  {t:"Mephisto", n:26, nEst:1, npc:"Mephisto",
