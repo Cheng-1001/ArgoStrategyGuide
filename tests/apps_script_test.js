@@ -93,7 +93,7 @@ const rows = () => [HDR,
   pItem.setGoToPage(pShot); pPlace.setGoToPage(pShot);
   const val = { requireWholeNumber: () => val, requireNumberBetween: () => val, setHelpText: () => val, build: () => ({}) };
   const ctx = { console, Logger: { log: () => {} }, PropertiesService: { getScriptProperties: () => ({ getProperty: () => 'F' }) },
-    FormApp: { ItemType: T, openById: () => form, createTextValidation: () => val } };
+    FormApp: { ItemType: T, PageNavigationType: { SUBMIT: 'SUBMIT' }, openById: () => form, createTextValidation: () => val } };
   vm.createContext(ctx);
   vm.runInContext(fs.readFileSync(path.join(ROOT, 'google', 'apps-script.gs'), 'utf8') + '\nthis.upgradeForm=upgradeForm;', ctx);
   ctx.upgradeForm();
@@ -109,17 +109,20 @@ const rows = () => [HDR,
   check(list.find(i => i.getTitle() === '地點・種類')._it.choices.map(c => c.getValue()).includes('傳送點'), 'place kinds include 傳送點');
   // walk the form: choose a type, fill its page, the next page must be 截圖
   const pages = list.filter(i => i.getType() === T.PAGE_BREAK);
-  const nextAfter = pg => { const k = pages.indexOf(pg); const nx = pages[k + 1]; return nx ? (nx._it.goto || nx) : null; };
-  const route = type._it.choices.map(c => [c.getValue(), c.getGotoPage().getTitle(), nextAfter(c.getGotoPage()).getTitle()]);
-  check(route.length === 7 && route.every(([v, pg, nx]) => v === pg && nx === '截圖'), 'every report type opens its own page and then goes to 截圖: ' + route.map(r => r.join('→')).join('，'));
+  const nextAfter = pg => { const k = pages.indexOf(pg); const nx = pages[k + 1]; const g = nx ? (nx._it.goto || nx) : null; return g === 'SUBMIT' ? '送出' : g.getTitle(); };
+  const route = type._it.choices.map(c => [c.getValue(), c.getGotoPage().getTitle(), nextAfter(c.getGotoPage())]);
+  check(route.length === 8 && route.every(([v, pg, nx]) => v === pg && nx === (v === '建議' ? '送出' : '截圖')),
+    'every report type opens its own page, then 截圖 (建議 goes straight to 送出): ' + route.map(r => r.join('→')).join('，'));
   // a form that already got the first three new pages (upgradeForm of 2026-11-02) only gets 探索地圖 added
   const k = list.findIndex(i => i.getTitle() === '探索地圖');
-  list.splice(k, 2);   // the page break and its one question
-  type.setChoices(type._it.choices.filter(c => c.getValue() !== '探索地圖'));
+  list.splice(k, 5);   // 探索地圖 and 建議: page breaks and their questions (2 + 3 items)
+  type.setChoices(type._it.choices.filter(c => !['探索地圖', '建議'].includes(c.getValue())));
+  list.find(i => i.getTitle() === '截圖')._it.goto = null;
   ctx.upgradeForm();
   const t2 = list.map(i => i.getTitle());
-  check(t2.indexOf('技能・備註') < t2.indexOf('探索地圖') && t2.indexOf('探索地圖') < t2.indexOf('截圖') && list.length === n1 && type._it.choices.length === 7,
-    'running the new upgradeForm on an already upgraded form adds only the 探索地圖 page, before 截圖');
+  check(t2.indexOf('技能・備註') < t2.indexOf('探索地圖') && t2.indexOf('探索地圖') < t2.indexOf('建議') && t2.indexOf('建議') < t2.indexOf('截圖')
+    && list.length === n1 && type._it.choices.length === 8 && list.find(i => i.getTitle() === '截圖')._it.goto === 'SUBMIT',
+    'running the new upgradeForm on an already upgraded form adds only the missing pages (探索地圖, 建議) before 截圖; 建議 submits directly');
 }
 // ---- publishJmap_: zip to a GitHub release (created once), size limit; processQueue does not redo it ----
 {

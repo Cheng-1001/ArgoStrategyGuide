@@ -19,7 +19,7 @@ const CFG = {
   REPORTS_FILE: 'reports.js',
   IMG_DIR: 'reports',
   TZ: 'Asia/Taipei',
-  TYPES: { '怪物': 'monster', '物品': 'item', '地點': 'place', '配方': 'recipe', '任務追蹤': 'quest', '技能': 'skill', '探索地圖': 'jmap' },
+  TYPES: { '怪物': 'monster', '物品': 'item', '地點': 'place', '配方': 'recipe', '任務追蹤': 'quest', '技能': 'skill', '探索地圖': 'jmap', '建議': 'idea' },
   Q_JMAP: '探索地圖・壓縮檔',   // 上傳題目，要手動加在「探索地圖」頁（Google 不允許程式建立上傳題目）
   JMAP_MAX_MB: 45,
   // 試算表欄位名稱（前四個是表單題目，後四個是審核用欄位）
@@ -41,7 +41,7 @@ const FORM_DESC = '回報 SAO Minecraft 的怪物、物品、地點、配方、�
 const NAME_HELP = '照遊戲裡的名稱寫，例如怪物 Young Spider、物品 Leg of a Spider、配方填做出來的物品名稱、任務填任務標題、技能填技能名稱。地點可以寫中文。';
 const PLACE_KINDS = ['村鎮', '傳送點', 'NPC', '採集點', '地下城或礦坑', '首領位置', '怪物區', '怪物重生點', '其他'];
 const NPC_KINDS = ['鍊金術士', '收購商', '鑰匙鐵匠', '飾品鐵匠', '伐木工', '武器收購商', '旅行商人', '裝備商人', '工具商人', '飾品商人', '神秘商人', '消耗品商人', '武器鐵匠', '防具鐵匠', '金屬錠鐵匠', '材料工匠', '裝備鐵匠', '隱藏飾品鐵匠', '其他'];
-const NEW_TYPES = ['配方', '任務追蹤', '技能', '探索地圖'];
+const NEW_TYPES = ['配方', '任務追蹤', '技能', '探索地圖', '建議'];   // 建議一定要放最後：它填完直接送出，不經過截圖頁
 const NUM = () => FormApp.createTextValidation().requireWholeNumber().setHelpText('只填數字').build();
 
 /** 地點頁在座標後面多的三題。 */
@@ -101,6 +101,14 @@ const PAGE_BUILDERS = {
       '目前只合併第 1 層；「名稱」填你的遊戲名稱或「探索地圖」都可以。');
   form.addParagraphTextItem().setTitle('探索地圖・說明').setHelpText('例如這次新探索的地方（可不填）');
   return pg;
+  },
+  '建議': form => {
+  const pg = form.addPageBreakItem().setTitle('建議')
+    .setHelpText('對查詢工具網站的建議：想要的新功能、版面或操作上的改善、任何讓攻略更好用的想法。不用截圖，填完直接送出。\n' +
+      '「名稱」填一句話的標題，例如「地圖可以標記自己的位置」。審核員看過後會公開在網站「協作區 → 問題回報及建議」，你的 Google 帳號不會公開。');
+  form.addParagraphTextItem().setTitle('建議・內容').setRequired(true).setHelpText('想要什麼、在哪裡、為什麼有幫助');
+  form.addTextItem().setTitle('建議・相關頁面').setHelpText('例如 地圖、圖鑑、任務、配方（可不填）');
+  return pg;
   }
 };
 
@@ -148,7 +156,8 @@ function upgradeForm() {
     created.forEach(it => form.moveItem(it.getIndex(), byTitle(CFG.Q_SHOT, FormApp.ItemType.PAGE_BREAK).getIndex()));
   });
   const pShot = byTitle(CFG.Q_SHOT, FormApp.ItemType.PAGE_BREAK).asPageBreakItem();
-  NEW_TYPES.forEach(n => pages[n].setGoToPage(pShot));   // 前一頁（地點、配方、任務追蹤）填完 → 截圖頁
+  NEW_TYPES.forEach(n => pages[n].setGoToPage(pShot));   // 前一頁（地點、配方、任務追蹤…）填完 → 截圖頁
+  pShot.setGoToPage(FormApp.PageNavigationType.SUBMIT);   // 截圖頁前面一頁是「建議」：建議填完直接送出，不用截圖
 
   // 回報種類：保留原本三個選項的跳頁，再加三個新的
   const mc = typeQ.asMultipleChoiceItem();
@@ -216,6 +225,7 @@ function setup() {
     .concat(NEW_TYPES.map(n => type.createChoice(n, extra[n]))));
   // 每個種類的頁面填完都跳到截圖頁：「下一個分頁」的 setGoToPage 決定前一頁填完要去哪裡
   [pItem, pPlace].concat(NEW_TYPES.map(n => extra[n])).forEach(pb => pb.setGoToPage(pShot));
+  pShot.setGoToPage(FormApp.PageNavigationType.SUBMIT);   // 截圖頁前面是「建議」頁：建議填完直接送出
 
   // 試算表
   const ss = SpreadsheetApp.create('Aincrad 查詢工具・回報審核');
@@ -421,7 +431,7 @@ function publishRow_(sh, row) {
 
     // 截圖：Google Drive 上的檔案 → 縮成約 1600px 的 JPEG → 存進網站的 reports 資料夾
     const ids = (get(CFG.Q_SHOT).match(/id=([\w-]+)/g) || []).map(s => s.slice(3));
-    if (!ids.length) throw new Error('沒有截圖');
+    if (!ids.length && type !== 'idea') throw new Error('沒有截圖');
     const imgs = [];
     ids.forEach((fid, k) => {
       const img = imageBlob_(fid);
@@ -433,7 +443,7 @@ function publishRow_(sh, row) {
     const entry = {
       id: id, type: type, floor: floor, name: name,
       date: Utilities.formatDate(new Date(), CFG.TZ, 'yyyy-MM-dd'),
-      img: imgs[0], imgs: imgs, raw: raw, source: 'form'
+      img: imgs[0] || null, imgs: imgs, raw: raw, source: 'form'
     };
     if (get(CFG.C_NOTE)) entry.review = get(CFG.C_NOTE);
     const sha = upsertReport_(entry);
@@ -536,7 +546,7 @@ function decorateRow_(sh, row) {
   hdr.forEach((h, i) => {
     if (i === 0 || !h || skip.includes(h)) return;
     const v = String(val[i]).trim();
-    if (v && v !== '不確定') lines.push(String(h).replace(/^(怪物|物品|地點|配方|任務|技能|探索地圖)・/, '') + '：' + v);
+    if (v && v !== '不確定') lines.push(String(h).replace(/^(怪物|物品|地點|配方|任務|技能|探索地圖|建議)・/, '') + '：' + v);
   });
   const ids = (get(CFG.Q_SHOT).match(/id=([\w-]+)/g) || []).map(s => s.slice(3));
   lines.push('', '截圖 ' + ids.length + ' 張' + (ids.length > 1 ? '（預覽只顯示第一張，其他請點「截圖」欄的連結）' : ''));

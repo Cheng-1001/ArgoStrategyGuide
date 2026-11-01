@@ -81,10 +81,10 @@ kbd{font:11.5px ui-monospace,monospace;border:1px solid var(--line);border-botto
 <main id="main"><div class="empty">載入中…</div></main>
 <script>
 var MAPS={1:{img:"https://cheng-1001.github.io/ArgoStrategyGuide/floor1.jpg",x0:70,size:4980},2:{img:"https://cheng-1001.github.io/ArgoStrategyGuide/floor2.jpg",x0:-1062,size:2124}};
-var ICON={"怪物":"🐾","物品":"🎒","地點":"📍","配方":"⚒️","任務追蹤":"📜","技能":"✨","探索地圖":"🗺️"};
+var ICON={"怪物":"🐾","物品":"🎒","地點":"📍","配方":"⚒️","任務追蹤":"📜","技能":"✨","探索地圖":"🗺️","建議":"💡"};
 var PRI={"怪物":0,"物品":0,"配方":0,"任務追蹤":0};
-var TYPES=["怪物","物品","地點","配方","任務追蹤","技能","探索地圖"];
-var SITE_TAB={"物品":"items","地點":"map","配方":"recipes","任務追蹤":"quests","技能":"classes","探索地圖":"map"};
+var TYPES=["怪物","物品","地點","配方","任務追蹤","技能","探索地圖","建議"];
+var SITE_TAB={"物品":"items","地點":"map","配方":"recipes","任務追蹤":"quests","技能":"classes","探索地圖":"map","建議":"feedback"};
 var S={items:[],view:"wait",type:"all",floor:"all",sort:"pri",cur:null,shotIdx:0,busy:false};
 var shotCache={};
 function $(id){return document.getElementById(id)}
@@ -100,7 +100,7 @@ function filtered(){var a=S.items.filter(function(x){return(S.view==="wait"?pend
   a.sort(function(x,y){if(S.view==="done")return t(y)-t(x);if(S.sort==="new")return t(y)-t(x);if(S.sort==="old")return t(x)-t(y);
     var px=PRI[x.type]===0?0:1,py=PRI[y.type]===0?0:1;return px-py||t(x)-t(y)});return a}
 function coords(x){for(var i=0;i<x.fields.length;i++){if(/座標/.test(x.fields[i][0])){var m=x.fields[i][1].match(/(-?\d+)[^\d-]+(-?\d+)/);if(m)return{x:+m[1],z:+m[2]}}}return null}
-function label(h){return String(h).replace(/^(怪物|物品|地點|配方|任務|技能|探索地圖)・/,"")}
+function label(h){return String(h).replace(/^(怪物|物品|地點|配方|任務|技能|探索地圖|建議)・/,"")}
 function render(){
   var base=S.items.filter(function(x){return S.view==="wait"?pending(x):!pending(x)});
   var nWait=S.items.filter(pending).length;

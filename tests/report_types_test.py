@@ -23,6 +23,7 @@ reports += [
     rep("T107", "place", "Pumba", {"地點・種類": "首領位置", "地點・座標 x, z": "1900, 3550", "地點・在地下嗎": "地下（要從入口走下去）"}),
     rep("T108", "place", "Putrid Swamp", {"地點・種類": "怪物區", "地點・座標 x, z": "1400, 3100"}),
     rep("T109", "jmap", "My map", {"探索地圖・說明": "north road"}),
+    {**rep("T110", "idea", "Mark my position", {"建議・內容": "Show where I am on the map", "建議・相關頁面": "地圖"}), "review": "審核：someone@example.com｜已排入待辦"},
 ]
 body = m.group(1) + json.dumps(reports, ensure_ascii=False) + ";\n"
 
@@ -94,6 +95,12 @@ with sync_playwright() as p:
     check("配方・Iron Sword" in t and "技能・Boule de Feu" in t and "任務・A New World" in t and "看配方" in t and "看職業" in t and "看任務" in t,
           "received list labels the new types and links to them")
     check("探索地圖・My map" in t and "合併中" in t, "an approved JourneyMap upload shows as merging until jmmeta.js has its result")
+    check("Mark my position" not in t, "suggestions are not listed with the data reports")
+    pg.goto(base + "#feedback"); pg.wait_for_timeout(400)
+    t = pg.inner_text("#ideaL")
+    check("Mark my position" in t and "Show where I am on the map" in t and "回覆：已排入待辦" in t and "someone@example.com" not in t,
+          "approved suggestions are listed under 玩家建議 with the reviewer's reply (reviewer account hidden)")
+    check("viewform" in (pg.get_attribute("#ideaGo", "href") or ""), "提出建議 opens the Google form")
     check(not errs, "no page errors" + ("" if not errs else ": " + errs[0]))
     b.close()
 srv.shutdown()
