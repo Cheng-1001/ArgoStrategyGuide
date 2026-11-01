@@ -28,7 +28,7 @@ function sheet_() {
 
 function doGet() {
   return HtmlService.createHtmlOutput(REVIEW_HTML)
-    .setTitle('Aincrad 回報審核')
+    .setTitle('艾恩葛朗特 回報審核')
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 

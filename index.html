@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="description" content="SAO Minecraft Aincrad 樓層查詢工具：地圖、怪物、物品、支線任務。">
+<meta name="description" content="SAO Minecraft 艾恩葛朗特（Aincrad）樓層查詢工具：地圖、怪物、物品、支線任務。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>Aincrad 樓層查詢工具</title>
+<title>艾恩葛朗特樓層查詢工具</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -423,7 +423,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 
 <div class="app">
   <header class="top" id="top">
-    <div class="brand"><span class="floor">SAO Minecraft</span><h1>Aincrad 查詢工具</h1></div>
+    <div class="brand"><span class="floor">SAO Minecraft</span><h1>艾恩葛朗特查詢工具</h1></div>
     <div class="flpick" id="floorPick">
       <button class="fltrig" id="flTrig" aria-haspopup="dialog" aria-expanded="false" aria-controls="flPop"><span class="flno" id="flNo">1F</span><span class="flnm" id="flNm"></span><span class="caret" aria-hidden="true">▾</span></button>
       <div class="flpop" id="flPop" hidden role="dialog" aria-label="選擇樓層">
@@ -516,7 +516,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup" id="gQTown"><span class="flabel">村鎮</span><div class="chips" id="fQTown"></div></div>
       <div class="fgroup" id="gQSort"><span class="flabel">排序</span><select class="sel" id="fQSort" aria-label="排序">
         <option value="town">依村鎮</option><option value="xp">經驗值（高→低）</option><option value="col">Col（高→低）</option></select></div>
-      <div class="note" id="qNoteMain" hidden>主線依劇情順序排列。說明取自 wiki 主線任務表；步驟順序和座標取自參考互動地圖（DelayedCode），步驟文字是本站改寫。標「約」的是大約位置。按「在地圖上看路線」會在地圖上畫出步驟順序。第 7～18 段在 Fractured Underworld，不列在這裡。</div>
+      <div class="note" id="qNoteMain" hidden>主線依劇情順序排列。說明取自 wiki 主線任務表；步驟順序和座標取自參考互動地圖（DelayedCode），步驟文字是本站改寫。標「約」的是大約位置。按「在地圖上看路線」會在地圖上畫出步驟順序。第 7～18 段在破碎的地下世界（Fractured Underworld），不列在這裡。</div>
       <div class="note" id="qNoteSide">任務需求與座標來自 wiki 支線任務表。標有<span class="inf"> 推斷 </span>的物品是依任務原文的簡寫推斷，原文可在詳細資料裡看到。</div>
     </div>
     <div class="results"><div class="rhead"><h2 id="hQ">支線任務</h2><span class="count" id="cQ"></span></div><div id="lQ" style="display:flex;flex-direction:column;gap:10px"></div></div>

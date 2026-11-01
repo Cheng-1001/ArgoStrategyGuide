@@ -34,7 +34,7 @@ window.SAO_BOSSES = {
       ["Guard and riposte（格擋反擊）", "舉起大盾，放下時反擊。"]
     ],
     weakness: "胸口中央的核心只在「漩渦」和「升空」時打開；這時打中會造成三倍傷害，還可能讓牠倒地。",
-    access: "要先在 Fractured Underworld 用 Cardinal Relay 的 System Creation 做出「World Boss Altar」，再於每週開放時段參加（wiki）。"
+    access: "要先在破碎的地下世界（Fractured Underworld）用 Cardinal Relay 的 System Creation 做出「World Boss Altar」，再於每週開放時段參加（wiki）。"
   }],
   unique: [{
     id: "seraphel", img: "wb_seraphel.jpg",
