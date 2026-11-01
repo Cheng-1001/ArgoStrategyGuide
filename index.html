@@ -112,6 +112,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .mq{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .mqh{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
 .mqn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:600 13px var(--f-mono)}
+.recipes .mats{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}.recipes .mats .slot{vertical-align:middle}.recipes .v{text-align:right;line-height:1.3}
 .mqn.est{background:none;color:var(--accent);border:2px dashed var(--accent)}.mqn.nonum{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
 .mqt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.mqt b{font-family:var(--f-display);font-size:15px;font-weight:600;overflow-wrap:anywhere}.mqt span{font-size:12px;color:var(--muted)}
 .mq p{margin:0;font-size:13px;color:var(--muted)}
@@ -587,6 +588,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="equip.js"></script>
 <script src="props.js"></script>
 <script src="npcs.js"></script>
+<script src="recipes.js"></script>
 <script>
 (()=>{
 const S1=window.SAO,S23=window.SAO23;
@@ -810,9 +812,10 @@ function itemDetail(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id],ga
   ${srcRows?`<ul class="rows">${srcRows}</ul>`:""}${it.src?`<div class="note">${esc(it.src)}</div>`:""}${!srcRows&&!it.src?`<div class="note">目前沒有已知的取得方式。</div>`:""}
   <h3 class="sec">用途 <span class="c">${use.length?use.length+" 個任務，共 "+needTotal(id)+" 個":""}</span></h3>
   ${use.length?`<ul class="rows">${useRows}</ul>`:""}
+  ${RECIPE_BY_MAT[id]?`<h3 class="sec">可以拿去製作 <span class="c">${RECIPE_BY_MAT[id].length}</span></h3>${recipeTable(RECIPE_BY_MAT[id])}`:""}
   ${it.use?`<ul class="uses">${it.use.map(u=>`<li>${esc(u)}<span class="muted">（依官方物品描述）</span></li>`).join("")}</ul>`:""}
   ${it.locked?`<div class="note">官方資料標示此物品不能用於一般合成、熔煉、鍛造台、修理或附魔。</div>`:""}
-  ${!use.length&&!it.use&&!it.locked?`<div class="note">目前沒有已知用途。</div>`:""}
+  ${!use.length&&!it.use&&!it.locked&&!RECIPE_BY_MAT[id]?`<div class="note">目前沒有已知用途。</div>`:""}
   <div class="note warn">配方：公開資料尚未提供鍛造或合成配方（wiki 鍛造頁標示為「待補」），以上用途只來自任務需求與物品描述。</div>`}
 
 function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">這個地點已不存在。</div>`;const st=STATUS[sp.src];const Fx=FLOORS[sp.floor];
@@ -936,9 +939,22 @@ rwSvg.addEventListener("wheel",e=>{e.preventDefault();const r=rwSvg.getBoundingC
 $("rwIn").onclick=()=>rwZoom(1.4);$("rwOut").onclick=()=>rwZoom(1/1.4);$("rwFit").onclick=()=>{rwFitBox();rwRender()};$("rwX").onclick=()=>{$("rwin").hidden=true;RW=null};
 new ResizeObserver(()=>rwRender()).observe($("rwBody"));
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("rwin").hidden){$("rwin").hidden=true;RW=null}});
+const RECIPES=window.SAO_RECIPES||{};
+const recRow=(npc,f,it)=>({npc,f,oid:it[0],en:it[1],sec:it[2],mats:it[3],cost:it[4],r:it[5]});
+const RECIPE_BY_EQ={},RECIPE_BY_MAT={};Object.entries(RECIPES).forEach(([npc,r])=>r.items.forEach(it=>{const row=recRow(npc,r.floor,it);
+  if(it[0]!=null)(RECIPE_BY_EQ[it[0]]=RECIPE_BY_EQ[it[0]]||[]).push(row);it[3].forEach(([m])=>(RECIPE_BY_MAT[m]=RECIPE_BY_MAT[m]||[]).push(row))}));
+const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
+const matText=mats=>mats.map(([m,q])=>`${ITEMS[m]?slot(m,22):""}<span>${esc(m)} ×${q}</span>`).join("・");
+const costText=c=>c==="Free"||c==="0"?"免費":esc(c)+" Col";
+function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=>{const e=eqById[String(r.oid)];const n=npcByName(r.f,r.npc);
+  const go=showNpc?(n?"n|"+n.id:""):(e?"e|"+r.oid:"");const rar=e?e.r:r.r;const tag=go?"button":"div";
+  return`<li><${tag} class="lrow"${go?` data-go="${go}"`:""}>${showNpc?`<span class="th sm" style="--ring:var(--ref)" aria-hidden="true">${NPCCAT[n?n.c:"accessoriesBlacksmith"][1]}</span>`:(e?eslot(e,34):`<span class="eslot empty" style="--s:34px" aria-hidden="true">💍</span>`)}
+    <span class="t"><b>${showNpc?esc(r.npc):esc(r.en)}</b><span>${showNpc?"":(e?esc(e.name)+"・":"")+(RAR[rar]?RAR[rar][0]+"・":"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${r.sec} 秒<br><span class="muted">${costText(r.cost)}</span></span></${tag}></li>`}).join("")}</ul>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const c=NPCCAT[n.c];
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u?"・在地下":""}</div></div></div>
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
+  ${RECIPES[n.n]?`<h3 class="sec">可以製作 <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${esc(RECIPES[n.n].src)}</div>`
+    :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「回報區」回報就能補上。</div>`:""}
   <div class="note">${n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「回報區」回報地點。</div>`}
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
   const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv],["獎勵",qq.rw]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")
@@ -1012,7 +1028,8 @@ function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
   <dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
   ${en?`<h3 class="sec">本站物品資料</h3><ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>掉落來源、任務需求</span></span><span class="v">›</span></button></li></ul>`:""}
-  <div class="note">官方圖鑑 #${e.oid}。取得方式和合成材料還沒有資料，歡迎用「回報」分頁補充。</div>`}
+  ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}`:""}
+  <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"配方取自玩家的遊戲截圖。":"取得方式和合成材料還沒有資料，歡迎用「回報區」補充。"}</div>`}
 
 // ================= props tab (official catalogue, non-equipment) =================
 const PR=(window.SAO_PROPS||[]).map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
@@ -1357,12 +1374,12 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin").forEach(n=>n.re
     if(t.tp)b.classList.add("tp");b.innerHTML=`<span class="pin"></span><span class="tname">${t.tp?"🌀 ":""}${esc(t.n)}</span>`;b.setAttribute("aria-label",(t.tp?"可傳送的村鎮 ":"村鎮 ")+t.n);if(t.tp)b.title="傳送點："+t.tp;
     b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("t",t.id,"new")});world.appendChild(b)});
   const rank={"Boss":0,"Mini-Boss":1,"Monster":2,"Minion":3};
-  spotsOf(FL).forEach(sp=>{if(!spotVisible(sp))return;const vm=sp.mons.map(n=>F().monByName[n]).filter(Boolean);
-    const d=document.createElement("div");d.className="zone"+(sp.src==="est"?" est":"")+(sp.mons.length?"":" poi");d.dataset.s=sp.id;
+  spotsOf(FL).forEach(sp=>{if(!spotVisible(sp))return;const own=catOn(spotCat(sp));const vm=own?sp.mons.map(n=>F().monByName[n]).filter(Boolean):[];
+    const d=document.createElement("div");d.className="zone"+(sp.src==="est"?" est":"")+(vm.length?"":" poi");d.dataset.s=sp.id;
     d.style.left=toPxX(sp.x)+"px";d.style.top=toPxZ(sp.z)+"px";
-    const lb=document.createElement("button");lb.className="zlabel";lb.innerHTML=`<i style="background:${SRC_COL[sp.src]}"></i>${sp.tp?'<span class="tpi" title="傳送點">🌀</span>':""}${sp.mons.length?"":(sp.gt?GT[sp.gt][1]:KIND[sp.kind][1])+" "}${esc(sp.n)}`;if(sp.tp)lb.title="傳送點："+sp.tp;if(sp.kind==="shop"){lb.title=sp.n+"（"+sp.zh+"）";lb.setAttribute("aria-label","收購商 "+sp.n)}
+    const lb=document.createElement("button");lb.className="zlabel";lb.innerHTML=`<i style="background:${SRC_COL[sp.src]}"></i>${sp.tp?'<span class="tpi" title="傳送點">🌀</span>':""}${vm.length?"":(sp.gt?GT[sp.gt][1]:sp.tp?"":KIND[sp.kind][1])+" "}${esc(sp.n)}`;if(sp.tp)lb.title="傳送點："+sp.tp;if(sp.kind==="shop"){lb.title=sp.n+"（"+sp.zh+"）";lb.setAttribute("aria-label","收購商 "+sp.n)}
     lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("s",sp.id,"new")});d.appendChild(lb);
-    if(sp.mons.length){const tw=document.createElement("div");tw.className="thumbs";
+    if(vm.length){const tw=document.createElement("div");tw.className="thumbs";
       vm.sort((a,b)=>rank[a.type]-rank[b.type]).forEach(mm=>tw.appendChild(mapThumb(mm)));
       if(vm.length>1){const mo=document.createElement("span");mo.className="more";mo.textContent="+"+(vm.length-1);tw.appendChild(mo)}
       d.appendChild(tw)}
@@ -1379,16 +1396,16 @@ function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(F
   const townRow=t=>{const row=document.createElement("div");row.className="zrow";row.dataset.tp=t.n+" "+(t.tp||"")+" "+(t.en||"");
     row.innerHTML=`<div class="zhead"><button class="zn">${esc(t.n)}</button><span class="zzh">${t.tp?"傳送選單："+esc(t.tp):"村鎮・無法傳送"}</span>${coord(t.x,t.z)}</div>`;
     row.querySelector(".zn").onclick=()=>{centerOn(t.x,t.z,2.6);openP("t",t.id,"new")};zl.appendChild(row)};
-  const spotRow=x=>{const st=STATUS[x.src];const row=document.createElement("div");row.className="zrow";row.dataset.s=x.id;
+  const spotRow=(x,noMons)=>{const st=STATUS[x.src];const row=document.createElement("div");row.className="zrow";row.dataset.s=x.id;
     row.innerHTML=`<div class="zhead"><button class="zn">${x.gt?GT[x.gt][1]+" ":""}${esc(x.n)}</button><span class="zzh">${x.tp?"傳送選單："+esc(x.tp)+"・":""}${esc(x.zh)}</span>${x.gt?`<span class="pill">${GT[x.gt][0]}</span>`:""}<span class="pill ${st.c}">${st.t}</span>${coord(x.x,x.z)}</div>`;
     row.querySelector(".zn").onclick=()=>{focusSpot(x.id);openP("s",x.id,"new")};
-    if(x.mons.length){const tw=document.createElement("div");tw.className="thumbs";x.mons.forEach(n=>{const mm=F().monByName[n];if(!mm)return;const b=mapThumb(mm);b.classList.remove("mapth");tw.appendChild(b)});row.appendChild(tw)}
+    if(x.mons.length&&!noMons){const tw=document.createElement("div");tw.className="thumbs";x.mons.forEach(n=>{const mm=F().monByName[n];if(!mm)return;const b=mapThumb(mm);b.classList.remove("mapth");tw.appendChild(b)});row.appendChild(tw)}
     zl.appendChild(row)};
   const tpT=F().towns.filter(t=>t.tp),tpS=sp.filter(x=>x.tp);
-  if(catOn("tp")){if(tpT.length){sec("🌀 傳送點－城鎮",tpT.length);tpT.forEach(townRow)}if(tpS.length){sec("🌀 傳送點－地標",tpS.length);tpS.forEach(spotRow)}}
+  if(catOn("tp")){if(tpT.length){sec("🌀 傳送點－城鎮",tpT.length);tpT.forEach(townRow)}if(tpS.length){sec("🌀 傳送點－地標",tpS.length);tpS.forEach(x=>spotRow(x,true))}}
   const lT=F().towns.filter(t=>!t.tp),lS=sp.filter(x=>x.kind==="poi"&&!x.tp);
-  if(catOn("land")&&lT.length+lS.length){sec("📍 地標（無法傳送）",lT.length+lS.length);lT.forEach(townRow);lS.forEach(spotRow)}
-  [["boss","👑 區域首領"],["wboss","🌋 世界王"],["dungeon","⚔️ 地下城"],["mob","🐾 怪物區"],["gather","⛏️ 採集點"]].forEach(([k,title])=>{if(!catOn(k))return;const g=sp.filter(x=>x.kind===k);if(!g.length)return;sec(title,g.length);g.forEach(spotRow)});
+  if(catOn("land")&&lT.length+lS.length){sec("📍 地標（無法傳送）",lT.length+lS.length);lT.forEach(townRow);lS.forEach(x=>spotRow(x))}
+  [["boss","👑 區域首領"],["wboss","🌋 世界王"],["dungeon","⚔️ 地下城"],["mob","🐾 怪物區"],["gather","⛏️ 採集點"]].forEach(([k,title])=>{if(!catOn(k))return;const g=sp.filter(x=>x.kind===k);if(!g.length)return;sec(title,g.length);g.forEach(x=>spotRow(x))});
   const np=NPCS(FL).filter(npcVisible);
   if(np.length){sec("🧑 NPC",np.length);Object.keys(NPCCAT).forEach(c=>{np.filter(n=>n.c===c).forEach(n=>{const row=document.createElement("div");row.className="zrow npcrow";row.dataset.tp=n.n+" "+NPCCAT[c][0];
     row.innerHTML=`<div class="zhead"><button class="zn">${NPCCAT[c][1]} ${esc(n.n)}</button><span class="zzh">${NPCCAT[c][0]}${n.u?"・地下":""}${n.src==="beta"?"・測試版資料":""}</span>${coord(n.x,n.z)}</div>`;

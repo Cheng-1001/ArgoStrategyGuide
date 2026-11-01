@@ -36,6 +36,7 @@
 | `reports.js` | 已收錄的玩家回報。格式必須維持 `window.SAO_REPORTS = <JSON 陣列>;`，Google 程式會自動讀寫它 |
 | `mainq.js` | 第 1 層主線任務 `window.SAO_MAINQ[1]`：說明取自 wiki 主線表，步驟順序和座標取自參考互動地圖，步驟文字是本站中文改寫。步驟格式 `[文字, x, z, 約略]` |
 | `equip.js`、`equip.png` | 裝備分頁：官網物品圖鑑的 656 件裝備（武器、盾、防具、飾品），由 scratchpad 的 `build_equip.py` 產生，不要手改。`equip.png` 48px 一格、一列 16 格 |
+| `recipes.js` | 工匠配方 `window.SAO_RECIPES`，key 是 `npcs.js` 裡的 NPC 名稱。每筆 `[官網圖鑑 id 或 null, 遊戲英文名, 秒數, [[材料, 數量]], 費用 Col（"Free"＝免費）, 稀有度]`。目前有 Bandit Accessories、Shark Accessories（使用者截圖）。遊戲英文名對到官網法文名：Small Purse＝Small Pouch（Petite Bourse）、Shark Carapace＝Shark Shell。鯊魚飾品官網圖鑑還沒收錄（id null）。NPC 詳細資料列「可以製作」，裝備詳細資料列「製作方式」，材料的物品資料列「可以拿去製作」 |
 | `hints.js` | 遊戲圖鑑的 LOCATION HINT，對應到 41 隻第 1 層怪物（`sure=0` 表示依順序推斷） |
 | `items.png` | 物品圖示表：64px 一格、一列 8 格，目前用到第 185 格。物品資料的最後一個欄位就是格子編號 |
 | `floor1.jpg`、`floor2.jpg` | wiki 地圖。floor1.jpg 原本在 X 1652、Z 2770（腐臭沼澤北邊麥田旁）有一個 wiki 編輯者留下的測試路標「sdsd」，另外 X 1917–1967、Z 2412–2495 有一塊黑色 T 形破圖。2026-11-01 修掉：路標那一處用使用者 JourneyMap 的真實地形縮到 wiki 解析度、做色調轉換後貼上；黑色 T 處 JourneyMap 沒資料，改搬旁邊的森林紋理。之後換新的 wiki 地圖要再檢查一次 |
@@ -73,6 +74,7 @@
   - **篩選**（「篩選 ▾」面板，手機也有；存在 localStorage `sao-map-filter`）：傳送點、地標（無法傳送的城鎮和 poi）、怪物區、採集點、地下城、世界王、區域首領、NPC，NPC 底下再分 18 類。同時是傳送點的地點，只要「傳送點」或它本身的分類有開就會顯示。右側清單照同樣的篩選，分成 傳送點－城鎮／傳送點－地標／地標／區域首領／世界王／地下城／怪物區／採集點／NPC。
   - SPOTS 的 kind：mob、boss（區域首領）、dungeon、poi（地標）、gather（採集點，`gt` = crop／ore／wood，標籤前畫 🌾／⛏️／🪵）、wboss（世界王：參考地圖的 Floor 1 World Event）。
   - **怪物區框線**：SPOTS 的 `area`（[[x,z],…]）是依探索地圖的地形自己描的大略範圍（沒有用參考地圖的多邊形），用 Catmull-Rom 平滑曲線畫在 `.areas` SVG，`vector-effect:non-scaling-stroke` 讓線寬不隨縮放改變。「怪物區」篩選關掉時一起隱藏。
+  - 只開「傳送點」時，傳送地標（狼之谷、Geldorak、詛咒廢墟）只畫名稱不畫怪物；右側「傳送點－地標」清單也不列怪物。怪物只在它本身的分類（怪物區、地下城）開著時顯示。
   - **NPC**：`npcs.js`（`tools/build_npcs.py` 從參考地圖文字解析產生）。參考地圖 Current Data 有的類別只用 Current；Current 沒有的類別（旅行商人、武器收購商、裝備商人、飾品商人、武器鐵匠、防具鐵匠、金屬錠鐵匠、伐木工）才用它的測試版資料，標「測試版資料」。地圖上畫小圓圖示，點了開右側資料（type "n"）。收購商已從 SPOTS 移到這裡。
   - 第 1 層可以切換「wiki 地圖 / 探索地圖」（`sao-map-base`），預設 wiki 地圖。探索地圖用切片載入（`updateTiles`）：L0 一直載入當底，再依縮放倍率 × devicePixelRatio 選層級，只載入畫面內的切片。手機版圖例只留底圖切換按鈕。
 - **座標**：

@@ -129,6 +129,23 @@ with sync_playwright() as p:
           "hiding monster areas keeps an area that is also a teleport (Wolf Valley)")
     check(pg.locator(".areas path").count() == 0, "hiding monster areas hides their outlines")
     pg.click("#fpAll"); pg.click("#fpX"); pg.wait_for_timeout(200)
+    pg.click("#filterBtn"); pg.wait_for_timeout(200)
+    for k in ("land", "mob", "gather", "dungeon", "wboss", "boss", "npc"):
+        pg.click(f'#fpCats .fchip[data-k="{k}"]'); pg.wait_for_timeout(80)
+    pg.wait_for_timeout(300)
+    check(pg.locator('.zone[data-s="wolf"] .thumbs').count() == 0 and pg.locator('.zone[data-s="wolf"]').count() == 1
+          and pg.locator('#zlist .zrow[data-s="wolf"] .thumbs').count() == 0,
+          "teleports only: Wolf Valley shows without monsters on the map and in the list")
+    pg.click("#fpAll"); pg.click("#fpX"); pg.wait_for_timeout(200)
+    if pg.is_visible("#pClose"):
+        pg.click("#pClose"); pg.wait_for_timeout(200)
+    pg.locator("#zlist .npcrow", has_text="Bandit Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
+    t = pg.inner_text("#pBody")
+    check("可以製作\n4" in t and "Bandit Coin" in t and "Small Pouch ×24" in t, "Bandit Accessories lists its 4 recipes")
+    pg.click("#pClose"); pg.wait_for_timeout(200)
+    pg.locator("#zlist .npcrow", has_text="Shark Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
+    t = pg.inner_text("#pBody")
+    check("Shark Fang" in t and "Wolf Fangs ×8" in t and "33 Col" in t, "Shark Accessories lists its recipes with cost")
     check("⛏️ 採集點 4" in pg.inner_text("#zlist") and "🌾 Farm" in pg.inner_text("#zlist"), "gathering spots listed with their type")
 
     pg.goto(base + "#map"); pg.wait_for_timeout(500)
