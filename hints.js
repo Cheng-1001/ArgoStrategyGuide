@@ -57,11 +57,6 @@ window.SAO_HINTS={1:{
   "Au-delà des montagnes glaciales",
   1
  ],
- "Mountain Stag": [
-  "Beyond the icy mountains",
-  "Au-delà des montagnes glaciales",
-  1
- ],
  "Slime Warrior": [
   "Scattered across a slimy zone...",
   "Éparpillé dans une zone visqueuse...",

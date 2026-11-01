@@ -107,6 +107,7 @@
 - 已知限制：
   - 第 1 層只剩 Skeleton、Kazor 沒有座標（參考互動地圖的 Current Data 也沒有 Kazor）；第 2 和第 3 層全部怪物的區域沒有座標。
   - 和參考互動地圖還沒對齊的差異：城鎮座標（起始之城、Castlebrume、Candelia、Virelune 差約 100 格）、多個怪物名稱不同（例如 Black/White Sinister Wolf、Little Slime、Slime Magician、Robust Bandit、Tank Skeleton、Mage Sylvester）、它的 8 個英文支線任務和其他 NPC（飾品鐵匠、鑰匙鐵匠、神秘商人等）。
+  - wiki 的 Bestiary 表會留著 2026-06（Seas）加的**舊條目**（沒有圖鑑編號），10 月（SpaceKat）照遊戲圖鑑補新條目時沒刪。已合併：Mountain Stag → #018 Mountain Deer、Sylvan Mage → #012 Woodland Mage（舊名放 aka）。重抓 wiki 時用 Bestiary 頁的編輯歷史判斷新舊，不要再把沒編號的舊條目當成另一隻。沒編號的「Skeleton」也是 6 月舊條目，還不知道對應哪一隻，先保留。
   - Sissou 任務的「harpies des vents」找不到對應的怪物。
   - 還有幾個未知物品：Arc courbe、bûches de ???、Sac à dos、Sylvan/Skeleton Shaman Staff、兩種 Scroll、Curved Bow。
 
