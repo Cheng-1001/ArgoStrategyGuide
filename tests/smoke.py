@@ -190,6 +190,15 @@ with sync_playwright() as p:
     pg.click("#pClose"); pg.wait_for_timeout(150)
     check(pg.evaluate("document.querySelector('#fpCats .fchip[data-k=npc]').nextElementSibling.id") == "fpNpcWrap",
           "NPC sub-categories sit right under the NPC chip")
+    pg.evaluate("document.getElementById('fpNpcWrap').open=true"); pg.wait_for_timeout(200)
+    fb, pb = pg.locator("#fpFly").bounding_box(), pg.locator("#fpanel").bounding_box()
+    check(pg.is_visible("#fpFly") and fb["x"] >= pb["x"] + pb["width"] and pg.locator("#fpFly .fchip").count() >= 10,
+          "desktop: NPC sub-categories open in a flyout to the right of the filter panel")
+    pg.click("#fpFlyX"); pg.wait_for_timeout(150)
+    check(pg.is_hidden("#fpFly"), "flyout closes")
+    st = pg.evaluate("""(()=>{const d=document.querySelector('.town.dungeon[data-s="fallen"]');const z=document.querySelector('.zone.mobarea .zlabel');
+      return [!!d&&!!d.querySelector('.pin'),z?getComputedStyle(z).backgroundColor:'none',[...document.querySelectorAll('.bsp')].every(b=>getComputedStyle(b).borderTopStyle==='solid')]})()""")
+    check(st[0] and st[1] == "rgba(0, 0, 0, 0)" and st[2], "dungeons have a pin on the entrance, monster-area names have no box, boss rings are all solid")
     sz = pg.evaluate("""(()=>{const w=s=>{const e=document.querySelector(s);return e?e.getBoundingClientRect().width:0};return [w('.bsp.boss'),w('.bsp.mini'),w('.zone .mapth:not(.boss):not(.mini):not(.minion)')]})()""")
     check(sz[0] > sz[1] > sz[2] > 0, f"bosses drawn bigger than mini-bosses and monsters ({sz[0]:.0f} > {sz[1]:.0f} > {sz[2]:.0f}px)")
     pg.click('#fpCats .fchip[data-k="boss"]'); pg.wait_for_timeout(200)
