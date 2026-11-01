@@ -1,5 +1,9 @@
+"""Rebuild npcs.js from the reference map (DelayedCode/SAO-MC-Interactive-Map).
+Usage: python3 -I tools/build_npcs.py <clone>/Aincrad/Map
+"""
 import re,json,math
-D='ext/SAO-MC-Interactive-Map/Aincrad/Map/'
+import sys, os
+D=(sys.argv[1] if len(sys.argv)>1 else 'ext/SAO-MC-Interactive-Map/Aincrad/Map').rstrip('/')+'/'   # reference map repo's Aincrad/Map folder; text-parsed, never executed
 CATS=['alchemist','lumberjack','lootBuyers','weaponSellers','travelingMerchants','equipmentMerchants','toolMerchants','accessoriesMerchants','occultMerchants','consumablesMerchants','weaponsmith','armorBlacksmith','ingotBlacksmith','keyBlacksmith','materialsBlacksmith','accessoriesBlacksmith','equipmentBlacksmith','secretAccessoryBlacksmith']
 def load(f,cur):
     t=open(D+f,encoding='utf-8').read();out=[]
@@ -27,4 +31,4 @@ hdr='''/* Floor 1 NPCs by role, from DelayedCode's SAO MC Interactive Map (title
    map's Beta-test data (may have moved since). Beta rows are used only for roles that Current Data does not list at all. */
 window.SAO_NPCS={1:[
 '''
-open('/home/user/ArgoStrategyGuide/npcs.js','w',encoding='utf-8').write(hdr+rows+'\n]};\n')
+open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'npcs.js'),'w',encoding='utf-8').write(hdr+rows+'\n]};\n')
