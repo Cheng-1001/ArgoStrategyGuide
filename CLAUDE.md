@@ -135,7 +135,7 @@
 - [x] 高解析度地圖（C1）：2026-10-31 用使用者 JourneyMap 原尺寸重做第 1 層探索地圖並改成切片。2026-11-01 用 jm-upload-2 更新（62 張，島上探索範圍 32.4% → 38.2%，新增 Virelune 往北經 Candelia 到 Kobold Tower 的路線）。之後使用者會改用本機 Claude Code 直接執行 `tools/jm_tiles.py` 並 push，不再走 release。
 - **2026-11-02 起 JourneyMap 一律走合併**：玩家和站長都用表單「探索地圖」上傳（或本機 `python3 -I tools/jm_merge.py <day 資料夾>` 後 commit 切片、`explored.png`、`jmmeta.js`），不要再用 `jm_tiles.py` 整張重做。以下是舊流程，僅供參考。
 - JourneyMap 更新流程（舊）：**雲端工作階段連不到使用者的 Windows 電腦**（Remote Control 不支援 Windows）。使用者讓 GPT 在電腦上打包 `jm_export.zip`，用 `gh release create jm-upload-N ... --prerelease` 上傳到 GitHub Release。下載 `https://github.com/Cheng-1001/ArgoStrategyGuide/releases/download/jm-upload-N/jm_export.zip`，第 1 層是 `Triggers_815bd3d6-…/overworld/day`，執行 `tools/jm_tiles.py`，更新 `jmDate`。用完請使用者刪掉 release。
-- [x] 玩家回報 JourneyMap（2026-11-02 做好，使用者選 A：表單上傳 zip，全自動合併）。[ ] 等使用者執行 `upgradeForm`、手動加上傳題目「探索地圖・壓縮檔」，再用自己的地圖測試一次。
+- [x] 玩家回報 JourneyMap（2026-11-02 做好，使用者選 A：表單上傳 zip，全自動合併）。`upgradeForm` 已執行；[ ] 手動加上傳題目「探索地圖・壓縮檔」，再用自己的地圖測試一次。
 
 - [x] Google 表單端到端測試（2026-11-01）：R0001 Young Spider LV3 核准後自動寫入 `reports.js` 和 3 張截圖，網站顯示等級 3。checkSetup、分頁跳轉都已確認。Drive 縮圖（`=s1600`）可用，但當時存成 PNG（每張 1.7 MB），已手動轉成 JPEG。
 - [x] 審核畫面（2026-11-01 使用者執行 `upgradeSheet` 確認）：「截圖預覽」用 `newCellImage` 嵌 base64 縮圖可正常顯示（Drive 檔案不公開）、「內容摘要」、原始欄位收起、整列依狀態上色；表單「截圖」頁換成 F2 說明。截圖一律轉 JPEG。注意：Google 會把回應表自動轉成「表格」（Form_Responses），表格標題預設白字，所以標題要明確設深色字。
@@ -144,8 +144,8 @@
 - 改了 `apps-script.gs` 或審核網頁後：`node tests/apps_script_test.js`（含假表單上的 `upgradeForm` 測試）、`python3 tests/review_test.py` 都要 ALL PASSED。改了回報解讀要跑 `python3 tests/report_types_test.py`、`tests/report_rules_test.py`。
 - [ ] 第 2、3 層預計 **11/4 開放**（遊戲改版）。使用者通知後，重新抓 wiki 和官網資料，比對差異後更新 `data23.js`。第 3 層還沒有地圖。
 - [ ] 物品類型的回報，目前只出現在「已收錄」清單，還沒整合進物品詳細資料（地點回報 2026-11-02 已整合成地圖點位）。
-- [ ] 等使用者執行 `upgradeForm`（表單加配方、任務追蹤、技能、探索地圖）。
-- [ ] 等使用者貼上新版 `apps-script.gs` 並執行 `syncPending`（網站顯示處理中的回報，SETUP.md「網站顯示「處理中的回報」」）。
+- [x] 使用者執行 `upgradeForm`（2026-11-01 22:05，執行記錄：回報種類 8 個、共 58 題）。[ ] 手動加上傳題目「探索地圖・壓縮檔」、再執行 `upgradeSheet`、用自己的地圖測試探索地圖上傳。
+- [x] 使用者貼上新版 `apps-script.gs` 並執行 `syncPending`（2026-11-01 21:57，Apps Script commit「處理中的回報：0 則」）。
 - 已知限制：
   - 第 1 層只剩 Skeleton、Kazor 沒有座標（參考互動地圖的 Current Data 也沒有 Kazor）；第 2 和第 3 層全部怪物的區域沒有座標。
   - 和參考互動地圖還沒對齊的差異：城鎮座標（起始之城、Castlebrume、Candelia、Virelune 差約 100 格）、多個怪物名稱不同（例如 Black/White Sinister Wolf、Little Slime、Slime Magician、Robust Bandit、Tank Skeleton、Mage Sylvester）、它的 8 個英文支線任務和其他 NPC（飾品鐵匠、鑰匙鐵匠、神秘商人等）。
