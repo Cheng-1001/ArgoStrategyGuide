@@ -76,7 +76,7 @@ const M = [
 ["028","Skeleton Tank","Monster","A","skeld",2,[["Reinforced Skeleton Bone",40],["Bone Dust",30]],"","💀"],
 ["029","Skeleton Wizard","Monster","A","skeld",2,[["Cursed Cloth",50],["Skeleton Bone",40],["Bone Dust",30],["Skeleton Mage Staff",2],["Skeleton Shaman Staff",2]],"","💀",["Skeleton Sorcerer"]],
 ["","Narax the Cursed Skeleton","Mini-Boss","A","skeld",2,[["Putrefied Heart",70],["Cursed Skeleton Mage Staff",3],["Cursed Skeleton Shaman Staff",3],["Narax's Ring",1]],"","☠️"],
-["030","Cursed Nazgul Protector","Boss","A","skeld",3,[["Spectral Mane Piece",1],["Cursed Hoof Shard",3]],"","🐴",["Nasgul"]],
+["030","Cursed Nazgul Protector","Boss","A","skeld",3,[["Spectral Mane Piece",1],["Cursed Hoof Shard",3]],"LV 8，打法分兩個階段：第一階段騎在幽靈馬上衝撞，第二階段下馬、拿長柄武器步戰。位置在骷髏地下城底下的洞窟草地（截圖小地圖約 X 2851 · Z 4196、Y −35），主線 #23 Behind the Great Door 要打倒牠。（玩家的遊戲截圖，2026-11-01）","🐴",["Nasgul"],8],
 ["039","Bandit Archer","Monster","A","geldorak",2,[["Worn Leather",85],["Small Pouch",75],["Bandit Crossbow",0.5]],"傷害 5","🏹"],
 ["040","Bandit Assassin","Monster","A","geldorak",2,[["Worn Leather",80],["Small Pouch",70],["Bandit Dagger",0.5]],"傷害 5","🗡️"],
 ["041","Sturdy Bandit","Monster","A","geldorak",2,[["Worn Leather",80],["Small Pouch",75]],"傷害 5","🪓"],
@@ -114,7 +114,7 @@ const M = [
 ["","Illfang the Kobold Lord","Boss","A","kobold",0,[],"第一層樓層首領。剩 33,000 HP 起會持續召喚小怪；剩 13,000 HP 時回血並進入第二階段，傷害大增，會跳上柱子連續跳擊。主攻擊是矩形範圍（動畫略往順時針偏），站在中央會被盾擊暈眩後追擊；兩招都可能一擊必殺。","👹"],
 ["062","Nymbréa","Boss","A","aepep",4,[["Nymbréa's Heart",null]],"","🐍"],
 ["","Kazor","Boss","A","none",5,[],"wiki 未寫出現區域。","🔥"]
-].map((r,i)=>({id:"m"+i,num:r[0],name:r[1],type:r[2],beh:r[3],zone:r[4],diff:r[5],drops:r[6],note:r[7],icon:r[8],aka:r[9]||[]}));
+].map((r,i)=>({id:"m"+i,num:r[0],name:r[1],type:r[2],beh:r[3],zone:r[4],diff:r[5],drops:r[6],note:r[7],icon:r[8],aka:r[9]||[],lvShot:r[10]}));
 const PHOTO = { "Corrupted Boar":"mob_boar.jpg", "Pumba":"mob_pumba.jpg", "White Dire Wolf":"mob_wolf.jpg" };
 
 /* Items. Key = English drop name from the Bestiary (or an English label for quest-only items).

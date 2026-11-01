@@ -786,7 +786,7 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   const kq=KILLQ[m.id]||[];
   return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(m.name)}</h2>${m.aka&&m.aka.length?`<div class="sub">舊名：${m.aka.map(esc).join("、")}${m.renamedBy?`・名稱依${m.renamedBy.how==="codex"?`遊戲圖鑑 #${esc(m.renamedBy.no)}`:"審核員確認"}（回報 ${esc(String(m.renamedBy.report||""))}）更新`:""}</div>`:""}</div></div>
   ${soonNote(m.floor)}
-  <dl class="facts"><dt>等級</dt><dd>${lvOf(m)!=null?`<b class="mono">${lvOf(m)}</b> <span class="pill rep">玩家回報</span>`:`<span class="muted">未回報</span>`}</dd><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
+  <dl class="facts"><dt>等級</dt><dd>${lvOf(m)!=null?`<b class="mono">${lvOf(m)}</b> <span class="pill rep">${repsOf(m).some(x=>x.level!=null)?"玩家回報":"遊戲截圖"}</span>`:`<span class="muted">未回報</span>`}</dd><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
   <dt>圖鑑區域</dt><dd>${m.codexRegion?`${esc(m.codexRegion)} <span class="pill rep">遊戲圖鑑</span><br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`:`${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`}</dd>
   <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${SPAWN_OF[m.id]?"":p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd>${SPAWN_OF[m.id]?`<dt>重生點</dt><dd>${SPAWN_OF[m.id].map(w=>`<button class="linkbtn mono" data-rep="${m.floor}|${w.x}|${w.z}">X ${w.x} · Z ${w.z}${w.u?"（地下）":""}</button>`).join("<br>")}</dd>`:""}</dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
@@ -806,7 +806,7 @@ const REPS=(window.SAO_REPORTS||[]);
 const repRef=r=>r.issue?`<a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">回報 #${r.issue}</a>`:`回報 ${esc(r.id||"")}`;
 const repKey=r=>r.issue?"#"+r.issue:(r.id||"");
 const repsOf=m=>REPS.filter(r=>r.type==="monster"&&r.floor===m.floor&&(r.monId?r.monId===m.id:(r.name===m.name||(m.aka||[]).includes(r.name))));
-const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:null};
+const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:m.lvShot!=null?m.lvShot:null};
 function repBlock(m){const r=repsOf(m);if(!r.length)return"";const a=r[0];
   return`<h3 class="sec">玩家回報 <span class="c">${r.length} 則</span></h3>
   <figure class="repfig"><a href="${esc(a.img)}" target="_blank" rel="noopener"><img src="${esc(a.img)}" alt="${esc(m.name)} 的遊戲截圖" loading="lazy"></a>

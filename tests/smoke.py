@@ -184,6 +184,10 @@ with sync_playwright() as p:
     pg.click("#zfit"); pg.wait_for_timeout(200)
     check(pg.locator(".bsp").count() == 23 and pg.locator('.bsp[title*="Pumba"]').count() == 5, "23 boss spawn points drawn (Pumba has 5)")
     check(pg.is_visible("#fpanel") and pg.locator("#fpanel").bounding_box()["width"] <= 200, "filter panel stays open on the left and is narrow")
+    pg.eval_on_selector('.bsp[title*="Nazgul"]', 'e=>e.click()'); pg.wait_for_timeout(300)
+    t = pg.inner_text("#pBody")
+    check("8 遊戲截圖" in t and "Behind the Great Door" in t and "兩個階段" in t, "Cursed Nazgul Protector: LV 8 from a screenshot and its two phases")
+    pg.click("#pClose"); pg.wait_for_timeout(150)
     check(pg.evaluate("document.querySelector('#fpCats .fchip[data-k=npc]').nextElementSibling.id") == "fpNpcWrap",
           "NPC sub-categories sit right under the NPC chip")
     sz = pg.evaluate("""(()=>{const w=s=>{const e=document.querySelector(s);return e?e.getBoundingClientRect().width:0};return [w('.bsp.boss'),w('.bsp.mini'),w('.zone .mapth:not(.boss):not(.mini):not(.minion)')]})()""")
