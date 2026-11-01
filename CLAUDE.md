@@ -139,6 +139,7 @@
 - **2026-11-02 起 JourneyMap 一律走合併**：玩家和站長都用表單「探索地圖」上傳（或本機 `python3 -I tools/jm_merge.py <day 資料夾>` 後 commit 切片、`explored.png`、`jmmeta.js`），不要再用 `jm_tiles.py` 整張重做。以下是舊流程，僅供參考。
 - JourneyMap 更新流程（舊）：**雲端工作階段連不到使用者的 Windows 電腦**（Remote Control 不支援 Windows）。使用者讓 GPT 在電腦上打包 `jm_export.zip`，用 `gh release create jm-upload-N ... --prerelease` 上傳到 GitHub Release。下載 `https://github.com/Cheng-1001/ArgoStrategyGuide/releases/download/jm-upload-N/jm_export.zip`，第 1 層是 `Triggers_815bd3d6-…/overworld/day`，執行 `tools/jm_tiles.py`，更新 `jmDate`。用完請使用者刪掉 release。
 - [x] 玩家回報 JourneyMap（2026-11-02 做好，使用者選 A：表單上傳 zip，全自動合併；同日改成網站打包工具＋送出自動核准）。
+- [x] 探索地圖端到端測試（2026-11-02 01:18，R0002，站長自己的地圖）：送出自動核准 → Release（草稿→上傳→發佈）→ Actions 合併成功：52 張、2 個第 1 層資料夾、重疊 25894 區塊、新增 27 區塊（探索比例仍 28.5%，站長的地圖本來就是網站底圖）。
 
 - [x] Google 表單端到端測試（2026-11-01）：R0001 Young Spider LV3 核准後自動寫入 `reports.js` 和 3 張截圖，網站顯示等級 3。checkSetup、分頁跳轉都已確認。Drive 縮圖（`=s1600`）可用，但當時存成 PNG（每張 1.7 MB），已手動轉成 JPEG。
 - [x] 審核畫面（2026-11-01 使用者執行 `upgradeSheet` 確認）：「截圖預覽」用 `newCellImage` 嵌 base64 縮圖可正常顯示（Drive 檔案不公開）、「內容摘要」、原始欄位收起、整列依狀態上色；表單「截圖」頁換成 F2 說明。截圖一律轉 JPEG。注意：Google 會把回應表自動轉成「表格」（Form_Responses），表格標題預設白字，所以標題要明確設深色字。
@@ -148,7 +149,7 @@
 - [ ] 第 2、3 層預計 **11/4 開放**（遊戲改版）。使用者通知後，重新抓 wiki 和官網資料，比對差異後更新 `data23.js`。第 3 層還沒有地圖。
 - [ ] 物品類型的回報，目前只出現在「已收錄」清單，還沒整合進物品詳細資料（地點回報 2026-11-02 已整合成地圖點位）。
 - [x] 使用者執行 `upgradeForm`（2026-11-01 22:05，執行記錄：回報種類 8 個、共 58 題）。
-- [ ] 2026-11-02 表單改版＋探索地圖改成打包工具／自動核准：等使用者貼新版 `apps-script.gs`、再執行 `upgradeForm`（搬樓層名稱、寫 `formcfg.js`）、手動加上傳題目「探索地圖・壓縮檔」、`upgradeSheet`、用自己的 mp 資料夾測試（SETUP.md「表單改版＋探索地圖」）。也要重貼審核網頁的 `review.gs`（認得新欄位）。
+- [x] 2026-11-02 表單改版＋探索地圖改成打包工具／自動核准：使用者已貼新版 `apps-script.gs`、執行 `upgradeForm`（`formcfg.js` 已寫入 4 個樓層題）、加上傳題目、`upgradeSheet`、`retryApproved`，R0002 合併成功。[ ] 審核網頁部署時要用新版 `review.gs`。
 - [x] 使用者貼上新版 `apps-script.gs` 並執行 `syncPending`（2026-11-01 21:57，Apps Script commit「處理中的回報：0 則」）。
 - 已知限制：
   - 第 1 層只剩 Skeleton、Kazor 沒有座標（參考互動地圖的 Current Data 也沒有 Kazor）；第 2 和第 3 層全部怪物的區域沒有座標。
