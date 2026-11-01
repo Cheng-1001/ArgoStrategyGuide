@@ -81,6 +81,9 @@ with sync_playwright() as p:
 
     pg.goto(base + "#quests"); pg.wait_for_timeout(400)
     check(pg.locator(".qcard").count() >= 30, "quests tab lists the floor 1 main questline")
+    seal = pg.locator(".qcard", has_text="The Truth About the Seal").first
+    check(seal.locator(".mqn").inner_text() == "24" and pg.locator(".qcard", has_text="The Southern Marshes").locator(".mqn").inner_text() == "14",
+          "main quests show the in-game numbers (Truth About the Seal = 24, as in report R0001; Southern Marshes = 14)")
     pg.click("[data-go='q|mq1_15']"); pg.wait_for_timeout(400)
     check(pg.locator("#pBody .qmap svg polyline").count() == 1 and pg.locator("#pBody .mqs li").count() >= 5,
           "clicking a main quest opens the panel with its steps and a route mini map")

@@ -3,8 +3,13 @@
    - NPC, level, reward and the short story text: saominecraft.wiki.gg/wiki/Quests/Aincrad/Main (rev 2700), rewritten in Chinese.
    - Quest order, step list and step coordinates: DelayedCode's SAO MC Interactive Map (Current Data). Only the facts
      (order, target, amount, X / Z) were taken; every step text below is our own Chinese wording.
-   Parts 7-18 of the reference numbering happen in the Fractured Underworld (another world) and are not listed.
-   Quest fields: t = title (as in game), npc, lv, rw = reward, d = story text, s = steps.
+   Parts 7-18 of the REFERENCE MAP numbering (not the game numbering) happen in the Fractured Underworld and are not listed.
+   Quest fields: t = title (as in game), n = number in the in-game quest tracker, nEst = number estimated
+   from the order, npc, lv, rw = reward, d = story text, s = steps.
+   Numbers: 8-18 are written on the wiki main-quest table, 24 is confirmed by report R0001 (tracker shows
+   "24. The Truth About the Seal"), 19-23 follow the wiki order between them; 25+ are estimated. The
+   reference map merged "The Southern Marshes" (14) into "The Suspended City"; it is split again here.
+   Quests before The Trader have no reliable number yet.
    Step: [text, x, z, approx]   x/z null = no coordinate; approx 1 = "about here". */
 window.SAO_MAINQ = {1: [
  {t:"A New World", npc:"Yui", lv:"1", d:"在起始之城醒來，Yui 把你送進艾恩葛朗特。",
@@ -27,50 +32,52 @@ window.SAO_MAINQ = {1: [
   s:[["前往小蛛網森林",1358,3539],["找到第二具屍體",1341,3521],["找到第三具屍體",1375,3512],["回報村長",1526,3412]]},
  {t:"Bury Them", npc:"Mayor of Hanaka", d:"村長請你埋葬他的三個手下，不然森林裡爬的東西會把他們吃掉。",
   s:[["背起第一具屍體",1341,3521],["背起第二具屍體",1375,3512],["背起第三具屍體",1526,3412],["把屍體分別埋進三座墳墓",1254,3770],["回去找村長",1526,3412]]},
- {t:"The Trader", npc:"The Trader", d:"村長介紹他的商人給你。商人要小蛛網森林的毒液，願意付錢。",
+ {t:"The Trader", n:8, npc:"The Trader", d:"村長介紹他的商人給你。商人要小蛛網森林的毒液，願意付錢。",
   s:[["和村長的商人碰面",1564,3428],["擊殺 15 隻蜘蛛",1366,3618,1],["收集 5 個毒腺",null,null],["把毒液交給商人",1564,3428]]},
- {t:"The Slime Marsh", npc:"The Trader", d:"商人還有話要說，接著前往島的西側。",
+ {t:"The Slime Marsh", n:9, npc:"The Trader", d:"商人還有話要說，接著前往島的西側。",
   s:[["走西邊的路到島的山腳",null,null],["和 Ceyla 對話",499,3043]]},
- {t:"The Foot of the Island", npc:"Ceyla", d:"通往 Vallhat 的傳送點壞了，看守的 Ceyla 知道的最多。",
+ {t:"The Foot of the Island", n:10, npc:"Ceyla", d:"通往 Vallhat 的傳送點壞了，看守的 Ceyla 知道的最多。",
   s:[["和 Baldim 對話",507,3044],["前往巨人花園",374,2479,1],["和 Zebulgarath 對話",374,2479]]},
- {t:"By the Branches of the Ancients", npc:"Zebulgarath", d:"巨人花園住著一位會和鳥說話的老人，他比傳送點還早就在這裡。提示：利用水往上爬。",
+ {t:"By the Branches of the Ancients", n:11, npc:"Zebulgarath", d:"巨人花園住著一位會和鳥說話的老人，他比傳送點還早就在這裡。提示：利用水往上爬。",
   s:[["從老橡樹採 3 塊樹皮",286,2448,1],["把樹皮交給 Zebulgarath",374,2479]]},
- {t:"The Broken Knot", npc:"Zebulgarath", d:"Zebulgarath 答應修好山腳的傳送點，說會比你先到。",
+ {t:"The Broken Knot", n:12, npc:"Zebulgarath", d:"Zebulgarath 答應修好山腳的傳送點，說會比你先到。",
   s:[["到傳送點和 Zebulgarath 會合",498,3047,1],["和 Zebulgarath 對話",498,3047,1],["和 Baldim 對話",484,3058]]},
- {t:"The Suspended City", npc:"Baldim", d:"傳送點修好了，Baldim 回到了他的城鎮 Vallhat。",
-  s:[["在 Vallhat 找第 1 條線索",466,2999],["找第 2 條線索",398,3080],["找第 3 條線索",450,3116],["和看到怪物的村民對話",null,null],["把書拿給 Baldim",484,3058],["和 Lisa 對話",450,3116],["到南方沼澤找 Isaac 的蹤跡",317,3200,1],["打倒史萊姆王 Gorbel",317,3200,1],["和 Isaac 對話並跟著他走",325,3194],["和 Baldim 對話",484,3058]]},
- {t:"What Emanates From You", npc:"Baldim", d:"Baldim 找兒子時，在 Hanaka 北邊的沼澤感覺到某種存在。",
+ {t:"The Suspended City", n:13, npc:"Baldim", d:"傳送點修好了，Baldim 回到了他的城鎮 Vallhat。",
+  s:[["在 Vallhat 找第 1 條線索",466,2999],["找第 2 條線索",398,3080],["找第 3 條線索",450,3116],["和看到怪物的村民對話",null,null],["把書拿給 Baldim",484,3058],["和 Lisa 對話",450,3116]]},
+ {t:"The Southern Marshes", n:14, npc:"Lisa", d:"Lisa 看到 Isaac 往南走了。史萊姆之王 Gorbel 就在那片沼澤出沒。",
+  s:[["到南方沼澤找 Isaac 的蹤跡",317,3200,1],["打倒史萊姆王 Gorbel",317,3200,1],["和 Isaac 對話並跟著他走",325,3194],["回去和 Baldim 對話",484,3058]]},
+ {t:"What Emanates From You", n:15, npc:"Baldim", d:"Baldim 找兒子時，在 Hanaka 北邊的沼澤感覺到某種存在。",
   s:[["離開 Vallhat 前和 Baldim 對話",484,3058],["前往 Hanaka 北邊的沼澤",1421,3091],["調查神秘的綠色團塊",1421,3091],["取得遠古封印的第一塊碎片",1441,3091]]},
- {t:"He Came", npc:"The Master Swordsman", d:"劍術大師在沼澤找到你，要你前往供應首都糧食的 Mizunari。",
+ {t:"He Came", n:16, npc:"The Master Swordsman", d:"劍術大師在沼澤找到你，要你前往供應首都糧食的 Mizunari。",
   s:[["和劍術大師對話",1089,4289],["前往 Mizunari",3133,3656],["和 Elma 對話",3136,3668]]},
- {t:"At Elma's", npc:"Elma", d:"Elma 在 Mizunari 招待旅人，村裡的消息她都知道。",
+ {t:"At Elma's", n:17, npc:"Elma", d:"Elma 在 Mizunari 招待旅人，村裡的消息她都知道。",
   s:[["和 Elma 對話 3 次",3136,3668],["到森林北邊的田",3334,3779,1],["擊殺倉庫旁的 3 隻 Nephentes",3334,3779,1],["清掉附近 5 隻 Nephentes",3334,3779,1],["回去找 Harrold",3335,3782],["採 8 束奇怪的麥穗",3401,3749],["回 Mizunari 找 Elma",3136,3668,1],["和 Harrold 對話",3134,3666]]},
- {t:"What Harrold Saw", npc:"Harrold", d:"Harrold 在 Elma 家等你，說你們需要談談。",
+ {t:"What Harrold Saw", n:18, npc:"Harrold", d:"Harrold 在 Elma 家等你，說你們需要談談。",
   s:[["聽 Harrold 說 3 次他看到的事",3134,3666],["前往東邊道路上的井",4301,3704,1]]},
- {t:"The Chamber Beneath the Fields", npc:"Harrold", d:"Harrold 說東邊道路的井在夜裡會發光。",
+ {t:"The Chamber Beneath the Fields", n:19, npc:"Harrold", d:"Harrold 說東邊道路的井在夜裡會發光。",
   s:[["探索井下的隧道",4281,3710,1],["回到地面向 Harrold 報告",3134,3666],["前往盜賊的據點",4204,3899],["和 Bob 對話",4287,3890]]},
- {t:"The Geldorak Mine", npc:"Bob",
+ {t:"The Geldorak Mine", n:20, npc:"Bob",
   s:[["和 Bob 對話",4287,3890],["取得 Geldorak 地下城鑰匙",4288,3887],["進入礦坑並完成地下城",4288,3887],["離開礦坑入口",4260,3892,1],["到 Castlebrume 找 Velka",2922,3006],["（額外）把稀有素材交給 Hanaka 的商人",null,null]]},
- {t:"Velka, and the Ruins of the Dream", npc:"Velka",
+ {t:"Velka, and the Ruins of the Dream", n:21, npc:"Velka",
   s:[["和 Velka 對話",2922,3006],["把奇怪的麥穗拿給 Velka 看",2922,3006],["找到南方的廢墟",2842,4400]]},
- {t:"The Archivist Specter", npc:"Archivist Specter",
+ {t:"The Archivist Specter", n:22, npc:"Archivist Specter",
   s:[["和檔案管理員幽靈對話（地下）",2849,4342],["收集 10 塊詛咒布",null,null],["打倒廢墟的詛咒之靈 Narax（地下）",2757,4285],["把報酬交給幽靈",2849,4342]]},
- {t:"Behind the Great Door", npc:"—",
+ {t:"Behind the Great Door", n:23, npc:"—",
   s:[["穿過解封的大門（地下）",2848,4254,1],["打倒 Cursed Nazgul Protector",null,null],["取得遠古封印的第三塊碎片",null,null],["和 A 的回聲對話，封印重新成形",null,null],["走通道離開",null,null],["前往墮落者迷宮",2382,2415]]},
- {t:"The Truth About the Seal", npc:"Catherine",
-  s:[["和 Catherine 對話",null,null]]},
- {t:"The Calamity", npc:"The Master Swordsman",
+ {t:"The Truth About the Seal", n:24, npc:"Catherine",
+  s:[["和 Catherine 對話（在墮落者迷宮一帶；依玩家截圖：在 X 1362、Z 3595 時任務指引顯示 1565 格）",2382,2415,1]]},
+ {t:"The Calamity", n:25, nEst:1, npc:"The Master Swordsman",
   s:[["和劍術大師對話",1809,4289],["告訴他迷宮裡發生的事，選擇繼續或放棄",1809,4289],["問 Tolbana 的第 1 位法師",3321,1619],["問第 2 位法師",3200,1447],["問第 3 位法師",3198,1469],["去找 Mephisto",3260,1403]]},
- {t:"Mephisto", npc:"Mephisto",
+ {t:"Mephisto", n:26, nEst:1, npc:"Mephisto",
   s:[["和 Mephisto 對話",3260,1403],["回答他的問題（答案：An Instrument）",3260,1403],["學會卷軸加水晶的機制",3260,1403]]},
- {t:"Request an Audience with King Harald", npc:"King Harald",
+ {t:"Request an Audience with King Harald", n:27, nEst:1, npc:"King Harald",
   s:[["前往 Harald 的宮殿",3199,1510],["和 Harald 國王對話",3198,1524],["得知檔案裡有關於他的記載",3198,1524]]},
- {t:"The Trials of the Heralds", npc:"—",
+ {t:"The Trials of the Heralds", n:28, nEst:1, npc:"—",
   s:[["找到祖先之墓",3681,1648],["Harald 的試煉 1",3781,1673],["試煉 2",3741,1714],["試煉 3",3701,1667],["得到三個年份：−700、−620、−660",null,null],["回去找 Harald 國王",3198,1524]]},
- {t:"Find a Way to Remake the Scroll", npc:"Emy",
+ {t:"Find a Way to Remake the Scroll", n:29, nEst:1, npc:"Emy",
   s:[["到 Tolbana 鍛造場找 Emy",3227,1495],["問清楚重做卷軸需要什麼",3227,1495],["進入舊磨坊",2771,4777],["找到挑戰區",868,1675,1],["接受挑戰，在時間內找到物品",null,null],["前往 Virelune",1617,1958],["和 Dorven 對話",1618,1959],["調查岩石，看有沒有入口",1419,1986],["全部帶回去給 Emy",3227,1495]]},
- {t:"The Crystal of Tolbana", npc:"Mephisto",
+ {t:"The Crystal of Tolbana", n:30, nEst:1, npc:"Mephisto",
   s:[["回去找 Mephisto",3260,1403],["在鍛造場附近的門和他會合",3239,1461],["跟著他走到門口",3216,1445],["下到水晶底下",3047,1208],["在 Kobold Tower 和 Mephisto 會合",3400,1080]]},
- {t:"Floor 2", npc:"—", d:"前往第 2 層（預計 11/4 開放）。",
+ {t:"Floor 2", n:31, nEst:1, npc:"—", d:"前往第 2 層（預計 11/4 開放）。",
   s:[["抵達第 2 層",null,null]]}
 ]};

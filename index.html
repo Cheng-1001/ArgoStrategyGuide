@@ -112,6 +112,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .mq{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .mqh{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
 .mqn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:600 13px var(--f-mono)}
+.mqn.est{background:none;color:var(--accent);border:2px dashed var(--accent)}.mqn.nonum{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
 .mqt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.mqt b{font-family:var(--f-display);font-size:15px;font-weight:600;overflow-wrap:anywhere}.mqt span{font-size:12px;color:var(--muted)}
 .mq p{margin:0;font-size:13px;color:var(--muted)}
 .qcard{gap:6px}.qcard .qd{margin:0;font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
@@ -516,7 +517,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup" id="gQTown"><span class="flabel">村鎮</span><div class="chips" id="fQTown"></div></div>
       <div class="fgroup" id="gQSort"><span class="flabel">排序</span><select class="sel" id="fQSort" aria-label="排序">
         <option value="town">依村鎮</option><option value="xp">經驗值（高→低）</option><option value="col">Col（高→低）</option></select></div>
-      <div class="note" id="qNoteMain" hidden>主線依劇情順序排列。說明取自 wiki 主線任務表；步驟順序和座標取自參考互動地圖（DelayedCode），步驟文字是本站改寫。標「約」的是大約位置。按「在地圖上看路線」會在地圖上畫出步驟順序。第 7～18 段在破碎的地下世界（Fractured Underworld），不列在這裡。</div>
+      <div class="note" id="qNoteMain" hidden>主線依劇情順序排列。圓圈數字是遊戲任務追蹤上的編號（虛線圈是依順序推算的，灰點是編號還沒確認）。說明取自 wiki 主線任務表；步驟順序和座標取自參考互動地圖（DelayedCode），步驟文字是本站改寫。標「約」的是大約位置。按「在地圖上看路線」會在地圖上畫出步驟順序。破碎的地下世界（Fractured Underworld）裡的主線不列在這裡。</div>
       <div class="note" id="qNoteSide">任務需求與座標來自 wiki 支線任務表。標有<span class="inf"> 推斷 </span>的物品是依任務原文的簡寫推斷，原文可在詳細資料裡看到。</div>
     </div>
     <div class="results"><div class="rhead"><h2 id="hQ">支線任務</h2><span class="count" id="cQ"></span></div><div id="lQ" style="display:flex;flex-direction:column;gap:10px"></div></div>
@@ -708,7 +709,7 @@ function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.
   pBody.innerHTML=cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
   pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);goMapThen(f,()=>repPin(x,z))}));
-  pBody.querySelectorAll("[data-route]").forEach(b=>b.addEventListener("click",()=>{const Q=questById(b.dataset.route);if(Q)openRouteWin((Q.main?`主線 ${Q.i+1}・`:"支線・")+Q.title,Q.steps,Q.f)}));
+  pBody.querySelectorAll("[data-route]").forEach(b=>b.addEventListener("click",()=>{const Q=questById(b.dataset.route);if(Q)openRouteWin((Q.main?mqLabel(Q.q)+"・":"支線・")+Q.title,Q.steps,Q.f)}));
   pBody.querySelectorAll("[data-spot]").forEach(b=>b.addEventListener("click",()=>{const sp=spotById(b.dataset.spot);goMapThen(sp.floor,()=>focusSpot(sp.id))}));
   pBody.querySelectorAll("[data-town]").forEach(b=>b.addEventListener("click",()=>{const t=townById[b.dataset.town];goMapThen(t.floor,()=>centerOn(t.x,t.z,2.6))}));
 }
@@ -855,6 +856,7 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=$("fItemAll").ch
 // Main quest ids: "mq{floor}_{index}"; side quests keep their own ids.
 let qTown="all",qKind="main";const MQ=f=>(window.SAO_MAINQ||{})[f]||[];
 chipsInto($("fQKind"),[["main","主線"],["side","支線"]],()=>qKind,v=>qKind=v,renderQuests);
+const mqNo=qq=>qq.n?`#${qq.n}${qq.nEst?"?":""}`:"";const mqLabel=qq=>qq.n?`主線 #${qq.n}${qq.nEst?"（推算）":""}`:"主線";
 const mqHit=(qq,s)=>!s||norm([qq.t,qq.npc,qq.d,...qq.s.map(x=>x[0])].join(" ")).includes(s);
 function questById(id){if(id.startsWith("mq")){const [f,i]=id.slice(2).split("_").map(Number);const qq=MQ(f)[i];return qq?{main:1,f,i,q:qq,title:qq.t,steps:qq.s}:null}
   const qq=ALLQ.find(x=>x.id===id);return qq?{main:0,f:qq.floor,q:qq,title:qq.title||`${qq.npc} 的委託`,steps:sideSteps(qq)}:null}
@@ -908,7 +910,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("rwin").hidden){
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
   const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv],["獎勵",qq.rw]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")
     :`<dt>NPC</dt><dd>${esc(qq.npc)}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?t.n:"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq)}</dd>`;
-  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">📜</span><div class="ttl"><div class="num">${flBadge(f)} ${Q.main?`主線 ${Q.i+1}`:"支線"}</div><h2>${esc(Q.title)}</h2>${!Q.main&&qq.src==="ref"?`<div class="sub">目前版本的支線（參考互動地圖）</div>`:""}</div></div>
+  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">📜</span><div class="ttl"><div class="num">${flBadge(f)} ${Q.main?mqLabel(qq):"支線"}</div><h2>${esc(Q.title)}</h2>${!Q.main&&qq.src==="ref"?`<div class="sub">目前版本的支線（參考互動地圖）</div>`:""}</div></div>
   <dl class="facts">${facts}</dl>${Q.main&&qq.d?`<p class="lore" style="font-style:normal">${esc(qq.d)}</p>`:""}
   <h3 class="sec">步驟</h3><ol class="mqs">${Q.steps.map(x=>`<li>${esc(x[0])}${x[1]!=null&&FLOORS[f].map?`<button class="linkbtn" data-rep="${f}|${x[1]}|${x[2]}">${x[3]?"約 ":""}X ${x[1]} · Z ${x[2]}</button>`:""}</li>`).join("")}</ol>
   ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}
@@ -916,7 +918,7 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
   <div class="note">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。":qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>`}
 function mqCard(qq,i){const meta=[qq.npc&&("NPC "+qq.npc),qq.lv&&("等級 "+qq.lv),qq.rw&&("獎勵 "+qq.rw)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
-  return`<button class="card qcard" data-key="q|${id}" data-go="q|${id}"><div class="mqh"><span class="mqn">${i+1}</span><div class="mqt"><b>${esc(qq.t)}</b>${meta?`<span>${meta}</span>`:""}</div></div>
+  return`<button class="card qcard" data-key="q|${id}" data-go="q|${id}"><div class="mqh"><span class="mqn${qq.n?"":" nonum"}${qq.nEst?" est":""}" title="${qq.n?(qq.nEst?"遊戲任務編號（依順序推算）":"遊戲任務編號"):"遊戲編號未確認"}">${qq.n?qq.n:"·"}</span><div class="mqt"><b>${esc(qq.t)}</b>${meta?`<span>${meta}</span>`:""}</div></div>
   ${qq.d?`<p class="qd">${esc(qq.d)}</p>`:""}<span class="muted" style="font-size:12px">${qq.s.length} 個步驟${qq.s.some(x=>x[1]!=null)?"・有路線圖":""}</span></button>`}
 function renderMainQ(s){const all=MQ(FL);const idx=all.map((qq,i)=>[qq,i]).filter(([qq])=>mqHit(qq,s));
   $("cQ").textContent=all.length?`${idx.length} / ${all.length} 段`:"";
