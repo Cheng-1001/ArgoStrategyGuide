@@ -130,7 +130,7 @@ function renderCard(a){
     +(x.shots.length>1?'<div class="thumbs">'+x.shots.map(function(s,k){return'<button type="button" data-k="'+k+'" aria-pressed="'+(k===S.shotIdx)+'">第 '+(k+1)+' 張</button>'}).join("")+'</div>':"")+'</div>'
     +'<div style="display:flex;flex-direction:column;gap:12px;min-width:0"><dl>'+dl+'</dl>'+map
     +'<a class="muted" href="https://cheng-1001.github.io/ArgoStrategyGuide/#f'+encodeURIComponent(x.floor)+'-'+(x.type==="物品"?"items":x.type==="地點"?"map":"monsters")+'" target="_blank" rel="noopener">在網站上看目前的資料 ↗</a></div></div>'
-    +(wait?'<div class="act"><textarea id="note" placeholder="審核備註（可不填；退回時建議寫原因，例如：截圖看不到等級）"></textarea><button class="btn ok" id="bOk" type="button">✅ 核准</button><button class="btn bad" id="bNo" type="button">❌ 退回</button></div>'
+    +(wait?'<div class="act"><textarea id="note" placeholder="審核備註（可不填）。退回時寫原因；如果這隻其實是舊怪物改名，寫「舊名：原本的名字」，例如 舊名：Young Spider"></textarea><button class="btn ok" id="bOk" type="button">✅ 核准</button><button class="btn bad" id="bNo" type="button">❌ 退回</button></div>'
       :'<div class="result"><b>處理結果</b>\n'+esc(x.result||(x.status==="核准"?"等待上線（約 1 分鐘內）":"—"))+(x.note?'\n\n<b>審核備註</b>\n'+esc(x.note):"")+'</div>')
     +'<div class="nav"><button class="btn ghost" id="bPrev" type="button"'+(i<=0?" disabled":"")+'>← 上一筆</button><button class="btn ghost" id="bNext" type="button"'+(i>=a.length-1?" disabled":"")+'>下一筆 →</button><span class="muted">'+(i+1)+' / '+a.length+'</span>'
     +(wait?'<span class="muted keys">快捷鍵：<kbd>A</kbd> 核准、<kbd>R</kbd> 退回、<kbd>J</kbd>/<kbd>K</kbd> 下一筆／上一筆</span>':"")+'</div>';

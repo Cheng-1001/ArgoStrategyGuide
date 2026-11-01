@@ -589,12 +589,32 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
   if(!o.summary){const t=[];if(o.level!=null)t.push("等級 "+o.level);if(o.codexNo)t.push("圖鑑 "+o.codexNo);if(o.drops)t.push("掉落物 "+o.drops.length+" 種");if(o.how)t.push(o.how+(o.from?"："+o.from:""));if(o.kind&&r.type==="place")t.push(o.kind);o.summary=t.join("・")}
   return o}
 window.SAO_REPORTS=(window.SAO_REPORTS||[]).map(normRep);
+// ---- which monster does a report belong to? (codex screenshots win over the wiki) ----
+// 1. reviewer note "舊名：X" -> the monster called X (name or alias), renamed to the reported name
+// 2. official 3-digit codex number (#018) -> the monster with that number, renamed if the name differs
+//    (unofficial numbers such as "014-2" are never used for matching)
+// 3. otherwise the reported name or a known old name (alias)
+// 4. no match -> a new "player reported" monster (below). Never rename on a bare name guess.
+const OFFICIAL_NO=v=>{const m=String(v||"").trim().match(/^#?\s*(\d{3})$/);return m?m[1]:""};
+const OLDNAME_RE=/舊名[:：]\s*([^｜|\n,，;；]+)/;
+function findMon(Fx,name){name=String(name||"").trim().toLowerCase();return Fx.M.find(m=>m.name.toLowerCase()===name||(m.aka||[]).some(a=>a.toLowerCase()===name))}
+function renameMon(Fx,m,newName,why){if(!newName||m.name===newName)return;m.aka=[...new Set([...(m.aka||[]),m.name])].filter(a=>a!==newName);
+  m.renamedBy=why;m.name=newName;Fx.monByName[newName]=m;m.aka.forEach(a=>Fx.monByName[a]=m)}
+window.SAO_REPORTS.forEach(r=>{if(r.type!=="monster"||!FLOORS[r.floor])return;const Fx=FLOORS[r.floor];
+  const old=(String(r.review||"").match(OLDNAME_RE)||[])[1];const no=OFFICIAL_NO(r.codexNo);let m=null,how="";
+  if(old&&(m=findMon(Fx,old)))how="note";
+  else if(no&&(m=Fx.M.find(x=>x.num===no)))how="codex";
+  else if((m=findMon(Fx,r.name)))how="name";
+  if(!m)return;r.monId=m.id;r.matchedBy=how;
+  if(how!=="name")renameMon(Fx,m,String(r.name).trim(),{how,report:r.id||r.issue,no});
+  if(no&&m.num!==no&&!OFFICIAL_NO(m.num))m.num=no;      // an official number replaces a missing or unofficial one
+  if(r.region)m.codexRegion=r.region});
 // monsters reported by players that the tool does not have yet get their own entry
-window.SAO_REPORTS.forEach(r=>{if(r.type!=="monster"||!FLOORS[r.floor])return;const Fx=FLOORS[r.floor];if(Fx.monByName[r.name])return;
+window.SAO_REPORTS.forEach(r=>{if(r.type!=="monster"||!FLOORS[r.floor])return;const Fx=FLOORS[r.floor];if(r.monId||Fx.monByName[r.name])return;
   if(!Fx.zones.rep){Fx.zones.rep={n:"Player reports",zh:"玩家回報（位置待整理）"};if(Fx.order&&!Fx.order.includes("rep"))Fx.order.push("rep")}
   const type={"一般怪物":"Monster","小首領":"Mini-Boss","首領":"Boss"}[r.kind]||"Monster";const beh=/主動/.test(r.beh||"")?"A":/被動/.test(r.beh||"")?"P":"N";
-  const m={id:"rep-"+r.id,num:(r.codexNo||"").replace("#",""),name:r.name,type,beh,zone:"rep",diff:0,drops:[],note:"這隻怪物是玩家回報新增的，wiki 沒有收錄。"+(/主動|中立|被動/.test(r.beh||"")?"":"行為未回報。"),icon:"❔",floor:r.floor,fromReport:true};
-  Fx.M.push(m);Fx.monByName[m.name]=m});
+  const m={id:"rep-"+r.id,num:OFFICIAL_NO(r.codexNo),name:r.name,type,beh,zone:"rep",diff:0,drops:[],note:"這隻怪物是玩家回報新增的，wiki 沒有收錄。"+(/主動|中立|被動/.test(r.beh||"")?"":"行為未回報。"),icon:"❔",floor:r.floor,fromReport:true};
+  Fx.M.push(m);Fx.monByName[m.name]=m;r.monId=m.id});
 const FL_KEYS=Object.keys(FLOORS).map(Number).sort((a,b)=>a-b);
 const ALLM=FL_KEYS.flatMap(f=>FLOORS[f].M), monById=Object.fromEntries(ALLM.map(m=>[m.id,m]));
 const ALLT=FL_KEYS.flatMap(f=>FLOORS[f].towns), townById=Object.fromEntries(ALLT.map(t=>[t.id,t]));
@@ -607,7 +627,7 @@ Object.entries(window.SAO23_ITEMS).forEach(([id,r])=>{ITEMS[id]={id,fr:r[0],r:r[
 Object.entries(S23.unknown).forEach(([id,x])=>{ITEMS[id]={id,fr:null,r:null,lv:null,cat:"unknown",lore:null,dmg:null,st:null,ic:-1,...x}});
 
 // accepted player reports with in-game Codex data replace the wiki drop list (the Codex is the game's own data)
-(window.SAO_REPORTS||[]).forEach(r=>{if(r.type!=="monster")return;const m=ALLM.find(x=>x.floor===r.floor&&(x.name===r.name||(x.aka||[]).includes(r.name)));if(!m)return;
+(window.SAO_REPORTS||[]).forEach(r=>{if(r.type!=="monster")return;const m=monById[r.monId]||ALLM.find(x=>x.floor===r.floor&&(x.name===r.name||(x.aka||[]).includes(r.name)));if(!m)return;
   // replace the wiki drop list only when every reported item is one the tool knows ("???" = still locked in the Codex)
   if(r.drops&&r.drops.every(d=>d[0]==="???"||ITEMS[d[0]])){m.wikiDrops=m.drops;m.drops=r.drops.filter(d=>d[0]!=="???");m.dropsLocked=r.drops.filter(d=>d[0]==="???");m.dropSrc=r}
   else if(r.dropsText)m.repDropsText=r.dropsText;
@@ -633,7 +653,7 @@ const KIND={boss:["首領","👑"],dungeon:["地下城","⚔️"],mob:["怪物�
 const spotsOf=f=>{const Fx=FLOORS[f];return Fx.spots.concat(Object.entries(userPos[f]).filter(([z])=>Fx.zones[z]).map(([z,p])=>({id:"u"+f+"-"+z,floor:f,zone:z,kind:"mob",n:Fx.zones[z].n,zh:Fx.zones[z].zh,x:p.x,z:p.z,src:"user",items:[],
   mons:Fx.M.filter(m=>m.zone===z&&!BASE_SPOT[m.id]).map(m=>m.name)})).filter(sp=>sp.mons.length||sp.items.length))};
 const spotById=id=>{for(const f of FL_KEYS){const s=spotsOf(f).find(x=>x.id===id);if(s)return s}return null};
-const monPos=m=>{const sp=spotsOf(m.floor).find(x=>x.mons.includes(m.name));return sp?{x:sp.x,z:sp.z,s:sp.src,spot:sp}:{x:null,z:null,s:"unk"}};
+const monPos=m=>{const sp=spotsOf(m.floor).find(x=>x.mons.some(n=>n===m.name||(m.aka||[]).includes(n)));return sp?{x:sp.x,z:sp.z,s:sp.src,spot:sp}:{x:null,z:null,s:"unk"}};
 const unknownZones=f=>FLOORS[f].order.filter(z=>FLOORS[f].M.some(m=>m.zone===z&&!BASE_SPOT[m.id]));
 
 // ---------- labels ----------
@@ -694,14 +714,14 @@ const soonNote=f=>FLOORS[f].status==="soon"?`<div class="note warn">${FLN(f)}預
 function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.zones[m.zone];const p=monPos(m);const st=STATUS[p.s];
   const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(iid)}</b><span>${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
   const kq=KILLQ[m.id]||[];
-  return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(m.name)}</h2>${m.aka&&m.aka.length?`<div class="sub">舊名：${m.aka.map(esc).join("、")}</div>`:""}</div></div>
+  return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(m.name)}</h2>${m.aka&&m.aka.length?`<div class="sub">舊名：${m.aka.map(esc).join("、")}${m.renamedBy?`・名稱依${m.renamedBy.how==="codex"?`遊戲圖鑑 #${esc(m.renamedBy.no)}`:"審核員確認"}（回報 ${esc(String(m.renamedBy.report||""))}）更新`:""}</div>`:""}</div></div>
   ${soonNote(m.floor)}
   <dl class="facts"><dt>等級</dt><dd>${lvOf(m)!=null?`<b class="mono">${lvOf(m)}</b> <span class="pill rep">玩家回報</span>`:`<span class="muted">未回報</span>`}</dd><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
-  <dt>圖鑑區域</dt><dd>${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span></dd>
+  <dt>圖鑑區域</dt><dd>${m.codexRegion?`${esc(m.codexRegion)} <span class="pill rep">遊戲圖鑑</span><br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`:`${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`}</dd>
   <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd></dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
   ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
-  ${(()=>{const h=(window.SAO_HINTS||{})[m.floor]?.[m.name];return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted">${esc(h[1])}${h[2]?"":"・依圖鑑順序推斷對應，可能不準"}</span></div>`:""})()}
+  ${(()=>{const H=(window.SAO_HINTS||{})[m.floor]||{};const h=H[m.name]||(m.aka||[]).map(a=>H[a]).find(Boolean);return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted">${esc(h[1])}${h[2]?"":"・依圖鑑順序推斷對應，可能不準"}</span></div>`:""})()}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
   ${m.dropsLocked&&m.dropsLocked.length?`<div class="note">另有 ${m.dropsLocked.length} 種掉落物在圖鑑上還沒解鎖（${m.dropsLocked.map(d=>pct(d[1])).join("、")}）。</div>`:""}
   ${m.dropSrc?`<div class="note">掉落機率來自玩家回報（${repRef(m.dropSrc)}）。${m.wikiDrops.length?"wiki 原本寫："+m.wikiDrops.map(([i,p])=>esc(i)+" "+pct(p)).join("、")+"。":""}</div>`:""}
@@ -715,7 +735,7 @@ const REPO="https://github.com/Cheng-1001/ArgoStrategyGuide";
 const REPS=(window.SAO_REPORTS||[]);
 const repRef=r=>r.issue?`<a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">回報 #${r.issue}</a>`:`回報 ${esc(r.id||"")}`;
 const repKey=r=>r.issue?"#"+r.issue:(r.id||"");
-const repsOf=m=>REPS.filter(r=>r.type==="monster"&&r.floor===m.floor&&(r.name===m.name||(m.aka||[]).includes(r.name)));
+const repsOf=m=>REPS.filter(r=>r.type==="monster"&&r.floor===m.floor&&(r.monId?r.monId===m.id:(r.name===m.name||(m.aka||[]).includes(r.name))));
 const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:null};
 function repBlock(m){const r=repsOf(m);if(!r.length)return"";const a=r[0];
   return`<h3 class="sec">玩家回報 <span class="c">${r.length} 則</span></h3>
@@ -1190,7 +1210,7 @@ function renderReport(){
   if(FORM_PREFILL){if(!rBuilt)buildFormReport();$("formGo").href=FORM_PREFILL.replace("{floor}",FL)}
   else{if(!rBuilt)buildReport();if(rFloorShown!==FL){$("rf_floor").value=FL;rFloorShown=FL;if(RF[rType].list==="monster")rDrawFields()}}
   const done=REPS.slice().sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(repKey(b)).localeCompare(String(repKey(a))));$("doneC").textContent=done.length+" 則";
-  $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?FLOORS[r.floor]?.M.find(x=>x.name===r.name||(x.aka||[]).includes(r.name)):null;
+  $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?(monById[r.monId]||FLOORS[r.floor]?.M.find(x=>x.name===r.name||(x.aka||[]).includes(r.name))):null;
       return`<li class="replist">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${flBadge(r.floor)} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span><span>${repRef(r)}・${esc(r.date)}${m?` ・<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:""}${r.x!=null&&FLOORS[r.floor]?.map?` ・<button class="linkbtn" data-rep="${r.floor}|${r.x}|${r.z}">在地圖上看</button>`:""}</span></span></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
   bindGo($("doneL"));$("doneL").querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);goMapThen(f,()=>repPin(x,z))});
   if(FORM_PREFILL)return;
