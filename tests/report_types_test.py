@@ -121,7 +121,8 @@ with sync_playwright() as p:
     pg.evaluate("localStorage.setItem('sao-map-base','jm')")
     pg.goto(base + "#map"); pg.reload(); pg.wait_for_timeout(1200)
     t = pg.inner_text("#jmCredit") if pg.is_visible("#jmCredit") else ""
-    check("探索地圖貢獻" in t and "站長" in t and "90.0%" in t and "My map" in t and "10.0%" in t, f"the explored map lists contributors and their share ({t!r})")
+    check("探索地圖貢獻" in t and "第 1 層已探索" in t and "30.1%" in t and "IICHENGII" in t and "90.0%" in t and "My map" in t and "10.0%" in t,
+          f"the explored map shows the floor's explored share and lists contributors with their share ({t!r})")
     pg.click("#baseBtn"); pg.wait_for_timeout(300)
     check(pg.is_hidden("#jmCredit"), "the contributor list is hidden on the wiki base map")
     pg.goto(base + "#feedback"); pg.wait_for_timeout(400)

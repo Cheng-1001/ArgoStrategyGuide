@@ -9,14 +9,15 @@ window.SAO_JM = {
     "report": null,
     "date": "2026-11-01",
     "note": "站長的 JourneyMap（jm-upload-2），探索範圍由 tools/jm_merge.py --init-mask 從切片推算",
-    "newChunks": 27712
+    "newChunks": 27712,
+    "by": "IICHENGII"
    },
    {
     "report": "R0002",
     "date": "2026-11-01",
     "regions": 52,
     "newChunks": 27,
-    "by": "站長"
+    "by": "IICHENGII"
    }
   ],
   "chunks": 27739
