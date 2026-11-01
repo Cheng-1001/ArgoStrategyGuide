@@ -1,5 +1,8 @@
 """Small icons for recipes the official item catalogue does not have, taken from the server resource pack.
 
+ON HOLD (2026-11-01): the server's Terms of Use (art. 5) forbid copying, extracting or reproducing any part of
+the Services without written authorisation. Do not run this until the owner has decided (see CLAUDE.md).
+
 Run on the owner's PC (local Claude Code). The cloud session cannot reach the pack.
 The pack (resourcepacks/sao.zip) holds paid assets: copy ONLY the icons listed in tools/recipe_icons.json,
 each scaled to 48 px. Never commit the pack, other textures, models or the candidate sheet.
