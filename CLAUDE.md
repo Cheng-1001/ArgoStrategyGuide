@@ -115,7 +115,7 @@
   - 地點（「地點・種類」加了 傳送點、怪物區；「地點・在地下嗎／傳送選單名稱／NPC 類別」）：NPC → `SAO_NPCS` 新列（類別中文對 key，對不上用 `other`）；首領位置＋對得上怪物（第 1 層）→ `BOSS_SPAWNS`；其他新增成 SPOTS（`src:"rep"`、`rep` 回報編號、`u` 地下）；地圖上已有同名地點／城鎮的只掛 `reps`（面板顯示回報座標），不移動。
   - 掉落物名稱全部對得上物品資料時，才取代 wiki 的掉落表；對不上就以文字列出。
   - 工具裡沒有的怪物，會自動新增成「玩家回報新增」的怪物，放在 zone `rep`。
-- **回報分頁**：`FORM_PREFILL` 有值時顯示 Google 表單大按鈕，並把目前樓層帶入表單；沒有值時退回舊的 GitHub issue 流程。
+- **回報分頁**：`FORM_PREFILL` 有值時顯示 Google 表單大按鈕，並把目前樓層帶入表單；沒有值時退回舊的 GitHub issue 流程。有未送出的 Google 表單草稿時，用預填連結打開會跳「繼續使用目前的草稿？」（Google 表單的行為）；使用者 2026-11-02 選 A：維持預填，不改。
 - **處理中的回報**（2026-11-02）：`renderQueue` 用 `fetch("pending.js",{cache:"no-store"})` 讀（不用 script 標籤，避免瀏覽器快取；每分鐘最多重讀一次），攻略資料維護右欄「處理中的回報」列非建議的、問題回報及建議右欄「審核中的建議」（`#ideaQ`，沒有就隱藏）列建議。Apps Script 的 `pendingList_`／`syncPending_` 在送出、改狀態、`processQueue`、`retryApproved` 時更新，內容有變（MD5 存在指令碼屬性 `PENDING_SIG`）才 commit；退回保留 `PENDING_REJECT_DAYS`＝14 天；`syncPending` 手動整份重寫。測試：`tests/apps_script_test.js`、`tests/report_types_test.py`。
 
 ## 玩家回報流程（Google 表單）
