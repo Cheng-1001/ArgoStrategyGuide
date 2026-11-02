@@ -39,6 +39,7 @@
 | `recipes.js` | 第 1 層配方，`tools/build_recipes.py` 產生（不要手改）。key 是 NPC 名稱；每筆 `[官網圖鑑 id 或 null, 遊戲英文名, 秒數, [[材料, 數量]], Col（"Free"；null＝未知）, 稀有度, 分類 weapon/armor/acc/potion/key, 等級, 來源 shot/ref]`。來源：使用者截圖（`SHOTS`，優先）＋參考地圖 eCompendium Current Data 的材料清單（只取事實；鯊魚飾品 4 筆和截圖完全相同）。英文名對官網 id 是人工對照表 `OID`（官網數值改版過，無法用屬性自動配對；藥水、水晶、強化藥、鑰匙 17 筆在 2026-11-01 補上，名稱和等級都吻合才收。官網沒有的：Mana Potion I、Quality Mana/Stamina Potion I～III、Teleportation Crystal、Kobold Key、Purification Elixir，維持 🧪/🔑 佔位），材料名對照表 `MAT`（Small Purse＝Small Pouch、Shark Carapace＝Shark Shell、Sylve Shoot＝Sylvan Sprout…）。武器、防具目前只有起始商人賣的新手裝備 |
 | `recicons.js`、`icons/recipes/`、`tools/recipe_icons.py`、`tools/recipe_icons.json` | 官網圖鑑沒有的配方（Quality Mana/Stamina Potion 等 10 種）的圖示。**只能在使用者電腦上用本機 Claude Code 執行**：`find` 從 `sao.zip` 列出候選並輸出對照圖（不要 commit），把選定的貼圖路徑填進 `recipe_icons.json`，`build` 只把這幾張縮成 48px 寫進 `icons/recipes/` 和 `recicons.js`。`recIcon` 優先用官網圖示，沒有才用這裡的 |
 | `classes.js`、`tools/build_classes.py` | 職業／技能分頁（`#classes`）。`build_classes.py` 讀 wiki 的 Classes 和 6 個職業頁（API parse 存成 JSON）、參考地圖 `Aincrad/Character Build` 的起始屬性／每級成長／天賦樹（文字解析）、`equip.js` 的職業限制。說明是本站中文改寫（`ZH` 對照表）。**不放任何職業或技能圖片**（使用者 2026-11-01：官方用的 SAO 原作圖片、圖示、標誌不要放，官方沒有原作授權）。wiki 除戰士外的技能圖示都是佔位圖（同一人 2026-04-18 一次建立），標「技能待確認」；武鬥家（Martial Artist）官方圖鑑沒有裝備、參考地圖也沒有屬性，標「可能尚未開放」 |
+| `changelog.js` | 說明頁「更新紀錄」`window.SAO_CHANGELOG=[["YYYY-MM-DD",[項目…]],…]`，新的在最上面，依日期分組（使用者 2026-11-02 指定格式：日期下面列點）。**每次推送玩家看得到的改動，都要在當天那一筆加一行**（中文、一行一件事、寫玩家感受得到的結果，不寫技術細節）；玩家回報自動收錄、探索地圖自動合併不列。網站顯示最近 3 天，較早的收在「較早的更新」 |
 | `hints.js` | 遊戲圖鑑的 LOCATION HINT，對應到 41 隻第 1 層怪物（`sure=0` 表示依順序推斷） |
 | `items.png` | 物品圖示表：64px 一格、一列 8 格，目前用到第 185 格。物品資料的最後一個欄位就是格子編號 |
 | `floor1.jpg`、`floor2.jpg` | wiki 地圖。floor1.jpg 原本在 X 1652、Z 2770（腐臭沼澤北邊麥田旁）有一個 wiki 編輯者留下的測試路標「sdsd」，另外 X 1917–1967、Z 2412–2495 有一塊黑色 T 形破圖。2026-11-01 修掉：路標那一處用使用者 JourneyMap 的真實地形縮到 wiki 解析度、做色調轉換後貼上；黑色 T 處 JourneyMap 沒資料，改搬旁邊的森林紋理。之後換新的 wiki 地圖要再檢查一次 |
@@ -68,8 +69,9 @@
 1. 改 `src/index.html`，或根目錄的資料檔。
 2. `python3 src/build.py`
 3. `python3 tests/smoke.py`，要看到 ALL PASSED。改了畫面的話，另外用 Playwright 截圖親眼確認，電腦寬度（1280）和手機寬度（390）都要看，手機不能左右捲動。
-4. commit，訊息結尾附上工作階段規定的署名行，然後 push 到 `main`。GitHub Pages 大約 1～3 分鐘後更新。使用者看到舊畫面時，請他按 Ctrl+F5。
-5. Google Apps Script 也會直接 commit 到 `main`。**push 之前先 `git pull --rebase`**，避免和自動收錄的回報衝突。
+4. 玩家看得到的改動要在 `changelog.js` 當天那一筆加一行。
+5. commit，訊息結尾附上工作階段規定的署名行，然後 push 到 `main`。GitHub Pages 大約 1～3 分鐘後更新。使用者看到舊畫面時，請他按 Ctrl+F5。
+6. Google Apps Script 也會直接 commit 到 `main`。**push 之前先 `git pull --rebase`**，避免和自動收錄的回報衝突。
 
 ## 網站功能（`src/index.html`）
 
