@@ -117,6 +117,13 @@ with sync_playwright() as p:
     pg.locator("#lEq .card").first.click(); pg.wait_for_timeout(300)
     check(total > 100 and "官方圖鑑 #" in pg.inner_text("#pBody"), "equipment tab lists official items and opens a detail")
 
+    pg.goto(base + "#map"); pg.wait_for_timeout(400)
+    pg.click("#aboutBtn"); pg.wait_for_timeout(150)
+    check(pg.is_visible("#aboutMenu") and pg.inner_text("#aboutMenu").split() == ["介紹及資訊", "更新紀錄"], "關於本站 opens a menu: 介紹及資訊, 更新紀錄")
+    pg.click("#logBtn"); pg.wait_for_timeout(300)
+    check(pg.is_hidden("#aboutMenu") and pg.url.endswith("#changelog") and pg.is_visible("#changelog") and pg.locator('#aboutBtn[aria-current="page"]').count() == 1, "更新紀錄 in the menu opens the changelog page")
+    pg.click("#aboutBtn"); pg.wait_for_timeout(150); pg.mouse.click(400, 600); pg.wait_for_timeout(150)
+    check(pg.is_hidden("#aboutMenu"), "the menu closes when clicking elsewhere")
     pg.goto(base + "#recipes"); pg.wait_for_timeout(400)
     tot = pg.locator("#lRc .rcard").count()
     pg.click('#fRcCat .chip[data-v="key"]'); pg.wait_for_timeout(200)

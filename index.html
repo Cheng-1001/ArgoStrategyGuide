@@ -70,7 +70,9 @@ nav.tabs a .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
 .aboutbtn:hover{color:var(--fg);border-color:var(--accent)}
 .aboutbtn[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:#fff}
 .aboutbtn .i{font-size:15px;line-height:1}
-.hbtns{margin-left:auto;flex:none;display:flex;gap:8px}.hbtns .aboutbtn{margin-left:0}.hbtns+.gsearch{margin-left:0}
+.hbtns{margin-left:auto;flex:none;display:flex;gap:8px}.amenu-w{position:relative}body.amenu-open header.top{position:relative;z-index:45}.aboutbtn .cv{font-size:10px;margin-left:1px}button.aboutbtn{cursor:pointer;font:inherit;font-family:var(--f-display);font-weight:600;font-size:13.5px}
+.amenu{position:absolute;right:0;top:calc(100% + 6px);z-index:60;min-width:150px;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:5px;display:flex;flex-direction:column}.amenu[hidden]{display:none}
+.amenu a{padding:8px 12px;border-radius:7px;text-decoration:none;color:var(--fg);font-size:14px;white-space:nowrap}.amenu a:hover,.amenu a:focus-visible{background:var(--panel-2);color:var(--accent)}.amenu a[aria-current="page"]{color:var(--accent);font-weight:700}.hbtns .aboutbtn{margin-left:0}.hbtns+.gsearch{margin-left:0}
 .srcl{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
 .srcl li{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr);gap:4px 16px;padding:9px 0;border-top:1px solid var(--line)}
 .srcl li:first-child{border-top:0;padding-top:2px}
@@ -573,8 +575,8 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <a href="#classes" data-v="classes"><span class="tl">職業／技能</span><span class="ts">職業</span></a>
       <a href="#bosses" data-v="bosses">世界王</a>
     </nav>
-    <div class="hbtns"><a class="aboutbtn" id="collabBtn" href="#report" data-v="report" title="回報攻略資料、問題和建議">協作區</a><a class="aboutbtn" id="logBtn" href="#changelog" title="網站更新紀錄">更新紀錄</a>
-    <a class="aboutbtn" id="aboutBtn" href="#about" title="關於本站、資料來源、版權聲明"><span class="i" aria-hidden="true">ⓘ</span>關於本站</a></div>
+    <div class="hbtns"><a class="aboutbtn" id="collabBtn" href="#report" data-v="report" title="回報攻略資料、問題和建議">協作區</a><div class="amenu-w"><button type="button" class="aboutbtn" id="aboutBtn" aria-haspopup="menu" aria-expanded="false" aria-controls="aboutMenu" title="介紹及資訊、更新紀錄"><span class="i" aria-hidden="true">ⓘ</span>關於本站<span class="cv" aria-hidden="true">▾</span></button>
+      <div class="amenu" id="aboutMenu" role="menu" hidden><a role="menuitem" id="aboutInfo" href="#about">介紹及資訊</a><a role="menuitem" id="logBtn" href="#changelog">更新紀錄</a></div></div></div>
     <label class="gsearch" for="q">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
       <input id="q" type="search" placeholder="搜尋怪物、物品（英文或法文）、NPC、地區" autocomplete="off">
@@ -745,7 +747,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=0e9f806f"></script>
 <script src="npcs.js?v=7db42e50"></script>
-<script src="changelog.js?v=54c86681"></script>
+<script src="changelog.js?v=bfb210f2"></script>
 <script src="recipes.js?v=d8583693"></script>
 <script src="jmmeta.js?v=c7b7a32b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1058,6 +1060,17 @@ function itemDetail(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id],ga
   ${!use.length&&!it.use&&!it.locked&&!RECIPE_BY_MAT[id]?`<div class="note">目前沒有已知用途。</div>`:""}
   <div class="note warn">配方：公開資料尚未提供鍛造或合成配方（wiki 鍛造頁標示為「待補」），以上用途只來自任務需求與物品描述。</div>`}
 
+// dungeon entry key: the key named in the dungeon note (official French name), else a key recipe made within 150 blocks of the entrance
+const kn=x=>String(x||"").replace(/[’']/g,"'").toLowerCase();
+function dgKeys(sp){const want=(String(sp.note||"").match(/Cl[ée] [^（）(),，。、]+/)||[""])[0].trim();
+  const keys=ALLREC.filter(r=>r.cat==="key"&&r.f===sp.floor);
+  let hit=want?keys.filter(r=>{const p=prById[String(r.oid)];return p&&kn(p.name)===kn(want)}):[];
+  if(!hit.length)hit=keys.filter(r=>{const n=npcByName(r.f,r.npc);return n&&Math.hypot(n.x-sp.x,n.z-sp.z)<=150});
+  return{want,hit}}
+function dgKeyHTML(sp){const {want,hit}=dgKeys(sp);if(!want&&!hit.length)return"";
+  return`<h3 class="sec">進入鑰匙</h3>${hit.length?`<ul class="rows">${hit.map(r=>{const p=prById[String(r.oid)],n=npcByName(r.f,r.npc);
+    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(r.en)}${p?` <span class="muted" style="font-weight:400">${esc(p.name)}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(m)+" ×"+q).join("・"):"只要 Col"}</span></span><span class="v">${costText(r.cost)}</span></button>${n?`<div class="muted" style="font-size:12.5px;margin:2px 0 0 44px">在 <button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button> 製作（X ${n.x} · Z ${n.z}）</div>`:""}</li>`}).join("")}</ul>`
+    :`<div class="note">需要 ${esc(want)}，本站還沒有它的製作方式。</div>`}`}
 function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">這個地點已不存在。</div>`;const st=STATUS[sp.src];const Fx=FLOORS[sp.floor];
   const ms=sp.mons.map(n=>Fx.monByName[n]);const rz=[...new Set(ms.filter(Boolean).map(m=>Fx.zones[m.zone].n))];
   const nameRow=sp.nsrc==="wiki"?`<dt>名稱</dt><dd>wiki 圖鑑表的區域名${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`
@@ -1067,6 +1080,7 @@ function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">�
   ${sp.u?`<div class="note">在地下，要從入口走下去。</div>`:""}${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}${sp.rep?`<div class="note">這個地點來自核准的玩家回報（${esc(sp.rep)}）。</div>`:""}
   ${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${esc(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}
   <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>
+  ${sp.kind==="dungeon"?dgKeyHTML(sp):""}
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(m.name)}</b><span>${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
   ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(i)}</b><span>${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}`}
 
@@ -1336,7 +1350,7 @@ function changelogCard(){const C=window.SAO_CHANGELOG||[];if(!C.length)return"";
   return`<article class="bcard" id="changelog">${C.slice(0,3).map(day).join("")}${C.length>3?`<details class="clold"><summary>較早的更新（${C.length-3} 天）</summary>${C.slice(3).map(day).join("")}</details>`:""}</article>`}
 function renderChangelog(){$("clWrap").innerHTML=`<div class="rhead"><h2>更新紀錄</h2><span class="count">網站改了什麼</span></div>${changelogCard()}`;$("view-changelog").scrollTop=0}
 function renderAbout(){const iss=GH_ISSUES;
-  $("aWrap").innerHTML=`<div class="rhead"><h2>關於本站</h2><span class="count">本站介紹・官方連結・資料來源・版權聲明</span></div>
+  $("aWrap").innerHTML=`<div class="rhead"><h2>介紹及資訊</h2><span class="count">本站介紹・官方連結・資料來源・版權聲明</span></div>
   <article class="bcard" id="aboutSite"><h4 class="sec">本站介紹</h4>
     <p>艾恩葛朗特（Aincrad）查詢工具：把 SAO Minecraft 的地圖、怪物、裝備、配方、任務、職業技能、世界王互相連結，點任何名稱都能跳到相關資料。</p>
     <p>此攻略由中文玩家社群協力製作，提供中文玩家使用。資料有錯或缺漏，歡迎到<a href="#report">協作區</a>回報。</p>
@@ -1374,7 +1388,7 @@ function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
 function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找不到這個配方。</div>`;
   const e=eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),rar=e?e.r:r.r,isE=!!eqById[String(r.oid)];
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} 配方・${RC_CAT[r.cat][0]}</div><h2>${esc(r.en)}</h2>${e?`<div class="sub">${esc(e.name)}</div>`:""}</div></div>
-  <dl class="facts"><dt>在哪裡做</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button>`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvRef?` <span class="muted" style="font-size:12px">（參考互動地圖寫 ${r.lvRef}，以官方圖鑑為準）</span>`:""}</dd>`:""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
+  <dl class="facts"><dt>在哪裡做</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button>`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvRef?` <span class="muted" style="font-size:12px">（參考互動地圖寫 ${r.lvRef}，以官方圖鑑為準）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(x.n)}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
   <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:'<div class="muted">只要 Col，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
   <div class="note srcn">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${esc(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
@@ -2150,8 +2164,12 @@ const CODEX=["monsters","equip","items","props"];let lastCodex="monsters";
 const hashFor=(v,f)=>(f===1?"":"f"+f+"-")+v;
 function go(v,f){location.hash=hashFor(v,f??FL)}
 document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v==="codex"?lastCodex:a.dataset.v)}));
-$("aboutBtn").addEventListener("click",e=>{e.preventDefault();if(view==="about")$("view-about").scrollTop=0;else go("about")});
-$("logBtn").addEventListener("click",e=>{e.preventDefault();if(view==="changelog")$("view-changelog").scrollTop=0;else go("changelog")});
+// 關於本站 dropdown: 介紹及資訊 (#about) and 更新紀錄 (#changelog)
+{const btn=$("aboutBtn"),menu=$("aboutMenu");const close=()=>{menu.hidden=true;btn.setAttribute("aria-expanded","false");document.body.classList.remove("amenu-open")};
+ btn.addEventListener("click",e=>{e.stopPropagation();const op=menu.hidden;menu.hidden=!op;btn.setAttribute("aria-expanded",String(op));document.body.classList.toggle("amenu-open",op);if(op)menu.querySelector("a").focus()});
+ [["aboutInfo","about"],["logBtn","changelog"]].forEach(([id,v])=>$(id).addEventListener("click",e=>{e.preventDefault();close();if(view===v)$("view-"+v).scrollTop=0;else go(v)}));
+ document.addEventListener("click",e=>{if(!menu.hidden&&!e.target.closest(".amenu-w"))close()});
+ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!menu.hidden){close();btn.focus()}})}
 // floor picker: 100 floors; only floors with data can be opened
 const TOTAL=100;const flTrig=$("flTrig"),flPop=$("flPop");
 const flState=f=>FLOORS[f]?(FLOORS[f].status==="soon"?"soon":"open"):"lock";
@@ -2192,7 +2210,8 @@ function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.m
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
   document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
-  [["aboutBtn","about"],["logBtn","changelog"]].forEach(([b,v])=>{const ab=$(b);ab.href="#"+hashFor(v,FL);if(view===v)ab.setAttribute("aria-current","page");else ab.removeAttribute("aria-current")});
+  [["aboutInfo","about"],["logBtn","changelog"]].forEach(([b,v])=>{const ab=$(b);ab.href="#"+hashFor(v,FL);if(view===v)ab.setAttribute("aria-current","page");else ab.removeAttribute("aria-current")});
+  if(view==="about"||view==="changelog")$("aboutBtn").setAttribute("aria-current","page");else $("aboutBtn").removeAttribute("aria-current");
   if(view==="map")requestAnimationFrame(()=>{syncNpcFly();if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
   renderCurrent();if(viewPending){const fn=viewPending;viewPending=null;requestAnimationFrame(fn)}}
 function renderCurrent(){requestAnimationFrame(fixCols);requestAnimationFrame(fbarSync);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="about")renderAbout();else if(view==="changelog")renderChangelog();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="dungeons")renderDungeons();else if(view==="classes")renderClasses();else renderQuests()}
