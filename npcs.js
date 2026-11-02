@@ -1,6 +1,7 @@
 /* Floor 1 NPCs by role, from DelayedCode's SAO MC Interactive Map (titles, roles and X / Z only).
    Row: [category, name, x, z, src, underground?]; src "ref" = Current Data, "beta" = only in the reference
-   map's Beta-test data (may have moved since). Beta rows are used only for roles that Current Data does not list at all. */
+   map's Beta-test data (may have moved since). Beta rows are used only for roles that Current Data does not list at all.
+   "site" = located in game by the site owner (SITE list in tools/build_npcs.py). */
 window.SAO_NPCS={1:[
  ["alchemist", "Alchemist", 1771, 4097, "ref"],
  ["alchemist", "Crystallographer", 1777, 4098, "ref"],
@@ -76,5 +77,6 @@ window.SAO_NPCS={1:[
  ["secretAccessoryBlacksmith", "Secret Deer Belt Merchant", 3650, 1331, "ref", 1],
  ["secretAccessoryBlacksmith", "Secret Gelatinous Cloak", 2854, 4657, "ref", 1],
  ["secretAccessoryBlacksmith", "Secret Sticky Ring Merchant", 390, 3064, "ref"],
- ["secretAccessoryBlacksmith", "Skeleton Skull", 1163, 3546, "ref"]
+ ["secretAccessoryBlacksmith", "Skeleton Skull", 1163, 3546, "ref"],
+ ["other", "臭乞丐", 3336, 1760, "site"]
 ]};
