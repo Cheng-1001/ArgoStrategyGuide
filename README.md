@@ -2,7 +2,7 @@
 
 SAO Minecraft（saominecraft.com）的艾恩葛朗特（Aincrad）樓層查詢工具：地圖、怪物、裝備、配方、任務、職業技能、世界王互相連結。
 
-網站：https://cheng-1001.github.io/ArgoStrategyGuide/ （右上角「ⓘ 說明」頁有資料來源和版權聲明）
+網站：https://cheng-1001.github.io/ArgoStrategyGuide/ （右上角「ⓘ 關於本站」有資料來源和版權聲明，「更新紀錄」列出每天的改動）
 
 此攻略由中文玩家社群協力製作，提供中文玩家使用。
 
