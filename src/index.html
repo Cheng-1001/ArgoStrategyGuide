@@ -128,7 +128,8 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .qcard{gap:6px}.qcard .qd{margin:0;font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .qside{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}.qside .qobj{grid-column:1;font-size:13px;overflow-wrap:anywhere}.qside .reward{grid-column:2;grid-row:1/span 2;text-align:right}
 .qmap{flex:none;width:80%;align-self:center;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#0d1218}.qmap svg{display:block;width:100%;height:auto;aspect-ratio:1}.qmap g.hl rect{fill:#e5484d}.qmap g.hl text{fill:#fff}.mqs .linkbtn.on{color:#e5484d;font-weight:700}
-.mbonly{display:none}
+.mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}
+@media (max-width:820px){.mgo{display:inline}}
 @media (max-width:820px){.mbonly{display:block}.pconly,.rwhead .muted{display:none!important}.qmap{width:100%}[data-route]{display:none!important}}
 @media (max-width:820px){.qside{grid-template-columns:minmax(0,1fr)}.qside .reward{grid-column:1;grid-row:auto;text-align:left}}
 .mqs{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:3px;font-size:13px}.mqs li::marker{font-family:var(--f-mono);color:var(--muted)}
@@ -519,7 +520,19 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   nav.tabs a{flex:1;justify-content:center;padding:6px 4px;white-space:nowrap}
   nav.tabs a .tl{display:none} nav.tabs a .ts{display:inline}
   nav.tabs a .n{display:none}
-  #panel{top:auto;left:0;right:0;bottom:0;width:auto;max-width:none;height:78vh;border-radius:14px 14px 0 0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  /* phones: the panel takes the whole screen; its top bar only shows the path when there is a previous page */
+  #panel{top:0;left:0;right:0;bottom:0;width:auto;max-width:none;height:auto;border-radius:0;padding-bottom:env(safe-area-inset-bottom,0px)}
+  body:not(.pdeep) #pCrumb{visibility:hidden}
+  .brand{display:none}
+  .hud .coord{display:none}
+  .card .pill.s-player,.card .pill.s-ref,.card .pill.s-label,.zrow .pill.s-player,.zrow .pill.s-ref,.zrow .pill.s-label{display:none}
+  .hint .hfr{display:none}.hint .hinf{display:block}
+  .mhint{display:none}
+  .qcard .rwnone{display:none}
+  .zsec{cursor:pointer;display:flex;align-items:center;gap:6px;padding:12px 0 8px;border-bottom:1px solid var(--line)}
+  .zsec .zcv{margin-left:auto}.zsec .zcv::after{content:"▾"}.zsec.zopen .zcv::after{content:"▴"}
+  .zrow.zfold{display:none}
+  .srcfold{margin-top:6px;font-size:12.5px;color:var(--muted)}.srcfold summary{cursor:pointer;padding:6px 0}.srcfold .note{margin-top:6px}
   .legend{background:none;padding:0;gap:6px}
 }
 @media (prefers-reduced-motion:reduce){.card,.mapth{transition:none}}
@@ -915,8 +928,10 @@ function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[
 function goMapThen(f,fn){if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
 const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
 function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");
-  $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");
+  $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");document.body.classList.toggle("pdeep",stack.length>1);
   pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
+  // phones: source notes fold into one 「ⓘ 資料來源」 line at the bottom of the panel
+  if(matchMedia("(max-width:820px)").matches){const sn=[...pBody.querySelectorAll(".note.srcn")];if(sn.length){const d=document.createElement("details");d.className="srcfold";d.innerHTML="<summary>ⓘ 資料來源</summary>";sn.forEach(n=>d.appendChild(n));pBody.appendChild(d)}}
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
   pBody.querySelectorAll("[data-goview]").forEach(b=>b.addEventListener("click",()=>{const [v,t,i]=b.dataset.goview.split("|");goView(v,t,i)}));
   pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);
@@ -955,14 +970,14 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${SPAWN_OF[m.id]?"":p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd>${SPAWN_OF[m.id]?`<dt>重生點</dt><dd>${SPAWN_OF[m.id].map((w,i)=>`${SPAWN_OF[m.id].length>1?`<span class="rnum">${i+1}</span>`:""}<button class="linkbtn mono" data-rep="${m.floor}|${w.x}|${w.z}">X ${w.x} · Z ${w.z}${w.u?"（地下）":""}</button>`).join("<br>")}</dd>`:""}</dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
   ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
-  ${(()=>{const H=(window.SAO_HINTS||{})[m.floor]||{};const h=H[m.name]||(m.aka||[]).map(a=>H[a]).find(Boolean);return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted">${esc(h[1])}${h[2]?"":"・依圖鑑順序推斷對應，可能不準"}</span></div>`:""})()}
+  ${(()=>{const H=(window.SAO_HINTS||{})[m.floor]||{};const h=H[m.name]||(m.aka||[]).map(a=>H[a]).find(Boolean);return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted"><span class="hfr">${esc(h[1])}</span>${h[2]?"":"<span class=\"hinf\">・依圖鑑順序推斷對應，可能不準</span>"}</span></div>`:""})()}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
   ${m.dropsLocked&&m.dropsLocked.length?`<div class="note">另有 ${m.dropsLocked.length} 種掉落物在圖鑑上還沒解鎖（${m.dropsLocked.map(d=>pct(d[1])).join("、")}）。</div>`:""}
   ${m.dropSrc?`<div class="note">掉落機率來自玩家回報（${repRef(m.dropSrc)}）。${m.wikiDrops.length?"wiki 原本寫："+m.wikiDrops.map(([i,p])=>esc(i)+" "+pct(p)).join("、")+"。":""}</div>`:""}
   ${m.repDropsText?`<div class="note">玩家回報的掉落物（名稱還沒對應到物品資料）：${m.repDropsText.map(esc).join("、")}</div>`:""}
   ${repBlock(m)}
   ${kq.length?`<h3 class="sec">相關任務</h3><ul class="rows">${kq.map(qq=>`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>${killText(qq)}（${esc(qq.raw)}）</span></span><span class="v">${qq.xp?qq.xp+" xp":""}</span></button></li>`).join("")}</ul>`:""}
-  <div class="note">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>
+  <div class="note srcn">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>
   ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}`}
 // ---- player reports ----
 const REPO="https://github.com/Cheng-1001/ArgoStrategyGuide";
@@ -1051,7 +1066,7 @@ const rewardGo=b=>{const m=String(b||"").match(/^(?:(\d+)\s*[x×]?\s+)?(.+)$/);c
   const e=EQ.find(x=>norm(x.name)===n);if(e)return"e|"+e.oid;const p=PR.find(x=>norm(x.name)===n);return p?"p|"+p.oid:""};
 // one reward format for main and side quests: "100 xp · 120 Col · 🎁 item"; link=true (panels) makes known items clickable
 const rewardText=(qq,link)=>[qq.xp?`<span class="xp">${money(qq.xp)} xp</span>`:"",qq.money?`<span class="col">${money(qq.money)} Col</span>`:"",
-  qq.bonus?(link&&rewardGo(qq.bonus)?`<span class="rwi">🎁 <button class="linkbtn" data-go="${rewardGo(qq.bonus)}">${esc(qq.bonus)}</button></span>`:`<span class="rwi">🎁 ${esc(qq.bonus)}</span>`):""].filter(Boolean).join(" · ")||'<span class="muted">獎勵未記錄</span>';
+  qq.bonus?(link&&rewardGo(qq.bonus)?`<span class="rwi">🎁 <button class="linkbtn" data-go="${rewardGo(qq.bonus)}">${esc(qq.bonus)}</button></span>`:`<span class="rwi">🎁 ${esc(qq.bonus)}</span>`):""].filter(Boolean).join(" · ")||'<span class="muted rwnone">獎勵未記錄</span>';
 Object.values(window.SAO_MAINQ||{}).forEach(L=>L.forEach(q=>{if(!q.rw)return;const n=re=>{const m=q.rw.match(re);return m?+m[1].replace(/,/g,""):0};
   q.xp=q.xp||n(/([\d,]+)\s*(?:經驗|xp)/i);q.money=q.money||n(/([\d,]+)\s*Col/i)}));
 
@@ -1244,7 +1259,7 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
   <ul class="rows">${c.skills.map(([n,ty,lv,d])=>`<li><div class="lrow"><span class="th sm" style="--ring:${ty==="被動"?"var(--ok)":"var(--accent)"}" aria-hidden="true">${lv}</span><span class="t"><b>${esc(n)}</b><span>Lv ${lv}・${ty}・${esc(d)}</span></span></div></li>`).join("")}</ul>
   ${c.talents.length?`<h3 class="sec">天賦樹（被動點數） <span class="c">參考互動地圖</span></h3>${tbl(c.talents.map(([n,st,a,u,k])=>`<tr><th>${esc(n)}</th><td>${esc(st)} +${a}${u}／點</td><td class="mono">× ${k}</td></tr>`).join(""),["節點","效果","數量"])}<div class="muted" style="font-size:12px">同名節點合併計算；數值是參考互動地圖配裝計算器的資料，還沒有用遊戲畫面核對。</div>`:""}
   </div></div>
-  <div class="note">介紹和技能名稱來自 wiki（<a href="https://saominecraft.wiki.gg/wiki/${encodeURIComponent(c.name.replace(/ /g,"_"))}" target="_blank" rel="noopener">${esc(c.name)} 頁</a>），說明是本站改寫；本站不使用職業或技能的圖片。</div>`}
+  <div class="note srcn">介紹和技能名稱來自 wiki（<a href="https://saominecraft.wiki.gg/wiki/${encodeURIComponent(c.name.replace(/ /g,"_"))}" target="_blank" rel="noopener">${esc(c.name)} 頁</a>），說明是本站改寫；本站不使用職業或技能的圖片。</div>`}
 // floating window: equipment a class can use (like the quest route window)
 let CW=null;
 function openClassEquip(cid,part){const c=CLS.find(x=>x.id===cid);if(!c)return;CW={cid,part:part||"all",view};
@@ -1321,15 +1336,15 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   const e=eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),rar=e?e.r:r.r,isE=!!eqById[String(r.oid)];
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} 配方・${RC_CAT[r.cat][0]}</div><h2>${esc(r.en)}</h2>${e?`<div class="sub">${esc(e.name)}</div>`:""}</div></div>
   <dl class="facts"><dt>在哪裡做</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button>`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}</dd>`:""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
-  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span>點了看哪裡拿得到</span></span><span class="v">× ${q}</span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:'<div class="muted">只要 Col，不用材料。</div>'}
+  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:'<div class="muted">只要 Col，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
-  <div class="note">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${esc(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
+  <div class="note srcn">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${esc(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const c=NPCCAT[n.c];
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u?"・在地下":""}</div></div></div>
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
   ${RECIPES[n.n]?`<h3 class="sec">可以製作 <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
     :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「協作區」回報就能補上。</div>`:""}
-  <div class="note">${n.src==="rep"?`位置和類別來自核准的玩家回報（${esc(n.rep)}）。`:n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
+  <div class="note srcn">${n.src==="rep"?`位置和類別來自核准的玩家回報（${esc(n.rep)}）。`:n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
   const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")+`<dt>獎勵</dt><dd class="reward" style="text-align:left">${rewardText(qq,true)}</dd>`
     :`<dt>NPC</dt><dd>${esc(qq.npc)}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?t.n:"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq,true)}</dd>`;
@@ -1339,7 +1354,7 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
 
   ${!Q.main&&(qq.need.length||qq.kill)?`<h3 class="sec">需要的物品和目標</h3><div class="reqs">${reqChips(qq)}</div>`:""}
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
-  <div class="note">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。":qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
+  <div class="note srcn">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。":qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
   ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${esc(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
   ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}`}
 function mqCard(qq,i){const meta=[qq.npc&&("NPC "+qq.npc),qq.lv&&("等級 "+qq.lv)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
@@ -1405,7 +1420,7 @@ function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
   <dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
   ${en?`<h3 class="sec">本站物品資料</h3><ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>掉落來源、任務需求</span></span><span class="v">›</span></button></li></ul>`:""}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
-  <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}</div>`}
+  <div class="note srcn">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
 // ================= props tab (official catalogue, non-equipment) =================
 const PR=(window.SAO_PROPS||[]).map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
@@ -1435,7 +1450,7 @@ function propDetail(id){const e=prById[id];const en=FR2ID[e.name];
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}${rows?`<dl class="stats">${rows}</dl>`:""}
   ${en?`<h3 class="sec">掉落與任務</h3><ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>掉落來源、掉落率、任務需求</span></span><span class="v">›</span></button></li></ul>`:""}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
-  <div class="note">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
+  <div class="note srcn">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
 // ================= bosses tab =================
 const BO=window.SAO_BOSSES;
@@ -2005,8 +2020,12 @@ function declutter(){if(view!=="map"||world.hidden)return;
     if(ok){if(ok[0]||ok[1]){l.e.style.position="relative";l.e.style.left=ok[0]/k+"px";l.e.style.top=ok[1]/k+"px";l.e.classList.add("moved")}placed.push(ok[2])}
     else if(l.hide)l.e.style.visibility="hidden";else placed.push(r)}}
 let editing=false,placing=null;
+// phones: the place list under the map starts folded to its section headers; tap a header to open it (searching opens all)
+const ZOPEN=new Set();
+function zfoldSync(){const all=!!Sq();let k=null,op=false;[...$("zlist").children].forEach(e=>{if(e.classList.contains("zsec")){k=e.dataset.k;op=all||ZOPEN.has(k);e.classList.toggle("zopen",op);e.setAttribute("aria-expanded",op)}else e.classList.toggle("zfold",!op)})}
 function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(FL);
-  const sec=(title,n)=>{const h=document.createElement("div");h.className="zsec";h.innerHTML=`${title} <span class="mono">${n}</span>`;zl.appendChild(h)};
+  const sec=(title,n)=>{const h=document.createElement("div");h.className="zsec";h.dataset.k=title;h.innerHTML=`${title} <span class="mono">${n}</span><span class="zcv" aria-hidden="true"></span>`;
+    h.onclick=()=>{if(ZOPEN.has(title))ZOPEN.delete(title);else ZOPEN.add(title);zfoldSync()};zl.appendChild(h)};
   const coord=(x,z)=>`<span class="mono muted" style="font-size:11px;margin-left:auto">X ${x} · Z ${z}</span>`;
   const townRow=t=>{const row=document.createElement("div");row.className="zrow";row.dataset.tp=t.n+" "+(t.tp||"")+" "+(t.zh||"")+" "+(t.en||"");
     row.innerHTML=`<div class="zhead"><button class="zn">${esc(t.n)}</button><span class="zzh">${t.tp?"傳送選單："+esc(t.tp):"村鎮・無法傳送"}${t.zh?"・"+esc(t.zh):""}</span>${coord(t.x,t.z)}</div>`;
@@ -2062,7 +2081,7 @@ function filterMap(){const s=Sq();
   const sp=spotsOf(FL);
   document.querySelectorAll(".zone,.town[data-s]").forEach(z=>{const x=sp.find(y=>y.id===z.dataset.s);z.classList.toggle("dim",!!x&&!spotHit(x,s))});
   document.querySelectorAll(".zrow").forEach(r=>{if(r.dataset.tp!=null){r.hidden=!!s&&!norm(r.dataset.tp).includes(s)}else if(r.dataset.s){const x=sp.find(y=>y.id===r.dataset.s);r.hidden=!x||!spotHit(x,s)}else r.hidden=!F().M.some(m=>m.zone===r.dataset.z&&!BASE_SPOT[m.id]&&monHit(m,s))});
-  document.querySelectorAll(".zsec").forEach(h=>{let n=h.nextElementSibling,any=false;while(n&&!n.classList.contains("zsec")){if(!n.hidden)any=true;n=n.nextElementSibling}h.hidden=!any});
+  document.querySelectorAll(".zsec").forEach(h=>{let n=h.nextElementSibling,any=false;while(n&&!n.classList.contains("zsec")){if(!n.hidden)any=true;n=n.nextElementSibling}h.hidden=!any});zfoldSync();
   // searching dims everything that does not match: say so on the map, with a way out
   document.querySelectorAll(".bsp").forEach(b=>{const m=monById[b.dataset.id];b.classList.toggle("dim",!!s&&!monHit(m,s))});
   $("srchHint").hidden=!s;if(s){const n=sp.filter(x=>spotHit(x,s)).length+SPAWNS(FL).filter(w=>monHit(w.m,s)).length;
@@ -2125,9 +2144,9 @@ document.querySelectorAll(".browse .filters").forEach(F=>{const gs=F.querySelect
   F.insertBefore(bar,gs.length>1?gs[1]:F.firstChild);
   bar.querySelectorAll(".fbtn").forEach(b=>b.onclick=()=>{const t=b.dataset.t,op=F.classList.toggle(t);if(t==="nopen"){b.textContent=`ⓘ 說明 ${op?"▴":"▾"}`;b.setAttribute("aria-expanded",op)}else fbarSync()});
   const sy=()=>requestAnimationFrame(fbarSync);F.addEventListener("click",sy);F.addEventListener("change",sy);F.addEventListener("input",sy)});
-function show(){const h=location.hash.replace("#","");const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback|about)$/);
+function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback|about)$/);
   view=mm?mm[2]:"map";if(view==="feedback"){view="report";rSub="feedback"}else if(view==="report")rSub="data";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
-  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about")&&!panel.hidden)closeP();
+  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about"||(pv!==view&&!viewPending&&matchMedia("(max-width:820px)").matches))&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
   document.querySelectorAll("nav.tabs a,#codexTabs a").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
