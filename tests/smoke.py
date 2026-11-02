@@ -122,8 +122,8 @@ with sync_playwright() as p:
     pg.click('#fRcCat .chip[data-v="key"]'); pg.wait_for_timeout(200)
     check(tot >= 100 and pg.locator("#lRc .rcard").count() == 4 and "Forest Key" in pg.inner_text("#lRc"), "recipes tab: 100+ recipes, key filter shows the 4 dungeon keys")
     check(pg.locator('nav.tabs a[data-v="recipes"][aria-current="page"]').count() == 1 and pg.is_hidden("#codexTabs")
-          and pg.eval_on_selector_all("nav.tabs a", "e=>e.map(a=>a.dataset.v).join(',')") == "map,codex,quests,recipes,dungeons,classes,bosses,report",
-          "top tabs: recipes after quests, then dungeons, classes, world bosses, collaboration")
+          and pg.eval_on_selector_all("nav.tabs a", "e=>e.map(a=>a.dataset.v).join(',')") == "map,codex,quests,recipes,dungeons,classes,bosses" and pg.locator("#collabBtn").count() == 1,
+          "top tabs: recipes after quests, then dungeons, classes, world bosses; collaboration is a button by the changelog")
     pg.click('nav.tabs a[data-v="dungeons"]'); pg.wait_for_timeout(300)
     dn = pg.eval_on_selector_all("#lDg .card b", "e=>e.map(x=>x.textContent)")
     check(len(dn) == 4 and "Kobold Tower" not in dn and "Fallen Dungeon" in dn, f"dungeons tab lists the 4 floor-1 dungeons, not the boss tower ({dn})")
@@ -341,7 +341,7 @@ with sync_playwright() as p:
           "floor 2 still uses its single map image")
 
     pg.goto(base + "#feedback"); pg.wait_for_timeout(500)
-    check(pg.locator('nav.tabs a[data-v="report"]').inner_text().strip() == "協作區" and pg.locator('nav.tabs a[data-v="report"][aria-current="page"]').count() == 1
+    check(pg.locator('#collabBtn').inner_text().strip() == "協作區" and pg.locator('#collabBtn[aria-current="page"]').count() == 1
           and pg.is_visible("#rFeedW") and pg.is_hidden("#rData") and pg.locator('#rFeedW a[href*="template=5-bug.yml"]').count() == 1
           and pg.locator('#rFeedW a[href*="template=6-idea.yml"]').count() == 1, "協作區: #feedback opens 問題回報及建議 with the bug and idea buttons")
     pg.click('.csub a[data-sub="data"]'); pg.wait_for_timeout(300)

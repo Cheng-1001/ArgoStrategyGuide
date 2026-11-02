@@ -47,10 +47,10 @@ header.top{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;backgrou
 .brand h1{margin:0;font-family:var(--f-display);font-weight:700;font-size:19px;letter-spacing:.03em;white-space:nowrap}
 nav.tabs{display:flex;gap:4px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px}
 nav.tabs a{font-family:var(--f-display);font-weight:600;font-size:14px;letter-spacing:.04em;text-decoration:none;color:var(--muted);padding:5px 11px;border-radius:7px;display:flex;gap:5px;align-items:center}
-@media (max-width:1360px) and (min-width:821px){nav.tabs a .n{display:none}nav.tabs a span.tl{display:none}nav.tabs a span.ts{display:inline}nav.tabs a{padding:5px 9px}}
+@media (max-width:1600px) and (min-width:821px){nav.tabs a .n{display:none}nav.tabs a span.tl{display:none}nav.tabs a span.ts{display:inline}nav.tabs a{padding:5px 9px}}
 /* 更新紀錄 + 關於本站 buttons: on mid-width screens the brand stacks (SAO MINECRAFT above the title) so the search stays on the first row */
-@media (max-width:1360px) and (min-width:821px){.brand{flex-direction:column;align-items:flex-start;gap:0}.brand .floor{font-size:10px;line-height:1.1}.brand h1{font-size:17px;line-height:1.2}header.top{column-gap:14px}.gsearch{min-width:130px}}
-@media (max-width:820px){.flpick{min-width:0;flex:1 1 0}.fltrig{max-width:100%}header.top{column-gap:10px}.hbtns{gap:6px}.aboutbtn{padding:6px 8px;font-size:13px}.aboutbtn .i{display:none}}
+@media (max-width:1600px) and (min-width:821px){.brand{flex-direction:column;align-items:flex-start;gap:0}.brand .floor{font-size:10px;line-height:1.1}.brand h1{font-size:17px;line-height:1.2}header.top{column-gap:14px}.gsearch{min-width:130px}}
+@media (max-width:820px){.flpick{min-width:0;flex:1 1 0}.flpick .fltrig{max-width:100%}header.top{column-gap:10px}.hbtns{gap:6px}.aboutbtn{padding:6px 8px;font-size:13px}.aboutbtn .i{display:none}}
 .subtabs{display:flex;flex-wrap:wrap;gap:6px;padding:8px max(16px,env(safe-area-inset-left,0px)) 0;background:var(--bg);overflow-x:auto}
 .subtabs a{flex:none;text-decoration:none;color:var(--muted);font-family:var(--f-display);font-weight:600;font-size:13.5px;padding:5px 14px;border-radius:999px;border:1px solid var(--line);background:var(--panel);display:flex;gap:6px;align-items:center}
 .subtabs a .n{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
@@ -562,9 +562,8 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <a href="#dungeons" data-v="dungeons">地下城</a>
       <a href="#classes" data-v="classes"><span class="tl">職業／技能</span><span class="ts">職業</span></a>
       <a href="#bosses" data-v="bosses">世界王</a>
-      <a href="#report" data-v="report">協作區</a>
     </nav>
-    <div class="hbtns"><a class="aboutbtn" id="logBtn" href="#changelog" title="網站更新紀錄">更新紀錄</a>
+    <div class="hbtns"><a class="aboutbtn" id="collabBtn" href="#report" data-v="report" title="回報攻略資料、問題和建議">協作區</a><a class="aboutbtn" id="logBtn" href="#changelog" title="網站更新紀錄">更新紀錄</a>
     <a class="aboutbtn" id="aboutBtn" href="#about" title="關於本站、資料來源、版權聲明"><span class="i" aria-hidden="true">ⓘ</span>關於本站</a></div>
     <label class="gsearch" for="q">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
@@ -2140,7 +2139,7 @@ const VIEWS=["map","monsters","items","props","recipes","dungeons","quests","equ
 const CODEX=["monsters","equip","items","props"];let lastCodex="monsters";
 const hashFor=(v,f)=>(f===1?"":"f"+f+"-")+v;
 function go(v,f){location.hash=hashFor(v,f??FL)}
-document.querySelectorAll("nav.tabs a,#codexTabs a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v==="codex"?lastCodex:a.dataset.v)}));
+document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v==="codex"?lastCodex:a.dataset.v)}));
 $("aboutBtn").addEventListener("click",e=>{e.preventDefault();if(view==="about")$("view-about").scrollTop=0;else go("about")});
 $("logBtn").addEventListener("click",e=>{e.preventDefault();if(view==="changelog")$("view-changelog").scrollTop=0;else go("changelog")});
 // floor picker: 100 floors; only floors with data can be opened
@@ -2181,7 +2180,7 @@ function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.m
   view=mm?mm[2]:"map";if(view==="feedback"){view="report";rSub="feedback"}else if(view==="report")rSub="data";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
   VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about"||view==="changelog"||(pv!==view&&!viewPending&&matchMedia("(max-width:820px)").matches))&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
-  document.querySelectorAll("nav.tabs a,#codexTabs a").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);
+  document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   [["aboutBtn","about"],["logBtn","changelog"]].forEach(([b,v])=>{const ab=$(b);ab.href="#"+hashFor(v,FL);if(view===v)ab.setAttribute("aria-current","page");else ab.removeAttribute("aria-current")});
   if(view==="map")requestAnimationFrame(()=>{syncNpcFly();if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
