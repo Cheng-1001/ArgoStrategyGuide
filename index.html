@@ -737,7 +737,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=0e9f806f"></script>
 <script src="npcs.js?v=7db42e50"></script>
-<script src="changelog.js?v=d690b117"></script>
+<script src="changelog.js?v=562868b0"></script>
 <script src="recipes.js?v=a614ead5"></script>
 <script src="jmmeta.js?v=c7b7a32b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1229,6 +1229,9 @@ function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=
     <span class="t"><b>${showNpc?esc(r.npc):esc(r.en)}</b><span>${showNpc?"":(e?esc(e.name)+"・":"")+(RAR[rar]?RAR[rar][0]+"・":"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}></li>`}).join("")}</ul>`}
 const RC_CAT={weapon:["武器","⚔️"],armor:["防具","🛡️"],acc:["飾品","💍"],potion:["藥水","🧪"],key:["鑰匙","🗝️"],other:["其他","📦"]};
 const ALLREC=Object.entries(RECIPES).flatMap(([npc,r])=>r.items.map(it=>recRow(npc,r.floor,it)));ALLREC.forEach((r,i)=>r.i=i);
+// the official catalogue's level wins over the reference map's older recipe level (game screenshots already agree with it)
+{const OL={};(window.SAO_EQUIP||[]).forEach(e=>OL[e[0]]=e[4]);(window.SAO_PROPS||[]).forEach(e=>{if(e[4])OL[e[0]]=e[4]});
+ ALLREC.forEach(r=>{const o=r.oid!=null?OL[r.oid]:null;if(o&&r.src==="ref"&&r.lv!==o){r.lvRef=r.lv;r.lv=o}})}
 let rcCat="all";
 chipsInto($("fRcCat"),[["all",`全部 <b>${ALLREC.length}</b>`],...Object.entries(RC_CAT).map(([k,[l,ic]])=>[k,`${ic} ${l} <b>${ALLREC.filter(r=>r.cat===k).length}</b>`])],()=>rcCat,v=>rcCat=v,renderRecipes);
 $("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(ALLREC.map(r=>r.npc))].sort().map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join("");
@@ -1358,7 +1361,7 @@ function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
 function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找不到這個配方。</div>`;
   const e=eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),rar=e?e.r:r.r,isE=!!eqById[String(r.oid)];
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} 配方・${RC_CAT[r.cat][0]}</div><h2>${esc(r.en)}</h2>${e?`<div class="sub">${esc(e.name)}</div>`:""}</div></div>
-  <dl class="facts"><dt>在哪裡做</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button>`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}</dd>`:""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
+  <dl class="facts"><dt>在哪裡做</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button>`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvRef?` <span class="muted" style="font-size:12px">（參考互動地圖寫 ${r.lvRef}，以官方圖鑑為準）</span>`:""}</dd>`:""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
   <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:'<div class="muted">只要 Col，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
   <div class="note srcn">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${esc(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
