@@ -122,8 +122,11 @@ with sync_playwright() as p:
     pg.click('#fRcCat .chip[data-v="key"]'); pg.wait_for_timeout(200)
     check(tot >= 100 and pg.locator("#lRc .rcard").count() == 4 and "Forest Key" in pg.inner_text("#lRc"), "recipes tab: 100+ recipes, key filter shows the 4 dungeon keys")
     check(pg.locator('nav.tabs a[data-v="recipes"][aria-current="page"]').count() == 1 and pg.is_hidden("#codexTabs")
-          and pg.eval_on_selector_all("nav.tabs a", "e=>e.map(a=>a.dataset.v).join(',')") == "map,codex,quests,recipes,classes,bosses,report",
-          "recipes is its own top tab between quests and world bosses")
+          and pg.eval_on_selector_all("nav.tabs a", "e=>e.map(a=>a.dataset.v).join(',')") == "map,codex,quests,recipes,dungeons,classes,bosses,report",
+          "top tabs: recipes after quests, then dungeons, classes, world bosses, collaboration")
+    pg.click('nav.tabs a[data-v="dungeons"]'); pg.wait_for_timeout(300)
+    dn = pg.eval_on_selector_all("#lDg .card b", "e=>e.map(x=>x.textContent)")
+    check(len(dn) == 4 and "Kobold Tower" not in dn and "Fallen Dungeon" in dn, f"dungeons tab lists the 4 floor-1 dungeons, not the boss tower ({dn})")
     pg.click("#legalBtn"); pg.wait_for_timeout(350)
     t = pg.inner_text("#legal")
     check("about" in pg.url and pg.is_visible("#view-about") and "非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t and "中文玩家社群協力製作" in t,
