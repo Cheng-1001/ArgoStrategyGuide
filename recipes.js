@@ -312,9 +312,7 @@ null,
 "Bracelet of Ice": {
 "floor": 1,
 "items": [
-[
-null,
-"Bracelet of Ice",
+[1596,"Bracelet of Ice",
 null,
 [
 [
@@ -954,9 +952,7 @@ null,
 "Necklace of Aragorn": {
 "floor": 1,
 "items": [
-[
-null,
-"Necklace of Aragorn",
+[1458,"Necklace of Aragorn",
 null,
 [
 [
@@ -1048,9 +1044,7 @@ null,
 "Occult Merchant - Amulet": {
 "floor": 1,
 "items": [
-[
-null,
-"Occult Amulet",
+[1298,"Occult Amulet",
 null,
 [],
 "5000",
@@ -1075,9 +1069,7 @@ null,
 10,
 "ref"
 ],
-[
-null,
-"Occult Robe",
+[1462,"Occult Robe",
 null,
 [],
 "5000",
@@ -1086,9 +1078,7 @@ null,
 10,
 "ref"
 ],
-[
-null,
-"Occult Hood",
+[1463,"Occult Hood",
 null,
 [],
 "5000",
@@ -1102,9 +1092,7 @@ null,
 "Occult Merchant - Bracelet": {
 "floor": 1,
 "items": [
-[
-null,
-"Occult Bracelet",
+[1597,"Occult Bracelet",
 null,
 [],
 "5000",
@@ -1118,9 +1106,7 @@ null,
 "Occult Merchant - Gloves": {
 "floor": 1,
 "items": [
-[
-null,
-"Occult Gloves",
+[2045,"Occult Gloves",
 null,
 [],
 "5000",
@@ -1134,9 +1120,7 @@ null,
 "Occult Merchant - Ring": {
 "floor": 1,
 "items": [
-[
-null,
-"Occult Ring",
+[2486,"Occult Ring",
 null,
 [],
 "5000",
@@ -1183,9 +1167,7 @@ null,
 "Ring of the Leviathan": {
 "floor": 1,
 "items": [
-[
-null,
-"Ring of the Leviathan",
+[2485,"Ring of the Leviathan",
 null,
 [
 [
@@ -1212,9 +1194,7 @@ null,
 "Secret Accessory Blacksmith": {
 "floor": 1,
 "items": [
-[
-null,
-"Gloves of the Wolves",
+[2044,"Gloves of the Wolves",
 null,
 [
 [
@@ -1808,9 +1788,7 @@ null,
 3,
 "ref"
 ],
-[
-null,
-"Amulet of the Sylvan",
+[1288,"Amulet of the Sylvan",
 null,
 [
 [
