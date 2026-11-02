@@ -29,7 +29,7 @@
 |---|---|
 | `src/index.html` | **要編輯的頁面原始檔**，HTML、CSS、JS 都在這一個檔案裡。沒有 `<!doctype>` 和 `<head>`，因為最初是 Artifact 格式 |
 | `src/build.py` | 加上 doctype 和 head，產生根目錄的 `index.html`。**改完 `src/index.html` 一定要執行** |
-| `index.html` | build 產生的檔案，不要直接改 |
+| `index.html` | build 產生的檔案，不要直接改。build 會在每個本地 `<script src="x.js">` 後面加 `?v=內容雜湊`（2026-11-02：GitHub Pages 讓瀏覽器快取 10 分鐘，手機曾拿到新頁面配舊 `npcs.js`，篩選顯示錯的類別名稱）。Apps Script／Actions 直接改的資料檔（reports.js、jmmeta.js、formcfg.js）不會更新雜湊，和以前一樣最多 10 分鐘後更新 |
 | `data.js` | 第 1 層：`window.SAO` = MAP、STATUS、ZONES、M（怪物）、ITEMS、EXTRA、TOWNS、SPOTS、QUESTS |
 | `data23.js` | 第 2、3 層：`SAO23_ITEMS`、`SAO23.floors[2/3]`（第 3 層沒有地圖） |
 | `bosses.js` | 世界首領 Galiath、獨特怪物 Seraphel、wiki 列的其他首領 |

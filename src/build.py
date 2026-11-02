@@ -21,6 +21,14 @@ head = '''<!doctype html>
 '''
 i = body.index("</style>") + len("</style>")
 page = head + body[:i] + "\n</head>\n<body>\n" + body[i:] + "\n</body>\n</html>\n"
+# cache busting: each local script gets ?v=<content hash>, so a phone that still has an old copy of a data file
+# (GitHub Pages lets browsers keep files 10 minutes) loads the new one as soon as it gets the new page
+import re, hashlib
+def _ver(m):
+    f = os.path.join(ROOT, m.group(1))
+    if not os.path.isfile(f): return m.group(0)
+    return '<script src="%s?v=%s"' % (m.group(1), hashlib.md5(open(f, "rb").read()).hexdigest()[:8])
+page = re.sub(r'<script src="([\w.-]+\.js)"', _ver, page)
 open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(page)
 open(os.path.join(ROOT, ".nojekyll"), "w").close()
 print("built index.html")
