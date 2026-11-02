@@ -121,7 +121,7 @@ function render(){
   [].forEach.call(document.querySelectorAll(".qi"),function(b){b.onclick=function(){S.cur=b.dataset.id;S.shotIdx=0;render()}});
   renderCard(a);
 }
-function renderCard(a){
+function renderCard(a){S.list=a;
   var i=a.findIndex(function(x){return x.id===S.cur}),x=a[i];var c=coords(x),mp=MAPS[x.floor];
   var dl=x.fields.map(function(f){return"<dt>"+esc(label(f[0]))+"</dt><dd>"+esc(f[1])+"</dd>"}).join("")||'<dt>內容</dt><dd class="muted">玩家只填了名稱</dd>';
   var map="";
@@ -143,10 +143,17 @@ function renderCard(a){
   if(wait){$("bOk").onclick=function(){decide(x,"核准",a,i)};$("bNo").onclick=function(){decide(x,"退回",a,i)}}
   loadShot(x);
 }
+// one request per screenshot (shared by the card and the background prefetch)
+var shotReq={};
+function getShot(id){if(shotCache[id])return Promise.resolve(shotCache[id]);if(!shotReq[id])shotReq[id]=run("apiShot",id,1600).then(function(src){shotCache[id]=src;return src},function(e){delete shotReq[id];throw e});return shotReq[id]}
+// after a screenshot shows: load this report's other screenshots and the next report's first one in the background
+function prefetch(x){var a=S.list||[],i=-1;for(var k=0;k<a.length;k++)if(a[k].id===x.id)i=k;
+  var ids=x.shots.slice();if(i>=0&&a[i+1]&&a[i+1].shots[0])ids.push(a[i+1].shots[0]);
+  ids.reduce(function(p,id){return p.then(function(){return getShot(id).catch(function(){})})},Promise.resolve())}
 function loadShot(x){var id=x.shots[S.shotIdx];if(!id)return;var el=$("shot");
   var show=function(src){if($("shot")!==el||x.id!==S.cur)return;el.innerHTML='<img alt="'+esc(x.id)+' 第 '+(S.shotIdx+1)+' 張截圖" src="'+src+'">';el.querySelector("img").onclick=function(){var z=document.createElement("div");z.className="zoom";z.innerHTML='<img alt="" src="'+src+'">';z.onclick=function(){z.remove()};document.body.appendChild(z)}};
-  if(shotCache[id]){show(shotCache[id]);return}
-  run("apiShot",id,1600).then(function(src){shotCache[id]=src;show(src)}).catch(function(e){if($("shot")===el)el.innerHTML='<div>截圖載入失敗：'+esc(e.message)+'<br><a style="color:#9cc6ff" href="https://drive.google.com/file/d/'+encodeURIComponent(id)+'/view" target="_blank" rel="noopener">在雲端硬碟開啟</a></div>'})}
+  if(shotCache[id]){show(shotCache[id]);prefetch(x);return}
+  getShot(id).then(function(src){show(src);prefetch(x)}).catch(function(e){if($("shot")===el)el.innerHTML='<div>截圖載入失敗：'+esc(e.message)+'<br><a style="color:#9cc6ff" href="https://drive.google.com/file/d/'+encodeURIComponent(id)+'/view" target="_blank" rel="noopener">在雲端硬碟開啟</a></div>'})}
 function decide(x,d,a,i){if(S.busy)return;var note=($("note")||{}).value||"";
   if(d==="退回"&&!note.trim()&&!confirm("沒有填退回原因，確定要退回 "+x.id+"？"))return;
   S.busy=true;[].forEach.call(document.querySelectorAll(".act .btn"),function(b){b.disabled=true});

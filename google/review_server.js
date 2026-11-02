@@ -75,6 +75,20 @@ function apiList() {
 function apiShot(fileId, size) {
   const auth = { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() };
   let why = '';
+  // 1) 進階服務「Drive」（資訊清單有開；開了它，Google 才會替這個專案啟用 Drive API）
+  try {
+    if (typeof Drive !== 'undefined') {
+      const f = Drive.Files.get(fileId, { fields: 'thumbnailLink' });
+      if (f && f.thumbnailLink) {
+        const r = UrlFetchApp.fetch(f.thumbnailLink.replace(/=s\d+$/, '=s' + Math.min(Number(size) || 1200, 1600)),
+          { headers: auth, muteHttpExceptions: true });
+        if (r.getResponseCode() === 200)
+          return 'data:image/jpeg;base64,' + Utilities.base64Encode(r.getBlob().getAs(MimeType.JPEG).getBytes());
+        why = '進階服務縮圖下載 ' + r.getResponseCode() + '；';
+      } else why = '進階服務：還沒有縮圖；';
+    }
+  } catch (e) { why = '進階服務：' + e.message + '；'; }
+  // 2) 直接呼叫 Drive API
   try {
     const res = UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(fileId) + '?fields=thumbnailLink',
       { headers: auth, muteHttpExceptions: true });
@@ -85,12 +99,13 @@ function apiShot(fileId, size) {
         { headers: auth, muteHttpExceptions: true });
       if (r.getResponseCode() === 200)
         return 'data:image/jpeg;base64,' + Utilities.base64Encode(r.getBlob().getAs(MimeType.JPEG).getBytes());
-      why = '縮圖下載 ' + r.getResponseCode();
+      why += '縮圖下載 ' + r.getResponseCode();
     } else {
-      why = 'Drive API ' + res.getResponseCode() + (meta.error && meta.error.message ? '：' + meta.error.message : '：還沒有縮圖');
+      why += 'Drive API ' + res.getResponseCode() + (meta.error && meta.error.message ? '：' + meta.error.message : '：還沒有縮圖');
     }
-  } catch (e) { why = 'Drive API：' + e.message; }
-  // 備援：直接讀原檔（截圖通常 1～3 MB）
+  } catch (e) { why += 'Drive API：' + e.message; }
+  console.log('apiShot 改讀原檔：' + why);   // 在專案的「執行項目」看得到原因
+  // 3) 備援：直接讀原檔（截圖通常 1～3 MB）
   let file;
   try { file = DriveApp.getFileById(fileId); }
   catch (e) {
