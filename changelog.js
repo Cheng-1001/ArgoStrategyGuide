@@ -15,7 +15,8 @@ window.SAO_CHANGELOG=[
   "手機版點資料裡的座標（首領重生點、NPC、地點、回報位置）會直接切到地圖並移到那一點，不再彈出地圖視窗",
   "「更新紀錄」移到右上角獨立按鈕；「說明」改名「關於本站」",
   "修正：18 個配方的等級和官方圖鑑不一致（例如 Belt of the Stags 寫 7、官方是 5），改以官方圖鑑為準",
-  "11 個配方飾品連上官方圖鑑（Occult 系列 6 件、Ring of the Leviathan、Necklace of Aragorn、Bracelet of Ice、Gloves of the Wolves、Amulet of the Sylvan），有圖示和裝備資料了"
+  "11 個配方飾品連上官方圖鑑（Occult 系列 6 件、Ring of the Leviathan、Necklace of Aragorn、Bracelet of Ice、Gloves of the Wolves、Amulet of the Sylvan），有圖示和裝備資料了",
+  "新增「地下城」分頁（在配方和職業中間），先列出第 1 層 4 個地下城，詳細資料陸續補上"
  ]],
  ["2026-11-01",[
   "新增說明頁（右上角「ⓘ 說明」）：關於本站、官方網站和 Discord、資料來源、版權聲明",

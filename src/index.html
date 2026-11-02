@@ -47,7 +47,7 @@ header.top{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;backgrou
 .brand h1{margin:0;font-family:var(--f-display);font-weight:700;font-size:19px;letter-spacing:.03em;white-space:nowrap}
 nav.tabs{display:flex;gap:4px;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px}
 nav.tabs a{font-family:var(--f-display);font-weight:600;font-size:14px;letter-spacing:.04em;text-decoration:none;color:var(--muted);padding:5px 11px;border-radius:7px;display:flex;gap:5px;align-items:center}
-@media (max-width:1360px) and (min-width:821px){nav.tabs a .n{display:none}}
+@media (max-width:1360px) and (min-width:821px){nav.tabs a .n{display:none}nav.tabs a span.tl{display:none}nav.tabs a span.ts{display:inline}nav.tabs a{padding:5px 9px}}
 /* 更新紀錄 + 關於本站 buttons: on mid-width screens the brand stacks (SAO MINECRAFT above the title) so the search stays on the first row */
 @media (max-width:1360px) and (min-width:821px){.brand{flex-direction:column;align-items:flex-start;gap:0}.brand .floor{font-size:10px;line-height:1.1}.brand h1{font-size:17px;line-height:1.2}header.top{column-gap:14px}.gsearch{min-width:130px}}
 @media (max-width:820px){.flpick{min-width:0;flex:1 1 0}.fltrig{max-width:100%}header.top{column-gap:10px}.hbtns{gap:6px}.aboutbtn{padding:6px 8px;font-size:13px}.aboutbtn .i{display:none}}
@@ -521,7 +521,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   .results{overflow:visible}
   .gsearch{order:3;max-width:none;flex-basis:100%;margin-left:0}
   nav.tabs{order:2;flex-basis:100%}
-  nav.tabs a{flex:1;justify-content:center;padding:6px 4px;white-space:nowrap}
+  nav.tabs{gap:2px}nav.tabs a{flex:1 1 auto;justify-content:center;padding:6px 2px;white-space:nowrap;font-size:13px;letter-spacing:0;min-width:0}
   nav.tabs a .tl{display:none} nav.tabs a .ts{display:inline}
   nav.tabs a .n{display:none}
   /* phones: the panel takes the whole screen; its top bar only shows the path when there is a previous page */
@@ -559,6 +559,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <a href="#monsters" data-v="codex">圖鑑</a>
       <a href="#quests" data-v="quests">任務 <span class="n" id="nQuest"></span></a>
       <a href="#recipes" data-v="recipes">配方 <span class="n" id="nRec"></span></a>
+      <a href="#dungeons" data-v="dungeons">地下城</a>
       <a href="#classes" data-v="classes"><span class="tl">職業／技能</span><span class="ts">職業</span></a>
       <a href="#bosses" data-v="bosses">世界王</a>
       <a href="#report" data-v="report">協作區</a>
@@ -691,6 +692,14 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="note">材料、數量、費用來自玩家的遊戲截圖（標「遊戲截圖」）和參考互動地圖的資料。參考地圖的鯊魚飾品配方和遊戲截圖完全相同。武器、防具目前只有起始商人賣的新手裝備，武器鐵匠和防具鐵匠的配方還沒有資料，歡迎在遊戲裡打開製作選單、按 F2 截圖回報。</div>
     </div>
     <div class="results"><div class="rhead"><h2>配方</h2><span class="count" id="cRc"></span></div><div class="grid" id="lRc"></div></div>
+  </section>
+
+  <!-- DUNGEONS -->
+  <section class="view browse" id="view-dungeons" hidden>
+    <div class="filters">
+      <div class="note">先建立的分頁，目前只列地下城名稱。進入條件、攻略和掉落會陸續補上；點名稱可以看入口位置和裡面的怪物。</div>
+    </div>
+    <div class="results"><div class="rhead"><h2>地下城</h2><span class="count" id="cDg"></span></div><div class="grid" id="lDg"></div></div>
   </section>
 
   <!-- CLASSES -->
@@ -1244,6 +1253,11 @@ const CLS=window.SAO_CLASSES||[];
 CLS.forEach(c=>{c.reps=(window.SAO_REPORTS||[]).filter(r=>r.type==="skill"&&norm(r.cls)===norm(c.name)).sort((a,b)=>(a.unlock||99)-(b.unlock||99))});
 const clsWeap=c=>Object.entries(c.weapons).map(([k,n])=>`${EQ_CAT[k]||k}（${n}）`).join("、");
 const clsSoon=c=>!Object.keys(c.weapons).length&&!c.base.length;
+// ---- dungeons tab (preliminary, user 2026-11-02: only the dungeon names for now; floor-boss towers are left out) ----
+function renderDungeons(){const s=Sq();const a=spotsOf(FL).filter(x=>x.kind==="dungeon"&&!/樓層首領/.test(x.zh||"")&&(!s||norm([x.n,x.zh].join(" ")).includes(s)));
+  $("cDg").textContent=`${a.length} 個`;
+  $("lDg").innerHTML=a.map(sp=>`<button class="card" data-go="s|${sp.id}" data-key="s|${sp.id}"><div class="chead"><span class="th" style="--ring:var(--boss)" aria-hidden="true">⚔️</span><div class="cname"><b>${esc(sp.n)}</b><span>${esc(sp.zh)}</span></div></div></button>`).join("")||`<div class="empty-note">${s?"沒有符合的地下城。":"這一層還沒有地下城資料。"}</div>`;
+  bindGo($("lDg"));markSel()}
 function renderClasses(){const s=Sq();const a=CLS.filter(c=>!s||norm([c.name,c.zh,c.role,...c.subs.map(x=>x[0]),...c.skills.map(x=>x[0])].join(" ")).includes(s));
   $("cCls").textContent=`${a.length} 個職業`;
   $("lCls").innerHTML=a.map(c=>`<button class="card" data-go="c|${c.id}" data-key="c|${c.id}"><div class="chead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="cname"><b>${esc(c.name)}</b><span>${esc(c.zh)}・${esc(c.role)}</span></div></div>
@@ -2122,7 +2136,7 @@ $("exportBtn").onclick=async()=>{const out={};Object.entries(userPos[FL]).forEac
 $("resetBtn").onclick=()=>{userPos[FL]={};savePos(FL);renderMap();renderZoneList()};
 
 // ================= floor switch + routing =================
-const VIEWS=["map","monsters","items","props","recipes","quests","equip","classes","bosses","report","about","changelog"];let view="map";
+const VIEWS=["map","monsters","items","props","recipes","dungeons","quests","equip","classes","bosses","report","about","changelog"];let view="map";
 const CODEX=["monsters","equip","items","props"];let lastCodex="monsters";
 const hashFor=(v,f)=>(f===1?"":"f"+f+"-")+v;
 function go(v,f){location.hash=hashFor(v,f??FL)}
@@ -2163,7 +2177,7 @@ document.querySelectorAll(".browse .filters").forEach(F=>{const gs=F.querySelect
   F.insertBefore(bar,gs.length>1?gs[1]:F.firstChild);
   bar.querySelectorAll(".fbtn").forEach(b=>b.onclick=()=>{const t=b.dataset.t,op=F.classList.toggle(t);if(t==="nopen"){b.textContent=`ⓘ 說明 ${op?"▴":"▾"}`;b.setAttribute("aria-expanded",op)}else fbarSync()});
   const sy=()=>requestAnimationFrame(fbarSync);F.addEventListener("click",sy);F.addEventListener("change",sy);F.addEventListener("input",sy)});
-function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback|about|changelog)$/);
+function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback|about|changelog|dungeons)$/);
   view=mm?mm[2]:"map";if(view==="feedback"){view="report";rSub="feedback"}else if(view==="report")rSub="data";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
   VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about"||view==="changelog"||(pv!==view&&!viewPending&&matchMedia("(max-width:820px)").matches))&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
@@ -2172,7 +2186,7 @@ function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.m
   [["aboutBtn","about"],["logBtn","changelog"]].forEach(([b,v])=>{const ab=$(b);ab.href="#"+hashFor(v,FL);if(view===v)ab.setAttribute("aria-current","page");else ab.removeAttribute("aria-current")});
   if(view==="map")requestAnimationFrame(()=>{syncNpcFly();if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
   renderCurrent();if(viewPending){const fn=viewPending;viewPending=null;requestAnimationFrame(fn)}}
-function renderCurrent(){requestAnimationFrame(fixCols);requestAnimationFrame(fbarSync);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="about")renderAbout();else if(view==="changelog")renderChangelog();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="classes")renderClasses();else renderQuests()}
+function renderCurrent(){requestAnimationFrame(fixCols);requestAnimationFrame(fbarSync);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="about")renderAbout();else if(view==="changelog")renderChangelog();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="dungeons")renderDungeons();else if(view==="classes")renderClasses();else renderQuests()}
 window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
 
