@@ -23,9 +23,9 @@ for b in beta:
     if b['c'] in curcats: continue          # Current Data already covers this role; Beta positions are likely outdated
     res.append(b)
 # NPCs the site owner located in game (not in the reference map); src "site"
-SITE=[dict(c='other',n='臭乞丐',x=3336,z=1760,u=False,src='site')]   # Tolbana, owner's gameplay video 2026-10-30 (player position next to the NPC)
+SITE=[dict(c='beggar',n='臭乞丐',x=3336,z=1760,u=False,src='site')]   # Tolbana, owner's gameplay video 2026-10-30 (player position next to the NPC)
 res+=SITE
-res.sort(key=lambda r:((CATS+['other']).index(r['c']),r['n']))
+res.sort(key=lambda r:((CATS+['beggar','other']).index(r['c']),r['n']))
 from collections import Counter
 print(len(res),Counter(r['c'] for r in res)); print(Counter(r['src'] for r in res))
 rows=',\n'.join(' '+json.dumps([r['c'],r['n'],r['x'],r['z'],r['src']]+([1] if r['u'] else []),ensure_ascii=False) for r in res)

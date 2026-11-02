@@ -78,5 +78,5 @@ window.SAO_NPCS={1:[
  ["secretAccessoryBlacksmith", "Secret Gelatinous Cloak", 2854, 4657, "ref", 1],
  ["secretAccessoryBlacksmith", "Secret Sticky Ring Merchant", 390, 3064, "ref"],
  ["secretAccessoryBlacksmith", "Skeleton Skull", 1163, 3546, "ref"],
- ["other", "臭乞丐", 3336, 1760, "site"]
+ ["beggar", "臭乞丐", 3336, 1760, "site"]
 ]};
