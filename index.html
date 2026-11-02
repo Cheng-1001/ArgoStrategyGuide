@@ -747,7 +747,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=0e9f806f"></script>
 <script src="npcs.js?v=7db42e50"></script>
-<script src="changelog.js?v=e0552388"></script>
+<script src="changelog.js?v=0b24676a"></script>
 <script src="recipes.js?v=d8583693"></script>
 <script src="jmmeta.js?v=c7b7a32b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -2174,7 +2174,7 @@ document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>a.add
 const TOTAL=100;const flTrig=$("flTrig"),flPop=$("flPop");
 const flState=f=>FLOORS[f]?(FLOORS[f].status==="soon"?"soon":"open"):"lock";
 $("flGrid").innerHTML=Array.from({length:TOTAL},(_,i)=>{const f=i+1,st=flState(f);
-  const tip=st==="lock"?`第 ${f} 層・尚未開放`:`第 ${f} 層・${FLOORS[f].name}${st==="soon"?"（預計 11/4 開放）":""}`;
+  const tip=st==="lock"?`第 ${f} 層・尚未開放`:`第 ${f} 層${st==="soon"?"（預計 11/4 開放）":""}`;
   return`<button class="flcell ${st}" data-f="${f}" title="${esc(tip)}" aria-label="${esc(tip)}" ${st==="lock"?'aria-disabled="true"':""}>${f}</button>`}).join("");
 function openPick(o){flPop.hidden=!o;flTrig.setAttribute("aria-expanded",o);$("flMsg").textContent="";if(o){$("flJump").value="";setTimeout(()=>$("flJump").focus(),0)}}
 flTrig.onclick=e=>{e.stopPropagation();openPick(flPop.hidden)};
@@ -2186,7 +2186,7 @@ function pickFloor(f){if(!(f>=1&&f<=TOTAL)){$("flMsg").textContent="請輸入 1 
 $("flGrid").querySelectorAll(".flcell").forEach(b=>b.onclick=()=>pickFloor(+b.dataset.f));
 $("flForm").onsubmit=e=>{e.preventDefault();pickFloor(parseInt($("flJump").value,10))};
 function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.ready=1;
-  $("flNo").textContent=f+"F";$("flNm").textContent=F().name;
+  $("flNo").textContent=f+"F";$("flNm").textContent=`第 ${f} 層`;   // no floor name: the game has no confirmed floor names (user 2026-11-02 chose A)
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
   const Fx=F();$("floorInfo").innerHTML=`<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/4 開放・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PR.length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
