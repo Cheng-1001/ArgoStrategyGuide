@@ -879,7 +879,7 @@ const npcById=id=>{const f=+id.slice(1).split("_")[0];return NPCS(f).find(n=>n.i
 // NPC sub-categories: only alchemist, loot buyers, key smith and accessory smith on (listed first: NPC_TOP).
 // FILT lists the categories that are switched off. The key has a version so a new default reaches everyone once.
 const NPC_TOP=["alchemist","lootBuyers","keyBlacksmith","accessoriesBlacksmith"];
-const FILT_DEF={gather:1,npc:1,wboss:1,dungeon:1,boss:1,mini:1,...Object.fromEntries(["lumberjack","weaponSellers","travelingMerchants","equipmentMerchants","toolMerchants","accessoriesMerchants","occultMerchants","consumablesMerchants","weaponsmith","armorBlacksmith","ingotBlacksmith","materialsBlacksmith","equipmentBlacksmith","secretAccessoryBlacksmith"].map(k=>["npc:"+k,1]))};
+const FILT_DEF={gather:1,npc:1,wboss:1,dungeon:1,boss:1,mini:1,...Object.fromEntries(["lumberjack","weaponSellers","travelingMerchants","equipmentMerchants","toolMerchants","accessoriesMerchants","occultMerchants","consumablesMerchants","weaponsmith","armorBlacksmith","ingotBlacksmith","materialsBlacksmith","equipmentBlacksmith","secretAccessoryBlacksmith","other"].map(k=>["npc:"+k,1]))};
 let FILT={...FILT_DEF};try{const s=localStorage.getItem("sao-map-filter-v4");if(s)FILT=JSON.parse(s)||{...FILT_DEF}}catch(e){FILT={...FILT_DEF}}
 const saveFilt=()=>{try{localStorage.setItem("sao-map-filter-v4",JSON.stringify(FILT))}catch(e){}};
 const catOn=k=>!FILT[k];
