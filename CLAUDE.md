@@ -42,9 +42,10 @@
 | `changelog.js` | 「更新紀錄」頁（右上角按鈕，`#changelog`）`window.SAO_CHANGELOG=[["YYYY-MM-DD",[項目…]],…]`，新的在最上面，依日期分組（使用者 2026-11-02 指定格式：日期下面列點）。**每次推送玩家看得到的改動，都要在當天那一筆加一行**（中文、一行一件事、寫玩家感受得到的結果，不寫技術細節）；玩家回報自動收錄、探索地圖自動合併不列。網站顯示最近 3 天，較早的收在「較早的更新」 |
 | `hints.js` | 遊戲圖鑑的 LOCATION HINT，對應到 41 隻第 1 層怪物（`sure=0` 表示依順序推斷） |
 | `items.png` | 物品圖示表：64px 一格、一列 8 格，目前用到第 185 格。物品資料的最後一個欄位就是格子編號 |
-| `floor1.jpg`、`floor2.jpg` | wiki 地圖。floor1.jpg 原本在 X 1652、Z 2770（腐臭沼澤北邊麥田旁）有一個 wiki 編輯者留下的測試路標「sdsd」，另外 X 1917–1967、Z 2412–2495 有一塊黑色 T 形破圖。2026-11-01 修掉：路標那一處用使用者 JourneyMap 的真實地形縮到 wiki 解析度、做色調轉換後貼上；黑色 T 處 JourneyMap 沒資料，改搬旁邊的森林紋理。之後換新的 wiki 地圖要再檢查一次 |
+| `floor1.jpg`、`floor2.jpg` | wiki 地圖。**floor1.jpg 2026-11-02 換成 wiki 新圖「File:Updated floor 1 map.png」**（2026-10-29 23:17 UTC 上傳，Floor 1 頁修訂 2802；舊圖是同日 14:44 UTC 之前抓的）：新圖是看圖軟體截圖、島約 1408px，用 SIFT 對到舊圖（2123 組特徵點，殘差中位數 0.26px，比例 1.483、無旋轉）轉成同樣的 2100px 座標框（x0＝z0＝70 不變），輕微銳化、圓外塗黑。和舊圖的差異：Boar Zone 的「Zone Sanglier」字樣拿掉、Mizunari 東邊和 X 1836 Z 2481 一帶地形重做（舊圖的黑色破圖和 sdsd 路標都不在了）。之後 wiki 換圖時同樣做法：對位 → 覆蓋 floor1.jpg → `python3 -I tools/jm_rebase.py`（只重畫探索地圖切片裡未探索區塊的變暗 wiki 底，已探索區塊不動，再重產 L0～L2 和 floor1_jm.jpg） |
 | `floor1_jm.jpg` | 第 1 層「探索地圖」3000px 預覽：使用者的 JourneyMap 疊在變暗的 wiki 地圖上（網站實際用 `tiles/f1jm`） |
 | `tiles/f1jm/{L}/{c}_{r}.jpg` | 第 1 層探索地圖切片：256px，L0～L3 = 640／1280／2560／5120px，L3 是 1 格 1 像素。由 `tools/jm_tiles.py` 產生 |
+| `tools/jm_rebase.py` | 換 wiki 底圖後重畫探索地圖切片的未探索部分（見 floor1.jpg 那一列） |
 | `tools/jm_tiles.py` | JourneyMap day 圖 → `floor1_jm.jpg` ＋ 切片，**整張重做**（2026-11-02 起不要再用，會蓋掉玩家合併的部分） |
 | `tools/jm_merge.py`、`tiles/f1jm/explored.png`、`jmmeta.js` | **探索地圖的合併**：玩家上傳的 zip（網站「打包探索地圖」產生，或本機資料夾）疊到現有切片上。**依資料夾分組，只收名叫 `day` 的資料夾（或 zip 根目錄）的圖**（夜間、地形、洞穴層不收）；**每個資料夾各自檢查**：和已探索區塊重疊至少 `--min-overlap`（20）塊且顏色對得上才合併，重疊太少（無法確認是第 1 層）或對不上就略過；多個資料夾依檔案日期舊→新貼上（新的蓋舊的）；結果有 `folders`／`skipped`。`explored.png` 是已探索的 16×16 區塊（1 px＝1 區塊，世界座標；2026-11-02 用 `--init-mask` 從切片推算，直方圖雙峰、門檻 9）。和已探索區塊重疊處顏色差異中位數 > 32 就拒絕（別的樓層／世界）；只接受 `x,z.png`、512×512、≤ 600 張、每張 ≤ 4 MB。只重寫碰到的 L3 切片，L0～L2 和 `floor1_jm.jpg` 由 L3 重產。結果寫在 `jmmeta.js`（`SAO_JM["1"]` 日期、探索比例、合併紀錄；`results[回報編號]`），**不碰 `reports.js`**（避免和 Apps Script 衝突）。測試 `tests/jm_merge_test.py` |
 | `formcfg.js` | 回報表單預填網址 `window.SAO_FORM = {prefill, updated}`，**Apps Script 的 `upgradeForm` 自動寫入，不要手改**（`{floor}` 每個必填樓層題各一個，網站全部替換） |
