@@ -69,21 +69,36 @@ function apiList() {
   return { me: me, items: items };
 }
 
-/** 截圖縮圖（以審核員自己的權限讀雲端硬碟，所以截圖資料夾要分享給審核員：主程式的 enableReviewQueue 會做）。 */
+/** 截圖縮圖（以審核員自己的權限讀雲端硬碟，所以截圖資料夾要分享給審核員：主程式的 enableReviewQueue 會做）。
+ *  先用 Drive API 拿縮圖（小、快）；拿不到時改用 DriveApp 直接讀原檔（2026-11-02：擁有者自己打開也出現 403/404，
+ *  原因不明，所以加上備援，並把 Google 回傳的原始錯誤顯示出來）。 */
 function apiShot(fileId, size) {
   const auth = { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() };
-  const res = UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(fileId) + '?fields=thumbnailLink',
-    { headers: auth, muteHttpExceptions: true });
-  const meta = JSON.parse(res.getContentText() || '{}');
-  if (!meta.thumbnailLink) {
-    if (res.getResponseCode() === 404 || res.getResponseCode() === 403)
-      throw new Error('你還沒有這張截圖的檢視權限。請試算表擁有者在「Aincrad 回報自動化」執行 enableReviewQueue');
-    throw new Error('雲端硬碟還在產生縮圖，等幾分鐘再按「重新整理」');
+  let why = '';
+  try {
+    const res = UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(fileId) + '?fields=thumbnailLink',
+      { headers: auth, muteHttpExceptions: true });
+    let meta = {};
+    try { meta = JSON.parse(res.getContentText() || '{}'); } catch (e) {}
+    if (meta.thumbnailLink) {
+      const r = UrlFetchApp.fetch(meta.thumbnailLink.replace(/=s\d+$/, '=s' + Math.min(Number(size) || 1200, 1600)),
+        { headers: auth, muteHttpExceptions: true });
+      if (r.getResponseCode() === 200)
+        return 'data:image/jpeg;base64,' + Utilities.base64Encode(r.getBlob().getAs(MimeType.JPEG).getBytes());
+      why = '縮圖下載 ' + r.getResponseCode();
+    } else {
+      why = 'Drive API ' + res.getResponseCode() + (meta.error && meta.error.message ? '：' + meta.error.message : '：還沒有縮圖');
+    }
+  } catch (e) { why = 'Drive API：' + e.message; }
+  // 備援：直接讀原檔（截圖通常 1～3 MB）
+  let file;
+  try { file = DriveApp.getFileById(fileId); }
+  catch (e) {
+    throw new Error('你還沒有這張截圖的檢視權限（' + why + '；DriveApp：' + e.message + '）。請試算表擁有者在「Aincrad 回報自動化」執行 enableReviewQueue');
   }
-  const r = UrlFetchApp.fetch(meta.thumbnailLink.replace(/=s\d+$/, '=s' + Math.min(Number(size) || 1200, 1600)),
-    { headers: auth, muteHttpExceptions: true });
-  if (r.getResponseCode() !== 200) throw new Error('縮圖下載失敗（' + r.getResponseCode() + '）');
-  return 'data:image/jpeg;base64,' + Utilities.base64Encode(r.getBlob().getAs(MimeType.JPEG).getBytes());
+  if (file.getSize() > 15 * 1024 * 1024) throw new Error('截圖太大（' + Math.round(file.getSize() / 1048576) + ' MB），請用下面的連結在雲端硬碟開啟（' + why + '）');
+  const blob = file.getBlob();
+  return 'data:' + (blob.getContentType() || 'image/png') + ';base64,' + Utilities.base64Encode(blob.getBytes());
 }
 
 /** 核准或退回一筆。只改「狀態」「審核備註」；別人已經處理過就不覆蓋。 */
