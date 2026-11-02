@@ -923,11 +923,12 @@ function openP(type,id,mode){if(mode==="push"&&!panel.hidden&&stack.length)stack
 let pending=null;
 // a place asked for from a panel / list: on the map tab move the big map; elsewhere open the floating map window
 // sel = index of the point the user clicked: drawn red and named in the title, the others stay numbered
-function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[f].map){goMapThen(f,onMap);return}
+// phones never open the floating map: they switch to the map tab and centre the point there
+function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[f].map||matchMedia("(max-width:820px)").matches){goMapThen(f,onMap);return}
   const s=sel!=null&&sel>=0?sel:null,c=p=>`X ${p[0]} · Z ${p[1]}`;
   openRouteWin(pts.length>1&&s!=null?`${title}・第 ${s+1} 點（共 ${pts.length} 點）${c(pts[s])}`:`${title}・${pts.map(c).join("、")}`,
     pts.map((p,i)=>[pts.length>1?`${i+1}. ${c(p)}`:c(p),p[0],p[1]]),f,true);if(s!=null&&pts.length>1)RW.sel=s+1}
-function goMapThen(f,fn){if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
+function goMapThen(f,fn){const ph=matchMedia("(max-width:820px)").matches;if(ph){closeP();const g=fn;fn=()=>{g();requestAnimationFrame(()=>stage.scrollIntoView({block:"start",behavior:"smooth"}))}}if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
 const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
 function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");document.body.classList.toggle("pdeep",stack.length>1);
