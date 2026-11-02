@@ -130,7 +130,7 @@ function renderCard(a){S.list=a;
   $("card").innerHTML='<div class="ctop"><span style="font-size:24px">'+(ICON[x.type]||"❔")+'</span><h2>'+esc(x.name)+'</h2><span class="badge">'+esc(x.type)+'</span><span class="badge">'+flTxt(x)+'</span><span class="badge">'+esc(x.id)+'</span>'
     +(wait?(PRI[x.type]===0?'<span class="pri">優先</span>':""):'<span class="st '+stCls(x.status)+'">'+esc(x.status)+'</span>')+'<span class="muted">'+esc(x.time)+'</span></div>'
     +'<div class="cbody"><div><div class="shot" id="shot">'+(x.shots.length?"截圖載入中…":"這筆回報沒有截圖")+'</div>'
-    +(x.shots.length>1?'<div class="thumbs">'+x.shots.map(function(s,k){return'<button type="button" data-k="'+k+'" aria-pressed="'+(k===S.shotIdx)+'">第 '+(k+1)+' 張</button>'}).join("")+'</div>':"")+'</div>'
+    +(x.shots.length>1?'<div class="thumbs">'+x.shots.map(function(s,k){return'<button type="button" data-k="'+k+'" aria-pressed="'+(k===S.shotIdx)+'">第 '+(k+1)+' 張</button>'}).join("")+'</div>':"")+'<div id="shotVia" style="font-size:12px;color:#8a94a3;margin-top:4px;overflow-wrap:anywhere"></div></div>'
     +'<div style="display:flex;flex-direction:column;gap:12px;min-width:0"><dl>'+dl+'</dl>'+map
     +'<a class="muted" href="https://cheng-1001.github.io/ArgoStrategyGuide/#f'+encodeURIComponent(x.floor||1)+'-'+(SITE_TAB[x.type]||"monsters")+'" target="_blank" rel="noopener">在網站上看目前的資料 ↗</a></div></div>'
     +(wait?'<div class="act"><textarea id="note" placeholder="審核備註（可不填）。退回時寫原因；如果這隻其實是舊怪物改名，寫「舊名：原本的名字」，例如 舊名：Young Spider"></textarea><button class="btn ok" id="bOk" type="button">✅ 核准</button><button class="btn bad" id="bNo" type="button">❌ 退回</button></div>'
@@ -145,13 +145,13 @@ function renderCard(a){S.list=a;
 }
 // one request per screenshot (shared by the card and the background prefetch)
 var shotReq={};
-function getShot(id){if(shotCache[id])return Promise.resolve(shotCache[id]);if(!shotReq[id])shotReq[id]=run("apiShot",id,1600).then(function(src){shotCache[id]=src;return src},function(e){delete shotReq[id];throw e});return shotReq[id]}
+function getShot(id){if(shotCache[id])return Promise.resolve(shotCache[id]);if(!shotReq[id])shotReq[id]=run("apiShot",id,1600).then(function(r){if(typeof r==="string")r={src:r};shotCache[id]=r;return r},function(e){delete shotReq[id];throw e});return shotReq[id]}
 // after a screenshot shows: load this report's other screenshots and the next report's first one in the background
 function prefetch(x){var a=S.list||[],i=-1;for(var k=0;k<a.length;k++)if(a[k].id===x.id)i=k;
   var ids=x.shots.slice();if(i>=0&&a[i+1]&&a[i+1].shots[0])ids.push(a[i+1].shots[0]);
   ids.reduce(function(p,id){return p.then(function(){return getShot(id).catch(function(){})})},Promise.resolve())}
 function loadShot(x){var id=x.shots[S.shotIdx];if(!id)return;var el=$("shot");
-  var show=function(src){if($("shot")!==el||x.id!==S.cur)return;el.innerHTML='<img alt="'+esc(x.id)+' 第 '+(S.shotIdx+1)+' 張截圖" src="'+src+'">';el.querySelector("img").onclick=function(){var z=document.createElement("div");z.className="zoom";z.innerHTML='<img alt="" src="'+src+'">';z.onclick=function(){z.remove()};document.body.appendChild(z)}};
+  var show=function(r){if($("shot")!==el||x.id!==S.cur)return;var src=r.src;el.innerHTML='<img alt="'+esc(x.id)+' 第 '+(S.shotIdx+1)+' 張截圖" src="'+src+'">';var d=$("shotVia");if(d)d.textContent=r.via&&r.via!=="縮圖"?"讀取方式："+r.via+(r.ms!=null?"（"+(r.ms/1000).toFixed(1)+" 秒）":"")+(r.why?"。縮圖讀不到的原因："+r.why:""):"";el.querySelector("img").onclick=function(){var z=document.createElement("div");z.className="zoom";z.innerHTML='<img alt="" src="'+src+'">';z.onclick=function(){z.remove()};document.body.appendChild(z)}};
   if(shotCache[id]){show(shotCache[id]);prefetch(x);return}
   getShot(id).then(function(src){show(src);prefetch(x)}).catch(function(e){if($("shot")===el)el.innerHTML='<div>截圖載入失敗：'+esc(e.message)+'<br><a style="color:#9cc6ff" href="https://drive.google.com/file/d/'+encodeURIComponent(id)+'/view" target="_blank" rel="noopener">在雲端硬碟開啟</a></div>'})}
 function decide(x,d,a,i){if(S.busy)return;var note=($("note")||{}).value||"";

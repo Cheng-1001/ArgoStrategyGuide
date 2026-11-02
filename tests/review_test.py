@@ -29,10 +29,10 @@ window.__calls=[];window.__items=%s;
 window.google={script:{get run(){var ok=function(){},no=function(){};var o={
  withSuccessHandler:function(f){ok=f;return o},withFailureHandler:function(f){no=f;return o},
  apiList:function(){__calls.push(["apiList"]);setTimeout(function(){ok({me:"reviewer@gmail.com",items:JSON.parse(JSON.stringify(__items))})},30)},
- apiShot:function(id){__calls.push(["apiShot",id]);setTimeout(function(){ok(%s)},30)},
+ apiShot:function(id){__calls.push(["apiShot",id]);setTimeout(function(){ok(id==="fR0003"?{src:%s,via:"原檔",why:"測試原因",ms:1234}:%s)},30)},
  apiDecide:function(row,id,d,note){__calls.push(["apiDecide",row,id,d,note]);var x=__items.find(function(i){return i.id===id});x.status=d;
    setTimeout(function(){ok({ok:true,note:"審核：reviewer"+(note?"｜"+note:""),msg:id+(d==="核准"?" 已核准，約 1 分鐘內自動上線":" 已退回")})},30)}};return o}}};
-</script>""" % (json.dumps(ITEMS, ensure_ascii=False), json.dumps(img))
+</script>""" % (json.dumps(ITEMS, ensure_ascii=False), json.dumps(img), json.dumps(img))
 page_html = "<!doctype html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'></head><body>" + MOCK + html + "</body></html>"
 
 fails = []
@@ -55,6 +55,7 @@ with sync_playwright() as p:
             check("怪物 2" in pg.inner_text("#fType") and "地點 2" in pg.inner_text("#fType") and "配方 0" in pg.inner_text("#fType") and "技能 0" in pg.inner_text("#fType"), "type chips show counts, new types included")
             pg.wait_for_timeout(200)
             check(pg.locator("#shot img").count() == 1, "screenshot loads into the card")
+            check("讀取方式：原檔（1.2 秒）" in pg.inner_text("#shotVia") and "測試原因" in pg.inner_text("#shotVia"), "a screenshot read from the original file says so, with the reason (" + pg.inner_text("#shotVia") + ")")
             check(pg.locator(".map i").count() == 1, "coordinates are marked on the floor map")
             pg.wait_for_timeout(300)
             shots = pg.evaluate("__calls.filter(c=>c[0]==='apiShot').map(c=>c[1])")

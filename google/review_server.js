@@ -74,46 +74,51 @@ function apiList() {
  *  原因不明，所以加上備援，並把 Google 回傳的原始錯誤顯示出來）。 */
 function apiShot(fileId, size) {
   const auth = { Authorization: 'Bearer ' + ScriptApp.getOAuthToken() };
-  let why = '';
-  // 1) 進階服務「Drive」（資訊清單有開；開了它，Google 才會替這個專案啟用 Drive API）
+  const px = Math.min(Number(size) || 1200, 1600), notes = [], t0 = Date.now();
+  const jpeg = (r, via) => ({ src: 'data:image/jpeg;base64,' + Utilities.base64Encode(r.getBlob().getAs(MimeType.JPEG).getBytes()),
+                              via: via, why: notes.join('；'), ms: Date.now() - t0 });
+  const isImg = r => r.getResponseCode() === 200 && /^image\//.test(String(r.getHeaders()['Content-Type'] || r.getHeaders()['content-type'] || ''));
+  // 1) 進階服務「Drive」（資訊清單有開）拿 thumbnailLink
+  let link = '';
   try {
     if (typeof Drive !== 'undefined') {
       const f = Drive.Files.get(fileId, { fields: 'thumbnailLink' });
-      if (f && f.thumbnailLink) {
-        const r = UrlFetchApp.fetch(f.thumbnailLink.replace(/=s\d+$/, '=s' + Math.min(Number(size) || 1200, 1600)),
-          { headers: auth, muteHttpExceptions: true });
-        if (r.getResponseCode() === 200)
-          return 'data:image/jpeg;base64,' + Utilities.base64Encode(r.getBlob().getAs(MimeType.JPEG).getBytes());
-        why = '進階服務縮圖下載 ' + r.getResponseCode() + '；';
-      } else why = '進階服務：還沒有縮圖；';
-    }
-  } catch (e) { why = '進階服務：' + e.message + '；'; }
-  // 2) 直接呼叫 Drive API
-  try {
+      link = f && f.thumbnailLink || '';
+      if (!link) notes.push('進階服務：沒有縮圖連結');
+    } else notes.push('進階服務沒開');
+  } catch (e) { notes.push('進階服務：' + e.message); }
+  // 2) 直接呼叫 Drive API 拿 thumbnailLink
+  if (!link) try {
     const res = UrlFetchApp.fetch('https://www.googleapis.com/drive/v3/files/' + encodeURIComponent(fileId) + '?fields=thumbnailLink',
       { headers: auth, muteHttpExceptions: true });
     let meta = {};
     try { meta = JSON.parse(res.getContentText() || '{}'); } catch (e) {}
-    if (meta.thumbnailLink) {
-      const r = UrlFetchApp.fetch(meta.thumbnailLink.replace(/=s\d+$/, '=s' + Math.min(Number(size) || 1200, 1600)),
-        { headers: auth, muteHttpExceptions: true });
-      if (r.getResponseCode() === 200)
-        return 'data:image/jpeg;base64,' + Utilities.base64Encode(r.getBlob().getAs(MimeType.JPEG).getBytes());
-      why += '縮圖下載 ' + r.getResponseCode();
-    } else {
-      why += 'Drive API ' + res.getResponseCode() + (meta.error && meta.error.message ? '：' + meta.error.message : '：還沒有縮圖');
-    }
-  } catch (e) { why += 'Drive API：' + e.message; }
-  console.log('apiShot 改讀原檔：' + why);   // 在專案的「執行項目」看得到原因
-  // 3) 備援：直接讀原檔（截圖通常 1～3 MB）
+    link = meta.thumbnailLink || '';
+    if (!link) notes.push('Drive API ' + res.getResponseCode() + (meta.error && meta.error.message ? '：' + meta.error.message : '：沒有縮圖連結'));
+  } catch (e) { notes.push('Drive API：' + e.message); }
+  if (link) try {
+    const r = UrlFetchApp.fetch(link.replace(/=s\d+$/, '=s' + px), { headers: auth, muteHttpExceptions: true });
+    if (isImg(r)) return jpeg(r, '縮圖');
+    notes.push('縮圖連結回應 ' + r.getResponseCode());
+  } catch (e) { notes.push('縮圖連結：' + e.message); }
+  // 3) 雲端硬碟的縮圖網址（另一個入口）
+  try {
+    const r = UrlFetchApp.fetch('https://drive.google.com/thumbnail?id=' + encodeURIComponent(fileId) + '&sz=w' + px,
+      { headers: auth, muteHttpExceptions: true, followRedirects: true });
+    if (isImg(r)) return jpeg(r, '縮圖（第二入口）');
+    notes.push('第二入口回應 ' + r.getResponseCode() + ' ' + String(r.getHeaders()['Content-Type'] || ''));
+  } catch (e) { notes.push('第二入口：' + e.message); }
+  // 4) 備援：直接讀原檔（截圖通常 1～3 MB，慢）
+  console.log('apiShot 改讀原檔：' + notes.join('；'));
   let file;
   try { file = DriveApp.getFileById(fileId); }
   catch (e) {
-    throw new Error('你還沒有這張截圖的檢視權限（' + why + '；DriveApp：' + e.message + '）。請試算表擁有者在「Aincrad 回報自動化」執行 enableReviewQueue');
+    throw new Error('你還沒有這張截圖的檢視權限（' + notes.join('；') + '；DriveApp：' + e.message + '）。請試算表擁有者在「Aincrad 回報自動化」執行 enableReviewQueue');
   }
-  if (file.getSize() > 15 * 1024 * 1024) throw new Error('截圖太大（' + Math.round(file.getSize() / 1048576) + ' MB），請用下面的連結在雲端硬碟開啟（' + why + '）');
+  if (file.getSize() > 15 * 1024 * 1024) throw new Error('截圖太大（' + Math.round(file.getSize() / 1048576) + ' MB），請用下面的連結在雲端硬碟開啟（' + notes.join('；') + '）');
   const blob = file.getBlob();
-  return 'data:' + (blob.getContentType() || 'image/png') + ';base64,' + Utilities.base64Encode(blob.getBytes());
+  return { src: 'data:' + (blob.getContentType() || 'image/png') + ';base64,' + Utilities.base64Encode(blob.getBytes()),
+           via: '原檔', why: notes.join('；'), ms: Date.now() - t0 };
 }
 
 /** 核准或退回一筆。只改「狀態」「審核備註」；別人已經處理過就不覆蓋。 */
