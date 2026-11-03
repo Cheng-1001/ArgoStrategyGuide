@@ -279,6 +279,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .lg{width:11px;height:11px;border-radius:50%;border:2.5px solid var(--minion);background:#fff;display:inline-block}
 .editbar{position:absolute;left:50%;top:48px;transform:translateX(-50%);z-index:6;background:var(--accent);color:var(--accent-ink);padding:6px 14px;border-radius:6px;font-size:13px;box-shadow:var(--shadow);max-width:calc(100% - 24px);text-align:center}
 aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.shopt{font-size:11.5px;font-weight:600;color:var(--ok)}
 .wonly{font-style:normal;font-size:11px;color:var(--warn);border:1px solid var(--warn);border-radius:4px;padding:0 4px;margin-right:6px;white-space:nowrap}
 .zlist{overflow:auto;padding:4px 16px 12px;flex:1;min-height:0}
 .zrow{padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
@@ -1274,7 +1275,10 @@ function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=
   const ri=r.i!=null?r.i:ALLREC.findIndex(x=>x.npc===r.npc&&x.en===r.en);
   const go=showNpc?(n?"n|"+n.id:""):(e?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid:ri>=0?"r|"+ri:"");const rar=e?e.r:r.r;const tag=go?"button":"div";
   return`<li><${tag} class="lrow"${go?` data-go="${go}"`:""}>${showNpc?`<span class="th sm" style="--ring:var(--ref)" aria-hidden="true">${NGRP[npcGrp(n?n.c:"accessoriesBlacksmith")][1]}</span>`:recIcon(r,34)}
-    <span class="t"><b>${showNpc?esc(r.npc):esc(r.en)}</b><span>${showNpc?"":(e?esc(e.name)+"・":"")+(RAR[rar]?RAR[rar][0]+"・":"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}>${showNpc&&n?`<div class="npcw-row">${npcWhere(n)}</div>`:""}</li>`}).join("")}</ul>`}
+    <span class="t"><b>${showNpc?esc(r.npc):esc(r.en)}</b><span>${showNpc?"":(e?esc(e.name)+"・":"")+(RAR[rar]?RAR[rar][0]+"・":"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${isShop(r.f,r.npc)?`<span class="shopt">販售</span><br>`:r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}>${showNpc&&n?`<div class="npcw-row">${npcWhere(n)}</div>`:""}</li>`}).join("")}</ul>`}
+// loot buyers sell these for Col from their Buy tab: no crafting
+const isShop=(f,npc)=>{const n=npcByName(f,npc);return!!n&&n.c==="lootBuyers"};
+const howTitle=rs=>{const sh=rs.filter(x=>isShop(x.f,x.npc)).length;return!sh?"製作方式":sh===rs.length?"NPC 販售":"製作或購買"};
 const RC_CAT={weapon:["武器","⚔️"],armor:["防具","🛡️"],acc:["飾品","💍"],potion:["藥水","🧪"],key:["鑰匙","🗝️"],other:["其他","📦"]};
 const ALLREC=Object.entries(RECIPES).flatMap(([npc,r])=>r.items.map(it=>recRow(npc,r.floor,it)));ALLREC.forEach((r,i)=>r.i=i);
 // the official catalogue's level wins over the reference map's older recipe level (game screenshots already agree with it)
@@ -1293,7 +1297,7 @@ function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value
   a.sort((x,y)=>so==="lv"?(x.lv||0)-(y.lv||0)||x.en.localeCompare(y.en):so==="name"?x.en.localeCompare(y.en):x.npc.localeCompare(y.npc)||(x.lv||0)-(y.lv||0));
   $("cRc").textContent=`${a.length} / ${ALLREC.length} 筆`;
   $("lRc").innerHTML=a.length?a.map(r=>{const e=eqById[String(r.oid)]||prById[String(r.oid)];const go=recGo(r);const rar=e?e.r:r.r;const tag="button";
-    return`<${tag} class="card rcard" data-go="r|${r.i}" data-key="r|${r.i}"><div class="chead">${recIcon(r)}<div class="cname"><b>${esc(r.en)}</b><span>${e?esc(e.name)+"・":""}${esc(r.npc)}</span></div></div>
+    return`<${tag} class="card rcard" data-go="r|${r.i}" data-key="r|${r.i}"><div class="chead">${recIcon(r)}<div class="cname"><b>${esc(r.en)}</b><span>${e?esc(e.name)+"・":""}${isShop(r.f,r.npc)?"販售・":""}${esc(r.npc)}</span></div></div>
     <div class="cmeta">${RAR[rar]?`<span class="pill ${RAR[rar][1]}">${RAR[rar][0]}</span>`:""}<span>${RC_CAT[r.cat][0]}</span>${r.lv?`<span>· 等級 ${r.lv}</span>`:""}<span>· ${costText(r.cost)}</span>${r.sec?`<span>· ${r.sec} 秒</span>`:""}${r.src==="shot"?'<span class="pill rep">遊戲截圖</span>':r.src==="rep"?'<span class="pill rep">玩家回報</span>':""}</div>
     <div class="mats">${r.mats.length?matText(r.mats):'<span class="muted">只要 Col</span>'}</div></${tag}>`}).join(""):`<div class="empty-note">沒有符合條件的配方。</div>`;
   bindGo($("lRc"));markSel()}
@@ -1410,20 +1414,20 @@ function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
   ${e.dmg||rows?`<dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>`:""}
   ${en?`<ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>${isE?"掉落來源、任務需求":"掉落來源、掉落率、任務需求"}</span></span><span class="v">›</span></button></li></ul>`:""}
-  ${other.length?`<h3 class="sec">其他製作地點</h3>${recipeTable(other,true)}`:""}
+  ${other.length?`<h3 class="sec">${other.some(x=>isShop(x.f,x.npc))?"其他製作或購買地點":"其他製作地點"}</h3>${recipeTable(other,true)}`:""}
   <div class="gobtns"><button class="btn" data-goview="${isE?"equip|e":"props|p"}|${e.oid}">查看圖鑑</button></div>`}
 function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找不到這個配方。</div>`;
-  const e=eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),rar=e?e.r:r.r,isE=!!eqById[String(r.oid)];
-  return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} 配方・${RC_CAT[r.cat][0]}</div><h2>${esc(r.en)}</h2>${e?`<div class="sub">${esc(e.name)}</div>`:""}</div></div>
-  <dl class="facts"><dt>在哪裡做</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button><br>${npcWhere(n)}`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvRef?` <span class="muted" style="font-size:12px">（參考互動地圖寫 ${r.lvRef}，以官方圖鑑為準）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(x.n)}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
-  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:'<div class="muted">只要 Col，不用材料。</div>'}
+  const e=eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),shop=isShop(r.f,r.npc),rar=e?e.r:r.r,isE=!!eqById[String(r.oid)];
+  return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} ${shop?"NPC 販售":"配方"}・${RC_CAT[r.cat][0]}</div><h2>${esc(r.en)}</h2>${e?`<div class="sub">${esc(e.name)}</div>`:""}</div></div>
+  <dl class="facts"><dt>${shop?"在哪裡買":"在哪裡做"}</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button><br>${npcWhere(n)}`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvRef?` <span class="muted" style="font-size:12px">（參考互動地圖寫 ${r.lvRef}，以官方圖鑑為準）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(x.n)}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
+  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用 Col 購買，不用材料。</div>':'<div class="muted">只要 Col，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
-  <div class="note srcn">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
+  <div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u?"・在地下":""}</div></div></div>
   ${ty&&ty[0]!==g[0]?`<dl class="facts"><dt>類型</dt><dd>${esc(ty[0])}<span class="muted">（參考互動地圖的分類）</span></dd></dl>`:""}
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
-  ${RECIPES[n.n]?`<h3 class="sec">可以製作 <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
+  ${RECIPES[n.n]?`<h3 class="sec">${n.c==="lootBuyers"?"販售":"可以製作"} <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
     :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「協作區」回報就能補上。</div>`:""}
   ${n.n==="Nodachi Blacksmith"?`<h3 class="sec">Nodachi Altar（升階）</h3><div class="note">打開製作選單是「Nodachi Altar」：把兩把同種的 Nodachi 武器合成升一階。共 5 種武器（Nodachi、Nodachi Dagger、Nodachi Bow、Nodachi Magic Staff、Nodachi Staff），每種 5 階，製作時間 10 秒、20 秒、30 秒、45 秒、1 分鐘，全部神話級（MYTHIC）、免費。第 1 階的材料是同一把武器 ×2，之後每階是兩把各 1；每一階要哪一階的武器，畫面上沒寫，還在確認（站長 2026-11-03 的截圖）。</div>`:""}
   <div class="note srcn">${n.src==="rep"?`位置和類別來自核准的玩家回報（${repLink(n.rep)}）。`:n.src==="site"?"位置取自站長的遊戲影片（2026-10-30），座標是站在 NPC 旁邊時的位置。":n.src==="site2"?"位置取自站長的遊戲截圖（2026-11-03），座標是站在 NPC 旁邊時的位置。":n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
@@ -1503,7 +1507,7 @@ function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
   <dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
   ${en?`<h3 class="sec">本站物品資料</h3><ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>掉落來源、任務需求</span></span><span class="v">›</span></button></li></ul>`:""}
-  ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
+  ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note srcn">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
 // ================= props tab (official catalogue, non-equipment) =================
@@ -1533,7 +1537,7 @@ function propDetail(id){const e=prById[id];const en=FR2ID[e.name];
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}${rows?`<dl class="stats">${rows}</dl>`:""}
   ${en?`<h3 class="sec">掉落與任務</h3><ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>掉落來源、掉落率、任務需求</span></span><span class="v">›</span></button></li></ul>`:""}
-  ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">製作方式</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
+  ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note srcn">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
 // ================= bosses tab =================
