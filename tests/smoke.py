@@ -341,7 +341,7 @@ with sync_playwright() as p:
           "NPC sub-categories sit right under the NPC chip")
     fb, pb = pg.locator("#fpFly").bounding_box(), pg.locator("#fpanel").bounding_box()
     top4 = pg.eval_on_selector_all("#fpFly .fchip", "e=>e.slice(0,4).map(b=>b.dataset.k).join(',')")
-    check(pg.is_visible("#fpFly") and fb["x"] >= pb["x"] + pb["width"] and pg.locator("#fpFly .fchip").count() == 9
+    check(pg.is_visible("#fpFly") and fb["x"] >= pb["x"] + pb["width"] and pg.locator("#fpFly .fchip").count() == 10
           and top4 == "npc:potion,npc:loot,npc:key,npc:acc",
           f"desktop: NPC sub-categories shown on the right as soon as NPC is on, the 4 main ones first ({top4})")
     pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)

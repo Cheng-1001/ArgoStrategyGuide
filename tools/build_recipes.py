@@ -11,26 +11,120 @@ import json, os, re, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REF, CAT = sys.argv[1], sys.argv[2]
 
-# owner's in-game screenshots (2026-11-01): npc -> [(catalogue id, name, seconds, mats, cost Col or "Free", rarity)]
+# owner's in-game screenshots (2026-11-01, 2026-11-03 evening batch): npc -> [(name, rarity, seconds, mats, cost Col or "Free", category)]
+# loot buyers' Buy tab = potions sold for Col (no materials). Catalogue id comes from OID.
 SHOTS = {
-    "Bandit Accessories": [
-        (1455, "Bandit Coin", 30, [["Small Pouch", 24]], "Free", None),
-        (2040, "Gloves of the Bandit", 15, [["Small Pouch", 16]], "Free", None),
-        (1456, "Bandit Hood", 15, [["Small Pouch", 16]], "Free", None),
-        (1292, "Stolen Amulet", 30, [["Small Pouch", 24]], "Free", None)],
-    "Shark Accessories": [
-        (None, "Shark Amulet", 15, [["Shark Shell", 8], ["Birch String", 1]], "30", "c"),
-        (None, "Shark Fang", 30, [["Shark Shell", 12], ["Wolf Fangs", 8]], "33", "b"),
-        (None, "Bracelet of the Shark", 30, [["Shark Shell", 12], ["Iron Ingot", 1]], "33", "b"),
-        (None, "Ring of the Shark", 15, [["Shark Shell", 8]], "30", "c")],
+    'Shark Accessories': [
+        ('Ring of the Shark', 'c', 15, [['Shark Carapace', 8]], '30', 'acc'),
+        ('Shark Amulet', 'c', 15, [['Shark Carapace', 8], ['Birch String', 1]], '30', 'acc'),
+        ('Shark Fang', 'b', 30, [['Shark Carapace', 12], ['Wolf Fangs', 8]], '33', 'acc'),
+        ('Bracelet of the Shark', 'b', 30, [['Shark Carapace', 12], ['Iron Ingot', 1]], '33', 'acc'),
+    ],
+    'Spider Accessories': [
+        ('Spider Ring', 'c', 15, [['Spider Cloth', 8], ['Coal Ore', 8]], '30', 'acc'),
+        ('Spider Bracelet', 'c', 15, [['Spider Cloth', 8], ['Corrupted Spore', 8]], '30', 'acc'),
+        ('Spider Gloves', 'c', 15, [['Spider Cloth', 8], ['Spider Thread', 8]], '30', 'acc'),
+        ('Spider Cloak', 'b', 30, [['Spider Cloth', 12], ['Spider Thread', 8]], '33', 'acc'),
+    ],
+    'Ice Golem Accessories': [
+        ('Frozen Ring', 'b', 30, [['Hard Glacial Hide', 12], ['Frost Dust', 8]], '33', 'acc'),
+        ('Frozen Bracelet', 'b', 30, [['Hard Glacial Hide', 16]], '33', 'acc'),
+        ('Frozen Gloves', 'c', 15, [['Hard Glacial Hide', 12]], '30', 'acc'),
+        ('Frozen Amulet', 'c', 15, [['Hard Glacial Hide', 8], ['Birch String', 1]], '30', 'acc'),
+    ],
+    'Deer Accessories': [
+        ('Bracelet of the Stags', 'b', 30, [['Mountain Stag Hide', 12]], '33', 'acc'),
+        ('Gloves of the Stags', 'b', 30, [['Mountain Stag Hide', 12]], '33', 'acc'),
+    ],
+    'Ice Spirit Accessories': [
+        ('Glacial Ring', 'b', 30, [['Glacial Magic Shard', 12], ['Frost Dust', 8]], '33', 'acc'),
+        ('Glacial Antenna', 'b', 30, [['Glacial Magic Shard', 16]], '33', 'acc'),
+        ('Glacial Essence', 'a', 60, [['Frost Dust', 32]], '40', 'acc'),
+        ('Glacial Amulet', 'b', 30, [['Glacial Magic Shard', 12], ['Birch String', 1]], '33', 'acc'),
+    ],
+    'Slime Accessories': [
+        ('Slimy Ring', 'c', 15, [['Slime Jelly', 8]], '25', 'acc'),
+        ('Gelatinous Bracelet', 'b', 30, [['Slime Jelly', 12], ['Slime Core', 4]], '28', 'acc'),
+        ('Gelatinous Amulet', 'c', 15, [['Oak String', 1], ['Slime Jelly', 8]], '25', 'acc'),
+    ],
+    'Elite Treant Accessories': [
+        ('Elite Gloves', 'c', 15, [['Wolf Fur', 8]], '25', 'acc'),
+        ('Elite Amulet', 'c', 15, [['Oak String', 1], ['Sylvan Bark', 8]], '25', 'acc'),
+        ('Elite Bracelet', 'b', 30, [['Oak Log', 4], ['Titan Bark', 4], ['Sylvan Bark', 8]], '28', 'acc'),
+        ('Elite Carapace', 'b', 30, [['Titan Bark', 8], ['Sylvan Bark', 8], ['Sylve Sprout', 8]], '28', 'acc'),
+    ],
+    'Sylve Accessories': [
+        ('Bracelet of the Sylve', 'c', 15, [['Oak Log', 8], ['Magic Wood Shard', 8]], '25', 'acc'),
+        ('Amulet of the Sylve', 'c', 15, [['Magic Wood Shard', 8], ['Oak String', 1]], '25', 'acc'),
+        ('Ring of the Sylve', 'b', 30, [['Magic Wood Shard', 8], ['Allium Flower', 8], ['Oak Log', 4], ['Wood Heart', 1]], '28', 'acc'),
+    ],
+    'Nepenthes Accessories': [
+        ('Ring of the Nepenthes', 'c', 15, [['Leaf Fragments', 8], ['Corrupted Spore', 8]], '25', 'acc'),
+        ('Bracelet of the Nepenthes', 'b', 30, [['Leaf Fragments', 12]], '28', 'acc'),
+        ('Amulet of the Nepenthes', 'c', 15, [['Leaf Fragments', 4], ['Corrupted Spore', 4], ['Oak String', 1]], '25', 'acc'),
+    ],
+    'Bandit Accessories': [
+        ('Gloves of the Bandit', 'c', 15, [['Small Purse', 16]], 'Free', 'acc'),
+        ('Bandit Hood', 'c', 15, [['Small Purse', 16]], 'Free', 'acc'),
+        ('Stolen Amulet', 'b', 30, [['Small Purse', 24]], 'Free', 'acc'),
+        ('Stolen Cloak', 'b', 30, [['Small Purse', 24]], 'Free', 'acc'),
+        ('Bandit Coin', 'b', 30, [['Small Purse', 24]], 'Free', 'acc'),
+    ],
+    'Geldorak Dungeon Guard - Starting Town': [
+        ('Forest Key', 'c', 60, [['Sylvan Bark', 8], ['Wood Heart', 4], ['Magic Mycelium', 1]], '10', 'key'),
+    ],
+    'Sewer Reshaper': [
+        ('Slime Essence', 'a', 60, [['Slime Jelly', 16], ['Essence of Gorbel', 1]], '20', 'other'),
+        ('Slime Tear', 's', 240, [['Slime Core', 16]], '25', 'other'),
+    ],
+    'Vallhat - Loot Buyer': [
+        ('Health Potion I', 'c', None, [], '5.02', 'potion'),
+        ('Mana Potion I', 'c', None, [], '5.02', 'potion'),
+        ('Stamina Potion I', 'c', None, [], '5.02', 'potion'),
+    ],
+    'Hanaka - Loot Buyer': [
+        ('Health Potion I', 'c', None, [], '5.02', 'potion'),
+        ('Mana Potion I', 'c', None, [], '5.02', 'potion'),
+        ('Stamina Potion I', 'c', None, [], '5.02', 'potion'),
+    ],
+    'Virelune - Loot Buyer': [
+        ('Health Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Mana Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Stamina Potion II', 'c', None, [], '10.05', 'potion'),
+    ],
+    'Mizunari Loot Buyer': [
+        ('Health Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Mana Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Stamina Potion II', 'c', None, [], '10.05', 'potion'),
+    ],
+    'Cursed Ruins - Loot Buyer': [
+        ('Health Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Mana Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Stamina Potion II', 'c', None, [], '10.05', 'potion'),
+    ],
+    'Cursed Ruins - Loot Buyer (2)': [
+        ('Health Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Mana Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Stamina Potion II', 'c', None, [], '10.05', 'potion'),
+    ],
+    'Candelia': [
+        ('Health Potion III', 'c', None, [], '15.07', 'potion'),
+        ('Mana Potion III', 'c', None, [], '15.07', 'potion'),
+        ('Stamina Potion III', 'c', None, [], '15.07', 'potion'),
+    ],
+    'Magical & Icy Loot Buyer': [
+        ('Health Potion III', 'c', None, [], '15.07', 'potion'),
+        ('Mana Potion III', 'c', None, [], '15.07', 'potion'),
+        ('Stamina Potion III', 'c', None, [], '15.07', 'potion'),
+    ],
 }
-SAME = {"Bandit's Gloves": "Gloves of the Bandit"}          # reference-map name -> in-game name
+SAME = {"Bandit's Gloves": "Gloves of the Bandit", "Bracelet of the Sylvan": "Bracelet of the Sylve", "Amulet of the Sylvan": "Amulet of the Sylve"}          # reference-map name -> in-game name
 # material names used in game / by the reference map -> this site's ITEMS ids
 MAT = {"Shark Carapace": "Shark Shell", "Soul of the Ruins": "Souls of the Ruins", "Sylve Shoot": "Sylvan Sprout",
        "Hard Glacial Hide": "Glacial Hardhide", "Essence of Gorbel": "Gorbel Essence", "Heart of Nymbrea": "Nymbréa's Heart",
-       "Fragment of the Bear's Soul": "Bear Soul Fragment", "Small Purse": "Small Pouch"}
+       "Fragment of the Bear's Soul": "Bear Soul Fragment", "Small Purse": "Small Pouch", "Leaf Fragments": "Leaf Fragment", "Allium Flower": "Allium", "Sylve Sprout": "Sylvan Sprout"}
 # item name -> official catalogue id (checked by hand: name keyword, level and set)
-OID = {"Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "Ring of the Leviathan": 2485, "Necklace of Aragorn": 1458, "Bracelet of Ice": 1596, "Gloves of the Wolves": 2044, "Occult Amulet": 1298, "Occult Ring": 2486, "Occult Bracelet": 1597, "Occult Gloves": 2045,   # 2026-11-02: official names matched by hand (Anneau de Léviathan, Collier de Aragorn, Capuche/Robe Occulte…; level may differ, the site shows the official one)
+OID = {"Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "Amulet of the Sylve": 1288, "Gloves of the Bandit": 2040, "Bandit Hood": 1456, "Stolen Amulet": 1292, "Bandit Coin": 1455, "Bracelet of the Sylve": 1589, "Health Potion II": 2458, "Health Potion III": 2459, "Stamina Potion II": 2472, "Ring of the Leviathan": 2485, "Necklace of Aragorn": 1458, "Bracelet of Ice": 1596, "Gloves of the Wolves": 2044, "Occult Amulet": 1298, "Occult Ring": 2486, "Occult Bracelet": 1597, "Occult Gloves": 2045,   # 2026-11-02: official names matched by hand (Anneau de Léviathan, Collier de Aragorn, Capuche/Robe Occulte…; level may differ, the site shows the official one)
        "Training Sword": 2596, "Training Bow": 1566, "Training Crossbow": 1727, "Training Scythe": 1761, "Katana Training": 1762,
        "Training Magic Staff": 2569, "Unbound Grimoire": 1626, "Training Lantern": 1627, "Wild Grimoire": 1628,
        "Beginner's Tunic": 1334, "Beginner Leggings": 1335, "Beginner's Boots": 1336,
@@ -74,7 +168,7 @@ for k, (pos, sec) in enumerate(secs):
 
 for npc, rows in SHOTS.items():                              # screenshots replace the same item, keep the rest
     old = {r[1]: r for r in npcs.get(npc, [])}
-    new = [[oid, n, sec, mats, cost, rar, "acc", (old.get(n) or [None] * 8)[7], "shot"] for oid, n, sec, mats, cost, rar in rows]
+    new = [[OID.get(n), n, sec, [[MAT.get(m, m), q] for m, q in mats], cost, rar, cat, (old.get(n) or [None] * 8)[7], "shot"] for n, rar, sec, mats, cost, cat in rows]
     names = {r[1] for r in new}
     npcs[npc] = new + [r for r in npcs.get(npc, []) if r[1] not in names]
 

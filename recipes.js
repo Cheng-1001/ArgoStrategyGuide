@@ -288,22 +288,6 @@ null,
 "floor": 1,
 "items": [
 [
-1455,
-"Bandit Coin",
-30,
-[
-[
-"Small Pouch",
-24
-]
-],
-"Free",
-null,
-"acc",
-5,
-"shot"
-],
-[
 2040,
 "Gloves of the Bandit",
 15,
@@ -314,7 +298,7 @@ null,
 ]
 ],
 "Free",
-null,
+"c",
 "acc",
 5,
 "shot"
@@ -330,7 +314,7 @@ null,
 ]
 ],
 "Free",
-null,
+"c",
 "acc",
 5,
 "shot"
@@ -346,7 +330,7 @@ null,
 ]
 ],
 "Free",
-null,
+"b",
 "acc",
 5,
 "shot"
@@ -354,18 +338,34 @@ null,
 [
 1454,
 "Stolen Cloak",
-null,
+30,
 [
 [
 "Small Pouch",
 24
 ]
 ],
-null,
-null,
+"Free",
+"b",
 "acc",
 5,
-"ref"
+"shot"
+],
+[
+1455,
+"Bandit Coin",
+30,
+[
+[
+"Small Pouch",
+24
+]
+],
+"Free",
+"b",
+"acc",
+5,
+"shot"
 ]
 ]
 },
@@ -391,6 +391,44 @@ null,
 "acc",
 8,
 "ref"
+]
+]
+},
+"Candelia": {
+"floor": 1,
+"items": [
+[
+2459,
+"Health Potion III",
+null,
+[],
+"15.07",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Mana Potion III",
+null,
+[],
+"15.07",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Stamina Potion III",
+null,
+[],
+"15.07",
+"c",
+"potion",
+null,
+"shot"
 ]
 ]
 },
@@ -572,13 +610,89 @@ null,
 ]
 ]
 },
+"Cursed Ruins - Loot Buyer": {
+"floor": 1,
+"items": [
+[
+2458,
+"Health Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Mana Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+2472,
+"Stamina Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+]
+]
+},
+"Cursed Ruins - Loot Buyer (2)": {
+"floor": 1,
+"items": [
+[
+2458,
+"Health Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Mana Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+2472,
+"Stamina Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+]
+]
+},
 "Deer Accessories": {
 "floor": 1,
 "items": [
 [
 1594,
 "Bracelet of the Stags",
-null,
+30,
 [
 [
 "Mountain Stag Hide",
@@ -586,15 +700,15 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 7,
-"ref"
+"shot"
 ],
 [
 2043,
 "Gloves of the Stags",
-null,
+30,
 [
 [
 "Mountain Stag Hide",
@@ -602,10 +716,10 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 7,
-"ref"
+"shot"
 ]
 ]
 },
@@ -615,7 +729,7 @@ null,
 [
 null,
 "Elite Gloves",
-null,
+15,
 [
 [
 "Wolf Fur",
@@ -623,15 +737,15 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 null,
 "Elite Amulet",
-null,
+15,
 [
 [
 "Oak String",
@@ -643,15 +757,15 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 null,
 "Elite Bracelet",
-null,
+30,
 [
 [
 "Oak Log",
@@ -667,15 +781,15 @@ null,
 ]
 ],
 "28",
-null,
+"b",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 null,
 "Elite Carapace",
-null,
+30,
 [
 [
 "Titan Bark",
@@ -691,10 +805,10 @@ null,
 ]
 ],
 "28",
-null,
+"b",
 "acc",
 3,
-"ref"
+"shot"
 ]
 ]
 },
@@ -729,7 +843,7 @@ null,
 [
 1821,
 "Forest Key",
-null,
+60,
 [
 [
 "Sylvan Bark",
@@ -745,10 +859,48 @@ null,
 ]
 ],
 "10",
-null,
+"c",
 "key",
 null,
-"ref"
+"shot"
+]
+]
+},
+"Hanaka - Loot Buyer": {
+"floor": 1,
+"items": [
+[
+2457,
+"Health Potion I",
+null,
+[],
+"5.02",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Mana Potion I",
+null,
+[],
+"5.02",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+2471,
+"Stamina Potion I",
+null,
+[],
+"5.02",
+"c",
+"potion",
+null,
+"shot"
 ]
 ]
 },
@@ -758,7 +910,7 @@ null,
 [
 null,
 "Frozen Ring",
-null,
+30,
 [
 [
 "Glacial Hardhide",
@@ -770,15 +922,15 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 7,
-"ref"
+"shot"
 ],
 [
 null,
 "Frozen Bracelet",
-null,
+30,
 [
 [
 "Glacial Hardhide",
@@ -786,15 +938,15 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 7,
-"ref"
+"shot"
 ],
 [
 null,
 "Frozen Gloves",
-null,
+15,
 [
 [
 "Glacial Hardhide",
@@ -802,15 +954,15 @@ null,
 ]
 ],
 "30",
-null,
+"c",
 "acc",
 7,
-"ref"
+"shot"
 ],
 [
 null,
 "Frozen Amulet",
-null,
+15,
 [
 [
 "Glacial Hardhide",
@@ -822,10 +974,10 @@ null,
 ]
 ],
 "30",
-null,
+"c",
 "acc",
 7,
-"ref"
+"shot"
 ]
 ]
 },
@@ -835,7 +987,7 @@ null,
 [
 null,
 "Glacial Ring",
-null,
+30,
 [
 [
 "Glacial Magic Shard",
@@ -847,15 +999,15 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 7,
-"ref"
+"shot"
 ],
 [
 null,
 "Glacial Antenna",
-null,
+30,
 [
 [
 "Glacial Magic Shard",
@@ -863,15 +1015,15 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 7,
-"ref"
+"shot"
 ],
 [
 null,
 "Glacial Essence",
-null,
+60,
 [
 [
 "Frost Dust",
@@ -879,15 +1031,15 @@ null,
 ]
 ],
 "40",
-null,
+"a",
 "acc",
 7,
-"ref"
+"shot"
 ],
 [
 null,
 "Glacial Amulet",
-null,
+30,
 [
 [
 "Glacial Magic Shard",
@@ -899,10 +1051,10 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 7,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1011,6 +1163,82 @@ null,
 ]
 ]
 },
+"Magical & Icy Loot Buyer": {
+"floor": 1,
+"items": [
+[
+2459,
+"Health Potion III",
+null,
+[],
+"15.07",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Mana Potion III",
+null,
+[],
+"15.07",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Stamina Potion III",
+null,
+[],
+"15.07",
+"c",
+"potion",
+null,
+"shot"
+]
+]
+},
+"Mizunari Loot Buyer": {
+"floor": 1,
+"items": [
+[
+2458,
+"Health Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Mana Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+2472,
+"Stamina Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+]
+]
+},
 "Necklace of Aragorn": {
 "floor": 1,
 "items": [
@@ -1046,7 +1274,7 @@ null,
 [
 null,
 "Ring of the Nepenthes",
-null,
+15,
 [
 [
 "Leaf Fragment",
@@ -1058,15 +1286,15 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 5,
-"ref"
+"shot"
 ],
 [
 null,
 "Bracelet of the Nepenthes",
-null,
+30,
 [
 [
 "Leaf Fragment",
@@ -1074,15 +1302,15 @@ null,
 ]
 ],
 "28",
-null,
+"b",
 "acc",
 5,
-"ref"
+"shot"
 ],
 [
 null,
 "Amulet of the Nepenthes",
-null,
+15,
 [
 [
 "Leaf Fragment",
@@ -1098,10 +1326,10 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 5,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1373,9 +1601,66 @@ null,
 ]
 ]
 },
+"Sewer Reshaper": {
+"floor": 1,
+"items": [
+[
+null,
+"Slime Essence",
+60,
+[
+[
+"Slime Jelly",
+16
+],
+[
+"Gorbel Essence",
+1
+]
+],
+"20",
+"a",
+"other",
+null,
+"shot"
+],
+[
+null,
+"Slime Tear",
+240,
+[
+[
+"Slime Core",
+16
+]
+],
+"25",
+"s",
+"other",
+null,
+"shot"
+]
+]
+},
 "Shark Accessories": {
 "floor": 1,
 "items": [
+[
+null,
+"Ring of the Shark",
+15,
+[
+[
+"Shark Shell",
+8
+]
+],
+"30",
+"c",
+"acc",
+7,
+"shot"
+],
 [
 null,
 "Shark Amulet",
@@ -1435,22 +1720,6 @@ null,
 "acc",
 7,
 "shot"
-],
-[
-null,
-"Ring of the Shark",
-15,
-[
-[
-"Shark Shell",
-8
-]
-],
-"30",
-"c",
-"acc",
-7,
-"shot"
 ]
 ]
 },
@@ -1481,7 +1750,7 @@ null,
 [
 2478,
 "Slimy Ring",
-null,
+15,
 [
 [
 "Slime Jelly",
@@ -1489,15 +1758,15 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 4,
-"ref"
+"shot"
 ],
 [
 1592,
 "Gelatinous Bracelet",
-null,
+30,
 [
 [
 "Slime Jelly",
@@ -1509,15 +1778,15 @@ null,
 ]
 ],
 "28",
-null,
+"b",
 "acc",
 4,
-"ref"
+"shot"
 ],
 [
 1291,
 "Gelatinous Amulet",
-null,
+15,
 [
 [
 "Oak String",
@@ -1529,10 +1798,10 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 4,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1542,7 +1811,7 @@ null,
 [
 null,
 "Spider Ring",
-null,
+15,
 [
 [
 "Spider Cloth",
@@ -1554,15 +1823,15 @@ null,
 ]
 ],
 "30",
-null,
+"c",
 "acc",
 6,
-"ref"
+"shot"
 ],
 [
 1595,
 "Spider Bracelet",
-null,
+15,
 [
 [
 "Spider Cloth",
@@ -1574,15 +1843,15 @@ null,
 ]
 ],
 "30",
-null,
+"c",
 "acc",
 6,
-"ref"
+"shot"
 ],
 [
 null,
 "Spider Gloves",
-null,
+15,
 [
 [
 "Spider Cloth",
@@ -1594,15 +1863,15 @@ null,
 ]
 ],
 "30",
-null,
+"c",
 "acc",
 6,
-"ref"
+"shot"
 ],
 [
 null,
 "Spider Cloak",
-null,
+30,
 [
 [
 "Spider Cloth",
@@ -1614,10 +1883,10 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 6,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1845,8 +2114,8 @@ null,
 "items": [
 [
 1589,
-"Bracelet of the Sylvan",
-null,
+"Bracelet of the Sylve",
+15,
 [
 [
 "Oak Log",
@@ -1857,16 +2126,16 @@ null,
 8
 ]
 ],
-null,
-null,
+"25",
+"c",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 1288,
-"Amulet of the Sylvan",
-null,
+"Amulet of the Sylve",
+15,
 [
 [
 "Magic Wood Shard",
@@ -1877,16 +2146,16 @@ null,
 1
 ]
 ],
-null,
-null,
+"25",
+"c",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 2473,
 "Ring of the Sylve",
-null,
+30,
 [
 [
 "Magic Wood Shard",
@@ -1905,11 +2174,11 @@ null,
 1
 ]
 ],
-null,
-null,
+"28",
+"b",
 "acc",
 3,
-"ref"
+"shot"
 ]
 ]
 },
@@ -2047,6 +2316,82 @@ null,
 "potion",
 8,
 "ref"
+]
+]
+},
+"Vallhat - Loot Buyer": {
+"floor": 1,
+"items": [
+[
+2457,
+"Health Potion I",
+null,
+[],
+"5.02",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Mana Potion I",
+null,
+[],
+"5.02",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+2471,
+"Stamina Potion I",
+null,
+[],
+"5.02",
+"c",
+"potion",
+null,
+"shot"
+]
+]
+},
+"Virelune - Loot Buyer": {
+"floor": 1,
+"items": [
+[
+2458,
+"Health Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Mana Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+2472,
+"Stamina Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
 ]
 ]
 },
