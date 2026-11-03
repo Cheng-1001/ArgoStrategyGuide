@@ -100,6 +100,11 @@ with sync_playwright() as p:
     check(pg.locator('.bsp[title*="Pumba"]').count() == 6 and pg.locator('.bsp.ug[title*="Pumba"]').count() == 1, "boss place report adds an underground spawn")
     pg.locator("#zlist .zn", has_text="Putrid Swamp").first.click(); pg.wait_for_timeout(300)
     check("玩家回報的座標" in pg.inner_text("#pBody") and "T108" in pg.inner_text("#pBody"), "a report for a known place is attached, the point is not moved")
+    pg.click('#pBody a[data-repgo="T108"]'); pg.wait_for_timeout(1200)
+    li = pg.locator('#doneL li.replist[data-rid="T108"]')
+    box = li.bounding_box() if li.count() else None
+    check(pg.url.endswith("#report") and box is not None and 0 <= box["y"] < 900 and pg.locator('#doneL li[data-rid="T108"] .rhd a[data-repgo]').count() == 0,
+          "a report number links to its entry in 已收錄 (scrolled into view); the entry's own heading is not a link")
     pg.goto(base + "#report"); pg.wait_for_timeout(400)
     t = pg.inner_text("#doneL")
     check("配方・Iron Sword" in t and "技能・Boule de Feu" in t and "任務・A New World" in t and "看配方" in t and "看職業" in t and "看任務" in t,

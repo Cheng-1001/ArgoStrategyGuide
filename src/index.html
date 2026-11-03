@@ -548,6 +548,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 }
 @media (prefers-reduced-motion:reduce){.card,.mapth{transition:none}}
 #updBar{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:300;display:flex;align-items:center;gap:2px;max-width:calc(100vw - 32px);background:var(--accent,#e8a23a);color:#fff;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.3);padding:2px}#updBar button{font:inherit;font-weight:700;color:#fff;background:none;border:0;cursor:pointer;padding:8px 14px;white-space:nowrap}#updBar .ub-x{padding:8px 12px 8px 4px;opacity:.85;font-weight:400}
+@keyframes rflash{0%,60%{background:color-mix(in srgb,var(--accent,#e8a23a) 22%,transparent)}100%{background:transparent}}.replist.rflash{animation:rflash 2.6s ease}
 </style>
 
 <div class="app">
@@ -1007,7 +1008,9 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
 const REPO="https://github.com/Cheng-1001/ArgoStrategyGuide";
 const REPS=(window.SAO_REPORTS||[]);
 // report reference; the reporter's optional in-game nickname is shown with it
-const repRef=r=>(r.issue?`<a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">回報 #${r.issue}</a>`:`回報 ${esc(r.id||"")}`)+(r.by?`・<span class="repby">${esc(r.by)}</span> 提供`:"");
+// 回報編號連到協作區「已收錄」的那一則（goRep）；已收錄清單自己的標題不連
+const repLink=(id,label)=>id?`<a href="#report" class="replink" data-repgo="${esc(id)}">${esc(label||id)}</a>`:"";
+const repRef=(r,self)=>(r.issue?`<a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">回報 #${r.issue}</a>`:self?`回報 ${esc(r.id||"")}`:repLink(r.id,"回報 "+r.id))+(r.by?`・<span class="repby">${esc(r.by)}</span> 提供`:"");
 const repKey=r=>r.issue?"#"+r.issue:(r.id||"");
 const repsOf=m=>REPS.filter(r=>r.type==="monster"&&r.floor===m.floor&&(r.monId?r.monId===m.id:(r.name===m.name||(m.aka||[]).includes(r.name))));
 const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:m.lvShot!=null?m.lvShot:null};
@@ -1073,8 +1076,8 @@ function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">�
     :sp.nsrc==="site"?`<dt>名稱</dt><dd>本站命名<br><span class="muted" style="font-size:12.5px">wiki 圖鑑把這裡的怪物歸在「${rz.map(esc).join("、")}」，和附近的地點同名，所以另取名字區分</span></dd>`:"";
   return`<div class="phead"><span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span><div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(sp.n)}</h2><div class="sub">${esc(sp.zh)}</div></div></div>
   <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd>${nameRow}<dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd>${sp.tp?`<dt>傳送</dt><dd><span class="pill tpp">🌀 可傳送</span> 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl>
-  ${sp.u?`<div class="note">在地下，要從入口走下去。</div>`:""}${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}${sp.rep?`<div class="note">這個地點來自核准的玩家回報（${esc(sp.rep)}）。</div>`:""}
-  ${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${esc(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}
+  ${sp.u?`<div class="note">在地下，要從入口走下去。</div>`:""}${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}${sp.rep?`<div class="note">這個地點來自核准的玩家回報（${repLink(sp.rep)}）。</div>`:""}
+  ${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${repLink(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}
   <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>
   ${sp.kind==="dungeon"?dgKeyHTML(sp):""}
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(m.name)}</b><span>${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
@@ -1298,7 +1301,7 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
   <h3 class="sec">能力傾向 <span class="c">wiki 星等</span></h3>${tbl(c.stars.map(([k,n])=>`<tr><th>${esc(k)}</th><td>${n?bar(n):'<span class="muted">—</span>'}</td></tr>`).join(""),null)}
   ${keys.length?`<h3 class="sec">起始屬性和成長 <span class="c">參考互動地圖</span></h3>${tbl(keys.map(k=>`<tr><th>${esc(k)}</th><td class="mono">${esc(stat(c.base,k)??"—")}</td><td class="mono">${stat(c.perLv,k)!=null?"+"+esc(stat(c.perLv,k)):"—"}</td></tr>`).join(""),["屬性","Lv 1","每升 1 級"])}`:""}
   </div><div>
-  ${c.reps.length?`<h3 class="sec">技能（玩家回報） <span class="c">${c.reps.length}</span></h3><ul class="rows">${c.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:${/被動/.test(r.stype)?"var(--ok)":"var(--accent)"}" aria-hidden="true">${r.unlock||"?"}</span><span class="t"><b>${esc(r.name)}</b><span>${r.unlock?"Lv "+r.unlock+"・":""}${esc(r.stype||"")}${r.scost?"・"+esc(r.scost):""}${r.sdesc?"・原文："+esc(r.sdesc):""}</span></span><span class="v">${esc(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>`:""}
+  ${c.reps.length?`<h3 class="sec">技能（玩家回報） <span class="c">${c.reps.length}</span></h3><ul class="rows">${c.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:${/被動/.test(r.stype)?"var(--ok)":"var(--accent)"}" aria-hidden="true">${r.unlock||"?"}</span><span class="t"><b>${esc(r.name)}</b><span>${r.unlock?"Lv "+r.unlock+"・":""}${esc(r.stype||"")}${r.scost?"・"+esc(r.scost):""}${r.sdesc?"・原文："+esc(r.sdesc):""}</span></span><span class="v">${repLink(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>`:""}
   <h3 class="sec">技能${c.reps.length?"（wiki）":""} <span class="c">${c.skills.length}</span></h3>
   ${c.skillsSure?"":`<div class="note warn">wiki 上這些技能的圖示都是佔位圖，清單可能是開服前的預定內容，和遊戲實際不同。</div>`}
   <ul class="rows">${c.skills.map(([n,ty,lv,d])=>`<li><div class="lrow"><span class="th sm" style="--ring:${ty==="被動"?"var(--ok)":"var(--accent)"}" aria-hidden="true">${lv}</span><span class="t"><b>${esc(n)}</b><span>Lv ${lv}・${ty}・${esc(d)}</span></span></div></li>`).join("")}</ul>
@@ -1388,13 +1391,13 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   <dl class="facts"><dt>在哪裡做</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button>`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvRef?` <span class="muted" style="font-size:12px">（參考互動地圖寫 ${r.lvRef}，以官方圖鑑為準）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(x.n)}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
   <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:'<div class="muted">只要 Col，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
-  <div class="note srcn">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${esc(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
+  <div class="note srcn">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const c=NPCCAT[n.c];
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u?"・在地下":""}</div></div></div>
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
   ${RECIPES[n.n]?`<h3 class="sec">可以製作 <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
     :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「協作區」回報就能補上。</div>`:""}
-  <div class="note srcn">${n.src==="rep"?`位置和類別來自核准的玩家回報（${esc(n.rep)}）。`:n.src==="site"?"位置取自站長的遊戲影片（2026-10-30），座標是站在 NPC 旁邊時的位置。":n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
+  <div class="note srcn">${n.src==="rep"?`位置和類別來自核准的玩家回報（${repLink(n.rep)}）。`:n.src==="site"?"位置取自站長的遊戲影片（2026-10-30），座標是站在 NPC 旁邊時的位置。":n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
   const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")+`<dt>獎勵</dt><dd class="reward" style="text-align:left">${rewardText(qq,true)}</dd>`
     :`<dt>NPC</dt><dd>${esc(qq.npc)}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?t.n:"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq,true)}</dd>`;
@@ -1405,7 +1408,7 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
   ${!Q.main&&(qq.need.length||qq.kill)?`<h3 class="sec">需要的物品和目標</h3><div class="reqs">${reqChips(qq)}</div>`:""}
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
   <div class="note srcn">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。":qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
-  ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${esc(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
+  ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${repLink(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
   ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}`}
 function mqCard(qq,i){const meta=[qq.npc&&("NPC "+qq.npc),qq.lv&&("等級 "+qq.lv)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
   return`<button class="card qcard" data-key="q|${id}" data-go="q|${id}"><div class="mqh"><span class="mqn${qq.n?"":" nonum"}${qq.nEst?" est":""}" title="${qq.n?(qq.nEst?"遊戲任務編號（依順序推算）":"遊戲任務編號"):"遊戲編號未確認"}">${qq.n?qq.n:"·"}</span><div class="mqt"><b>${esc(qq.t)}</b>${meta?`<span>${meta}</span>`:""}</div><div class="reward">${rewardText(qq)}</div></div>
@@ -1901,7 +1904,7 @@ function renderReport(){
   $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?(monById[r.monId]||FLOORS[r.floor]?.M.find(x=>x.name===r.name||(x.aka||[]).includes(r.name))):null;
       const go=[m?`<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:"",r.type==="recipe"&&ALLREC.findIndex(x=>x.rep===r.id)>=0?`<button class="linkbtn" data-go="r|${ALLREC.findIndex(x=>x.rep===r.id)}">看配方</button>`:"",r.type==="skill"&&CLS.some(c=>c.reps.includes(r))?`<button class="linkbtn" data-go="c|${CLS.find(c=>c.reps.includes(r)).id}">看職業</button>`:"",r.type==="quest"&&r.qref&&r.qref!=="main"?`<button class="linkbtn" data-go="q|${r.qref}">看任務</button>`:"",r.type==="quest"&&r.qref==="main"?`<button class="linkbtn" data-go="q|mq${r.floor}_${MQ(r.floor).findIndex(x=>(x.reps||[]).includes(r))}">看任務</button>`:"",r.x!=null&&FLOORS[r.floor]?.map?`<button class="linkbtn" data-rep="${r.floor}|${r.x}|${r.z}">在地圖上看</button>`:""].filter(Boolean);
       // the report number and date head each entry; the links stay under the text
-      return`<li class="replist"><div class="rhd">${repRef(r)}・${esc(r.date)}</div><div class="rbody">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${r.floor?flBadge(r.floor):r.type==="item"?'<span class="fl">通用</span>':""} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span>${go.length?`<span class="rgo">${go.join(" ・")}</span>`:""}</span></div></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
+      return`<li class="replist" data-rid="${esc(r.id||"")}"><div class="rhd">${repRef(r,1)}・${esc(r.date)}</div><div class="rbody">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${r.floor?flBadge(r.floor):r.type==="item"?'<span class="fl">通用</span>':""} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span>${go.length?`<span class="rgo">${go.join(" ・")}</span>`:""}</span></div></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
   bindGo($("doneL"));$("doneL").querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);showPoints(f,[[x,z]],b.closest("li")?.querySelector("b")?.textContent||"回報位置",()=>repPin(x,z))});
   if(FORM_PREFILL){renderQueue();return}
   loadPending().then(list=>{const L=$("pendL"),C=$("pendC");if(!L)return;
@@ -2228,6 +2231,11 @@ new ResizeObserver(setHead).observe($("top"));
 let lastW=0;new ResizeObserver(()=>{const w=Math.round(stage.getBoundingClientRect().width);if(w&&w!==lastW&&MP()){const first=!lastW;lastW=w;if(!first||!fitted)fit()}}).observe(stage);
 mapImg.addEventListener("load",()=>{if(view==="map"&&!fitted)fit()});
 show();setHead();
+// 點「回報 R000N」：切到協作區「攻略資料維護」，把已收錄裡那一則捲到中間並閃一下
+function goRep(id){if(view!=="report"||rSub!=="data")go("report");let n=0;
+  const t=setInterval(()=>{const li=[...document.querySelectorAll("#doneL li.replist")].find(x=>x.dataset.rid===id);
+    if(li||++n>40){clearInterval(t);if(!li)return;li.scrollIntoView({block:"center",behavior:"smooth"});li.classList.remove("rflash");void li.offsetWidth;li.classList.add("rflash");setTimeout(()=>li.classList.remove("rflash"),2600)}},50)}
+document.addEventListener("click",e=>{const a=e.target.closest("[data-repgo]");if(!a)return;e.preventDefault();goRep(a.dataset.repgo)});
 // 新版檢查：GitHub Pages 讓瀏覽器把頁面暫存 10 分鐘，所以打開網站、回到這個分頁、每 5 分鐘各問一次伺服器
 // （不經過暫存）目前的 sao-build；和這一頁不同就在上方提示，點了用新網址（?u=新版號）載入，避開暫存
 {const meta=document.querySelector('meta[name="sao-build"]'),mine=meta&&meta.content;
