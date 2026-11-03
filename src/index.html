@@ -1548,7 +1548,10 @@ chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"]
 ["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
 const eqHit=(e,s)=>!s||norm(e.name+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value;
-  let a=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqSubV==="all"||eqSub(e)===eqSubV)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s));
+  const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s));
+  // sub-part counts follow the other filters (class, rarity, level, search), so they match the list
+  $("fEqSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>eqSub(e)===c.dataset.v).length});
+  let a=base.filter(e=>eqSubV==="all"||eqSub(e)===eqSubV);
   const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
   a.sort((x,y)=>so==="lvd"?y.lv-x.lv||x.name.localeCompare(y.name):so==="rar"?rv(y)-rv(x)||x.lv-y.lv:so==="name"?x.name.localeCompare(y.name):x.lv-y.lv||x.name.localeCompare(y.name));
   $("cEq").textContent=`${a.length} / ${EQ.length} 件`;
@@ -1585,7 +1588,9 @@ chipsInto($("fPrRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,R
 $("fPrSort").onchange=renderProps;
 const prHit=(e,s)=>!s||norm(e.name+" "+(FR2ID[e.name]||"")+" "+(PR_CAT[e.cat]||"")+" "+e.lore).includes(s);
 function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
-  let a=PR.filter(e=>(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prSubV==="all"||PR_SUBLAB(e.cat)===prSubV)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
+  const base=PR.filter(e=>(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
+  $("fPrSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>PR_SUBLAB(e.cat)===c.dataset.v).length});
+  let a=base.filter(e=>prSubV==="all"||PR_SUBLAB(e.cat)===prSubV);
   a.sort((x,y)=>so==="rar"?rv(y)-rv(x)||x.name.localeCompare(y.name):so==="lv"?x.lv-y.lv||x.name.localeCompare(y.name):x.name.localeCompare(y.name));
   $("cPr").textContent=`${a.length} / ${PR.length} 件`;const shown=a.slice(0,240);
   $("lPr").innerHTML=a.length?shown.map(e=>`<button class="card" data-key="p|${e.oid}" data-go="p|${e.oid}">
@@ -2322,7 +2327,7 @@ function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.m
   renderCurrent();if(viewPending){const fn=viewPending;viewPending=null;requestAnimationFrame(fn)}}
 // desktop: the main filters of each codex tab sit above the list (user 2026-11-04); the rest stay in the left column.
 // The groups are moved, not copied (their handlers keep working); phones put them back where they were.
-const TOPF={monsters:["fMonType"],equip:["fEqPart","fEqSub","fEqRar"],items:["fItemGroup","fItemRar"],props:["fPrGroup","fPrSub","fPrRar"]};
+const TOPF={monsters:["fMonType"],equip:["fEqPart","fEqSub"],items:["fItemGroup"],props:["fPrGroup","fPrSub"]};   // rarity stays in the left column (user 2026-11-04)
 const topMQ=matchMedia("(min-width:821px)");
 function placeTopFilters(){Object.entries(TOPF).forEach(([v,ids])=>{const sec=$("view-"+v);if(!sec)return;const res=sec.querySelector(".results"),rh=res.querySelector(".rhead");
   let bar=res.querySelector(":scope>.topf");if(!bar){bar=document.createElement("div");bar.className="topf";rh.after(bar)}
