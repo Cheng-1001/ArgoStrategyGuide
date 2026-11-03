@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="b01aee47be">
+<meta name="sao-build" content="2a27110bd7">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -749,7 +749,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=efd631d8"></script>
+<script src="data.js?v=12852eae"></script>
 <script src="data23.js?v=bc83d65b"></script>
 <script src="bosses.js?v=41309c3c"></script>
 <script src="reports.js?v=5f29733f"></script>
@@ -817,7 +817,7 @@ window.SAO_REPORTS=(window.SAO_REPORTS||[]).map(normRep);
   if(k==="NPC"){const L=(window.SAO_NPCS=window.SAO_NPCS||{})[f]=(window.SAO_NPCS[f]||[]);if(!L.some(n=>nrm(n[1])===nrm(r.name)))L.push([NPC_ZH[r.npcCat]||"other",r.name,r.x,r.z,"rep",r.ug?1:0,r.id]);return}
   const m=findMon(Fx,r.name);
   if(/首領/.test(k)&&m&&f===1){(S1.BOSS_SPAWNS=S1.BOSS_SPAWNS||[]).push([m.name,r.x,r.z,r.ug?1:0,r.id]);return}
-  const same=Fx.spots.find(s=>nrm(s.n)===nrm(r.name))||Fx.towns.find(s=>nrm(s.n)===nrm(r.name));
+  const nmOk=s=>[s.n,...String(s.old||"").split(" / ")].some(x=>x&&nrm(x)===nrm(r.name));const same=Fx.spots.find(nmOk)||Fx.towns.find(nmOk);   // old names (renamed to the codex names) still match
   if(same){(same.reps=same.reps||[]).push(r);return}
   const kind=k==="採集點"?"gather":/地下城/.test(k)?"dungeon":/怪物/.test(k)&&m?"mob":"poi";
   const tp=k==="傳送點"?(r.tpName||r.name):(r.tpName||null);
@@ -1096,7 +1096,7 @@ function dgKeyHTML(sp){const {want,hit}=dgKeys(sp);if(!want&&!hit.length)return"
     :`<div class="note">需要 ${esc(want)}，本站還沒有它的製作方式。</div>`}`}
 function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">這個地點已不存在。</div>`;const st=STATUS[sp.src];const Fx=FLOORS[sp.floor];
   const ms=sp.mons.map(n=>Fx.monByName[n]);const rz=[...new Set(ms.filter(Boolean).map(m=>Fx.zones[m.zone].n))];
-  const nameRow=sp.nsrc==="wiki"?`<dt>名稱</dt><dd>wiki 圖鑑表的區域名${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`
+  const nameRow=sp.csrc?`<dt>名稱</dt><dd>遊戲圖鑑的區域名${sp.old?`<br><span class="muted" style="font-size:12.5px">舊稱 ${esc(sp.old)}</span>`:""}</dd>`:sp.nsrc==="wiki"?`<dt>名稱</dt><dd>wiki 圖鑑表的區域名${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`
     :sp.nsrc==="site"?`<dt>名稱</dt><dd>本站命名<br><span class="muted" style="font-size:12.5px">wiki 圖鑑把這裡的怪物歸在「${rz.map(esc).join("、")}」，和附近的地點同名，所以另取名字區分</span></dd>`:"";
   return`<div class="phead"><span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span><div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(sp.n)}</h2><div class="sub">${esc(sp.zh)}</div></div></div>
   <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd>${nameRow}<dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd>${sp.tp?`<dt>傳送</dt><dd><span class="pill tpp">🌀 可傳送</span> 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl>
@@ -1108,7 +1108,7 @@ function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">�
   ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(i)}</b><span>${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}`}
 
 function townDetail(id){const t=townById[id];const qs=ALLQ.filter(x=>x.town===id);
-  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">🏘️</span><div class="ttl"><div class="num mono">${flBadge(t.floor)} X ${t.x} · Z ${t.z}</div><h2>${esc(t.n)}</h2>${t.zh||t.en?`<div class="sub">${esc(t.zh||t.en)}</div>`:""}</div></div>
+  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">🏘️</span><div class="ttl"><div class="num mono">${flBadge(t.floor)} X ${t.x} · Z ${t.z}</div><h2>${esc(t.n)}</h2>${t.zh||t.en||t.old?`<div class="sub">${esc([t.zh||t.en,t.old?"舊稱 "+t.old:""].filter(Boolean).join("・"))}</div>`:""}</div></div>
   ${soonNote(t.floor)}${t.tp?`<div class="note">🌀 <b>可以直接傳送</b>：在遊戲的傳送選單選「${esc(t.tp)}」。</div>`:t.floor===1?`<div class="note">這個村鎮不在遊戲的傳送選單裡，要自己走過去。</div>`:""}${t.note?`<div class="note">${esc(t.note)}</div>`:""}
   <button class="linkbtn" data-town="${id}">在地圖上查看</button>
   <h3 class="sec">支線任務 <span class="c">${qs.length}</span></h3>
@@ -2122,7 +2122,7 @@ function renderZoneList0(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(
   const sec=(title,n)=>{const h=document.createElement("div");h.className="zsec";h.dataset.k=title;h.innerHTML=`${title} <span class="mono">${n}</span><span class="zcv" aria-hidden="true"></span>`;
     h.onclick=()=>{if(ZOPEN.has(title))ZOPEN.delete(title);else ZOPEN.add(title);zfoldSync()};zl.appendChild(h)};
   const coord=(x,z)=>`<span class="mono muted" style="font-size:11px;margin-left:auto">X ${x} · Z ${z}</span>`;
-  const townRow=t=>{const row=document.createElement("div");row.className="zrow";row.dataset.tp=t.n+" "+(t.tp||"")+" "+(t.zh||"")+" "+(t.en||"");
+  const townRow=t=>{const row=document.createElement("div");row.className="zrow";row.dataset.tp=t.n+" "+(t.tp||"")+" "+(t.zh||"")+" "+(t.en||"")+" "+(t.old||"");
     row.innerHTML=`<div class="zhead"><button class="zn">${esc(t.n)}</button><span class="zzh">${t.tp?"傳送選單："+esc(t.tp):"村鎮・無法傳送"}${t.zh?"・"+esc(t.zh):""}</span>${coord(t.x,t.z)}</div>`;
     row.querySelector(".zn").onclick=()=>{centerOn(t.x,t.z,2.6);openP("t",t.id,"new")};zl.appendChild(row)};
   const spotRow=(x,noMons)=>{const st=STATUS[x.src];const row=document.createElement("div");row.className="zrow";row.dataset.s=x.id;
@@ -2170,7 +2170,7 @@ function showRoute(qq,i){ROUTE={q:qq,i};if(matchMedia("(max-width:820px)").match
   tx=r.width/2-toPxX((x0+x1)/2)*sc;ty=r.height/2-toPxZ((z0+z1)/2)*sc;apply()}
 function repPin(x,z){world.querySelectorAll(".rpin").forEach(n=>n.remove());const d=document.createElement("div");d.className="rpin";d.style.left=toPxX(x)+"px";d.style.top=toPxZ(z)+"px";d.innerHTML=`<span></span><b>X ${x} · Z ${z}</b>`;world.appendChild(d);centerOn(x,z,2.4)}
 function focusSpot(id){const sp=spotById(id);if(!sp)return;centerOn(sp.x,sp.z,2.4);const el=zoneEls[id];if(el){el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1300)}}
-const townHit=(t,s)=>!s||norm(t.n+" "+(t.zh||"")+" "+(t.tp||"")).includes(s);
+const townHit=(t,s)=>!s||norm(t.n+" "+(t.zh||"")+" "+(t.tp||"")+" "+(t.old||"")).includes(s);
 const spotHit=(sp,s)=>!s||norm(sp.n+" "+sp.zh+" "+(sp.old||"")).includes(s)||sp.mons.some(n=>monHit(FLOORS[sp.floor].monByName[n],s))||sp.items.some(i=>itemHit(i,s,true));
 let npcSearchKey="";
 function filterMap(){const s=Sq();

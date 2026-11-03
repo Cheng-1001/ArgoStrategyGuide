@@ -354,7 +354,7 @@ with sync_playwright() as p:
       for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const a=L[i][1],b=L[j][1];if(a.left<b.right-1&&a.right>b.left+1&&a.top<b.bottom-1&&a.bottom>b.top+1)bad.push(L[i][0]+'/'+L[j][0])}return bad})()""")
     check(not ov, f"map names do not cover each other; only teleport names may sit over a pin ({ov[:4]})")
     names = pg.eval_on_selector_all(".zone.mobarea .zlabel", "e=>e.map(x=>x.textContent.trim())")
-    check("Putrid Swamp" in names and "Boar Zone" in names and "Treants / Swamp" not in names, "monster areas use the wiki region names where one exists")
+    check("Marécage Putride" in names and "Zone Boar" in names and "Treants / Swamp" not in names, "monster areas use the in-game codex region names (Marécage Putride, Zone Boar)")
     st = pg.evaluate("""(()=>{const d=document.querySelector('.town.dungeon[data-s="fallen"]');const z=document.querySelector('.zone.mobarea .zlabel');
       return [!!d&&!!d.querySelector('.pin'),z?getComputedStyle(z).backgroundColor:'none',[...document.querySelectorAll('.bsp')].every(b=>getComputedStyle(b).borderTopStyle==='solid')]})()""")
     check(st[0] and st[1] == "rgba(0, 0, 0, 0)" and st[2], "dungeons have a pin on the entrance, monster-area names have no box, boss rings are all solid")

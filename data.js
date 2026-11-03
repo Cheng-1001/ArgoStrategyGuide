@@ -21,10 +21,10 @@ const STATUS = {
 };
 
 const ZONES = {
-  boar:     { n: "Boar Zone", zh: "野豬區（起始之城北）", note: "圖鑑把 Corrupted Boar 列在 Town of Beginnings，首領 Pumba 列在 Boar Zone；wiki 的 Pumba 頁面說牠會在起始之城外的野豬區定時重生。" },
-  wolf:     { n: "Wolf Valley", zh: "狼之谷" },
+  boar:     { n: "Zone Boar", zh: "野豬區（起始之城北）", note: "圖鑑把 Corrupted Boar 列在 Town of Beginnings，首領 Pumba 列在 Boar Zone；wiki 的 Pumba 頁面說牠會在起始之城外的野豬區定時重生。" },
+  wolf:     { n: "Vallée des Loups", zh: "狼之谷" },
   mizunari: { n: "Mizunari Fields", zh: "Mizunari 田野", note: "Mizunari 是供應首都糧食的農村。" },
-  putrid:   { n: "Putrid Swamp", zh: "腐臭沼澤", note: "主線第 15 段提到「Hanaka 北邊的沼澤」。" },
+  putrid:   { n: "Marécage Putride", zh: "腐臭沼澤", note: "主線第 15 段提到「Hanaka 北邊的沼澤」。" },
   vallhat:  { n: "Vallhat", zh: "Vallhat（史萊姆區）", note: "Vallhat 是需靠傳送器上去的懸空城；主線提到史萊姆王 Gorbel 在南方沼澤出沒。" },
   hanaka:   { n: "Hanaka", zh: "Hanaka 周邊", note: "主線提到 Hanaka 附近有「小蛛網森林」。" },
   arakhnol: { n: "Arakh'Nol", zh: "Arakh'Nol" },
@@ -38,7 +38,7 @@ const ZONES = {
   snow:     { n: "Tolbana Mountains", zh: "Tolbana 雪山", note: "圖鑑寫 Mountain Deer 在「Tolbana 西北的雪地」。" },
   citadel:  { n: "Snow Citadel", zh: "雪之城塞" },
   virelune: { n: "Virelune Lake", zh: "Virelune 湖", note: "Virelune 的 NPC Monique 有「擊殺 10 隻鯊魚」任務。" },
-  kobold:   { n: "Kobold Tower", zh: "狗頭人之塔（樓層首領）", note: "樓層地下城分三段：迷宮（啟動 4 個拉桿，順序不限）→ 大廳怪物波次 → 首領 Illfang。" },
+  kobold:   { n: "Tour du Kobold", zh: "狗頭人之塔（樓層首領）", note: "樓層地下城分三段：迷宮（啟動 4 個拉桿，順序不限）→ 大廳怪物波次 → 首領 Illfang。" },
   aepep:    { n: "Aepep's Lair", zh: "Aepep 巢穴" },
   none:     { n: "Unlisted", zh: "wiki 未標示區域" }
 };
@@ -257,11 +257,11 @@ for (const [id, r] of Object.entries(RAW)) {
    13 teleport destinations on floor 1: 7 towns below (Vallhat is NOT one: it is reached by the teleporter at the
    foot of the island) and 6 spots (wolf, geldorak, ruins, og, garden, guild). */
 const TOWNS = [
- { id:"tob", tp:"Ville de Départ", n:"Town of Beginnings", zh:"起始之城", x:1700, z:4300 },
+ { id:"tob", tp:"Ville de Départ", n:"Starting Town",csrc:1,old:"Town of Beginnings", zh:"起始之城", x:1700, z:4300 },
  { id:"hanaka", tp:"Hanaka", n:"Hanaka", x:1492, z:3453 },
  { id:"vallhat", n:"Vallhat", x:470, z:3045 },
  { id:"mizunari", tp:"Mizunari", n:"Mizunari", x:3133, z:3673 },
- { id:"castlebrume", tp:"Castelbrume", n:"CastleBrume", x:2963, z:3110, note:"城鎮座標由使用者提供；wiki 上三位 NPC 的任務座標在城鎮東北約 300 格（X 3224–3395, Z 2891–2948）。" },
+ { id:"castlebrume", tp:"Castelbrume", n:"Castelbrume",csrc:1,old:"CastleBrume", x:2963, z:3110, note:"城鎮座標由使用者提供；wiki 上三位 NPC 的任務座標在城鎮東北約 300 格（X 3224–3395, Z 2891–2948）。" },
  { id:"candelia", tp:"Candelia", n:"Candelia", x:1940, z:850 },
  { id:"virelune", tp:"Virelune", n:"Virelune", x:1660, z:2000 },
  { id:"tolbana", tp:"Tolbana", n:"Tolbana", x:3313, z:1629, note:"城鎮座標由使用者提供；wiki 只有一位 Tolbana 的 NPC（Horace），他的任務座標在城鎮西南約 360 格。" }
@@ -272,10 +272,10 @@ const TOWNS = [
    Map spots. Coordinates given by the user (in-game X / Z) unless src says otherwise.
    kind: boss | dungeon | mob | poi ; mons = monster names shown there ; items = items gathered there */
 const SPOTS = [
- {id:"pumba",area:[[1650,3480],[1740,3420],[1880,3410],[2000,3440],[2060,3530],[2050,3640],[1960,3700],[1800,3700],[1680,3650],[1640,3560]],kind:"mob",n:"Boar Zone",old:"Boar Zone / Pumba",nsrc:"wiki",zh:"野豬區・Pumba 重生點",x:1828,z:3555,mons:["Corrupted Boar","Pumba"],note:"座標為 Pumba 的位置；地圖上的「Zone Sanglier」標示也在這裡。Corrupted Boar 分布在周圍森林。參考互動地圖標了 5 個 Pumba（Corrupted Pumba）重生點：X 1859 · Z 3606、X 1677 · Z 3581、X 1974 · Z 3583、X 1931 · Z 3515、X 1987 · Z 3636。"},
- {id:"wolf",area:[[2360,3700],[2440,3650],[2580,3640],[2690,3680],[2710,3780],[2660,3900],[2600,3990],[2470,4010],[2390,3960],[2350,3860]],tp:"Vallée des Loups",kind:"mob",n:"Wolf Valley",zh:"狼之谷",x:2445,z:3930,mons:["White Dire Wolf","Black Dire Wolf"]},
+ {id:"pumba",area:[[1650,3480],[1740,3420],[1880,3410],[2000,3440],[2060,3530],[2050,3640],[1960,3700],[1800,3700],[1680,3650],[1640,3560]],kind:"mob",n:"Zone Boar",csrc:1,old:"Boar Zone / Boar Zone / Pumba",nsrc:"wiki",zh:"野豬區・Pumba 重生點",x:1828,z:3555,mons:["Corrupted Boar","Pumba"],note:"座標為 Pumba 的位置；地圖上的「Zone Sanglier」標示也在這裡。Corrupted Boar 分布在周圍森林。參考互動地圖標了 5 個 Pumba（Corrupted Pumba）重生點：X 1859 · Z 3606、X 1677 · Z 3581、X 1974 · Z 3583、X 1931 · Z 3515、X 1987 · Z 3636。"},
+ {id:"wolf",area:[[2360,3700],[2440,3650],[2580,3640],[2690,3680],[2710,3780],[2660,3900],[2600,3990],[2470,4010],[2390,3960],[2350,3860]],tp:"Vallée des Loups",kind:"mob",n:"Vallée des Loups",csrc:1,old:"Wolf Valley",zh:"狼之谷",x:2445,z:3930,mons:["White Dire Wolf","Black Dire Wolf"]},
  {id:"nephentes",area:[[3300,3730],[3380,3715],[3425,3770],[3405,3835],[3330,3845],[3290,3790]],kind:"mob",n:"Mizunari Fields",old:"Nephentes",nsrc:"wiki",zh:"Mizunari 田野・豬籠草",x:3376,z:3772,mons:["Nephentes"]},
- {id:"swamp",area:[[1010,3000],[1100,2930],[1300,2890],[1450,2870],[1640,2880],[1700,2990],[1700,3180],[1610,3270],[1400,3280],[1200,3270],[1040,3230],[1000,3110]],kind:"mob",n:"Putrid Swamp",old:"Treants / Swamp",nsrc:"wiki",zh:"腐臭沼澤・樹人",x:1501,z:3207,mons:["Treant Warrior","Elite Treant","Mini Treant","Woodland Mage"]},
+ {id:"swamp",area:[[1010,3000],[1100,2930],[1300,2890],[1450,2870],[1640,2880],[1700,2990],[1700,3180],[1610,3270],[1400,3280],[1200,3270],[1040,3230],[1000,3110]],kind:"mob",n:"Marécage Putride",csrc:1,old:"Putrid Swamp / Treants / Swamp",nsrc:"wiki",zh:"腐臭沼澤・樹人",x:1501,z:3207,mons:["Treant Warrior","Elite Treant","Mini Treant","Woodland Mage"]},
  {id:"slimes",area:[[160,2840],[300,2800],[470,2810],[570,2860],[590,3000],[560,3120],[430,3160],[290,3140],[180,3060],[150,2950]],kind:"mob",nsrc:"site",n:"Slimes",zh:"史萊姆區",x:530,z:2922,mons:["Slime Warrior","Small Slime","Healer Slime","Mage Slime"]},
  {id:"spiders",area:[[1290,3500],[1400,3480],[1445,3560],[1410,3645],[1310,3655],[1270,3580]],kind:"mob",nsrc:"site",n:"Spiders / Forest",zh:"蜘蛛森林（Hanaka 附近）",x:1366,z:3618,mons:["Young Spider"],note:"座標只寫「Spiders / Forest」。圖鑑把 Young Spider 列在 Hanaka；Hanaka 的 Scout Raphael 也有燒蜘蛛網的任務。Forest Spider 改標在北邊的 Arakh'Nol（參考互動地圖的怪物區域）。"},
  {id:"arakhnol",area:[[1080,1150],[1250,1130],[1420,1180],[1500,1290],[1545,1370],[1540,1460],[1450,1510],[1340,1600],[1170,1570],[1080,1440],[1050,1280]],kind:"mob",n:"Arakh'Nol",zh:"Arakh'Nol 森林・蜘蛛",x:1239,z:1374,src:"ref",mons:["Forest Spider"],note:"參考互動地圖把 Forest Spider 的出沒區域畫在這裡（約 X 1100–1380, Z 1250–1500），和圖鑑寫的 Arakh'Nol 一致。"},
@@ -287,10 +287,10 @@ const SPOTS = [
  {id:"geldorakd",kind:"dungeon",n:"Geldorak Mine Dungeon",zh:"Geldorak 礦坑地下城",x:4288,z:3887,src:"ref",mons:["Devouring Plant","Forest Treant","Evil Forest Treant","Forest Brute","Forest Devouring Plant","Fallen Mauler","Vyrmos, the Royal Thorn","Tornak"],note:"在 Geldorak Mine 傳送點旁，入口有守衛 NPC。進入地下城需要 Clé de la Forêt（森林之鑰）。名稱取自圖鑑的區域欄（Fallen Mauler），入口座標取自參考互動地圖的主線步驟。"},
  {id:"ika",area:[[3200,4040],[3300,4000],[3400,4040],[3420,4160],[3330,4220],[3220,4180]],kind:"mob",nsrc:"site",n:"Ika Archipelago",zh:"Ika 群島",x:3271,z:4090,mons:["Ika"],note:"圖鑑把 Ika 列在 Geldorak Mine；這裡用使用者提供的 Ika 群島。"},
  {id:"fallen",kind:"dungeon",n:"Fallen Dungeon",zh:"墮落者迷宮",x:2383,z:2414,mons:["Fallen Soldier","Fallen Warrior","Fallen Guardian","Fallen Herald","Fallen Reaper","Ornstein, Fallen Devastator","Smough, Fallen Devastator"],note:"進入需要 Clé des Déchus。打倒 3 位 Fallen 小首領取得 Artefact des Fallens，才能進雙子騎士的首領房。"},
- {id:"ruins",area:[[2720,4340],[2840,4320],[2930,4380],[2920,4510],[2800,4560],[2710,4480]],tp:"Ruines Maudites des Squelettes",kind:"mob",n:"Cursed Ruins",zh:"詛咒廢墟（圖鑑現稱 Forgotten Ruins）",x:2806,z:4449,mons:["Skeleton Swordsman","Skeleton Warrior","Skeleton Halberdier","Skeleton Archer"]},
+ {id:"ruins",area:[[2720,4340],[2840,4320],[2930,4380],[2920,4510],[2800,4560],[2710,4480]],tp:"Ruines Maudites des Squelettes",kind:"mob",n:"Cursed Ruins des Squelettes",csrc:1,old:"Cursed Ruins",zh:"詛咒廢墟",x:2806,z:4449,mons:["Skeleton Swordsman","Skeleton Warrior","Skeleton Halberdier","Skeleton Archer"]},
  {id:"xal",kind:"dungeon",n:"Xal'Zirith Dungeon",zh:"Xal'Zirith 聖所（地下城入口）",x:1034,z:1184,src:"ref",mons:["Strangler Spider","Hunting Spider","Venomous Spider","Pricilia","Yula","Jira","Kamilia"],note:"入口在 Arakh'Nol 西北，守衛 NPC 在 X 1013 · Z 1189（進入需要 Clé de Xal'Zirith）。地下的小首領位置（參考互動地圖）：Pricilia X 1232 · Z 1102、Yula X 1102 · Z 1227、Kamilia X 987 · Z 1247、Jira X 1192 · Z 1407。"},
  {id:"skeld",kind:"dungeon",n:"Skeleton Dungeon",zh:"骷髏地下城（Nazgul 副本）",x:2782,z:4422,src:"ref",mons:["Skeleton Tank","Skeleton Wizard","Narax the Cursed Skeleton","Cursed Nazgul Protector"],note:"入口在詛咒廢墟裡。地下的首領位置（參考互動地圖）：Cursed Nazgul Protector X 2829 · Z 4247、Narax X 2722 · Z 4332。"},
- {id:"kobold",kind:"dungeon",n:"Kobold Tower",zh:"狗頭人之塔（樓層首領）",x:3409,z:972,src:"ref",mons:["Illfang the Kobold Lord","Kobold Sentinel","Kobold Warrior","Kobold Lancer","Kobold Sorcerer","Small Kobold","The Mischievous Archer"],note:"Tolbana 北邊的塔，第一層樓層首領 Illfang 在塔頂。官方公告：Kobold 地下城和第 2、3 層一起在 11/5（四）03:00（台灣時間）開放。"},
+ {id:"kobold",kind:"dungeon",n:"Tour du Kobold",csrc:1,old:"Kobold Tower",zh:"狗頭人之塔（樓層首領）",x:3409,z:972,src:"ref",mons:["Illfang the Kobold Lord","Kobold Sentinel","Kobold Warrior","Kobold Lancer","Kobold Sorcerer","Small Kobold","The Mischievous Archer"],note:"Tolbana 北邊的塔，第一層樓層首領 Illfang 在塔頂。官方公告：Kobold 地下城和第 2、3 層一起在 11/5（四）03:00（台灣時間）開放。"},
  {id:"wevent",kind:"wboss",n:"Floor 1 World Event",zh:"第 1 層世界事件",x:1947,z:1990,src:"ref",note:"參考互動地圖標的「Floor 1 World Event」位置。世界王 Galiath 本身要在破碎的地下世界做出祭壇才能進入（見「世界王」分頁），這裡是第 1 層的世界事件地點。"},
  {id:"guild",tp:"Guilde Marchand",kind:"poi",n:"Merchant Guild",zh:"商人公會",x:4772,z:2422,src:"ref",note:"商人公會總部，在東北邊的山上。座標取自參考互動地圖。"},
  {id:"mine",kind:"gather",gt:"ore",n:"Aincrad Mine",zh:"Aincrad 礦坑（東礦坑）",x:2396,z:3527,items:["Iron Ore","Copper Ingot"],note:"礦坑。參考互動地圖稱為 East Mines（X 2399 · Z 3510），可採 Coal Ore、Copper、Iron。"},
@@ -298,8 +298,8 @@ const SPOTS = [
  {id:"farm",kind:"gather",gt:"crop",n:"Farm",zh:"農田",x:2351,z:3662,src:"ref",items:["Allium","Wheat"],note:"可採 Allium、Wheat（參考互動地圖）。主線 The Essentials 也要你在城鎮東北的田裡採這兩種。"},
  {id:"wood",kind:"gather",gt:"wood",n:"Birch & Oak Wood",zh:"樺木・橡木林",x:2641,z:4333,items:["Oak Log","Birch Log"],note:"伐木點。"},
  {id:"harold",kind:"poi",n:"Harold's Quest (Hidden Well)",zh:"Harrold 的任務・隱藏的井",x:4309,z:3697,src:"est",note:"提供的座標是「4309, 36971」，第二個數字超出地圖範圍（最大約 4980），這裡暫時標在 Z 3697。主線「The Chamber Beneath the Fields」：Harrold 說東邊道路上有一口井，夜裡看得到光。"},
- {id:"og",tp:"Quartier OG",kind:"poi",n:"OG Quarter",zh:"OG Quarter",x:2312,z:3272},
- {id:"garden",tp:"Jardin des Géants",kind:"poi",n:"Giant's Garden",zh:"巨人花園",x:379,z:2442,note:"主線「By the Branches of the Ancients」：Zebulgarath 住在巨人花園，提示是「利用水往上爬」。"}
+ {id:"og",tp:"Quartier OG",kind:"poi",n:"Quartier OG",csrc:1,old:"OG Quarter",zh:"OG 區",x:2312,z:3272},
+ {id:"garden",tp:"Jardin des Géants",kind:"poi",n:"Jardin des Géants",csrc:1,old:"Giant's Garden",zh:"巨人花園",x:379,z:2442,note:"主線「By the Branches of the Ancients」：Zebulgarath 住在巨人花園，提示是「利用水往上爬」。"}
 ].map(s=>({src:"player",mons:[],items:[],...s}));
 
 /* Side quests. need: [itemId, qty, inferred?] ; kill: [monster name(s), count] ; raw = original condition text (FR) */
