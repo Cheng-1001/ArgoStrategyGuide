@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="2d410990e8">
+<meta name="sao-build" content="34ce2803e6">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -755,7 +755,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="mainq.js?v=e071e291"></script>
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=0e9f806f"></script>
-<script src="npcs.js?v=7db42e50"></script>
+<script src="npcs.js?v=264bc3a9"></script>
 <script src="changelog.js?v=29183197"></script>
 <script src="recipes.js?v=8b5f81f8"></script>
 <script src="jmmeta.js?v=c7b7a32b"></script>
@@ -809,7 +809,7 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
 window.SAO_REPORTS=(window.SAO_REPORTS||[]).map(normRep);
 // approved place reports become map points; a name the map already has only gets the report attached
 {const nrm=s=>String(s||"").toLowerCase().trim();
- const NPC_ZH={"鍊金術士":"alchemist","收購商":"lootBuyers","鑰匙鐵匠":"keyBlacksmith","飾品鐵匠":"accessoriesBlacksmith","伐木工":"lumberjack","武器收購商":"weaponSellers","旅行商人":"travelingMerchants","裝備商人":"equipmentMerchants","工具商人":"toolMerchants","飾品商人":"accessoriesMerchants","神秘商人":"occultMerchants","消耗品商人":"consumablesMerchants","武器鐵匠":"weaponsmith","防具鐵匠":"armorBlacksmith","金屬錠鐵匠":"ingotBlacksmith","材料工匠":"materialsBlacksmith","裝備鐵匠":"equipmentBlacksmith","隱藏飾品鐵匠":"secretAccessoryBlacksmith"};
+ const NPC_ZH={"鍊金術士":"alchemist","收購商":"lootBuyers","鑰匙鐵匠":"keyBlacksmith","飾品鐵匠":"accessoriesBlacksmith","伐木工":"lumberjack","武器收購商":"weaponSellers","旅行商人":"travelingMerchants","裝備商人":"equipmentMerchants","工具商人":"toolMerchants","飾品商人":"accessoriesMerchants","神秘商人":"occultMerchants","消耗品商人":"alchemist","武器鐵匠":"weaponsmith","防具鐵匠":"armorBlacksmith","金屬錠鐵匠":"ingotBlacksmith","材料工匠":"materialsBlacksmith","裝備鐵匠":"equipmentBlacksmith","隱藏飾品鐵匠":"secretAccessoryBlacksmith"};
  window.SAO_REPORTS.forEach(r=>{if(r.type!=="place"||r.x==null||!FLOORS[r.floor])return;const Fx=FLOORS[r.floor],f=r.floor,k=r.kind||"";
   if(k==="NPC"){const L=(window.SAO_NPCS=window.SAO_NPCS||{})[f]=(window.SAO_NPCS[f]||[]);if(!L.some(n=>nrm(n[1])===nrm(r.name)))L.push([NPC_ZH[r.npcCat]||"other",r.name,r.x,r.z,"rep",r.ug?1:0,r.id]);return}
   const m=findMon(Fx,r.name);
@@ -898,14 +898,14 @@ const KIND={boss:["首領","👑"],dungeon:["地下城","⚔️"],mob:["怪物�
 const GT={crop:["作物","🌾"],ore:["礦物","⛏️"],wood:["木材","🪵"]};
 const MAPGRP=[["地點",[["tp","傳送點","🌀"],["land","地標","📍"],["gather","採集點","⛏️"],["npc","NPC","🧑"]]],["戰鬥",[["wboss","世界王","🌋"],["dungeon","地下城","⚔️"],["area","怪物區","🐾"],["boss","首領","👑"],["mini","小首領","🎖️"],["mobs","一般怪物","👾"]]]];
 const MAPCAT=MAPGRP.flatMap(g=>g[1]);
-const NPCCAT={alchemist:["鍊金術士","⚗️"],lumberjack:["伐木工","🪓"],lootBuyers:["收購商","💰"],weaponSellers:["武器收購商","🗡️"],travelingMerchants:["旅行商人","🧳"],equipmentMerchants:["裝備商人","🛡️"],toolMerchants:["工具商人","🔧"],accessoriesMerchants:["飾品商人","💍"],occultMerchants:["神秘商人","🔮"],consumablesMerchants:["消耗品商人","🧪"],weaponsmith:["武器鐵匠","⚔️"],armorBlacksmith:["防具鐵匠","🦺"],ingotBlacksmith:["金屬錠鐵匠","🧱"],keyBlacksmith:["鑰匙鐵匠","🗝️"],materialsBlacksmith:["材料工匠","🪵"],accessoriesBlacksmith:["飾品鐵匠","📿"],equipmentBlacksmith:["裝備鐵匠","🔨"],secretAccessoryBlacksmith:["隱藏飾品鐵匠","✨"],beggar:["臭乞丐","🧑"],other:["其他 NPC","🧑"]};
+const NPCCAT={alchemist:["鍊金術士","⚗️"],lumberjack:["伐木工","🪓"],lootBuyers:["收購商","💰"],weaponSellers:["武器收購商","🗡️"],travelingMerchants:["旅行商人","🧳"],equipmentMerchants:["裝備商人","🛡️"],toolMerchants:["工具商人","🔧"],accessoriesMerchants:["飾品商人","💍"],occultMerchants:["神秘商人","🔮"],weaponsmith:["武器鐵匠","⚔️"],armorBlacksmith:["防具鐵匠","🦺"],ingotBlacksmith:["金屬錠鐵匠","🧱"],keyBlacksmith:["鑰匙鐵匠","🗝️"],materialsBlacksmith:["材料工匠","🪵"],accessoriesBlacksmith:["飾品鐵匠","📿"],equipmentBlacksmith:["裝備鐵匠","🔨"],secretAccessoryBlacksmith:["隱藏飾品鐵匠","✨"],beggar:["臭乞丐","🧑"],other:["其他 NPC","🧑"]};
 const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:!!r[5],rep:r[6]}));
 const npcById=id=>{const f=+id.slice(1).split("_")[0];return NPCS(f).find(n=>n.id===id)};
 // default (owner, 2026-11-01): teleports, landmarks, monster areas and regular monsters on; the rest off.
 // NPC sub-categories: only alchemist, loot buyers, key smith and accessory smith on (listed first: NPC_TOP).
 // FILT lists the categories that are switched off. The key has a version so a new default reaches everyone once.
 const NPC_TOP=["alchemist","lootBuyers","keyBlacksmith","accessoriesBlacksmith"];
-const FILT_DEF={gather:1,npc:1,wboss:1,dungeon:1,boss:1,mini:1,...Object.fromEntries(["lumberjack","weaponSellers","travelingMerchants","equipmentMerchants","toolMerchants","accessoriesMerchants","occultMerchants","consumablesMerchants","weaponsmith","armorBlacksmith","ingotBlacksmith","materialsBlacksmith","equipmentBlacksmith","secretAccessoryBlacksmith","beggar","other"].map(k=>["npc:"+k,1]))};
+const FILT_DEF={gather:1,npc:1,wboss:1,dungeon:1,boss:1,mini:1,...Object.fromEntries(["lumberjack","weaponSellers","travelingMerchants","equipmentMerchants","toolMerchants","accessoriesMerchants","occultMerchants","weaponsmith","armorBlacksmith","ingotBlacksmith","materialsBlacksmith","equipmentBlacksmith","secretAccessoryBlacksmith","beggar","other"].map(k=>["npc:"+k,1]))};
 let FILT={...FILT_DEF};try{const s=localStorage.getItem("sao-map-filter-v4");if(s)FILT=JSON.parse(s)||{...FILT_DEF}}catch(e){FILT={...FILT_DEF}}
 const saveFilt=()=>{try{localStorage.setItem("sao-map-filter-v4",JSON.stringify(FILT))}catch(e){}};
 const catOn=k=>!FILT[k];
