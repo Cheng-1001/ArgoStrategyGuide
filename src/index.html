@@ -1461,7 +1461,7 @@ const EQ=(window.SAO_EQUIP||[]).map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r
   .concat((window.SAO_PROPS||[]).filter(r=>r[2]==="catalyst").map(r=>({oid:r[0],name:r[1],cat:"catalyst",r:r[3],lv:r[4]||0,dmg:null,lore:r[5],st:r[6]||{},ic:r[7],ps:1})));
 const eqById=Object.fromEntries(EQ.map(e=>[String(e.oid),e]));
 const FR2ID={};Object.keys(ITEMS).forEach(id=>{if(ITEMS[id].fr)FR2ID[ITEMS[id].fr]=id});
-const EQ_PART={sword:"weapon",dagger:"weapon",bow:"weapon",crossbow:"weapon",staff_mage:"weapon",staff_shaman:"weapon",catalyst:"weapon",shield:"armor",armor:"armor",gloves:"armor",ring:"acc",amulet:"acc",bracelet:"acc",artifact:"acc"};
+const EQ_PART={sword:"weapon",dagger:"weapon",bow:"weapon",crossbow:"weapon",staff_mage:"weapon",staff_shaman:"weapon",catalyst:"weapon",shield:"armor",armor:"armor",gloves:"acc",ring:"acc",amulet:"acc",bracelet:"acc",artifact:"acc"};
 const EQ_CAT={sword:"近戰武器",dagger:"匕首",bow:"弓",crossbow:"弩",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",catalyst:"催化器（副手）",shield:"盾牌",armor:"防具",gloves:"手套",ring:"戒指",amulet:"項鍊",bracelet:"手環",artifact:"遺物"};
 const SLOT_ZH={head:"頭盔",chest:"胸甲",legs:"護腿",feet:"靴子"};
 const eqCat=e=>e.cat==="armor"&&e.slot?SLOT_ZH[e.slot]:EQ_CAT[e.cat]||e.cat;
