@@ -26,7 +26,8 @@ window.SAO_CHANGELOG=[
   "任務路線圖上太近的點合成一個標記（例如「1–4」），不再疊在一起",
   "The Geldorak Mine 的額外步驟（把稀有素材交給 Hanaka 的商人）先標上推測位置：村長的商人 The Trader，待確認",
   "任務和物品的路線小地圖加上附近的傳送點和地標名稱，比較好認位置；範圍很大時改用 wiki 地圖，看得比較清楚",
-  "修正：Health／Mana／Stamina Potion I 的配方改列在 Starting Merchant 和 Alchemist 兩個 NPC 底下（兩個都能做），有座標了"
+  "修正：Health／Mana／Stamina Potion I 的配方改列在 Starting Merchant 和 Alchemist 兩個 NPC 底下（兩個都能做），有座標了",
+  "地圖的 NPC 篩選改成依功能分組：藥水・水晶、收購商、地下城鑰匙、飾品、武器・防具、材料加工等；NPC 的細分類型改在右側資料顯示（地圖篩選設定會重設一次）"
  ]],
  ["2026-11-02",[
   "探索地圖上傳要填貢獻者名稱，底圖切到探索地圖時列出樓層探索比例和貢獻者",
