@@ -203,14 +203,14 @@ with sync_playwright() as p:
     pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#items"); pg.wait_for_timeout(300); pg.fill("#q", "Magic Mycelium"); pg.wait_for_timeout(300)
     pg.locator("#lItem .card").first.click(); pg.wait_for_timeout(300)
-    labels = pg.eval_on_selector_all("#pBody .qmap svg text", "e=>e.map(x=>x.textContent)")
+    labels = pg.eval_on_selector_all("#pBody .qmap svg g:not(.refm) text", "e=>e.map(x=>x.textContent)")
     check(labels and set(labels) == {"1"}, f"one source with several spawn points (Guardian Colossal) is numbered 1 at every point ({labels})")
     pg.fill("#q", ""); pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
     pg.fill("#q", "Albal"); pg.wait_for_timeout(250)
     pg.locator("#lMon .card", has_text="Albal").first.click(); pg.wait_for_timeout(300)
     pg.locator("#pBody [data-rep]").first.click(); pg.wait_for_timeout(500)
-    check(pg.is_visible("#rwin") and "#monsters" in pg.url and pg.locator("#rwSvg g").count() == 3 and pg.locator("#rwSvg polyline").count() == 0,
+    check(pg.is_visible("#rwin") and "#monsters" in pg.url and pg.locator("#rwSvg g:not(.refm)").count() == 3 and pg.locator("#rwSvg polyline").count() == 0,
           "codex: a spawn coordinate opens the floating map window (all 3 Albal spawns), the codex stays")
     pg.click("#rwX"); pg.wait_for_timeout(150)
     pg.locator("#pBody [data-rep]").nth(1).click(); pg.wait_for_timeout(500)
@@ -239,7 +239,7 @@ with sync_playwright() as p:
     pg.locator("#lRc .rcard", has_text="Quality Health Potion II").first.click(); pg.wait_for_timeout(300)
     pg.locator("#pBody [data-go^='n|']").first.click(); pg.wait_for_timeout(300)
     pg.locator("#pBody [data-rep]").first.click(); pg.wait_for_timeout(500)
-    check(pg.is_visible("#rwin") and "#recipes" in pg.url and pg.locator("#rwSvg g").count() == 1 and "Alchemist" in pg.inner_text("#rwTitle"),
+    check(pg.is_visible("#rwin") and "#recipes" in pg.url and pg.locator("#rwSvg g:not(.refm)").count() == 1 and "Alchemist" in pg.inner_text("#rwTitle"),
           "recipe -> Alchemist -> 在地圖上查看 opens the floating map window with one point, the recipes tab stays")
     pg.click("#rwX"); pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#classes"); pg.wait_for_timeout(400)

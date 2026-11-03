@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="82c16d0e29">
+<meta name="sao-build" content="b390a34983">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -1206,14 +1206,19 @@ function miniTiles(m,cx,cz,span){if(!m.tiles||!m.tileFull||span>500)return"";
 function clusterPts(pts,X,Z,d){const C=[];pts.forEach(p=>{const px=X(p[1]),pz=Z(p[2]);const c=C.find(c=>Math.hypot(c.px-px,c.pz-pz)<d);
   if(c){if(!c.ns.includes(p[0]))c.ns.push(p[0]);const k=p[1]+","+p[2];if(!c.keys.includes(k))c.keys.push(k)}else C.push({px,pz,bx:p[1],bz:p[2],ns:[p[0]],keys:[p[1]+","+p[2]]})});return C}
 const numLab=ns=>{const a=ns.map(Number);if(ns.length>=3&&a.every((v,i)=>Number.isInteger(v)&&(!i||v===a[i-1]+1)))return a[0]+"–"+a[a.length-1];return ns.join("・")};
+// 路線圖上畫附近的傳送點和地標當參考（使用者 2026-11-03）：只畫在畫面範圍內的，名稱在點下方，不能點
+function refMarks(f,X,Z,bx,by,bw,bh,u){const Fx=FLOORS[f];const L=[];
+  (Fx.towns||[]).forEach(t=>L.push([t.n,t.x,t.z,!!t.tp]));spotsOf(f).forEach(p=>{if(p.tp||p.kind==="poi")L.push([p.n,p.x,p.z,!!p.tp])});
+  return L.filter(([,x,z])=>x!=null&&X(x)>=bx&&X(x)<=bx+bw&&Z(z)>=by&&Z(z)<=by+bh).map(([n,x,z,tp])=>{const cx=X(x),cz=Z(z),r=u*0.42;
+    return`<g class="refm" aria-hidden="true">${tp?`<circle cx="${cx}" cy="${cz}" r="${r}" fill="#e8a23a" stroke="#fff" stroke-width="${r*0.35}"/>`:`<rect x="${cx-r*0.8}" y="${cz-r*0.8}" width="${r*1.6}" height="${r*1.6}" transform="rotate(45 ${cx} ${cz})" fill="#e8a23a" stroke="#fff" stroke-width="${r*0.3}"/>`}<text x="${cx}" y="${cz+r+u*0.95}" font-size="${u*0.95}" text-anchor="middle" font-weight="700" fill="#fff" stroke="rgba(0,0,0,.75)" stroke-width="${u*0.22}" paint-order="stroke">${esc(n)}</text></g>`}).join("")}
 function routeMini(steps,f,noLine){const m=FLOORS[f].map;if(!m)return"";const pts=steps.map((x,k)=>[x[4]??(k+1),x[1],x[2]]).filter(p=>p[1]!=null);if(!pts.length)return"";
   const X=b=>(b-m.x0)/m.size*1000,Z=b=>(b-m.z0)/m.size*1000;const xs=pts.map(p=>X(p[1])),zs=pts.map(p=>Z(p[2]));
   const span=Math.max(Math.max(...xs)-Math.min(...xs),Math.max(...zs)-Math.min(...zs),70)*1.4;const cx=(Math.max(...xs)+Math.min(...xs))/2,cz=(Math.max(...zs)+Math.min(...zs))/2;
   const r=span/34,fs=span/40;
   const dots=clusterPts(pts,X,Z,r*2.2).map(c=>{const x=c.bx,z=c.bz;const lab=numLab(c.ns);const w=Math.max(r*2,lab.length*fs*0.62+r);
     return`<g data-xz="${c.keys.join(" ")}"><rect x="${X(x)-w/2}" y="${Z(z)-r}" width="${w}" height="${r*2}" rx="${r}" fill="#e8a23a" stroke="#fff" stroke-width="${r/5}"/><text x="${X(x)}" y="${Z(z)+fs*0.36}" font-size="${fs}" text-anchor="middle" font-weight="700" fill="#1b1206" font-family="monospace">${lab}</text></g>`}).join("");
-  return`<div class="qmap"><svg viewBox="${cx-span/2} ${cz-span/2} ${span} ${span}" role="img" aria-label="任務路線圖"><image href="${BASE==="jm"&&m.jm?m.jm:m.img}" x="0" y="0" width="1000" height="1000" preserveAspectRatio="none"/>${miniTiles(m,cx,cz,span)}
-    ${noLine?"":`<polyline points="${pts.map(p=>X(p[1]).toFixed(1)+","+Z(p[2]).toFixed(1)).join(" ")}" fill="none" stroke="#e8a23a" stroke-width="${span/180}" stroke-dasharray="${span/70} ${span/110}" stroke-linejoin="round" stroke-linecap="round"/>`}${dots}</svg></div>`}
+  return`<div class="qmap"><svg viewBox="${cx-span/2} ${cz-span/2} ${span} ${span}" role="img" aria-label="任務路線圖"><image href="${BASE==="jm"&&m.jm&&span<=500?m.jm:m.img}" x="0" y="0" width="1000" height="1000" preserveAspectRatio="none"/>${miniTiles(m,cx,cz,span)}
+    ${noLine?"":`<polyline points="${pts.map(p=>X(p[1]).toFixed(1)+","+Z(p[2]).toFixed(1)).join(" ")}" fill="none" stroke="#e8a23a" stroke-width="${span/180}" stroke-dasharray="${span/70} ${span/110}" stroke-linejoin="round" stroke-linecap="round"/>`}${refMarks(f,X,Z,cx-span/2,cz-span/2,span,span,fs)}${dots}</svg></div>`}
 // ---- floating route window (wheel zooms, drag pans, drag the title bar to move, resize from the corner) ----
 let RW=null;const rwSvg=$("rwSvg");
 function rwFitBox(){const m=FLOORS[RW.f].map;const X=b=>(b-m.x0)/m.size*1000,Z=b=>(b-m.z0)/m.size*1000;const p=RW.steps.filter(x=>x[1]!=null);
@@ -1228,7 +1233,7 @@ function rwRender(){if(!RW)return;const m=FLOORS[RW.f].map;const r=rwSvg.getBoun
     const on=RW.sel!=null&&ns.includes(RW.sel),Rr=on?R*1.35:R,w2=on?ww*1.35:ww;
     return`<g${on?' class="rwsel"':""}><title>${esc(ns.map(n=>n+". "+txt[n]).join("\n"))}</title>${on?`<circle cx="${X(bx)}" cy="${Z(bz)}" r="${Rr*1.9}" fill="none" stroke="#e5484d" stroke-width="${2.5*k}" opacity=".85"/>`:""}<rect x="${X(bx)-w2/2}" y="${Z(bz)-Rr}" width="${w2}" height="${Rr*2}" rx="${Rr}" fill="${on?"#e5484d":"#e8a23a"}" stroke="#fff" stroke-width="${2*k}"/><text x="${X(bx)}" y="${Z(bz)+fs*0.36}" font-size="${on?fs*1.3:fs}" text-anchor="middle" font-weight="700" fill="${on?"#fff":"#1b1206"}" font-family="monospace">${lab}</text></g>`}).join("");
   rwSvg.setAttribute("viewBox",`${x} ${y} ${w} ${h}`);
-  rwSvg.innerHTML=`<image href="${BASE==="jm"&&m.jm?m.jm:m.img}" x="0" y="0" width="1000" height="1000" preserveAspectRatio="none"/>${RW.noLine?"":`<polyline points="${pts.map(p=>X(p[1]).toFixed(1)+","+Z(p[2]).toFixed(1)).join(" ")}" fill="none" stroke="#e8a23a" stroke-width="${3.5*k}" stroke-dasharray="${10*k} ${7*k}" stroke-linejoin="round" stroke-linecap="round"/>`}${dots}`}
+  rwSvg.innerHTML=`<image href="${BASE==="jm"&&m.jm?m.jm:m.img}" x="0" y="0" width="1000" height="1000" preserveAspectRatio="none"/>${RW.noLine?"":`<polyline points="${pts.map(p=>X(p[1]).toFixed(1)+","+Z(p[2]).toFixed(1)).join(" ")}" fill="none" stroke="#e8a23a" stroke-width="${3.5*k}" stroke-dasharray="${10*k} ${7*k}" stroke-linejoin="round" stroke-linecap="round"/>`}${refMarks(RW.f,X,Z,x,y,w,h,fs)}${dots}`}
 function rwFocus(x,z){requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!RW)return;const m=FLOORS[RW.f].map;const r=rwSvg.getBoundingClientRect();if(!r.width)return;
   const w=160,h=w*r.height/r.width,px=(x-m.x0)/m.size*1000,pz=(z-m.z0)/m.size*1000;RW.vb=[px-w/2,pz-h/2,w,h];rwRender()}))}
 function openRouteWin(title,steps,f,noLine){RW={steps,f,noLine:!!noLine,view,vb:[0,0,1000,1000]};$("rwTitle").textContent=title;$("rwin").hidden=false;requestAnimationFrame(()=>{rwFitBox();rwRender()})}
