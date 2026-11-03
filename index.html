@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="b4cff13738">
+<meta name="sao-build" content="5ea8938a12">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -55,6 +55,12 @@ button,input,select{font:inherit;color:inherit}
   .vtabs a .n{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);font-weight:400}
   .vtabs a[aria-current="page"]{background:var(--accent-soft);border-left-color:var(--accent);color:var(--fg)}
   .vtabs .vth{font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.04em;padding:0 12px 4px}}
+.topf{display:flex;flex-direction:column;gap:8px;margin:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+.topf[hidden]{display:none}
+.topf .fgroup{display:flex;flex-direction:row;align-items:center;gap:12px}
+.topf .fgroup[hidden]{display:none}
+.topf .flabel{flex:none;width:48px;margin:0}
+.chip .cn{font-family:var(--f-mono);font-size:10.5px;opacity:.7;margin-left:2px}
 /* active filters next to the result count: each can be removed without going back to the left column */
 .actf{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .actf .af{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--accent);color:var(--fg);background:var(--accent-soft);border-radius:999px;padding:1px 4px 1px 10px;font-size:12px;cursor:pointer}
@@ -699,6 +705,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <section class="view browse" id="view-equip" hidden>
     <div class="filters">
       <div class="fgroup"><span class="flabel">部位</span><div class="chips" id="fEqPart"></div></div>
+      <div class="fgroup" id="gEqSub" hidden><span class="flabel">細分</span><div class="chips" id="fEqSub"></div></div>
       <div class="fgroup"><span class="flabel">職業</span><div class="chips" id="fEqClass"></div></div>
       <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fEqRar"></div></div>
       <div class="fgroup"><span class="flabel">等級</span><div class="lvrange"><input type="number" class="sel" id="fEqMin" min="1" max="99" placeholder="最低" aria-label="最低等級"><span>～</span><input type="number" class="sel" id="fEqMax" min="1" max="99" placeholder="最高" aria-label="最高等級"></div></div>
@@ -713,6 +720,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <section class="view browse" id="view-props" hidden>
     <div class="filters">
       <div class="fgroup"><span class="flabel">分類</span><div class="chips" id="fPrGroup"></div></div>
+      <div class="fgroup" id="gPrSub" hidden><span class="flabel">細分</span><div class="chips" id="fPrSub"></div></div>
       <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fPrRar"></div></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fPrSort" aria-label="排序">
         <option value="name">名稱</option><option value="rar">稀有度（高→低）</option><option value="lv">等級（低→高）</option></select></div>
@@ -1181,9 +1189,11 @@ function goView(v,t,i){const card=()=>document.querySelector(`#view-${v} .card[d
 let monType="all";
 chipsInto($("fMonType"),[["all","全部"],["Boss","首領"],["Mini-Boss","小首領"],["Monster","一般"],["Minion","嘍囉"]],()=>monType,v=>monType=v,renderMon);
 $("fMonZone").onchange=renderMon;$("fMonSort").onchange=renderMon;
-function fillZoneSelect(){$("fMonZone").innerHTML=`<option value="all">全部區域</option>`+F().order.map(z=>`<option value="${z}">${esc(F().zones[z].n)}（${esc(F().zones[z].zh)}）</option>`).join("")}
+const isDgZone=z=>/Dungeon|Labyrinth|Sanctuary|Tower|Lair|地下城|迷宮|聖所/i.test(z.n+" "+z.zh);
+function fillZoneSelect(){const Z=F().zones,o=F().order,opt=z=>`<option value="${z}">${esc(Z[z].n)}（${esc(Z[z].zh)}）</option>`,dg=o.filter(z=>isDgZone(Z[z])),wild=o.filter(z=>!isDgZone(Z[z]));
+  $("fMonZone").innerHTML=`<option value="all">全部區域</option>${dg.length?'<option value="@dg">全部地下城</option><option value="@wild">全部野外</option>':""}<optgroup label="野外">${wild.map(opt).join("")}</optgroup>${dg.length?`<optgroup label="地下城">${dg.map(opt).join("")}</optgroup>`:""}`}
 function renderMon(){const s=Sq(),zf=$("fMonZone").value,so=$("fMonSort").value;const M=F().M;
-  let a=M.filter(m=>(monType==="all"||m.type===monType)&&(zf==="all"||m.zone===zf)&&monHit(m,s));
+  let a=M.filter(m=>(monType==="all"||m.type===monType)&&(zf==="all"||m.zone===zf||zf[0]==="@"&&(F().zones[m.zone]?isDgZone(F().zones[m.zone]):false)===(zf==="@dg"))&&monHit(m,s));
   if(so==="diff")a=[...a].sort((x,y)=>y.diff-x.diff);else if(so==="name")a=[...a].sort((x,y)=>x.name.localeCompare(y.name));else if(so==="lv")a=[...a].sort((x,y)=>(lvOf(x)??999)-(lvOf(y)??999));
   $("cMon").textContent=`${a.length} / ${M.length} 種・已知等級 ${M.filter(m=>lvOf(m)!=null).length}`;
   $("lMon").innerHTML=a.length?a.map(m=>{const p=monPos(m);return`<button class="card" data-key="m|${m.id}" data-go="m|${m.id}">
@@ -1527,22 +1537,29 @@ const EQ=(window.SAO_EQUIP||[]).map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r
   .concat((window.SAO_PROPS||[]).filter(r=>r[2]==="catalyst").map(r=>({oid:r[0],name:r[1],cat:"catalyst",r:r[3],lv:r[4]||0,dmg:null,lore:r[5],st:r[6]||{},ic:r[7],ps:1})));
 const eqById=Object.fromEntries(EQ.map(e=>[String(e.oid),e]));
 const FR2ID={};Object.keys(ITEMS).forEach(id=>{if(ITEMS[id].fr)FR2ID[ITEMS[id].fr]=id});
-const EQ_PART={sword:"weapon",dagger:"weapon",bow:"weapon",crossbow:"weapon",staff_mage:"weapon",staff_shaman:"weapon",catalyst:"weapon",shield:"armor",armor:"armor",gloves:"acc",ring:"acc",amulet:"acc",bracelet:"acc",artifact:"acc"};
+const EQ_PART={sword:"weapon",dagger:"weapon",bow:"weapon",crossbow:"weapon",staff_mage:"weapon",staff_shaman:"weapon",catalyst:"off",shield:"off",armor:"armor",gloves:"acc",ring:"acc",amulet:"acc",bracelet:"acc",artifact:"acc"};
 const EQ_CAT={sword:"近戰武器",dagger:"匕首",bow:"弓",crossbow:"弩",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",catalyst:"催化器（副手）",shield:"盾牌",armor:"防具",gloves:"手套",ring:"戒指",amulet:"項鍊",bracelet:"手環",artifact:"遺物"};
 const SLOT_ZH={head:"頭盔",chest:"胸甲",legs:"護腿",feet:"靴子"};
+// armour without a slot in the catalogue: take it from the French name (Casque/Masque = head, Plastron/Tunique/Robe = chest…)
+const SLOT_BY_NAME=[[/^(Casque|Masque|Diad[eè]me|Heaume|Capuche|Chapeau|Couronne)/i,"head"],[/^(Plastron|Tunique|Robe)/i,"chest"],[/^Jambi[eè]re/i,"legs"],[/^(Bottes|Bottines|Sandales)/i,"feet"]];
+EQ.forEach(e=>{if(e.cat==="armor"&&!e.slot){const m=SLOT_BY_NAME.find(([re])=>re.test(e.name));if(m)e.slot=m[1]}});
 const eqCat=e=>e.cat==="armor"&&e.slot?SLOT_ZH[e.slot]:EQ_CAT[e.cat]||e.cat;
+const eqSub=e=>e.cat==="armor"?(e.slot||"armor"):e.cat;
+const EQ_SUBS={weapon:["sword","dagger","bow","crossbow","staff_mage","staff_shaman"],off:["shield","catalyst"],armor:["head","chest","legs","feet"],acc:["amulet","ring","bracelet","gloves","artifact"]};
+const subLab=k=>SLOT_ZH[k]||EQ_CAT[k]||k;
 const eqClasses=e=>String(e.st["Classe requise"]||"").split(/,\s*/).map(c=>c.toLowerCase()).filter(c=>CLASS_ZH[c]);
-const eslot=(e,s=44)=>e.ps?pslot(e,s):e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="armor"?"🛡️":"💍"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
+const eslot=(e,s=44)=>e.ps?pslot(e,s):e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
 const statVal=(k,v)=>k==="Classe requise"?String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]).filter(Boolean).join("、")||"不限":k==="Arme à deux mains"?"是":typeof v==="number"&&!k.startsWith("Required")?(v>0?"+":"")+v:v;
 const eqKey=e=>{const o=[];if(e.dmg)o.push("傷害 "+e.dmg);["Defense","Max Health","Magic Damage","Physical Damage","Skill Damage","Critical Strike Chance"].forEach(k=>{if(e.st[k]!=null&&o.length<3)o.push((STAT_ZH[k]||k)+" "+statVal(k,e.st[k]))});return o.join("・")};
-let eqPart="all",eqClass="all",eqRar="all";
-chipsInto($("fEqPart"),[["all","全部"],["weapon","武器"],["armor","防具"],["acc","飾品"]],()=>eqPart,v=>eqPart=v,renderEquip);
+let eqPart="all",eqClass="all",eqRar="all",eqSubV="all";
+const fillEqSub=()=>{const g=$("gEqSub"),ks=EQ_SUBS[eqPart];g.hidden=!ks;eqSubV="all";if(ks)chipsInto($("fEqSub"),[["all","全部"],...ks.map(k=>[k,`${subLab(k)} <span class="cn">${EQ.filter(e=>EQ_PART[e.cat]===eqPart&&eqSub(e)===k).length}</span>`])],()=>eqSubV,v=>eqSubV=v,renderEquip)};
+chipsInto($("fEqPart"),[["all","全部"],["weapon","武器（主手）"],["off","副手"],["armor","防具"],["acc","飾品"]],()=>eqPart,v=>{eqPart=v;fillEqSub()},renderEquip);
 chipsInto($("fEqClass"),[["all","全部"],...Object.entries(CLASS_ZH)],()=>eqClass,v=>eqClass=v,renderEquip);
 chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
 ["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
 const eqHit=(e,s)=>!s||norm(e.name+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value;
-  let a=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s));
+  let a=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqSubV==="all"||eqSub(e)===eqSubV)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s));
   const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
   a.sort((x,y)=>so==="lvd"?y.lv-x.lv||x.name.localeCompare(y.name):so==="rar"?rv(y)-rv(x)||x.lv-y.lv:so==="name"?x.name.localeCompare(y.name):x.lv-y.lv||x.name.localeCompare(y.name));
   $("cEq").textContent=`${a.length} / ${EQ.length} 件`;
@@ -1570,13 +1587,16 @@ const PR_CAT={material:"材料",fishing_job:"漁獲",miner_job:"礦物",lumberja
 const PR_GROUP={material:"材料",fishing_job:"採集",miner_job:"採集",lumberjack_job:"採集",farmer_job:"採集",consumable_item:"消耗品",consumable:"消耗品",food:"消耗品",potion_stamina:"消耗品",potion_heal:"消耗品",gem_stone:"符文・強化",fortifier:"符文・強化",crystal:"消耗品",tool:"工具",key_crate:"鑰匙",dungeon_key:"鑰匙",halloween:"活動",noel2025:"活動",saint_valentin:"活動",lunar:"活動"};
 const PR_ICON={材料:"🧱",採集:"⛏️",消耗品:"🧪","符文・強化":"💎",工具:"🔧",鑰匙:"🗝️",活動:"🎉"};
 const pslot=(e,s=44)=>OID_RECIC[e.oid]?recicImg(OID_RECIC[e.oid],s):e.ic<0&&FR2ID[e.name]&&ITEMS[FR2ID[e.name]].ic>=0?slot(FR2ID[e.name],s):e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${PR_ICON[PR_GROUP[e.cat]]||"❔"}</span>`:`<span class="eslot pslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
-let prGroup="all",prRar="all";
-chipsInto($("fPrGroup"),[["all","全部"],...[...new Set(Object.values(PR_GROUP))].map(g=>[g,g])],()=>prGroup,v=>prGroup=v,renderProps);
+let prGroup="all",prRar="all",prSubV="all";
+const PR_SUBLAB=c=>PR_GROUP[c]==="活動"?PR_CAT[c].replace("活動",""):PR_CAT[c];
+const fillPrSub=()=>{const g=$("gPrSub");prSubV="all";const labs=[...new Set(PR.filter(e=>PR_GROUP[e.cat]===prGroup).map(e=>PR_SUBLAB(e.cat)))];g.hidden=prGroup==="all"||labs.length<2;
+  if(!g.hidden)chipsInto($("fPrSub"),[["all","全部"],...labs.map(l=>[l,`${esc(l)} <span class="cn">${PR.filter(e=>PR_GROUP[e.cat]===prGroup&&PR_SUBLAB(e.cat)===l).length}</span>`])],()=>prSubV,v=>prSubV=v,renderProps)};
+chipsInto($("fPrGroup"),[["all","全部"],...[...new Set(Object.values(PR_GROUP))].map(g=>[g,g==="活動"?"活動道具":g])],()=>prGroup,v=>{prGroup=v;fillPrSub()},renderProps);
 chipsInto($("fPrRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,RAR[r][0]])],()=>prRar,v=>prRar=v,renderProps);
 $("fPrSort").onchange=renderProps;
 const prHit=(e,s)=>!s||norm(e.name+" "+(FR2ID[e.name]||"")+" "+(PR_CAT[e.cat]||"")+" "+e.lore).includes(s);
 function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
-  let a=PR.filter(e=>(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
+  let a=PR.filter(e=>(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prSubV==="all"||PR_SUBLAB(e.cat)===prSubV)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
   a.sort((x,y)=>so==="rar"?rv(y)-rv(x)||x.name.localeCompare(y.name):so==="lv"?x.lv-y.lv||x.name.localeCompare(y.name):x.name.localeCompare(y.name));
   $("cPr").textContent=`${a.length} / ${PR.length} 件`;const shown=a.slice(0,240);
   $("lPr").innerHTML=a.length?shown.map(e=>`<button class="card" data-key="p|${e.oid}" data-go="p|${e.oid}">
@@ -2311,6 +2331,15 @@ function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.m
   if(view==="about"||view==="changelog")$("aboutBtn").setAttribute("aria-current","page");else $("aboutBtn").removeAttribute("aria-current");
   if(view==="map")requestAnimationFrame(()=>{syncNpcFly();if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
   renderCurrent();if(viewPending){const fn=viewPending;viewPending=null;requestAnimationFrame(fn)}}
+// desktop: the main filters of each codex tab sit above the list (user 2026-11-04); the rest stay in the left column.
+// The groups are moved, not copied (their handlers keep working); phones put them back where they were.
+const TOPF={monsters:["fMonType"],equip:["fEqPart","fEqSub","fEqRar"],items:["fItemGroup","fItemRar"],props:["fPrGroup","fPrSub","fPrRar"]};
+const topMQ=matchMedia("(min-width:821px)");
+function placeTopFilters(){Object.entries(TOPF).forEach(([v,ids])=>{const sec=$("view-"+v);if(!sec)return;const res=sec.querySelector(".results"),rh=res.querySelector(".rhead");
+  let bar=res.querySelector(":scope>.topf");if(!bar){bar=document.createElement("div");bar.className="topf";rh.after(bar)}
+  ids.forEach(id=>{const g=$(id).closest(".fgroup");if(!g.__home){g.__home=document.createComment("f");g.before(g.__home)}
+    if(topMQ.matches)bar.appendChild(g);else g.__home.after(g)});bar.hidden=!topMQ.matches})}
+topMQ.addEventListener("change",()=>{placeTopFilters();renderCurrent()});
 // desktop codex tabs inside each codex view's left column (copies of #codexTabs, kept in sync)
 const CODEX_V=["monsters","equip","items","props"];
 function syncVTabs(){CODEX_V.forEach(v=>{const F=document.querySelector(`#view-${v} .filters`);if(!F)return;let nv=F.querySelector(":scope>.vtabs");
@@ -2318,7 +2347,7 @@ function syncVTabs(){CODEX_V.forEach(v=>{const F=document.querySelector(`#view-$
   nv.innerHTML='<div class="vth">圖鑑分類</div>'+[...document.querySelectorAll("#codexTabs a")].map(a=>`<a href="${a.getAttribute("href")}" data-v="${a.dataset.v}"${a.dataset.v===view?' aria-current="page"':""}>${a.innerHTML}</a>`).join("")})}
 document.addEventListener("click",e=>{const a=e.target.closest(".vtabs a");if(!a)return;e.preventDefault();go(a.dataset.v)});
 // "已篩選" row: active (non-default) controls of the current tab's left column, each removable
-function actControls(sec){const out=[];sec.querySelectorAll(".filters .fgroup").forEach(g=>{if(g.closest(".vtabs"))return;const lab=(g.querySelector(".flabel")||{}).textContent||"";
+function actControls(sec){const out=[];sec.querySelectorAll(".filters .fgroup,.topf .fgroup").forEach(g=>{if(g.hidden)return;if(g.closest(".vtabs"))return;const lab=(g.querySelector(".flabel")||{}).textContent||"";
   g.querySelectorAll(".chips").forEach(c=>{const all=c.querySelector('.chip[data-v="all"]'),on=c.querySelector('.chip[aria-pressed="true"]');
     if(all&&on&&on!==all)out.push({lab,val:on.textContent.replace(/\s*\d+\s*$/,"").trim(),clr:()=>all.click()})});
   g.querySelectorAll("select").forEach(x=>{if(/Sort$/.test(x.id)||x.selectedIndex<=0)return;out.push({lab,val:x.options[x.selectedIndex].text,clr:()=>{x.selectedIndex=0;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
@@ -2331,9 +2360,10 @@ function actSync(){const sec=$("view-"+view);if(!sec||!sec.classList.contains("b
   box.innerHTML=cs.map((c,i)=>`<button type="button" class="af" data-i="${i}" title="取消這個條件">${c.lab?`<b>${esc(c.lab)}</b>`:""}${esc(c.val)}<span aria-hidden="true">✕</span></button>`).join("")+(cs.length>1?'<button type="button" class="afx">全部清除</button>':"");
   box.querySelectorAll(".af").forEach(b=>b.onclick=()=>{cs[+b.dataset.i].clr();setTimeout(actSync,0)});
   const x=box.querySelector(".afx");if(x)x.onclick=()=>{cs.slice().reverse().forEach(c=>c.clr());setTimeout(actSync,0)}}
-document.addEventListener("click",e=>{if(e.target.closest(".filters"))setTimeout(actSync,0)});
-document.addEventListener("change",e=>{if(e.target.closest(".filters"))setTimeout(actSync,0)});
-document.addEventListener("input",e=>{if(e.target.closest(".filters"))setTimeout(actSync,0)});
+document.addEventListener("click",e=>{if(e.target.closest(".filters,.topf"))setTimeout(actSync,0)});
+document.addEventListener("change",e=>{if(e.target.closest(".filters,.topf"))setTimeout(actSync,0)});
+document.addEventListener("input",e=>{if(e.target.closest(".filters,.topf"))setTimeout(actSync,0)});
+placeTopFilters();
 function renderCurrent(){requestAnimationFrame(fixCols);requestAnimationFrame(fbarSync);requestAnimationFrame(syncVTabs);requestAnimationFrame(actSync);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="about")renderAbout();else if(view==="changelog")renderChangelog();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="dungeons")renderDungeons();else if(view==="classes")renderClasses();else renderQuests()}
 window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
