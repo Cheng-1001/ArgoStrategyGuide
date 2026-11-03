@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="39b73d8eb6">
+<meta name="sao-build" content="4b4db9e414">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -748,12 +748,13 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=22374c21"></script>
+<script src="data.js?v=efd631d8"></script>
 <script src="data23.js?v=bc83d65b"></script>
 <script src="bosses.js?v=41309c3c"></script>
 <script src="reports.js?v=5f29733f"></script>
-<script src="hints.js?v=9fc20763"></script>
-<script src="mainq.js?v=e071e291"></script>
+<script src="hints.js?v=fcf000d6"></script>
+<script src="codex.js?v=48141603"></script>
+<script src="mainq.js?v=c85e09ba"></script>
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=0e9f806f"></script>
 <script src="npcs.js?v=7db42e50"></script>
@@ -1017,6 +1018,7 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
   ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
   ${(()=>{const H=(window.SAO_HINTS||{})[m.floor]||{};const h=H[m.name]||(m.aka||[]).map(a=>H[a]).find(Boolean);return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted"><span class="hfr">${esc(h[1])}</span>${h[2]?"":"<span class=\"hinf\">・依圖鑑順序推斷對應，可能不準</span>"}</span></div>`:""})()}
+  ${(()=>{const C=((window.SAO_CODEX||{})[m.floor]||{})[m.num];return C?`<div class="hint cdx"><span class="hk">遊戲圖鑑說明</span><span class="muted">#${esc(m.num)}${C.reg?"・"+esc(C.reg):""}${C.n!==m.name?"・圖鑑名稱 "+esc(C.n):""}</span><span>${esc(C.desc)}</span></div>`:""})()}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
   ${m.dropsLocked&&m.dropsLocked.length?`<div class="note">另有 ${m.dropsLocked.length} 種掉落物在圖鑑上還沒解鎖（${m.dropsLocked.map(d=>pct(d[1])).join("、")}）。</div>`:""}
   ${m.dropSrc?`<div class="note">掉落機率來自玩家回報（${repRef(m.dropSrc)}）。${m.wikiDrops.length?"wiki 原本寫："+m.wikiDrops.map(([i,p])=>esc(i)+" "+pct(p)).join("、")+"。":""}</div>`:""}

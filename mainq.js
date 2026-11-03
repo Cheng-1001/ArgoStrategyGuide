@@ -10,28 +10,29 @@
    Numbers: 8-18 are written on the wiki main-quest table, 24 is confirmed by report R0001 (tracker shows
    "24. The Truth About the Seal"), 19-23 follow the wiki order between them; 25+ are estimated. The
    reference map merged "The Southern Marshes" (14) into "The Suspended City"; it is split again here.
-   Quests before The Trader have no reliable number yet.
+   1-6 are confirmed by the owner's quest-log screenshots of 2026-11-03 (1. A new horizon … 6. The Forest of Small Webs);
+   7 = Bury Them (between 6 and the wiki's 8). A New World and A Decisive Choice have no number in the game.
    Step: [text, x, z, approx]   x/z null = no coordinate; approx 1 = "about here". */
 window.SAO_MAINQ = {1: [
  {t:"A New World", npc:"Yui", lv:"1", d:"在起始之城醒來，Yui 把你送進艾恩葛朗特。",
   s:[["和神秘人物對話（教學區，不在樓層地圖上）",null,null]]},
  {t:"A Decisive Choice", npc:"The Master Swordsman", lv:"1", d:"劍術大師介紹所有職業和職業選單。之後隨時可以換職業；選好後前往起始之城。",
   s:[["和劍術大師對話（教學區）",null,null],["依序試用戰士、弓箭手、薩滿、法師、刺客五種職業",null,null],["回去找劍術大師",null,null]]},
- {t:"A New Horizon", npc:"The Master Swordsman", lv:"1", rw:"150 經驗、200 Col", d:"到了起始之城，劍術大師發現你兩手空空，決定先幫你準備裝備。",
+ {t:"A New Horizon", n:1, npc:"The Master Swordsman", lv:"1", rw:"150 經驗、200 Col", d:"到了起始之城，劍術大師發現你兩手空空，決定先幫你準備裝備。",
   s:[["和劍術大師對話",1089,4289],["買一件胸甲（Beginner's Tunic）",null,null],["買一件護腿（Beginner's Leggings）",null,null],["依職業買一把訓練用武器（劍、法杖、弓或匕首）",null,null],["回去找劍術大師",1089,4289]]},
- {t:"Show Me", npc:"The Master Swordsman", lv:"1", rw:"100 經驗、110 Col", d:"劍術大師要你到平原拿野豬試刀，旁邊有一位獨自苦撐的鐵匠學徒。",
+ {t:"Show Me", n:2, npc:"The Master Swordsman", lv:"1", rw:"100 經驗、110 Col", d:"劍術大師要你到平原拿野豬試刀，旁邊有一位獨自苦撐的鐵匠學徒。",
   s:[["搭鍛造場對面的傳送點",1816,4136],["和鐵匠學徒對話",1789,3636],["擊殺 16 隻野豬",1798,3617,1],["把 16 張野豬皮交給鐵匠",1789,3636],["把皮帶回去給 Abraham",1789,3636]]},
- {t:"The Essentials", npc:"Town Alchemist", lv:"1–3", rw:"100 經驗、120 Col", d:"不是每個傷口都能靠劍解決，城裡的鍊金術士有東西要給你看。",
+ {t:"The Essentials", n:3, npc:"Town Alchemist", lv:"1–3", rw:"100 經驗、120 Col", d:"不是每個傷口都能靠劍解決，城裡的鍊金術士有東西要給你看。",
   s:[["到工作室找鍊金術士",1772,4096],["在城鎮東北的田裡採 5 朵 Allium",2362,3651,1],["在同一片田採 5 束小麥",2362,3651,1],["靠近發出聲音的地方",2372,3702],["回去找鍊金術士",1772,4096]]},
- {t:"What No One Will Touch", npc:"The Alchemist、The Master Swordsman", lv:"1–3", rw:"100 經驗、120 Col", d:"鍊金術士幫你調藥，卻不肯碰你在田裡撿到的東西；劍術大師也不願多說。",
+ {t:"What No One Will Touch", n:4, npc:"The Alchemist、The Master Swordsman", lv:"1–3", rw:"100 經驗、120 Col", d:"鍊金術士幫你調藥，卻不肯碰你在田裡撿到的東西；劍術大師也不願多說。",
   s:[["告訴鍊金術士碎片的事",1772,4096],["去找劍術大師",1089,4289],["前往花瓣谷的墜落地點",1051,4367]]},
  {t:"What No One Will Touch（續）", npc:"The Master Swordsman", d:"從破碎的地下世界回到艾恩葛朗特後，繼續這段主線。",
   s:[["從遊戲選單點艾恩葛朗特（Aincrad）圖示回到艾恩葛朗特",null,null],["去找劍術大師",1089,4289],["前往 Hanaka",1576,3460,1]]},
- {t:"The Assault", npc:"Mayor of Hanaka", d:"Hanaka 遭到襲擊。",
+ {t:"The Assault", n:5, npc:"Mayor of Hanaka", d:"Hanaka 遭到襲擊。",
   s:[["擋下三波敵人（每波 5 隻）",null,null],["右鍵救出被抓的村民",null,null],["和村長對話",1526,3412]]},
- {t:"The Forest of Small Webs", npc:"Mayor of Hanaka", d:"村長有事要拜託吸收了腐化之力的你。",
+ {t:"The Forest of Small Webs", n:6, npc:"Mayor of Hanaka", d:"村長有事要拜託吸收了腐化之力的你。",
   s:[["前往小蛛網森林",1358,3539],["找到第二具屍體",1341,3521],["找到第三具屍體",1375,3512],["回報村長",1526,3412]]},
- {t:"Bury Them", npc:"Mayor of Hanaka", d:"村長請你埋葬他的三個手下，不然森林裡爬的東西會把他們吃掉。",
+ {t:"Bury Them", n:7, npc:"Mayor of Hanaka", d:"村長請你埋葬他的三個手下，不然森林裡爬的東西會把他們吃掉。",
   s:[["背起第一具屍體",1341,3521],["背起第二具屍體",1375,3512],["背起第三具屍體",1526,3412],["把屍體分別埋進三座墳墓",1254,3770],["回去找村長",1526,3412]]},
  {t:"The Trader", n:8, npc:"The Trader", d:"村長介紹他的商人給你。商人要小蛛網森林的毒液，願意付錢。",
   s:[["和村長的商人碰面",1564,3428],["擊殺 15 隻蜘蛛",1366,3618,1],["收集 5 個毒腺",null,null],["把毒液交給商人",1564,3428]]},

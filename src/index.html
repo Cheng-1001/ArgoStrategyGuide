@@ -742,6 +742,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="bosses.js"></script>
 <script src="reports.js"></script>
 <script src="hints.js"></script>
+<script src="codex.js"></script>
 <script src="mainq.js"></script>
 <script src="equip.js"></script>
 <script src="props.js"></script>
@@ -1006,6 +1007,7 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
   ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
   ${(()=>{const H=(window.SAO_HINTS||{})[m.floor]||{};const h=H[m.name]||(m.aka||[]).map(a=>H[a]).find(Boolean);return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted"><span class="hfr">${esc(h[1])}</span>${h[2]?"":"<span class=\"hinf\">・依圖鑑順序推斷對應，可能不準</span>"}</span></div>`:""})()}
+  ${(()=>{const C=((window.SAO_CODEX||{})[m.floor]||{})[m.num];return C?`<div class="hint cdx"><span class="hk">遊戲圖鑑說明</span><span class="muted">#${esc(m.num)}${C.reg?"・"+esc(C.reg):""}${C.n!==m.name?"・圖鑑名稱 "+esc(C.n):""}</span><span>${esc(C.desc)}</span></div>`:""})()}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
   ${m.dropsLocked&&m.dropsLocked.length?`<div class="note">另有 ${m.dropsLocked.length} 種掉落物在圖鑑上還沒解鎖（${m.dropsLocked.map(d=>pct(d[1])).join("、")}）。</div>`:""}
   ${m.dropSrc?`<div class="note">掉落機率來自玩家回報（${repRef(m.dropSrc)}）。${m.wikiDrops.length?"wiki 原本寫："+m.wikiDrops.map(([i,p])=>esc(i)+" "+pct(p)).join("、")+"。":""}</div>`:""}
