@@ -3,7 +3,7 @@
 window.SAO_JM = {
  "1": {
   "date": "2026-11-03",
-  "pct": 32.1,
+  "pct": 32.8,
   "log": [
    {
     "report": null,
@@ -24,9 +24,15 @@ window.SAO_JM = {
     "date": "2026-11-03",
     "regions": 61,
     "newChunks": 3515
+   },
+   {
+    "report": "R0004",
+    "date": "2026-11-03",
+    "regions": 61,
+    "newChunks": 691
    }
   ],
-  "chunks": 31254
+  "chunks": 31945
  },
  "results": {
   "R0002": {
@@ -45,6 +51,16 @@ window.SAO_JM = {
    "newChunks": 3515,
    "overlap": 26441,
    "pct": 32.1,
+   "date": "2026-11-03",
+   "folders": 2,
+   "skipped": 0
+  },
+  "R0004": {
+   "ok": true,
+   "regions": 61,
+   "newChunks": 691,
+   "overlap": 30072,
+   "pct": 32.8,
    "date": "2026-11-03",
    "folders": 2,
    "skipped": 0
