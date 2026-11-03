@@ -119,20 +119,11 @@ with sync_playwright() as p:
 
     pg.goto(base + "#map"); pg.wait_for_timeout(400)
     pg.click("#aboutBtn"); pg.wait_for_timeout(150)
-    check(pg.is_visible("#aboutMenu") and pg.inner_text("#aboutMenu").split() == ["介紹及資訊", "更新紀錄", "網頁導覽"], "關於本站 opens a menu: 介紹及資訊, 更新紀錄, 網頁導覽")
+    check(pg.is_visible("#aboutMenu") and pg.inner_text("#aboutMenu").split() == ["介紹及資訊", "更新紀錄"], "關於本站 opens a menu: 介紹及資訊, 更新紀錄")
     pg.click("#logBtn"); pg.wait_for_timeout(300)
     check(pg.is_hidden("#aboutMenu") and pg.url.endswith("#changelog") and pg.is_visible("#changelog") and pg.locator('#aboutBtn[aria-current="page"]').count() == 1, "更新紀錄 in the menu opens the changelog page")
     pg.click("#aboutBtn"); pg.wait_for_timeout(150); pg.mouse.click(400, 600); pg.wait_for_timeout(150)
     check(pg.is_hidden("#aboutMenu"), "the menu closes when clicking elsewhere")
-    check(pg.locator("#tour").count() == 0, "the tour does not start by itself in automated browsers")
-    pg.click("#aboutBtn"); pg.wait_for_timeout(150); pg.click("#tourBtn"); pg.wait_for_timeout(400)
-    steps = pg.evaluate("saoTour.steps"); seen = []
-    for k in range(steps):
-        seen.append(pg.inner_text("#tour .tour-card h3"))
-        if k == 4: mapok = pg.url.endswith("#map")
-        pg.click("#tour .tour-card button.pri"); pg.wait_for_timeout(350)
-    check(steps == 8 and seen[4] == "地圖" and "兩種底圖" not in seen and mapok and pg.locator("#tour").count() == 0
-          and pg.evaluate("localStorage.getItem('sao-tour-v1')") == "done", "網頁導覽: 8 steps, the map step switches to the map, finishing closes it and remembers")
     pg.goto(base + "#recipes"); pg.wait_for_timeout(400)
     tot = pg.locator("#lRc .rcard").count()
     pg.click('#fRcCat .chip[data-v="key"]'); pg.wait_for_timeout(200)
