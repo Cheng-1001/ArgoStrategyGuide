@@ -29,6 +29,9 @@ def _ver(m):
     if not os.path.isfile(f): return m.group(0)
     return '<script src="%s?v=%s"' % (m.group(1), hashlib.md5(open(f, "rb").read()).hexdigest()[:8])
 page = re.sub(r'<script src="([\w.-]+\.js)"', _ver, page)
+# build id: the page checks it against the live copy (fetched without cache) and offers a reload when they differ
+build = hashlib.md5(page.encode("utf-8")).hexdigest()[:10]
+page = page.replace('<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="sao-build" content="%s">' % build, 1)
 open(os.path.join(ROOT, "index.html"), "w", encoding="utf-8").write(page)
 open(os.path.join(ROOT, ".nojekyll"), "w").close()
 print("built index.html")

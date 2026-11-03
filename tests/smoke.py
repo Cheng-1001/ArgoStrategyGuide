@@ -58,6 +58,20 @@ with sync_playwright() as p:
         pg.close()
     check(not errs, "no page errors on any tab" + ("" if not errs else ": " + errs[0]))
 
+    pg = b.new_page(viewport={"width": 390, "height": 844})
+    pg.goto(base + "#f1-quests"); pg.wait_for_timeout(500)
+    pg.evaluate("__updCheck()"); pg.wait_for_timeout(400)
+    no_bar = pg.locator("#updBar").count() == 0
+    pg.route("**/index.html?_=*", lambda r: r.fulfill(status=200, content_type="text/html",
+             body=open(os.path.join(ROOT, "index.html"), encoding="utf-8").read().replace('name="sao-build" content="', 'name="sao-build" content="ff', 1)))
+    pg.evaluate("__updCheck()"); pg.wait_for_timeout(400)
+    bar = pg.locator("#updBar").count() == 1 and "網站有更新" in pg.inner_text("#updBar")
+    over = pg.evaluate("document.documentElement.scrollWidth>innerWidth")
+    pg.click("#updBar .ub-go"); pg.wait_for_timeout(1200)
+    check(no_bar and bar and not over and pg.url.endswith("/index.html#f1-quests") and pg.evaluate("!!document.querySelector('meta[name=sao-build]')"),
+          "update check: no bar when the live page is the same build; a newer build shows the bar, which reloads (and drops ?u=)")
+    pg.close()
+
     pg = b.new_page(viewport={"width": 1280, "height": 900})
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
     check(pg.eval_on_selector_all("#fpCats .fchip", "e=>e.filter(b=>!b.dataset.k.includes(':')&&b.getAttribute('aria-pressed')==='true').map(b=>b.dataset.k).join(',')") == "tp,land,area,mobs"
