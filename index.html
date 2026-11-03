@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="d055bf680e">
+<meta name="sao-build" content="d4cde675a5">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -2266,7 +2266,7 @@ const STEPS=[
  {sel:"nav.tabs",t:"功能選單",b:"切換分頁來找到想要的資料。"},
  {sel:".gsearch",t:"全站搜尋",b:"依分頁顯示搜尋內容，支援英文、法文、wiki舊版名稱。<br>在地圖上搜尋時，符合的位置會亮起來。"},
  {sel:()=>ph()?"#filterBtn":"#fpanel",go:"map",t:"篩選器",b:()=>(ph()?"使用上方的「篩選 ▾」":"使用左邊的篩選器")+"選要顯示的東西，設定會記在你的瀏覽器裡。"},
- {sel:"#stage",go:"map",pos:"tr",cut:"#fpanel",t:"地圖",b:"點選圖示打開詳細資料，物品名稱都可以再連結相關分頁。"},
+ {sel:"#stage",go:"map",pos:"tr",cut:"#fpanel",fit:"#stage img.map",t:"地圖",b:"點選圖示打開詳細資料，物品名稱都可以再連結相關分頁。"},
  {sel:"#collabBtn",t:"協作區",b:"在遊戲裡發現新資料、錯誤或有建議，到這裡使用表單回報，審核後自動更新到網站。"},
  {sel:"#aboutBtn",t:"關於本站",b:"網站介紹、資料來源、版權聲明，還有「更新紀錄」看最近改了什麼。"},
  {t:"導覽結束",b:"想再看一次導覽，可以從「關於本站 → 網頁導覽」打開。"}
@@ -2290,13 +2290,15 @@ function place(){const s=STEPS[i],el=target(s),M=8;
   if(cardW!==innerWidth){cardW=innerWidth;card.style.minHeight="";cardH=0;const keep=i;for(let k=0;k<STEPS.length;k++){i=k;card.innerHTML=body();cardH=Math.max(cardH,card.offsetHeight)}i=keep}
   card.innerHTML=body();card.style.minHeight=cardH+"px";card.classList.toggle("end",i===STEPS.length-1);
   card.querySelectorAll("button").forEach(b=>b.onclick=()=>b.dataset.a==="n"?(i<STEPS.length-1?show(i+1):end()):b.dataset.a==="p"?show(i-1):show(STEPS.length-1));
+  // 手機的地圖那一步：說明卡在下方，把頁面往下捲，讓整張地圖露在說明卡（和上面的「略過」）上方
+  if(el&&ph()&&s.fit){const m=$q(s.fit),over=m?m.getBoundingClientRect().bottom-(innerHeight-cardH-16-52):0;if(over>0)scrollBy(0,over)}
   if(!el){hole.className="tour-hole none";hole.style.cssText="";}
   else{const r=el.getBoundingClientRect(),cb=ph()&&i<STEPS.length-1?innerHeight-cardH-16-44:innerHeight;const cut=!ph()&&s.cut&&$q(s.cut),l=Math.max(4,r.left-M,cut?cut.getBoundingClientRect().right+M:0),t=Math.max(4,r.top-M),rr=Math.min(innerWidth-4,r.right+M),bb=Math.min(cb-4,r.bottom+M);hole.className="tour-hole";hole.style.cssText=`left:${l}px;top:${t}px;width:${rr-l}px;height:${bb-t}px`}
   const cw=card.offsetWidth,ch=card.offsetHeight,W=innerWidth,H=innerHeight;let x=(W-cw)/2,y=(H-ch)/2;if(ph()){card.style.top=i===STEPS.length-1?Math.max(16,y)+"px":"";return}
   if(el&&s.pos==="tr"){const r=el.getBoundingClientRect();x=Math.max(16,Math.min(W-16,r.right)-cw-24);y=Math.max(56,r.top+60)}
   card.style.left=x+"px";card.style.top=y+"px"}
 function show(k){i=k;const s=STEPS[i];if(s.go&&view!==s.go)go(s.go);
-  const el=target(s);if(el)el.scrollIntoView({block:"nearest"});requestAnimationFrame(()=>requestAnimationFrame(place))}
+  if(!s.fit)scrollTo(0,0);const el=target(s);if(el)el.scrollIntoView({block:"nearest"});requestAnimationFrame(()=>requestAnimationFrame(place))}
 function end(){if(!root)return;root.remove();root=null;removeEventListener("resize",place);removeEventListener("keydown",esc);try{localStorage.setItem("sao-tour-v1","done")}catch(e){}}
 window.saoTour={start(k=0){css();root?.remove();root=document.createElement("div");root.id="tour";root.innerHTML='<div class="tour-hole none"></div><div class="tour-card" role="dialog" aria-label="網頁導覽"></div>';document.body.appendChild(root);hole=root.firstChild;card=root.lastChild;cardW=0;addEventListener("resize",place);addEventListener("keydown",esc);show(k)},go:show,end,steps:STEPS.length};
 })();
