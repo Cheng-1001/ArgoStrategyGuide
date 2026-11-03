@@ -9,7 +9,7 @@ each scaled to 48 px. Never commit the pack, other textures, models or the candi
 
   1. Find candidates (textures and item models whose path or text matches the keywords):
        python tools/recipe_icons.py find "<game folder>/resourcepacks/sao.zip" [keyword ...]
-     Default keywords: potion mana stamina quality qualite teleport kobold purification elixir crystal cristal.
+     Default keywords: potion mana stamina health vie soin healing quality qualite teleport kobold purification elixir crystal cristal.
      Writes recipe_icon_candidates.png (numbered contact sheet) in the current folder: look at it, do not commit it.
   2. Put the chosen texture path for each recipe in tools/recipe_icons.json ("" = leave the placeholder).
      Check against the in-game crafting menu (F2 screenshot) when unsure; a wrong icon is worse than a placeholder.
@@ -22,7 +22,7 @@ from PIL import Image, ImageDraw
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MAP = os.path.join(ROOT, "tools", "recipe_icons.json")
-KEYS = "potion mana stamina quality qualite teleport kobold purification elixir crystal cristal".split()
+KEYS = "potion mana stamina health vie soin healing quality qualite teleport kobold purification elixir crystal cristal".split()
 
 
 def first_frame(im):
