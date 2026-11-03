@@ -2,13 +2,5 @@
 // 只公開回報編號、種類、樓層、送出時間、狀態；名稱和內容要等審核員核准後，才會出現在 reports.js。
 window.SAO_PENDING = {
  "updated": "2026-11-03 23:23",
- "list": [
-  {
-   "id": "R0004",
-   "type": "jmap",
-   "floor": 1,
-   "date": "2026-11-03 23:22",
-   "status": "approved"
-  }
- ]
+ "list": []
 };
