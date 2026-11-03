@@ -2,7 +2,27 @@
    日期一律用台灣時間（UTC+8，使用者 2026-11-03 指定）；git log 用 TZ=Asia/Taipei 看。
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
+ ["2026-11-04",[
+  "新增「地下城資料」：墮落者迷宮和 Geldorak 礦坑地下城的首領、鑰匙、4 種難度、Easy 難度的限制和「通關寶箱」內容（取自遊戲的 Dungeons 視窗）",
+  "藥水圖示改用遊戲裡的圖：一般藥水是紅（生命）、藍（魔力）、橘（體力）試管，Quality 藥水是圓瓶；官網原本的藥水圖顏色對不上",
+  "鍊金術士在起始之城建築的二樓，除了做 Quality 藥水，也賣一般藥水 I～III；NPC 資料分成「可以製作」和「販售」兩段",
+  "Crystallographer 註明在二樓；一樓金色名牌的「Alchemist」是任務 NPC"
+ ]],
  ["2026-11-03",[
+  "照遊戲圖鑑截圖校正怪物：名稱（Gorbel, King of Slimes、Narax Cursed Skeleton、Vyrmoss, the Royal Thorn、Thornak, the Sylvan Guardian、Ornstein, Fallen Defender，舊名仍可搜尋）、圖鑑編號、掉落率和出沒提示",
+  "怪物資料新增「遊戲圖鑑說明」；Small／Healer／Mage Slime 標上等級 4",
+  "Skeleton Wizard 加回兩把法杖（2%），標「只有 wiki 有記錄」",
+  "主線任務 1～7 段補上遊戲裡的編號",
+  "地區名稱對照遊戲圖鑑：Starting Town（原 Town of Beginnings）、Castelbrume；其他維持英文名，面板寫出遊戲圖鑑的法文名稱，搜尋法文也找得到",
+  "新增地標 Lac des Nénuphars（遊戲圖鑑區域 #011）",
+  "新增 NPC：Mine Archaeologist、Weapon Recycling、Accessory Recycling、Auction House、Vault、Labyrinth Archaeologist；回收 NPC 列出可以換 Recycling Coins 的物品",
+  "配方和裝備資料直接寫出製作 NPC 在哪個城鎮附近，座標可以點",
+  "飾品鐵匠、Bandit、The Assistant、Crystallographer 等配方照遊戲截圖補上稀有度、製作時間、費用和材料",
+  "收購商、起始商人、工具商人賣的東西改標「販售」；Health／Mana／Stamina Potion I 是在起始商人那裡買，不是用材料做",
+  "起始商人的完整商品（22 項）和工具商人的 4 種工具；新增 Sewer Reshaper 的 2 個配方",
+  "Nodachi Blacksmith 資料加上 Nodachi Altar 的升階說明",
+  "協作區「已收錄」每一則改成一個獨立的框，比較好分辨",
+  "探索地圖的回報不再重複問貢獻者名稱，改用回報者暱稱",
   "「更新紀錄」移到右上角；「說明」改名「關於本站」，之後改成下拉選單：介紹及資訊、更新紀錄",
   "「協作區」移到右上角，放在「關於本站」左邊",
   "修正：18 個配方的等級和官方圖鑑不一致（例如 Belt of the Stags 寫 7、官方是 5），改以官方圖鑑為準",
