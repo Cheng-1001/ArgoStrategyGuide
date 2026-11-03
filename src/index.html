@@ -976,7 +976,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!panel.hidden)close
 function markSel(){const cur=!panel.hidden&&stack[stack.length-1];
   document.querySelectorAll(".card.sel").forEach(e=>e.classList.remove("sel"));document.querySelectorAll(".th.selm").forEach(e=>e.classList.remove("selm"));
   if(!cur)return;document.querySelectorAll(`[data-key="${cur.type}|${CSS.escape(cur.id)}"]`).forEach(e=>e.classList.add(e.classList.contains("th")?"selm":"sel"))}
-const soonNote=f=>FLOORS[f].status==="soon"?`<div class="note warn">${FLN(f)}預計 11 月 4 日開放。這是 wiki 目前的資料，官方說會調整進度設計，開放後可能不同。</div>`:"";
+const soonNote=f=>FLOORS[f].status==="soon"?`<div class="note warn">${FLN(f)}預計 11/5（四）03:00（台灣時間）開放（官方公告：11/4 晚上 8 點巴黎時間）。這是 wiki 目前的資料，官方說會調整進度設計，開放後可能不同。</div>`:"";
 
 function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.zones[m.zone];const p=monPos(m);const st=STATUS[p.s];
   const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(iid)}</b><span>${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
@@ -1264,7 +1264,7 @@ function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value
 // ================= classes / skills tab =================
 const CLS=window.SAO_CLASSES||[];
 CLS.forEach(c=>{c.reps=(window.SAO_REPORTS||[]).filter(r=>r.type==="skill"&&norm(r.cls)===norm(c.name)).sort((a,b)=>(a.unlock||99)-(b.unlock||99))});
-const clsWeap=c=>Object.entries(c.weapons).map(([k,n])=>`${EQ_CAT[k]||k}（${n}）`).join("、");
+const clsWeap=c=>Object.entries(Object.assign({},c.weapons,(n=>n?{catalyst:n}:{})(EQ.filter(e=>e.cat==="catalyst"&&eqClasses(e).includes(c.id)).length))).map(([k,n])=>`${EQ_CAT[k]||k}（${n}）`).join("、");
 const clsSoon=c=>!Object.keys(c.weapons).length&&!c.base.length;
 // ---- dungeons tab (preliminary, user 2026-11-02: only the dungeon names for now; floor-boss towers are left out) ----
 function renderDungeons(){const s=Sq();const a=spotsOf(FL).filter(x=>x.kind==="dungeon"&&!/樓層首領/.test(x.zh||"")&&(!s||norm([x.n,x.zh].join(" ")).includes(s)));
@@ -1287,6 +1287,7 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
   ${clsSoon(c)?`<div class="note warn">官方物品圖鑑沒有這個職業的裝備，參考互動地圖也沒有它的屬性資料，可能還沒開放。下面只有 wiki 的介紹。</div>`:""}
   <dl class="facts"><dt>難度</dt><dd>${stars(c.diff)}</dd><dt>可用武器</dt><dd>${clsWeap(c)||'<span class="muted">官方圖鑑沒有資料</span>'}</dd><dt>Lv 30 專精</dt><dd>${c.subs.map(x=>`<b>${esc(x[0])}</b>：${esc(x[1])}`).join("<br>")}<br><span class="muted" style="font-size:12px">wiki 註明專精還在準備中。</span></dd></dl>
   ${Object.keys(c.weapons).length&&CLASS_ZH[c.id]?`<button class="btn" data-eqcls="${c.id}">查看這個職業可用的裝備（另開視窗）</button>`:""}
+  <a class="btn" style="display:block;text-align:center;text-decoration:none;margin-top:6px" href="https://saominecraft.com/builds?class=${c.id==="martial"?"martial_artist":c.id}" target="_blank" rel="noopener">官網的玩家配裝（${esc(c.zh)}）↗</a>
   <div class="cls2"><div>
   <h3 class="sec">能力傾向 <span class="c">wiki 星等</span></h3>${tbl(c.stars.map(([k,n])=>`<tr><th>${esc(k)}</th><td>${n?bar(n):'<span class="muted">—</span>'}</td></tr>`).join(""),null)}
   ${keys.length?`<h3 class="sec">起始屬性和成長 <span class="c">參考互動地圖</span></h3>${tbl(keys.map(k=>`<tr><th>${esc(k)}</th><td class="mono">${esc(stat(c.base,k)??"—")}</td><td class="mono">${stat(c.perLv,k)!=null?"+"+esc(stat(c.perLv,k)):"—"}</td></tr>`).join(""),["屬性","Lv 1","每升 1 級"])}`:""}
@@ -2166,7 +2167,7 @@ document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>a.add
 const TOTAL=100;const flTrig=$("flTrig"),flPop=$("flPop");
 const flState=f=>FLOORS[f]?(FLOORS[f].status==="soon"?"soon":"open"):"lock";
 $("flGrid").innerHTML=Array.from({length:TOTAL},(_,i)=>{const f=i+1,st=flState(f);
-  const tip=st==="lock"?`第 ${f} 層・尚未開放`:`第 ${f} 層${st==="soon"?"（預計 11/4 開放）":""}`;
+  const tip=st==="lock"?`第 ${f} 層・尚未開放`:`第 ${f} 層${st==="soon"?"（預計 11/5（四）03:00（台灣時間）開放）":""}`;
   return`<button class="flcell ${st}" data-f="${f}" title="${esc(tip)}" aria-label="${esc(tip)}" ${st==="lock"?'aria-disabled="true"':""}>${f}</button>`}).join("");
 function openPick(o){flPop.hidden=!o;flTrig.setAttribute("aria-expanded",o);$("flMsg").textContent="";if(o){$("flJump").value="";setTimeout(()=>$("flJump").focus(),0)}}
 flTrig.onclick=e=>{e.stopPropagation();openPick(flPop.hidden)};
@@ -2180,7 +2181,7 @@ $("flForm").onsubmit=e=>{e.preventDefault();pickFloor(parseInt($("flJump").value
 function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.ready=1;
   $("flNo").textContent=f+"F";$("flNm").textContent=`第 ${f} 層`;   // no floor name: the game has no confirmed floor names (user 2026-11-02 chose A)
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
-  const Fx=F();$("floorInfo").innerHTML=`<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/4 開放・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
+  const Fx=F();$("floorInfo").innerHTML=`<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/5（四）03:00（台灣時間）開放・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PR.length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
   $("nItem").textContent=Object.keys(ITEMS).filter(id=>itemFloors(id).includes(f)).length;
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
