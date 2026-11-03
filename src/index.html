@@ -2258,7 +2258,7 @@ function css(){if($q("#tourCss"))return;const st=document.createElement("style")
 function target(s){const sel=typeof s.sel==="function"?s.sel():s.sel;return sel?$q(sel):null}
 function place(){const s=STEPS[i],el=target(s),M=8;
   card.innerHTML=`${i<STEPS.length-1?'<button class="skip" data-a="x">略過</button>':""}<h3>${s.t}</h3><p>${typeof s.b==='function'?s.b():s.b}</p><div class="tour-foot"><button data-a="p"${i?"":' class="ph0" tabindex="-1" aria-hidden="true"'}>上一步</button><div class="tour-dots" aria-label="第 ${i+1} 步，共 ${STEPS.length} 步">${STEPS.map((_,k)=>`<i class="${k===i?"on":""}"></i>`).join("")}</div><button class="pri" data-a="n">${i===STEPS.length-1?"開始使用":"下一步"}</button></div>`;
-  card.querySelectorAll("button").forEach(b=>b.onclick=()=>b.dataset.a==="n"?(i<STEPS.length-1?show(i+1):end()):b.dataset.a==="p"?show(i-1):end());
+  card.querySelectorAll("button").forEach(b=>b.onclick=()=>b.dataset.a==="n"?(i<STEPS.length-1?show(i+1):end()):b.dataset.a==="p"?show(i-1):show(STEPS.length-1));
   if(!el){hole.className="tour-hole none";hole.style.cssText="";}
   else{const r=el.getBoundingClientRect(),cb=ph()?card.getBoundingClientRect().top-6:innerHeight;const l=Math.max(4,r.left-M),t=Math.max(4,r.top-M),rr=Math.min(innerWidth-4,r.right+M),bb=Math.min(cb-4,r.bottom+M);hole.className="tour-hole";hole.style.cssText=`left:${l}px;top:${t}px;width:${rr-l}px;height:${bb-t}px`}
   if(ph())return;const cw=card.offsetWidth,ch=card.offsetHeight,W=innerWidth,H=innerHeight;let x,y;

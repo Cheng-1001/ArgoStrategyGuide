@@ -133,6 +133,12 @@ with sync_playwright() as p:
         pg.click("#tour .tour-card button.pri"); pg.wait_for_timeout(350)
     check(steps == 8 and seen[4] == "地圖" and "兩種底圖" not in seen and mapok and pg.locator("#tour").count() == 0
           and pg.evaluate("localStorage.getItem('sao-tour-v1')") == "done", "網頁導覽: 8 steps, the map step switches to the map, finishing closes it and remembers")
+    pg.evaluate("localStorage.removeItem('sao-tour-v1')")
+    pg.click("#aboutBtn"); pg.wait_for_timeout(150); pg.click("#tourBtn"); pg.wait_for_timeout(400)
+    pg.click("#tour .tour-card button.skip"); pg.wait_for_timeout(400)
+    last = pg.inner_text("#tour .tour-card h3") if pg.locator("#tour").count() else ""
+    pg.click("#tour .tour-card button.pri"); pg.wait_for_timeout(300)
+    check(last == "林哭斯大斗！" and pg.locator("#tour").count() == 0 and pg.evaluate("localStorage.getItem('sao-tour-v1')") == "done", "網頁導覽: 略過 jumps to the last step, which then closes the tour")
     pg.goto(base + "#recipes"); pg.wait_for_timeout(400)
     tot = pg.locator("#lRc .rcard").count()
     pg.click('#fRcCat .chip[data-v="key"]'); pg.wait_for_timeout(200)
