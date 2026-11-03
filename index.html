@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="df9aecf9cc">
+<meta name="sao-build" content="b7bc4915c8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -60,6 +60,7 @@ button,input,select{font:inherit;color:inherit}
 .topf .fgroup{display:flex;flex-direction:row;align-items:center;gap:12px}
 .topf .fgroup[hidden]{display:none}
 .topf .flabel{flex:none;width:48px;margin:0}
+.cmeta .alsoin{font-size:11px;color:var(--ref);border:1px solid var(--ref);border-radius:4px;padding:0 5px}
 .chip .cn{font-family:var(--f-mono);font-size:10.5px;opacity:.7;margin-left:2px}
 /* active filters next to the result count: each can be removed without going back to the left column */
 .actf{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
@@ -620,7 +621,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <nav class="subtabs" id="codexTabs" aria-label="圖鑑分類" hidden>
     <a href="#monsters" data-v="monsters">怪物 <span class="n" id="nMon"></span></a>
     <a href="#equip" data-v="equip">裝備 <span class="n" id="nEquip"></span></a>
-    <a href="#items" data-v="items">掉落物 <span class="n" id="nItem"></span></a>
+    <a href="#items" data-v="items">怪物掉落 <span class="n" id="nItem"></span></a>
     <a href="#props" data-v="props">道具 <span class="n" id="nProp"></span></a>
   </nav>
 
@@ -685,7 +686,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fItemSort" aria-label="排序">
         <option value="name">名稱</option><option value="rar">稀有度（高→低）</option><option value="src">掉落來源最多</option><option value="need">任務需求量最多</option></select></div>
     </div>
-    <div class="results"><div class="rhead"><h2>物品</h2><span class="count" id="cItem"></span></div><div class="grid" id="lItem"></div></div>
+    <div class="results"><div class="rhead"><h2>怪物掉落</h2><span class="count" id="cItem"></span></div><div class="grid" id="lItem"></div></div>
   </section>
 
   <!-- QUESTS -->
@@ -1076,7 +1077,7 @@ function itemMap(id){const pts=[];let f=null;const add=(fl,label,xs)=>{if(!FLOOR
   const num={};(SOURCES[id]||[]).forEach(({m})=>{const zp=monPos(m);const xs=zp.spot?[[zp.x,zp.z]]:zp.spawns?zp.spawns.map(w=>[w.x,w.z]):[];num["m"+m.id]=add(m.floor,m.name,xs)});
   (GATHER[id]||[]).forEach(sp=>{num["s"+sp.id]=add(sp.floor,sp.n,[[sp.x,sp.z]])});
   const steps=pts.map(p=>[p.label,p.x,p.z,0,p.n]);return{f,steps,num}}
-function itemDetail(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id],gat=GATHER[id];const IM=itemMap(id);const rn=k=>IM.num[k]?`<span class="rnum">${IM.num[k]}</span>`:"";
+function itemDetail(id){const it=ITEMS[id];const OFF=offOf(id);const src=SOURCES[id],use=USES[id],gat=GATHER[id];const IM=itemMap(id);const rn=k=>IM.num[k]?`<span class="rnum">${IM.num[k]}</span>`:"";
   const stl=it.st?Object.entries(it.st).map(([k,v])=>{let val=v;if(k==="Classe requise")val=String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]||c).join("、");else if(k==="Arme à deux mains")val="是";else if(typeof v==="number"&&!["Item Cooldown","Restore Food","Max Durability"].includes(k)&&!k.startsWith("Required"))val=(v>0?"+":"")+v;return`<dt>${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(val)}</dd>`}).join(""):"";
   let lastF=0;const fh=f=>{if(f===lastF)return"";lastF=f;return`<li class="fsep">${flBadge(f)} ${FLN(f)}</li>`};
   const multi=itemFloors(id).length>1;
@@ -1086,6 +1087,7 @@ function itemDetail(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id],ga
   const useRows=use.map(({q:qq,n,inf})=>(multi?fh(qq.floor):"")+`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>原文：${esc(qq.raw)}${inf?' <span class="inf">推斷</span>':""}</span></span><span class="v">× ${n}</span></button></li>`).join("");
   return`<div class="phead">${slot(id,64)}<div class="ttl"><h2>${esc(id)}</h2><div class="sub">${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${rarPill(it)}<span class="muted" style="font-size:12px">${esc(CAT_ZH[it.cat]||it.cat)}${it.lv?" · 等級 "+it.lv:""}</span>${itemFloors(id).map(flBadge).join("")}</div></div></div>
+  ${OFF?`<div class="gobtns" style="margin-top:0"><button class="btn" data-goview="${OFF.v}|${OFF.t}|${OFF.e.oid}">在${OFF.v==="equip"?"裝備":"道具"}圖鑑查看（官方資料）</button></div>`:""}
   ${it.lore?`<p class="lore">${esc(it.lore)}</p>`:""}
   ${(()=>{const pieces=it.cat==="armor_set"&&it.fr?it.fr.split(/\s*\/\s*/).map((x,i,a)=>i===a.length-1?x.split(/\s+/)[0]:x):null;
     if(pieces&&it.st&&Object.values(it.st).some(v=>/\s\/\s/.test(String(v)))){
@@ -1204,13 +1206,21 @@ function renderMon(){const s=Sq(),zf=$("fMonZone").value,so=$("fMonSort").value;
 
 // ================= items tab =================
 let itemGroup="all",itemRar="all";
-const GROUPS=["材料","武器","防具","飾品","符文","藥水","食物","採集","工具","未收錄"];
+// 怪物掉落 tab (user 2026-11-04, option B): only what monsters drop or quests need; groups use the same names as
+// the 裝備 parts and 道具 groups; items that are also in the official catalogue say so and link there
+const GROUPS=["武器（主手）","副手","防具","飾品","材料","採集","消耗品","符文・強化","工具","鑰匙","活動道具","官網未收錄"];
+let OFF_CACHE=null;
+const offOf=id=>{if(!OFF_CACHE){OFF_CACHE={};const eb={},pb={};EQ.forEach(e=>eb[e.name]=e);PR.forEach(e=>pb[e.name]=e);
+  Object.keys(ITEMS).forEach(k=>{const fr=ITEMS[k].fr;OFF_CACHE[k]=fr&&eb[fr]?{v:"equip",t:"e",e:eb[fr]}:fr&&pb[fr]?{v:"props",t:"p",e:pb[fr]}:null})}return OFF_CACHE[id]};
+const PART_ZH={weapon:"武器（主手）",off:"副手",armor:"防具",acc:"飾品"};
+const itemGroupOf=id=>{const o=offOf(id);if(o)return o.v==="equip"?PART_ZH[EQ_PART[o.e.cat]]:(PR_GROUP[o.e.cat]==="活動"?"活動道具":PR_GROUP[o.e.cat]);return"官網未收錄"};
 chipsInto($("fItemGroup"),[["all","全部"],...GROUPS.map(g=>[g,g])],()=>itemGroup,v=>itemGroup=v,renderItems);
 chipsInto($("fItemRar"),[["all","全部"],["c","普通"],["b","稀有"],["a","史詩"],["s","傳說"],["splus","傳說+"]],()=>itemRar,v=>itemRar=v,renderItems);
 ["fItemQuest","fItemDrop","fItemSort","fItemAll"].forEach(i=>$(i).onchange=renderItems);
 function renderItems(){const s=Sq(),so=$("fItemSort").value,all=$("fItemAll").checked;
-  const pool=Object.keys(ITEMS).filter(id=>all||itemFloors(id).includes(FL));
-  let a=pool.filter(id=>{const it=ITEMS[id];return(itemGroup==="all"||GROUP[it.cat]===itemGroup)&&(itemRar==="all"||it.r===itemRar)
+  const pool=Object.keys(ITEMS).filter(id=>(SOURCES[id].length||USES[id].length)&&(all||itemFloors(id).includes(FL)));
+  const gHas=new Set(pool.map(itemGroupOf));$("fItemGroup").querySelectorAll(".chip").forEach(c=>c.hidden=c.dataset.v!=="all"&&!gHas.has(c.dataset.v)&&c.getAttribute("aria-pressed")!=="true");
+  let a=pool.filter(id=>{const it=ITEMS[id];return(itemGroup==="all"||itemGroupOf(id)===itemGroup)&&(itemRar==="all"||it.r===itemRar)
     &&(!$("fItemQuest").checked||USES[id].length)&&(!$("fItemDrop").checked||SOURCES[id].length)&&(itemHit(id,s)||SOURCES[id].some(x=>norm(x.m.name).includes(s)))});
   const rv=id=>ITEMS[id].r&&RAR[ITEMS[id].r]?RAR[ITEMS[id].r][2]:0;const nt=id=>needTotal(id,all?0:FL);
   if(so==="name")a.sort((x,y)=>x.localeCompare(y));else if(so==="rar")a.sort((x,y)=>rv(y)-rv(x)||x.localeCompare(y));
@@ -1218,7 +1228,7 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=$("fItemAll").ch
   $("cItem").textContent=`${a.length} / ${pool.length} 件`;
   $("lItem").innerHTML=a.length?a.map(id=>{const it=ITEMS[id];const src=SOURCES[id].filter(x=>all||x.m.floor===FL),use=USES[id].filter(u=>all||u.q.floor===FL);return`<button class="card" data-key="i|${esc(id)}" data-go="i|${esc(id)}">
     <div class="chead">${slot(id,44)}<div class="cname"><b>${esc(id)}</b><span>${it.fr?esc(it.fr):"官方圖鑑未收錄"}</span></div></div>
-    <div class="cmeta">${rarPill(it)}<span>${esc(CAT_ZH[it.cat]||"")}</span>${src.length?`<span>· ${src.length} 種怪物掉落</span>`:it.src?`<span>· ${esc(it.src.split("：")[0].split("（")[0])}</span>`:""}${use.length?`<span>· ${use.length} 任務需 ${nt(id)}</span>`:""}${itemFloors(id).length>1||all?itemFloors(id).map(flBadge).join(""):""}</div></button>`}).join(""):`<div class="empty-note">沒有符合條件的物品。</div>`;
+    <div class="cmeta">${rarPill(it)}<span>${esc(CAT_ZH[it.cat]||"")}</span>${offOf(id)?`<span class="alsoin">也在${offOf(id).v==="equip"?"裝備":"道具"}</span>`:""}${src.length?`<span>· ${src.length} 種怪物掉落</span>`:it.src?`<span>· ${esc(it.src.split("：")[0].split("（")[0])}</span>`:""}${use.length?`<span>· ${use.length} 任務需 ${nt(id)}</span>`:""}${itemFloors(id).length>1||all?itemFloors(id).map(flBadge).join(""):""}</div></button>`}).join(""):`<div class="empty-note">沒有符合條件的物品。</div>`;
   bindGo($("lItem"));markSel()}
 
 // ================= quests tab =================
@@ -2312,7 +2322,7 @@ function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
   const Fx=F();$("floorInfo").innerHTML=`<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/5（四）03:00（台灣時間）開放・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PR.length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
-  $("nItem").textContent=Object.keys(ITEMS).filter(id=>itemFloors(id).includes(f)).length;
+  $("nItem").textContent=Object.keys(ITEMS).filter(id=>(SOURCES[id].length||USES[id].length)&&itemFloors(id).includes(f)).length;
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
 // phones: fold bar for every browse tab's filters (hidden on wider screens by CSS)
 function fbarSync(){document.querySelectorAll(".browse .filters").forEach(F=>{const b=F.querySelector(':scope>.fbar [data-t="fopen"]');if(!b)return;
