@@ -221,6 +221,105 @@ null,
 "potion",
 8,
 "shot"
+],
+[
+2457,
+"Health Potion I",
+null,
+[],
+"5.02",
+"c",
+"potion",
+1,
+"shot"
+],
+[
+2458,
+"Health Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+2459,
+"Health Potion III",
+null,
+[],
+"15.07",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Mana Potion I",
+null,
+[],
+"5.02",
+"c",
+"potion",
+1,
+"shot"
+],
+[
+null,
+"Mana Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Mana Potion III",
+null,
+[],
+"15.07",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+2471,
+"Stamina Potion I",
+null,
+[],
+"5.02",
+"c",
+"potion",
+1,
+"shot"
+],
+[
+2472,
+"Stamina Potion II",
+null,
+[],
+"10.05",
+"c",
+"potion",
+null,
+"shot"
+],
+[
+null,
+"Stamina Potion III",
+null,
+[],
+"15.07",
+"c",
+"potion",
+null,
+"shot"
 ]
 ]
 },

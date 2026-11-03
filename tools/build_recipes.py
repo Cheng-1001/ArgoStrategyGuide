@@ -158,6 +158,17 @@ SHOTS = {
         ('Quality Stamina Potion I', 'b', 5, [['Wheat', 8], ['Allium Flower', 8]], '5', 'potion'),
         ('Quality Stamina Potion II', 'b', 5, [['Wheat', 8], ['Bone Dust', 8], ['Allium Flower', 12]], '7', 'potion'),
         ('Quality Stamina Potion III', 'b', 5, [['Wheat', 8], ['Bone Dust', 8], ['Ancestral Root', 1], ['Allium Flower', 16]], '10', 'potion'),
+
+        # Buy tab (owner's screenshot 2026-11-04, 2 pages): Potion I-III sold for Col, same prices as the loot buyers
+        ('Health Potion I', 'c', None, [], '5.02', 'potion'),
+        ('Health Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Health Potion III', 'c', None, [], '15.07', 'potion'),
+        ('Mana Potion I', 'c', None, [], '5.02', 'potion'),
+        ('Mana Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Mana Potion III', 'c', None, [], '15.07', 'potion'),
+        ('Stamina Potion I', 'c', None, [], '5.02', 'potion'),
+        ('Stamina Potion II', 'c', None, [], '10.05', 'potion'),
+        ('Stamina Potion III', 'c', None, [], '15.07', 'potion'),
     ],
     'The Assistant': [                                         # "F1 The Assistant - Starting City"
         ('Quality Vitality Fortifier I', 'b', 10, [['Magic Wood Shard', 16], ['Wood Heart', 2], ['Slime Core', 2]], '10', 'potion'),
