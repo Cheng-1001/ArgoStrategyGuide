@@ -329,7 +329,8 @@ with sync_playwright() as p:
     check(pg.locator(".bsp").count() == 23 and pg.locator('.bsp[title*="Pumba"]').count() == 5, "23 boss spawn points drawn (Pumba has 5)")
     check(pg.is_visible("#fpanel") and pg.locator("#fpanel").bounding_box()["width"] <= 200, "filter panel stays open on the left and is narrow")
     pg.fill("#q", "Magic Mycelium"); pg.wait_for_timeout(300)
-    check(pg.is_visible("#srchHint") and "Magic Mycelium" in pg.inner_text("#srchHint") and pg.locator(".zone.dim").count() > 0, "searching on the map shows a hint (things not matching are dimmed)")
+    check(pg.is_visible("#srchHint") and "Magic Mycelium" in pg.inner_text("#srchHint") and pg.locator(".zone.shide").count() > 0 and pg.locator(".town.shide").count() > 0
+          and "只顯示符合" in pg.inner_text("#srchHint"), "searching on the map shows a hint and hides everything that does not match")
     pg.click("#srchClr"); pg.wait_for_timeout(300)
     check(pg.is_hidden("#srchHint") and pg.locator(".zone.dim").count() == 0 and pg.input_value("#q") == "", "清除搜尋 clears the search and the dimming")
     pg.eval_on_selector('.bsp[title*="Nazgul"]', 'e=>e.click()'); pg.wait_for_timeout(300)
