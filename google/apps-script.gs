@@ -35,7 +35,7 @@ const CFG = {
     '配方': { floor: ['配方・樓層', true], name: ['配方・物品名稱', '做出來的物品名稱，例如 Quality Health Potion I'] },
     '任務追蹤': { floor: ['任務・樓層', true], name: ['任務・標題', '任務標題，不含前面的數字，例如 The Truth About the Seal'] },
     '技能': { floor: null, name: ['技能・名稱', '技能名稱原文，例如 Combinaison Brutale'] },
-    '探索地圖': { floor: null, name: ['探索地圖・貢獻者名稱', '必填。會顯示在網站「探索地圖」的貢獻名單上，請填你的遊戲內暱稱（不要填 Google 帳號或真實姓名）'] },   // 固定第 1 層
+    '探索地圖': { floor: null, name: null },   // 固定第 1 層；貢獻名單用第 1 頁的「回報者・遊戲內暱稱」（2026-11-03 使用者：原本的「探索地圖・貢獻者名稱」和暱稱重複，已刪）
     '建議': { floor: null, name: ['建議・標題', '一句話的標題，例如「地圖可以標記自己的位置」'] }
   },
   C_ID: '回報編號', C_STATUS: '狀態', C_NOTE: '審核備註', C_RESULT: '處理結果',
@@ -60,7 +60,8 @@ const NAME_HELP = '照遊戲裡的名稱寫，例如怪物 Young Spider、物品
 const PLACE_KINDS = ['村鎮', '傳送點', 'NPC', '採集點', '地下城或礦坑', '首領位置', '怪物區', '怪物重生點', '其他'];
 const NPC_KINDS = ['鍊金術士', '收購商', '鑰匙鐵匠', '飾品鐵匠', '伐木工', '武器收購商', '旅行商人', '裝備商人', '工具商人', '飾品商人', '神秘商人', '消耗品商人', '武器鐵匠', '防具鐵匠', '金屬錠鐵匠', '材料工匠', '裝備鐵匠', '隱藏飾品鐵匠', '其他'];
 const NEW_TYPES = ['配方', '任務追蹤', '技能', '探索地圖', '建議'];   // 建議一定要放最後：它填完直接送出，不經過截圖頁
-const NICK_HELP = '選填。填了會顯示在網站上，表示這筆資料是你提供的；不想公開就留空。請不要填 Google 帳號或真實姓名。';
+const NICK_HELP = '選填。填了會顯示在網站上，表示這筆資料是你提供的（上傳探索地圖時也會列在貢獻名單上）；不想公開就留空。請不要填 Google 帳號或真實姓名。';
+const JMAP_OLD_NAME = '探索地圖・貢獻者名稱';   // 2026-11-02 加、2026-11-03 刪（和暱稱重複）；upgradeForm 會刪掉，試算表的舊欄位和資料保留
 const NUM = () => FormApp.createTextValidation().requireWholeNumber().setHelpText('只填數字').build();
 const FLOOR_VAL = () => FormApp.createTextValidation().requireNumberBetween(1, 100).setHelpText('請填 1 到 100 的數字').build();
 /** 所有種類頁的樓層、名稱題目（摘要和送到網站的原始欄位都略過它們，因為已經是 floor、name）。 */
@@ -102,7 +103,7 @@ const PAGE_HELP = {
   '配方': '打開 NPC 的製作或購買選單，點到那個物品按 F2 截圖（要看得到材料、數量、費用、時間）。',
   '任務追蹤': '任務追蹤畫面（右側 Tracked quest）或任務選單按 F2 截圖。',
   '技能': '打開技能選單，點到那個技能按 F2 截圖。技能和樓層無關，不用填樓層。',
-  '探索地圖': '上傳 JourneyMap 記錄的地圖，網站會自動檢查並合併到「探索地圖」，不用截圖、不用等審核。合併後你的名稱和貢獻比例會列在網站探索地圖的貢獻名單上。\n' +
+  '探索地圖': '上傳 JourneyMap 記錄的地圖，網站會自動檢查並合併到「探索地圖」，不用截圖、不用等審核。合併後第 1 頁填的暱稱和貢獻比例會列在網站探索地圖的貢獻名單上（沒填暱稱就顯示「未具名玩家」）。\n' +
     '1. 到查詢工具網站「協作區 → 攻略資料維護」，用「打包探索地圖」選 JourneyMap 的 mp 資料夾，它會自動找出第 1 層、只留網站還沒有的區域，下載壓縮檔。\n' +
     '2. 把壓縮檔上傳到下面的「探索地圖・壓縮檔」，送出。\n' +
     '結果（合併了多少、或為什麼沒合併）會顯示在網站協作區的「已收錄」。目前只合併第 1 層。',
@@ -226,7 +227,7 @@ function upgradeForm() {
     const pb = byTitle(n, FormApp.ItemType.PAGE_BREAK);
     if (pb && PAGE_HELP[n] !== undefined) pb.asPageBreakItem().setHelpText(PAGE_HELP[n]);
   });
-  [CFG.Q_FLOOR, CFG.Q_NAME].forEach(t => { const it = byTitle(t, FormApp.ItemType.TEXT); if (it) form.deleteItem(it); });
+  [CFG.Q_FLOOR, CFG.Q_NAME, JMAP_OLD_NAME].forEach(t => { const it = byTitle(t, FormApp.ItemType.TEXT); if (it) form.deleteItem(it); });
 
   // 回報種類：保留原本三個選項的跳頁，再加三個新的
   const mc = typeQ.asMultipleChoiceItem();
