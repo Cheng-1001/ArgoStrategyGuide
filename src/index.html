@@ -2277,12 +2277,12 @@ function target(s){const sel=typeof s.sel==="function"?s.sel():s.sel;return sel?
 function place(){const s=STEPS[i],el=target(s),M=8;
   // 每一步的說明卡一樣高：先量出所有步驟裡最高的，當最小高度（視窗寬度改變時重量）
   if(cardW!==innerWidth){cardW=innerWidth;card.style.minHeight="";cardH=0;const keep=i;for(let k=0;k<STEPS.length;k++){i=k;card.innerHTML=body();cardH=Math.max(cardH,card.offsetHeight)}i=keep}
-  card.innerHTML=body();card.style.minHeight=cardH+"px";card.classList.toggle("end",i===STEPS.length-1);
+  card.innerHTML=body();card.style.minHeight=ph()?"":cardH+"px";card.classList.toggle("end",i===STEPS.length-1);
   card.querySelectorAll("button").forEach(b=>b.onclick=()=>b.dataset.a==="n"?(i<STEPS.length-1?show(i+1):end()):b.dataset.a==="p"?show(i-1):show(STEPS.length-1));
   // 手機的地圖那一步：說明卡在下方，把頁面往下捲，讓整張地圖露在說明卡（和上面的「略過」）上方
-  if(el&&ph()&&s.fit){const m=$q(s.fit),over=m?m.getBoundingClientRect().bottom-(innerHeight-cardH-16-52):0;if(over>0)scrollBy(0,over)}
+  if(el&&ph()&&s.fit){const m=$q(s.fit),over=m?m.getBoundingClientRect().bottom-(innerHeight-card.offsetHeight-16-52):0;if(over>0)scrollBy(0,over)}
   if(!el){hole.className="tour-hole none";hole.style.cssText="";}
-  else{const r=el.getBoundingClientRect(),cb=ph()&&i<STEPS.length-1?innerHeight-cardH-16-44:innerHeight;const cut=!ph()&&s.cut&&$q(s.cut),l=Math.max(4,r.left-M,cut?cut.getBoundingClientRect().right+M:0),t=Math.max(4,r.top-M),rr=Math.min(innerWidth-4,r.right+M),bb=Math.min(cb-4,r.bottom+M);hole.className="tour-hole";hole.style.cssText=`left:${l}px;top:${t}px;width:${rr-l}px;height:${bb-t}px`}
+  else{const r=el.getBoundingClientRect(),cb=ph()&&i<STEPS.length-1?innerHeight-card.offsetHeight-16-44:innerHeight;const cut=!ph()&&s.cut&&$q(s.cut),l=Math.max(4,r.left-M,cut?cut.getBoundingClientRect().right+M:0),t=Math.max(4,r.top-M),rr=Math.min(innerWidth-4,r.right+M),bb=Math.min(cb-4,r.bottom+M);hole.className="tour-hole";hole.style.cssText=`left:${l}px;top:${t}px;width:${rr-l}px;height:${bb-t}px`}
   const cw=card.offsetWidth,ch=card.offsetHeight,W=innerWidth,H=innerHeight;let x=(W-cw)/2,y=(H-ch)/2;if(ph()){card.style.top=i===STEPS.length-1?Math.max(16,y)+"px":"";return}
   if(el&&s.pos==="tr"){const r=el.getBoundingClientRect();x=Math.max(16,Math.min(W-16,r.right)-cw-24);y=Math.max(56,r.top+60)}
   card.style.left=x+"px";card.style.top=y+"px"}
