@@ -2248,7 +2248,7 @@ const STEPS=[
  {sel:"#flTrig",t:"切換樓層",b:"先選你在第幾層，所有分頁都會跟著換成那一層的資料。"},
  {sel:"nav.tabs",t:"功能選單",b:"切換分頁來找到想要的資料。"},
  {sel:".gsearch",t:"搜尋",b:"全站搜尋依分頁顯示，支援英文、法文、wiki舊版名稱。<br>在地圖上搜尋時，符合的位置會亮起來。"},
- {sel:"#stage",go:"map",t:"地圖",b:()=>(ph()?"使用上方的「篩選 ▾」":"使用左邊的篩選器")+"選要顯示的東西，設定會記在你的瀏覽器裡。<br>點選城鎮、怪物、NPC 會打開詳細資料：掉落物、任務、座標，名稱都可以再連結相關分頁。"},
+ {sel:"#stage",go:"map",pos:"tr",t:"地圖",b:()=>(ph()?"使用上方的「篩選 ▾」":"使用左邊的篩選器")+"選要顯示的東西，設定會記在你的瀏覽器裡。<br>點選城鎮、怪物、NPC 會打開詳細資料：掉落物、任務、座標，名稱都可以再連結相關分頁。"},
  {sel:"#collabBtn",t:"協作區",b:"在遊戲裡發現新資料、錯誤或有建議，到這裡使用表單回報，審核後自動更新到網站。"},
  {sel:"#aboutBtn",t:"關於本站",b:"網站介紹、資料來源、版權聲明，還有「更新紀錄」看最近改了什麼。"},
  {t:"林哭斯大斗！",b:"之後想再看一次導覽，可以從「關於本站 → 網頁導覽」打開。"}
@@ -2271,9 +2271,8 @@ function place(){const s=STEPS[i],el=target(s),M=8;
   card.querySelectorAll("button").forEach(b=>b.onclick=()=>b.dataset.a==="n"?(i<STEPS.length-1?show(i+1):end()):b.dataset.a==="p"?show(i-1):show(STEPS.length-1));
   if(!el){hole.className="tour-hole none";hole.style.cssText="";}
   else{const r=el.getBoundingClientRect(),cb=ph()?card.getBoundingClientRect().top-6:innerHeight;const l=Math.max(4,r.left-M),t=Math.max(4,r.top-M),rr=Math.min(innerWidth-4,r.right+M),bb=Math.min(cb-4,r.bottom+M);hole.className="tour-hole";hole.style.cssText=`left:${l}px;top:${t}px;width:${rr-l}px;height:${bb-t}px`}
-  if(ph())return;const cw=card.offsetWidth,ch=card.offsetHeight,W=innerWidth,H=innerHeight;let x,y;
-  if(!el){x=(W-cw)/2;y=(H-ch)/2}else{const r=el.getBoundingClientRect();
-    if(r.height>H*.5){y=Math.max(16,Math.min(H-ch-16,r.top+24));x=r.right+18;if(x+cw>W-16)x=r.left-cw-18;if(x<16)x=Math.min(W-cw-16,Math.max(16,r.left+230))}else{x=Math.min(Math.max(16,r.left),W-cw-16);y=r.bottom+18;if(y+ch>H-16)y=r.top-ch-18;if(y<16){y=Math.min(H-ch-16,Math.max(16,r.top));x=r.right+18;if(x+cw>W-16)x=Math.max(16,r.left-cw-18)}}}
+  if(ph())return;const cw=card.offsetWidth,ch=card.offsetHeight,W=innerWidth,H=innerHeight;let x=(W-cw)/2,y=(H-ch)/2;
+  if(el&&s.pos==="tr"){const r=el.getBoundingClientRect();x=Math.max(16,Math.min(W-16,r.right)-cw-24);y=Math.max(16,r.top+24)}
   card.style.left=x+"px";card.style.top=y+"px"}
 function show(k){i=k;const s=STEPS[i];if(s.go&&view!==s.go)go(s.go);
   const el=target(s);if(el)el.scrollIntoView({block:"nearest"});requestAnimationFrame(()=>requestAnimationFrame(place))}
