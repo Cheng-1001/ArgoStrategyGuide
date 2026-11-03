@@ -64,11 +64,13 @@ for k, (pos, sec) in enumerate(secs):
         if not res or not loc or not cat:
             continue
         lv = re.search(r"level: (\d+)", b)
-        npc = re.sub(r"^F1 - ", "", loc.group(1))
+        # "Starting Merchant / Alchemist" = either NPC makes it (user 2026-11-03): list it under each
+        npc_list = [re.sub(r"^F1 - ", "", x.strip()) for x in loc.group(1).split(" / ")]
         mats = [[MAT.get(i, i), int(float(a))] for i, a in res if i != "Col"]
         col = next((str(int(float(a))) for i, a in res if i == "Col"), None)
         name = SAME.get(name, name)
-        npcs.setdefault(npc, []).append([OID.get(name), name, None, mats, col, None, cat, int(lv[1]) if lv else None, "ref"])
+        for npc in npc_list:
+            npcs.setdefault(npc, []).append([OID.get(name), name, None, [m[:] for m in mats], col, None, cat, int(lv[1]) if lv else None, "ref"])
 
 for npc, rows in SHOTS.items():                              # screenshots replace the same item, keep the rest
     old = {r[1]: r for r in npcs.get(npc, [])}
