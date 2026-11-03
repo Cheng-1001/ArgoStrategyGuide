@@ -59,7 +59,7 @@ window.SAO_MAINQ = {1: [
   s:[["探索井下的隧道",4281,3710,1],["回到地面向 Harrold 報告",3134,3666],["前往盜賊的據點",4204,3899],["和 Bob 對話",4287,3890]]},
  {t:"The Geldorak Mine", n:20, npc:"Bob",
    en:{4:"Find Velka, in Castelbrume",5:"(Bonus) Hand the rare material to the Hanaka merchant"},
-  s:[["和 Bob 對話",4287,3890],["取得 Geldorak 地下城鑰匙",4288,3887],["進入礦坑並完成地下城",4288,3887],["離開礦坑入口",4260,3892,1],["到 Castlebrume 找 Velka",2922,3006],["（額外）把稀有素材交給 Hanaka 的商人",null,null]]},
+  s:[["和 Bob 對話",4287,3890],["取得 Geldorak 地下城鑰匙",4288,3887],["進入礦坑並完成地下城",4288,3887],["離開礦坑入口",4260,3892,1],["到 Castlebrume 找 Velka",2922,3006],["（額外）把稀有素材交給 Hanaka 的商人（推測是第 8 段村長的商人 The Trader，待確認）",1564,3428,1]]},
  {t:"Velka, and the Ruins of the Dream", n:21, npc:"Velka",
   s:[["和 Velka 對話",2922,3006],["把奇怪的麥穗拿給 Velka 看",2922,3006],["找到南方的廢墟",2842,4400]]},
  {t:"The Archivist Specter", n:22, npc:"Archivist Specter",

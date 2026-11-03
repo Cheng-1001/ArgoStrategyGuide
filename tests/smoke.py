@@ -157,7 +157,7 @@ with sync_playwright() as p:
     hit_q = pg.inner_text("#cQ").startswith("1 /")
     pg.locator("#lQ [data-go]", has_text="The Geldorak Mine").first.click(); pg.wait_for_timeout(400)
     marks = pg.eval_on_selector_all(".qmap g[data-xz] text", "e=>e.map(x=>x.textContent)")
-    check(hit_q and "遊戲原文：(Bonus) Hand the rare material" in pg.inner_text("#pBody") and marks == ["1–4", "5"],
+    check(hit_q and "遊戲原文：(Bonus) Hand the rare material" in pg.inner_text("#pBody") and marks == ["1–4", "5", "6"],
           "main quest steps keep the in-game English text (searchable); close route points merge into one marker 1–4")
     pg.click("#pClose"); pg.fill("#q", ""); pg.evaluate("localStorage.removeItem('sao-map-filter-v4')"); pg.goto(base + "#map"); pg.reload(); pg.wait_for_timeout(800)
     n0 = pg.locator("#view-map .npc").count(); pg.fill("#q", "hanaka"); pg.wait_for_timeout(500)
