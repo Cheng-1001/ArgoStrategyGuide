@@ -173,7 +173,7 @@ with sync_playwright() as p:
           "top tabs: recipes after quests, then dungeons, classes, world bosses; collaboration is a button by the changelog")
     pg.click('nav.tabs a[data-v="dungeons"]'); pg.wait_for_timeout(300)
     dn = pg.eval_on_selector_all("#lDg .card b", "e=>e.map(x=>x.textContent)")
-    check(len(dn) == 4 and "Kobold Tower" not in dn and "Fallen Dungeon" in dn, f"dungeons tab lists the 4 floor-1 dungeons, not the boss tower ({dn})")
+    check(len(dn) == 4 and "Kobold Tower" not in dn and "Labyrinth of the Fallen" in dn, f"dungeons tab lists the 4 floor-1 dungeons, not the boss tower ({dn})")
     pg.click("#legalBtn"); pg.wait_for_timeout(350)
     t = pg.inner_text("#legal")
     check("about" in pg.url and pg.is_visible("#view-about") and "非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t and "中文玩家社群協力製作" in t,
@@ -277,8 +277,8 @@ with sync_playwright() as p:
 
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
     zl = pg.inner_text("#zlist")
-    check("傳送點－城鎮 7" in zl and "傳送點－地標 6" in zl and pg.locator(".town.tp").count() == 13 and pg.locator(".town.land").count() == 2,
-          "13 teleports (7 towns, 6 landmarks) share one marker style; landmarks (Vallhat, hidden well) another")
+    check("傳送點－城鎮 7" in zl and "傳送點－地標 6" in zl and pg.locator(".town.tp").count() == 13 and pg.locator(".town.land").count() == 3,
+          "13 teleports (7 towns, 6 landmarks) share one marker style; landmarks (Vallhat, hidden well, Lac des Nénuphars) another")
     check(pg.locator(".areas path").count() >= 13 and pg.get_attribute(".areas path", "vector-effect") == "non-scaling-stroke",
           "monster areas are outlined with a zoom-independent line width")
     n = pg.locator(".zone.npc").count()

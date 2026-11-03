@@ -79,5 +79,10 @@ window.SAO_NPCS={1:[
  ["secretAccessoryBlacksmith", "Secret Sticky Ring Merchant", 390, 3064, "ref"],
  ["secretAccessoryBlacksmith", "Skeleton Skull", 1163, 3546, "ref"],
  ["beggar", "臭乞丐", 3336, 1760, "site"],
- ["other", "Mine Archaeologist", 4280, 3891, "site2"]
+ ["other", "Accessory Recycling", 1766, 4123, "site2"],
+ ["other", "Auction House", 1825, 4086, "site2"],
+ ["other", "Labyrinth Archaeologist", 2389, 2412, "site2"],
+ ["other", "Mine Archaeologist", 4280, 3891, "site2"],
+ ["other", "Vault", 1825, 4091, "site2"],
+ ["other", "Weapon Recycling", 1776, 4132, "site2"]
 ]};

@@ -117,17 +117,85 @@ SHOTS = {
         ('Mana Potion III', 'c', None, [], '15.07', 'potion'),
         ('Stamina Potion III', 'c', None, [], '15.07', 'potion'),
     ],
+    # 2026-11-03 22:38-23:18 batch (Starting Town shops, Tolbana dungeon guard)
+    'Starting Merchant': [                                     # Buy tab, 4 pages, all sold for Col (Potion I is bought here, not crafted)
+        ('Teleportation Crystal', 's', None, [], '301.49', 'potion'),
+        ('Boar Meat', 'c', None, [], '1.00', 'other'),
+        ('Health Potion I', 'c', None, [], '5.02', 'potion'),
+        ('Mana Potion I', 'c', None, [], '5.02', 'potion'),
+        ('Stamina Potion I', 'c', None, [], '5.02', 'potion'),
+        ("Beginner's Tunic", 'c', None, [], '50.25', 'armor'),
+        ("Beginner's Leggings", 'c', None, [], '50.25', 'armor'),
+        ("Beginner's Boots", 'c', None, [], '50.25', 'armor'),
+        ('Training Sword', 'c', None, [], '1.00', 'weapon'),
+        ('Training Bow', 'c', None, [], '1.00', 'weapon'),
+        ('Training Crossbow', 'c', None, [], '1.00', 'weapon'),
+        ('Training Dagger', 'c', None, [], '1.00', 'weapon'),
+        ('Training Scythe', 'c', None, [], '1.00', 'weapon'),
+        ('Training Katana', 'c', None, [], '1.00', 'weapon'),
+        ('Training Magic Staff', 'c', None, [], '1.00', 'weapon'),
+        ('Training Scepter', 'c', None, [], '1.00', 'weapon'),
+        ('Unbound Grimoire', 'c', None, [], '1.00', 'weapon'),
+        ('Training Lantern', 'c', None, [], '1.00', 'weapon'),
+        ('Wild Grimoire', 'c', None, [], '1.00', 'weapon'),
+        ('Training Quiver', 'c', None, [], '1.00', 'weapon'),
+        ('Training Pavise', 'c', None, [], '1.00', 'weapon'),
+        ('Training Buckler', 'c', None, [], '1.00', 'weapon'),
+    ],
+    'Starting Town - Tools': [                                 # in game "F1 - Starting City - Tools", Buy tab
+        ('Chipped Axe', 'c', None, [], '50.25', 'other'),
+        ('Cracked Pickaxe', 'c', None, [], '50.25', 'other'),
+        ('Twisted Hoe', 'c', None, [], '50.25', 'other'),
+        ('Wooden Fishing Rod', 'c', None, [], '50.25', 'other'),
+    ],
+    'Alchemist': [                                             # "F1 Alchemist - Starting City", Recipes tab 2 pages: only the Quality potions (each makes ×3)
+        ('Quality Health Potion I', 'b', 5, [['Sylve Sprout', 8], ['Allium Flower', 8]], '5', 'potion'),
+        ('Quality Health Potion II', 'b', 5, [['Sylve Sprout', 8], ['Bone Dust', 8], ['Allium Flower', 12]], '7', 'potion'),
+        ('Quality Health Potion III', 'b', 5, [['Sylve Sprout', 8], ['Bone Dust', 8], ['Ancestral Root', 1], ['Allium Flower', 16]], '10', 'potion'),
+        ('Quality Mana Potion I', 'b', 5, [['Soul of the Ruins', 8], ['Allium Flower', 8]], '5', 'potion'),
+        ('Quality Mana Potion II', 'b', 5, [['Soul of the Ruins', 8], ['Bone Dust', 8], ['Allium Flower', 12]], '7', 'potion'),
+        ('Quality Mana Potion III', 'b', 5, [['Soul of the Ruins', 8], ['Bone Dust', 8], ['Ancestral Root', 1], ['Allium Flower', 16]], '10', 'potion'),
+        ('Quality Stamina Potion I', 'b', 5, [['Wheat', 8], ['Allium Flower', 8]], '5', 'potion'),
+        ('Quality Stamina Potion II', 'b', 5, [['Wheat', 8], ['Bone Dust', 8], ['Allium Flower', 12]], '7', 'potion'),
+        ('Quality Stamina Potion III', 'b', 5, [['Wheat', 8], ['Bone Dust', 8], ['Ancestral Root', 1], ['Allium Flower', 16]], '10', 'potion'),
+    ],
+    'The Assistant': [                                         # "F1 The Assistant - Starting City"
+        ('Quality Vitality Fortifier I', 'b', 10, [['Magic Wood Shard', 16], ['Wood Heart', 2], ['Slime Core', 2]], '10', 'potion'),
+        ('Quality Ferocity Fortifier I', 'b', 10, [['Wolf Fangs', 16], ['Wheat Flower', 2], ['Fangs of Albal', 1]], '10', 'potion'),
+        ('Quality Knowledge Fortifier I', 'b', 10, [['Allium Flower', 16], ['Lavender', 2], ['Refined Allium', 1]], '10', 'potion'),
+        ('Quality Endurance Fortifier I', 'b', 10, [['Wheat', 16], ['Wheat Leaves', 2], ['Refined Wheat', 1]], '10', 'potion'),
+        ('Quality Resistance Fortifier I', 'b', 10, [['Hard Glacial Hide', 16], ['Wisteria', 2], ['Ancestral Root', 2]], '10', 'potion'),
+        ('Quality Patience Fortifier I', 'b', 10, [['Soul of the Ruins', 16], ['Glacial Magic Shard', 8], ["Fragment of the Bear's Soul", 1]], '10', 'potion'),
+    ],
+    'Crystallographer': [
+        ('Healing Crystal', 'a', 300, [['Ancestral Root', 16], ['Magic Mycelium', 4], ['Essence of Gorbel', 1], ['Frost Dust', 32]], '50', 'potion'),
+        ('Mana Crystal', 'a', 300, [['Ancestral Root', 16], ['Magic Mycelium', 4], ['Essence of Gorbel', 1], ['Glacial Magic Shard', 32]], '50', 'potion'),
+        ('Stamina Crystal', 'a', 300, [['Ancestral Root', 16], ['Magic Mycelium', 4], ['Essence of Gorbel', 1], ['Hard Glacial Hide', 32]], '50', 'potion'),
+    ],
+    'PvP Purification Alchemist': [
+        ('Purification Elixir', 'a', 15, [['Ancestral Root', 1], ['Frost Dust', 1], ['Bone Dust', 1], ['Slime Core', 1]], 'Free', 'potion'),
+    ],
+    'Copper Accessories': [(n, 'c', 15, [['Copper Ingot', 1]] + ([['Copper String', 1]] if 'Amulet' in n else []), '25', 'acc')
+                           for n in ('Copper Ring', 'Copper Bracelet', 'Copper Gloves', 'Copper Coin', 'Copper Amulet')],
+    'Iron Accessories': [(n, 'b', 15, [['Iron Ingot', 1]] + ([['Iron String', 1]] if 'Amulet' in n else []), '30', 'acc')
+                         for n in ('Iron Ring', 'Iron Bracelet', 'Iron Gloves', 'Iron Coin', 'Iron Amulet')],
+    'Fallen Labyrinth Dungeon Guard - Tolbana': [
+        ('Key of the Fallen', 'b', 60, [['Leaf Fragments', 8], ['Cursed Cloth', 8]], '20', 'key'),
+    ],
 }
-SAME = {"Bandit's Gloves": "Gloves of the Bandit", "Bracelet of the Sylvan": "Bracelet of the Sylve", "Amulet of the Sylvan": "Amulet of the Sylve"}          # reference-map name -> in-game name
+# the screenshot showed the NPC's whole list: drop reference-map rows the game no longer has
+FULL = {'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
+SAME = {"Katana Training": "Training Katana", "Beginner Leggings": "Beginner's Leggings", "Bandit's Gloves": "Gloves of the Bandit", "Bracelet of the Sylvan": "Bracelet of the Sylve", "Amulet of the Sylvan": "Amulet of the Sylve"}          # reference-map name -> in-game name
 # material names used in game / by the reference map -> this site's ITEMS ids
 MAT = {"Shark Carapace": "Shark Shell", "Soul of the Ruins": "Souls of the Ruins", "Sylve Shoot": "Sylvan Sprout",
        "Hard Glacial Hide": "Glacial Hardhide", "Essence of Gorbel": "Gorbel Essence", "Heart of Nymbrea": "Nymbréa's Heart",
-       "Fragment of the Bear's Soul": "Bear Soul Fragment", "Small Purse": "Small Pouch", "Leaf Fragments": "Leaf Fragment", "Allium Flower": "Allium", "Sylve Sprout": "Sylvan Sprout"}
+       "Fragment of the Bear's Soul": "Bear Soul Fragment", "Fangs of Albal": "Albal's Fangs", "Small Purse": "Small Pouch", "Leaf Fragments": "Leaf Fragment", "Allium Flower": "Allium", "Sylve Sprout": "Sylvan Sprout"}
 # item name -> official catalogue id (checked by hand: name keyword, level and set)
 OID = {"Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "Amulet of the Sylve": 1288, "Gloves of the Bandit": 2040, "Bandit Hood": 1456, "Stolen Amulet": 1292, "Bandit Coin": 1455, "Bracelet of the Sylve": 1589, "Health Potion II": 2458, "Health Potion III": 2459, "Stamina Potion II": 2472, "Ring of the Leviathan": 2485, "Necklace of Aragorn": 1458, "Bracelet of Ice": 1596, "Gloves of the Wolves": 2044, "Occult Amulet": 1298, "Occult Ring": 2486, "Occult Bracelet": 1597, "Occult Gloves": 2045,   # 2026-11-02: official names matched by hand (Anneau de Léviathan, Collier de Aragorn, Capuche/Robe Occulte…; level may differ, the site shows the official one)
-       "Training Sword": 2596, "Training Bow": 1566, "Training Crossbow": 1727, "Training Scythe": 1761, "Katana Training": 1762,
+       "Training Sword": 2596, "Training Bow": 1566, "Training Crossbow": 1727, "Training Scythe": 1761, "Training Katana": 1762, "Training Dagger": 1760, "Training Pavise": 2534, "Training Buckler": 2533,
+       "Boar Meat": 1957, "Chipped Axe": 2703, "Cracked Pickaxe": 2691, "Wooden Fishing Rod": 2709,
        "Training Magic Staff": 2569, "Unbound Grimoire": 1626, "Training Lantern": 1627, "Wild Grimoire": 1628,
-       "Beginner's Tunic": 1334, "Beginner Leggings": 1335, "Beginner's Boots": 1336,
+       "Beginner's Tunic": 1334, "Beginner's Leggings": 1335, "Beginner's Boots": 1336,
        "Bracelet of the Stags": 1594, "Gloves of the Stags": 2043, "Slimy Ring": 2478, "Gelatinous Bracelet": 1592,
        "Gelatinous Amulet": 1291, "Gelatinous Cloak": 1453, "Spider Bracelet": 1595, "Iron Ring": 2482, "Iron Bracelet": 1593,
        "Iron Gloves": 2042, "Iron Coin": 1457, "Iron Amulet": 1297, "Copper Ring": 2477, "Copper Bracelet": 1591,
@@ -170,7 +238,7 @@ for npc, rows in SHOTS.items():                              # screenshots repla
     old = {r[1]: r for r in npcs.get(npc, [])}
     new = [[OID.get(n), n, sec, [[MAT.get(m, m), q] for m, q in mats], cost, rar, cat, (old.get(n) or [None] * 8)[7], "shot"] for n, rar, sec, mats, cost, cat in rows]
     names = {r[1] for r in new}
-    npcs[npc] = new + [r for r in npcs.get(npc, []) if r[1] not in names]
+    npcs[npc] = new + ([] if npc in FULL else [r for r in npcs.get(npc, []) if r[1] not in names])
 
 cat_ids = {x["id"] for x in json.load(open(CAT, encoding="utf-8"))}
 bad = [r[1] for rows in npcs.values() for r in rows if r[0] is not None and r[0] not in cat_ids]

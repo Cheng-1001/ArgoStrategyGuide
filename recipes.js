@@ -7,69 +7,9 @@ window.SAO_RECIPES = {
 "floor": 1,
 "items": [
 [
-2457,
-"Health Potion I",
-null,
-[
-[
-"Sylvan Sprout",
-8
-],
-[
-"Allium",
-8
-]
-],
-"5",
-null,
-"potion",
-1,
-"ref"
-],
-[
-null,
-"Mana Potion I",
-null,
-[
-[
-"Souls of the Ruins",
-8
-],
-[
-"Allium",
-8
-]
-],
-"5",
-null,
-"potion",
-1,
-"ref"
-],
-[
-2471,
-"Stamina Potion I",
-null,
-[
-[
-"Wheat",
-8
-],
-[
-"Allium",
-8
-]
-],
-"5",
-null,
-"potion",
-1,
-"ref"
-],
-[
 2463,
 "Quality Health Potion I",
-null,
+5,
 [
 [
 "Sylvan Sprout",
@@ -81,15 +21,15 @@ null,
 ]
 ],
 "5",
-null,
+"b",
 "potion",
 1,
-"ref"
+"shot"
 ],
 [
 2464,
 "Quality Health Potion II",
-null,
+5,
 [
 [
 "Sylvan Sprout",
@@ -105,15 +45,15 @@ null,
 ]
 ],
 "7",
-null,
+"b",
 "potion",
 5,
-"ref"
+"shot"
 ],
 [
 2465,
 "Quality Health Potion III",
-null,
+5,
 [
 [
 "Sylvan Sprout",
@@ -133,15 +73,15 @@ null,
 ]
 ],
 "10",
-null,
+"b",
 "potion",
 8,
-"ref"
+"shot"
 ],
 [
 null,
 "Quality Mana Potion I",
-null,
+5,
 [
 [
 "Souls of the Ruins",
@@ -153,15 +93,15 @@ null,
 ]
 ],
 "5",
-null,
+"b",
 "potion",
 1,
-"ref"
+"shot"
 ],
 [
 null,
 "Quality Mana Potion II",
-null,
+5,
 [
 [
 "Souls of the Ruins",
@@ -177,15 +117,15 @@ null,
 ]
 ],
 "7",
-null,
+"b",
 "potion",
 5,
-"ref"
+"shot"
 ],
 [
 null,
 "Quality Mana Potion III",
-null,
+5,
 [
 [
 "Souls of the Ruins",
@@ -205,15 +145,15 @@ null,
 ]
 ],
 "10",
-null,
+"b",
 "potion",
 8,
-"ref"
+"shot"
 ],
 [
 null,
 "Quality Stamina Potion I",
-null,
+5,
 [
 [
 "Wheat",
@@ -225,15 +165,15 @@ null,
 ]
 ],
 "5",
-null,
+"b",
 "potion",
 1,
-"ref"
+"shot"
 ],
 [
 null,
 "Quality Stamina Potion II",
-null,
+5,
 [
 [
 "Wheat",
@@ -249,15 +189,15 @@ null,
 ]
 ],
 "7",
-null,
+"b",
 "potion",
 5,
-"ref"
+"shot"
 ],
 [
 null,
 "Quality Stamina Potion III",
-null,
+5,
 [
 [
 "Wheat",
@@ -277,10 +217,10 @@ null,
 ]
 ],
 "10",
-null,
+"b",
 "potion",
 8,
-"ref"
+"shot"
 ]
 ]
 },
@@ -438,7 +378,7 @@ null,
 [
 2477,
 "Copper Ring",
-null,
+15,
 [
 [
 "Copper Ingot",
@@ -446,15 +386,15 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 1591,
 "Copper Bracelet",
-null,
+15,
 [
 [
 "Copper Ingot",
@@ -462,15 +402,15 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 2039,
 "Copper Gloves",
-null,
+15,
 [
 [
 "Copper Ingot",
@@ -478,15 +418,15 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 1452,
 "Copper Coin",
-null,
+15,
 [
 [
 "Copper Ingot",
@@ -494,15 +434,15 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 1290,
 "Copper Amulet",
-null,
+15,
 [
 [
 "Copper Ingot",
@@ -514,10 +454,10 @@ null,
 ]
 ],
 "25",
-null,
+"c",
 "acc",
 3,
-"ref"
+"shot"
 ]
 ]
 },
@@ -527,86 +467,86 @@ null,
 [
 1747,
 "Healing Crystal",
-null,
+300,
 [
 [
 "Ancestral Root",
 16
+],
+[
+"Magic Mycelium",
+4
+],
+[
+"Gorbel Essence",
+1
 ],
 [
 "Frost Dust",
 32
-],
-[
-"Magic Mycelium",
-4
-],
-[
-"Gorbel Essence",
-1
 ]
 ],
 "50",
-null,
+"a",
 "potion",
 10,
-"ref"
+"shot"
 ],
 [
 1749,
 "Mana Crystal",
-null,
+300,
 [
 [
 "Ancestral Root",
 16
+],
+[
+"Magic Mycelium",
+4
+],
+[
+"Gorbel Essence",
+1
 ],
 [
 "Glacial Magic Shard",
 32
-],
-[
-"Magic Mycelium",
-4
-],
-[
-"Gorbel Essence",
-1
 ]
 ],
 "50",
-null,
+"a",
 "potion",
 10,
-"ref"
+"shot"
 ],
 [
 1750,
 "Stamina Crystal",
-null,
+300,
 [
 [
 "Ancestral Root",
 16
 ],
 [
-"Glacial Hardhide",
-32
-],
-[
 "Magic Mycelium",
 4
 ],
 [
 "Gorbel Essence",
 1
+],
+[
+"Glacial Hardhide",
+32
 ]
 ],
 "50",
-null,
+"a",
 "potion",
 10,
-"ref"
+"shot"
 ]
 ]
 },
@@ -818,22 +758,22 @@ null,
 [
 1823,
 "Key of the Fallen",
-null,
+60,
 [
 [
-"Cursed Cloth",
+"Leaf Fragment",
 8
 ],
 [
-"Leaf Fragment",
+"Cursed Cloth",
 8
 ]
 ],
 "20",
-null,
+"b",
 "key",
 null,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1064,7 +1004,7 @@ null,
 [
 2482,
 "Iron Ring",
-null,
+15,
 [
 [
 "Iron Ingot",
@@ -1072,15 +1012,15 @@ null,
 ]
 ],
 "30",
-null,
+"b",
 "acc",
 5,
-"ref"
+"shot"
 ],
 [
 1593,
 "Iron Bracelet",
-null,
+15,
 [
 [
 "Iron Ingot",
@@ -1088,15 +1028,15 @@ null,
 ]
 ],
 "30",
-null,
+"b",
 "acc",
 5,
-"ref"
+"shot"
 ],
 [
 2042,
 "Iron Gloves",
-null,
+15,
 [
 [
 "Iron Ingot",
@@ -1104,15 +1044,15 @@ null,
 ]
 ],
 "30",
-null,
+"b",
 "acc",
 5,
-"ref"
+"shot"
 ],
 [
 1457,
 "Iron Coin",
-null,
+15,
 [
 [
 "Iron Ingot",
@@ -1120,15 +1060,15 @@ null,
 ]
 ],
 "30",
-null,
+"b",
 "acc",
 5,
-"ref"
+"shot"
 ],
 [
 1297,
 "Iron Amulet",
-null,
+15,
 [
 [
 "Iron Ingot",
@@ -1140,10 +1080,10 @@ null,
 ]
 ],
 "30",
-null,
+"b",
 "acc",
 5,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1441,7 +1381,7 @@ null,
 [
 null,
 "Purification Elixir",
-null,
+15,
 [
 [
 "Ancestral Root",
@@ -1460,11 +1400,11 @@ null,
 1
 ]
 ],
-null,
-null,
+"Free",
+"a",
 "potion",
 null,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1894,218 +1834,295 @@ null,
 "floor": 1,
 "items": [
 [
-2596,
-"Training Sword",
+null,
+"Teleportation Crystal",
 null,
 [],
-"1",
+"301.49",
+"s",
+"potion",
 null,
-"weapon",
-1,
-"ref"
+"shot"
 ],
 [
-1566,
-"Training Bow",
+1957,
+"Boar Meat",
 null,
 [],
-"1",
+"1.00",
+"c",
+"other",
 null,
-"weapon",
-1,
-"ref"
+"shot"
 ],
 [
-1727,
-"Training Crossbow",
+2457,
+"Health Potion I",
 null,
 [],
-"1",
-null,
-"weapon",
+"5.02",
+"c",
+"potion",
 1,
-"ref"
-],
-[
-1761,
-"Training Scythe",
-null,
-[],
-"1",
-null,
-"weapon",
-1,
-"ref"
-],
-[
-1762,
-"Katana Training",
-null,
-[],
-"1",
-null,
-"weapon",
-1,
-"ref"
-],
-[
-2569,
-"Training Magic Staff",
-null,
-[],
-"1",
-null,
-"weapon",
-1,
-"ref"
-],
-[
-1626,
-"Unbound Grimoire",
-null,
-[],
-"1",
-null,
-"weapon",
-1,
-"ref"
-],
-[
-1627,
-"Training Lantern",
-null,
-[],
-"1",
-null,
-"weapon",
-1,
-"ref"
-],
-[
-1628,
-"Wild Grimoire",
-null,
-[],
-"1",
-null,
-"weapon",
-1,
-"ref"
+"shot"
 ],
 [
 null,
-"Training Quiver",
+"Mana Potion I",
 null,
 [],
-"1",
-null,
-"weapon",
+"5.02",
+"c",
+"potion",
 1,
-"ref"
+"shot"
+],
+[
+2471,
+"Stamina Potion I",
+null,
+[],
+"5.02",
+"c",
+"potion",
+1,
+"shot"
 ],
 [
 1334,
 "Beginner's Tunic",
 null,
 [],
-"50",
-null,
+"50.25",
+"c",
 "armor",
 1,
-"ref"
+"shot"
 ],
 [
 1335,
-"Beginner Leggings",
+"Beginner's Leggings",
 null,
 [],
-"50",
-null,
+"50.25",
+"c",
 "armor",
 1,
-"ref"
+"shot"
 ],
 [
 1336,
 "Beginner's Boots",
 null,
 [],
-"50",
-null,
+"50.25",
+"c",
 "armor",
 1,
-"ref"
+"shot"
 ],
 [
-null,
-"Teleportation Crystal",
+2596,
+"Training Sword",
 null,
 [],
-"301",
-null,
-"potion",
-null,
-"ref"
-],
-[
-2457,
-"Health Potion I",
-null,
-[
-[
-"Sylvan Sprout",
-8
-],
-[
-"Allium",
-8
-]
-],
-"5",
-null,
-"potion",
+"1.00",
+"c",
+"weapon",
 1,
-"ref"
+"shot"
 ],
 [
+1566,
+"Training Bow",
 null,
-"Mana Potion I",
-null,
-[
-[
-"Souls of the Ruins",
-8
-],
-[
-"Allium",
-8
-]
-],
-"5",
-null,
-"potion",
+[],
+"1.00",
+"c",
+"weapon",
 1,
-"ref"
+"shot"
 ],
 [
-2471,
-"Stamina Potion I",
+1727,
+"Training Crossbow",
 null,
-[
-[
-"Wheat",
-8
-],
-[
-"Allium",
-8
-]
-],
-"5",
-null,
-"potion",
+[],
+"1.00",
+"c",
+"weapon",
 1,
-"ref"
+"shot"
+],
+[
+1760,
+"Training Dagger",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+null,
+"shot"
+],
+[
+1761,
+"Training Scythe",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+1,
+"shot"
+],
+[
+1762,
+"Training Katana",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+1,
+"shot"
+],
+[
+2569,
+"Training Magic Staff",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+1,
+"shot"
+],
+[
+null,
+"Training Scepter",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+null,
+"shot"
+],
+[
+1626,
+"Unbound Grimoire",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+1,
+"shot"
+],
+[
+1627,
+"Training Lantern",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+1,
+"shot"
+],
+[
+1628,
+"Wild Grimoire",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+1,
+"shot"
+],
+[
+null,
+"Training Quiver",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+1,
+"shot"
+],
+[
+2534,
+"Training Pavise",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+null,
+"shot"
+],
+[
+2533,
+"Training Buckler",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+null,
+"shot"
+]
+]
+},
+"Starting Town - Tools": {
+"floor": 1,
+"items": [
+[
+2703,
+"Chipped Axe",
+null,
+[],
+"50.25",
+"c",
+"other",
+null,
+"shot"
+],
+[
+2691,
+"Cracked Pickaxe",
+null,
+[],
+"50.25",
+"c",
+"other",
+null,
+"shot"
+],
+[
+null,
+"Twisted Hoe",
+null,
+[],
+"50.25",
+"c",
+"other",
+null,
+"shot"
+],
+[
+2709,
+"Wooden Fishing Rod",
+null,
+[],
+"50.25",
+"c",
+"other",
+null,
+"shot"
 ]
 ]
 },
@@ -2188,7 +2205,7 @@ null,
 [
 1969,
 "Quality Vitality Fortifier I",
-null,
+10,
 [
 [
 "Magic Wood Shard",
@@ -2204,22 +2221,22 @@ null,
 ]
 ],
 "10",
-null,
+"b",
 "potion",
 8,
-"ref"
+"shot"
 ],
 [
 1970,
 "Quality Ferocity Fortifier I",
-null,
+10,
 [
 [
 "Wolf Fangs",
 16
 ],
 [
-"Wheat",
+"Wheat Flower",
 2
 ],
 [
@@ -2228,58 +2245,70 @@ null,
 ]
 ],
 "10",
-null,
+"b",
 "potion",
 8,
-"ref"
+"shot"
 ],
 [
 1971,
 "Quality Knowledge Fortifier I",
-null,
+10,
 [
 [
 "Allium",
-17
+16
 ],
 [
-"Wheat",
+"Lavender",
 2
+],
+[
+"Refined Allium",
+1
 ]
 ],
 "10",
-null,
+"b",
 "potion",
 8,
-"ref"
+"shot"
 ],
 [
 1972,
 "Quality Endurance Fortifier I",
-null,
+10,
 [
 [
 "Wheat",
-19
+16
+],
+[
+"Wheat Leaves",
+2
+],
+[
+"Refined Wheat",
+1
 ]
 ],
 "10",
-null,
+"b",
 "potion",
 8,
-"ref"
+"shot"
 ],
 [
 1973,
 "Quality Resistance Fortifier I",
-null,
+10,
 [
 [
 "Glacial Hardhide",
 16
 ],
 [
-"Allium",
+"Wisteria",
 2
 ],
 [
@@ -2288,15 +2317,15 @@ null,
 ]
 ],
 "10",
-null,
+"b",
 "potion",
 8,
-"ref"
+"shot"
 ],
 [
 1974,
 "Quality Patience Fortifier I",
-null,
+10,
 [
 [
 "Souls of the Ruins",
@@ -2312,10 +2341,10 @@ null,
 ]
 ],
 "10",
-null,
+"b",
 "potion",
 8,
-"ref"
+"shot"
 ]
 ]
 },
