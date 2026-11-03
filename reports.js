@@ -64,5 +64,31 @@ window.SAO_REPORTS = [
   "raw": {},
   "source": "form",
   "review": "自動核准：探索地圖由程式比對網站地圖檢查"
+ },
+ {
+  "id": "R0003",
+  "type": "jmap",
+  "floor": 1,
+  "name": "IICHENGII",
+  "date": "2026-11-03",
+  "img": null,
+  "imgs": [],
+  "raw": {
+   "回報者・遊戲內暱稱": "IICHENGII"
+  },
+  "source": "form",
+  "review": "自動核准：探索地圖由程式比對網站地圖檢查"
+ },
+ {
+  "id": "R0004",
+  "type": "jmap",
+  "floor": 1,
+  "name": "IICHENGII",
+  "date": "2026-11-03",
+  "img": null,
+  "imgs": [],
+  "raw": {},
+  "source": "form",
+  "review": "自動核准：探索地圖由程式比對網站地圖檢查"
  }
 ];
