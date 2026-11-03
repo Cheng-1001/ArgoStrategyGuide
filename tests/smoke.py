@@ -78,8 +78,8 @@ with sync_playwright() as p:
           and pg.locator(".bsp").count() == 0 and pg.locator(".town.dungeon").count() == 0, "default map filter: teleports, landmarks, monster areas, regular monsters")
     pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
     on = pg.eval_on_selector_all("#fpFly .fchip", "e=>e.filter(b=>b.getAttribute('aria-pressed')==='true').map(b=>b.dataset.k).join(',')")
-    check(on == "npc:alchemist,npc:lootBuyers,npc:keyBlacksmith,npc:accessoriesBlacksmith", f"default NPC sub-categories: the 4 chosen ones ({on})")
-    pg.evaluate("localStorage.setItem('sao-map-filter-v4','{}')")   # the rest of the tests start with everything on
+    check(on == "npc:potion,npc:loot,npc:key,npc:acc", f"default NPC sub-categories: the 4 chosen ones ({on})")
+    pg.evaluate("localStorage.setItem('sao-map-filter-v5','{}')")   # the rest of the tests start with everything on
     pg.reload(); pg.wait_for_timeout(300)
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
@@ -159,7 +159,7 @@ with sync_playwright() as p:
     marks = pg.eval_on_selector_all(".qmap g[data-xz] text", "e=>e.map(x=>x.textContent)")
     check(hit_q and "遊戲原文：(Bonus) Hand the rare material" in pg.inner_text("#pBody") and marks == ["1–4", "5", "6"],
           "main quest steps keep the in-game English text (searchable); close route points merge into one marker 1–4")
-    pg.click("#pClose"); pg.fill("#q", ""); pg.evaluate("localStorage.removeItem('sao-map-filter-v4')"); pg.goto(base + "#map"); pg.reload(); pg.wait_for_timeout(800)
+    pg.click("#pClose"); pg.fill("#q", ""); pg.evaluate("localStorage.removeItem('sao-map-filter-v5')"); pg.goto(base + "#map"); pg.reload(); pg.wait_for_timeout(800)
     n0 = pg.locator("#view-map .npc").count(); pg.fill("#q", "hanaka"); pg.wait_for_timeout(500)
     check(n0 == 0 and pg.locator("#view-map .npc.hit").count() == 1 and pg.locator("#zlist", has_text="Hanaka - Loot Buyer").count() == 1,
           "map search shows matching NPCs even when the NPC filter is off")
@@ -286,8 +286,8 @@ with sync_playwright() as p:
     check(n >= 70 and pg.locator(".zone.npc").count() == 0 and "🧑 NPC" not in pg.inner_text("#zlist"),
           "NPCs on the map; the filter hides them on the map and in the list")
     pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
-    pg.click('#fpNpc .fchip[data-k="npc:lootBuyers"]'); pg.wait_for_timeout(300)
-    check(pg.locator(".zone.npc").count() == n - 16, "NPC sub-filter hides the 16 loot buyers only")
+    pg.click('#fpNpc .fchip[data-k="npc:loot"]'); pg.wait_for_timeout(300)
+    check(pg.locator(".zone.npc").count() == n - 18, "NPC function filter: 收購商 hides the 18 buyers (16 loot + 2 weapon buyers) only")
     pg.click("#fpAll"); pg.wait_for_timeout(200)
     pg.click('#fpCats .fchip[data-k="area"]'); pg.click('#fpCats .fchip[data-k="mobs"]'); pg.wait_for_timeout(300)
     check(pg.locator('.zone[data-s="slimes"]').count() == 0 and pg.locator('.town.tp[data-s="wolf"]').count() == 1,
@@ -340,8 +340,8 @@ with sync_playwright() as p:
           "NPC sub-categories sit right under the NPC chip")
     fb, pb = pg.locator("#fpFly").bounding_box(), pg.locator("#fpanel").bounding_box()
     top4 = pg.eval_on_selector_all("#fpFly .fchip", "e=>e.slice(0,4).map(b=>b.dataset.k).join(',')")
-    check(pg.is_visible("#fpFly") and fb["x"] >= pb["x"] + pb["width"] and pg.locator("#fpFly .fchip").count() >= 10
-          and top4 == "npc:alchemist,npc:lootBuyers,npc:keyBlacksmith,npc:accessoriesBlacksmith",
+    check(pg.is_visible("#fpFly") and fb["x"] >= pb["x"] + pb["width"] and pg.locator("#fpFly .fchip").count() == 9
+          and top4 == "npc:potion,npc:loot,npc:key,npc:acc",
           f"desktop: NPC sub-categories shown on the right as soon as NPC is on, the 4 main ones first ({top4})")
     pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
     check(pg.is_hidden("#fpFly"), "turning NPC off hides the sub-categories")

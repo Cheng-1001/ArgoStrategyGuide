@@ -17,10 +17,7 @@ def load(f,cur):
         out.append(dict(c=cat,n=re.sub(r'^F1 - ','',g('title')).strip(),x=x,z=z,u='underground: true' in b,src='ref' if cur else 'beta'))
     return out
 cur=load('maps_current.js',True); beta=load('maps_floor1.js',False)
-# categories the site merges (user 2026-11-03): consumables merchants (The Assistant, PvP Purification Alchemist) stand next to
-# the Alchemist and also make consumables -> one 鍊金術士 category
-MERGE={'consumablesMerchants':'alchemist'}
-for r in cur+beta: r['c']=MERGE.get(r['c'],r['c'])
+# the site groups these types by function for the map filter (NGRP in src/index.html); the type itself is kept
 res=list(cur)
 curcats={r['c'] for r in cur}
 for b in beta:

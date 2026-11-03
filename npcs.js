@@ -5,8 +5,6 @@
 window.SAO_NPCS={1:[
  ["alchemist", "Alchemist", 1771, 4097, "ref"],
  ["alchemist", "Crystallographer", 1777, 4098, "ref"],
- ["alchemist", "PvP Purification Alchemist", 1813, 4180, "ref"],
- ["alchemist", "The Assistant", 1772, 4102, "ref"],
  ["lumberjack", "Lumberjack", 2464, 4299, "beta"],
  ["lootBuyers", "Aragorn's Lair - Loot Buyer", 1020, 1176, "ref"],
  ["lootBuyers", "Boar and Wolf loot buyer", 1787, 4179, "ref"],
@@ -45,6 +43,8 @@ window.SAO_NPCS={1:[
  ["occultMerchants", "Occult Merchant - Bracelet", 3348, 1634, "ref"],
  ["occultMerchants", "Occult Merchant - Gloves", 3371, 1698, "ref"],
  ["occultMerchants", "Occult Merchant - Ring", 3319, 1722, "ref"],
+ ["consumablesMerchants", "PvP Purification Alchemist", 1813, 4180, "ref"],
+ ["consumablesMerchants", "The Assistant", 1772, 4102, "ref"],
  ["weaponsmith", "Labyrinth Weaponsmith", 2419, 2390, "beta", 1],
  ["weaponsmith", "Tolbana Weaponsmith", 3236, 1479, "beta", 1],
  ["armorBlacksmith", "Tolbana Armor Blacksmith", 3234, 1472, "beta", 1],

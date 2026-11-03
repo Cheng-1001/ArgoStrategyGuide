@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="34ce2803e6">
+<meta name="sao-build" content="b5251e634d">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -755,7 +755,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="mainq.js?v=e071e291"></script>
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=0e9f806f"></script>
-<script src="npcs.js?v=264bc3a9"></script>
+<script src="npcs.js?v=7db42e50"></script>
 <script src="changelog.js?v=29183197"></script>
 <script src="recipes.js?v=8b5f81f8"></script>
 <script src="jmmeta.js?v=c7b7a32b"></script>
@@ -809,7 +809,7 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
 window.SAO_REPORTS=(window.SAO_REPORTS||[]).map(normRep);
 // approved place reports become map points; a name the map already has only gets the report attached
 {const nrm=s=>String(s||"").toLowerCase().trim();
- const NPC_ZH={"鍊金術士":"alchemist","收購商":"lootBuyers","鑰匙鐵匠":"keyBlacksmith","飾品鐵匠":"accessoriesBlacksmith","伐木工":"lumberjack","武器收購商":"weaponSellers","旅行商人":"travelingMerchants","裝備商人":"equipmentMerchants","工具商人":"toolMerchants","飾品商人":"accessoriesMerchants","神秘商人":"occultMerchants","消耗品商人":"alchemist","武器鐵匠":"weaponsmith","防具鐵匠":"armorBlacksmith","金屬錠鐵匠":"ingotBlacksmith","材料工匠":"materialsBlacksmith","裝備鐵匠":"equipmentBlacksmith","隱藏飾品鐵匠":"secretAccessoryBlacksmith"};
+ const NPC_ZH={"鍊金術士":"alchemist","收購商":"lootBuyers","鑰匙鐵匠":"keyBlacksmith","飾品鐵匠":"accessoriesBlacksmith","伐木工":"lumberjack","武器收購商":"weaponSellers","旅行商人":"travelingMerchants","裝備商人":"equipmentMerchants","工具商人":"toolMerchants","飾品商人":"accessoriesMerchants","神秘商人":"occultMerchants","消耗品商人":"consumablesMerchants","武器鐵匠":"weaponsmith","防具鐵匠":"armorBlacksmith","金屬錠鐵匠":"ingotBlacksmith","材料工匠":"materialsBlacksmith","裝備鐵匠":"equipmentBlacksmith","隱藏飾品鐵匠":"secretAccessoryBlacksmith"};
  window.SAO_REPORTS.forEach(r=>{if(r.type!=="place"||r.x==null||!FLOORS[r.floor])return;const Fx=FLOORS[r.floor],f=r.floor,k=r.kind||"";
   if(k==="NPC"){const L=(window.SAO_NPCS=window.SAO_NPCS||{})[f]=(window.SAO_NPCS[f]||[]);if(!L.some(n=>nrm(n[1])===nrm(r.name)))L.push([NPC_ZH[r.npcCat]||"other",r.name,r.x,r.z,"rep",r.ug?1:0,r.id]);return}
   const m=findMon(Fx,r.name);
@@ -898,23 +898,28 @@ const KIND={boss:["首領","👑"],dungeon:["地下城","⚔️"],mob:["怪物�
 const GT={crop:["作物","🌾"],ore:["礦物","⛏️"],wood:["木材","🪵"]};
 const MAPGRP=[["地點",[["tp","傳送點","🌀"],["land","地標","📍"],["gather","採集點","⛏️"],["npc","NPC","🧑"]]],["戰鬥",[["wboss","世界王","🌋"],["dungeon","地下城","⚔️"],["area","怪物區","🐾"],["boss","首領","👑"],["mini","小首領","🎖️"],["mobs","一般怪物","👾"]]]];
 const MAPCAT=MAPGRP.flatMap(g=>g[1]);
-const NPCCAT={alchemist:["鍊金術士","⚗️"],lumberjack:["伐木工","🪓"],lootBuyers:["收購商","💰"],weaponSellers:["武器收購商","🗡️"],travelingMerchants:["旅行商人","🧳"],equipmentMerchants:["裝備商人","🛡️"],toolMerchants:["工具商人","🔧"],accessoriesMerchants:["飾品商人","💍"],occultMerchants:["神秘商人","🔮"],weaponsmith:["武器鐵匠","⚔️"],armorBlacksmith:["防具鐵匠","🦺"],ingotBlacksmith:["金屬錠鐵匠","🧱"],keyBlacksmith:["鑰匙鐵匠","🗝️"],materialsBlacksmith:["材料工匠","🪵"],accessoriesBlacksmith:["飾品鐵匠","📿"],equipmentBlacksmith:["裝備鐵匠","🔨"],secretAccessoryBlacksmith:["隱藏飾品鐵匠","✨"],beggar:["臭乞丐","🧑"],other:["其他 NPC","🧑"]};
+const NPCCAT={alchemist:["鍊金術士","⚗️"],lumberjack:["伐木工","🪓"],lootBuyers:["收購商","💰"],weaponSellers:["武器收購商","🗡️"],travelingMerchants:["旅行商人","🧳"],equipmentMerchants:["裝備商人","🛡️"],toolMerchants:["工具商人","🔧"],accessoriesMerchants:["飾品商人","💍"],occultMerchants:["神秘商人","🔮"],consumablesMerchants:["消耗品商人","🧪"],weaponsmith:["武器鐵匠","⚔️"],armorBlacksmith:["防具鐵匠","🦺"],ingotBlacksmith:["金屬錠鐵匠","🧱"],keyBlacksmith:["鑰匙鐵匠","🗝️"],materialsBlacksmith:["材料工匠","🪵"],accessoriesBlacksmith:["飾品鐵匠","📿"],equipmentBlacksmith:["裝備鐵匠","🔨"],secretAccessoryBlacksmith:["隱藏飾品鐵匠","✨"],beggar:["臭乞丐","🧑"],other:["其他 NPC","🧑"]};
+// 地圖篩選用功能分類（使用者 2026-11-03）；NPCCAT 是參考互動地圖的細分類型，只在右側資料寫出來
+const NGRP={potion:["藥水・水晶","⚗️",["alchemist","consumablesMerchants"]],loot:["收購商","💰",["lootBuyers","weaponSellers"]],key:["地下城鑰匙","🗝️",["keyBlacksmith"]],
+  acc:["飾品","💍",["accessoriesBlacksmith","secretAccessoryBlacksmith","occultMerchants","accessoriesMerchants"]],gear:["武器・防具","⚔️",["weaponsmith","armorBlacksmith","equipmentBlacksmith","equipmentMerchants"]],
+  mat:["材料加工","🧱",["materialsBlacksmith","ingotBlacksmith","lumberjack"]],tool:["工具商人","🔧",["toolMerchants"]],travel:["旅行商人","🧳",["travelingMerchants"]],beggar:["臭乞丐","🧑",["beggar"]],other:["其他 NPC","🧑",["other"]]};
+const npcGrp=c=>Object.keys(NGRP).find(g=>NGRP[g][2].includes(c))||"other";
 const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:!!r[5],rep:r[6]}));
 const npcById=id=>{const f=+id.slice(1).split("_")[0];return NPCS(f).find(n=>n.id===id)};
 // default (owner, 2026-11-01): teleports, landmarks, monster areas and regular monsters on; the rest off.
 // NPC sub-categories: only alchemist, loot buyers, key smith and accessory smith on (listed first: NPC_TOP).
 // FILT lists the categories that are switched off. The key has a version so a new default reaches everyone once.
-const NPC_TOP=["alchemist","lootBuyers","keyBlacksmith","accessoriesBlacksmith"];
-const FILT_DEF={gather:1,npc:1,wboss:1,dungeon:1,boss:1,mini:1,...Object.fromEntries(["lumberjack","weaponSellers","travelingMerchants","equipmentMerchants","toolMerchants","accessoriesMerchants","occultMerchants","weaponsmith","armorBlacksmith","ingotBlacksmith","materialsBlacksmith","equipmentBlacksmith","secretAccessoryBlacksmith","beggar","other"].map(k=>["npc:"+k,1]))};
-let FILT={...FILT_DEF};try{const s=localStorage.getItem("sao-map-filter-v4");if(s)FILT=JSON.parse(s)||{...FILT_DEF}}catch(e){FILT={...FILT_DEF}}
-const saveFilt=()=>{try{localStorage.setItem("sao-map-filter-v4",JSON.stringify(FILT))}catch(e){}};
+const NPC_TOP=["potion","loot","key","acc"];
+const FILT_DEF={gather:1,npc:1,wboss:1,dungeon:1,boss:1,mini:1,...Object.fromEntries(["gear","mat","tool","travel","beggar","other"].map(k=>["npc:"+k,1]))};
+let FILT={...FILT_DEF};try{const s=localStorage.getItem("sao-map-filter-v5");if(s)FILT=JSON.parse(s)||{...FILT_DEF}}catch(e){FILT={...FILT_DEF}}
+const saveFilt=()=>{try{localStorage.setItem("sao-map-filter-v5",JSON.stringify(FILT))}catch(e){}};
 const catOn=k=>!FILT[k];
 const spotCat=sp=>sp.kind==="poi"?(sp.tp?"tp":"land"):sp.kind==="mob"?"area":sp.kind;
 const spotVisible=sp=>catOn(spotCat(sp))||(sp.tp&&catOn("tp"))||(sp.kind==="mob"&&catOn("mobs"));
 const townCat=t=>t.tp?"tp":"land";
-const npcHit=(n,s)=>!!s&&norm(n.n+" "+(NPCCAT[n.c]?NPCCAT[n.c][0]:"")+" "+n.c.replace(/([A-Z])/g," $1")).includes(s);
+const npcHit=(n,s)=>!!s&&norm(n.n+" "+(NPCCAT[n.c]?NPCCAT[n.c][0]:"")+" "+NGRP[npcGrp(n.c)][0]+" "+n.c.replace(/([A-Z])/g," $1")).includes(s);
 // 搜尋時，名字（或類別）符合的 NPC 就算篩選關著也顯示（使用者 2026-11-03）
-const npcVisible=n=>(catOn("npc")&&!FILT["npc:"+n.c])||npcHit(n,Sq());
+const npcVisible=n=>(catOn("npc")&&!FILT["npc:"+npcGrp(n.c)])||npcHit(n,Sq());
 const spotsOf=f=>{const Fx=FLOORS[f];return Fx.spots.concat(Object.entries(userPos[f]).filter(([z])=>Fx.zones[z]).map(([z,p])=>({id:"u"+f+"-"+z,floor:f,zone:z,kind:"mob",n:Fx.zones[z].n,zh:Fx.zones[z].zh,x:p.x,z:p.z,src:"user",items:[],
   mons:Fx.M.filter(m=>m.zone===z&&!HAS_POS(m.id)).map(m=>m.name)})).filter(sp=>sp.mons.length||sp.items.length))};
 const spotById=id=>{for(const f of FL_KEYS){const s=spotsOf(f).find(x=>x.id===id);if(s)return s}return null};
@@ -1269,7 +1274,7 @@ const recGoBtns=rows=>{const b=rows.map(x=>[x,ALLREC.findIndex(y=>y.npc===x.npc&
 function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=>{const e=eqById[String(r.oid)];const n=npcByName(r.f,r.npc);
   const ri=r.i!=null?r.i:ALLREC.findIndex(x=>x.npc===r.npc&&x.en===r.en);
   const go=showNpc?(n?"n|"+n.id:""):(e?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid:ri>=0?"r|"+ri:"");const rar=e?e.r:r.r;const tag=go?"button":"div";
-  return`<li><${tag} class="lrow"${go?` data-go="${go}"`:""}>${showNpc?`<span class="th sm" style="--ring:var(--ref)" aria-hidden="true">${NPCCAT[n?n.c:"accessoriesBlacksmith"][1]}</span>`:recIcon(r,34)}
+  return`<li><${tag} class="lrow"${go?` data-go="${go}"`:""}>${showNpc?`<span class="th sm" style="--ring:var(--ref)" aria-hidden="true">${NGRP[npcGrp(n?n.c:"accessoriesBlacksmith")][1]}</span>`:recIcon(r,34)}
     <span class="t"><b>${showNpc?esc(r.npc):esc(r.en)}</b><span>${showNpc?"":(e?esc(e.name)+"・":"")+(RAR[rar]?RAR[rar][0]+"・":"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}></li>`}).join("")}</ul>`}
 const RC_CAT={weapon:["武器","⚔️"],armor:["防具","🛡️"],acc:["飾品","💍"],potion:["藥水","🧪"],key:["鑰匙","🗝️"],other:["其他","📦"]};
 const ALLREC=Object.entries(RECIPES).flatMap(([npc,r])=>r.items.map(it=>recRow(npc,r.floor,it)));ALLREC.forEach((r,i)=>r.i=i);
@@ -1415,8 +1420,9 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:'<div class="muted">只要 Col，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
   <div class="note srcn">配方來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
-function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const c=NPCCAT[n.c];
+function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u?"・在地下":""}</div></div></div>
+  ${ty&&ty[0]!==g[0]?`<dl class="facts"><dt>類型</dt><dd>${esc(ty[0])}<span class="muted">（參考互動地圖的分類）</span></dd></dl>`:""}
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
   ${RECIPES[n.n]?`<h3 class="sec">可以製作 <span class="c">${RECIPES[n.n].items.length}</span></h3>${recipeTable(RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)))}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
     :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「協作區」回報就能補上。</div>`:""}
@@ -1992,8 +1998,8 @@ function renderFilter(){const c=mapCounts();const np=NPCS(FL);const off=MAPCAT.f
   $("filterBtn").textContent=off?`篩選（已隱藏 ${off} 類）▾`:"篩選 ▾";
   const nw=$("fpNpcWrap");$("fpanel").appendChild(nw);
   $("fpCats").innerHTML=MAPGRP.map(([g,cs])=>`<div class="fpgrp">${g}</div>`+cs.map(([k,l,ic])=>`<button class="fchip" data-k="${k}" aria-pressed="${catOn(k)}">${ic} ${l}<span class="n">${c[k]||0}</span></button>`).join("")).join("");
-  const cats=Object.keys(NPCCAT).filter(k=>np.some(n=>n.c===k)).sort((a,b)=>(NPC_TOP.includes(a)?NPC_TOP.indexOf(a):99)-(NPC_TOP.includes(b)?NPC_TOP.indexOf(b):99));nw.hidden=!catOn("npc")||!cats.length;$("fpCats").querySelector('[data-k="npc"]').after(nw);
-  $("fpNpc").innerHTML=cats.map(k=>`<button class="fchip" data-k="npc:${k}" aria-pressed="${!FILT["npc:"+k]}">${NPCCAT[k][1]} ${NPCCAT[k][0]}<span class="n">${np.filter(n=>n.c===k).length}</span></button>`).join("");
+  const cats=Object.keys(NGRP).filter(k=>np.some(n=>npcGrp(n.c)===k)).sort((a,b)=>(NPC_TOP.includes(a)?NPC_TOP.indexOf(a):99)-(NPC_TOP.includes(b)?NPC_TOP.indexOf(b):99));nw.hidden=!catOn("npc")||!cats.length;$("fpCats").querySelector('[data-k="npc"]').after(nw);
+  $("fpNpc").innerHTML=cats.map(k=>`<button class="fchip" data-k="npc:${k}" aria-pressed="${!FILT["npc:"+k]}">${NGRP[k][1]} ${NGRP[k][0]}<span class="n">${np.filter(n=>npcGrp(n.c)===k).length}</span></button>`).join("");
   [...$("fpanel").querySelectorAll(".fchip"),...$("fpFly").querySelectorAll(".fchip")].forEach(b=>b.onclick=ev=>{ev.stopPropagation();const k=b.dataset.k;if(FILT[k])delete FILT[k];else FILT[k]=1;saveFilt();renderFilter();renderMap();renderZoneList()});syncNpcFly()}
 // desktop: NPC sub-categories open in a flyout to the right of the panel (a list below would be too long)
 const deskFilter=matchMedia("(min-width:821px)");
@@ -2004,7 +2010,7 @@ function syncNpcFly(){const w=$("fpNpcWrap"),body=$("fpNpcBody"),fly=$("fpFly");
   else{if(body.parentNode!==w)w.appendChild(body);fly.hidden=true}}
 $("fpNpcWrap").addEventListener("toggle",syncNpcFly);
 $("fpFly").addEventListener("pointerdown",ev=>ev.stopPropagation());$("fpFly").addEventListener("wheel",ev=>ev.stopPropagation(),{passive:true});
-const setNpcAll=on=>{Object.keys(NPCCAT).forEach(k=>{if(on)delete FILT["npc:"+k];else FILT["npc:"+k]=1});saveFilt();renderFilter();renderMap();renderZoneList()};
+const setNpcAll=on=>{Object.keys(NGRP).forEach(k=>{if(on)delete FILT["npc:"+k];else FILT["npc:"+k]=1});saveFilt();renderFilter();renderMap();renderZoneList()};
 $("fpNpcAll").onclick=ev=>{ev.stopPropagation();setNpcAll(true)};$("fpNpcNone").onclick=ev=>{ev.stopPropagation();setNpcAll(false)};
 $("fpAll").onclick=ev=>{ev.stopPropagation();FILT={};saveFilt();renderFilter();renderMap();renderZoneList()};
 $("filterBtn").onclick=ev=>{ev.stopPropagation();const o=$("fpanel").hidden;$("fpanel").hidden=!o;$("filterBtn").setAttribute("aria-expanded",o);if(o)renderFilter()};
@@ -2071,7 +2077,7 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
     b.style.left=toPxX(w.x)+"px";b.style.top=toPxZ(w.z)+"px";b.innerHTML=face(m);b.title=`${m.name}・重生點 X ${w.x} · Z ${w.z}${w.u?"（地下）":""}`;b.setAttribute("aria-label",b.title);
     b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("m",m.id,"new")});world.appendChild(b)});
   NPCS(FL).forEach(n=>{if(!npcVisible(n))return;const d=document.createElement("div");d.className="zone poi shop npc";d.dataset.n=n.id;d.style.left=toPxX(n.x)+"px";d.style.top=toPxZ(n.z)+"px";
-    const lb=document.createElement("button");lb.className="zlabel";lb.textContent=NPCCAT[n.c][1];lb.title=`${NPCCAT[n.c][0]}：${n.n}${n.u?"（地下）":""}`;lb.setAttribute("aria-label",lb.title);
+    const lb=document.createElement("button");lb.className="zlabel";lb.textContent=NGRP[npcGrp(n.c)][1];lb.title=`${NGRP[npcGrp(n.c)][0]}：${n.n}${n.u?"（地下）":""}`;lb.setAttribute("aria-label",lb.title);
     lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("n",n.id,"new")});d.appendChild(lb);world.appendChild(d)});
   drawRoute();filterMap();markSel();requestAnimationFrame(declutter)}
 // label collision: teleport / dungeon names stay put; other names try nearby free spots (screen px), monster-area
@@ -2125,8 +2131,8 @@ function renderZoneList(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(F
     row.innerHTML=`<div class="zhead"><button class="zn">${esc(m.name)}</button><span class="zzh">${TYPE_ZH[m.type]}・${ws.length} 個重生點${ws.some(w=>w.u)?"・地下":""}</span></div><div class="spawnl">${ws.map(w=>`<button class="linkbtn mono" data-x="${w.x}" data-z="${w.z}">X ${w.x} · Z ${w.z}</button>`).join("")}</div>`;
     row.querySelector(".zn").onclick=()=>{centerOn(ws[0].x,ws[0].z,2.6);openP("m",m.id,"new")};row.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>repPin(+b.dataset.x,+b.dataset.z));zl.appendChild(row)})});
   const np=NPCS(FL).filter(npcVisible);
-  if(np.length){sec("🧑 NPC",np.length);Object.keys(NPCCAT).forEach(c=>{np.filter(n=>n.c===c).forEach(n=>{const row=document.createElement("div");row.className="zrow npcrow";row.dataset.tp=n.n+" "+NPCCAT[c][0];
-    row.innerHTML=`<div class="zhead"><button class="zn">${NPCCAT[c][1]} ${esc(n.n)}</button><span class="zzh">${NPCCAT[c][0]}${n.u?"・地下":""}${n.src==="beta"?"・測試版資料":""}</span>${coord(n.x,n.z)}</div>`;
+  if(np.length){sec("🧑 NPC",np.length);Object.keys(NGRP).forEach(c=>{np.filter(n=>npcGrp(n.c)===c).forEach(n=>{const row=document.createElement("div");row.className="zrow npcrow";row.dataset.tp=n.n+" "+NGRP[c][0]+" "+(NPCCAT[n.c]||[""])[0];
+    row.innerHTML=`<div class="zhead"><button class="zn">${NGRP[c][1]} ${esc(n.n)}</button><span class="zzh">${NGRP[c][0]}${n.u?"・地下":""}${n.src==="beta"?"・測試版資料":""}</span>${coord(n.x,n.z)}</div>`;
     row.querySelector(".zn").onclick=()=>{centerOn(n.x,n.z,2.8);openP("n",n.id,"new")};zl.appendChild(row)})})}
   const uz=unknownZones(FL).filter(z=>!userPos[FL][z]);
   if(uz.length){sec("位置未知",uz.length);
