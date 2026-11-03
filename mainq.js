@@ -6,6 +6,7 @@
    Parts 7-18 of the REFERENCE MAP numbering (not the game numbering) happen in the Fractured Underworld and are not listed.
    Quest fields: t = title (as in game), n = number in the in-game quest tracker, nEst = number estimated
    from the order, npc, lv, rw = reward, d = story text, s = steps.
+   en = in-game English step text from players' screenshots, keyed by step index (shown under the step, searchable).
    Numbers: 8-18 are written on the wiki main-quest table, 24 is confirmed by report R0001 (tracker shows
    "24. The Truth About the Seal"), 19-23 follow the wiki order between them; 25+ are estimated. The
    reference map merged "The Southern Marshes" (14) into "The Suspended City"; it is split again here.
@@ -57,6 +58,7 @@ window.SAO_MAINQ = {1: [
  {t:"The Chamber Beneath the Fields", n:19, npc:"Harrold", d:"Harrold 說東邊道路的井在夜裡會發光。",
   s:[["探索井下的隧道",4281,3710,1],["回到地面向 Harrold 報告",3134,3666],["前往盜賊的據點",4204,3899],["和 Bob 對話",4287,3890]]},
  {t:"The Geldorak Mine", n:20, npc:"Bob",
+   en:{4:"Find Velka, in Castelbrume",5:"(Bonus) Hand the rare material to the Hanaka merchant"},
   s:[["和 Bob 對話",4287,3890],["取得 Geldorak 地下城鑰匙",4288,3887],["進入礦坑並完成地下城",4288,3887],["離開礦坑入口",4260,3892,1],["到 Castlebrume 找 Velka",2922,3006],["（額外）把稀有素材交給 Hanaka 的商人",null,null]]},
  {t:"Velka, and the Ruins of the Dream", n:21, npc:"Velka",
   s:[["和 Velka 對話",2922,3006],["把奇怪的麥穗拿給 Velka 看",2922,3006],["找到南方的廢墟",2842,4400]]},

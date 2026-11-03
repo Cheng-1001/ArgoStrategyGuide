@@ -153,6 +153,17 @@ with sync_playwright() as p:
     last = pg.inner_text("#tour .tour-card h3") if pg.locator("#tour").count() else ""
     pg.click("#tour .tour-card button.pri"); pg.wait_for_timeout(300)
     check(last == "導覽結束" and pg.locator("#tour").count() == 0 and pg.evaluate("localStorage.getItem('sao-tour-v1')") == "done", "網頁導覽: 略過 jumps to the last step, which then closes the tour")
+    pg.goto(base + "#quests"); pg.wait_for_timeout(400); pg.click('#fQKind .chip[data-v="main"]'); pg.fill("#q", "hanaka merchant"); pg.wait_for_timeout(300)
+    hit_q = pg.inner_text("#cQ").startswith("1 /")
+    pg.locator("#lQ [data-go]", has_text="The Geldorak Mine").first.click(); pg.wait_for_timeout(400)
+    marks = pg.eval_on_selector_all(".qmap g[data-xz] text", "e=>e.map(x=>x.textContent)")
+    check(hit_q and "遊戲原文：(Bonus) Hand the rare material" in pg.inner_text("#pBody") and marks == ["1–4", "5"],
+          "main quest steps keep the in-game English text (searchable); close route points merge into one marker 1–4")
+    pg.click("#pClose"); pg.fill("#q", ""); pg.evaluate("localStorage.removeItem('sao-map-filter-v4')"); pg.goto(base + "#map"); pg.reload(); pg.wait_for_timeout(800)
+    n0 = pg.locator("#view-map .npc").count(); pg.fill("#q", "hanaka"); pg.wait_for_timeout(500)
+    check(n0 == 0 and pg.locator("#view-map .npc.hit").count() == 1 and pg.locator("#zlist", has_text="Hanaka - Loot Buyer").count() == 1,
+          "map search shows matching NPCs even when the NPC filter is off")
+    pg.fill("#q", ""); pg.wait_for_timeout(300); pg.click("#fpAll"); pg.wait_for_timeout(300)
     pg.goto(base + "#recipes"); pg.wait_for_timeout(400)
     tot = pg.locator("#lRc .rcard").count()
     pg.click('#fRcCat .chip[data-v="key"]'); pg.wait_for_timeout(200)
