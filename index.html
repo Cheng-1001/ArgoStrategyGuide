@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="f17e6395df">
+<meta name="sao-build" content="11e5fa81c1">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -1100,8 +1100,8 @@ function dgInfoHTML(sp){const d=sp.dg;if(!d)return"";
   const item=nm=>{const k=ITEMS[nm]?nm:DG_ITEM[nm];return k&&ITEMS[k]?`<button class="linkbtn" data-go="i|${esc(k)}">${esc(nm)}</button>`:esc(nm)};
   return`<h3 class="sec">地下城資料 <span class="c">遊戲畫面</span></h3>
   <dl class="facts">${d.title&&d.title!==sp.n?`<dt>視窗名稱</dt><dd>${esc(d.title)}</dd>`:""}<dt>首領</dt><dd>${esc(d.boss)}<br><span class="muted" style="font-size:12.5px">${esc(d.bossZh)}</span></dd><dt>鑰匙</dt><dd>${esc(d.key)}</dd><dt>難度</dt><dd>${d.modes.map(esc).join("／")}</dd>${d.easy.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}<span class="muted" style="font-size:12px">（Easy）</span></dd>`).join("")}</dl>
-  <h3 class="sec">通關掉落（Easy） <span class="c">${d.loot.length}</span></h3>
-  <ul class="rows">${d.loot.map(([it,by,p])=>`<li><div class="lrow"><span class="t"><b>${item(it)}</b><span>${by?mon(by)+" 掉落":"視窗沒寫哪隻掉落"}</span></span><span class="v">${pct(p)}</span></div></li>`).join("")}</ul>
+  <h3 class="sec">通關寶箱（Easy） <span class="c">${d.loot.length}</span></h3><div class="muted" style="font-size:12.5px">打完地下城時寶箱開出來的東西和機率（遊戲視窗的 Loot）。</div>
+  <ul class="rows">${d.loot.map(([it,by,p])=>`<li><div class="lrow"><span class="t"><b>${item(it)}</b>${by?`<span>視窗標示：${mon(by)}</span>`:""}</span><span class="v">${pct(p)}</span></div></li>`).join("")}</ul>
   <div class="note srcn">地下城資料取自站長的遊戲截圖（${esc(d.date)}，遊戲的 Dungeons 視窗）。其他難度的掉落還沒有截圖。</div>`}
 function dgKeyHTML(sp){const {want,hit}=dgKeys(sp);if(!want&&!hit.length)return"";
   return`<h3 class="sec">進入鑰匙</h3>${hit.length?`<ul class="rows">${hit.map(r=>{const p=prById[String(r.oid)],n=npcByName(r.f,r.npc);
