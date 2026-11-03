@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="57fb32e892">
+<meta name="sao-build" content="b4cff13738">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -46,7 +46,22 @@ button,input,select{font:inherit;color:inherit}
 .app{height:100%;display:grid;grid-template-rows:auto auto auto minmax(0,1fr)}
 .app:has(#codexTabs[hidden]){grid-template-rows:auto auto minmax(0,1fr)}
 .subtabs[hidden]{display:none!important}
-@media (min-width:821px){#codexTabs{padding-left:266px;background:linear-gradient(90deg,var(--panel) 0 249px,var(--line) 249px 250px,var(--bg) 250px)}}
+/* desktop: the codex sub-tabs live at the top of the left filter column (user 2026-11-04: pick tab and filters in one column, top to bottom) */
+@media (min-width:821px){#codexTabs{display:none!important}.app{grid-template-rows:auto auto minmax(0,1fr)}}
+.vtabs{display:none}
+@media (min-width:821px){.vtabs{display:flex;flex-direction:column;gap:2px;margin:-4px -4px 0;padding-bottom:14px;border-bottom:1px solid var(--line)}
+  .vtabs a{display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:var(--fg);font-family:var(--f-display);font-weight:600;font-size:14px;padding:7px 10px 7px 12px;border-radius:8px;border-left:3px solid transparent}
+  .vtabs a:hover{background:var(--panel-2)}
+  .vtabs a .n{font-family:var(--f-mono);font-size:11.5px;color:var(--muted);font-weight:400}
+  .vtabs a[aria-current="page"]{background:var(--accent-soft);border-left-color:var(--accent);color:var(--fg)}
+  .vtabs .vth{font-size:11.5px;color:var(--muted);font-weight:600;letter-spacing:.04em;padding:0 12px 4px}}
+/* active filters next to the result count: each can be removed without going back to the left column */
+.actf{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.actf .af{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--accent);color:var(--fg);background:var(--accent-soft);border-radius:999px;padding:1px 4px 1px 10px;font-size:12px;cursor:pointer}
+.actf .af b{font-weight:400;color:var(--muted)}
+.actf .af span{font-size:13px;line-height:1;padding:2px 5px;border-radius:999px}
+.actf .af:hover span{background:var(--accent);color:var(--accent-ink)}
+.actf .afx{border:0;background:none;color:var(--accent);font-size:12px;cursor:pointer;text-decoration:underline;padding:2px 4px}
 /* ---------- header ---------- */
 header.top{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;background:var(--panel);border-bottom:1px solid var(--line);
   padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));position:relative;z-index:20}
@@ -2296,7 +2311,30 @@ function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.m
   if(view==="about"||view==="changelog")$("aboutBtn").setAttribute("aria-current","page");else $("aboutBtn").removeAttribute("aria-current");
   if(view==="map")requestAnimationFrame(()=>{syncNpcFly();if(!fitted&&MP())fit();if(pending){const fn=pending;pending=null;fn()}});
   renderCurrent();if(viewPending){const fn=viewPending;viewPending=null;requestAnimationFrame(fn)}}
-function renderCurrent(){requestAnimationFrame(fixCols);requestAnimationFrame(fbarSync);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="about")renderAbout();else if(view==="changelog")renderChangelog();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="dungeons")renderDungeons();else if(view==="classes")renderClasses();else renderQuests()}
+// desktop codex tabs inside each codex view's left column (copies of #codexTabs, kept in sync)
+const CODEX_V=["monsters","equip","items","props"];
+function syncVTabs(){CODEX_V.forEach(v=>{const F=document.querySelector(`#view-${v} .filters`);if(!F)return;let nv=F.querySelector(":scope>.vtabs");
+  if(!nv){nv=document.createElement("nav");nv.className="vtabs";nv.setAttribute("aria-label","圖鑑分類");F.insertBefore(nv,F.firstChild)}
+  nv.innerHTML='<div class="vth">圖鑑分類</div>'+[...document.querySelectorAll("#codexTabs a")].map(a=>`<a href="${a.getAttribute("href")}" data-v="${a.dataset.v}"${a.dataset.v===view?' aria-current="page"':""}>${a.innerHTML}</a>`).join("")})}
+document.addEventListener("click",e=>{const a=e.target.closest(".vtabs a");if(!a)return;e.preventDefault();go(a.dataset.v)});
+// "已篩選" row: active (non-default) controls of the current tab's left column, each removable
+function actControls(sec){const out=[];sec.querySelectorAll(".filters .fgroup").forEach(g=>{if(g.closest(".vtabs"))return;const lab=(g.querySelector(".flabel")||{}).textContent||"";
+  g.querySelectorAll(".chips").forEach(c=>{const all=c.querySelector('.chip[data-v="all"]'),on=c.querySelector('.chip[aria-pressed="true"]');
+    if(all&&on&&on!==all)out.push({lab,val:on.textContent.replace(/\s*\d+\s*$/,"").trim(),clr:()=>all.click()})});
+  g.querySelectorAll("select").forEach(x=>{if(/Sort$/.test(x.id)||x.selectedIndex<=0)return;out.push({lab,val:x.options[x.selectedIndex].text,clr:()=>{x.selectedIndex=0;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
+  g.querySelectorAll("input[type=checkbox]").forEach(x=>{if(!x.checked)return;out.push({lab:"",val:(x.closest("label")||{}).textContent.trim(),clr:()=>{x.checked=false;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
+  const nums=[...g.querySelectorAll("input[type=number]")];if(nums.some(x=>x.value))out.push({lab,val:nums.map(x=>x.value||"…").join("～"),clr:()=>nums.forEach(x=>{if(x.value){x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})})});
+  return out}
+function actSync(){const sec=$("view-"+view);if(!sec||!sec.classList.contains("browse"))return;const rh=sec.querySelector(".results>.rhead");if(!rh)return;
+  let box=rh.querySelector(".actf");if(!box){box=document.createElement("div");box.className="actf";rh.appendChild(box)}
+  const cs=actControls(sec);box.hidden=!cs.length;
+  box.innerHTML=cs.map((c,i)=>`<button type="button" class="af" data-i="${i}" title="取消這個條件">${c.lab?`<b>${esc(c.lab)}</b>`:""}${esc(c.val)}<span aria-hidden="true">✕</span></button>`).join("")+(cs.length>1?'<button type="button" class="afx">全部清除</button>':"");
+  box.querySelectorAll(".af").forEach(b=>b.onclick=()=>{cs[+b.dataset.i].clr();setTimeout(actSync,0)});
+  const x=box.querySelector(".afx");if(x)x.onclick=()=>{cs.slice().reverse().forEach(c=>c.clr());setTimeout(actSync,0)}}
+document.addEventListener("click",e=>{if(e.target.closest(".filters"))setTimeout(actSync,0)});
+document.addEventListener("change",e=>{if(e.target.closest(".filters"))setTimeout(actSync,0)});
+document.addEventListener("input",e=>{if(e.target.closest(".filters"))setTimeout(actSync,0)});
+function renderCurrent(){requestAnimationFrame(fixCols);requestAnimationFrame(fbarSync);requestAnimationFrame(syncVTabs);requestAnimationFrame(actSync);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="about")renderAbout();else if(view==="changelog")renderChangelog();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="dungeons")renderDungeons();else if(view==="classes")renderClasses();else renderQuests()}
 window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
 
