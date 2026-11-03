@@ -279,6 +279,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .lg{width:11px;height:11px;border-radius:50%;border:2.5px solid var(--minion);background:#fff;display:inline-block}
 .editbar{position:absolute;left:50%;top:48px;transform:translateX(-50%);z-index:6;background:var(--accent);color:var(--accent-ink);padding:6px 14px;border-radius:6px;font-size:13px;box-shadow:var(--shadow);max-width:calc(100% - 24px);text-align:center}
 aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.wonly{font-style:normal;font-size:11px;color:var(--warn);border:1px solid var(--warn);border-radius:4px;padding:0 4px;margin-right:6px;white-space:nowrap}
 .zlist{overflow:auto;padding:4px 16px 12px;flex:1;min-height:0}
 .zrow{padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
 .zrow[hidden]{display:none}
@@ -859,8 +860,9 @@ Object.entries(S23.unknown).forEach(([id,x])=>{ITEMS[id]={id,fr:null,r:null,lv:n
   if(r.drops&&r.drops.every(d=>d[0]==="???"||ITEMS[d[0]])){m.wikiDrops=m.drops;m.drops=r.drops.filter(d=>d[0]!=="???");m.dropsLocked=r.drops.filter(d=>d[0]==="???");m.dropSrc=r}
   else if(r.dropsText)m.repDropsText=r.dropsText;
   if(r.desc)m.codexDesc=r.desc});
+const WIKI_ONLY=`<em class="wonly" title="遊戲圖鑑截圖裡沒有這一項，可能是舊資料">只有 wiki 有記錄</em>`;
 const SOURCES={},USES={},GATHER={};Object.keys(ITEMS).forEach(k=>{SOURCES[k]=[];USES[k]=[];GATHER[k]=[]});
-ALLM.forEach(m=>m.drops.forEach(([id,p])=>SOURCES[id].push({m,p})));
+ALLM.forEach(m=>m.drops.forEach(([id,p,w])=>SOURCES[id].push({m,p,w})));
 Object.values(SOURCES).forEach(a=>a.sort((x,y)=>x.m.floor-y.m.floor||(y.p??-1)-(x.p??-1)));
 ALLQ.forEach(q=>q.need.forEach(([id,n,inf])=>USES[id].push({q,n,inf})));
 ALLS.forEach(s=>s.items.forEach(i=>GATHER[i].push(s)));
@@ -998,7 +1000,7 @@ function markSel(){const cur=!panel.hidden&&stack[stack.length-1];
 const soonNote=f=>FLOORS[f].status==="soon"?`<div class="note warn">${FLN(f)}預計 11/5（四）03:00（台灣時間）開放（官方公告：11/4 晚上 8 點巴黎時間）。這是 wiki 目前的資料，官方說會調整進度設計，開放後可能不同。</div>`:"";
 
 function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.zones[m.zone];const p=monPos(m);const st=STATUS[p.s];
-  const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(iid)}</b><span>${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
+  const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp,ww])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(iid)}</b><span>${ww?WIKI_ONLY:""}${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
   const kq=KILLQ[m.id]||[];
   return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(m.name)}</h2>${m.aka&&m.aka.length?`<div class="sub">舊名：${m.aka.map(esc).join("、")}${m.renamedBy?`・名稱依${m.renamedBy.how==="codex"?`遊戲圖鑑 #${esc(m.renamedBy.no)}`:"審核員確認"}（回報 ${esc(String(m.renamedBy.report||""))}）更新`:""}</div>`:""}</div></div>
   ${soonNote(m.floor)}
@@ -1043,7 +1045,7 @@ function itemDetail(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id],ga
   const stl=it.st?Object.entries(it.st).map(([k,v])=>{let val=v;if(k==="Classe requise")val=String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]||c).join("、");else if(k==="Arme à deux mains")val="是";else if(typeof v==="number"&&!["Item Cooldown","Restore Food","Max Durability"].includes(k)&&!k.startsWith("Required"))val=(v>0?"+":"")+v;return`<dt>${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(val)}</dd>`}).join(""):"";
   let lastF=0;const fh=f=>{if(f===lastF)return"";lastF=f;return`<li class="fsep">${flBadge(f)} ${FLN(f)}</li>`};
   const multi=itemFloors(id).length>1;
-  const srcRows=src.map(({m,p})=>{const zp=monPos(m);return(multi?fh(m.floor):"")+`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${rn("m"+m.id)}${esc(m.name)}</b><span>${esc(zp.spot?zp.spot.zh:FLOORS[m.floor].zones[m.zone].zh)}・${STATUS[zp.s].t}</span></span><span class="v">${pct(p)}</span></button></li>`}).join("")
+  const srcRows=src.map(({m,p,w})=>{const zp=monPos(m);return(multi?fh(m.floor):"")+`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${rn("m"+m.id)}${esc(m.name)}</b><span>${w?WIKI_ONLY:""}${esc(zp.spot?zp.spot.zh:FLOORS[m.floor].zones[m.zone].zh)}・${STATUS[zp.s].t}</span></span><span class="v">${pct(p)}</span></button></li>`}).join("")
     +gat.map(sp=>`<li><button class="lrow" data-go="s|${sp.id}"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">${KIND[sp.kind][1]}</span><span class="t"><b>${rn("s"+sp.id)}${flBadge(sp.floor)} ${esc(sp.n)}</b><span>${esc(sp.zh)}・X ${sp.x} · Z ${sp.z}</span></span><span class="v">撿取</span></button></li>`).join("");
   lastF=0;
   const useRows=use.map(({q:qq,n,inf})=>(multi?fh(qq.floor):"")+`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>原文：${esc(qq.raw)}${inf?' <span class="inf">推斷</span>':""}</span></span><span class="v">× ${n}</span></button></li>`).join("");
