@@ -2251,7 +2251,7 @@ document.addEventListener("click",e=>{const a=e.target.closest("[data-repgo]");i
 {const meta=document.querySelector('meta[name="sao-build"]'),mine=meta&&meta.content;
  const sp=new URLSearchParams(location.search);if(sp.has("u")){sp.delete("u");const q=sp.toString();history.replaceState(null,"",location.pathname+(q?"?"+q:"")+location.hash)}
  let last=0,shown="";
- async function updCheck(){if(!mine||location.protocol==="file:"||Date.now()-last<60000)return;last=Date.now();
+ async function updCheck(){if(!mine||location.protocol==="file:"||/githack/.test(location.hostname)||Date.now()-last<60000)return;last=Date.now();
   try{const t=await(await fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"})).text();const m=t.match(/<meta name="sao-build" content="([0-9a-f]+)"/);
    if(!m||m[1]===mine||m[1]===shown)return;shown=m[1];
    let bar=$("updBar");if(!bar){bar=document.createElement("div");bar.id="updBar";bar.setAttribute("role","status");document.body.appendChild(bar)}
