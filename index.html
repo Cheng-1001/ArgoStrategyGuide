@@ -2249,7 +2249,7 @@ const STEPS=[
  {sel:"nav.tabs",t:"功能選單",b:"切換分頁來找到想要的資料。"},
  {sel:".gsearch",t:"全站搜尋",b:"依分頁顯示搜尋內容，支援英文、法文、wiki舊版名稱。<br>在地圖上搜尋時，符合的位置會亮起來。"},
  {sel:()=>ph()?"#filterBtn":"#fpanel",go:"map",t:"篩選器",b:()=>(ph()?"使用上方的「篩選 ▾」":"使用左邊的篩選器")+"選要顯示的東西，設定會記在你的瀏覽器裡。"},
- {sel:"#stage",go:"map",pos:"tr",t:"地圖",b:"點選圖示打開詳細資料，物品名稱都可以再連結相關分頁。"},
+ {sel:"#stage",go:"map",pos:"tr",cut:"#fpanel",t:"地圖",b:"點選圖示打開詳細資料，物品名稱都可以再連結相關分頁。"},
  {sel:"#collabBtn",t:"協作區",b:"在遊戲裡發現新資料、錯誤或有建議，到這裡使用表單回報，審核後自動更新到網站。"},
  {sel:"#aboutBtn",t:"關於本站",b:"網站介紹、資料來源、版權聲明，還有「更新紀錄」看最近改了什麼。"},
  {t:"導覽結束",b:"想再看一次導覽，可以從「關於本站 → 網頁導覽」打開。"}
@@ -2262,19 +2262,19 @@ function css(){if($q("#tourCss"))return;const st=document.createElement("style")
 #tour .tour-card{display:flex;flex-direction:column;box-sizing:border-box;position:fixed;width:min(340px,calc(100vw - 32px));background:var(--panel,#fff);color:var(--fg,#111);border:1px solid var(--line,#ccd);border-radius:14px;box-shadow:0 12px 32px rgba(0,0,0,.28);padding:16px 16px 12px;pointer-events:auto;transition:top .25s ease,left .25s ease}
 #tour .tour-card h3{margin:0 0 6px;font-family:var(--f-display,inherit);font-size:17px}
 #tour .tour-card p{flex:1;margin:0 0 12px;font-size:14px;line-height:1.6;color:var(--muted,#555)}
-#tour .tour-foot{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px}#tour .tour-foot.end{justify-content:center}#tour .tour-foot.end button.pri{font-size:17px;padding:8px 22px}#tour .tour-foot .ph0{visibility:hidden}#tour .tour-dots{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:5px;justify-content:center;pointer-events:none}#tour .tour-dots i{width:6px;height:6px;border-radius:50%;background:var(--line,#ccd)}#tour .tour-dots i.on{background:var(--accent,#e8a23a)}
+#tour .tour-foot{position:relative;display:flex;align-items:center;justify-content:space-between;gap:8px}#tour .tour-foot.end{justify-content:center}#tour .tour-card.end{justify-content:center;padding-bottom:16px}#tour .tour-card.end p{flex:0 0 auto}#tour .tour-foot.end button.pri{font-size:17px;padding:8px 22px}#tour .tour-foot .ph0{visibility:hidden}#tour .tour-dots{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:flex;gap:5px;justify-content:center;pointer-events:none}#tour .tour-dots i{width:6px;height:6px;border-radius:50%;background:var(--line,#ccd)}#tour .tour-dots i.on{background:var(--accent,#e8a23a)}
 #tour button{white-space:nowrap;font:inherit;font-size:13px;border-radius:8px;padding:6px 12px;cursor:pointer;border:1px solid var(--line,#ccd);background:var(--panel-2,#f3f4f6);color:var(--fg,#111)}
 #tour button.pri{background:var(--accent,#e8a23a);border-color:var(--accent,#e8a23a);color:#fff;font-weight:700}#tour .tour-card .skip{position:absolute;bottom:calc(100% + 8px);right:0;background:rgba(10,16,24,.72);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:999px;padding:4px 14px}#tour .tour-card .skip:hover{background:rgba(10,16,24,.9)}#tour .tour-card h3{text-align:center}
-@media (min-width:821px){#tour .tour-card{width:408px;padding:19px 19px 14px;border-radius:17px}#tour .tour-card h3{font-size:20px;margin-bottom:7px}#tour .tour-foot.end button.pri{font-size:20px;padding:9px 26px}#tour .tour-card p{font-size:17px;margin-bottom:14px}#tour button{font-size:15.5px;padding:7px 14px;border-radius:10px}#tour .tour-dots{gap:5px}#tour .tour-dots i{width:7px;height:7px}}
+@media (min-width:821px){#tour .tour-card{width:408px;padding:19px 19px 14px;border-radius:17px}#tour .tour-card h3{font-size:20px;margin-bottom:7px}#tour .tour-card.end{padding-bottom:19px}#tour .tour-foot.end button.pri{font-size:20px;padding:9px 26px}#tour .tour-card p{font-size:17px;margin-bottom:14px}#tour button{font-size:15.5px;padding:7px 14px;border-radius:10px}#tour .tour-dots{gap:5px}#tour .tour-dots i{width:7px;height:7px}}
 @media (max-width:820px){#tour .tour-card{left:16px!important;right:16px;width:auto;bottom:16px;top:auto!important}}`;document.head.appendChild(st)}
 function target(s){const sel=typeof s.sel==="function"?s.sel():s.sel;return sel?$q(sel):null}
 function place(){const s=STEPS[i],el=target(s),M=8;
   // 每一步的說明卡一樣高：先量出所有步驟裡最高的，當最小高度（視窗寬度改變時重量）
   if(cardW!==innerWidth){cardW=innerWidth;card.style.minHeight="";cardH=0;const keep=i;for(let k=0;k<STEPS.length;k++){i=k;card.innerHTML=body();cardH=Math.max(cardH,card.offsetHeight)}i=keep}
-  card.innerHTML=body();card.style.minHeight=cardH+"px";
+  card.innerHTML=body();card.style.minHeight=cardH+"px";card.classList.toggle("end",i===STEPS.length-1);
   card.querySelectorAll("button").forEach(b=>b.onclick=()=>b.dataset.a==="n"?(i<STEPS.length-1?show(i+1):end()):b.dataset.a==="p"?show(i-1):show(STEPS.length-1));
   if(!el){hole.className="tour-hole none";hole.style.cssText="";}
-  else{const r=el.getBoundingClientRect(),cb=ph()?card.getBoundingClientRect().top-44:innerHeight;const l=Math.max(4,r.left-M),t=Math.max(4,r.top-M),rr=Math.min(innerWidth-4,r.right+M),bb=Math.min(cb-4,r.bottom+M);hole.className="tour-hole";hole.style.cssText=`left:${l}px;top:${t}px;width:${rr-l}px;height:${bb-t}px`}
+  else{const r=el.getBoundingClientRect(),cb=ph()?card.getBoundingClientRect().top-44:innerHeight;const cut=!ph()&&s.cut&&$q(s.cut),l=Math.max(4,r.left-M,cut?cut.getBoundingClientRect().right+M:0),t=Math.max(4,r.top-M),rr=Math.min(innerWidth-4,r.right+M),bb=Math.min(cb-4,r.bottom+M);hole.className="tour-hole";hole.style.cssText=`left:${l}px;top:${t}px;width:${rr-l}px;height:${bb-t}px`}
   if(ph())return;const cw=card.offsetWidth,ch=card.offsetHeight,W=innerWidth,H=innerHeight;let x=(W-cw)/2,y=(H-ch)/2;
   if(el&&s.pos==="tr"){const r=el.getBoundingClientRect();x=Math.max(16,Math.min(W-16,r.right)-cw-24);y=Math.max(56,r.top+60)}
   card.style.left=x+"px";card.style.top=y+"px"}
