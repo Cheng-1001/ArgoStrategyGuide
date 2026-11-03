@@ -131,8 +131,8 @@ with sync_playwright() as p:
         seen.append(pg.inner_text("#tour .tour-card h3"))
         if k == 4: mapok = pg.url.endswith("#map")
         pg.click("#tour .tour-card button.pri"); pg.wait_for_timeout(350)
-    check(steps == 8 and seen[4] == "地圖" and "兩種底圖" not in seen and mapok and pg.locator("#tour").count() == 0
-          and pg.evaluate("localStorage.getItem('sao-tour-v1')") == "done", "網頁導覽: 8 steps, the map step switches to the map, finishing closes it and remembers")
+    check(steps == 9 and seen[4] == "篩選器" and seen[5] == "地圖" and "兩種底圖" not in seen and mapok and pg.locator("#tour").count() == 0
+          and pg.evaluate("localStorage.getItem('sao-tour-v1')") == "done", "網頁導覽: 9 steps, the filter step switches to the map, finishing closes it and remembers")
     pg.evaluate("localStorage.removeItem('sao-tour-v1')")
     pg.click("#aboutBtn"); pg.wait_for_timeout(150); pg.click("#tourBtn"); pg.wait_for_timeout(400)
     pg.click("#tour .tour-card button.skip"); pg.wait_for_timeout(400)
