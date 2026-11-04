@@ -119,36 +119,7 @@ const M = [
 ["062","Nymbréa","Boss","A","aepep",4,[["Heart of Nymbrea",null]],"","🐍"],
 ["","Kazor","Boss","A","none",5,[],"wiki 未寫出現區域。","🔥"]
 ].map((r,i)=>({id:"m"+i,num:r[0],name:r[1],type:r[2],beh:r[3],zone:r[4],diff:r[5],drops:r[6],note:r[7],icon:r[8],aka:r[9]||[],lvShot:r[10]}));
-const PHOTO = {
-  // 2026-11-04: 128 px crops of the owner's in-game codex video frames (3/4 view, facing left; frames not published).
-  // Left out until better frames: #013, #024, #038 (back view), #026, #027, #028, #044 (angle too far off).
-  // #041-#043: the codex draws the whole monster on top and loose parts below (server glitch); only the top is kept.
-  "Corrupted Boar":"icons/mobs/mob_001.png",
-  "Pumba":"icons/mobs/mob_002.png",
-  "White Dire Wolf":"icons/mobs/mob_003.png",
-  "Black Dire Wolf":"icons/mobs/mob_004.png",
-  "Albal":"icons/mobs/mob_006.png",
-  "Nephentes":"icons/mobs/mob_007.png",
-  "Devouring Plant":"icons/mobs/mob_008.png",
-  "Treant Warrior":"icons/mobs/mob_009.png",
-  "Elite Treant":"icons/mobs/mob_010.png",
-  "Mini Treant":"icons/mobs/mob_011.png",
-  "Woodland Mage":"icons/mobs/mob_012.png",
-  "Forest Spider":"icons/mobs/mob_014.png",
-  "Mountain Deer":"icons/mobs/mob_018.png",
-  "Slime Warrior":"icons/mobs/mob_019.png",
-  "Small Slime":"icons/mobs/mob_020.png",
-  "Healer Slime":"icons/mobs/mob_021.png",
-  "Mage Slime":"icons/mobs/mob_022.png",
-  "Gorbel, King of Slimes":"icons/mobs/mob_023.png",
-  "Skeleton Warrior":"icons/mobs/mob_025.png",
-  "Skeleton Wizard":"icons/mobs/mob_029.png",
-  "Cursed Nazgul Protector":"icons/mobs/mob_030.png",
-  "Bandit Archer":"icons/mobs/mob_039.png",
-  "Bandit Assassin":"icons/mobs/mob_040.png",
-  "Sturdy Bandit":"icons/mobs/mob_041.png",
-  "Forest Treant":"icons/mobs/mob_042.png",
-  "Evil Forest Treant":"icons/mobs/mob_043.png" };
+const PHOTO = { "Corrupted Boar":"mob_boar.jpg", "Pumba":"mob_pumba.jpg", "White Dire Wolf":"mob_wolf.jpg" };
 
 /* Item renames 2026-11-04 (in-game English names from the Specifications popup, user option 1A): the old wiki names are kept in
    ITEM_OLD in src/index.html so recipes.js, reports.js and searches still resolve them.

@@ -9,7 +9,6 @@ window.SAO_CHANGELOG=[
   "38 件物品的資料加上「遊戲寫的取得方式」：怪物掉落、製作 NPC、NPC 收購價、寶箱掉率、Island Forge（破碎的地下世界的鍛造台）等，附遊戲的英文說明",
   "Skeleton Wizard 補上掉落 Mage's Scroll（50%）",
   "照遊戲的物品說明視窗校正：Flower of a Nepenthes 名稱確認並補上數值；Skeleton Wizard 的 Magic Staff of the Ruins 掉落率 0.5%（原 wiki 寫 2%）；Narax 的戒指 3%（原 1%）",
-  "26 隻怪物的圖示換成遊戲圖鑑裡的模型（去背，背景乾淨一致）",
   "地圖上被傳送點名稱擋住的地下城名稱，改顯示在入口點的下方（例如 Geldorack Mine 旁的 Geldorack Dungeon）",
   "地點資料的名稱下面加上遊戲裡的法文名稱（遊戲圖鑑和傳送選單），例如 Wolf Valley 下面是 Vallée des Loups・狼之谷",
   "Geldorak 礦坑照遊戲裡的告示牌改名 Geldorack Mine，礦坑地下城改名 Geldorack Dungeon（遊戲 Dungeons 視窗寫 Geldorack；舊名仍可搜尋）",
