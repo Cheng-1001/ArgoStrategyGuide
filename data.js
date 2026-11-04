@@ -52,7 +52,7 @@ const M = [
 ["003","White Dire Wolf","Monster","N","wolf",1,[["Wolf Fur",85],["Wolf Fangs",70]],"","🐺"],
 ["004","Black Dire Wolf","Monster","N","wolf",1,[["Wolf Fur",70],["Wolf Fangs",85]],"","🐺"],
 ["006","Albal","Boss","N","wolf",2,[["Wolf Fur",100],["Wolf Fangs",70],["Albal's Fangs",20]],"","🐺"],
-["007","Nephentes","Monster","A","mizunari",2,[["Corrupted Spore",85],["Leaf Fragment",70],["???",0.5]],"","🪴"],
+["007","Nephentes","Monster","A","mizunari",2,[["Corrupted Spore",85],["Leaf Fragment",70],["Flower of a Nepenthes",0.5]],"","🪴"],
 ["009","Treant Warrior","Monster","A","putrid",2,[["Titan Bark",75],["Ancestral Root",35],["Sylvan Shield",0.5]],"","🌳"],
 ["010","Elite Treant","Monster","A","putrid",2,[["Sylvan Bark",75],["Sylvan Bowstring",85],["Sylvan Bow",0.5]],"","🌲"],
 ["011","Mini Treant","Monster","A","putrid",1,[["Sylvan Sprout",85],["Magic Wood Shard",75]],"","🌿"],
@@ -198,6 +198,7 @@ const RAW = {
 "Unknown Logs":[null,null,null,"unknown",null,null,null,-1],
 "???":[null,null,null,"unknown",null,null,null,-1],
 "Sylvan Shaman Staff":[null,null,null,"unknown",null,null,null,-1],
+"Flower of a Nepenthes":[null,null,null,"artifact",null,null,null,188],
 "Leg of a Spider":[null,"a",7,"artifact","The leg of a giant spider, quick and unpredictable, it dodges as much as it stings",null,{"Critical Strike Chance":1,"Projectile Damage":2,"Dodge":2.5},182],
 "Swordsmans Scroll":[null,null,null,"unknown",null,null,null,-1],
 "Archers Scroll":[null,null,null,"unknown",null,null,null,-1],
@@ -206,6 +207,7 @@ const RAW = {
 
 // How each item is obtained besides monster drops (source text) and what it is used for (paraphrased from its official description).
 const EXTRA = {
+"Flower of a Nepenthes":{note:"名稱是推斷的：遊戲圖鑑的 Nephentes 第 3 格掉落（0.5%，紅花圖示）沒有顯示名稱；起始之城 Accessory Recycling 的回收清單有「Flower of a Nepenthes」，和 Forest Spider 0.5% 掉的 Leg of a Spider 同一系列。數值還沒有資料。圖示取自站長的圖鑑截圖。"},
 "Leg of a Spider":{set:{name:"Spider Set（蜘蛛套裝）",tiers:[[2,"+2.5% 移動速度"],[3,"+0.025 攻擊速度"],[4,"+2.5% 閃避"],[5,"+0.25 攻擊傷害、+1% 暴擊率"]]},note:"套裝效果的名稱、數值、說明取自社群截圖（2026-10-30），法文名稱未知；wiki 原本寫成 Leg of Spider。圖示來自遊戲資源包（patte_araignee），與截圖一致。當時拍賣行最低價約 300 Col。"},
 "Spider Thread":{note:"圖示來自遊戲資源包（drop_fils_blanc），依外觀推斷對應，官方圖鑑沒有圖示。"},
 "Oak Log":{src:"伐木職業（Bûcheron）採集"},
