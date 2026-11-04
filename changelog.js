@@ -3,7 +3,7 @@
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
  ["2026-11-04",[
-  "26 隻怪物的圖示換成遊戲圖鑑裡的模型（一般怪物臉朝左，首領臉朝右）",
+  "26 隻怪物的圖示換成遊戲圖鑑裡的模型（去背，背景乾淨一致）",
   "地圖上被傳送點名稱擋住的地下城名稱，改顯示在入口點的下方（例如 Geldorack Mine 旁的 Geldorack Dungeon）",
   "地點資料的名稱下面加上遊戲裡的法文名稱（遊戲圖鑑和傳送選單），例如 Wolf Valley 下面是 Vallée des Loups・狼之谷",
   "Geldorak 礦坑照遊戲裡的告示牌改名 Geldorack Mine，礦坑地下城改名 Geldorack Dungeon（遊戲 Dungeons 視窗寫 Geldorack；舊名仍可搜尋）",

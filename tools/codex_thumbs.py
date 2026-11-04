@@ -1,63 +1,80 @@
-"""Crop 128 px monster thumbnails from in-game codex screenshots (2560x1440, Monstres page).
+"""Cut out 128 px monster thumbnails (transparent PNG) from in-game codex screenshots (2560x1440, Monstres page).
 Usage: python3 -I tools/codex_thumbs.py <folder of codex_###_*.png> <out folder>
-Finds the centre panel on row 455, masks pixels that differ from the panel colour in the model band (y 445-775),
-keeps the model's connected parts, crops a square around them and pads with the panel colour (never the header or name text).
-Writes mob_###.jpg and sheet.jpg (contact sheet to check by eye). The screenshots stay local; only the thumbnails go to icons/mobs/."""
+The codex panel is semi-transparent, so the game world shows through it and the background is uneven (user 2026-11-04):
+the model is cut out instead of cropped with its background.
+ 1. find the centre panel on row 455; work in the model band (y 440-780) inside it
+ 2. estimate the (smoothly varying) background: inpaint the likely-model pixels, then blur heavily
+ 3. pixels that differ from that background = model, except the codex's soft glow behind it (neutral, bright, no texture); keep the model's connected parts (TOP_ONLY: upper copy only)
+ 4. fill holes inside the model, shrink the edge 1 px and feather it (no background halo)
+ 5. square crop around the model, 128 px RGBA PNG
+Writes mob_###.png and sheet.png (on a checkerboard and on a dark colour, to check by eye).
+The screenshots stay local; only the thumbnails go to icons/mobs/."""
 import sys,glob,os,re
 import numpy as np
-from PIL import Image
+from PIL import Image,ImageDraw
 import cv2
 src,out=sys.argv[1],sys.argv[2];os.makedirs(out,exist_ok=True)
-tiles=[]
+# the codex draws these models twice (whole monster on top, loose parts underneath; a server-side glitch): keep the top
 TOP_ONLY={'041','042','043'}
-# bosses and mini-bosses face right (user 2026-11-04, option B): the owner picks frames where the model itself has
-# turned to face right; no mirroring here (mirroring would swap weapon hands and one-sided details)
-FLIP=set()
-for f in sorted(glob.glob(src+'/*.png')):
-    num=re.search(r'codex_(\d{3})',f).group(1)
-    im=np.array(Image.open(f).convert('RGB')).astype(int)
-    # find centre panel: on row y=560 the panel is a long light run around x 750..1440 (shifts right sometimes)
-    row=im[455]; light=(row.min(1)>175)&(row.max(1)-row.min(1)<30)
+tiles=[]
+def panel_x(im):
+    row=im[455];light=(row.min(1)>175)&(row.max(1)-row.min(1)<30)
     runs=[];s=None
     for x,v in enumerate(light):
         if v and s is None:s=x
         if not v and s is not None:runs.append((s,x));s=None
     if s is not None:runs.append((s,len(light)))
     runs=[r for r in runs if 450<r[1]-r[0]<800 and 600<r[0]<1200]
-    x0,x1=max(runs,key=lambda r:r[1]-r[0]) if runs else (744,1440)
-    y0,y1=445,775
-    reg=im[y0:y1,x0+10:x1-10]
-    bg=np.median(np.concatenate([reg[:6].reshape(-1,3),reg[-6:].reshape(-1,3)]),0)
-    d=np.abs(reg-bg).sum(2); mask=(d>60).astype(np.uint8)
-    mask=cv2.morphologyEx(mask,cv2.MORPH_CLOSE,np.ones((5,5),np.uint8))
-    n,lab,st,_=cv2.connectedComponentsWithStats(mask)
-    W_=reg.shape[1];keep=[i for i in range(1,n) if st[i,4]>400 and st[i,0]>2 and st[i,0]+st[i,2]<W_-2 and st[i,1]+st[i,3]<reg.shape[0]-1]
-    if not keep: print(num,'nothing');continue
-    big=max(keep,key=lambda i:st[i,4])
-    # union of components that are reasonably big (detached parts of the model) and near the main one
-    xs=[];ys=[]
-    # TOP_ONLY: the codex renders these models twice (whole monster on top, loose parts underneath, a server-side glitch):
-    # keep only the parts that overlap the main body vertically
-    by0_,by1_=st[big,1],st[big,1]+st[big,3]
-    for i in keep:
-        if num in TOP_ONLY and not (st[i,1]<by1_ and st[i,1]+st[i,3]>by0_): continue
-        if st[i,4]>=0.03*st[big,4]:
-            xs+= [st[i,0],st[i,0]+st[i,2]]; ys+=[st[i,1],st[i,1]+st[i,3]]
-    bx0,bx1,by0,by1=min(xs),max(xs),min(ys),max(ys)
-    cx,cy=(bx0+bx1)/2,(by0+by1)/2; side=max(bx1-bx0,by1-by0)*1.12
-    X0=int(x0+10+cx-side/2);Y0=int(y0+cy-side/2);S=int(side)
-    full=Image.open(f).convert('RGB')
-    # never reach into the header line above or the name text below: take what lies inside the model band, pad the rest with the panel colour
-    band=(max(X0,x0+10),max(Y0,y0-8),min(X0+S,x1-10),min(Y0+S,y1+8))
-    sq=Image.new('RGB',(S,S),tuple(int(v) for v in bg))
-    sq.paste(full.crop(band),(band[0]-X0,band[1]-Y0))
-    crop=sq.resize((128,128),Image.LANCZOS)
-    if num in FLIP: crop=crop.transpose(Image.FLIP_LEFT_RIGHT)
-    crop.save(f'{out}/mob_{num}.jpg',quality=88)
-    tiles.append((num,crop)); print(num,'panel',x0,x1,'box',S)
-W=8;sheet=Image.new('RGB',(W*136,((len(tiles)+W-1)//W)*150),(40,40,40))
-from PIL import ImageDraw
-dr=ImageDraw.Draw(sheet)
+    return max(runs,key=lambda r:r[1]-r[0]) if runs else (744,1440)
+for f in sorted(glob.glob(src+'/*.png')):
+    num=re.search(r'codex_(\d{3})',f).group(1)
+    rgb=np.array(Image.open(f).convert('RGB'))
+    x0,x1=panel_x(rgb.astype(int))
+    X0,X1,Y0,Y1=x0+12,x1-12,440,780
+    reg=rgb[Y0:Y1,X0:X1].copy();H,W=reg.shape[:2]
+    # 2-3: background estimate and model mask (two rounds)
+    fg=np.zeros((H,W),np.uint8)
+    g=reg.astype(np.float32);gray=g.mean(2)
+    sd=np.sqrt(np.maximum(cv2.blur(gray*gray,(5,5))-cv2.blur(gray,(5,5))**2,0))
+    glow=((g.max(2)-g.min(2))<16)&(g.min(2)>165)&(sd<3.5)
+    for it in range(3):
+        hole=cv2.dilate(fg,np.ones((15,15),np.uint8)) if it else fg
+        bg=cv2.inpaint(reg,hole*255,9,cv2.INPAINT_TELEA) if it else reg
+        bg=cv2.GaussianBlur(bg,(0,0),25 if it else 40)
+        d=np.abs(reg.astype(int)-bg.astype(int)).sum(2)
+        fg=(d>(36 if it else 60)).astype(np.uint8)
+        # the codex draws a soft light glow behind the model: neutral, bright and smooth (no pixel texture) -> not model
+        fg[glow]=0
+        fg=cv2.morphologyEx(fg,cv2.MORPH_CLOSE,np.ones((5,5),np.uint8))
+        n,lab,st,_=cv2.connectedComponentsWithStats(fg)
+        keep=[i for i in range(1,n) if st[i,4]>300 and st[i,0]>2 and st[i,0]+st[i,2]<W-2 and st[i,1]+st[i,3]<H-1]
+        if not keep: break
+        big=max(keep,key=lambda i:st[i,4])
+        if num in TOP_ONLY: big=min([i for i in keep if st[i,4]>=0.2*st[big,4]],key=lambda i:st[i,1])
+        b0,b1=st[big,1],st[big,1]+st[big,3]
+        sel=[i for i in keep if st[i,4]>=0.02*st[big,4] and (num not in TOP_ONLY or (st[i,1]<b1 and st[i,1]+st[i,3]>b0))]
+        fg=np.isin(lab,sel).astype(np.uint8)
+    if not fg.any(): print(num,'nothing');continue
+    # 4: fill holes inside the model (translucent slimes, faces close to the panel colour); no GrabCut: it grew halos
+    m=fg.copy();inv=(1-m).astype(np.uint8);n,lab,st,_=cv2.connectedComponentsWithStats(inv)
+    for i in range(1,n):
+        if st[i,0]>0 and st[i,1]>0 and st[i,0]+st[i,2]<W and st[i,1]+st[i,3]<H: m[lab==i]=1
+    alpha=cv2.GaussianBlur(cv2.erode(m*255,np.ones((2,2),np.uint8)).astype(np.float32),(0,0),0.8)
+    rgba=np.dstack([reg,np.clip(alpha,0,255).astype(np.uint8)])
+    # 5: square crop
+    ys,xs=np.nonzero(m);bx0,bx1,by0,by1=xs.min(),xs.max()+1,ys.min(),ys.max()+1
+    side=int(max(bx1-bx0,by1-by0)*1.08);cx,cy=(bx0+bx1)//2,(by0+by1)//2
+    sq=Image.new('RGBA',(side,side),(0,0,0,0));tile=Image.fromarray(rgba,'RGBA')
+    sq.paste(tile.crop((cx-side//2,cy-side//2,cx-side//2+side,cy-side//2+side)),(0,0))
+    th=sq.resize((128,128),Image.LANCZOS);th.save(f'{out}/mob_{num}.png',optimize=True)
+    tiles.append((num,th));print(num,'panel',x0,x1,'model px',int(m.sum()))
+# contact sheet: each thumbnail on a checkerboard and on the site's dark ring colour
+T=128;sheet=Image.new('RGB',(8*(2*T+12)+8,((len(tiles)+7)//8)*(T+22)+8),(40,40,40));dr=ImageDraw.Draw(sheet)
+chk=Image.new('RGB',(T,T));cd=ImageDraw.Draw(chk)
+for yy in range(0,T,16):
+    for xx in range(0,T,16): cd.rectangle([xx,yy,xx+15,yy+15],fill=(255,255,255) if (xx+yy)//16%2 else (205,205,205))
 for k,(num,c) in enumerate(tiles):
-    x=(k%W)*136+4;y=(k//W)*150+4;sheet.paste(c,(x,y));dr.text((x,y+130),'#'+num,fill=(255,255,255))
-sheet.save(out+'/sheet.jpg',quality=88)
+    x=8+(k%8)*(2*T+12);y=8+(k//8)*(T+22)
+    a=chk.copy();a.paste(c,(0,0),c);sheet.paste(a,(x,y))
+    b=Image.new('RGB',(T,T),(22,30,40));b.paste(c,(0,0),c);sheet.paste(b,(x+T,y));dr.text((x,y+T+4),'#'+num,fill=(255,255,255))
+sheet.save(out+'/sheet.png')
