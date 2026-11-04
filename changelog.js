@@ -3,6 +3,7 @@
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
  ["2026-11-04",[
+  "照遊戲的物品說明視窗校正：Flower of a Nepenthes 名稱確認並補上數值；Skeleton Wizard 的 Magic Staff of the Ruins 掉落率 0.5%（原 wiki 寫 2%）；Narax 的戒指 3%（原 1%）",
   "26 隻怪物的圖示換成遊戲圖鑑裡的模型（去背，背景乾淨一致）",
   "地圖上被傳送點名稱擋住的地下城名稱，改顯示在入口點的下方（例如 Geldorack Mine 旁的 Geldorack Dungeon）",
   "地點資料的名稱下面加上遊戲裡的法文名稱（遊戲圖鑑和傳送選單），例如 Wolf Valley 下面是 Vallée des Loups・狼之谷",

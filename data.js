@@ -78,8 +78,8 @@ const M = [
 ["027","Skeleton Archer","Monster","A","ruins",2,[["Souls of the Ruins",80],["Skeleton Bone",75],["Bone Dust",70],["Archers Scroll",50]],"","🏹"],
 ["","Skeleton","Monster","A","none",1,[],"","💀"],
 ["028","Skeleton Tank","Monster","A","skeld",2,[["Souls of the Ruins",80],["Skeleton Bone",75],["Bone Dust",70],["Reinforced Skeleton Bone",70]],"","💀"],
-["029","Skeleton Wizard","Monster","A","skeld",2,[["Souls of the Ruins",80],["Skeleton Bone",75],["Cursed Cloth",75],["Bone Dust",70],["Skeleton Mage Staff",2,"wiki"],["Skeleton Shaman Staff",2,"wiki"]],"","💀",["Skeleton Sorcerer"]],
-["038","Narax Cursed Skeleton","Mini-Boss","A","skeld",2,[["Putrefied Heart",75],["Cursed Skeleton Mage Staff",3],["Cursed Skeleton Shaman Staff",3],["Narax's Ring",1]],"","☠️",["Narax the Cursed Skeleton"]],
+["029","Skeleton Wizard","Monster","A","skeld",2,[["Souls of the Ruins",80],["Skeleton Bone",75],["Cursed Cloth",75],["Bone Dust",70],["Skeleton Mage Staff",0.5],["Skeleton Shaman Staff",2,"wiki"]],"","💀",["Skeleton Sorcerer"]],
+["038","Narax Cursed Skeleton","Mini-Boss","A","skeld",2,[["Putrefied Heart",75],["Cursed Skeleton Mage Staff",3],["Cursed Skeleton Shaman Staff",3],["Narax's Ring",3]],"","☠️",["Narax the Cursed Skeleton"]],
 ["030","Cursed Nazgul Protector","Boss","A","skeld",3,[["Spectral Mane Piece",1],["Cursed Hoof Shard",3]],"LV 8，打法分兩個階段：第一階段騎在幽靈馬上衝撞，第二階段下馬、拿長柄武器步戰。位置在骷髏地下城底下的洞窟草地（截圖小地圖約 X 2851 · Z 4196、Y −35），主線 #23 Behind the Great Door 要打倒牠。（玩家的遊戲截圖，2026-11-01）","🐴",["Nasgul"],8],
 ["039","Bandit Archer","Monster","A","geldorak",2,[["Worn Leather",85],["Small Pouch",75],["Bandit Crossbow",0.5]],"傷害 5","🏹"],
 ["040","Bandit Assassin","Monster","A","geldorak",2,[["Worn Leather",80],["Small Pouch",70],["Bandit Dagger",0.5]],"傷害 5","🗡️"],
@@ -230,7 +230,7 @@ const RAW = {
 "Curved Bow":[null,null,null,"unknown",null,null,null,-1],
 "Unknown Logs":[null,null,null,"unknown",null,null,null,-1],
 "Sylvan Shaman Staff":[null,null,null,"unknown",null,null,null,-1],
-"Flower of a Nepenthes":[null,null,null,"artifact",null,null,null,188],
+"Flower of a Nepenthes":[null,null,5,"artifact",null,null,{"Magic Damage":2.5,"Max Health":2,"Max Mana":0.5},188],
 "Leg of a Spider":[null,"a",7,"artifact","The leg of a giant spider, quick and unpredictable, it dodges as much as it stings",null,{"Critical Strike Chance":1,"Projectile Damage":2,"Dodge":2.5},182],
 "Swordsmans Scroll":[null,null,null,"unknown",null,null,null,-1],
 "Archers Scroll":[null,null,null,"unknown",null,null,null,-1],
@@ -239,7 +239,7 @@ const RAW = {
 
 // How each item is obtained besides monster drops (source text) and what it is used for (paraphrased from its official description).
 const EXTRA = {
-"Flower of a Nepenthes":{note:"名稱是推斷的：遊戲圖鑑的 Nephentes 第 3 格掉落（0.5%，紅花圖示）沒有顯示名稱；起始之城 Accessory Recycling 的回收清單有「Flower of a Nepenthes」，和 Forest Spider 0.5% 掉的 Leg of a Spider 同一系列。數值還沒有資料。圖示取自站長的圖鑑截圖。"},
+"Flower of a Nepenthes":{note:"名稱和數值取自遊戲的物品說明視窗（站長 2026-11-04 截圖）：飾品，需求等級 5，屬於 Nepenthes Set；說明「The flower of a Nepenthes torn off alive; it pours its magic into the veins of its bearer」。取得：Nephentes 掉落 0.5%；Shop - Mizunari 收購 25 Cols。圖示取自站長的圖鑑截圖。"},
 "Leg of a Spider":{set:{name:"Spider Set（蜘蛛套裝）",tiers:[[2,"+2.5% 移動速度"],[3,"+0.025 攻擊速度"],[4,"+2.5% 閃避"],[5,"+0.25 攻擊傷害、+1% 暴擊率"]]},note:"套裝效果的名稱、數值、說明取自社群截圖（2026-10-30），法文名稱未知；wiki 原本寫成 Leg of Spider。圖示來自遊戲資源包（patte_araignee），與截圖一致。當時拍賣行最低價約 300 Col。"},
 "Spider Thread":{note:"圖示來自遊戲資源包（drop_fils_blanc），依外觀推斷對應，官方圖鑑沒有圖示。"},
 "Oak Log":{src:"伐木職業（Bûcheron）採集"},
