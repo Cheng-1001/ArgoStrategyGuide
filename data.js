@@ -121,7 +121,8 @@ const M = [
 ].map((r,i)=>({id:"m"+i,num:r[0],name:r[1],type:r[2],beh:r[3],zone:r[4],diff:r[5],drops:r[6],note:r[7],icon:r[8],aka:r[9]||[],lvShot:r[10]}));
 const PHOTO = {
   // 2026-11-04: 128 px crops of the owner's in-game codex video frames (3/4 view, facing left; frames not published).
-  // #041-#043 are left out: the codex shows those models with detached parts in every frame.
+  // Left out until better frames: #013, #024, #038 (back view), #026, #027, #028, #044 (angle too far off).
+  // #041-#043: the codex draws the whole monster on top and loose parts below (server glitch); only the top is kept.
   "Corrupted Boar":"icons/mobs/mob_001.jpg",
   "Pumba":"icons/mobs/mob_002.jpg",
   "White Dire Wolf":"icons/mobs/mob_003.jpg",
@@ -133,7 +134,6 @@ const PHOTO = {
   "Elite Treant":"icons/mobs/mob_010.jpg",
   "Mini Treant":"icons/mobs/mob_011.jpg",
   "Woodland Mage":"icons/mobs/mob_012.jpg",
-  "Guardian Colossal":"icons/mobs/mob_013.jpg",
   "Forest Spider":"icons/mobs/mob_014.jpg",
   "Mountain Deer":"icons/mobs/mob_018.jpg",
   "Slime Warrior":"icons/mobs/mob_019.jpg",
@@ -141,17 +141,14 @@ const PHOTO = {
   "Healer Slime":"icons/mobs/mob_021.jpg",
   "Mage Slime":"icons/mobs/mob_022.jpg",
   "Gorbel, King of Slimes":"icons/mobs/mob_023.jpg",
-  "Skeleton Swordsman":"icons/mobs/mob_024.jpg",
   "Skeleton Warrior":"icons/mobs/mob_025.jpg",
-  "Skeleton Halberdier":"icons/mobs/mob_026.jpg",
-  "Skeleton Archer":"icons/mobs/mob_027.jpg",
-  "Skeleton Tank":"icons/mobs/mob_028.jpg",
   "Skeleton Wizard":"icons/mobs/mob_029.jpg",
   "Cursed Nazgul Protector":"icons/mobs/mob_030.jpg",
-  "Narax Cursed Skeleton":"icons/mobs/mob_038.jpg",
   "Bandit Archer":"icons/mobs/mob_039.jpg",
   "Bandit Assassin":"icons/mobs/mob_040.jpg",
-  "Forest Devouring Plant":"icons/mobs/mob_044.jpg" };
+  "Sturdy Bandit":"icons/mobs/mob_041.jpg",
+  "Forest Treant":"icons/mobs/mob_042.jpg",
+  "Evil Forest Treant":"icons/mobs/mob_043.jpg" };
 
 /* Items. Key = English drop name from the Bestiary (or an English label for quest-only items).
    [French name, rarity, level, category, description (FR), damage, stats, icon index in items.png (-1 = none)] */

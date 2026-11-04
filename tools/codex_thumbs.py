@@ -9,6 +9,11 @@ from PIL import Image
 import cv2
 src,out=sys.argv[1],sys.argv[2];os.makedirs(out,exist_ok=True)
 tiles=[]
+TOP_ONLY={'041','042','043'}
+# bosses and mini-bosses face the other way (user 2026-11-04), so they stand apart from ordinary monsters:
+# mirror them; the types come from data.js (codex number -> type)
+_d=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','data.js'),encoding='utf8').read()
+FLIP={m.group(1) for m in re.finditer(r'^\["(\d{3})","[^"]+","(Boss|Mini-Boss)"',_d,re.M)}
 for f in sorted(glob.glob(src+'/*.png')):
     num=re.search(r'codex_(\d{3})',f).group(1)
     im=np.array(Image.open(f).convert('RGB')).astype(int)
@@ -32,7 +37,11 @@ for f in sorted(glob.glob(src+'/*.png')):
     big=max(keep,key=lambda i:st[i,4])
     # union of components that are reasonably big (detached parts of the model) and near the main one
     xs=[];ys=[]
+    # TOP_ONLY: the codex renders these models twice (whole monster on top, loose parts underneath, a server-side glitch):
+    # keep only the parts that overlap the main body vertically
+    by0_,by1_=st[big,1],st[big,1]+st[big,3]
     for i in keep:
+        if num in TOP_ONLY and not (st[i,1]<by1_ and st[i,1]+st[i,3]>by0_): continue
         if st[i,4]>=0.03*st[big,4]:
             xs+= [st[i,0],st[i,0]+st[i,2]]; ys+=[st[i,1],st[i,1]+st[i,3]]
     bx0,bx1,by0,by1=min(xs),max(xs),min(ys),max(ys)
@@ -44,6 +53,7 @@ for f in sorted(glob.glob(src+'/*.png')):
     sq=Image.new('RGB',(S,S),tuple(int(v) for v in bg))
     sq.paste(full.crop(band),(band[0]-X0,band[1]-Y0))
     crop=sq.resize((128,128),Image.LANCZOS)
+    if num in FLIP: crop=crop.transpose(Image.FLIP_LEFT_RIGHT)
     crop.save(f'{out}/mob_{num}.jpg',quality=88)
     tiles.append((num,crop)); print(num,'panel',x0,x1,'box',S)
 W=8;sheet=Image.new('RGB',(W*136,((len(tiles)+W-1)//W)*150),(40,40,40))
