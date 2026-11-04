@@ -21,29 +21,31 @@ const STATUS = {
 };
 
 const ZONES = {
-  boar:     { n: "Boar Zone", zh: "野豬區（起始之城北）", zl: "野豬區", note: "圖鑑把 Corrupted Boar 列在 Town of Beginnings，首領 Pumba 列在 Boar Zone；wiki 的 Pumba 頁面說牠會在起始之城外的野豬區定時重生。" },
-  wolf:     { n: "Wolf Valley", zh: "狼之谷", zl: "狼之谷" },
+  boar:     { n: "Zone Boar", zh: "野豬區（起始之城北）", zl: "野豬區", old: "Boar Zone", note: "圖鑑把 Corrupted Boar 列在 Town of Beginnings，首領 Pumba 列在 Boar Zone；wiki 的 Pumba 頁面說牠會在起始之城外的野豬區定時重生。" },
+  wolf:     { n: "Vallée des Loups", zh: "狼之谷", zl: "狼之谷", old: "Wolf Valley" },
   mizunari: { n: "Mizunari Fields", zh: "Mizunari 田野", zl: "", note: "Mizunari 是供應首都糧食的農村。" },
-  putrid:   { n: "Putrid Swamp", zh: "腐臭沼澤", zl: "腐臭沼澤", note: "主線第 15 段提到「Hanaka 北邊的沼澤」。" },
+  putrid:   { n: "Marécage Putride", zh: "腐臭沼澤", zl: "腐臭沼澤", old: "Putrid Swamp", note: "主線第 15 段提到「Hanaka 北邊的沼澤」。" },
   vallhat:  { n: "Vallhat", zh: "Vallhat（史萊姆區）", zl: "史萊姆區", note: "Vallhat 是需靠傳送器上去的懸空城；主線提到史萊姆王 Gorbel 在南方沼澤出沒。" },
   hanaka:   { n: "Hanaka", zh: "Hanaka 周邊", zl: "", note: "主線提到 Hanaka 附近有「小蛛網森林」。" },
   arakhnol: { n: "Arakh'Nol", zh: "Arakh'Nol", zl: "" },
   arakhnolD:{ n: "Ara'knol Dungeons", zh: "Ara'knol 地下城", zl: "" },
-  ruins:    { n: "Forgotten Ruins", zh: "遺忘廢墟（舊稱 Cursed Ruins）", zl: "遺忘廢墟" },
+  ruins:    { n: "Ruines Oubliées", zh: "遺忘廢墟", zl: "遺忘廢墟", old: "Forgotten Ruins" },
   skeld:    { n: "Skeleton Dungeon", zh: "骷髏地下城", zl: "骷髏地下城" },
-  geldorak: { n: "Geldorak Mine", zh: "Geldorak 礦坑", zl: "" },
-  geldorakD:{ n: "Geldorak Mine Dungeon", zh: "Geldorak 礦坑地下城", zl: "", note: "進入需要 Clé de la Forêt（森林之鑰）。" },
+  geldorak: { n: "Mine de Geldorak", zh: "Geldorak 礦坑", zl: "Geldorak 礦坑", old: "Geldorak Mine" },
+  geldorakD:{ n: "Geldorack Mine", zh: "Geldorak 礦坑地下城", zl: "礦坑地下城", old: "Geldorak Mine Dungeon", note: "進入需要 Clé de la Forêt（森林之鑰）。" },
   fallen:   { n: "Labyrinth of the Fallen", zh: "墮落者迷宮", zl: "墮落者迷宮", note: "進入需要 Clé des Déchus（墮落者之鑰）。打倒 3 位 Fallen 小首領取得的 Artefact des Fallens 用來開啟雙子騎士（Ornstein 與 Smough）的首領房。" },
   xal:      { n: "Sanctuary of Xal'Zirith", zh: "Xal'Zirith 聖所", zl: "", note: "進入需要 Clé de Xal'Zirith。" },
   snow:     { n: "Tolbana Mountains", zh: "Tolbana 雪山", zl: "", note: "圖鑑寫 Mountain Deer 在「Tolbana 西北的雪地」。" },
   citadel:  { n: "Snow Citadel", zh: "雪之城塞", zl: "雪之城塞" },
   virelune: { n: "Virelune Lake", zh: "Virelune 湖", zl: "", note: "Virelune 的 NPC Monique 有「擊殺 10 隻鯊魚」任務。" },
-  kobold:   { n: "Kobold Tower", zh: "狗頭人之塔（樓層首領）", zl: "狗頭人之塔", note: "樓層地下城分三段：迷宮（啟動 4 個拉桿，順序不限）→ 大廳怪物波次 → 首領 Illfang。" },
+  kobold:   { n: "Tour du Kobold", zh: "狗頭人之塔（樓層首領）", zl: "狗頭人之塔", old: "Kobold Tower", note: "樓層地下城分三段：迷宮（啟動 4 個拉桿，順序不限）→ 大廳怪物波次 → 首領 Illfang。" },
   aepep:    { n: "Aepep's Lair", zh: "Aepep 巢穴", zl: "" },
   none:     { n: "Unlisted", zh: "wiki 未標示區域" }
 };
 const ZONE_ORDER = ["boar","wolf","mizunari","putrid","vallhat","hanaka","arakhnol","virelune","snow","ruins","geldorak","geldorakD","skeld","fallen","xal","arakhnolD","citadel","aepep","kobold","none"];
 
+// Names (2026-11-04 user rule): in-game screen first, then wiki, then the reference map; English title when the game shows English,
+// French when only a French screen exists; French/Chinese go in the subtitle; the previous name goes in old (search keeps it).
 // Zone zl = short Chinese label for the monster-zone select ("" = the English name says it all; omitted = show zh).
 // [num, name, type, behaviour A/N/P, zone, difficulty (0 = unrated), drops [[itemId, %]], note, icon, aka (old names, optional)]
 // Names follow the in-game codex (via the wiki display names, rev 2797 on 2026-10-31); renamed monsters keep old names in aka.
@@ -274,35 +276,35 @@ const TOWNS = [
    Map spots. Coordinates given by the user (in-game X / Z) unless src says otherwise.
    kind: boss | dungeon | mob | poi ; mons = monster names shown there ; items = items gathered there */
 const SPOTS = [
- {id:"pumba",area:[[1650,3480],[1740,3420],[1880,3410],[2000,3440],[2060,3530],[2050,3640],[1960,3700],[1800,3700],[1680,3650],[1640,3560]],kind:"mob",n:"Boar Zone",csrc:"Zone Boar",old:"Zone Boar / Pumba",nsrc:"wiki",zh:"野豬區・Pumba 重生點",x:1828,z:3555,mons:["Corrupted Boar","Pumba"],note:"座標為 Pumba 的位置；地圖上的「Zone Sanglier」標示也在這裡。Corrupted Boar 分布在周圍森林。參考互動地圖標了 5 個 Pumba（Corrupted Pumba）重生點：X 1859 · Z 3606、X 1677 · Z 3581、X 1974 · Z 3583、X 1931 · Z 3515、X 1987 · Z 3636。"},
- {id:"wolf",area:[[2360,3700],[2440,3650],[2580,3640],[2690,3680],[2710,3780],[2660,3900],[2600,3990],[2470,4010],[2390,3960],[2350,3860]],tp:"Vallée des Loups",kind:"mob",n:"Wolf Valley",csrc:"Vallée des Loups",old:"Vallée des Loups",zh:"狼之谷",x:2445,z:3930,mons:["White Dire Wolf","Black Dire Wolf"]},
+ {id:"pumba",area:[[1650,3480],[1740,3420],[1880,3410],[2000,3440],[2060,3530],[2050,3640],[1960,3700],[1800,3700],[1680,3650],[1640,3560]],kind:"mob",n:"Zone Boar",csrc:1,old:"Boar Zone / Pumba",nsrc:"wiki",zh:"野豬區・Pumba 重生點",x:1828,z:3555,mons:["Corrupted Boar","Pumba"],note:"座標為 Pumba 的位置；地圖上的「Zone Sanglier」標示也在這裡。Corrupted Boar 分布在周圍森林。參考互動地圖標了 5 個 Pumba（Corrupted Pumba）重生點：X 1859 · Z 3606、X 1677 · Z 3581、X 1974 · Z 3583、X 1931 · Z 3515、X 1987 · Z 3636。"},
+ {id:"wolf",area:[[2360,3700],[2440,3650],[2580,3640],[2690,3680],[2710,3780],[2660,3900],[2600,3990],[2470,4010],[2390,3960],[2350,3860]],tp:"Vallée des Loups",kind:"mob",n:"Vallée des Loups",csrc:1,old:"Wolf Valley",zh:"狼之谷",x:2445,z:3930,mons:["White Dire Wolf","Black Dire Wolf"]},
  {id:"nephentes",area:[[3300,3730],[3380,3715],[3425,3770],[3405,3835],[3330,3845],[3290,3790]],kind:"mob",n:"Mizunari Fields",old:"Nephentes",nsrc:"wiki",zh:"Mizunari 田野・豬籠草",x:3376,z:3772,mons:["Nephentes"]},
- {id:"swamp",area:[[1010,3000],[1100,2930],[1300,2890],[1450,2870],[1640,2880],[1700,2990],[1700,3180],[1610,3270],[1400,3280],[1200,3270],[1040,3230],[1000,3110]],kind:"mob",n:"Putrid Swamp",csrc:"Marécage Putride",old:"Marécage Putride / Treants / Swamp",nsrc:"wiki",zh:"腐臭沼澤・樹人",x:1501,z:3207,mons:["Treant Warrior","Elite Treant","Mini Treant","Woodland Mage"]},
+ {id:"swamp",area:[[1010,3000],[1100,2930],[1300,2890],[1450,2870],[1640,2880],[1700,2990],[1700,3180],[1610,3270],[1400,3280],[1200,3270],[1040,3230],[1000,3110]],kind:"mob",n:"Marécage Putride",csrc:1,old:"Putrid Swamp / Treants / Swamp",nsrc:"wiki",zh:"腐臭沼澤・樹人",x:1501,z:3207,mons:["Treant Warrior","Elite Treant","Mini Treant","Woodland Mage"]},
  {id:"slimes",area:[[160,2840],[300,2800],[470,2810],[570,2860],[590,3000],[560,3120],[430,3160],[290,3140],[180,3060],[150,2950]],kind:"mob",nsrc:"site",n:"Slimes",zh:"史萊姆區",x:530,z:2922,mons:["Slime Warrior","Small Slime","Healer Slime","Mage Slime"]},
  {id:"spiders",area:[[1290,3500],[1400,3480],[1445,3560],[1410,3645],[1310,3655],[1270,3580]],kind:"mob",nsrc:"site",n:"Spiders / Forest",zh:"蜘蛛森林（Hanaka 附近）",x:1366,z:3618,mons:["Young Spider"],note:"座標只寫「Spiders / Forest」。圖鑑把 Young Spider 列在 Hanaka；Hanaka 的 Scout Raphael 也有燒蜘蛛網的任務。Forest Spider 改標在北邊的 Arakh'Nol（參考互動地圖的怪物區域）。"},
  {id:"arakhnol",area:[[1080,1150],[1250,1130],[1420,1180],[1500,1290],[1545,1370],[1540,1460],[1450,1510],[1340,1600],[1170,1570],[1080,1440],[1050,1280]],kind:"mob",n:"Arakh'Nol",zh:"Arakh'Nol 森林・蜘蛛",x:1239,z:1374,src:"ref",mons:["Forest Spider"],note:"參考互動地圖把 Forest Spider 的出沒區域畫在這裡（約 X 1100–1380, Z 1250–1500），和圖鑑寫的 Arakh'Nol 一致。"},
  {id:"virelune",area:[[1290,1960],[1450,1890],[1610,1890],[1660,1990],[1640,2120],[1500,2160],[1330,2120],[1280,2040]],kind:"mob",n:"Virelune Lake",old:"Virelune & Sharks",nsrc:"wiki",zh:"Virelune 湖・鯊魚",x:1492,z:2013,mons:["Shark Fish"]},
  {id:"deers",area:[[3900,950],[4100,920],[4260,980],[4300,1150],[4220,1320],[4040,1350],[3920,1250],[3880,1080]],kind:"mob",n:"Tolbana Mountains",old:"Deers",nsrc:"wiki",zh:"山鹿",x:4102,z:1137,mons:["Mountain Deer"]},
  {id:"icefort",area:[[3900,1900],[4060,1880],[4110,1990],[4080,2110],[3950,2120],[3880,2020]],kind:"mob",n:"Snow Citadel",old:"Ice Fortress",nsrc:"wiki",zh:"冰之要塞（Snow Citadel）",x:4013,z:2007,mons:["Ice Golem","Ice Spirit"],note:"圖鑑把這三隻的區域寫成 Snow Citadel（雪之城塞），應該就是這座冰之要塞。"},
- {id:"bandits",area:[[4060,3820],[4220,3790],[4320,3850],[4310,3980],[4170,4020],[4060,3960]],kind:"mob",nsrc:"site",n:"Bandits",zh:"盜賊",x:4156,z:3889,mons:["Bandit Archer","Bandit Assassin","Sturdy Bandit"],note:"圖鑑把盜賊列在 Geldorak Mine，就在礦坑地下城旁。"},
+ {id:"bandits",area:[[4060,3820],[4220,3790],[4320,3850],[4310,3980],[4170,4020],[4060,3960]],kind:"mob",nsrc:"site",n:"Bandits",zh:"盜賊",x:4156,z:3889,mons:["Bandit Archer","Bandit Assassin","Sturdy Bandit"],note:"圖鑑把盜賊列在 Mine de Geldorak，就在礦坑地下城旁。"},
  {id:"nenuphars",kind:"poi",n:"Lac des Nénuphars",zh:"睡蓮湖",csrc:1,src:"player",x:2438,z:2783,note:"遊戲圖鑑區域 #011。站長 2026-11-03 截圖：走到這裡畫面出現地名「Lac des Nénuphars」（座標是當時站的位置，在湖邊）。遊戲裡沒有英文名稱，所以用法文原名。"},
- {id:"geldorak",tp:"Mine de Geldorak",kind:"poi",n:"Geldorak Mine",zh:"Geldorak 礦坑",x:4267,z:3894,note:"遊戲傳送選單的「Mine de Geldorak」。圖鑑把盜賊和 Ika 的區域寫成 Geldorak Mine；礦坑裡是 Geldorak Mine Dungeon。"},
- {id:"geldorakd",kind:"dungeon",n:"Geldorak Mine Dungeon",zh:"Geldorak 礦坑地下城",dg:{date:"2026-11-03",title:"Geldorack",boss:"Les gardiens de la Forêt",bossZh:"森林守護者",key:"Forest Key",modes:["Easy","Initiate","Hard","Integrity"],easy:[["時間限制","沒有（None）"],["掉下去","送回入口（Sent back If you fall）"],["人數","1～4 人"],["建議等級","6 以上"]],loot:[["Bond of the Sylve",null,5],["Potion of Albal",null,10],["Drop of Sap",null,15],["250 Cols Pouch",null,100]]},x:4288,z:3887,src:"ref",mons:["Devouring Plant","Forest Treant","Evil Forest Treant","Forest Brute","Forest Devouring Plant","Fallen Mauler","Vyrmos, the Royal Thorn","Tornak"],note:"在 Geldorak Mine 傳送點旁，入口有守衛 NPC。進入地下城需要 Clé de la Forêt（森林之鑰）。名稱取自圖鑑的區域欄（Fallen Mauler），入口座標取自參考互動地圖的主線步驟。"},
- {id:"ika",area:[[3200,4040],[3300,4000],[3400,4040],[3420,4160],[3330,4220],[3220,4180]],kind:"mob",nsrc:"site",n:"Ika Archipelago",zh:"Ika 群島",x:3271,z:4090,mons:["Ika"],note:"圖鑑把 Ika 列在 Geldorak Mine；這裡用使用者提供的 Ika 群島。"},
- {id:"fallen",kind:"dungeon",n:"Labyrinth of the Fallen",old:"Fallen Dungeon",zh:"墮落者迷宮",dg:{date:"2026-11-03",boss:"Le duo des Déchus",bossZh:"墮落者二人組（Ornstein 和 Smough）",key:"Key of the Fallen",modes:["Easy","Initiate","Hard","Integrity"],easy:[["時間限制","45:00"],["掉下去","送回入口（Sent back If you fall）"],["人數","1～4 人"],["建議等級","8 以上"]],loot:[["Forgotten Shield","Ornstein, Fallen Defender",1],["Halberd of the Warden","Smough, Fallen Devastator",1],["Ring of the Fallen",null,3],["Crossbow of Ash",null,3],["Enchanted Metal Piece","Fallen Soldier",20],["Metal Soul Piece","Fallen Warrior",25],["Soul of the Herald","Fallen Herald",30],["Soul of the Warden","Fallen Guardian",30],["Soul of the Reaper","Fallen Reaper",30],["Metal Soul Ingot",null,50],["Enchanted Metal Ingot",null,50],["500 Cols Pouch",null,100]]},x:2383,z:2414,mons:["Fallen Soldier","Fallen Warrior","Fallen Guardian","Fallen Herald","Fallen Reaper","Ornstein, Fallen Defender","Smough, Fallen Devastator"],note:"進入需要 Clé des Déchus。打倒 3 位 Fallen 小首領取得 Artefact des Fallens，才能進雙子騎士的首領房。"},
- {id:"ruins",area:[[2720,4340],[2840,4320],[2930,4380],[2920,4510],[2800,4560],[2710,4480]],tp:"Ruines Maudites des Squelettes",kind:"mob",n:"Cursed Ruins",csrc:"Cursed Ruins des Squelettes",old:"Cursed Ruins des Squelettes",zh:"詛咒廢墟",x:2806,z:4449,mons:["Skeleton Swordsman","Skeleton Warrior","Skeleton Halberdier","Skeleton Archer"]},
+ {id:"geldorak",tp:"Mine de Geldorak",kind:"poi",n:"Mine de Geldorak",nsrc:"tp",old:"Geldorak Mine",zh:"Geldorak 礦坑",x:4267,z:3894,note:"遊戲傳送選單的「Mine de Geldorak」。圖鑑把盜賊和 Ika 的區域寫成 Mine de Geldorak；礦坑裡是 Geldorak Mine Dungeon。"},
+ {id:"geldorakd",kind:"dungeon",n:"Geldorack Mine",nsrc:"game",game:"入口告示牌寫「Geldorack Mine」，Dungeons 視窗寫「Geldorack」，守衛是「Geldorack Dungeon Guard」",old:"Geldorak Mine Dungeon",zh:"Geldorack 礦坑地下城",dg:{date:"2026-11-03",title:"Geldorack",boss:"Les gardiens de la Forêt",bossZh:"森林守護者",key:"Forest Key",modes:["Easy","Initiate","Hard","Integrity"],easy:[["時間限制","沒有（None）"],["掉下去","送回入口（Sent back If you fall）"],["人數","1～4 人"],["建議等級","6 以上"]],loot:[["Bond of the Sylve",null,5],["Potion of Albal",null,10],["Drop of Sap",null,15],["250 Cols Pouch",null,100]]},x:4288,z:3887,src:"ref",mons:["Devouring Plant","Forest Treant","Evil Forest Treant","Forest Brute","Forest Devouring Plant","Fallen Mauler","Vyrmos, the Royal Thorn","Tornak"],note:"在 Mine de Geldorak 傳送點旁，入口有守衛 NPC。進入地下城需要 Clé de la Forêt（森林之鑰）。入口座標取自參考互動地圖的主線步驟。"},
+ {id:"ika",area:[[3200,4040],[3300,4000],[3400,4040],[3420,4160],[3330,4220],[3220,4180]],kind:"mob",nsrc:"site",n:"Ika Archipelago",zh:"Ika 群島",x:3271,z:4090,mons:["Ika"],note:"圖鑑把 Ika 列在 Mine de Geldorak；這裡用使用者提供的 Ika 群島。"},
+ {id:"fallen",kind:"dungeon",n:"Labyrinth of the Fallen",nsrc:"game",game:"Dungeons 視窗、入口告示牌、守衛都寫「Labyrinth of the Fallen」",old:"Fallen Dungeon",zh:"墮落者迷宮",dg:{date:"2026-11-03",boss:"Le duo des Déchus",bossZh:"墮落者二人組（Ornstein 和 Smough）",key:"Key of the Fallen",modes:["Easy","Initiate","Hard","Integrity"],easy:[["時間限制","45:00"],["掉下去","送回入口（Sent back If you fall）"],["人數","1～4 人"],["建議等級","8 以上"]],loot:[["Forgotten Shield","Ornstein, Fallen Defender",1],["Halberd of the Warden","Smough, Fallen Devastator",1],["Ring of the Fallen",null,3],["Crossbow of Ash",null,3],["Enchanted Metal Piece","Fallen Soldier",20],["Metal Soul Piece","Fallen Warrior",25],["Soul of the Herald","Fallen Herald",30],["Soul of the Warden","Fallen Guardian",30],["Soul of the Reaper","Fallen Reaper",30],["Metal Soul Ingot",null,50],["Enchanted Metal Ingot",null,50],["500 Cols Pouch",null,100]]},x:2383,z:2414,mons:["Fallen Soldier","Fallen Warrior","Fallen Guardian","Fallen Herald","Fallen Reaper","Ornstein, Fallen Defender","Smough, Fallen Devastator"],note:"進入需要 Clé des Déchus。打倒 3 位 Fallen 小首領取得 Artefact des Fallens，才能進雙子騎士的首領房。"},
+ {id:"ruins",area:[[2720,4340],[2840,4320],[2930,4380],[2920,4510],[2800,4560],[2710,4480]],tp:"Ruines Maudites des Squelettes",kind:"mob",n:"Cursed Ruins des Squelettes",csrc:1,old:"Cursed Ruins",zh:"詛咒廢墟",x:2806,z:4449,mons:["Skeleton Swordsman","Skeleton Warrior","Skeleton Halberdier","Skeleton Archer"]},
  {id:"xal",kind:"dungeon",n:"Sanctuary of Xal'Zirith",old:"Xal'Zirith Dungeon",zh:"Xal'Zirith 聖所",x:1034,z:1184,src:"ref",mons:["Strangler Spider","Hunting Spider","Venomous Spider","Pricilia","Yula","Jira","Kamilia"],note:"入口在 Arakh'Nol 西北，守衛 NPC 在 X 1013 · Z 1189（進入需要 Clé de Xal'Zirith）。地下的小首領位置（參考互動地圖）：Pricilia X 1232 · Z 1102、Yula X 1102 · Z 1227、Kamilia X 987 · Z 1247、Jira X 1192 · Z 1407。"},
  {id:"skeld",kind:"dungeon",n:"Skeleton Dungeon",zh:"骷髏地下城（Nazgul 副本）",x:2782,z:4422,src:"ref",mons:["Skeleton Tank","Skeleton Wizard","Narax the Cursed Skeleton","Cursed Nazgul Protector"],note:"入口在詛咒廢墟裡。地下的首領位置（參考互動地圖）：Cursed Nazgul Protector X 2829 · Z 4247、Narax X 2722 · Z 4332。"},
- {id:"kobold",kind:"dungeon",n:"Kobold Tower",csrc:"Tour du Kobold",old:"Tour du Kobold",zh:"狗頭人之塔（樓層首領）",x:3409,z:972,src:"ref",mons:["Illfang the Kobold Lord","Kobold Sentinel","Kobold Warrior","Kobold Lancer","Kobold Sorcerer","Small Kobold","The Mischievous Archer"],note:"Tolbana 北邊的塔，第一層樓層首領 Illfang 在塔頂。官方公告：Kobold 地下城和第 2、3 層一起在 11/5（四）03:00（台灣時間）開放。"},
+ {id:"kobold",kind:"dungeon",n:"Tour du Kobold",csrc:1,old:"Kobold Tower",zh:"狗頭人之塔（樓層首領）",x:3409,z:972,src:"ref",mons:["Illfang the Kobold Lord","Kobold Sentinel","Kobold Warrior","Kobold Lancer","Kobold Sorcerer","Small Kobold","The Mischievous Archer"],note:"Tolbana 北邊的塔，第一層樓層首領 Illfang 在塔頂。官方公告：Kobold 地下城和第 2、3 層一起在 11/5（四）03:00（台灣時間）開放。"},
  {id:"wevent",kind:"wboss",n:"Floor 1 World Event",zh:"第 1 層世界事件",x:1947,z:1990,src:"ref",note:"參考互動地圖標的「Floor 1 World Event」位置。世界王 Galiath 本身要在破碎的地下世界做出祭壇才能進入（見「世界王」分頁），這裡是第 1 層的世界事件地點。"},
- {id:"guild",tp:"Guilde Marchand",kind:"poi",n:"Merchant Guild",zh:"商人公會",x:4772,z:2422,src:"ref",note:"商人公會總部，在東北邊的山上。座標取自參考互動地圖。"},
+ {id:"guild",tp:"Guilde Marchand",kind:"poi",n:"Guilde Marchand",nsrc:"tp",old:"Merchant Guild",zh:"商人公會",x:4772,z:2422,src:"ref",note:"商人公會總部，在東北邊的山上。座標取自參考互動地圖。"},
  {id:"mine",kind:"gather",gt:"ore",n:"Aincrad Mine",zh:"Aincrad 礦坑（東礦坑）",x:2396,z:3527,items:["Iron Ore","Copper Ingot"],note:"礦坑。參考互動地圖稱為 East Mines（X 2399 · Z 3510），可採 Coal Ore、Copper、Iron。"},
  {id:"westmine",kind:"gather",gt:"ore",n:"West Mines",zh:"西礦坑",x:986,z:3491,src:"ref",items:["Iron Ore","Copper Ingot"],note:"可採 Coal Ore、Copper、Iron（參考互動地圖）。"},
  {id:"farm",kind:"gather",gt:"crop",n:"Farm",zh:"農田",x:2351,z:3662,src:"ref",items:["Allium","Wheat"],note:"可採 Allium、Wheat（參考互動地圖）。主線 The Essentials 也要你在城鎮東北的田裡採這兩種。"},
  {id:"wood",kind:"gather",gt:"wood",n:"Birch & Oak Wood",zh:"樺木・橡木林",x:2641,z:4333,items:["Oak Log","Birch Log"],note:"伐木點。"},
  {id:"harold",kind:"poi",n:"Harold's Quest (Hidden Well)",zh:"Harrold 的任務・隱藏的井",x:4309,z:3697,src:"est",note:"提供的座標是「4309, 36971」，第二個數字超出地圖範圍（最大約 4980），這裡暫時標在 Z 3697。主線「The Chamber Beneath the Fields」：Harrold 說東邊道路上有一口井，夜裡看得到光。"},
- {id:"og",tp:"Quartier OG",kind:"poi",n:"OG Quarter",csrc:"Quartier OG",old:"Quartier OG",zh:"OG 區",x:2312,z:3272},
- {id:"garden",tp:"Jardin des Géants",kind:"poi",n:"Giant's Garden",csrc:"Jardin des Géants",old:"Jardin des Géants",zh:"巨人花園",x:379,z:2442,note:"主線「By the Branches of the Ancients」：Zebulgarath 住在巨人花園，提示是「利用水往上爬」。"}
+ {id:"og",tp:"Quartier OG",kind:"poi",n:"Quartier OG",csrc:1,old:"OG Quarter",zh:"OG 區",x:2312,z:3272},
+ {id:"garden",tp:"Jardin des Géants",kind:"poi",n:"Jardin des Géants",csrc:1,old:"Giant's Garden",zh:"巨人花園",x:379,z:2442,note:"主線「By the Branches of the Ancients」：Zebulgarath 住在巨人花園，提示是「利用水往上爬」。"}
 ].map(s=>({src:"player",mons:[],items:[],...s}));
 
 /* Side quests. need: [itemId, qty, inferred?] ; kill: [monster name(s), count] ; raw = original condition text (FR) */
