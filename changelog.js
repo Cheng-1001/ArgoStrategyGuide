@@ -2,6 +2,13 @@
    日期一律用台灣時間（UTC+8，使用者 2026-11-03 指定）；git log 用 TZ=Asia/Taipei 看。
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
+ ["2026-11-05",[
+  "主線 26. Mephisto、27. Find a Way to Remake the Scroll 照遊戲任務日誌確認編號，順序調整（27 原本排在後面），附遊戲原文；補上舊磨坊入口和墨水挑戰（150 秒內收集 8 份墨水）的位置",
+  "再補約 100 件物品的「遊戲寫的取得方式」，新增挖礦、伐木、釣魚、世界首領寶箱等取得方式的說明",
+  "物品名稱改用遊戲英文名：Hammer of the Colossus、Halberd of the Warden、Skeletal Sword、Sylvan Pavise、Allium Flower、Essence of Gorbel 等（舊名仍可搜尋）",
+  "原本未知的 Skeleton Shaman Staff 確認是 Magic Staff of the Revenants（薩滿法杖，Skeleton Wizard 掉落 0.5%）",
+  "掉落率照遊戲校正：Ice Golem 的 Hard Glacial Hide、Ice Spirit 的 Glacial Magic Shard 改為 70%，Ice Bear 的熊之魂碎片 50%，Cursed Nazgul Protector 的鬃毛 3%，Nymbréa 之心 50%；Skeleton Swordsman 補上 Skeletal Sword 0.5%"
+ ]],
  ["2026-11-04",[
   "主線 25. The Calamity 的編號照遊戲任務日誌確認，附上遊戲原文；Fallen Soldier、Fallen Warrior 標上等級 9（遊戲截圖）",
   "再補 10 件物品的遊戲說明和取得方式：Leaf Fragments、Cursed Cloth、Potion of the Martyr、Enchanted Metal Ingot（Island Forge 熔爐配方）等",

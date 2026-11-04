@@ -296,7 +296,7 @@ with sync_playwright() as p:
     pg.goto(base + "#items"); pg.wait_for_timeout(400)
     tabs = pg.evaluate("[...document.querySelectorAll('#view-items .vtabs a')].map(a=>a.textContent.replace(/\\s*\\d+$/,'').trim())")
     names = pg.evaluate("[...document.querySelectorAll('#lItem .card b')].map(b=>b.textContent)")
-    check(tabs == ["怪物", "裝備", "道具", "素材"] and "Allium" in names and "Sylvan Bow" not in names and "Boar Meat" not in names,
+    check(tabs == ["怪物", "裝備", "道具", "素材"] and "Allium Flower" in names and "Sylvan Bow" not in names and "Boar Meat" not in names,
           f"codex tabs 怪物／裝備／道具／素材; 素材 holds materials, not equipment or food ({tabs})")
     pg.goto(base + "#props"); pg.wait_for_timeout(300)
     check(pg.locator('#fPrGroup .chip[data-v="材料"]').count() == 0 and pg.locator('#fPrGroup .chip[data-v="採集"]').count() == 0, "道具 no longer lists materials / gathered things")

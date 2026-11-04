@@ -797,7 +797,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const STATUS={...S1.STATUS,quest:{t:"任務座標",c:"s-player",d:"座標寫在 wiki 的任務說明裡。"},rep:{t:"玩家回報",c:"s-player",d:"位置來自核准的玩家回報（附遊戲截圖）。"}};
 // material names used in game / by players -> this site's item names (same table as tools/build_recipes.py MAT)
-const REP_MAT={"Shark Carapace":"Shark Shell","Soul of the Ruins":"Souls of the Ruins","Sylve Shoot":"Sylvan Sprout","Hard Glacial Hide":"Glacial Hardhide","Essence of Gorbel":"Gorbel Essence","Heart of Nymbrea":"Nymbréa's Heart","Fragment of the Bear's Soul":"Bear Soul Fragment","Small Purse":"Small Pouch"};
+const REP_MAT={"Shark Carapace":"Shark Shell","Sylve Shoot":"Sylve Sprout","Small Purse":"Small Pouch"};  // other old names resolve through ITEM_OLD / ikey
 
 // ---------- floors ----------
 const FLOORS={
@@ -889,7 +889,7 @@ const ITEMS={...S1.ITEMS};
 Object.entries(window.SAO23_ITEMS).forEach(([id,r])=>{ITEMS[id]={id,fr:r[0],r:r[1],lv:r[2],cat:r[3],lore:r[4],dmg:r[5],st:r[6],ic:r[7],...(S23.extra[id]||{})}});
 Object.entries(S23.unknown).forEach(([id,x])=>{ITEMS[id]={id,fr:null,r:null,lv:null,cat:"unknown",lore:null,dmg:null,st:null,ic:-1,...x}});
 // 2026-11-04 (user option 1A): items renamed to the English name the game shows; old wiki names still resolve and are searchable
-const ITEM_OLD={"Skeleton Mage Staff": "Magic Staff of the Ruins", "Narax's Ring": "Ring of Narax", "Bandit Crossbow": "Crossbow of the Bandits", "Reaper's Ring": "Ring of the Fallen", "Warden's Soul": "Soul of the Warden", "Herald's Soul": "Soul of the Herald", "Reaper's Soul": "Soul of the Reaper", "Swordsmans Scroll": "Swordsman's Scroll", "Archers Scroll": "Archer's Scroll", "Souls of the Ruins": "Soul of the Ruins", "Albal's Fangs": "Fangs of Albal", "Nymbréa's Heart": "Heart of Nymbrea", "Sylvan Sprout": "Sylve Sprout"};
+const ITEM_OLD={"Skeleton Mage Staff": "Magic Staff of the Ruins", "Narax's Ring": "Ring of Narax", "Bandit Crossbow": "Crossbow of the Bandits", "Reaper's Ring": "Ring of the Fallen", "Warden's Soul": "Soul of the Warden", "Herald's Soul": "Soul of the Herald", "Reaper's Soul": "Soul of the Reaper", "Swordsmans Scroll": "Swordsman's Scroll", "Archers Scroll": "Archer's Scroll", "Souls of the Ruins": "Soul of the Ruins", "Albal's Fangs": "Fangs of Albal", "Nymbréa's Heart": "Heart of Nymbrea", "Sylvan Sprout": "Sylve Sprout", "Glacial Hardhide": "Hard Glacial Hide", "Gorbel Essence": "Essence of Gorbel", "Allium": "Allium Flower", "Bear Soul Fragment": "Fragment of the Bear's Soul", "Spectral Mane Piece": "Piece of Spectral Mane", "Colossus Hammer": "Hammer of the Colossus", "Royal Halberd": "Halberd of the Warden", "Bone Sword": "Skeletal Sword", "Bandit Dagger": "Bandit's Dagger", "Sylvan Shield": "Sylvan Pavise", "Sylvan Mage Staff": "Sylvan Staff", "Skeleton Shaman Staff": "Magic Staff of the Revenants"};
 const ikey=n=>ITEMS[n]?n:(ITEM_OLD[n]&&ITEMS[ITEM_OLD[n]]?ITEM_OLD[n]:n);
 Object.entries(ITEM_OLD).forEach(([o,n])=>{if(ITEMS[n])(ITEMS[n].aka=ITEMS[n].aka||[]).push(o)});
 (window.SAO_REPORTS||[]).forEach(r=>{(r.drops||[]).forEach(d=>{d[0]=ikey(d[0])});(r.mats||[]).forEach(m=>{m[0]=ikey(m[0])})});
@@ -1243,7 +1243,7 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").c
   const R_=x=>x.k==="p"?x.e.r:ITEMS[x.id].r,NM=x=>x.k==="p"?x.e.name:x.id,SRC=x=>x.k==="p"?[]:SOURCES[x.id],USE=x=>x.k==="p"?[]:USES[x.id];
   let a=pool.filter(x=>(itemGroup==="all"||matGroup(x)===itemGroup)&&(itemRar==="all"||R_(x)===itemRar)
     &&(!$("fItemQuest").checked||USE(x).length)&&(!$("fItemDrop").checked||SRC(x).length)
-    &&(x.k==="p"?!s||norm(x.e.name).includes(s):itemHit(x.id,s)||SOURCES[x.id].some(y=>norm(y.m.name).includes(s))));
+    &&(x.k==="p"?!s||norm(x.e.name+" "+(x.e.gen||"")).includes(s):itemHit(x.id,s)||SOURCES[x.id].some(y=>norm(y.m.name).includes(s))));
   const rv=x=>R_(x)&&RAR[R_(x)]?RAR[R_(x)][2]:0;const nt=x=>x.k==="p"?0:needTotal(x.id,all?0:FL);const by=(x,y)=>NM(x).localeCompare(NM(y));
   if(so==="name")a.sort(by);else if(so==="rar")a.sort((x,y)=>rv(y)-rv(x)||by(x,y));
   else if(so==="src")a.sort((x,y)=>SRC(y).length-SRC(x).length||by(x,y));else a.sort((x,y)=>nt(y)-nt(x)||by(x,y));
@@ -1581,7 +1581,10 @@ const obtZh=l=>{let m;
   if(m=l.match(/^Crafted at: (.+)$/))return`製作：${m[1]}`;
   if(m=l.match(/^Bought back by (.+) \((\d+) Cols?\)$/))return`可以賣給：${m[1]}（收購價 ${m[2]} Col）`;
   if(m=l.match(/^Sold by (.+) \((\d+) Cols?\)$/))return`販售：${m[1]}（${m[2]} Col）`;
-  if(m=l.match(/^(.+) Chest \(([\d.]+) ?%\)$/))return`${m[1]} 的通關寶箱（${m[2]}%）`;
+  if(m=l.match(/^(.+?) Chest(?: \((.+?)\))? \(([\d.]+) ?%\)$/))return`${m[1].replace(/'s$/,"")} 的寶箱${m[2]==="world boss"?"（世界首領）":m[2]?`（${m[2]}）`:""}（${m[3]}%）`;
+  if(m=l.match(/^Mineable: (.+?)(?: \(([\d.]+) ?%\))?$/))return`挖礦：${m[1].replace("Fractured Underworld","破碎的地下世界")}${m[2]?`（${m[2]}%）`:""}`;
+  if(m=l.match(/^Woodcutting: (.+)$/))return`伐木：${m[1]}`;
+  if(m=l.match(/^Fished with: (.+)$/))return`釣魚：${m[1].replace("Fractured Underworld","破碎的地下世界")}`;
   if(m=l.match(/^Reward of the quest "(.+)"$/))return`任務「${m[1]}」的獎勵`;
   if(l==="Island Forge")return"Island Forge（破碎的地下世界裡的鍛造台，從主選單的 Fractured Underworld 進入）";
   if(l==="Gacha machine")return"轉蛋機（Gacha machine）";
