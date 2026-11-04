@@ -109,8 +109,8 @@ with sync_playwright() as p:
     pg.click("[data-go='q|mq1_15']"); pg.wait_for_timeout(400)
     check(pg.locator("#pBody .qmap svg polyline").count() == 1 and pg.locator("#pBody .mqs li").count() >= 5,
           "clicking a main quest opens the panel with its steps and a route mini map")
-    check(pg.evaluate("(()=>{const b=document.getElementById('pBody');const m=b.querySelector('.qmap');return [...b.children].slice([...b.children].indexOf(m)+1).every(e=>e.matches('[data-route]'))})()"),
-          "quest panel: the route map is the last block (only the enlarge button after it)")
+    check(pg.evaluate("(()=>{const b=document.getElementById('pBody');const m=b.querySelector('.qmap');return [...b.children].slice([...b.children].indexOf(m)+1).every(e=>e.matches('[data-route],.srcend'))&&b.lastElementChild.matches('.srcend')})()"),
+          "quest panel: the route map is the last block before the source note (only the enlarge button between; source note at the very bottom)")
     pg.click("#pBody [data-route]"); pg.wait_for_timeout(600)
     vb0 = pg.get_attribute("#rwSvg", "viewBox")
     check(pg.is_visible("#rwin") and pg.locator("#rwSvg polyline").count() == 1, "enlarge opens the floating route window")
