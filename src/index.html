@@ -582,6 +582,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 #updBar{position:fixed;top:10px;left:50%;transform:translateX(-50%);z-index:300;display:flex;align-items:center;gap:2px;max-width:calc(100vw - 32px);background:var(--accent,#e8a23a);color:#fff;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.3);padding:2px}#updBar button{font:inherit;font-weight:700;color:#fff;background:none;border:0;cursor:pointer;padding:8px 14px;white-space:nowrap}#updBar .ub-x{padding:8px 12px 8px 4px;opacity:.85;font-weight:400}
 @keyframes rflash{0%,60%{background:color-mix(in srgb,var(--accent,#e8a23a) 22%,transparent)}100%{background:transparent}}.replist.rflash{animation:rflash 2.6s ease}
 .mqs .sten{display:block;font-size:12px;color:var(--muted);font-style:italic}
+.mqs .stimg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin:6px 0 4px}.mqs .stimg a{display:block;border-radius:6px;overflow:hidden;border:1px solid var(--line)}.mqs .stimg img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
 .shide{display:none!important}
 .npcw{font-size:13px;color:var(--muted)}.npcw .linkbtn{font-size:13px}.npcw-row{padding:0 12px 8px 56px;margin-top:-4px}
 </style>
@@ -849,7 +850,7 @@ window.SAO_REPORTS=(window.SAO_REPORTS||[]).map(normRep);
   Fx.spots.push({id:"rp-"+r.id,floor:f,kind,n:r.name,zh:k+(r.ug?"・地下":""),x:r.x,z:r.z,mons:kind==="mob"&&m?[m.name]:[],items:[],src:"rep",tp,u:r.ug,rep:r.id,note:(r.notes||"")})})}
 // approved quest reports: the tracker number replaces an unknown or estimated one; the report is shown on the quest
 window.SAO_REPORTS.forEach(r=>{if(r.type!=="quest")return;const nrm=s=>String(s||"").toLowerCase().replace(/^\s*\d+\s*[.、]\s*/,"").trim();
-  if(/主線/.test(r.qkind||"")){const q=((window.SAO_MAINQ||{})[r.floor]||[]).find(x=>nrm(x.t)===nrm(r.name));if(!q)return;
+  if(/主線/.test(r.qkind||"")){const q=((window.SAO_MAINQ||{})[r.floor]||[]).find(x=>nrm(x.t)===nrm(r.name)||(x.aka&&nrm(x.aka)===nrm(r.name)));if(!q)return;
     if(r.qno){q.n=r.qno;q.nEst=false;q.nRep=r.id}(q.reps=q.reps||[]).push(r);r.qref="main";return}
   const q=(FLOORS[r.floor]?.quests||[]).find(x=>nrm(x.title)===nrm(r.name)||(!x.title&&nrm(x.npc)===nrm(r.qnpc)));if(q){(q.reps=q.reps||[]).push(r);r.qref=q.id}});
 // ---- which monster does a report belong to? (codex screenshots win over the wiki) ----
@@ -1263,7 +1264,7 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").c
 let qTown="all",qKind="main";const MQ=f=>(window.SAO_MAINQ||{})[f]||[];
 chipsInto($("fQKind"),[["main","主線"],["side","支線"]],()=>qKind,v=>qKind=v,renderQuests);
 const mqNo=qq=>qq.n?`#${qq.n}${qq.nEst?"?":""}`:"";const mqLabel=qq=>qq.n?`主線 #${qq.n}${qq.nEst?"（推算）":""}`:"主線";
-const mqHit=(qq,s)=>!s||norm([qq.t,qq.npc,qq.d,qq.rw,qq.bonus,...qq.s.map(x=>x[0]),...Object.values(qq.en||{}),...(qq.reps||[]).map(r=>r.step)].join(" ")).includes(s);
+const mqHit=(qq,s)=>!s||norm([qq.t,qq.aka,qq.npc,qq.d,qq.rw,qq.bonus,...qq.s.map(x=>x[0]),...Object.values(qq.en||{}),...(qq.reps||[]).map(r=>r.step)].join(" ")).includes(s);
 function questById(id){if(id.startsWith("mq")){const [f,i]=id.slice(2).split("_").map(Number);const qq=MQ(f)[i];return qq?{main:1,f,i,q:qq,title:qq.t,steps:qq.s}:null}
   const qq=ALLQ.find(x=>x.id===id);return qq?{main:0,f:qq.floor,q:qq,title:qq.title||`${qq.npc} 的委託`,steps:sideSteps(qq)}:null}
 function bestSource(id,floor){const it=ITEMS[id];
@@ -1283,7 +1284,7 @@ let MT_ID=0;
 function miniTiles(m,cx,cz,span){if(!m.tiles||!m.tileFull||span>500)return"";
   const bpu=m.size/1000,L=span<=260?3:2,px=L===3?1:2,tb=256*px,tu=tb/bpu,n=Math.ceil(m.tileFull/tb);
   const c0=Math.max(0,Math.floor((cx-span/2)/tu)),c1=Math.min(n-1,Math.floor((cx+span/2)/tu)),r0=Math.max(0,Math.floor((cz-span/2)/tu)),r1=Math.min(n-1,Math.floor((cz+span/2)/tu));
-  let im="";for(let r=r0;r<=r1;r++)for(let c=c0;c<=c1;c++)im+=`<image href="${m.tiles}/${L}/${c}_${r}.jpg" x="${(c*tu).toFixed(2)}" y="${(r*tu).toFixed(2)}" width="${(tu+.2).toFixed(2)}" height="${(tu+.2).toFixed(2)}" preserveAspectRatio="none"/>`;
+  let im="";for(let r=r0;r<=r1;r++)for(let c=c0;c<=c1;c++)im+=`<image href="${m.tiles}/${L}/${c}_${r}.jpg?v=${JMV()}" x="${(c*tu).toFixed(2)}" y="${(r*tu).toFixed(2)}" width="${(tu+.2).toFixed(2)}" height="${(tu+.2).toFixed(2)}" preserveAspectRatio="none"/>`;
   if(BASE==="jm")return im;const id="mt"+(++MT_ID),mx=(0-m.x0)/bpu,mw=320*16/bpu;
   return`<mask id="${id}" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000"><image href="${m.tiles}/explored.png?v=${JMV()}" x="${mx.toFixed(2)}" y="${mx.toFixed(2)}" width="${mw.toFixed(2)}" height="${mw.toFixed(2)}" preserveAspectRatio="none"/></mask><g mask="url(#${id})">${im}</g>`}
 // 路線圖上太近的點合成一個標記（使用者 2026-11-03：同一個地方的 1～4 步擠在一起）；連號寫成「1–4」
@@ -1536,11 +1537,11 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
     :`<dt>NPC</dt><dd>${esc(qq.npc)}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?t.n:"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq,true)}</dd>`;
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">📜</span><div class="ttl"><div class="num">${flBadge(f)} ${Q.main?mqLabel(qq):"支線"}</div><h2>${esc(Q.title)}</h2>${!Q.main&&qq.src==="ref"?`<div class="sub">目前版本的支線（參考互動地圖）</div>`:""}</div></div>
   <dl class="facts">${facts}</dl>${Q.main&&qq.d?`<p class="lore" style="font-style:normal">${esc(qq.d)}</p>`:""}
-  <h3 class="sec">步驟</h3><ol class="mqs">${Q.steps.map((x,k)=>`<li>${esc(x[0])}${x[1]!=null&&FLOORS[f].map?`<button class="linkbtn" data-rep="${f}|${x[1]}|${x[2]}">${x[3]?"約 ":""}X ${x[1]} · Z ${x[2]}</button>`:""}${Q.main&&qq.en&&qq.en[k]?`<span class="sten">遊戲原文：${esc(qq.en[k])}</span>`:""}</li>`).join("")}</ol>
+  <h3 class="sec">步驟</h3><ol class="mqs">${Q.steps.map((x,k)=>`<li>${esc(x[0])}${x[1]!=null&&FLOORS[f].map?`<button class="linkbtn" data-rep="${f}|${x[1]}|${x[2]}">${x[3]?"約 ":""}X ${x[1]} · Z ${x[2]}</button>`:""}${Q.main&&qq.en&&qq.en[k]?`<span class="sten">遊戲原文：${esc(qq.en[k])}</span>`:""}${Q.main&&qq.img&&qq.img[k]?`<span class="stimg">${qq.img[k].map(([u,c])=>`<a href="${esc(u)}" target="_blank" rel="noopener" title="${esc(c)}（點了看大圖）"><img src="${esc(u)}" alt="${esc(c)}" loading="lazy"></a>`).join("")}</span>`:""}</li>`).join("")}</ol>
 
   ${!Q.main&&(qq.need.length||qq.kill)?`<h3 class="sec">需要的物品和目標</h3><div class="reqs">${reqChips(qq)}</div>`:""}
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
-  <div class="note srcn">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。":qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
+  <div class="note srcn">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。"+(qq.img?"步驟圖片是站長的遊戲截圖。":""):qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
   ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${repLink(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
   ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}`}
 function mqCard(qq,i){const meta=[qq.npc&&("NPC "+qq.npc),qq.lv&&("等級 "+qq.lv)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
@@ -1917,7 +1918,7 @@ function jmCredits(){const j=(window.SAO_JM||{})["1"]||{},log=j.log||[],tot=j.ch
 // verify the folder again (it needs >= 20 matching chunks). The zip (stored, not compressed: PNGs are compressed
 // already) keeps each folder's path so the server checks every world on its own.
 const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576};window.__JMP=JMP;   // exposed for tests/jm_pack_test.py
-const JMV=()=>{const j=(window.SAO_JM||{})["1"]||{};return encodeURIComponent(String(j.date||"")+"-"+String(j.pct||""))};
+const JMV=()=>{const j=(window.SAO_JM||{})["1"]||{};return encodeURIComponent(String(j.date||"")+"-"+String(j.pct||"")+"-"+String(j.chunks||""))};
 let JMREF=null;
 const jmLoadImg=src=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=()=>no(new Error(src));im.src=src});
 async function jmRef(){if(JMREF)return JMREF;
@@ -2097,7 +2098,7 @@ function updateTiles(){tileRaf=0;const m=MP();if(!useTiles()){if(TL.size){tilesE
   const need=sc*(window.devicePixelRatio||1);let L=0;const sizes=[640,1280,2560,5120];while(L<3&&sizes[L]/1000<need*0.9)L++;
   const want=new Set();const add=(lv,c,rr,cls)=>{const S=sizes[lv],k=lv+"/"+c+"_"+rr;want.add(k);if(TL.has(k))return;
     const u=256*(m.tileFull/S)*(1000/m.size);const im=new Image();im.className=cls;im.alt="";im.decoding="async";im.draggable=false;
-    im.style.cssText=`left:${c*u}px;top:${rr*u}px;width:${u+0.6}px;height:${u+0.6}px`;im.src=`${m.tiles}/${k}.jpg`;im.onerror=()=>im.remove();tilesEl.appendChild(im);TL.set(k,im)};
+    im.style.cssText=`left:${c*u}px;top:${rr*u}px;width:${u+0.6}px;height:${u+0.6}px`;im.src=`${m.tiles}/${k}.jpg?v=${JMV()}`;im.onerror=()=>im.remove();tilesEl.appendChild(im);TL.set(k,im)};
   const n0=Math.ceil(640/256);for(let rr=0;rr<n0;rr++)for(let c=0;c<n0;c++)add(0,c,rr,"l0");
   if(L>0){const S=sizes[L],u=256*(m.tileFull/S)*(1000/m.size),n=Math.ceil(S/256);
     const wx0=-tx/sc,wy0=-ty/sc,wx1=(r.width-tx)/sc,wy1=(r.height-ty)/sc;

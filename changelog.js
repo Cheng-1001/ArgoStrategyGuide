@@ -3,6 +3,9 @@
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
  ["2026-11-05",[
+  "探索地圖放大時偶爾顯示合併前的舊畫面（瀏覽器暫存），已修正：每次合併後會載入新的地圖",
+  "主線 28. Request an audience with King Harald 照遊戲任務日誌確認編號（遊戲裡 28 之後直接跳到 32）",
+  "主線 32. The Trial of the Haralds（原本標為推算的 The Trials of the Heralds）照遊戲任務追蹤確認編號和名稱，補上走法（路線圖和洞口、墓、跳下去的洞的截圖，點了看大圖）和三個試煉的過法（不要動／脫掉防具和主副手）",
   "主線 26. Mephisto、27. Find a Way to Remake the Scroll 照遊戲任務日誌確認編號，順序調整（27 原本排在後面），附遊戲原文；補上舊磨坊入口和墨水挑戰（150 秒內收集 8 份墨水）的位置",
   "再補約 100 件物品的「遊戲寫的取得方式」，新增挖礦、伐木、釣魚、世界首領寶箱等取得方式的說明",
   "物品名稱改用遊戲英文名：Hammer of the Colossus、Halberd of the Warden、Skeletal Sword、Sylvan Pavise、Allium Flower、Essence of Gorbel 等（舊名仍可搜尋）",
