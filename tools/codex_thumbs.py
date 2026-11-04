@@ -10,10 +10,9 @@ import cv2
 src,out=sys.argv[1],sys.argv[2];os.makedirs(out,exist_ok=True)
 tiles=[]
 TOP_ONLY={'041','042','043'}
-# bosses and mini-bosses face the other way (user 2026-11-04), so they stand apart from ordinary monsters:
-# mirror them; the types come from data.js (codex number -> type)
-_d=open(os.path.join(os.path.dirname(os.path.abspath(__file__)),'..','data.js'),encoding='utf8').read()
-FLIP={m.group(1) for m in re.finditer(r'^\["(\d{3})","[^"]+","(Boss|Mini-Boss)"',_d,re.M)}
+# bosses and mini-bosses face right (user 2026-11-04, option B): the owner picks frames where the model itself has
+# turned to face right; no mirroring here (mirroring would swap weapon hands and one-sided details)
+FLIP=set()
 for f in sorted(glob.glob(src+'/*.png')):
     num=re.search(r'codex_(\d{3})',f).group(1)
     im=np.array(Image.open(f).convert('RGB')).astype(int)
