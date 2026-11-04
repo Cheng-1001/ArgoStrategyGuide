@@ -4,7 +4,7 @@
 window.SAO_CHANGELOG=[
  ["2026-11-04",[
   "地點資料的名稱下面加上遊戲裡的法文名稱（遊戲圖鑑和傳送選單），例如 Wolf Valley 下面是 Vallée des Loups・狼之谷",
-  "Geldorak 礦坑地下城照入口告示牌改名 Geldorack Mine",
+  "Geldorak 礦坑照遊戲裡的告示牌改名 Geldorack Mine，礦坑地下城照 Dungeons 視窗改名 Geldorack（舊名仍可搜尋）",
   "聖誕節活動道具標上年份（2025，取自官網分類）；其他活動官網沒寫年份，暫不標",
   "地下城名稱統一：Xal'Zirith 地下城改叫 Sanctuary of Xal'Zirith（舊名仍可搜尋）；怪物區域選單不再重複英文名",
   "圖鑑改成四個分頁：怪物／裝備／道具／素材（素材＝怪物掉落和採集物，預設全部列出，漁獲也看得到）；怪物掉的裝備和道具，直接在裝備／道具資料裡看掉落率和取得地點",
