@@ -188,7 +188,7 @@ with sync_playwright() as p:
     pg.click('#fRcCat .chip[data-v="potion"]'); pg.wait_for_timeout(200)
     pg.locator("#lRc .rcard", has_text="Quality Health Potion I").first.click(); pg.wait_for_timeout(300)
     t = pg.inner_text("#pBody")
-    check(pg.locator("#lRc .rcard.sel").count() == 1 and "Alchemist" in t and "Sylvan Sprout" in t and "× 8" in t,
+    check(pg.locator("#lRc .rcard.sel").count() == 1 and "Alchemist" in t and "Sylve Sprout" in t and "× 8" in t,
           "clicking one potion recipe selects only that card and opens its recipe panel")
     check(pg.locator('#lRc .rcard', has_text="Quality Health Potion I").first.locator('img[src="icons/recipes/quality_health_potion_i.png"]').count() == 1,
           "Quality Health Potion I uses the game icon from recicons.js (game icons win over the official catalogue)")
@@ -304,7 +304,11 @@ with sync_playwright() as p:
     pg.evaluate("[...document.querySelectorAll('#lMon .card')].find(c=>c.querySelector('b').textContent==='Elite Treant').click()"); pg.wait_for_timeout(300)
     pg.evaluate("[...document.querySelectorAll('#pBody [data-go=\"i|Sylvan Bow\"]')][0].click()"); pg.wait_for_timeout(300)
     pb = pg.inner_text("#pBody")
-    check(pg.inner_text("#pBody h2") == "Arc Sylvestre" and "取得方式" in pb and "Elite Treant" in pb, "a dropped weapon opens its equipment panel with drop rate and map")
+    check(pg.inner_text("#pBody h2") == "Sylvan Bow" and "Arc Sylvestre" in pb and "取得方式" in pb and "Elite Treant" in pb, "a dropped weapon opens its equipment panel (game English name, French official name below) with drop rate and map")
+    check("遊戲寫的取得方式" in pb and "怪物掉落：Elite Treant（0.5%）" in pb, "equipment panel shows the in-game Obtainable lines with a Chinese gloss")
+    pg.fill("#q", "Narax's Ring"); pg.wait_for_timeout(400)
+    check(pg.locator("#lMon .card, #lEq .card, #lIt .card").count() >= 1 or "Ring of Narax" in pg.inner_text("body"), "old wiki item names still find the renamed item")
+    pg.fill("#q", ""); pg.wait_for_timeout(200)
     pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
     pg.select_option("#fMonZone", "@dg"); pg.wait_for_timeout(200)
