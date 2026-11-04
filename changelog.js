@@ -4,6 +4,7 @@
 window.SAO_CHANGELOG=[
  ["2026-11-04",[
   "地圖上被傳送點名稱擋住的地下城名稱，改顯示在入口點的下方（例如 Geldorack Mine 旁的 Geldorack Dungeon）",
+  "30 隻怪物的圖示換成遊戲圖鑑裡的模型（統一斜 45 度、臉朝左）",
   "地點資料的名稱下面加上遊戲裡的法文名稱（遊戲圖鑑和傳送選單），例如 Wolf Valley 下面是 Vallée des Loups・狼之谷",
   "Geldorak 礦坑照遊戲裡的告示牌改名 Geldorack Mine，礦坑地下城改名 Geldorack Dungeon（遊戲 Dungeons 視窗寫 Geldorack；舊名仍可搜尋）",
   "聖誕節活動道具標上年份（2025，取自官網分類）；其他活動官網沒寫年份，暫不標",
