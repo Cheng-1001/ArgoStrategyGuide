@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="79fefdca1e">
+<meta name="sao-build" content="dd719cd9ff">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -783,13 +783,13 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=8a947255"></script>
+<script src="data.js?v=48845c02"></script>
 <script src="data23.js?v=bc83d65b"></script>
 <script src="bosses.js?v=41309c3c"></script>
 <script src="reports.js?v=f9564506"></script>
 <script src="hints.js?v=fcf000d6"></script>
 <script src="codex.js?v=48141603"></script>
-<script src="mainq.js?v=3d5da267"></script>
+<script src="mainq.js?v=c8ca017f"></script>
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=0e9f806f"></script>
 <script src="npcs.js?v=3a3bf3bc"></script>
@@ -959,8 +959,8 @@ const townCat=t=>t.tp?"tp":"land";
 const npcHit=(n,s)=>!!s&&norm(n.n+" "+(NPCCAT[n.c]?NPCCAT[n.c][0]:"")+" "+NGRP[npcGrp(n.c)][0]+" "+n.c.replace(/([A-Z])/g," $1")).includes(s);
 // 搜尋時，名字（或類別）符合的 NPC 就算篩選關著也顯示（使用者 2026-11-03）
 const npcVisible=n=>(catOn("npc")&&!FILT["npc:"+npcGrp(n.c)])||npcHit(n,Sq());
-// subtitle under a place title: the French in-game name when the title is not already it, then Chinese (user rule 2026-11-04)
-const nameSub=x=>{const fr=typeof x.csrc==="string"?x.csrc:x.tp;return[fr&&fr!==x.n?fr:"",x.zh].filter(Boolean).join("・")};
+// subtitle under a place title: confirmed French in-game names (codex csrc, teleport tp, zone fr) that differ from the title, then Chinese (user 2026-11-04)
+const nameSub=x=>[...new Set([typeof x.csrc==="string"?x.csrc:"",x.tp||"",x.fr||""])].filter(v=>v&&v!==x.n).concat(x.zh?[x.zh]:[]).join("・");
 const spotsOf=f=>{const Fx=FLOORS[f];return Fx.spots.concat(Object.entries(userPos[f]).filter(([z])=>Fx.zones[z]).map(([z,p])=>({id:"u"+f+"-"+z,floor:f,zone:z,kind:"mob",n:Fx.zones[z].n,zh:Fx.zones[z].zh,x:p.x,z:p.z,src:"user",items:[],
   mons:Fx.M.filter(m=>m.zone===z&&!HAS_POS(m.id)).map(m=>m.name)})).filter(sp=>sp.mons.length||sp.items.length))};
 const spotById=id=>{for(const f of FL_KEYS){const s=spotsOf(f).find(x=>x.id===id);if(s)return s}return null};
@@ -1052,7 +1052,7 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(m.name)}</h2>${m.aka&&m.aka.length?`<div class="sub">舊名：${m.aka.map(esc).join("、")}${m.renamedBy?`・名稱依${m.renamedBy.how==="codex"?`遊戲圖鑑 #${esc(m.renamedBy.no)}`:"審核員確認"}（回報 ${esc(String(m.renamedBy.report||""))}）更新`:""}</div>`:""}</div></div>
   ${soonNote(m.floor)}
   <dl class="facts"><dt>等級</dt><dd>${lvOf(m)!=null?`<b class="mono">${lvOf(m)}</b> <span class="pill rep">${repsOf(m).some(x=>x.level!=null)?"玩家回報":"遊戲截圖"}</span>`:`<span class="muted">未回報</span>`}</dd><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
-  <dt>圖鑑區域</dt><dd>${m.codexRegion?`${esc(m.codexRegion)} <span class="pill rep">遊戲圖鑑</span><br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`:`${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`}</dd>
+  <dt>圖鑑區域</dt><dd>${m.codexRegion?`${esc(m.codexRegion)} <span class="pill rep">遊戲圖鑑</span><br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`:`${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(nameSub(z))}</span>`}</dd>
   <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${SPAWN_OF[m.id]?"":p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd>${SPAWN_OF[m.id]?`<dt>重生點</dt><dd>${SPAWN_OF[m.id].map((w,i)=>`${SPAWN_OF[m.id].length>1?`<span class="rnum">${i+1}</span>`:""}<button class="linkbtn mono" data-rep="${m.floor}|${w.x}|${w.z}">X ${w.x} · Z ${w.z}${w.u?"（地下）":""}</button>`).join("<br>")}</dd>`:""}</dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
   ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
