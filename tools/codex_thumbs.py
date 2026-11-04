@@ -5,7 +5,7 @@ the model is cut out instead of cropped with its background.
  1. find the centre panel on row 455; work in the model band (y 440-780) inside it
  2. estimate the (smoothly varying) background: inpaint the likely-model pixels, then blur heavily
  3. pixels that differ from that background = model, except the codex's soft glow behind it (neutral, bright, no texture); keep the model's connected parts (TOP_ONLY: upper copy only)
- 4. fill holes inside the model, shrink the edge 1 px and feather it (no background halo)
+ 4. fill holes inside the model only where they look like model (gaps that show background/glow stay empty), shrink the edge 1 px and feather it (no background halo)
  5. square crop around the model, 128 px RGBA PNG
 Writes mob_###.png and sheet.png (on a checkerboard and on a dark colour, to check by eye).
 The screenshots stay local; only the thumbnails go to icons/mobs/."""
@@ -57,8 +57,12 @@ for f in sorted(glob.glob(src+'/*.png')):
     if not fg.any(): print(num,'nothing');continue
     # 4: fill holes inside the model (translucent slimes, faces close to the panel colour); no GrabCut: it grew halos
     m=fg.copy();inv=(1-m).astype(np.uint8);n,lab,st,_=cv2.connectedComponentsWithStats(inv)
+    # only holes that look like model: a gap between legs / bow and body shows the background or the glow -> stays empty
+    bgl=(d<=36)|glow
     for i in range(1,n):
-        if st[i,0]>0 and st[i,1]>0 and st[i,0]+st[i,2]<W and st[i,1]+st[i,3]<H: m[lab==i]=1
+        if st[i,0]>0 and st[i,1]>0 and st[i,0]+st[i,2]<W and st[i,1]+st[i,3]<H:
+            h=lab==i
+            if st[i,4]<=12 or bgl[h].mean()<0.5: m[h]=1
     alpha=cv2.GaussianBlur(cv2.erode(m*255,np.ones((2,2),np.uint8)).astype(np.float32),(0,0),0.8)
     rgba=np.dstack([reg,np.clip(alpha,0,255).astype(np.uint8)])
     # 5: square crop
