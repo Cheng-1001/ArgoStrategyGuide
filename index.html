@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="473ad0e1ea">
+<meta name="sao-build" content="bdb08402ec">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -796,7 +796,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=0e9f806f"></script>
 <script src="gameinfo.js?v=7eb6cf27"></script>
 <script src="npcs.js?v=3a3bf3bc"></script>
-<script src="changelog.js?v=4e36b928"></script>
+<script src="changelog.js?v=83233f7c"></script>
 <script src="recipes.js?v=747aafd1"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1295,7 +1295,7 @@ let MT_ID=0;
 function miniTiles(m,cx,cz,span){if(!m.tiles||!m.tileFull||span>500)return"";
   const bpu=m.size/1000,L=span<=260?3:2,px=L===3?1:2,tb=256*px,tu=tb/bpu,n=Math.ceil(m.tileFull/tb);
   const c0=Math.max(0,Math.floor((cx-span/2)/tu)),c1=Math.min(n-1,Math.floor((cx+span/2)/tu)),r0=Math.max(0,Math.floor((cz-span/2)/tu)),r1=Math.min(n-1,Math.floor((cz+span/2)/tu));
-  let im="";for(let r=r0;r<=r1;r++)for(let c=c0;c<=c1;c++)im+=`<image href="${m.tiles}/${L}/${c}_${r}.jpg" x="${(c*tu).toFixed(2)}" y="${(r*tu).toFixed(2)}" width="${(tu+.2).toFixed(2)}" height="${(tu+.2).toFixed(2)}" preserveAspectRatio="none"/>`;
+  let im="";for(let r=r0;r<=r1;r++)for(let c=c0;c<=c1;c++)im+=`<image href="${m.tiles}/${L}/${c}_${r}.jpg?v=${JMV()}" x="${(c*tu).toFixed(2)}" y="${(r*tu).toFixed(2)}" width="${(tu+.2).toFixed(2)}" height="${(tu+.2).toFixed(2)}" preserveAspectRatio="none"/>`;
   if(BASE==="jm")return im;const id="mt"+(++MT_ID),mx=(0-m.x0)/bpu,mw=320*16/bpu;
   return`<mask id="${id}" maskUnits="userSpaceOnUse" x="0" y="0" width="1000" height="1000"><image href="${m.tiles}/explored.png?v=${JMV()}" x="${mx.toFixed(2)}" y="${mx.toFixed(2)}" width="${mw.toFixed(2)}" height="${mw.toFixed(2)}" preserveAspectRatio="none"/></mask><g mask="url(#${id})">${im}</g>`}
 // 路線圖上太近的點合成一個標記（使用者 2026-11-03：同一個地方的 1～4 步擠在一起）；連號寫成「1–4」
@@ -1929,7 +1929,7 @@ function jmCredits(){const j=(window.SAO_JM||{})["1"]||{},log=j.log||[],tot=j.ch
 // verify the folder again (it needs >= 20 matching chunks). The zip (stored, not compressed: PNGs are compressed
 // already) keeps each folder's path so the server checks every world on its own.
 const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576};window.__JMP=JMP;   // exposed for tests/jm_pack_test.py
-const JMV=()=>{const j=(window.SAO_JM||{})["1"]||{};return encodeURIComponent(String(j.date||"")+"-"+String(j.pct||""))};
+const JMV=()=>{const j=(window.SAO_JM||{})["1"]||{};return encodeURIComponent(String(j.date||"")+"-"+String(j.pct||"")+"-"+String(j.chunks||""))};
 let JMREF=null;
 const jmLoadImg=src=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=()=>no(new Error(src));im.src=src});
 async function jmRef(){if(JMREF)return JMREF;
@@ -2109,7 +2109,7 @@ function updateTiles(){tileRaf=0;const m=MP();if(!useTiles()){if(TL.size){tilesE
   const need=sc*(window.devicePixelRatio||1);let L=0;const sizes=[640,1280,2560,5120];while(L<3&&sizes[L]/1000<need*0.9)L++;
   const want=new Set();const add=(lv,c,rr,cls)=>{const S=sizes[lv],k=lv+"/"+c+"_"+rr;want.add(k);if(TL.has(k))return;
     const u=256*(m.tileFull/S)*(1000/m.size);const im=new Image();im.className=cls;im.alt="";im.decoding="async";im.draggable=false;
-    im.style.cssText=`left:${c*u}px;top:${rr*u}px;width:${u+0.6}px;height:${u+0.6}px`;im.src=`${m.tiles}/${k}.jpg`;im.onerror=()=>im.remove();tilesEl.appendChild(im);TL.set(k,im)};
+    im.style.cssText=`left:${c*u}px;top:${rr*u}px;width:${u+0.6}px;height:${u+0.6}px`;im.src=`${m.tiles}/${k}.jpg?v=${JMV()}`;im.onerror=()=>im.remove();tilesEl.appendChild(im);TL.set(k,im)};
   const n0=Math.ceil(640/256);for(let rr=0;rr<n0;rr++)for(let c=0;c<n0;c++)add(0,c,rr,"l0");
   if(L>0){const S=sizes[L],u=256*(m.tileFull/S)*(1000/m.size),n=Math.ceil(S/256);
     const wx0=-tx/sc,wy0=-ty/sc,wx1=(r.width-tx)/sc,wy1=(r.height-ty)/sc;
