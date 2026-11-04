@@ -1193,7 +1193,7 @@ let monType="all";
 chipsInto($("fMonType"),[["all","全部"],["Boss","首領"],["Mini-Boss","小首領"],["Monster","一般"],["Minion","嘍囉"]],()=>monType,v=>monType=v,renderMon);
 $("fMonZone").onchange=renderMon;$("fMonSort").onchange=renderMon;
 const isDgZone=z=>/Dungeon|Labyrinth|Sanctuary|Tower|Lair|地下城|迷宮|聖所/i.test(z.n+" "+z.zh);
-function fillZoneSelect(){const Z=F().zones,o=F().order,opt=z=>`<option value="${z}">${esc(Z[z].n)}（${esc(Z[z].zh)}）</option>`,dg=o.filter(z=>isDgZone(Z[z])),wild=o.filter(z=>!isDgZone(Z[z]));
+function fillZoneSelect(){const Z=F().zones,o=F().order,opt=z=>{const q=Z[z],l=q.zl==null?q.zh:q.zl;return`<option value="${z}">${esc(q.n)}${l?`（${esc(l)}）`:""}</option>`},dg=o.filter(z=>isDgZone(Z[z])),wild=o.filter(z=>!isDgZone(Z[z]));
   $("fMonZone").innerHTML=`<option value="all">全部區域</option>${dg.length?'<option value="@dg">全部地下城</option><option value="@wild">全部野外</option>':""}<optgroup label="野外">${wild.map(opt).join("")}</optgroup>${dg.length?`<optgroup label="地下城">${dg.map(opt).join("")}</optgroup>`:""}`}
 function renderMon(){const s=Sq(),zf=$("fMonZone").value,so=$("fMonSort").value;const M=F().M;
   let a=M.filter(m=>(monType==="all"||m.type===monType)&&(zf==="all"||m.zone===zf||zf[0]==="@"&&(F().zones[m.zone]?isDgZone(F().zones[m.zone]):false)===(zf==="@dg"))&&monHit(m,s));
@@ -1613,11 +1613,12 @@ function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
 const PR=(window.SAO_PROPS||[]).filter(r=>r[2]!=="catalyst").map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
 const prById=Object.fromEntries(PR.map(e=>[String(e.oid),e]));
 const PRV=()=>PR.filter(e=>!MATG(e));   // the 道具 tab: materials and gathered things live in 素材
-const PR_CAT={material:"材料",fishing_job:"漁獲",miner_job:"礦物",lumberjack_job:"木材",farmer_job:"作物",consumable_item:"消耗品",consumable:"消耗品",food:"食物",potion_stamina:"體力藥水",potion_heal:"治療藥水",gem_stone:"符文寶石",fortifier:"強化藥劑",catalyst:"催化劑",crystal:"水晶",tool:"工具",key_crate:"寶箱鑰匙",dungeon_key:"地下城鑰匙",halloween:"萬聖節活動",noel2025:"聖誕節活動",saint_valentin:"情人節活動",lunar:"農曆新年活動"};
+const PR_CAT={material:"材料",fishing_job:"漁獲",miner_job:"礦物",lumberjack_job:"木材",farmer_job:"作物",consumable_item:"消耗品",consumable:"消耗品",food:"食物",potion_stamina:"體力藥水",potion_heal:"治療藥水",gem_stone:"符文寶石",fortifier:"強化藥劑",catalyst:"催化劑",crystal:"水晶",tool:"工具",key_crate:"寶箱鑰匙",dungeon_key:"地下城鑰匙",halloween:"萬聖節活動",noel2025:"聖誕節活動（2025）",saint_valentin:"情人節活動",lunar:"農曆新年活動"};
 const PR_GROUP={material:"材料",fishing_job:"採集",miner_job:"採集",lumberjack_job:"採集",farmer_job:"採集",consumable_item:"消耗品",consumable:"消耗品",food:"消耗品",potion_stamina:"消耗品",potion_heal:"消耗品",gem_stone:"符文・強化",fortifier:"符文・強化",crystal:"消耗品",tool:"工具",key_crate:"鑰匙",dungeon_key:"鑰匙",halloween:"活動",noel2025:"活動",saint_valentin:"活動",lunar:"活動"};
 const PR_ICON={材料:"🧱",採集:"⛏️",消耗品:"🧪","符文・強化":"💎",工具:"🔧",鑰匙:"🗝️",活動:"🎉"};
 const pslot=(e,s=44)=>OID_RECIC[e.oid]?recicImg(OID_RECIC[e.oid],s):e.ic<0&&FR2ID[e.name]&&ITEMS[FR2ID[e.name]].ic>=0?slot(FR2ID[e.name],s):e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${PR_ICON[PR_GROUP[e.cat]]||"❔"}</span>`:`<span class="eslot pslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
 let prGroup="all",prRar="all",prSubV="all";
+const PR_EVYEAR={noel2025:2025}; // only years the official catalogue category names (Noël 2025)
 const PR_SUBLAB=c=>PR_GROUP[c]==="活動"?PR_CAT[c].replace("活動",""):PR_CAT[c];
 const fillPrSub=()=>{const g=$("gPrSub");prSubV="all";const labs=[...new Set(PRV().filter(e=>PR_GROUP[e.cat]===prGroup).map(e=>PR_SUBLAB(e.cat)))];g.hidden=prGroup==="all"||labs.length<2;
   if(!g.hidden)chipsInto($("fPrSub"),[["all","全部"],...labs.map(l=>[l,`${esc(l)} <span class="cn">${PRV().filter(e=>PR_GROUP[e.cat]===prGroup&&PR_SUBLAB(e.cat)===l).length}</span>`])],()=>prSubV,v=>prSubV=v,renderProps)};
@@ -1643,7 +1644,7 @@ function propDetail(id){const e=prById[id];const en=FR2ID[e.name];
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}${rows?`<dl class="stats">${rows}</dl>`:""}
   ${en&&ITEMS[en]?itemObtainHTML(en):""}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
-  <div class="note srcn">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
+  <div class="note srcn">官方圖鑑 #${e.oid}。${PR_GROUP[e.cat]==="活動"?(PR_EVYEAR[e.cat]?`活動年份 ${PR_EVYEAR[e.cat]} 取自官網圖鑑的分類名稱。`:"官網圖鑑的這個活動分類沒有寫年份，所以不標年份。"):""}${RECIPE_BY_EQ[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
 // ================= bosses tab =================
 const BO=window.SAO_BOSSES;

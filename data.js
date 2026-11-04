@@ -21,29 +21,30 @@ const STATUS = {
 };
 
 const ZONES = {
-  boar:     { n: "Boar Zone", zh: "野豬區（起始之城北）", note: "圖鑑把 Corrupted Boar 列在 Town of Beginnings，首領 Pumba 列在 Boar Zone；wiki 的 Pumba 頁面說牠會在起始之城外的野豬區定時重生。" },
-  wolf:     { n: "Wolf Valley", zh: "狼之谷" },
-  mizunari: { n: "Mizunari Fields", zh: "Mizunari 田野", note: "Mizunari 是供應首都糧食的農村。" },
-  putrid:   { n: "Putrid Swamp", zh: "腐臭沼澤", note: "主線第 15 段提到「Hanaka 北邊的沼澤」。" },
-  vallhat:  { n: "Vallhat", zh: "Vallhat（史萊姆區）", note: "Vallhat 是需靠傳送器上去的懸空城；主線提到史萊姆王 Gorbel 在南方沼澤出沒。" },
-  hanaka:   { n: "Hanaka", zh: "Hanaka 周邊", note: "主線提到 Hanaka 附近有「小蛛網森林」。" },
-  arakhnol: { n: "Arakh'Nol", zh: "Arakh'Nol" },
-  arakhnolD:{ n: "Ara'knol Dungeons", zh: "Ara'knol 地下城" },
-  ruins:    { n: "Forgotten Ruins", zh: "遺忘廢墟（舊稱 Cursed Ruins）" },
-  skeld:    { n: "Skeleton Dungeon", zh: "骷髏地下城" },
-  geldorak: { n: "Geldorak Mine", zh: "Geldorak 礦坑" },
-  geldorakD:{ n: "Geldorak Mine Dungeon", zh: "Geldorak 礦坑地下城", note: "進入需要 Clé de la Forêt（森林之鑰）。" },
-  fallen:   { n: "Labyrinth of the Fallen", zh: "墮落者迷宮（地下城）", note: "進入需要 Clé des Déchus（墮落者之鑰）。打倒 3 位 Fallen 小首領取得的 Artefact des Fallens 用來開啟雙子騎士（Ornstein 與 Smough）的首領房。" },
-  xal:      { n: "Sanctuary of Xal'Zirith", zh: "Xal'Zirith 聖所（地下城）", note: "進入需要 Clé de Xal'Zirith。" },
-  snow:     { n: "Tolbana Mountains", zh: "Tolbana 雪山", note: "圖鑑寫 Mountain Deer 在「Tolbana 西北的雪地」。" },
-  citadel:  { n: "Snow Citadel", zh: "雪之城塞" },
-  virelune: { n: "Virelune Lake", zh: "Virelune 湖", note: "Virelune 的 NPC Monique 有「擊殺 10 隻鯊魚」任務。" },
-  kobold:   { n: "Kobold Tower", zh: "狗頭人之塔（樓層首領）", note: "樓層地下城分三段：迷宮（啟動 4 個拉桿，順序不限）→ 大廳怪物波次 → 首領 Illfang。" },
-  aepep:    { n: "Aepep's Lair", zh: "Aepep 巢穴" },
+  boar:     { n: "Boar Zone", zh: "野豬區（起始之城北）", zl: "野豬區", note: "圖鑑把 Corrupted Boar 列在 Town of Beginnings，首領 Pumba 列在 Boar Zone；wiki 的 Pumba 頁面說牠會在起始之城外的野豬區定時重生。" },
+  wolf:     { n: "Wolf Valley", zh: "狼之谷", zl: "狼之谷" },
+  mizunari: { n: "Mizunari Fields", zh: "Mizunari 田野", zl: "", note: "Mizunari 是供應首都糧食的農村。" },
+  putrid:   { n: "Putrid Swamp", zh: "腐臭沼澤", zl: "腐臭沼澤", note: "主線第 15 段提到「Hanaka 北邊的沼澤」。" },
+  vallhat:  { n: "Vallhat", zh: "Vallhat（史萊姆區）", zl: "史萊姆區", note: "Vallhat 是需靠傳送器上去的懸空城；主線提到史萊姆王 Gorbel 在南方沼澤出沒。" },
+  hanaka:   { n: "Hanaka", zh: "Hanaka 周邊", zl: "", note: "主線提到 Hanaka 附近有「小蛛網森林」。" },
+  arakhnol: { n: "Arakh'Nol", zh: "Arakh'Nol", zl: "" },
+  arakhnolD:{ n: "Ara'knol Dungeons", zh: "Ara'knol 地下城", zl: "" },
+  ruins:    { n: "Forgotten Ruins", zh: "遺忘廢墟（舊稱 Cursed Ruins）", zl: "遺忘廢墟" },
+  skeld:    { n: "Skeleton Dungeon", zh: "骷髏地下城", zl: "骷髏地下城" },
+  geldorak: { n: "Geldorak Mine", zh: "Geldorak 礦坑", zl: "" },
+  geldorakD:{ n: "Geldorak Mine Dungeon", zh: "Geldorak 礦坑地下城", zl: "", note: "進入需要 Clé de la Forêt（森林之鑰）。" },
+  fallen:   { n: "Labyrinth of the Fallen", zh: "墮落者迷宮", zl: "墮落者迷宮", note: "進入需要 Clé des Déchus（墮落者之鑰）。打倒 3 位 Fallen 小首領取得的 Artefact des Fallens 用來開啟雙子騎士（Ornstein 與 Smough）的首領房。" },
+  xal:      { n: "Sanctuary of Xal'Zirith", zh: "Xal'Zirith 聖所", zl: "", note: "進入需要 Clé de Xal'Zirith。" },
+  snow:     { n: "Tolbana Mountains", zh: "Tolbana 雪山", zl: "", note: "圖鑑寫 Mountain Deer 在「Tolbana 西北的雪地」。" },
+  citadel:  { n: "Snow Citadel", zh: "雪之城塞", zl: "雪之城塞" },
+  virelune: { n: "Virelune Lake", zh: "Virelune 湖", zl: "", note: "Virelune 的 NPC Monique 有「擊殺 10 隻鯊魚」任務。" },
+  kobold:   { n: "Kobold Tower", zh: "狗頭人之塔（樓層首領）", zl: "狗頭人之塔", note: "樓層地下城分三段：迷宮（啟動 4 個拉桿，順序不限）→ 大廳怪物波次 → 首領 Illfang。" },
+  aepep:    { n: "Aepep's Lair", zh: "Aepep 巢穴", zl: "" },
   none:     { n: "Unlisted", zh: "wiki 未標示區域" }
 };
 const ZONE_ORDER = ["boar","wolf","mizunari","putrid","vallhat","hanaka","arakhnol","virelune","snow","ruins","geldorak","geldorakD","skeld","fallen","xal","arakhnolD","citadel","aepep","kobold","none"];
 
+// Zone zl = short Chinese label for the monster-zone select ("" = the English name says it all; omitted = show zh).
 // [num, name, type, behaviour A/N/P, zone, difficulty (0 = unrated), drops [[itemId, %]], note, icon, aka (old names, optional)]
 // Names follow the in-game codex (via the wiki display names, rev 2797 on 2026-10-31); renamed monsters keep old names in aka.
 const M = [
@@ -290,7 +291,7 @@ const SPOTS = [
  {id:"ika",area:[[3200,4040],[3300,4000],[3400,4040],[3420,4160],[3330,4220],[3220,4180]],kind:"mob",nsrc:"site",n:"Ika Archipelago",zh:"Ika 群島",x:3271,z:4090,mons:["Ika"],note:"圖鑑把 Ika 列在 Geldorak Mine；這裡用使用者提供的 Ika 群島。"},
  {id:"fallen",kind:"dungeon",n:"Labyrinth of the Fallen",old:"Fallen Dungeon",zh:"墮落者迷宮",dg:{date:"2026-11-03",boss:"Le duo des Déchus",bossZh:"墮落者二人組（Ornstein 和 Smough）",key:"Key of the Fallen",modes:["Easy","Initiate","Hard","Integrity"],easy:[["時間限制","45:00"],["掉下去","送回入口（Sent back If you fall）"],["人數","1～4 人"],["建議等級","8 以上"]],loot:[["Forgotten Shield","Ornstein, Fallen Defender",1],["Halberd of the Warden","Smough, Fallen Devastator",1],["Ring of the Fallen",null,3],["Crossbow of Ash",null,3],["Enchanted Metal Piece","Fallen Soldier",20],["Metal Soul Piece","Fallen Warrior",25],["Soul of the Herald","Fallen Herald",30],["Soul of the Warden","Fallen Guardian",30],["Soul of the Reaper","Fallen Reaper",30],["Metal Soul Ingot",null,50],["Enchanted Metal Ingot",null,50],["500 Cols Pouch",null,100]]},x:2383,z:2414,mons:["Fallen Soldier","Fallen Warrior","Fallen Guardian","Fallen Herald","Fallen Reaper","Ornstein, Fallen Defender","Smough, Fallen Devastator"],note:"進入需要 Clé des Déchus。打倒 3 位 Fallen 小首領取得 Artefact des Fallens，才能進雙子騎士的首領房。"},
  {id:"ruins",area:[[2720,4340],[2840,4320],[2930,4380],[2920,4510],[2800,4560],[2710,4480]],tp:"Ruines Maudites des Squelettes",kind:"mob",n:"Cursed Ruins",csrc:"Cursed Ruins des Squelettes",old:"Cursed Ruins des Squelettes",zh:"詛咒廢墟",x:2806,z:4449,mons:["Skeleton Swordsman","Skeleton Warrior","Skeleton Halberdier","Skeleton Archer"]},
- {id:"xal",kind:"dungeon",n:"Xal'Zirith Dungeon",zh:"Xal'Zirith 聖所（地下城入口）",x:1034,z:1184,src:"ref",mons:["Strangler Spider","Hunting Spider","Venomous Spider","Pricilia","Yula","Jira","Kamilia"],note:"入口在 Arakh'Nol 西北，守衛 NPC 在 X 1013 · Z 1189（進入需要 Clé de Xal'Zirith）。地下的小首領位置（參考互動地圖）：Pricilia X 1232 · Z 1102、Yula X 1102 · Z 1227、Kamilia X 987 · Z 1247、Jira X 1192 · Z 1407。"},
+ {id:"xal",kind:"dungeon",n:"Sanctuary of Xal'Zirith",old:"Xal'Zirith Dungeon",zh:"Xal'Zirith 聖所",x:1034,z:1184,src:"ref",mons:["Strangler Spider","Hunting Spider","Venomous Spider","Pricilia","Yula","Jira","Kamilia"],note:"入口在 Arakh'Nol 西北，守衛 NPC 在 X 1013 · Z 1189（進入需要 Clé de Xal'Zirith）。地下的小首領位置（參考互動地圖）：Pricilia X 1232 · Z 1102、Yula X 1102 · Z 1227、Kamilia X 987 · Z 1247、Jira X 1192 · Z 1407。"},
  {id:"skeld",kind:"dungeon",n:"Skeleton Dungeon",zh:"骷髏地下城（Nazgul 副本）",x:2782,z:4422,src:"ref",mons:["Skeleton Tank","Skeleton Wizard","Narax the Cursed Skeleton","Cursed Nazgul Protector"],note:"入口在詛咒廢墟裡。地下的首領位置（參考互動地圖）：Cursed Nazgul Protector X 2829 · Z 4247、Narax X 2722 · Z 4332。"},
  {id:"kobold",kind:"dungeon",n:"Kobold Tower",csrc:"Tour du Kobold",old:"Tour du Kobold",zh:"狗頭人之塔（樓層首領）",x:3409,z:972,src:"ref",mons:["Illfang the Kobold Lord","Kobold Sentinel","Kobold Warrior","Kobold Lancer","Kobold Sorcerer","Small Kobold","The Mischievous Archer"],note:"Tolbana 北邊的塔，第一層樓層首領 Illfang 在塔頂。官方公告：Kobold 地下城和第 2、3 層一起在 11/5（四）03:00（台灣時間）開放。"},
  {id:"wevent",kind:"wboss",n:"Floor 1 World Event",zh:"第 1 層世界事件",x:1947,z:1990,src:"ref",note:"參考互動地圖標的「Floor 1 World Event」位置。世界王 Galiath 本身要在破碎的地下世界做出祭壇才能進入（見「世界王」分頁），這裡是第 1 層的世界事件地點。"},

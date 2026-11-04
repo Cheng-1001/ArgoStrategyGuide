@@ -291,7 +291,7 @@ with sync_playwright() as p:
     pg.goto(base + "#props"); pg.wait_for_timeout(400)
     pg.click('#fPrGroup .chip[data-v="活動"]'); pg.wait_for_timeout(200)
     ev = pg.evaluate("[...document.querySelectorAll('#fPrSub .chip')].map(c=>c.textContent.replace(/\\s*\\d+$/,''))")
-    check(set(ev) >= {"全部", "萬聖節", "聖誕節", "情人節", "農曆新年"}, f"event items split by event ({ev})")
+    check(set(ev) >= {"全部", "萬聖節", "聖誕節（2025）", "情人節", "農曆新年"}, f"event items split by event ({ev})")
     # four-tab codex: 怪物／裝備／道具／素材 (an item lives in exactly one tab; links open the right panel)
     pg.goto(base + "#items"); pg.wait_for_timeout(400)
     tabs = pg.evaluate("[...document.querySelectorAll('#view-items .vtabs a')].map(a=>a.textContent.replace(/\\s*\\d+$/,'').trim())")
