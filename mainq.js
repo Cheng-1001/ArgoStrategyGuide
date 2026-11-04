@@ -75,12 +75,13 @@ window.SAO_MAINQ = {1: [
   s:[["和 Mephisto 對話",3260,1403],["回答他的問題（答案：An Instrument）",3260,1403],["學會卷軸加水晶的機制",3260,1403]]},
  {t:"Find a Way to Remake the Scroll", n:27, npc:"Emy", en:{0:"Find Emy in the Tolbana Forge",1:"Learn what it takes to remake the scroll",2:"Enter the old mill",3:"Harvest the ink (0/8)"},
   s:[["到 Tolbana 鍛造場找 Emy",3227,1495],["問清楚重做卷軸需要什麼",3227,1495],["進入舊磨坊（入口是岩石裡的豎井）",2765,4778],["在磨坊裡的黏液方塊房間，150 秒內收集 8 份墨水：用 Emy 的燈（右鍵，每 5 秒一次）照出墨水，時間到會重來",2851,4705],["前往 Virelune",1617,1958],["和 Dorven 對話",1618,1959],["調查岩石，看有沒有入口",1419,1986],["全部帶回去給 Emy",3227,1495]]},
- {t:"Request an Audience with King Harald", n:28, nEst:1, npc:"King Harald",
+ {t:"Request an Audience with King Harald", npc:"King Harald",
   s:[["前往 Harald 的宮殿",3199,1510],["和 Harald 國王對話",3198,1524],["得知檔案裡有關於他的記載",3198,1524]]},
- {t:"The Trials of the Heralds", n:29, nEst:1, npc:"—",
-  s:[["找到祖先之墓",3681,1648],["Harald 的試煉 1",3781,1673],["試煉 2",3741,1714],["試煉 3",3701,1667],["得到三個年份：−700、−620、−660",null,null],["回去找 Harald 國王",3198,1524]]},
- {t:"The Crystal of Tolbana", n:30, nEst:1, npc:"Mephisto",
+ {t:"The Trial of the Haralds", n:32, aka:"The Trials of the Heralds", npc:"—", en:{0:"Find the tomb of the ancestors",1:"Trial of Harald I（路標：Épreuve de Harald I）"},
+  img:{0:[["img/quests/32_tomb.jpg","祖先之墓的入口：銅色平台上有往下的樓梯和一盞燈"]],1:[["img/quests/32_trial1_room.jpg","試煉 1 的房間：長滿藤蔓的洞穴，中間有一顆石球"],["img/quests/32_trial1_hole.jpg","石球上的洞往下看"]]},
+  s:[["找到祖先之墓",3681,1648],["Harald 的試煉 1（目標 2 項）",3781,1673],["試煉 2",3741,1714],["試煉 3",3701,1667],["得到三個年份：−700、−620、−660",null,null],["回去找 Harald 國王",3198,1524]]},
+ {t:"The Crystal of Tolbana", n:33, nEst:1, npc:"Mephisto",
   s:[["回去找 Mephisto",3260,1403],["在鍛造場附近的門和他會合",3239,1461],["跟著他走到門口",3216,1445],["下到水晶底下",3047,1208],["在 Kobold Tower 和 Mephisto 會合",3400,1080]]},
- {t:"Floor 2", n:31, nEst:1, npc:"—", d:"前往第 2 層（預計 11/4 開放）。",
+ {t:"Floor 2", n:34, nEst:1, npc:"—", d:"前往第 2 層（預計 11/4 開放）。",
   s:[["抵達第 2 層",null,null]]}
 ]};
