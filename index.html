@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="a62be4763a">
+<meta name="sao-build" content="14510ae589">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -61,8 +61,10 @@ button,input,select{font:inherit;color:inherit}
 .rsel[hidden]{display:none}
 .rsel .fgroup{display:flex;flex-direction:row;align-items:center;gap:6px}
 .rsel .fgroup[hidden]{display:none}
-.rsel .flabel{margin:0;letter-spacing:.06em}
-.rsel .sel{width:auto;min-width:120px;max-width:230px;text-overflow:ellipsis;padding-top:4px;padding-bottom:4px}
+.rsel .flabel{margin:0;letter-spacing:0;text-transform:none;font-family:inherit;font-weight:400;font-size:12.5px;color:var(--muted)}
+.rsel select.sel{width:auto;min-width:120px;max-width:230px;text-overflow:ellipsis;height:24px;padding:0 6px;line-height:22px;font-size:12.5px;border-radius:6px}
+/* title row: everything centred on one line of fixed height, so the gap to the box below is the same on every tab */
+@media (min-width:821px){.results>.rhead{align-items:center;min-height:26px;row-gap:6px;margin-bottom:4px}.results>.rhead .actf .af{height:24px}}
 .topf .fgroup{display:flex;flex-direction:row;align-items:center;gap:12px}
 .topf .fgroup[hidden]{display:none}
 .topf .flabel{flex:none;width:48px;margin:0}
