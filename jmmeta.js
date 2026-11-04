@@ -2,8 +2,8 @@
    and every merged upload; results[report id] = outcome of each player upload. Written by tools/jm_merge.py. */
 window.SAO_JM = {
  "1": {
-  "date": "2026-11-03",
-  "pct": 32.8,
+  "date": "2026-11-04",
+  "pct": 35.1,
   "log": [
    {
     "report": null,
@@ -30,9 +30,15 @@ window.SAO_JM = {
     "date": "2026-11-03",
     "regions": 61,
     "newChunks": 691
+   },
+   {
+    "report": "R0005",
+    "date": "2026-11-04",
+    "regions": 62,
+    "newChunks": 2198
    }
   ],
-  "chunks": 31945
+  "chunks": 34143
  },
  "results": {
   "R0002": {
@@ -63,6 +69,16 @@ window.SAO_JM = {
    "pct": 32.8,
    "date": "2026-11-03",
    "folders": 2,
+   "skipped": 0
+  },
+  "R0005": {
+   "ok": true,
+   "regions": 62,
+   "newChunks": 2198,
+   "overlap": 30060,
+   "pct": 35.1,
+   "date": "2026-11-04",
+   "folders": 1,
    "skipped": 0
   }
  }
