@@ -90,5 +90,17 @@ window.SAO_REPORTS = [
   "raw": {},
   "source": "form",
   "review": "自動核准：探索地圖由程式比對網站地圖檢查"
+ },
+ {
+  "id": "R0005",
+  "type": "jmap",
+  "floor": 1,
+  "name": "IICHENGII",
+  "date": "2026-11-05",
+  "img": null,
+  "imgs": [],
+  "raw": {},
+  "source": "form",
+  "review": "自動核准：探索地圖由程式比對網站地圖檢查"
  }
 ];
