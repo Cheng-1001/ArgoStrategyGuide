@@ -69,7 +69,7 @@ window.SAO_MAINQ = {1: [
   s:[["穿過解封的大門（地下）",2848,4254,1],["打倒 Cursed Nazgul Protector",null,null],["取得遠古封印的第三塊碎片",null,null],["和 A 的回聲對話，封印重新成形",null,null],["走通道離開",null,null],["前往墮落者迷宮",2382,2415]]},
  {t:"The Truth About the Seal", n:24, npc:"Catherine",
   s:[["到墮落者迷宮門口和 Catherine 對話",2382,2415]]},
- {t:"The Calamity", n:25, nEst:1, npc:"The Master Swordsman",
+ {t:"The Calamity", n:25, npc:"The Master Swordsman", en:{0:"Speak with the Master Swordsman to continue the main story"},
   s:[["和劍術大師對話",1809,4289],["告訴他迷宮裡發生的事，選擇繼續或放棄",1809,4289],["問 Tolbana 的第 1 位法師",3321,1619],["問第 2 位法師",3200,1447],["問第 3 位法師",3198,1469],["去找 Mephisto",3260,1403]]},
  {t:"Mephisto", n:26, nEst:1, npc:"Mephisto",
   s:[["和 Mephisto 對話",3260,1403],["回答他的問題（答案：An Instrument）",3260,1403],["學會卷軸加水晶的機制",3260,1403]]},

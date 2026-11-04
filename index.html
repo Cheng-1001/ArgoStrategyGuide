@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="2812fa8c80">
+<meta name="sao-build" content="f3adeb6cb5">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -784,18 +784,18 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=1df9c40f"></script>
+<script src="data.js?v=e1924527"></script>
 <script src="data23.js?v=bc83d65b"></script>
 <script src="bosses.js?v=41309c3c"></script>
 <script src="reports.js?v=f9564506"></script>
 <script src="hints.js?v=fcf000d6"></script>
 <script src="codex.js?v=48141603"></script>
-<script src="mainq.js?v=c8ca017f"></script>
+<script src="mainq.js?v=49f8240a"></script>
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=0e9f806f"></script>
-<script src="gameinfo.js?v=4670c672"></script>
+<script src="gameinfo.js?v=c72d67ee"></script>
 <script src="npcs.js?v=3a3bf3bc"></script>
-<script src="changelog.js?v=82a50d43"></script>
+<script src="changelog.js?v=5ebc70bf"></script>
 <script src="recipes.js?v=747aafd1"></script>
 <script src="jmmeta.js?v=d55fc3c3"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1103,7 +1103,8 @@ function itemObtainHTML(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id
     +gat.map(sp=>`<li><button class="lrow" data-go="s|${sp.id}"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">${KIND[sp.kind][1]}</span><span class="t"><b>${rn("s"+sp.id)}${flBadge(sp.floor)} ${esc(sp.n)}</b><span>${esc(sp.zh)}・X ${sp.x} · Z ${sp.z}</span></span><span class="v">撿取</span></button></li>`).join("");
   lastF=0;
   const useRows=use.map(({q:qq,n,inf})=>(multi?fh(qq.floor):"")+`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>原文：${esc(qq.raw)}${inf?' <span class="inf">推斷</span>':""}</span></span><span class="v">× ${n}</span></button></li>`).join("");
-  return`${giHTML(GI_SITE[id])}  <h3 class="sec">取得方式</h3>
+  const gi=GI_SITE[id]||(offOf(id)&&GI_OID[offOf(id).e.oid]);
+  return`${giHTML(gi)}  <h3 class="sec">取得方式</h3>
   ${srcRows?`<ul class="rows">${srcRows}</ul>`:""}${it.src?`<div class="note">${esc(it.src)}</div>`:""}${!srcRows&&!it.src?`<div class="note">目前沒有已知的取得方式。</div>`:""}
   ${IM.steps.length?`${routeMini(IM.steps,IM.f,true)}<button class="btn" data-imap="${esc(id)}">放大查看取得地點（另開視窗，可縮放）</button>`:""}
   <h3 class="sec">用途 <span class="c">${use.length?use.length+" 個任務，共 "+needTotal(id)+" 個":""}</span></h3>
@@ -1597,7 +1598,7 @@ const obtZh=l=>{let m;
   if(l==="Gacha machine")return"轉蛋機（Gacha machine）";
   if(l==="No known source")return"遊戲寫「No known source」：目前沒有已知來源";
   return l};
-const giHTML=g=>g?`<h3 class="sec">遊戲寫的取得方式</h3><ul class="glist">${g.obt.length?g.obt.map(l=>`<li title="${esc(l)}">${esc(obtZh(l))}</li>`).join(""):"<li>說明視窗沒有寫取得方式</li>"}</ul>${g.desc?`<p class="lore">${esc(g.desc)}</p>`:""}<div class="note srcn">遊戲名稱、取得方式和英文說明取自遊戲的物品說明視窗（站長 ${GI.date} 截圖）${g.lvl?`；需求等級 ${g.lvl}`:""}。</div>`:"";
+const giHTML=g=>g?`<h3 class="sec">遊戲寫的取得方式</h3><ul class="glist">${g.obt.map(l=>`<li title="${esc(l)}">${esc(obtZh(l))}</li>`).join("")}${g.note?`<li>${esc(g.note)}</li>`:""}${g.obt.length||g.note?"":"<li>說明視窗沒有寫取得方式</li>"}</ul>${g.desc?`<p class="lore">${esc(g.desc)}</p>`:""}<div class="note srcn">遊戲名稱、取得方式和英文說明取自遊戲的物品說明視窗（站長 ${GI.date} 截圖）${g.lvl?`；需求等級 ${g.lvl}`:""}。</div>`:"";
 const dn=e=>e.gen||e.name;
 const eqById=Object.fromEntries(EQ.map(e=>[String(e.oid),e]));EQ.forEach(e=>{if(GI_OID[e.oid])e.gen=GI_OID[e.oid].en});
 const FR2ID={};Object.keys(ITEMS).forEach(id=>{if(ITEMS[id].fr)FR2ID[ITEMS[id].fr]=id});
@@ -1643,7 +1644,7 @@ function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span class="muted" style="font-size:12px">等級 ${e.lv}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):"・不限職業"}</span></div></div></div>
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
   <dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
-  ${en&&ITEMS[en]?itemObtainHTML(en):""}${giHTML(GI_OID[e.oid])}
+  ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note srcn">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
@@ -1680,7 +1681,7 @@ function propDetail(id){const e=prById[id];const en=FR2ID[e.name];
   return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${e.gen?esc(e.name)+"・":""}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}${rows?`<dl class="stats">${rows}</dl>`:""}
-  ${en&&ITEMS[en]?itemObtainHTML(en):""}${giHTML(GI_OID[e.oid])}
+  ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note srcn">官方圖鑑 #${e.oid}。${PR_GROUP[e.cat]==="活動"?(PR_EVYEAR[e.cat]?`活動年份 ${PR_EVYEAR[e.cat]} 取自官網圖鑑的分類名稱。`:"官網圖鑑的這個活動分類沒有寫年份，所以不標年份。"):""}${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
 

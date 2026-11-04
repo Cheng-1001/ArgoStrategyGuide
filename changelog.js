@@ -3,6 +3,8 @@
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
  ["2026-11-04",[
+  "主線 25. The Calamity 的編號照遊戲任務日誌確認，附上遊戲原文；Fallen Soldier、Fallen Warrior 標上等級 9（遊戲截圖）",
+  "再補 10 件物品的遊戲說明和取得方式：Leaf Fragments、Cursed Cloth、Potion of the Martyr、Enchanted Metal Ingot（Island Forge 熔爐配方）等",
   "物品名稱改用遊戲畫面上的英文名（例如 Ring of Narax、Magic Staff of the Ruins、Soul of the Warden），法文官方名稱放在名稱下面；舊名稱仍可搜尋",
   "38 件物品的資料加上「遊戲寫的取得方式」：怪物掉落、製作 NPC、NPC 收購價、寶箱掉率、Island Forge（破碎的地下世界的鍛造台）等，附遊戲的英文說明",
   "Skeleton Wizard 補上掉落 Mage's Scroll（50%）",
