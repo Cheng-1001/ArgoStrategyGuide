@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="45f3904631">
+<meta name="sao-build" content="e2e0568900">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -681,10 +681,10 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">條件</span>
         <label class="check"><input type="checkbox" id="fItemQuest"> 只看任務需要的</label>
         <label class="check"><input type="checkbox" id="fItemDrop"> 只看怪物會掉的</label>
-        <label class="check"><input type="checkbox" id="fItemAll"> 顯示全部素材（其他樓層、官網其他素材）</label></div>
+        <label class="check"><input type="checkbox" id="fItemAll"> 只看這一層有取得資料的</label></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fItemSort" aria-label="排序">
         <option value="name">名稱</option><option value="rar">稀有度（高→低）</option><option value="src">掉落來源最多</option><option value="need">任務需求量最多</option></select></div>
-      <div class="note">怪物掉的材料和採集物（作物、礦物、木材、漁獲），列出掉落率、採集點和任務需求。預設只列這一層有取得資料的；勾「顯示全部素材」會加上其他樓層和官網的其他素材。怪物掉的裝備、食物、藥水在「裝備」「道具」。</div>
+      <div class="note">怪物掉的材料和採集物（作物、礦物、木材、漁獲），列出掉落率、採集點和任務需求。預設列出全部（含官網的漁獲、礦物等，本站還沒有取得地點的也列）；勾「只看這一層有取得資料的」只留這一層有掉落、採集點或任務的。怪物掉的裝備、食物、藥水在「裝備」「道具」。</div>
     </div>
     <div class="results"><div class="rhead"><h2>素材</h2><span class="count" id="cItem"></span></div><div class="grid" id="lItem"></div></div>
   </section>
@@ -775,7 +775,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=2bc8c143"></script>
+<script src="data.js?v=ba262494"></script>
 <script src="data23.js?v=bc83d65b"></script>
 <script src="bosses.js?v=41309c3c"></script>
 <script src="reports.js?v=f9564506"></script>
@@ -1226,10 +1226,12 @@ const matGroup=x=>{if(x.k==="p")return MAT_G[x.e.cat]||"材料";const o=offOf(x.
 chipsInto($("fItemGroup"),[["all","全部"],...GROUPS.map(g=>[g,g])],()=>itemGroup,v=>itemGroup=v,renderItems);
 chipsInto($("fItemRar"),[["all","全部"],["c","普通"],["b","稀有"],["a","史詩"],["s","傳說"],["splus","傳說+"]],()=>itemRar,v=>itemRar=v,renderItems);
 ["fItemQuest","fItemDrop","fItemSort","fItemAll"].forEach(i=>$(i).onchange=renderItems);
-const matPool=(f,all)=>{const site=Object.keys(ITEMS).filter(id=>!redirI(id)&&(all||itemFloors(id).includes(f))).map(id=>({k:"i",id}));
-  if(!all)return site;return site.concat(PR.filter(e=>MATG(e)&&!(FR2ID[e.name]&&ITEMS[FR2ID[e.name]])).map(e=>({k:"p",e})))};
-function renderItems(){const s=Sq(),so=$("fItemSort").value,all=$("fItemAll").checked;
-  const pool=matPool(FL,all);
+// default: every material (this site's + the official catalogue's; fishing etc. have no floor data yet);
+// 「只看這一層有取得資料的」 keeps only this site's items with a drop / gather / quest on this floor (user 2026-11-04)
+const matPool=(f,here)=>{const site=Object.keys(ITEMS).filter(id=>!redirI(id)&&(here?itemFloors(id).includes(f):itemFloors(id).length||ITEMS[id].fr)).map(id=>({k:"i",id}));
+  if(here)return site;return site.concat(PR.filter(e=>MATG(e)&&!(FR2ID[e.name]&&ITEMS[FR2ID[e.name]])).map(e=>({k:"p",e})))};
+function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").checked;
+  const pool=matPool(FL,!all);
   const gHas=new Set(pool.map(matGroup));$("fItemGroup").querySelectorAll(".chip").forEach(c=>c.hidden=c.dataset.v!=="all"&&!gHas.has(c.dataset.v)&&c.getAttribute("aria-pressed")!=="true");
   const R_=x=>x.k==="p"?x.e.r:ITEMS[x.id].r,NM=x=>x.k==="p"?x.e.name:x.id,SRC=x=>x.k==="p"?[]:SOURCES[x.id],USE=x=>x.k==="p"?[]:USES[x.id];
   let a=pool.filter(x=>(itemGroup==="all"||matGroup(x)===itemGroup)&&(itemRar==="all"||R_(x)===itemRar)
@@ -1238,7 +1240,7 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=$("fItemAll").ch
   const rv=x=>R_(x)&&RAR[R_(x)]?RAR[R_(x)][2]:0;const nt=x=>x.k==="p"?0:needTotal(x.id,all?0:FL);const by=(x,y)=>NM(x).localeCompare(NM(y));
   if(so==="name")a.sort(by);else if(so==="rar")a.sort((x,y)=>rv(y)-rv(x)||by(x,y));
   else if(so==="src")a.sort((x,y)=>SRC(y).length-SRC(x).length||by(x,y));else a.sort((x,y)=>nt(y)-nt(x)||by(x,y));
-  $("cItem").textContent=`${a.length} / ${pool.length} 件`;const shown=a.slice(0,300);
+  $("cItem").textContent=`${a.length} / ${pool.length} 件`;const shown=a.slice(0,600);
   $("lItem").innerHTML=a.length?shown.map(x=>{if(x.k==="p"){const e=x.e;return`<button class="card" data-key="p|${e.oid}" data-go="p|${e.oid}">
     <div class="chead">${pslot(e)}<div class="cname"><b>${esc(e.name)}</b><span>${esc(PR_CAT[e.cat]||e.cat)}・本站還沒有取得資料</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span>等級 ${e.lv}</span>`:""}</div></button>`}

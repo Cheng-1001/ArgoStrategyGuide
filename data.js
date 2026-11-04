@@ -226,7 +226,6 @@ const RAW = {
 // named in quests / bestiary but absent from the official catalogue
 "Curved Bow":[null,null,null,"unknown",null,null,null,-1],
 "Unknown Logs":[null,null,null,"unknown",null,null,null,-1],
-"???":[null,null,null,"unknown",null,null,null,-1],
 "Sylvan Shaman Staff":[null,null,null,"unknown",null,null,null,-1],
 "Flower of a Nepenthes":[null,null,null,"artifact",null,null,null,188],
 "Leg of a Spider":[null,"a",7,"artifact","The leg of a giant spider, quick and unpredictable, it dodges as much as it stings",null,{"Critical Strike Chance":1,"Projectile Damage":2,"Dodge":2.5},182],
