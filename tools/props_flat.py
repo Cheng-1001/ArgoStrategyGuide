@@ -13,7 +13,7 @@ s=open(S+'/props_old.js').read();i=s.index('window.SAO_PROPS=')+17
 head=s[:i];rows=json.loads(s[i:s.rindex(';')])
 flat=json.load(open(S+'/im/flat.json'))
 extra={1824:S+'/im/rk/elitecreatures_knight_assortment_key.png',1823:S+'/im/rk/rpg_essentials_1_rpg_essentials_1_model_key_shadow.png',2116:S+'/im/rk/treasure_tier_pack_keys_gold_key.png',2118:S+'/im/rk/treasure_tier_pack_keys_wood_key.png'}
-OUTLINE={1823,1824}
+OUTLINE=set()   # user 2026-11-05: no outline on the keys
 old=Image.open(S+'/props_old.png').convert('RGBA')
 def fitpx(im):
     im=im.convert('RGBA');w,h=im.size

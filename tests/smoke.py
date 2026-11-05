@@ -447,16 +447,20 @@ with sync_playwright() as p:
           and pg.locator('#rFeedW a[href*="template=6-idea.yml"]').count() == 1, "協作區: #feedback opens 問題回報及建議 with the bug and idea buttons")
     pg.click('.csub a[data-sub="data"]'); pg.wait_for_timeout(300)
     check(pg.is_visible("#rData") and pg.is_hidden("#rFeedW") and "#report" in pg.url, "協作區: 攻略資料維護 shows the data form")
-    # recipe panel <-> codex: 查看圖鑑 / 查看配方 switch tabs and open the entry
+    # recipe panel <-> codex: 查看圖鑑 / 查看配方 open a pop-up in the middle (user 2026-11-05: 不要跳轉)
     pg.goto(base + "#recipes"); pg.wait_for_timeout(500)
     pg.fill("#q", ""); pg.click('#fRcCat .chip[data-v="all"]'); pg.wait_for_timeout(300)   # earlier steps left a category filter on
     pg.locator("#lRc .rcard", has_text="Belt of the Stags").first.click(); pg.wait_for_timeout(300)
     check("裝備資料" in pg.inner_text("#pBody") and "最大生命" in pg.inner_text("#pBody"), "the recipe panel shows the crafted item's data")
-    pg.click('#pBody [data-goview^="equip"]'); pg.wait_for_timeout(700)
-    hh, pt, ns = pg.evaluate("location.hash"), pg.inner_text("#pBody"), pg.locator(".card.sel").count()
-    check(hh.endswith("equip") and "Ceinture des Cerfs" in pt and ns == 1, f"查看圖鑑 opens the item in the equipment codex ({hh}, selected cards {ns})")
-    pg.click('#pBody [data-goview^="recipes"]'); pg.wait_for_timeout(700)
-    check(pg.evaluate("location.hash").endswith("recipes") and "Belt of the Stags" in pg.inner_text("#pBody"), "查看配方 opens the recipe in the recipes tab")
+    pg.click('#pBody [data-goview^="equip"]'); pg.wait_for_timeout(500)
+    hh, gt = pg.evaluate("location.hash"), pg.inner_text("#gvBody") if pg.is_visible("#gvBack") else ""
+    check(hh.endswith("recipes") and "Ceinture des Cerfs" in gt and "Belt of the Stags" in pg.inner_text("#pBody"),
+          f"查看圖鑑 opens the item in a pop-up, tab and panel unchanged ({hh})")
+    pg.click('#gvBody [data-goview^="recipes"]'); pg.wait_for_timeout(400)
+    gv = pg.evaluate("window.__gv()")
+    check(gv["depth"] == 2 and "Belt of the Stags" in pg.inner_text("#gvBody") and pg.is_visible("#gvPrev"), "查看配方 inside the pop-up swaps it, with a back link")
+    pg.keyboard.press("Escape"); pg.wait_for_timeout(200)
+    check(pg.is_hidden("#gvBack") and pg.is_visible("#panel"), "Esc closes only the pop-up")
     # calibration mode is for the owner only (?edit)
     pg.goto(base + "#map"); pg.wait_for_timeout(500)
     check(pg.is_hidden("#editToggle") and pg.is_hidden(".mapfoot"), "players do not see the calibration button")

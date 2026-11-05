@@ -176,6 +176,12 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .mqs .linkbtn{font-family:var(--f-mono);font-size:11.5px;margin-left:6px;white-space:nowrap}
 .routebar{position:absolute;left:50%;bottom:12px;transform:translateX(-50%);z-index:8;display:flex;gap:8px;align-items:center;background:rgba(10,16,22,.88);color:#fff;border-radius:999px;padding:3px 4px 3px 14px;font-size:12.5px;max-width:calc(100% - 24px)}
 .routebar span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.routebar .iconbtn{height:26px;min-width:26px;border-radius:999px;background:rgba(255,255,255,.12);color:#fff;border:0}
+/* 查看配方／查看圖鑑: a pop-up in the middle of the screen instead of switching tabs (user 2026-11-05: 不要跳轉，在中間開啟彈出視窗) */
+.gvback{position:fixed;inset:0;z-index:60;background:rgba(6,10,16,.55);display:flex;align-items:center;justify-content:center;padding:16px}.gvback[hidden]{display:none}
+.gvbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.4);width:min(560px,100%);max-height:min(86vh,900px);display:flex;flex-direction:column;overflow:hidden}
+.gvhead{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 16px;border-bottom:1px solid var(--line)}.gvhead b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
+.gvbody{overflow:auto;padding:14px 16px 18px;display:flex;flex-direction:column;gap:10px}
+@media (max-width:820px){.gvback{padding:8px}.gvbox{max-height:calc(100dvh - 16px)}}
 .rwin{position:fixed;z-index:40;left:max(10px,calc(50% - 420px));top:calc(var(--head-h) + 30px);width:min(720px,calc(100vw - 20px));height:min(560px,calc(100vh - var(--head-h) - 40px));min-width:280px;min-height:240px;max-width:calc(100vw - 10px);max-height:calc(100vh - 10px);resize:both;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.35);display:flex;flex-direction:column}
 .rwin[hidden]{display:none}
 .cwbody{flex:1;overflow:auto;padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
@@ -773,6 +779,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <section class="view bossview" id="view-changelog" hidden><div class="bwrap" id="clWrap"></div></section>
 </div>
 
+<div class="gvback" id="gvBack" hidden><div class="gvbox" role="dialog" aria-modal="true" aria-labelledby="gvTitle"><div class="gvhead"><button class="linkbtn" id="gvPrev" hidden>← 上一個</button><b id="gvTitle"></b><button class="iconbtn" id="gvX" aria-label="關閉">✕</button></div><div class="gvbody" id="gvBody"></div></div></div>
 <div class="rwin" id="cwin" hidden role="dialog" aria-label="職業可用的裝備"><div class="rwhead" id="cwHead"><b id="cwTitle"></b><span class="muted">拖曳標題移動・拉右下角調整大小</span><button class="iconbtn" id="cwX" aria-label="關閉">✕</button></div><div class="cwbody" id="cwBody"></div></div>
 <div class="rwin" id="rwin" hidden role="dialog" aria-label="任務路線"><div class="rwhead" id="rwHead"><b id="rwTitle"></b><span class="muted">滾輪縮放・拖曳移動・拉右下角調整大小</span><button class="iconbtn" id="rwIn" aria-label="放大">＋</button><button class="iconbtn" id="rwOut" aria-label="縮小">－</button><button class="iconbtn" id="rwFit" aria-label="顯示整條路線">⤢</button><button class="iconbtn" id="rwX" aria-label="關閉">✕</button></div><div class="rwbody" id="rwBody"><svg id="rwSvg" role="img" aria-label="任務路線圖"></svg></div></div>
 <aside id="panel" hidden aria-live="polite">
@@ -1032,7 +1039,7 @@ function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.
   // phones: source notes fold into one 「ⓘ 資料來源」 line at the bottom of the panel
   {const sn=[...pBody.querySelectorAll(".note.srcn")];if(sn.length){if(matchMedia("(max-width:820px)").matches){const d=document.createElement("details");d.className="srcfold";d.innerHTML="<summary>ⓘ 資料來源</summary>";sn.forEach(n=>d.appendChild(n));pBody.appendChild(d)}else sn.forEach(n=>{n.classList.add("srcend");pBody.appendChild(n)})}}
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
-  pBody.querySelectorAll("[data-goview]").forEach(b=>b.addEventListener("click",()=>{const [v,t,i]=b.dataset.goview.split("|");goView(v,t,i)}));
+  pBody.querySelectorAll("[data-goview]").forEach(b=>b.addEventListener("click",()=>{const [v,t,i]=b.dataset.goview.split("|");gvOpen(t,i)}));
   pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);
     // a quest step: the whole route in the floating window, zoomed to this step
     const rt=b.closest(".mqs")&&pBody.querySelector("[data-route]");
@@ -1202,7 +1209,30 @@ Object.values(window.SAO_MAINQ||{}).forEach(L=>L.forEach(q=>{if(!q.rw)return;con
 const chipsInto=(el,opts,get,set,cb)=>{el.innerHTML=opts.map(([v,l])=>`<button class="chip" data-v="${v}" aria-pressed="${get()===v}">${l}</button>`).join("");
   el.querySelectorAll(".chip").forEach(c=>c.onclick=()=>{set(c.dataset.v);el.querySelectorAll(".chip").forEach(o=>o.setAttribute("aria-pressed",o===c));cb()})};
 function bindGo(root){root.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [t,i]=b.dataset.go.split("|");openP(t,i,"new")});
-  root.querySelectorAll("[data-goview]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [v,t,i]=b.dataset.goview.split("|");goView(v,t,i)})}
+  root.querySelectorAll("[data-goview]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [v,t,i]=b.dataset.goview.split("|");gvOpen(t,i)})}
+// 查看配方／查看圖鑑 open the entry in a pop-up in the middle of the screen; the tab and the side panel stay as they are
+// (user 2026-11-05: 不要跳轉，在中間開啟彈出視窗). Inside it, 查看… swaps the pop-up (← 上一個 goes back); other links open in the side panel.
+const GV=[];
+function gvRender(){const cur=GV[GV.length-1],B=$("gvBody");if(!cur){$("gvBack").hidden=true;return}
+  let [t,i]=cur;if(t==="i"){const r=redirI(i);if(r)[t,i]=r}else if(t==="p"){const e=prById[String(i)];if(MATG(e)){const r=redirP(i);if(r)[t,i]=r}}
+  B.innerHTML=t==="r"?recipeDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):itemDetail(i);
+  $("gvTitle").textContent=nameOf({type:t,id:i});$("gvPrev").hidden=GV.length<2;
+  B.querySelectorAll(".note.srcn").forEach(n=>{n.classList.add("srcend");B.appendChild(n)});
+  B.querySelectorAll("[data-goview]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [,t2,i2]=b.dataset.goview.split("|");GV.push([t2,i2]);gvRender()});
+  B.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [t2,i2]=b.dataset.go.split("|");gvClose();openP(t2,i2,panel.hidden?"new":"push")});
+  B.querySelectorAll("[data-repgo]").forEach(b=>b.addEventListener("click",()=>gvClose()));
+  // map links: the floating map / map tab, so the pop-up closes first
+  const ttl=$("gvTitle").textContent||"位置";
+  B.querySelectorAll("[data-rep]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [f,x,z]=b.dataset.rep.split("|").map(Number);gvClose();showPoints(f,[[x,z]],ttl,()=>repPin(x,z),0)});
+  B.querySelectorAll("[data-imap]").forEach(b=>b.onclick=e=>{e.stopPropagation();const im=itemMap(b.dataset.imap);gvClose();openRouteWin(b.dataset.imap+"・取得地點",im.steps,im.f,true)});
+  B.querySelectorAll("[data-spot]").forEach(b=>b.onclick=e=>{e.stopPropagation();const sp=spotById(b.dataset.spot);gvClose();showPoints(sp.floor,[[sp.x,sp.z]],sp.n,()=>focusSpot(sp.id))});
+  B.scrollTop=0;$("gvBack").hidden=false}
+function gvOpen(t,i){GV.length=0;GV.push([t,String(i)]);gvRender();$("gvX").focus()}
+function gvClose(){GV.length=0;$("gvBack").hidden=true;$("gvBody").innerHTML=""}
+$("gvX").onclick=gvClose;$("gvPrev").onclick=()=>{GV.pop();gvRender()};
+$("gvBack").addEventListener("click",e=>{if(e.target===$("gvBack"))gvClose()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("gvBack").hidden){e.stopImmediatePropagation();gvClose()}},true);
+window.__gv=()=>({open:!$("gvBack").hidden,title:$("gvTitle").textContent,depth:GV.length});
 // switch to another tab and open an entry there (查看圖鑑 / 查看配方); the card is scrolled into view
 let viewPending=null;
 function goView(v,t,i){if(t==="i"){const r=redirI(i);if(r){[t,i]=r;v=t==="e"?"equip":"props"}}else if(t==="p"){const e=prById[String(i)];if(MATG(e)){v="items";const r=redirP(i);if(r)[t,i]=r}}
@@ -1716,14 +1746,14 @@ PR.forEach(e=>{if(!/^potion_/.test(e.cat))return;const n=(e.gen||"")+" "+e.name;
     const e={oid:id,name:n,gen:n,cat,r:null,lv:0,lore:"",st:{},ic:-1,extra:1};PR.push(e);prById[id]=e;if(RECIC[n])OID_RECIC[id]=RECIC[n];
     const rows=ALLREC.filter(r=>norm(r.en)===norm(n));if(rows.length)RECIPE_BY_EQ[id]=rows})}
 PR.forEach(e=>{const n=((e.gen||"")+" "+e.name).toLowerCase();
-  if(e.cat==="tool")e.cat=/pioche|pickaxe/.test(n)?"tool_pick":/houe|serpe|\bhoe\b/.test(n)?"tool_hoe":/hache|\baxe\b/.test(n)?"tool_axe":/canne|fishing rod/.test(n)?"tool_rod":/marteau|hammer/.test(n)?"tool_hammer":/torch/.test(n)?"tool_torch":"tool";
+  if(e.cat==="tool")e.cat=/pioche|pickaxe|houe|serpe|\bhoe\b|hache|\baxe\b/.test(n)?"tool_gather":/canne|fishing rod/.test(n)?"tool_rod":/marteau|hammer/.test(n)?"tool_hammer":/torch/.test(n)?"tool_torch":"tool";
   else if(/réparation|repair kit/.test(n))e.cat="tool_repair"});
 // sub-category order inside a group (user 2026-11-05): potions → crystals → food → other consumables; keys: dungeon then chest
-const SUB_ORDER=["生命藥水","魔力藥水","耐力藥水","水晶","食物","消耗品","鎬子","斧頭","鋤頭","釣竿","錘子","修理包","火把","其他工具","地下城鑰匙","寶箱鑰匙","符文寶石","強化藥劑"];
+const SUB_ORDER=["生命藥水","魔力藥水","耐力藥水","水晶","食物","消耗品","採集","釣竿","錘子","修理包","火把","其他工具","地下城鑰匙","寶箱鑰匙","符文寶石","強化藥劑"];
 const subRank=c=>{const i=SUB_ORDER.indexOf(PR_SUBLAB(c));return i<0?99:i};
 const PRV=()=>PR.filter(e=>!MATG(e));   // the 道具 tab: materials and gathered things live in 素材
-const PR_CAT={material:"材料",fishing_job:"漁獲",miner_job:"礦物",lumberjack_job:"木材",farmer_job:"作物",consumable_item:"消耗品",consumable:"消耗品",food:"食物",potion_stamina:"耐力藥水",potion_heal:"生命藥水",potion_mana:"魔力藥水",gem_stone:"符文寶石",fortifier:"強化藥劑",catalyst:"催化劑",crystal:"水晶",tool:"其他工具",tool_pick:"鎬子",tool_axe:"斧頭",tool_hoe:"鋤頭",tool_rod:"釣竿",tool_hammer:"錘子",tool_repair:"修理包",tool_torch:"火把",key_crate:"寶箱鑰匙",dungeon_key:"地下城鑰匙",halloween:"萬聖節活動",noel2025:"聖誕節活動（2025）",saint_valentin:"情人節活動",lunar:"農曆新年活動"};
-const PR_GROUP={material:"材料",fishing_job:"採集",miner_job:"採集",lumberjack_job:"採集",farmer_job:"採集",consumable_item:"消耗品",consumable:"消耗品",food:"消耗品",potion_stamina:"消耗品",potion_heal:"消耗品",potion_mana:"消耗品",gem_stone:"符文・強化",fortifier:"符文・強化",crystal:"消耗品",tool:"工具",tool_pick:"工具",tool_axe:"工具",tool_hoe:"工具",tool_rod:"工具",tool_hammer:"工具",tool_repair:"工具",tool_torch:"工具",key_crate:"鑰匙",dungeon_key:"鑰匙",halloween:"活動",noel2025:"活動",saint_valentin:"活動",lunar:"活動"};
+const PR_CAT={material:"材料",fishing_job:"漁獲",miner_job:"礦物",lumberjack_job:"木材",farmer_job:"作物",consumable_item:"消耗品",consumable:"消耗品",food:"食物",potion_stamina:"耐力藥水",potion_heal:"生命藥水",potion_mana:"魔力藥水",gem_stone:"符文寶石",fortifier:"強化藥劑",catalyst:"催化劑",crystal:"水晶",tool:"其他工具",tool_gather:"採集",tool_rod:"釣竿",tool_hammer:"錘子",tool_repair:"修理包",tool_torch:"火把",key_crate:"寶箱鑰匙",dungeon_key:"地下城鑰匙",halloween:"萬聖節活動",noel2025:"聖誕節活動（2025）",saint_valentin:"情人節活動",lunar:"農曆新年活動"};
+const PR_GROUP={material:"材料",fishing_job:"採集",miner_job:"採集",lumberjack_job:"採集",farmer_job:"採集",consumable_item:"消耗品",consumable:"消耗品",food:"消耗品",potion_stamina:"消耗品",potion_heal:"消耗品",potion_mana:"消耗品",gem_stone:"符文・強化",fortifier:"符文・強化",crystal:"消耗品",tool:"工具",tool_gather:"工具",tool_rod:"工具",tool_hammer:"工具",tool_repair:"工具",tool_torch:"工具",key_crate:"鑰匙",dungeon_key:"鑰匙",halloween:"活動",noel2025:"活動",saint_valentin:"活動",lunar:"活動"};
 const PR_ICON={材料:"🧱",採集:"⛏️",消耗品:"🧪","符文・強化":"💎",工具:"🔧",鑰匙:"🗝️",活動:"🎉"};
 const pslot=(e,s=44)=>OID_RECIC[e.oid]?recicImg(OID_RECIC[e.oid],s):e.gen&&GICON[e.gen]?recicImg(GICON[e.gen],s):e.ic<0&&FR2ID[e.name]&&ITEMS[FR2ID[e.name]].ic>=0?slot(FR2ID[e.name],s):e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${PR_ICON[PR_GROUP[e.cat]]||"❔"}</span>`:`<span class="eslot pslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
 let prGroup="all",prRar="all",prSubV="all";
@@ -2167,17 +2197,6 @@ function buildFormReport(){
   <article class="bcard"><h4 class="sec">審核流程</h4>
     <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表，幾分鐘內會出現在右邊的「處理中的回報」。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線；「處理中的回報」會標「退回」。想補截圖可以重新回報一次。</li></ol>
     <div class="muted" style="font-size:12.5px">想當審核員？請聯絡網站管理者。</div></article>
-  <article class="bcard pconly" id="jmPack"><h4 class="sec">🗺️ 打包探索地圖（JourneyMap）</h4>
-    <p style="margin:0">把你的 JourneyMap 地圖整理成可以上傳的壓縮檔，網站會把你探索過、網站還沒有的地方合併進「探索地圖」。<b>檔案只在你的瀏覽器裡處理，不會傳到任何地方</b>，直到你自己把壓縮檔上傳到表單。目前只收第 1 層。</p>
-    <ol class="steps">
-      <li>按下面的按鈕。在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。</li>
-      <li>瀏覽器會問「要將 N 個檔案上傳到這個網站嗎？」，按「上傳」。這只是讓網頁讀取，檔案不會被送出。</li>
-      <li>工具會自動找出第 1 層的地圖（mp 裡每個 <code>Triggers_</code> 資料夾是一個世界，不用自己挑），只留網站還沒有的區域，按「下載壓縮檔」。</li>
-      <li>按中間的「填寫回報表單」，回報種類選 <b>探索地圖</b>，上傳這個壓縮檔後送出。<b>不用截圖</b>，送出後會自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
-    <label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden>
-    <div class="muted" style="font-size:12.5px">要在電腦上用 Chrome 或 Edge。</div>
-    <div id="jmOut" class="jmout" aria-live="polite"></div>
-  </article>
   </div><div class="rcol rc-form">
   <article class="bcard rform">
     <a class="repbtn big" id="formGo" target="_blank" rel="noopener">填寫回報表單 ↗</a>
@@ -2190,7 +2209,7 @@ function buildFormReport(){
           <li><b>拍配方</b>：打開 NPC 的製作或購買選單，點到那個物品再按 F2，材料、數量、費用、時間都要看得到。</li>
           <li><b>拍任務追蹤</b>：畫面右側的任務追蹤（Tracked quest）有任務編號和目前步驟，直接按 F2。</li>
           <li><b>拍技能</b>：打開技能選單，點到那個技能再按 F2，名稱、解鎖等級、說明都要看得到。</li>
-          <li class="pconly"><b>上傳探索地圖（JourneyMap）</b>：不用截圖，用左邊的「打包探索地圖」產生壓縮檔，回報種類選「探索地圖」上傳。送出後自動檢查、合併，目前只合併第 1 層。</li>
+          <li class="pconly"><b>上傳探索地圖（JourneyMap）</b>：不用截圖，用下面的「打包探索地圖」產生壓縮檔，回報種類選「探索地圖」上傳。送出後自動檢查、合併，目前只合併第 1 層。</li>
           <li><b>檔案位置</b>：<code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots</code><br>按 <kbd>Win</kbd>＋<kbd>R</kbd>，貼上這一行按 Enter，就會直接打開資料夾。檔名就是拍攝時間，最新的排在最後面。</li>
           <li><b>上傳</b>：表單最後一頁按「新增檔案」→「瀏覽」→ 到上面的資料夾選檔。按住 <kbd>Ctrl</kbd> 可以一次選多張（最多 5 張，每張 10 MB 以內，F2 的截圖都在範圍內）。</li>
           <li>不用裁切，也不用另外壓縮，原圖直接上傳。審核通過後網站會自動縮小。</li>
@@ -2200,6 +2219,17 @@ function buildFormReport(){
       <li><b>最後一頁上傳截圖</b>，按「提交」。探索地圖不用截圖。</li></ol>
     <div class="note">審核員核對截圖後按「核准」，網站會在幾分鐘內自動更新。工具裡還沒有的怪物、物品、地點、配方、技能也可以回報；配方會直接更新配方分頁，任務追蹤會校正主線編號，技能會列在職業資料裡。</div>
     <div class="note mbonly">🗺️ 上傳探索地圖（JourneyMap）要在電腦上開本站，用「打包探索地圖」產生壓縮檔。</div>
+  </article>
+  <article class="bcard pconly" id="jmPack"><h4 class="sec">🗺️ 打包探索地圖（JourneyMap）</h4>
+    <p style="margin:0">把你的 JourneyMap 地圖整理成可以上傳的壓縮檔，網站會把你探索過、網站還沒有的地方合併進「探索地圖」。<b>檔案只在你的瀏覽器裡處理，不會傳到任何地方</b>，直到你自己把壓縮檔上傳到表單。目前只收第 1 層。</p>
+    <ol class="steps">
+      <li>按下面的按鈕。在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。</li>
+      <li>瀏覽器會問「要將 N 個檔案上傳到這個網站嗎？」，按「上傳」。這只是讓網頁讀取，檔案不會被送出。</li>
+      <li>工具會自動找出第 1 層的地圖（mp 裡每個 <code>Triggers_</code> 資料夾是一個世界，不用自己挑），只留網站還沒有的區域，按「下載壓縮檔」。</li>
+      <li>按上面的「填寫回報表單」，回報種類選 <b>探索地圖</b>，上傳這個壓縮檔後送出。<b>不用截圖</b>，送出後會自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
+    <label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden>
+    <div class="muted" style="font-size:12.5px">要在電腦上用 Chrome 或 Edge。</div>
+    <div id="jmOut" class="jmout" aria-live="polite"></div>
   </article>
   </div><div class="rcol rc-q">
   <article class="bcard" id="qCard"><h4 class="sec">處理中的回報 <span class="c" id="qC"></span></h4><div id="qL" class="muted">讀取中…</div>

@@ -2,6 +2,7 @@
    codex loot list removed; scratchpad cuticon.py), for items the official catalogue has no picture for.
    key = in-game English name -> 64 px PNG in icons/game/. User 2026-11-05: 有傳過截圖但沒有使用. */
 window.SAO_GAMEICONS = {
+ "Key of Xal'Zirith": "icons/game/key_of_xalzirith.png",   // auction house 2026-11-05 00:52: the game shows a silver key, not the catalogue's dark one
  "Skeleton Bone": "icons/game/skeleton_bone.png",
  "Magic Staff of the Revenants": "icons/game/magic_staff_of_the_revenants.png",
  "Healing Shard": "icons/game/healing_shard.png",
