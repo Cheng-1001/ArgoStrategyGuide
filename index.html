@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="c24b8bc680">
+<meta name="sao-build" content="876698e9f7">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -796,7 +796,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=0e9f806f"></script>
 <script src="gameinfo.js?v=c5fe6b67"></script>
 <script src="npcs.js?v=3a3bf3bc"></script>
-<script src="changelog.js?v=49ab2bba"></script>
+<script src="changelog.js?v=31f9c681"></script>
 <script src="recipes.js?v=747aafd1"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1769,7 +1769,11 @@ const effZh=t=>{let m;t=String(t).trim();
   const out=parts.map(x=>{let k;if(k=/^([+-][\d.]+%?)(\/s)?\s+(.+?)(\/s)?$/.exec(x)){const per=k[2]||k[4];const lab=labZh(k[3]+(k[4]?"/s":""));return per&&!k[4]?`每秒${lab} ${k[1]}`:`${lab} ${k[1]}${per?"/秒":""}`}return null});
   return out.every(Boolean)?out.join("、"):t};
 window.__effZh=t=>effZh(t);
-const effLine=x=>{const z=effZh(x);return`${effIc(x)}<span title="${esc(x)}">${esc(z)}</span>${z!==x?` <span class="effen">${esc(x)}</span>`:""}`};
+const effLine=x=>{const z=effZh(x);
+  // several stats on one line ("+0.1 Health/s +0.1 Mana/s"): one icon per stat
+  const parts=String(x).trim().split(/,\s*|\s+(?=[+-]\d)/).filter(Boolean);
+  const body=parts.length>1&&parts.every(p=>effZh(p)!==p)?parts.map(p=>`${effIc(p)}${esc(effZh(p))}`).join("、"):`${effIc(x)}${esc(z)}`;
+  return`<span title="${esc(x)}">${body}</span>${z!==x?` <span class="effen">${esc(x)}</span>`:""}`};
 const icK=(k,emo)=>STATIC[k]?`<img class="effic" src="${esc(STATIC[k])}" alt="" aria-hidden="true">`:emo?`<span class="effic" aria-hidden="true">${emo}</span>`:"";
 const SETS=window.SAO_SETS||{sets:[],potions:[]},SET_BY={},POT_BY={};
 SETS.sets.forEach(st=>st.members.forEach(m=>SET_BY[norm(m)]=st));SETS.potions.forEach(p=>POT_BY[norm(p.name)]=p);
