@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="e26a02818b">
+<meta name="sao-build" content="fd49040350">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -187,6 +187,9 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 /* 查看配方／查看圖鑑: a pop-up in the middle of the screen instead of switching tabs (user 2026-11-05: 不要跳轉，在中間開啟彈出視窗) */
 .gvback{position:fixed;inset:0;z-index:60;background:rgba(6,10,16,.55);display:flex;align-items:center;justify-content:center;padding:16px}.gvback[hidden]{display:none}
 .gvbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.4);width:min(560px,100%);max-height:min(86vh,900px);display:flex;flex-direction:column;overflow:hidden}
+.gvbox.gvwide{width:min(880px,100%)}
+.gvback+.gvback{background:rgba(6,10,16,.18)}.gvback .gvbox{transform:translate(calc(var(--gvn,0)*26px),calc(var(--gvn,0)*22px))}
+@media (max-width:820px){.gvback .gvbox{transform:none}}
 .gvhead{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 16px;border-bottom:1px solid var(--line)}.gvhead b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
 .gvbody{overflow:auto;padding:14px 16px 18px;display:flex;flex-direction:column;gap:10px}
 @media (max-width:820px){.gvback{padding:8px}.gvbox{max-height:calc(100dvh - 16px)}}
@@ -395,9 +398,9 @@ aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:
 /* 介紹及資訊 left/right, 協作區 left/middle/right (user 2026-11-05) */
 .agrid,.cgrid3{display:grid;gap:16px;align-items:start}
 .agrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}#aWrap:has(.agrid){max-width:1240px}
-.cgrid3{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) minmax(0,1fr)}#rWrap:has(.cgrid3:not([hidden])){max-width:1560px}
-@media (max-width:1100px){.cgrid3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.cgrid3>.rc-form{grid-column:1/-1;order:-1}}
-@media (max-width:900px){.agrid,.cgrid3{grid-template-columns:minmax(0,1fr)}.cgrid3>.rc-q{order:1}.cgrid3>.rc-side{order:2}}
+.cgrid3{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr)}#rWrap:has(.cgrid3:not([hidden])){max-width:1560px}
+@media (max-width:1100px){.cgrid3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.cgrid3>.rc-jm{grid-column:1/-1;order:2}}
+@media (max-width:900px){.agrid,.cgrid3{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:900px){.rgrid{grid-template-columns:minmax(0,1fr)}}
 .bcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .bcard p{margin:0}
@@ -790,7 +793,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <section class="view bossview" id="view-changelog" hidden><div class="bwrap" id="clWrap"></div></section>
 </div>
 
-<div class="gvback" id="gvBack" hidden><div class="gvbox" role="dialog" aria-modal="true" aria-labelledby="gvTitle"><div class="gvhead"><button class="linkbtn" id="gvPrev" hidden>← 上一個</button><b id="gvTitle"></b><button class="iconbtn" id="gvX" aria-label="關閉">✕</button></div><div class="gvbody" id="gvBody"></div></div></div>
+<div id="gvLayer"></div>
 <div class="rwin" id="cwin" hidden role="dialog" aria-label="職業可用的裝備"><div class="rwhead" id="cwHead"><b id="cwTitle"></b><span class="muted">拖曳標題移動・拉右下角調整大小</span><button class="iconbtn" id="cwX" aria-label="關閉">✕</button></div><div class="cwbody" id="cwBody"></div></div>
 <div class="rwin" id="rwin" hidden role="dialog" aria-label="任務路線"><div class="rwhead" id="rwHead"><b id="rwTitle"></b><span class="muted">滾輪縮放・拖曳移動・拉右下角調整大小</span><button class="iconbtn" id="rwIn" aria-label="放大">＋</button><button class="iconbtn" id="rwOut" aria-label="縮小">－</button><button class="iconbtn" id="rwFit" aria-label="顯示整條路線">⤢</button><button class="iconbtn" id="rwX" aria-label="關閉">✕</button></div><div class="rwbody" id="rwBody"><svg id="rwSvg" role="img" aria-label="任務路線圖"></svg></div></div>
 <aside id="panel" hidden aria-live="polite">
@@ -809,7 +812,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=6b149110"></script>
 <script src="npcs.js?v=3a3bf3bc"></script>
-<script src="changelog.js?v=0b56255e"></script>
+<script src="changelog.js?v=2be64814"></script>
 <script src="recipes.js?v=747aafd1"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1044,9 +1047,10 @@ function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[
     pts.map((p,i)=>[pts.length>1?`${i+1}. ${c(p)}`:c(p),p[0],p[1]]),f,true);if(s!=null&&pts.length>1)RW.sel=s+1}
 function goMapThen(f,fn){const ph=matchMedia("(max-width:820px)").matches;if(ph){closeP();const g=fn;fn=()=>{g();requestAnimationFrame(()=>stage.scrollIntoView({block:"start",behavior:"smooth"}))}}if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
 const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:s.type==="d"?(EVT.dungeons.find(d=>d.id===s.id)||{n:"活動"}).n:townById[s.id].n;
+const detailHTML=(t,i)=>t==="c"?classDetail(i):t==="r"?recipeDetail(i):t==="n"?npcDetail(i):t==="q"?questDetail(i):t==="m"?monDetail(i):t==="i"?itemDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):t==="s"?spotDetail(i):t==="d"?evDgDetail(i):townDetail(i);
 function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");document.body.classList.toggle("pdeep",stack.length>1);
-  pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):cur.type==="d"?evDgDetail(cur.id):townDetail(cur.id);
+  pBody.innerHTML=detailHTML(cur.type,cur.id);
   // phones: source notes fold into one 「ⓘ 資料來源」 line at the bottom of the panel
   {const sn=[...pBody.querySelectorAll(".note.srcn")];if(sn.length){if(matchMedia("(max-width:820px)").matches){const d=document.createElement("details");d.className="srcfold";d.innerHTML="<summary>ⓘ 資料來源</summary>";sn.forEach(n=>d.appendChild(n));pBody.appendChild(d)}else sn.forEach(n=>{n.classList.add("srcend");pBody.appendChild(n)})}}
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
@@ -1222,28 +1226,46 @@ const chipsInto=(el,opts,get,set,cb)=>{el.innerHTML=opts.map(([v,l])=>`<button c
 function bindGo(root){root.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [t,i]=b.dataset.go.split("|");openP(t,i,"new")});
   root.querySelectorAll("[data-goview]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [v,t,i]=b.dataset.goview.split("|");gvOpen(t,i)})}
 // 查看配方／查看圖鑑 open the entry in a pop-up in the middle of the screen; the tab and the side panel stay as they are
-// (user 2026-11-05: 不要跳轉，在中間開啟彈出視窗). Inside it, 查看… swaps the pop-up (← 上一個 goes back); other links open in the side panel.
-const GV=[];
-function gvRender(){const cur=GV[GV.length-1],B=$("gvBody");if(!cur){$("gvBack").hidden=true;return}
-  let [t,i]=cur;if(t==="i"){const r=redirI(i);if(r)[t,i]=r}else if(t==="p"){const e=prById[String(i)];if(MATG(e)){const r=redirP(i);if(r)[t,i]=r}}
-  B.innerHTML=t==="r"?recipeDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):itemDetail(i);
-  $("gvTitle").textContent=nameOf({type:t,id:i});$("gvPrev").hidden=GV.length<2;
+// (user 2026-11-05: 不要跳轉，在中間開啟彈出視窗). Inside a pop-up:
+//  - the top menu decides (使用者 2026-11-05：要不要再開彈出視窗用最上方選單來決定): a link to the same menu as this pop-up
+//    (圖鑑＝怪物／裝備／道具／素材, 配方, 任務, 地圖＝NPC／城鎮／地點, 地下城, 職業, 世界王) swaps it (← 上一個 goes back;
+//    going to something already in its history goes back to it instead of stacking), a link to another menu opens another
+//    pop-up on top (點 Starting Merchant 要另外再開一個); a link to what a lower pop-up already shows closes the ones above it
+//  - map links close every pop-up and open the floating map. ✕ / Esc / a click beside it close the top pop-up only.
+const GVW=[];
+const gvNorm=(t,i)=>{i=String(i);if(t==="i"){const r=redirI(i);if(r)[t,i]=r}else if(t==="p"){const e=prById[i];if(MATG(e)){const r=redirP(i);if(r)[t,i]=r}}return[t,String(i)]};
+const gvMenu=([t,i])=>t==="e"||t==="p"||t==="i"||t==="m"?"codex":t==="r"?"recipes":t==="q"?"quests":t==="c"?"classes":t==="d"?"dungeons":
+  t==="s"?(sp=>sp&&sp.kind==="dungeon"?"dungeons":sp&&sp.kind==="wboss"?"bosses":"map")(spotById(i)):"map";
+function gvLink(w,t,i){const n=gvNorm(t,i);if(gvMenu(n)===gvMenu(w.hist[w.hist.length-1]))gvGo(w,t,i);else gvNew(t,i)}
+const gvSame=(a,b)=>a&&b&&a[0]===b[0]&&a[1]===b[1];
+function gvGo(w,t,i){const n=gvNorm(t,i),k=w.hist.findIndex(x=>gvSame(x,n));if(k>=0)w.hist.length=k+1;else w.hist.push(n);gvRender(w)}
+function gvNew(t,i){const n=gvNorm(t,i);
+  const k=GVW.findIndex(w=>gvSame(w.hist[w.hist.length-1],n));if(k>=0){while(GVW.length>k+1)gvClose();return}
+  const el=document.createElement("div");el.className="gvback";el.style.zIndex=60+GVW.length;el.style.setProperty("--gvn",GVW.length);
+  el.innerHTML=`<div class="gvbox" role="dialog" aria-modal="true"><div class="gvhead"><button class="linkbtn gvprev" hidden>← 上一個</button><b class="gvtitle"></b><button class="iconbtn gvx" aria-label="關閉">✕</button></div><div class="gvbody"></div></div>`;
+  const w={el,hist:[n]};GVW.push(w);$("gvLayer").appendChild(el);
+  el.querySelector(".gvx").onclick=gvClose;el.querySelector(".gvprev").onclick=()=>{w.hist.pop();gvRender(w)};
+  el.addEventListener("click",e=>{if(e.target===el)gvClose()});
+  gvRender(w);el.querySelector(".gvx").focus()}
+function gvRender(w){const [t,i]=w.hist[w.hist.length-1],el=w.el,B=el.querySelector(".gvbody");
+  B.innerHTML=detailHTML(t,i);el.firstElementChild.classList.toggle("gvwide",t==="q"||t==="c");
+  el.querySelector(".gvtitle").textContent=nameOf({type:t,id:i});el.querySelector(".gvprev").hidden=w.hist.length<2;
   B.querySelectorAll(".note.srcn").forEach(n=>{n.classList.add("srcend");B.appendChild(n)});
-  B.querySelectorAll("[data-goview]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [,t2,i2]=b.dataset.goview.split("|");GV.push([t2,i2]);gvRender()});
-  B.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [t2,i2]=b.dataset.go.split("|");gvClose();openP(t2,i2,panel.hidden?"new":"push")});
-  B.querySelectorAll("[data-repgo]").forEach(b=>b.addEventListener("click",()=>gvClose()));
-  // map links: the floating map / map tab, so the pop-up closes first
-  const ttl=$("gvTitle").textContent||"位置";
-  B.querySelectorAll("[data-rep]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [f,x,z]=b.dataset.rep.split("|").map(Number);gvClose();showPoints(f,[[x,z]],ttl,()=>repPin(x,z),0)});
-  B.querySelectorAll("[data-imap]").forEach(b=>b.onclick=e=>{e.stopPropagation();const im=itemMap(b.dataset.imap);gvClose();openRouteWin(b.dataset.imap+"・取得地點",im.steps,im.f,true)});
-  B.querySelectorAll("[data-spot]").forEach(b=>b.onclick=e=>{e.stopPropagation();const sp=spotById(b.dataset.spot);gvClose();showPoints(sp.floor,[[sp.x,sp.z]],sp.n,()=>focusSpot(sp.id))});
-  B.scrollTop=0;$("gvBack").hidden=false}
-function gvOpen(t,i){GV.length=0;GV.push([t,String(i)]);gvRender();$("gvX").focus()}
-function gvClose(){GV.length=0;$("gvBack").hidden=true;$("gvBody").innerHTML=""}
-$("gvX").onclick=gvClose;$("gvPrev").onclick=()=>{GV.pop();gvRender()};
-$("gvBack").addEventListener("click",e=>{if(e.target===$("gvBack"))gvClose()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("gvBack").hidden){e.stopImmediatePropagation();gvClose()}},true);
-window.__gv=()=>({open:!$("gvBack").hidden,title:$("gvTitle").textContent,depth:GV.length});
+  B.querySelectorAll("[data-goview]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [,t2,i2]=b.dataset.goview.split("|");gvLink(w,t2,i2)});
+  B.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [t2,i2]=b.dataset.go.split("|");gvLink(w,t2,i2)});
+  B.querySelectorAll("[data-eqcls]").forEach(b=>b.onclick=e=>{e.stopPropagation();gvCloseAll();openClassEquip(b.dataset.eqcls)});
+  B.querySelectorAll("[data-route]").forEach(b=>b.onclick=e=>{e.stopPropagation();const Q=questById(b.dataset.route);gvCloseAll();if(Q)openRouteWin((Q.main?mqLabel(Q.q)+"・":"支線・")+Q.title,Q.steps,Q.f)});
+  B.querySelectorAll("[data-repgo]").forEach(b=>b.addEventListener("click",()=>gvCloseAll()));
+  const ttl=el.querySelector(".gvtitle").textContent||"位置";
+  B.querySelectorAll("[data-rep]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [f,x,z]=b.dataset.rep.split("|").map(Number);gvCloseAll();showPoints(f,[[x,z]],ttl,()=>repPin(x,z),0)});
+  B.querySelectorAll("[data-imap]").forEach(b=>b.onclick=e=>{e.stopPropagation();const im=itemMap(b.dataset.imap);gvCloseAll();openRouteWin(b.dataset.imap+"・取得地點",im.steps,im.f,true)});
+  B.querySelectorAll("[data-spot]").forEach(b=>b.onclick=e=>{e.stopPropagation();const sp=spotById(b.dataset.spot);gvCloseAll();showPoints(sp.floor,[[sp.x,sp.z]],sp.n,()=>focusSpot(sp.id))});
+  B.scrollTop=0}
+function gvOpen(t,i){gvCloseAll();gvNew(t,i)}
+function gvClose(){const w=GVW.pop();if(w)w.el.remove();const top=GVW[GVW.length-1];if(top)top.el.querySelector(".gvx").focus()}
+function gvCloseAll(){while(GVW.length)gvClose()}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&GVW.length){e.stopImmediatePropagation();gvClose()}},true);
+window.__gv=()=>{const w=GVW[GVW.length-1];return{open:GVW.length>0,count:GVW.length,title:w?w.el.querySelector(".gvtitle").textContent:"",depth:w?w.hist.length:0}};
 // switch to another tab and open an entry there (查看圖鑑 / 查看配方); the card is scrolled into view
 let viewPending=null;
 function goView(v,t,i){if(t==="i"){const r=redirI(i);if(r){[t,i]=r;v=t==="e"?"equip":"props"}}else if(t==="p"){const e=prById[String(i)];if(MATG(e)){v="items";const r=redirP(i);if(r)[t,i]=r}}
@@ -2204,11 +2226,7 @@ function showCollab(){const w=$("rWrap");if(!w.querySelector(".csub"))return;
 function buildFormReport(){
   $("rWrap").innerHTML=collabHead()+`<div id="rFeedW" hidden>${feedbackHTML()}</div>
   <div id="rData">
-  <div class="cgrid3"><div class="rcol rc-side">
-  <article class="bcard"><h4 class="sec">審核流程</h4>
-    <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表，幾分鐘內會出現在右邊的「處理中的回報」。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線；「處理中的回報」會標「退回」。想補截圖可以重新回報一次。</li></ol>
-    <div class="muted" style="font-size:12.5px">想當審核員？請聯絡網站管理者。</div></article>
-  </div><div class="rcol rc-form">
+  <div class="cgrid3"><div class="rcol rc-form">
   <article class="bcard rform">
     <a class="repbtn big" id="formGo" target="_blank" rel="noopener">填寫回報表單 ↗</a>
     <ol class="steps big">
@@ -2220,7 +2238,7 @@ function buildFormReport(){
           <li><b>拍配方</b>：打開 NPC 的製作或購買選單，點到那個物品再按 F2，材料、數量、費用、時間都要看得到。</li>
           <li><b>拍任務追蹤</b>：畫面右側的任務追蹤（Tracked quest）有任務編號和目前步驟，直接按 F2。</li>
           <li><b>拍技能</b>：打開技能選單，點到那個技能再按 F2，名稱、解鎖等級、說明都要看得到。</li>
-          <li class="pconly"><b>上傳探索地圖（JourneyMap）</b>：不用截圖，用下面的「打包探索地圖」產生壓縮檔，回報種類選「探索地圖」上傳。送出後自動檢查、合併，目前只合併第 1 層。</li>
+          <li class="pconly"><b>上傳探索地圖（JourneyMap）</b>：不用截圖，用中間的「打包探索地圖」產生壓縮檔，回報種類選「探索地圖」上傳。送出後自動檢查、合併，目前只合併第 1 層。</li>
           <li><b>檔案位置</b>：<code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots</code><br>按 <kbd>Win</kbd>＋<kbd>R</kbd>，貼上這一行按 Enter，就會直接打開資料夾。檔名就是拍攝時間，最新的排在最後面。</li>
           <li><b>上傳</b>：表單最後一頁按「新增檔案」→「瀏覽」→ 到上面的資料夾選檔。按住 <kbd>Ctrl</kbd> 可以一次選多張（最多 5 張，每張 10 MB 以內，F2 的截圖都在範圍內）。</li>
           <li>不用裁切，也不用另外壓縮，原圖直接上傳。審核通過後網站會自動縮小。</li>
@@ -2231,13 +2249,17 @@ function buildFormReport(){
     <div class="note">審核員核對截圖後按「核准」，網站會在幾分鐘內自動更新。工具裡還沒有的怪物、物品、地點、配方、技能也可以回報；配方會直接更新配方分頁，任務追蹤會校正主線編號，技能會列在職業資料裡。</div>
     <div class="note mbonly">🗺️ 上傳探索地圖（JourneyMap）要在電腦上開本站，用「打包探索地圖」產生壓縮檔。</div>
   </article>
+  <article class="bcard"><h4 class="sec">審核流程</h4>
+    <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表，幾分鐘內會出現在右邊的「處理中的回報」。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線；「處理中的回報」會標「退回」。想補截圖可以重新回報一次。</li></ol>
+    <div class="muted" style="font-size:12.5px">想當審核員？請聯絡網站管理者。</div></article>
+  </div><div class="rcol rc-jm pconly">
   <article class="bcard pconly" id="jmPack"><h4 class="sec">🗺️ 打包探索地圖（JourneyMap）</h4>
     <p style="margin:0">把你的 JourneyMap 地圖整理成可以上傳的壓縮檔，網站會把你探索過、網站還沒有的地方合併進「探索地圖」。<b>檔案只在你的瀏覽器裡處理，不會傳到任何地方</b>，直到你自己把壓縮檔上傳到表單。目前只收第 1 層。</p>
     <ol class="steps">
       <li>按下面的按鈕。在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。</li>
       <li>瀏覽器會問「要將 N 個檔案上傳到這個網站嗎？」，按「上傳」。這只是讓網頁讀取，檔案不會被送出。</li>
       <li>工具會自動找出第 1 層的地圖（mp 裡每個 <code>Triggers_</code> 資料夾是一個世界，不用自己挑），只留網站還沒有的區域，按「下載壓縮檔」。</li>
-      <li>按上面的「填寫回報表單」，回報種類選 <b>探索地圖</b>，上傳這個壓縮檔後送出。<b>不用截圖</b>，送出後會自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
+      <li>按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>，上傳這個壓縮檔後送出。<b>不用截圖</b>，送出後會自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
     <label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden>
     <div class="muted" style="font-size:12.5px">要在電腦上用 Chrome 或 Edge。</div>
     <div id="jmOut" class="jmout" aria-live="polite"></div>

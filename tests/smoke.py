@@ -453,14 +453,27 @@ with sync_playwright() as p:
     pg.locator("#lRc .rcard", has_text="Belt of the Stags").first.click(); pg.wait_for_timeout(300)
     check("裝備資料" in pg.inner_text("#pBody") and "最大生命" in pg.inner_text("#pBody"), "the recipe panel shows the crafted item's data")
     pg.click('#pBody [data-goview^="equip"]'); pg.wait_for_timeout(500)
-    hh, gt = pg.evaluate("location.hash"), pg.inner_text("#gvBody") if pg.is_visible("#gvBack") else ""
+    hh, gt = pg.evaluate("location.hash"), pg.inner_text(".gvback:last-child .gvbody") if pg.locator(".gvback").count() else ""
     check(hh.endswith("recipes") and "Ceinture des Cerfs" in gt and "Belt of the Stags" in pg.inner_text("#pBody"),
           f"查看圖鑑 opens the item in a pop-up, tab and panel unchanged ({hh})")
-    pg.click('#gvBody [data-goview^="recipes"]'); pg.wait_for_timeout(400)
+    # the top menu decides: another menu (配方, 地圖＝NPC) opens another pop-up, one already open lower down closes the ones above
+    pg.click('.gvback:last-child .gvbody [data-goview^="recipes"]'); pg.wait_for_timeout(400)
     gv = pg.evaluate("window.__gv()")
-    check(gv["depth"] == 2 and "Belt of the Stags" in pg.inner_text("#gvBody") and pg.is_visible("#gvPrev"), "查看配方 inside the pop-up swaps it, with a back link")
+    check(gv["count"] == 2 and gv["depth"] == 1 and "Belt of the Stags" in pg.inner_text(".gvback:last-child .gvbody"), f"查看配方 in a codex pop-up opens a recipe pop-up on top ({gv})")
+    pg.click('.gvback:last-child .gvbody [data-goview^="equip"]'); pg.wait_for_timeout(300)
+    check(pg.evaluate("window.__gv()")["count"] == 1, "查看圖鑑 back to the item already open below does not stack")
+    pg.click('.gvback:last-child .gvbody [data-go^="n|"]'); pg.wait_for_timeout(300)
+    gv2 = pg.evaluate("window.__gv()")
+    check(gv2["count"] == 2 and "Belt of the Stags" in pg.inner_text("#pBody"), f"an NPC link opens a second pop-up on top ({gv2})")
+    first = pg.locator('.gvback:last-child .gvbody [data-go^="r|"]')
+    if first.count():
+        first.first.click(); pg.wait_for_timeout(300)
+        check(pg.evaluate("window.__gv()")["count"] == 3, "a recipe link from an NPC pop-up opens a third pop-up (another menu)")
+        pg.keyboard.press("Escape"); pg.wait_for_timeout(200)
     pg.keyboard.press("Escape"); pg.wait_for_timeout(200)
-    check(pg.is_hidden("#gvBack") and pg.is_visible("#panel"), "Esc closes only the pop-up")
+    check(pg.evaluate("window.__gv()")["count"] == 1, "Esc closes only the top pop-up")
+    pg.keyboard.press("Escape"); pg.wait_for_timeout(200)
+    check(pg.locator(".gvback").count() == 0 and pg.is_visible("#panel"), "Esc closes the pop-ups, not the side panel")
     # calibration mode is for the owner only (?edit)
     pg.goto(base + "#map"); pg.wait_for_timeout(500)
     check(pg.is_hidden("#editToggle") and pg.is_hidden(".mapfoot"), "players do not see the calibration button")
