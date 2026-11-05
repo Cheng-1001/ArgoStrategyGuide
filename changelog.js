@@ -3,6 +3,8 @@
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
  ["2026-11-05",[
+  "地下城分頁新增萬聖節活動地下城 Sanctuary of Souls：首領、鑰匙做法、三個惡魔區的碎片掉落率、萬聖節轉蛋機率、Halloween Forge 武器兌換表（官方 11/4 公告）",
+  "照官方 11/4 公告先更新 Corrupted Mask、Necromancer's Mask、Lunar Dragon Mask 和 Simple／Superior／Explorer's Boots 的數值（官網圖鑑還沒更新，面板會註明舊數值）",
   "資料面板裡的「資料來源」說明一律移到最下面（任務、怪物、物品、配方、NPC、職業、地下城等）",
   "探索地圖放大時偶爾顯示合併前的舊畫面（瀏覽器暫存），已修正：每次合併後會載入新的地圖",
   "主線 28. Request an audience with King Harald 照遊戲任務日誌確認編號（遊戲裡 28 之後直接跳到 32）",

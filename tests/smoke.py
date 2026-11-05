@@ -173,7 +173,10 @@ with sync_playwright() as p:
           "top tabs: recipes after quests, then dungeons, classes, world bosses; collaboration is a button by the changelog")
     pg.click('nav.tabs a[data-v="dungeons"]'); pg.wait_for_timeout(300)
     dn = pg.eval_on_selector_all("#lDg .card b", "e=>e.map(x=>x.textContent)")
-    check(len(dn) == 4 and "Kobold Tower" not in dn and "Labyrinth of the Fallen" in dn, f"dungeons tab lists the 4 floor-1 dungeons, not the boss tower ({dn})")
+    check(len(dn) == 5 and dn[0] == "Sanctuary of Souls" and "Kobold Tower" not in dn and "Labyrinth of the Fallen" in dn, f"dungeons tab lists the event dungeon first, then the 4 floor-1 dungeons, not the boss tower ({dn})")
+    pg.click('#lDg [data-go="d|souls"]'); pg.wait_for_timeout(300)
+    check("Sanctuary of Souls Key" in pg.inner_text("#pBody") and pg.locator("#pBody .btbl").count() == 3, "event dungeon panel: key recipe, fragment zones, banner and forge tables")
+    pg.click("#pClose") if pg.locator("#pClose").count() else None
     pg.click("#legalBtn"); pg.wait_for_timeout(350)
     t = pg.inner_text("#legal")
     check("about" in pg.url and pg.is_visible("#view-about") and "非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t and "中文玩家社群協力製作" in t,

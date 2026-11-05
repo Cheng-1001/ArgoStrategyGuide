@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="91f167e0db">
+<meta name="sao-build" content="5567087795">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -414,7 +414,7 @@ h4.sec .c{font-family:var(--f-body);letter-spacing:0;text-transform:none;font-we
 .atk{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px}
 .atk li{background:var(--panel-2);border-radius:8px;padding:8px 10px;font-size:13px;display:flex;flex-direction:column;gap:2px}
 .atk b{font-family:var(--f-display);font-weight:600}
-.tblwrap{overflow-x:auto}
+.tblwrap{overflow-x:auto;flex-shrink:0}
 .btbl{border-collapse:collapse;width:100%;font-size:13px;min-width:340px}
 .btbl th,.btbl td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line)}
 .btbl th{font-size:11.5px;color:var(--muted);font-weight:600}
@@ -796,11 +796,12 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=0e9f806f"></script>
 <script src="gameinfo.js?v=7eb6cf27"></script>
 <script src="npcs.js?v=3a3bf3bc"></script>
-<script src="changelog.js?v=f26d4100"></script>
+<script src="changelog.js?v=2f03179e"></script>
 <script src="recipes.js?v=747aafd1"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=648ce8f1"></script>
+<script src="events.js?v=911a772d"></script>
 <script src="recicons.js?v=9e931339"></script>
 <script>
 (()=>{
@@ -1020,10 +1021,10 @@ function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[
   openRouteWin(pts.length>1&&s!=null?`${title}・第 ${s+1} 點（共 ${pts.length} 點）${c(pts[s])}`:`${title}・${pts.map(c).join("、")}`,
     pts.map((p,i)=>[pts.length>1?`${i+1}. ${c(p)}`:c(p),p[0],p[1]]),f,true);if(s!=null&&pts.length>1)RW.sel=s+1}
 function goMapThen(f,fn){const ph=matchMedia("(max-width:820px)").matches;if(ph){closeP();const g=fn;fn=()=>{g();requestAnimationFrame(()=>stage.scrollIntoView({block:"start",behavior:"smooth"}))}}if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
-const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:townById[s.id].n;
+const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:s.type==="d"?(EVT.dungeons.find(d=>d.id===s.id)||{n:"活動"}).n:townById[s.id].n;
 function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");document.body.classList.toggle("pdeep",stack.length>1);
-  pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):townDetail(cur.id);
+  pBody.innerHTML=cur.type==="c"?classDetail(cur.id):cur.type==="r"?recipeDetail(cur.id):cur.type==="n"?npcDetail(cur.id):cur.type==="q"?questDetail(cur.id):cur.type==="m"?monDetail(cur.id):cur.type==="i"?itemDetail(cur.id):cur.type==="e"?equipDetail(cur.id):cur.type==="p"?propDetail(cur.id):cur.type==="s"?spotDetail(cur.id):cur.type==="d"?evDgDetail(cur.id):townDetail(cur.id);
   // phones: source notes fold into one 「ⓘ 資料來源」 line at the bottom of the panel
   {const sn=[...pBody.querySelectorAll(".note.srcn")];if(sn.length){if(matchMedia("(max-width:820px)").matches){const d=document.createElement("details");d.className="srcfold";d.innerHTML="<summary>ⓘ 資料來源</summary>";sn.forEach(n=>d.appendChild(n));pBody.appendChild(d)}else sn.forEach(n=>{n.classList.add("srcend");pBody.appendChild(n)})}}
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
@@ -1419,9 +1420,24 @@ const clsWeap=c=>Object.entries(Object.assign({},c.weapons,(n=>n?{catalyst:n}:{}
 const clsSoon=c=>!Object.keys(c.weapons).length&&!c.base.length;
 // ---- dungeons tab (preliminary, user 2026-11-02: only the dungeon names for now; floor-boss towers are left out) ----
 function renderDungeons(){const s=Sq();const a=spotsOf(FL).filter(x=>x.kind==="dungeon"&&!/樓層首領/.test(x.zh||"")&&(!s||norm([x.n,x.zh].join(" ")).includes(s)));
-  $("cDg").textContent=`${a.length} 個`;
-  $("lDg").innerHTML=a.map(sp=>`<button class="card" data-go="s|${sp.id}" data-key="s|${sp.id}"><div class="chead"><span class="th" style="--ring:var(--boss)" aria-hidden="true">⚔️</span><div class="cname"><b>${esc(sp.n)}</b><span>${esc(sp.zh)}</span></div></div></button>`).join("")||`<div class="empty-note">${s?"沒有符合的地下城。":"這一層還沒有地下城資料。"}</div>`;
+  const ev=EVT.dungeons.filter(d=>!s||norm(JSON.stringify(d)).includes(s));
+  $("cDg").textContent=`${a.length+ev.length} 個`;
+  $("lDg").innerHTML=ev.map(d=>`<button class="card" data-go="d|${d.id}" data-key="d|${d.id}"><div class="chead"><span class="th" style="--ring:var(--boss)" aria-hidden="true">🎃</span><div class="cname"><b>${esc(d.n)}</b><span>${esc(d.zh)}</span></div></div><div class="cmeta"><span class="pill">限時活動</span><span class="pill">各層通用</span></div></button>`).join("")+a.map(sp=>`<button class="card" data-go="s|${sp.id}" data-key="s|${sp.id}"><div class="chead"><span class="th" style="--ring:var(--boss)" aria-hidden="true">⚔️</span><div class="cname"><b>${esc(sp.n)}</b><span>${esc(sp.zh)}</span></div></div></button>`).join("")||`<div class="empty-note">${s?"沒有符合的地下城。":"這一層還沒有地下城資料。"}</div>`;
   bindGo($("lDg"));markSel()}
+function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<div class="note">找不到這個活動。</div>`;
+  const tb=(head,rows)=>`<div class="tblwrap"><table class="btbl"><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  return`<div class="phead"><span class="th" style="--ring:var(--boss)" aria-hidden="true">🎃</span><div class="ttl"><div class="num">限時活動・地下城</div><h2>${esc(d.n)}</h2><div class="sub">${esc(d.ev)}</div></div></div>
+  <dl class="facts"><dt>人數</dt><dd>${esc(d.players)}</dd><dt>首領</dt><dd>${d.bosses.map(b=>`<b>${esc(b[0])}</b>：${esc(b[1])}`).join("<br>")}</dd><dt>通關寶箱</dt><dd>${d.chest.map(esc).join("<br>")}</dd></dl>
+  <div class="note warn">官方公告沒有寫入口和惡魔區的位置，地圖上還沒有標示。知道位置的話，歡迎用「協作區」回報地點。</div>
+  <h3 class="sec">進場鑰匙</h3><p><b>${esc(d.key.n)}</b>：到 ${esc(d.key.npc)}（${esc(d.key.where)}）用 ${d.key.mats.map(m=>esc(m[0])+" ×"+m[1]).join("＋")} 換，${esc(d.key.note)}。</p>
+  <h3 class="sec">鑰匙碎片：三個惡魔區</h3>${tb(["惡魔區","惡魔","首領","碎片"],d.zones.map(z=>[esc(z.n),z.mobs.map(esc).join("、"),esc(z.leader),`<b>${esc(z.frag)}</b>`]))}
+  <div class="note">${esc(d.fragRate)}</div>
+  <h3 class="sec">免費抽轉蛋的流程</h3><ol class="mqs">${d.loop.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
+  <h3 class="sec">萬聖節轉蛋</h3><p>${esc(d.banner.cost)}</p>${tb(["稀有度","內容","機率"],d.banner.rows.map(r=>r.map(esc)))}<div class="note">${esc(d.banner.pity)}</div>
+  <h3 class="sec">Halloween Forge：用 Dark Gift Pumpkin 換武器</h3><p>找 ${esc(d.forge.npc)}。</p>${tb(["武器","職業","南瓜","需求等級"],d.forge.rows.map(r=>[esc(r[0]),esc(r[1]),r[2],r[3]==null?"":r[3]]))}
+  <div class="note">${esc(d.forge.extra)}</div><div class="note">${esc(d.forge.lvNote)}</div>
+  <h3 class="sec">即將開放</h3><ul>${d.soon.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+  <div class="note srcn">資料來源：官方公告〈<a href="${esc(d.src.url)}" target="_blank" rel="noopener">${esc(d.src.title)}</a>〉（${esc(d.src.date)}），文字是本站改寫。</div>`}
 function renderClasses(){const s=Sq();const a=CLS.filter(c=>!s||norm([c.name,c.zh,c.role,...c.subs.map(x=>x[0]),...c.skills.map(x=>x[0])].join(" ")).includes(s));
   $("cCls").textContent=`${a.length} 個職業`;
   $("lCls").innerHTML=a.map(c=>`<button class="card" data-go="c|${c.id}" data-key="c|${c.id}"><div class="chead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="cname"><b>${esc(c.name)}</b><span>${esc(c.zh)}・${esc(c.role)}</span></div></div>
@@ -1584,6 +1600,10 @@ function renderQuests(){const s=Sq(),so=$("fQSort").value;const QS=F().quests;
 const EQ=(window.SAO_EQUIP||[]).map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,dmg:r[5],lore:r[6],st:r[7]||{},ic:r[8],slot:r[9]}))
   // catalysts (grimoires, lanterns: mage / shaman off-hand weapons) live in props.js but belong with the weapons, as on the wiki (user 2026-11-03); ps = icon from props.png
   .concat((window.SAO_PROPS||[]).filter(r=>r[2]==="catalyst").map(r=>({oid:r[0],name:r[1],cat:"catalyst",r:r[3],lv:r[4]||0,dmg:null,lore:r[5],st:r[6]||{},ic:r[7],ps:1})));
+// balance changes from an official announcement, applied before the item catalogue catches up (events.js eqPatch; user 2026-11-05)
+const EVT=window.SAO_EVENTS||{dungeons:[]};
+{const P=(EVT.eqPatch||{}).items||{};EQ.forEach(e=>{const q=P[e.oid];if(!q)return;const old={};
+  Object.entries(q.set).forEach(([k,v])=>{old[k]=e.st[k]===undefined?0:e.st[k];if(v===0)delete e.st[k];else e.st[k]=v});e.patch={old,note:q.note||""}})}
 // in-game item info (Specifications popup, owner's screenshots; gameinfo.js): English name = title (user 2026-11-04 option 1A),
 // "Obtainable" lines shown on the panel with a Chinese gloss (option 2)
 const GI=window.SAO_GAMEINFO||{items:[]},GI_OID={},GI_SITE={},GI_EN={};
@@ -1641,6 +1661,7 @@ function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").val
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span>等級 ${e.lv}</span>${cl.length?`<span>· ${cl.map(c=>CLASS_ZH[c]).join("、")}</span>`:""}</div>
     ${eqKey(e)?`<div class="estat">${esc(eqKey(e))}</div>`:""}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
   bindGo($("lEq"));markSel()}
+const patchNote=e=>{const S=EVT.eqPatch.src;return`<div class="note warn">⚖️ 數值已照官方公告〈<a href="${esc(S.url)}" target="_blank" rel="noopener">${esc(S.title)}</a>〉（${esc(S.date)}）調整，官網圖鑑還沒更新。圖鑑上的舊數值：${Object.entries(e.patch.old).map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v))||"0")).join("、")}。${esc(e.patch.note)}</div>`};
 function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
   const rows=Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
   const en=FR2ID[e.name];
@@ -1648,6 +1669,7 @@ function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span class="muted" style="font-size:12px">等級 ${e.lv}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):"・不限職業"}</span></div></div></div>
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
   <dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
+  ${e.patch?patchNote(e):""}
   ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note srcn">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}</div>`}
