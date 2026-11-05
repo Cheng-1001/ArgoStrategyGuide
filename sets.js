@@ -20,7 +20,7 @@ window.SAO_SETS = {date:"2026-11-05", sets:[
  {"name": "Copper Set", "tiers": [[2, "+2.5% Movement Speed"], [3, "+0.05 Health/s +0.05 Mana/s +0.05 Stamina/s"], [4, "+1% Magic Damage +1% Physical Damage +1% Projectile Damage"], [5, "+1 Health +1 Defense"]], "members": ["Copper Ring", "Copper Bracelet", "Copper Gloves", "Copper Coin", "Copper Amulet"]},
  {"name": "Watchful Reaper Set", "tiers": [[2, "+0.15 Mana/s"], [3, "+1.5 Bonus Healing"], [4, "+2% Ability Haste"]], "members": ["Chestplate of the Reaper"]},
  {"name": "Spider Set", "tiers": [[2, "+2.5% Movement Speed"], [3, "+0.025 Attack Speed"], [4, "+2.5% Dodge Chance"], [5, "+0.25 Attack Damage +1% Crit Chance"]], "members": ["Necklace of Aragorn"]},
- {"name": "Weakling Wolf Set", "tiers": [[2, "+0.5% Critical Power"], [3, "+5% Movement Speed"], [4, "+0.25 Attack Damage"]], "members": ["Ring of the Wolf", "Gloves of the Wolves"]},
+ {"name": "Weakling Wolf Set", "tiers": [[2, "+0.5% Critical Power"], [3, "+5% Movement Speed"], [4, "+0.25 Attack Damage"]], "members": ["Ring of the Wolf", "Gloves of the Wolves", "Skull of a Wolf"]},
  {"name": "Peaceful Deer Set", "tiers": [[2, "+1 Bonus Healing"], [3, "+2 Max Mana"]], "members": ["Gloves of the Stags", "Belt of the Stags", "Bracelet of the Stags"]},
  {"name": "Stealthy Herald Set", "tiers": [[2, "+5% Dodge Chance"], [3, "+3% Critical Damage"], [4, "+5% Movement Speed"]], "members": ["Tunic of the Herald", "Boots of the Herald"]},
  {"name": "Hunter Herald Set", "tiers": [[2, "+0.15 Stamina/s"], [3, "+1% Critical Chance"], [4, "+0.5 Attack Damage"]], "members": ["Helmet of the Herald"]},

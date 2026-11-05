@@ -3,6 +3,7 @@
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
  ["2026-11-05",[
+  "補上 Skull of a Wolf：Albal 3% 掉落（原本圖鑑寫「還沒解鎖」那一格）、遊戲等級 3、傷害 0.5、攻擊速度 0.05/s、史詩，屬於 Weakling Wolf Set",
   "裝備的「暴擊率」「技能暴擊率」原本誤用暴擊傷害的圖示（多一個綠色箭頭），改回遊戲的圖示；數值圖示加上和遊戲一樣的深色陰影",
   "配方的需求等級改成遊戲物品說明優先：Necklace of Aragorn 8、Gloves of the Wolves 5、Belt of the Stags 7、Ring of the Wolf 3 原本誤用官網圖鑑的舊等級，已改回；骷髏飾品 3 件補上等級 6",
   "配方新增 Skeleton Accessories 的 Skeletal Ring、Bony Gloves、Skeletal Amulet，Skeleton Skull 補上製作時間和稀有度（遊戲截圖）",

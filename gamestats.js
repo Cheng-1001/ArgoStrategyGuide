@@ -1,7 +1,7 @@
 /* In-game stats of equipment, from the owner's screenshots of the item "Specifications" popup (2026-11-04 evening; Skeleton accessories 2026-11-05 evening).
    The game shows the current values; the official item catalogue (equip.js, fetched 2026-10-31) is often older (reworked progression).
    Only items matched to the catalogue with high confidence (scratchpad map9.json). Keys use the catalogue stat names where they mean the same;
-   values are the game's own text ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
+   values are the game's own text; r = rarity from the tooltip frame colour when it differs from the catalogue ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
    (user 2026-11-05: 裝備資料要照新上傳的截圖更新). */
 window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "1334":{"en": "beginner's tunic", "lvl": 1, "dmg": null, "st": [["Max Health", "+2"]]},
@@ -45,5 +45,6 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "2474":{"date": "2026-11-05", "en": "skeletal ring", "lvl": 6, "dmg": null, "st": [["Max Health", "+3"]]},
  "2037":{"date": "2026-11-05", "en": "bony gloves", "lvl": 6, "dmg": null, "st": [["Defense", "+1"], ["Max Health", "+3"]]},
  "1289":{"date": "2026-11-05", "en": "skeletal amulet", "lvl": 6, "dmg": null, "st": [["Max Health", "+3"]]},
- "1450":{"date": "2026-11-05", "en": "skeleton skull", "lvl": 8, "dmg": null, "st": [["Skill Damage", "+1%"], ["Max Health", "+5"], ["Max Mana", "+1"], ["Max Stamina", "+1"], ["Health Regeneration", "+0.05/s"]]}
+ "1450":{"date": "2026-11-05", "en": "skeleton skull", "lvl": 8, "dmg": null, "st": [["Skill Damage", "+1%"], ["Max Health", "+5"], ["Max Mana", "+1"], ["Max Stamina", "+1"], ["Health Regeneration", "+0.05/s"]]},
+ "1469":{"date": "2026-11-05", "en": "skull of a wolf", "r": "a", "lvl": 3, "dmg": "0.5", "st": [["Attack Speed", "0.05/s"]]}
 }};
