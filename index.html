@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="f61769edc9">
+<meta name="sao-build" content="44412368e9">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -796,7 +796,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=0e9f806f"></script>
 <script src="gameinfo.js?v=7eb6cf27"></script>
 <script src="npcs.js?v=3a3bf3bc"></script>
-<script src="changelog.js?v=2f03179e"></script>
+<script src="changelog.js?v=a6536d41"></script>
 <script src="recipes.js?v=747aafd1"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1470,11 +1470,12 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
 // floating window: equipment a class can use (like the quest route window)
 let CW=null;
 function openClassEquip(cid,part){const c=CLS.find(x=>x.id===cid);if(!c)return;CW={cid,part:part||"all",view};
-  const all=EQ.filter(e=>eqClasses(e).includes(cid)).sort((x,y)=>x.lv-y.lv||x.name.localeCompare(y.name));
+  // accessories without a class restriction (gloves, rings, amulets, bracelets, relics) fit every class (user 2026-11-05: 手套類應該是全部通用)
+  const all=EQ.filter(e=>eqClasses(e).includes(cid)||(!eqClasses(e).length&&EQ_PART[e.cat]==="acc")).sort((x,y)=>x.lv-y.lv||x.name.localeCompare(y.name));
   const cats=[...new Set(all.map(e=>e.cat))];const a=CW.part==="all"?all:all.filter(e=>e.cat===CW.part);
   $("cwTitle").textContent=`${c.name}（${c.zh}）可用的裝備・${a.length} 件`;
   $("cwBody").innerHTML=`<div class="chips">${[["all","全部"],...cats.map(k=>[k,EQ_CAT[k]||k])].map(([v,l])=>`<button class="chip" data-cwp="${v}" aria-pressed="${CW.part===v}">${l}</button>`).join("")}</div>
-    <div class="muted" style="font-size:12px">只列官方物品圖鑑標了「職業限制」是 ${esc(CLASS_ZH[cid]||c.zh)} 的武器和防具；沒有職業限制的飾品不列。點裝備在右側看詳細資料。</div>
+    <div class="muted" style="font-size:12px">列官方物品圖鑑標了「職業限制」是 ${esc(CLASS_ZH[cid]||c.zh)} 的武器和防具，加上沒有職業限制、每個職業都能戴的飾品（項鍊、戒指、手環、手套、遺物）。點裝備在右側看詳細資料。</div>
     <div class="grid">${a.map(e=>`<button class="card" data-key="e|${e.oid}" data-cwe="${e.oid}"><div class="chead">${eslot(e,40)}<div class="cname"><b>${esc(dn(e))}</b><span>${esc(eqCat(e))}</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span>等級 ${e.lv}</span></div></button>`).join("")}</div>`;
   $("cwBody").querySelectorAll("[data-cwp]").forEach(b=>b.onclick=()=>openClassEquip(cid,b.dataset.cwp));
@@ -1483,7 +1484,7 @@ function openClassEquip(cid,part){const c=CLS.find(x=>x.id===cid);if(!c)return;C
 // item detail inside the floating window: the right panel (the class) stays as it is
 function showCWItem(oid){CW.scroll=$("cwBody").scrollTop;$("cwBody").innerHTML=`<button class="linkbtn" id="cwBack">← 回到裝備清單</button>${equipDetail(oid)}`;
   $("cwBack").onclick=()=>openClassEquip(CW.cid,CW.part);bindGo($("cwBody"));$("cwBody").scrollTop=0}
-const closeCW=()=>{$("cwin").hidden=true;CW=null};
+const closeCW=()=>{$("cwin").hidden=true;$("cwBody").innerHTML="";CW=null};
 $("cwX").onclick=closeCW;
 {let d=null;const w=$("cwin"),h=$("cwHead");h.addEventListener("pointerdown",e=>{if(e.target.closest("button"))return;const r=w.getBoundingClientRect();d={x:e.clientX-r.left,y:e.clientY-r.top};h.setPointerCapture(e.pointerId)});
  h.addEventListener("pointermove",e=>{if(!d)return;w.style.left=Math.max(0,Math.min(innerWidth-80,e.clientX-d.x))+"px";w.style.top=Math.max(0,Math.min(innerHeight-40,e.clientY-d.y))+"px"});
@@ -1652,7 +1653,8 @@ chipsInto($("fEqPart"),[["all","全部"],["weapon","武器（主手）"],["off",
 chipsInto($("fEqClass"),[["all","全部"],...Object.entries(CLASS_ZH)],()=>eqClass,v=>eqClass=v,renderEquip);
 chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
 ["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
-const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
+const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory"};
+const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value;
   const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s));
   // sub-part counts follow the other filters (class, rarity, level, search), so they match the list

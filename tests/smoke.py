@@ -177,7 +177,6 @@ with sync_playwright() as p:
     pg.click('#lDg [data-go="d|souls"]'); pg.wait_for_timeout(300)
     check("Sanctuary of Souls Key" in pg.inner_text("#pBody") and pg.locator("#pBody .btbl").count() == 3, "event dungeon panel: key recipe, fragment zones, banner and forge tables")
     pg.click("#pClose") if pg.locator("#pClose").count() else None
-    gst = pg.evaluate("(()=>{const e=(window.__EQ||[]);return 1})()")
     pg.click("#legalBtn"); pg.wait_for_timeout(350)
     t = pg.inner_text("#legal")
     check("about" in pg.url and pg.is_visible("#view-about") and "非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t and "中文玩家社群協力製作" in t,
