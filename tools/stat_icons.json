@@ -1,0 +1,9 @@
+{
+ "_how": "Fill each key with the texture path or glyph spec printed by `python tools/stat_icons.py find <sao.zip>` (see the docstring). Empty = the site keeps its emoji. Check against an in-game tooltip (F2) – the same icon the game draws before that stat.",
+ "_look": "Tooltips seen in screenshots: '?' before Minimum Level, a sword before Attack Damage / Physical Damage, a heart before Health, a chain before Life Steal, a star/cross before the set name.",
+ "health": "", "health_regen": "", "mana": "", "mana_regen": "", "stamina": "", "stamina_regen": "",
+ "attack_damage": "", "attack_speed": "", "physical_damage": "", "magic_damage": "", "projectile_damage": "", "skill_damage": "",
+ "crit_chance": "", "crit_damage": "", "skill_crit_chance": "", "skill_crit_damage": "",
+ "defense": "", "damage_reduction": "", "block": "", "dodge": "", "movement_speed": "", "cooldown": "", "ability_haste": "",
+ "lifesteal": "", "healing": "", "food": "", "min_level": "", "set": ""
+}

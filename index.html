@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="376b2a1b4f">
+<meta name="sao-build" content="c20f0a1d15">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -176,7 +176,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .qside{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}.qside .qobj{grid-column:1;font-size:13px;overflow-wrap:anywhere}.qside .reward{grid-column:2;grid-row:1/span 2;text-align:right}
 .qmap{flex:none;width:80%;align-self:center;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#0d1218}.qmap svg{display:block;width:100%;height:auto;aspect-ratio:1}.qmap g.hl rect{fill:#e5484d}.qmap g.hl text{fill:#fff}.mqs .linkbtn.on{color:#e5484d;font-weight:700}
 .clday{margin:10px 0 14px}.clday .cld{font-family:var(--f-display);font-size:15px}.cll{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}.clold summary{cursor:pointer;color:var(--muted);padding:4px 0}
-.mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}.note.srcend{margin-top:14px}.gieff{margin:4px 0 0 0;padding:0;list-style:none}.gieff li{margin:3px 0}.effic{display:inline-block;width:1.4em;text-align:center;margin-right:2px;font-size:.95em}
+.mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}.note.srcend{margin-top:14px}.gieff{margin:4px 0 0 0;padding:0;list-style:none}.gieff li{margin:3px 0}.effen{color:var(--muted);font-size:11.5px}.effic{display:inline-block;width:1.4em;text-align:center;margin-right:2px;font-size:.95em}img.effic{width:1.15em;height:1.15em;vertical-align:-.18em;image-rendering:pixelated;object-fit:contain}
 @media (max-width:820px){.mgo{display:inline}}
 @media (max-width:820px){.mbonly{display:block}.pconly,.rwhead .muted{display:none!important}.qmap{width:100%}[data-route],[data-imap]{display:none!important}}
 @media (max-width:820px){.qside{grid-template-columns:minmax(0,1fr)}.qside .reward{grid-column:1;grid-row:auto;text-align:left}}
@@ -796,7 +796,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=0e9f806f"></script>
 <script src="gameinfo.js?v=c5fe6b67"></script>
 <script src="npcs.js?v=3a3bf3bc"></script>
-<script src="changelog.js?v=2bd06efe"></script>
+<script src="changelog.js?v=52441446"></script>
 <script src="recipes.js?v=747aafd1"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -804,6 +804,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="events.js?v=911a772d"></script>
 <script src="gamestats.js?v=0dd893c8"></script>
 <script src="sets.js?v=4aebe313"></script>
+<script src="staticons.js?v=cf926f09"></script>
 <script src="recicons.js?v=9e931339"></script>
 <script>
 (()=>{
@@ -1698,6 +1699,13 @@ const PR=(window.SAO_PROPS||[]).filter(r=>r[2]!=="catalyst").map(r=>({oid:r[0],n
 const prById=Object.fromEntries(PR.map(e=>[String(e.oid),e]));PR.forEach(e=>{if(GI_OID[e.oid])e.gen=GI_OID[e.oid].en});
 // the official catalogue files every potion (health, mana) under potion_stamina; use the in-game English / French name (user 2026-11-05: 藥水分類有問題)
 PR.forEach(e=>{if(!/^potion_/.test(e.cat))return;const n=(e.gen||"")+" "+e.name;e.cat=/health|\bvie\b/i.test(n)?"potion_heal":/mana/i.test(n)?"potion_mana":"potion_stamina"});
+// consumables the game has but the official catalogue does not (Mana Potion I/II, Quality Mana/Stamina potions, crystals, candies…), from sets.js
+// (user 2026-11-05: 為什麼只有 Mana Potion III，我有截過其他的); pseudo entries with oid "g…", data from the game screenshots and recipes
+{const have=new Set(PR.filter(e=>e.gen).map(e=>norm(e.gen)));let k=0;
+  (window.SAO_SETS||{potions:[]}).potions.forEach(p=>{const n=p.name;if(have.has(norm(n)))return;have.add(norm(n));const id="g"+(++k);
+    const cat=/potion/i.test(n)?(/health|vie/i.test(n)?"potion_heal":/mana/i.test(n)?"potion_mana":"potion_stamina"):/crystal/i.test(n)?"crystal":/candy|drag[ée]e|caramel|swirl/i.test(n)?"halloween":/meat|chocolate/i.test(n)?"food":"consumable";
+    const e={oid:id,name:n,gen:n,cat,r:null,lv:0,lore:"",st:{},ic:-1,extra:1};PR.push(e);prById[id]=e;if(RECIC[n])OID_RECIC[id]=RECIC[n];
+    const rows=ALLREC.filter(r=>norm(r.en)===norm(n));if(rows.length)RECIPE_BY_EQ[id]=rows})}
 const PRV=()=>PR.filter(e=>!MATG(e));   // the 道具 tab: materials and gathered things live in 素材
 const PR_CAT={material:"材料",fishing_job:"漁獲",miner_job:"礦物",lumberjack_job:"木材",farmer_job:"作物",consumable_item:"消耗品",consumable:"消耗品",food:"食物",potion_stamina:"耐力藥水",potion_heal:"生命藥水",potion_mana:"魔力藥水",gem_stone:"符文寶石",fortifier:"強化藥劑",catalyst:"催化劑",crystal:"水晶",tool:"工具",key_crate:"寶箱鑰匙",dungeon_key:"地下城鑰匙",halloween:"萬聖節活動",noel2025:"聖誕節活動（2025）",saint_valentin:"情人節活動",lunar:"農曆新年活動"};
 const PR_GROUP={material:"材料",fishing_job:"採集",miner_job:"採集",lumberjack_job:"採集",farmer_job:"採集",consumable_item:"消耗品",consumable:"消耗品",food:"消耗品",potion_stamina:"消耗品",potion_heal:"消耗品",potion_mana:"消耗品",gem_stone:"符文・強化",fortifier:"符文・強化",crystal:"消耗品",tool:"工具",key_crate:"鑰匙",dungeon_key:"鑰匙",halloween:"活動",noel2025:"活動",saint_valentin:"活動",lunar:"活動"};
@@ -1719,34 +1727,67 @@ function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?R
   a.sort((x,y)=>so==="rar"?rv(y)-rv(x)||x.name.localeCompare(y.name):so==="lv"?x.lv-y.lv||x.name.localeCompare(y.name):x.name.localeCompare(y.name));
   $("cPr").textContent=`${a.length} / ${PRV().length} 件`;const shown=a.slice(0,240);
   $("lPr").innerHTML=a.length?shown.map(e=>`<button class="card" data-key="p|${e.oid}" data-go="p|${e.oid}">
-    <div class="chead">${pslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${potZhE(e)?esc(potZhE(e))+"・":""}${e.gen?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":""}${esc(PR_CAT[e.cat]||e.cat)}</span></div></div>
+    <div class="chead">${pslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${potZhE(e)?esc(potZhE(e))+"・":""}${e.gen&&!e.extra?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":""}${esc(PR_CAT[e.cat]||e.cat)}</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span>等級 ${e.lv}</span>`:""}${FR2ID[e.name]&&SOURCES[FR2ID[e.name]]?.length?`<span>· ${SOURCES[FR2ID[e.name]].length} 種怪物掉落</span>`:""}</div></button>`).join("")
     +(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用分類或搜尋縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的道具。</div>`;
   bindGo($("lPr"));markSel()}
 // set bonuses and potion effects as the game shows them (sets.js, from the owner's screenshots; user 2026-11-05: 套裝效果、藥水效果也要寫進去)
 // small effect icons (emoji, drawn by the site; not game assets), user 2026-11-05: 效果有沒有圖示
-const EFF_IC=[[/life ?steal|lifesteal|vampir|吸血/i,"🩸"],[/healing|bonus healing|heal bonus|治療/i,"💚"],[/health|♥|生命/i,"❤️"],[/mana|魔力/i,"💧"],[/stamina|food|耐力|飽食/i,"⚡"],[/defen[cs]e|guard|block|damage reduction|防禦|格擋|減免/i,"🛡️"],
-  [/crit|暴擊/i,"💥"],[/cooldown|haste|冷卻|急速/i,"⏱️"],[/movement|speed|移動|速度/i,"👟"],[/dodge|閃避/i,"🌀"],[/magic|魔法/i,"✨"],[/damage|attack|傷害|攻擊/i,"⚔️"],[/fall|摔落/i,"🪂"],[/rune|符文/i,"💎"]];
-const effIc=t=>{const m=EFF_IC.find(([r])=>r.test(t));return m?`<span class="effic" aria-hidden="true">${m[1]}</span>`:""};
+// order matters: the more specific phrase first. key -> game icon (staticons.js, tools/stat_icons.py on the owner's PC); emoji until then
+const EFF_IC=[[/life ?steal|lifesteal|vampir|吸血/i,"🩸","lifesteal"],[/healing|heal bonus|治療/i,"💚","healing"],[/health\/s|health regen|生命回復/i,"❤️","health_regen"],[/mana\/s|mana regen|魔力回復/i,"💧","mana_regen"],
+  [/stamina\/s|stamina regen|耐力回復/i,"⚡","stamina_regen"],[/health|♥|❤|生命/i,"❤️","health"],[/mana|魔力/i,"💧","mana"],[/stamina|endurance|耐力/i,"⚡","stamina"],[/food|saturation|飽食|飽和/i,"🍖","food"],
+  [/damage reduction|減免/i,"🛡️","damage_reduction"],[/block|guard|格擋/i,"🛡️","block"],[/defen[cs]e|防禦/i,"🛡️","defense"],
+  [/skill crit(ical)? (chance)|技能暴擊率/i,"💥","skill_crit_chance"],[/skill crit|技能暴擊/i,"💥","skill_crit_damage"],[/crit(ical)? (chance)|暴擊率/i,"💥","crit_chance"],[/crit|暴擊/i,"💥","crit_damage"],
+  [/ability haste|急速/i,"⏱️","ability_haste"],[/cooldown|冷卻/i,"⏱️","cooldown"],[/attack speed|攻擊速度/i,"⚔️","attack_speed"],[/movement|speed|移動|速度/i,"👟","movement_speed"],[/dodge|閃避/i,"🌀","dodge"],
+  [/magic|魔法/i,"✨","magic_damage"],[/projectile|投射/i,"🏹","projectile_damage"],[/physical|物理/i,"⚔️","physical_damage"],[/skill damage|技能傷害/i,"⚔️","skill_damage"],[/damage|attack|傷害|攻擊/i,"⚔️","attack_damage"],
+  [/fall|摔落/i,"🪂",""],[/rune|符文/i,"💎",""]];
+const STATIC=window.SAO_STATICONS||{};
+const effIc=t=>{const m=EFF_IC.find(([r])=>r.test(t));if(!m)return"";return STATIC[m[2]]?`<img class="effic" src="${esc(STATIC[m[2]])}" alt="" aria-hidden="true">`:`<span class="effic" aria-hidden="true">${m[1]}</span>`};
+// Chinese reading of the game's effect lines (user 2026-11-05: 效果說明也要中文); the original stays in the tooltip and in small grey text
+const EFF_LAB={"attack speed":"攻擊速度","health/s":"生命回復","mana/s":"魔力回復","stamina/s":"耐力回復","health":"生命","max health":"最大生命","attack damage":"攻擊傷害","crit chance":"暴擊率","critical chance":"暴擊率",
+  "critical power":"暴擊傷害","crit damage":"暴擊傷害","critical damage":"暴擊傷害","max mana":"最大魔力","mana":"魔力","stamina":"耐力","max stamina":"最大耐力","bonus healing":"治療加成","defense":"防禦","skill damage":"技能傷害",
+  "skill crit chance":"技能暴擊率","skill critical chance":"技能暴擊率","skill critical damage":"技能暴擊傷害","magic damage":"魔法傷害","physical damage":"物理傷害","projectile damage":"投射物傷害","ability haste":"技能急速",
+  "movement speed":"移動速度","speed":"速度","dodge chance":"閃避率","cooldown reduction":"冷卻縮減","healing received":"受到的治療","damage reduction":"傷害減免","block chance":"格擋率","block power":"格擋強度",
+  "knockback resistance":"擊退抗性","mana regeneration":"魔力回復","stamina regeneration":"耐力回復","max endurance":"最大耐力","skill critical skills":"技能暴擊","food":"飽食度","saturation":"飽和度","♥":"生命","❤":"生命"};
+const durZh=t=>{const m=/^(\d+)\s*(s|sec|min|h)$/i.exec(t.trim());if(!m)return t;let n=+m[1],u=m[2].toLowerCase();if(u==="s"||u==="sec"){if(n>=3600&&n%3600===0)return n/3600+" 小時";if(n>=60&&n%60===0)return n/60+" 分鐘";return n+" 秒"}return n+(u==="min"?" 分鐘":" 小時")};
+const labZh=l=>EFF_LAB[l.trim().toLowerCase()]||l;
+const effZh=t=>{let m;t=String(t).trim();
+  if(m=/^Restor(?:es|e)\s*:?\s*([\d.]+)\s*(.+)$/i.exec(t)||/^Restaure\s*([\d.]+)\s*(.+)$/i.exec(t))return`回復 ${m[1]} ${labZh(m[2])}`;
+  if(m=/^Cooldown\s*:\s*(\d+s)$/i.exec(t))return`冷卻 ${durZh(m[1])}`;
+  if(m=/^Boosts your (.+?) by ([\d.]+%?(?:\/s)?) for (\d+\s*\w+)$/i.exec(t))return`${durZh(m[3])}內${labZh(m[1])} +${m[2].replace("/s","/秒")}`;
+  if(m=/^Regenerates ([\d.]+)\/s of mana and ([\d.]+)\/s of stamina for (\d+\s*\w+)$/i.exec(t))return`${durZh(m[3])}內每秒回復 ${m[1]} 魔力和 ${m[2]} 耐力`;
+  if(m=/^Attack damage \+([\d.]+%) and skill critical strike power \+([\d.]+%) for (\d+\s*\w+)$/i.exec(t))return`${durZh(m[3])}內攻擊傷害 +${m[1]}、技能暴擊傷害 +${m[2]}`;
+  if(m=/^Boost les Dégâts armes de ([\d.]+%) - (\d+)sec/i.exec(t))return`${m[2]} 秒內武器傷害 +${m[1]}`;
+  if(m=/^(\d+s) cooldown on all (.+)$/i.exec(t))return`所有 ${m[2].replace(/candies/i,"糖果")} 共用 ${durZh(m[1])}冷卻`;
+  if(m=/^On consumption, applies (\d+)h of cooldown on all fortifiers$/i.exec(t))return`使用後，所有強化藥都要冷卻 ${m[1]} 小時`;
+  if(m=/^Single use - cooldown of (\d+)\s*min$/i.exec(t))return`只能用一次，冷卻 ${m[1]} 分鐘`;
+  if(m=/^(?:Uses Remaining|Utilisations restantes)\s*:\s*(\d+)$/i.exec(t))return`剩餘次數：${m[1]}`;
+  if(m=/^Repair\s*:\s*(.+)$/i.exec(t))return`修理 ${m[1]}`;
+  // stat phrases: "+0.05 Health/s, +0.05 Mana/s" / "+1 Health +1 Defense" / "-0.6/s Health"
+  const parts=t.split(/,\s*|\s+(?=[+-]\d)/).map(x=>x.trim()).filter(Boolean);
+  const out=parts.map(x=>{let k;if(k=/^([+-][\d.]+%?)(\/s)?\s+(.+?)(\/s)?$/.exec(x)){const per=k[2]||k[4];const lab=labZh(k[3]+(k[4]?"/s":""));return per&&!k[4]?`每秒${lab} ${k[1]}`:`${lab} ${k[1]}${per?"/秒":""}`}return null});
+  return out.every(Boolean)?out.join("、"):t};
+window.__effZh=t=>effZh(t);
+const effLine=x=>{const z=effZh(x);return`${effIc(x)}<span title="${esc(x)}">${esc(z)}</span>${z!==x?` <span class="effen">${esc(x)}</span>`:""}`};
 const SETS=window.SAO_SETS||{sets:[],potions:[]},SET_BY={},POT_BY={};
 SETS.sets.forEach(st=>st.members.forEach(m=>SET_BY[norm(m)]=st));SETS.potions.forEach(p=>POT_BY[norm(p.name)]=p);
 const enGo=n=>{const k=norm(n);let e=EQ.find(x=>x.gen&&norm(x.gen)===k);if(e)return"e|"+e.oid;e=PR.find(x=>x.gen&&norm(x.gen)===k);if(e)return"p|"+e.oid;
   const it=Object.keys(ITEMS).find(x=>norm(x)===k);if(it)return"i|"+it;const ri=ALLREC.findIndex(r=>norm(r.en)===k);return ri>=0?"r|"+ri:null};
 const setPotHTML=(...names)=>{const ns=names.filter(Boolean).map(norm);const st=ns.map(n=>SET_BY[n]).find(Boolean),po=ns.map(n=>POT_BY[n]).find(Boolean);let h="";
-  if(po)h+=`<h3 class="sec">遊戲寫的效果</h3><ul class="gieff">${po.effects.map(x=>`<li>${effIc(x)}${esc(x)}</li>`).join("")}</ul>`;
-  if(st)h+=`<h3 class="sec">套裝效果・${esc(st.name)}</h3><table class="settbl"><tbody>${st.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${effIc(e)}${esc(e)}</td></tr>`).join("")}</tbody></table>
+  if(po)h+=`<h3 class="sec">遊戲寫的效果</h3><ul class="gieff">${po.effects.map(x=>`<li>${effLine(x)}</li>`).join("")}</ul>`;
+  if(st)h+=`<h3 class="sec">套裝效果・${esc(st.name)}</h3><table class="settbl"><tbody>${st.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${effLine(e)}</td></tr>`).join("")}</tbody></table>
     <div class="muted" style="font-size:12.5px;margin-top:4px">同一套：${st.members.map(m=>{const g=enGo(m);return g&&!ns.includes(norm(m))?`<button class="linkbtn" data-go="${esc(g)}">${esc(m)}</button>`:esc(m)}).join("、")}</div>`;
   return h?h+`<div class="note srcn">套裝效果和藥水效果取自遊戲裡的物品提示（站長截圖 ${esc(SETS.date||"")}），原文照遊戲。</div>`:""};
 function propDetail(id){const e=prById[id];const en=FR2ID[e.name];
   // potions: the catalogue's restore values are wrong (health potions list "Restore Stamina"); when the game's effect lines exist, show those instead
   const potGame=/^potion_/.test(e.cat)&&[e.gen,en].some(n=>n&&POT_BY[norm(n)]);
   const rows=potGame?"":Object.entries(e.st).map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
-  return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${potZhE(e)?esc(potZhE(e))+"・":""}${e.gen?esc(e.name)+"・":""}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
+  return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${potZhE(e)?esc(potZhE(e))+"・":""}${e.gen&&!e.extra?esc(e.name)+"・":""}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
   ${e.lore&&!potGame?`<p class="lore">${esc(e.lore)}</p>`:""}${rows?`<dl class="stats">${rows}</dl>`:""}${setPotHTML(e.gen,en)}
-  ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}
+  ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen)]:null))}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
-  <div class="note srcn">官方圖鑑 #${e.oid}。${PR_GROUP[e.cat]==="活動"?(PR_EVYEAR[e.cat]?`活動年份 ${PR_EVYEAR[e.cat]} 取自官網圖鑑的分類名稱。`:"官網圖鑑的這個活動分類沒有寫年份，所以不標年份。"):""}${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
+  <div class="note srcn">${e.extra?"官網物品圖鑑沒有收錄這個物品，名稱和效果取自遊戲截圖。":`官方圖鑑 #${e.oid}。`}${PR_GROUP[e.cat]==="活動"?(PR_EVYEAR[e.cat]?`活動年份 ${PR_EVYEAR[e.cat]} 取自官網圖鑑的分類名稱。`:"官網圖鑑的這個活動分類沒有寫年份，所以不標年份。"):""}${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
 // ================= bosses tab =================
 const BO=window.SAO_BOSSES;
