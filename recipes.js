@@ -2643,7 +2643,7 @@ null,
 [
 1824,
 "Key of Xal'Zirith",
-null,
+60,
 [
 [
 "Spider Cloth",
@@ -2655,10 +2655,10 @@ null,
 ]
 ],
 "15",
-null,
+"b",
 "key",
 null,
-"ref"
+"shot"
 ]
 ]
 }

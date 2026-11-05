@@ -117,6 +117,10 @@ def build(pack):
         canvas.save(os.path.join(out, key + ".png"), optimize=True)
         table[key] = f"icons/stats/{key}.png"
         print(key, "<-", spec)
+    # hand-made icons (cut from screenshots, see _notes): key left empty above but the file exists -> keep them
+    for key, spec in json.load(open(MAP, encoding="utf-8")).items():
+        if not key.startswith("_") and not spec and os.path.exists(os.path.join(out, key + ".png")):
+            table[key] = f"icons/stats/{key}.png"; print(key, "<- kept (hand-made)")
     hdr = open(os.path.join(ROOT, "staticons.js"), encoding="utf-8").read().split("window.SAO_STATICONS")[0]
     open(os.path.join(ROOT, "staticons.js"), "w", encoding="utf-8").write(
         hdr + "window.SAO_STATICONS = " + json.dumps(table, ensure_ascii=False, indent=1) + ";\n")

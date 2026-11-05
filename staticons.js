@@ -15,6 +15,7 @@ window.SAO_STATICONS = {
  "food": "icons/stats/food.png",
  "health": "icons/stats/health.png",
  "health_regen": "icons/stats/health_regen.png",
+ "healing": "icons/stats/healing.png",
  "lifesteal": "icons/stats/lifesteal.png",
  "magic_damage": "icons/stats/magic_damage.png",
  "mana": "icons/stats/mana.png",

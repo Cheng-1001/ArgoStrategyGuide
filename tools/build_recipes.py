@@ -20,6 +20,9 @@ SHOTS = {
         ('Bony Gloves', 'b', 30, [['Skeleton Bone', 12], ['Reinforced Skeleton Bone', 8]], '28', 'acc'),
         ('Skeletal Amulet', 'c', 15, [['Skeleton Bone', 4], ['Soul of the Ruins', 4], ['Oak String', 1]], '25', 'acc'),
     ],
+    "Xal'Zirith Dungeon Guard - Candelia": [
+        ("Key of Xal'Zirith", 'b', 60, [['Spider Cloth', 16], ['Spider Thread', 16]], '15', 'key'),
+    ],
     'Skeleton Skull': [
         ('Skeleton Skull', 'a', 60, [['Reinforced Skeleton Bone', 20]], '35', 'acc'),
     ],
@@ -204,7 +207,7 @@ SHOTS = {
     ],
 }
 # the screenshot showed the NPC's whole list: drop reference-map rows the game no longer has
-FULL = {'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
+FULL = {"Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
 SAME = {"Katana Training": "Training Katana", "Beginner Leggings": "Beginner's Leggings", "Bandit's Gloves": "Gloves of the Bandit", "Bracelet of the Sylvan": "Bracelet of the Sylve", "Amulet of the Sylvan": "Amulet of the Sylve"}          # reference-map name -> in-game name
 # material names used in game / by the reference map -> this site's ITEMS ids
 MAT = {"Shark Carapace": "Shark Shell", "Soul of the Ruins": "Souls of the Ruins", "Sylve Shoot": "Sylvan Sprout",

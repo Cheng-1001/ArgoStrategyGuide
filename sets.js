@@ -54,6 +54,7 @@ window.SAO_SETS = {date:"2026-11-05", sets:[
  {"name": "Healing Crystal", "effects": ["Restores : 150 ♥", "Cooldown: 1800s", "Uses Remaining: 1"]},
  {"name": "Mana Crystal", "effects": ["Restores : 50 Mana", "Cooldown: 1800s", "Uses Remaining: 1"]},
  {"name": "Stamina Crystal", "effects": ["Restores : 50 Stamina", "Cooldown: 1800s", "Uses Remaining: 1"]},
+ {"name": "Reapkin King's Lollipop", "effects": ["Attack damage +8%, magic damage +6%, max health +15 and speed +0.03 for 30min", "60s cooldown on all Reapkin candies", "Cooldown: 60s", "Uses Remaining: 1"]},
  {"name": "Resurrection Crystal", "effects": ["Allows you to revive a comrade fallen in battle within 10s after their death in the authorized zones", "Cooldown: 7200s", "Uses Remaining: 1"]},
  {"name": "Radiant Power Crystal", "effects": ["Boosts Weapon Damage and Magic Damage by 25% - 10min", "Cooldown: 60s", "Uses Remaining: 1"]},
  {"name": "Daily Stamina Crystal", "effects": ["Restores : 80 Stamina", "Cooldown: 60s", "Uses Remaining: 1"]},

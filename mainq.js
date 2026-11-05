@@ -80,8 +80,12 @@ window.SAO_MAINQ = {1: [
  {t:"The Trial of the Haralds", n:32, aka:"The Trials of the Heralds", npc:"—", d:"三位已故的國王守著水晶，到地底的墓裡去見他們。", en:{0:"Find the tomb of the ancestors",1:"Trial of Harald I（路標：Épreuve de Harald I）"},
   img:{0:[["img/quests/32_route.jpg","路線：從 Tolbana 東北邊的路往上走，穿過森林到洞口（底圖是本站的探索地圖，紅線是站長畫的走法）"],["img/quests/32_cave.jpg","洞口：銅色平台上有往下的樓梯和一盞燈，沿著往下走"],["img/quests/32_tomb.jpg","走到底就是祖先之墓：長滿藤蔓的洞穴，中間有一顆石球"],["img/quests/32_hole.jpg","爬上石球，上面有一個洞，跳進去就到地底下的試煉場"]]},
   s:[["找到祖先之墓：從 Tolbana 東北邊沿著路走上去到洞口，往下走到底會看到墓（大石球）；爬上去有一個洞，跳進去到地底下才是試煉的地方",3681,1648],["Harald 的試煉 1：Harald I 會叫出一隻怪，站著不要動就好",3781,1673],["Harald 的試煉 2：脫掉防具和主手、副手",3741,1714],["Harald 的試煉 3：Harald III 會叫出一隻怪，站著不要動就好",3701,1667],["得到三個年份：−700、−620、−660",null,null],["回去找 Harald 國王",3198,1524]]},
- {t:"The Crystal of Tolbana", n:33, nEst:1, npc:"Mephisto",
-  s:[["回去找 Mephisto",3260,1403],["在鍛造場附近的門和他會合",3239,1461],["跟著他走到門口",3216,1445],["下到水晶底下",3047,1208],["在 Kobold Tower 和 Mephisto 會合",3400,1080]]},
- {t:"Floor 2", n:34, nEst:1, npc:"—", d:"前往第 2 層（預計 11/4 開放）。",
+ {t:"The Crystal of Tolbana", n:33, npc:"Mephisto", d:"Mephisto 帶你到鍛造場附近一扇很久沒開過的門。他會說：「Follow me. And don't touch anything.」「It hasn't been opened since before my time.」「Go down. I'll join you.」（站長 2026-11-05 截圖）",
+  en:{1:"Meet him at the door, near the forge",2:"Follow him to the door"},
+  s:[["回去找 Mephisto",3260,1403],["在鍛造場附近的門和他會合",3239,1461],["跟著他走到門口",3216,1445]]},
+ {t:"Beneath the Crystal", n:34, npc:"Mephisto", d:"從那扇門往下走到水晶底下，再到 Kobold Tower 和 Mephisto 會合。",
+  en:{0:"Go down beneath the crystal",1:"Meet Mephisto at the Kobold Tower"},
+  s:[["下到水晶底下",3047,1208],["在 Kobold Tower 和 Mephisto 會合",3400,1080]]},
+ {t:"Floor 2", n:35, npc:"—", d:"前往第 2 層。", en:{0:"Reach Floor 2"},
   s:[["抵達第 2 層",null,null]]}
 ]};

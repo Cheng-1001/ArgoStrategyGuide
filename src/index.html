@@ -1514,7 +1514,7 @@ function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<di
   <h3 class="sec">鑰匙碎片：三個惡魔區</h3>${tb(["惡魔區","惡魔","首領","碎片"],d.zones.map(z=>[esc(z.n),z.mobs.map(esc).join("、"),esc(z.leader),`<b>${esc(z.frag)}</b>`]))}
   <div class="note">${esc(d.fragRate)}</div>
   <h3 class="sec">免費抽轉蛋的流程</h3><ol class="mqs">${d.loop.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
-  <h3 class="sec">萬聖節轉蛋</h3><p>${esc(d.banner.cost)}</p>${tb(["稀有度","內容","機率"],d.banner.rows.map(r=>r.map(esc)))}<div class="note">${esc(d.banner.pity)}</div>
+  <h3 class="sec">萬聖節轉蛋</h3><p>${esc(d.banner.cost)}</p>${tb(["稀有度","內容","機率"],d.banner.rows.map(r=>r.map(esc)))}<div class="note">${esc(d.banner.pity)}</div>${(d.notes||[]).map(x=>`<div class="note">${esc(x)}</div>`).join("")}
   <h3 class="sec">Halloween Forge：用 Dark Gift Pumpkin 換武器</h3><p>找 ${esc(d.forge.npc)}。</p>${tb(["武器","職業","南瓜","需求等級"],d.forge.rows.map(r=>[esc(r[0]),esc(r[1]),r[2],r[3]==null?"":r[3]]))}
   <div class="note">${esc(d.forge.extra)}</div><div class="note">${esc(d.forge.lvNote)}</div>
   <h3 class="sec">即將開放</h3><ul>${d.soon.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
@@ -1844,12 +1844,12 @@ const STATIC=window.SAO_STATICONS||{};
 // fetch every stat icon once at start-up, so the first panel opened already has them (user 2026-11-05: 第一次點的時候不會馬上載入)
 const STATIC_PRE=Object.values(STATIC).map(u=>{const im=new Image();im.decoding="async";im.src=u;return im});
 const IC_FB={health_regen:"health",mana_regen:"mana",healing:"health"};   // no game icon of their own: borrow the family's
-const effIc=t=>{const m=EFF_IC.find(([r])=>r.test(t));if(!m)return"";const k=STATIC[m[2]]?m[2]:(STATIC[IC_FB[m[2]]]?IC_FB[m[2]]:"");return k?`<img class="effic" src="${esc(STATIC[k])}" alt="" aria-hidden="true">`:`<span class="effic" aria-hidden="true">${m[1]}</span>`};
+const effIc=t=>{if(/,.*\bfor\s+\d+\s*(?:s|sec|min|h)\b/i.test(t))return"";const m=EFF_IC.find(([r])=>r.test(t));if(!m)return"";const k=STATIC[m[2]]?m[2]:(STATIC[IC_FB[m[2]]]?IC_FB[m[2]]:"");return k?`<img class="effic" src="${esc(STATIC[k])}" alt="" aria-hidden="true">`:`<span class="effic" aria-hidden="true">${m[1]}</span>`};
 // Chinese reading of the game's effect lines (user 2026-11-05: 效果說明也要中文); the original stays in the tooltip and in small grey text
 const EFF_LAB={"attack speed":"攻擊速度","health/s":"生命回復","mana/s":"魔力回復","stamina/s":"耐力回復","health":"生命","max health":"最大生命","attack damage":"攻擊傷害","crit chance":"暴擊率","critical chance":"暴擊率",
   "critical power":"暴擊傷害","crit damage":"暴擊傷害","critical damage":"暴擊傷害","max mana":"最大魔力","mana":"魔力","stamina":"耐力","max stamina":"最大耐力","bonus healing":"治療加成","defense":"防禦","skill damage":"技能傷害",
   "skill crit chance":"技能暴擊率","skill critical chance":"技能暴擊率","skill critical damage":"技能暴擊傷害","magic damage":"魔法傷害","physical damage":"物理傷害","projectile damage":"投射物傷害","ability haste":"技能急速",
-  "movement speed":"移動速度","speed":"速度","dodge chance":"閃避率","cooldown reduction":"冷卻縮減","healing received":"受到的治療","damage reduction":"傷害減免","block chance":"格擋率","block power":"格擋強度",
+  "movement speed":"移動速度","speed":"速度","attack damage":"攻擊傷害","max health":"最大生命","dodge chance":"閃避率","cooldown reduction":"冷卻縮減","healing received":"受到的治療","damage reduction":"傷害減免","block chance":"格擋率","block power":"格擋強度",
   "knockback resistance":"擊退抗性","mana regeneration":"魔力回復","stamina regeneration":"耐力回復","max endurance":"最大耐力","skill critical skills":"技能暴擊","food":"飽食度","saturation":"飽和度","♥":"生命","❤":"生命"};
 const durZh=t=>{const m=/^(\d+)\s*(s|sec|min|h)$/i.exec(t.trim());if(!m)return t;let n=+m[1],u=m[2].toLowerCase();if(u==="s"||u==="sec"){if(n>=3600&&n%3600===0)return n/3600+" 小時";if(n>=60&&n%60===0)return n/60+" 分鐘";return n+" 秒"}return n+(u==="min"?" 分鐘":" 小時")};
 const labZh=l=>EFF_LAB[l.trim().toLowerCase()]||l;
@@ -1864,6 +1864,7 @@ const effZh=t=>{let m;t=String(t).trim();
   if(m=/^On consumption, applies (\d+)h of cooldown on all fortifiers$/i.exec(t))return`使用後，所有強化藥都要冷卻 ${m[1]} 小時`;
   if(/^Allows you to revive a comrade fallen in battle within (\d+)s/i.test(t))return`在允許的區域，隊友倒下後 ${/within (\d+)s/i.exec(t)[1]} 秒內可以把他救起來`;
   if(m=/^Boosts Weapon Damage and Magic Damage by ([\d.]+%) - (\d+)\s*min$/i.exec(t))return`${m[2]} 分鐘內武器傷害和魔法傷害 +${m[1]}`;
+  if(m=/^(.+?) for (\d+\s*(?:s|sec|min|h))$/i.exec(t)){const parts=m[1].split(/,\s*|\s+and\s+/).map(x=>{const k=/^(.+?)\s*([+-][\d.]+%?)$/.exec(x.trim());return k?`${labZh(k[1])} ${k[2]}`:null});if(parts.every(Boolean))return`${durZh(m[2])}內${parts.join("、")}`}
   if(m=/^Single use - cooldown of (\d+)\s*min$/i.exec(t))return`只能用一次，冷卻 ${m[1]} 分鐘`;
   if(m=/^(?:Uses Remaining|Utilisations restantes)\s*:\s*(\d+)$/i.exec(t))return`剩餘次數：${m[1]}`;
   if(m=/^Repair\s*:\s*(.+)$/i.exec(t))return`修理 ${m[1]}`;

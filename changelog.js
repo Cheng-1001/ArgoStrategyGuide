@@ -2,6 +2,14 @@
    日期一律用台灣時間（UTC+8，使用者 2026-11-03 指定）；git log 用 TZ=Asia/Taipei 看。
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
+ ["2026-11-06",[
+  "「治療加成」（Heal Bonus／Bonus Healing）終於有遊戲圖示了：從 Belt of the Stags 的物品提示切出來的綠色十字，裝備數值、套裝效果都會用",
+  "主線 33 The Crystal of Tolbana 編號確認（不再是推算），新增主線 34 Beneath the Crystal（下到水晶底下 → 到 Kobold Tower 找 Mephisto），Floor 2 改成主線 35；33 補上 Mephisto 的台詞和任務追蹤原文",
+  "Sanctuary of Xal'Zirith 加上遊戲 Dungeons 視窗的資料：首領 Voras、鑰匙、Easy 30 分鐘／1～4 人／建議 7 級、通關寶箱 Necklace of Aragorn 3%、Spider Venom 25%、1000 Cols Pouch 100%",
+  "Key of Xal'Zirith 的配方改用守衛視窗的截圖：Spider Cloth ×16＋Spider Thread ×16、15 Col、1 分鐘、稀有",
+  "Young Spider 補上掉落率（Spider Thread 50%、Spider Cloth 35%，取自物品說明）；Forest Spider LV 5、Venomous Spider LV 8（在 Xal'Zirith 地下城裡）、Pricilia LV 10",
+  "萬聖節活動面板補上 Pumpkin King 稱號的加成、Reapkin King's Lollipop 的效果、鑰匙碎片和 Spectral Crystal 的說明；Reapkin King's Lollipop 也列在道具分頁",
+ ]],
  ["2026-11-05",[
   "補上 Skull of a Wolf：Albal 3% 掉落（原本圖鑑寫「還沒解鎖」那一格）、遊戲等級 3、傷害 0.5、攻擊速度 0.05/s、史詩，屬於 Weakling Wolf Set",
   "裝備的「暴擊率」「技能暴擊率」原本誤用暴擊傷害的圖示（多一個綠色箭頭），改回遊戲的圖示；數值圖示加上和遊戲一樣的深色陰影",

@@ -54,6 +54,9 @@ window.SAO_EVENTS = {
         modes: ["Easy", "Initiate", "Hard", "Integrity"],
         easy: [["時間限制", "60 分鐘"], ["失敗時", "送回原處（Sent back if you fall）"], ["人數", "1～4 人"], ["建議等級", "13 級以上"]],
         loot: [["Skeletal Sword", "Skeleton Warrior", 0.5], ["Bone Dust", "Skeleton Warrior", 70], ["Skeleton Bone", "Skeleton Warrior", 15], ["Soul of the Ruins", "Skeleton Warrior", 80]] },
+  notes: ["Title: Pumpkin King（稱號）：戴著時 +15 生命、+3 防禦；使用後在稱號選單解鎖，已經有的不要再用（拍賣場提示，站長 2026-11-05 截圖）。",
+          "Reapkin King's Lollipop（糖果）：30 分鐘內攻擊傷害 +8%、魔法傷害 +6%、最大生命 +15、速度 +0.03；所有 Reapkin 糖果共用 60 秒冷卻。道具分頁也查得到。",
+          "Eternal Shadow：三種鑰匙碎片之一，說明寫「三個合起來在地下城告示牌鍛造鑰匙」。Spectral Crystal：萬聖節之夜迷失靈魂起舞的水晶（轉蛋貨幣）。"],
   soon: ["現有武器升級成第 2 層版本：公告寫「明天晚上」開放（法國時間 11/5 晚上），要先通關第 2 層才能用，NPC 會一直在，不用急。",
          "舊的萬聖節武器換成新武器：同樣是「明天晚上」開放。"]
  }],
