@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="fd49040350">
+<meta name="sao-build" content="94dd49740b">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -188,7 +188,9 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .gvback{position:fixed;inset:0;z-index:60;background:rgba(6,10,16,.55);display:flex;align-items:center;justify-content:center;padding:16px}.gvback[hidden]{display:none}
 .gvbox{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.4);width:min(560px,100%);max-height:min(86vh,900px);display:flex;flex-direction:column;overflow:hidden}
 .gvbox.gvwide{width:min(880px,100%)}
-.gvback+.gvback{background:rgba(6,10,16,.18)}.gvback .gvbox{transform:translate(calc(var(--gvn,0)*26px),calc(var(--gvn,0)*22px))}
+.gvback+.gvback{background:rgba(6,10,16,.18)}.gvback .gvbox{transform:translate(calc(var(--gvn,0)*26px + var(--dx,0px)),calc(var(--gvn,0)*22px + var(--dy,0px)))}
+.gvhead{cursor:move;user-select:none;touch-action:none}.gvhead button{cursor:pointer}.gvback.gvdrag .gvbox{box-shadow:0 30px 70px rgba(0,0,0,.5)}
+@media (max-width:820px){.gvhead{cursor:default}}
 @media (max-width:820px){.gvback .gvbox{transform:none}}
 .gvhead{display:flex;align-items:center;gap:10px;padding:10px 12px 10px 16px;border-bottom:1px solid var(--line)}.gvhead b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}
 .gvbody{overflow:auto;padding:14px 16px 18px;display:flex;flex-direction:column;gap:10px}
@@ -747,6 +749,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
     <div class="filters">
       <div class="fgroup"><span class="flabel">分類</span><div class="chips" id="fPrGroup"></div></div>
       <div class="fgroup" id="gPrSub" hidden><span class="flabel">細分</span><div class="chips" id="fPrSub"></div></div>
+      <div class="fgroup" id="gPrSub2" hidden><span class="flabel">種類</span><div class="chips" id="fPrSub2"></div></div>
       <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fPrRar"></div></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fPrSort" aria-label="排序">
         <option value="name">名稱</option><option value="rar">稀有度（高→低）</option><option value="lv">等級（低→高）</option></select></div>
@@ -1245,7 +1248,19 @@ function gvNew(t,i){const n=gvNorm(t,i);
   el.innerHTML=`<div class="gvbox" role="dialog" aria-modal="true"><div class="gvhead"><button class="linkbtn gvprev" hidden>← 上一個</button><b class="gvtitle"></b><button class="iconbtn gvx" aria-label="關閉">✕</button></div><div class="gvbody"></div></div>`;
   const w={el,hist:[n]};GVW.push(w);$("gvLayer").appendChild(el);
   el.querySelector(".gvx").onclick=gvClose;el.querySelector(".gvprev").onclick=()=>{w.hist.pop();gvRender(w)};
-  el.addEventListener("click",e=>{if(e.target===el)gvClose()});
+  el.addEventListener("click",e=>{if(e.target===el&&!el.__dragged)gvClose();el.__dragged=false});
+  // drag by the title bar (user 2026-11-05: 要可以拖動); phones keep the pop-up fixed
+  {const hd=el.querySelector(".gvhead"),bx=el.querySelector(".gvbox");let st=null;
+   hd.addEventListener("pointerdown",e=>{if(e.button!==0||e.target.closest("button")||matchMedia("(max-width:820px)").matches)return;
+     st={x:e.clientX,y:e.clientY,dx:parseFloat(bx.style.getPropertyValue("--dx"))||0,dy:parseFloat(bx.style.getPropertyValue("--dy"))||0};hd.setPointerCapture(e.pointerId);el.classList.add("gvdrag");e.preventDefault()});
+   hd.addEventListener("pointermove",e=>{if(!st)return;const r=bx.getBoundingClientRect();
+     let dx=st.dx+e.clientX-st.x,dy=st.dy+e.clientY-st.y;
+     // keep the title bar on screen
+     const ox=r.left-(parseFloat(bx.style.getPropertyValue("--dx"))||0),oy=r.top-(parseFloat(bx.style.getPropertyValue("--dy"))||0);
+     dx=Math.min(Math.max(dx,-ox-r.width+80),innerWidth-ox-80);dy=Math.min(Math.max(dy,-oy),innerHeight-oy-40);
+     bx.style.setProperty("--dx",dx+"px");bx.style.setProperty("--dy",dy+"px")});
+   const end=()=>{if(st){st=null;el.classList.remove("gvdrag");el.__dragged=true;setTimeout(()=>el.__dragged=false,0)}};
+   hd.addEventListener("pointerup",end);hd.addEventListener("pointercancel",end)}
   gvRender(w);el.querySelector(".gvx").focus()}
 function gvRender(w){const [t,i]=w.hist[w.hist.length-1],el=w.el,B=el.querySelector(".gvbody");
   B.innerHTML=detailHTML(t,i);el.firstElementChild.classList.toggle("gvwide",t==="q"||t==="c");
@@ -1779,21 +1794,25 @@ PR.forEach(e=>{if(!/^potion_/.test(e.cat))return;const n=(e.gen||"")+" "+e.name;
     const e={oid:id,name:n,gen:n,cat,r:null,lv:0,lore:"",st:{},ic:-1,extra:1};PR.push(e);prById[id]=e;if(RECIC[n])OID_RECIC[id]=RECIC[n];
     const rows=ALLREC.filter(r=>norm(r.en)===norm(n));if(rows.length)RECIPE_BY_EQ[id]=rows})}
 PR.forEach(e=>{const n=((e.gen||"")+" "+e.name).toLowerCase();
-  if(e.cat==="tool")e.cat=/pioche|pickaxe|houe|serpe|\bhoe\b|hache|\baxe\b/.test(n)?"tool_gather":/canne|fishing rod/.test(n)?"tool_rod":/marteau|hammer/.test(n)?"tool_hammer":/torch/.test(n)?"tool_torch":"tool";
+  if(e.cat==="tool")e.cat=/pioche|pickaxe/.test(n)?"tool_pick":/houe|serpe|\bhoe\b/.test(n)?"tool_hoe":/hache|\baxe\b/.test(n)?"tool_axe":/canne|fishing rod/.test(n)?"tool_rod":/marteau|hammer/.test(n)?"tool_hammer":/torch/.test(n)?"tool_torch":"tool";
   else if(/réparation|repair kit/.test(n))e.cat="tool_repair"});
 // sub-category order inside a group (user 2026-11-05): potions → crystals → food → other consumables; keys: dungeon then chest
-const SUB_ORDER=["生命藥水","魔力藥水","耐力藥水","水晶","食物","消耗品","採集","釣竿","錘子","修理包","火把","其他工具","地下城鑰匙","寶箱鑰匙","符文寶石","強化藥劑"];
+const SUB_ORDER=["生命藥水","魔力藥水","耐力藥水","水晶","食物","消耗品","採集","鎬子","斧頭","鋤頭","釣竿","錘子","修理包","火把","其他工具","地下城鑰匙","寶箱鑰匙","符文寶石","強化藥劑"];
 const subRank=c=>{const i=SUB_ORDER.indexOf(PR_SUBLAB(c));return i<0?99:i};
 const PRV=()=>PR.filter(e=>!MATG(e));   // the 道具 tab: materials and gathered things live in 素材
-const PR_CAT={material:"材料",fishing_job:"漁獲",miner_job:"礦物",lumberjack_job:"木材",farmer_job:"作物",consumable_item:"消耗品",consumable:"消耗品",food:"食物",potion_stamina:"耐力藥水",potion_heal:"生命藥水",potion_mana:"魔力藥水",gem_stone:"符文寶石",fortifier:"強化藥劑",catalyst:"催化劑",crystal:"水晶",tool:"其他工具",tool_gather:"採集",tool_rod:"釣竿",tool_hammer:"錘子",tool_repair:"修理包",tool_torch:"火把",key_crate:"寶箱鑰匙",dungeon_key:"地下城鑰匙",halloween:"萬聖節活動",noel2025:"聖誕節活動（2025）",saint_valentin:"情人節活動",lunar:"農曆新年活動"};
-const PR_GROUP={material:"材料",fishing_job:"採集",miner_job:"採集",lumberjack_job:"採集",farmer_job:"採集",consumable_item:"消耗品",consumable:"消耗品",food:"消耗品",potion_stamina:"消耗品",potion_heal:"消耗品",potion_mana:"消耗品",gem_stone:"符文・強化",fortifier:"符文・強化",crystal:"消耗品",tool:"工具",tool_gather:"工具",tool_rod:"工具",tool_hammer:"工具",tool_repair:"工具",tool_torch:"工具",key_crate:"鑰匙",dungeon_key:"鑰匙",halloween:"活動",noel2025:"活動",saint_valentin:"活動",lunar:"活動"};
+const PR_CAT={material:"材料",fishing_job:"漁獲",miner_job:"礦物",lumberjack_job:"木材",farmer_job:"作物",consumable_item:"消耗品",consumable:"消耗品",food:"食物",potion_stamina:"耐力藥水",potion_heal:"生命藥水",potion_mana:"魔力藥水",gem_stone:"符文寶石",fortifier:"強化藥劑",catalyst:"催化劑",crystal:"水晶",tool:"其他工具",tool_pick:"鎬子",tool_axe:"斧頭",tool_hoe:"鋤頭",tool_rod:"釣竿",tool_hammer:"錘子",tool_repair:"修理包",tool_torch:"火把",key_crate:"寶箱鑰匙",dungeon_key:"地下城鑰匙",halloween:"萬聖節活動",noel2025:"聖誕節活動（2025）",saint_valentin:"情人節活動",lunar:"農曆新年活動"};
+const PR_GROUP={material:"材料",fishing_job:"採集",miner_job:"採集",lumberjack_job:"採集",farmer_job:"採集",consumable_item:"消耗品",consumable:"消耗品",food:"消耗品",potion_stamina:"消耗品",potion_heal:"消耗品",potion_mana:"消耗品",gem_stone:"符文・強化",fortifier:"符文・強化",crystal:"消耗品",tool:"工具",tool_pick:"工具",tool_axe:"工具",tool_hoe:"工具",tool_rod:"工具",tool_hammer:"工具",tool_repair:"工具",tool_torch:"工具",key_crate:"鑰匙",dungeon_key:"鑰匙",halloween:"活動",noel2025:"活動",saint_valentin:"活動",lunar:"活動"};
 const PR_ICON={材料:"🧱",採集:"⛏️",消耗品:"🧪","符文・強化":"💎",工具:"🔧",鑰匙:"🗝️",活動:"🎉"};
 const pslot=(e,s=44)=>OID_RECIC[e.oid]?recicImg(OID_RECIC[e.oid],s):e.gen&&GICON[e.gen]?recicImg(GICON[e.gen],s):e.ic<0&&FR2ID[e.name]&&ITEMS[FR2ID[e.name]].ic>=0?slot(FR2ID[e.name],s):e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${PR_ICON[PR_GROUP[e.cat]]||"❔"}</span>`:`<span class="eslot pslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
 let prGroup="all",prRar="all",prSubV="all";
 const PR_EVYEAR={noel2025:2025}; // only years the official catalogue category names (Noël 2025)
-const PR_SUBLAB=c=>PR_GROUP[c]==="活動"?PR_CAT[c].replace("活動",""):PR_CAT[c];
+const PR_GATHER=new Set(["tool_pick","tool_axe","tool_hoe"]);   // 鎬子、斧頭、鋤頭 = one 「採集」 sub-category, split again in the 種類 row
+const PR_SUBLAB=c=>PR_GATHER.has(c)?"採集":PR_GROUP[c]==="活動"?PR_CAT[c].replace("活動",""):PR_CAT[c];
+let prSub2="all";
+const fillPrSub2=()=>{const g=$("gPrSub2");prSub2="all";g.hidden=prSubV!=="採集";if(g.hidden)return;
+  chipsInto($("fPrSub2"),[["all","全部"],...["tool_pick","tool_axe","tool_hoe"].map(c=>[c,`${PR_CAT[c]} <span class="cn"></span>`])],()=>prSub2,v=>prSub2=v,renderProps)};
 const fillPrSub=()=>{const g=$("gPrSub");prSubV="all";const labs=[...new Set(PRV().filter(e=>PR_GROUP[e.cat]===prGroup).map(e=>PR_SUBLAB(e.cat)))].sort((a,b)=>{const ia=SUB_ORDER.indexOf(a),ib=SUB_ORDER.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)});g.hidden=prGroup==="all"||labs.length<2;
-  if(!g.hidden)chipsInto($("fPrSub"),[["all","全部"],...labs.map(l=>[l,`${esc(l)} <span class="cn">${PRV().filter(e=>PR_GROUP[e.cat]===prGroup&&PR_SUBLAB(e.cat)===l).length}</span>`])],()=>prSubV,v=>prSubV=v,renderProps)};
+  if(!g.hidden)chipsInto($("fPrSub"),[["all","全部"],...labs.map(l=>[l,`${esc(l)} <span class="cn">${PRV().filter(e=>PR_GROUP[e.cat]===prGroup&&PR_SUBLAB(e.cat)===l).length}</span>`])],()=>prSubV,v=>{prSubV=v;fillPrSub2()},renderProps);fillPrSub2()};
 chipsInto($("fPrGroup"),[["all","全部"],...[...new Set(Object.values(PR_GROUP))].filter(g=>g!=="材料"&&g!=="採集").map(g=>[g,g==="活動"?"活動道具":g])],()=>prGroup,v=>{prGroup=v;fillPrSub()},renderProps);
 chipsInto($("fPrRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,RAR[r][0]])],()=>prRar,v=>prRar=v,renderProps);
 $("fPrSort").onchange=renderProps;
@@ -1801,7 +1820,8 @@ const prHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+((ITEMS[FR2ID[e.name]]||{
 function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
   const base=PRV().filter(e=>(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
   $("fPrSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>PR_SUBLAB(e.cat)===c.dataset.v).length});
-  let a=base.filter(e=>prSubV==="all"||PR_SUBLAB(e.cat)===prSubV);
+  $("fPrSub2").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>e.cat===c.dataset.v).length});
+  let a=base.filter(e=>(prSubV==="all"||PR_SUBLAB(e.cat)===prSubV)&&(prSubV!=="採集"||prSub2==="all"||e.cat===prSub2));
   a.sort((x,y)=>so==="rar"?rv(y)-rv(x)||x.name.localeCompare(y.name):so==="lv"?x.lv-y.lv||x.name.localeCompare(y.name):x.name.localeCompare(y.name));
   if(prGroup!=="all"&&prSubV==="all")a.sort((x,y)=>subRank(x.cat)-subRank(y.cat));   // stable: keeps the chosen order inside each sub-category
   $("cPr").textContent=`${a.length} / ${PRV().length} 件`;const shown=a.slice(0,240);
@@ -2592,7 +2612,7 @@ document.querySelectorAll(".browse .filters").forEach(F=>{const gs=F.querySelect
   const sy=()=>requestAnimationFrame(fbarSync);F.addEventListener("click",sy);F.addEventListener("change",sy);F.addEventListener("input",sy)});
 function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback|about|changelog|dungeons)$/);
   view=mm?mm[2]:"map";if(view==="feedback"){view="report";rSub="feedback"}else if(view==="report")rSub="data";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
-  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about"||view==="changelog"||(pv!==view&&!viewPending&&matchMedia("(max-width:820px)").matches))&&!panel.hidden)closeP();
+  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(pv!==view&&GVW.length)gvCloseAll();if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about"||view==="changelog"||(pv!==view&&!viewPending&&matchMedia("(max-width:820px)").matches))&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
   document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
@@ -2602,7 +2622,7 @@ function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.m
   renderCurrent();if(viewPending){const fn=viewPending;viewPending=null;requestAnimationFrame(fn)}}
 // desktop: the main filters of each codex tab sit above the list (user 2026-11-04); the rest stay in the left column.
 // The groups are moved, not copied (their handlers keep working); phones put them back where they were.
-const TOPF={monsters:["fMonType"],equip:["fEqPart","fEqSub"],items:["fItemGroup"],props:["fPrGroup","fPrSub"]};   // rarity stays in the left column (user 2026-11-04)
+const TOPF={monsters:["fMonType"],equip:["fEqPart","fEqSub"],items:["fItemGroup"],props:["fPrGroup","fPrSub","fPrSub2"]};   // rarity stays in the left column (user 2026-11-04)
 const topMQ=matchMedia("(min-width:821px)");
 function placeTopFilters(){Object.entries(TOPF).forEach(([v,ids])=>{const sec=$("view-"+v);if(!sec)return;const res=sec.querySelector(".results"),rh=res.querySelector(".rhead");
   let bar=res.querySelector(":scope>.topf");if(!bar){bar=document.createElement("div");bar.className="topf";rh.after(bar)}
