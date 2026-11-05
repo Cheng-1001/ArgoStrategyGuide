@@ -2,15 +2,15 @@
  "_how": "Fill each key with the texture path or glyph spec printed by `python tools/stat_icons.py find <sao.zip>` (see the docstring). Empty = the site keeps its emoji. Check against an in-game tooltip (F2) – the same icon the game draws before that stat.",
  "_look": "Tooltips seen in screenshots: '?' before Minimum Level, a sword before Attack Damage / Physical Damage, a heart before Health, a chain before Life Steal, a star/cross before the set name.",
  "health": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/health.png",
- "health_regen": "",
+ "health_regen": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/health.png",
  "mana": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/mana.png",
- "mana_regen": "",
- "stamina": "",
- "stamina_regen": "",
+ "mana_regen": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/mana.png",
+ "stamina": "assets/mmoitems_pack/textures/hyronic_pack/abilities/backstab.png",
+ "stamina_regen": "assets/mmoitems_pack/textures/hyronic_pack/abilities/backstab.png",
  "attack_damage": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/attack_damage.png",
  "attack_speed": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/attack_speed.png",
  "physical_damage": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/physical_damage.png",
- "magic_damage": "",
+ "magic_damage": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/skill_damage.png",
  "projectile_damage": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/projectile_damage.png",
  "skill_damage": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/skill_damage.png",
  "crit_chance": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/crit_chance.png",
@@ -29,5 +29,5 @@
  "food": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/food.png",
  "min_level": "assets/hsur/textures/custom/font_icons/tips.png",
  "set": "assets/mmoitems_pack/textures/hyronic_pack/font_icons/stats/rune.png",
- "_checked": "2026-11-05 against F2 tooltips (Ring of the Shark / Shark Fang): min_level red '?' = hsur tips.png, attack_damage, physical_damage, set = rune (orange cross). The rest matched by the pack's own MMOItems stat glyph names (font_icons/stats/<stat>.png). No glyph in the pack for health/mana/stamina regen, stamina, magic_damage, healing: left empty."
+ "_checked": "2026-11-05 against F2 tooltips. Seen in game: min_level red '?' = hsur tips.png; attack_damage; physical_damage; set = rune (orange cross) (Ring of the Shark / Shark Fang); defense, health, mana (Max Mana), stamina (Max Stamina = abilities/backstab.png, brown arm with leaves), movement_speed (11-04 19.37.54); magic_damage = the purple sword skill_damage glyph, mana_regen = mana (19.29.06); health_regen = heart, stamina_regen = backstab (19.26.47, 11-05 01.01.06); lifesteal (01.01.06). The rest matched by the pack's MMOItems stat glyph names. healing (Heal Bonus) never seen in a tooltip: left empty."
 }

@@ -14,8 +14,11 @@ window.SAO_STATICONS = {
  "dodge": "icons/stats/dodge.png",
  "food": "icons/stats/food.png",
  "health": "icons/stats/health.png",
+ "health_regen": "icons/stats/health_regen.png",
  "lifesteal": "icons/stats/lifesteal.png",
+ "magic_damage": "icons/stats/magic_damage.png",
  "mana": "icons/stats/mana.png",
+ "mana_regen": "icons/stats/mana_regen.png",
  "min_level": "icons/stats/min_level.png",
  "movement_speed": "icons/stats/movement_speed.png",
  "physical_damage": "icons/stats/physical_damage.png",
@@ -23,5 +26,7 @@ window.SAO_STATICONS = {
  "set": "icons/stats/set.png",
  "skill_crit_chance": "icons/stats/skill_crit_chance.png",
  "skill_crit_damage": "icons/stats/skill_crit_damage.png",
- "skill_damage": "icons/stats/skill_damage.png"
+ "skill_damage": "icons/stats/skill_damage.png",
+ "stamina": "icons/stats/stamina.png",
+ "stamina_regen": "icons/stats/stamina_regen.png"
 };
