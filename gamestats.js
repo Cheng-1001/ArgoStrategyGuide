@@ -1,4 +1,4 @@
-/* In-game stats of equipment, from the owner's screenshots of the item "Specifications" popup (2026-11-04 evening).
+/* In-game stats of equipment, from the owner's screenshots of the item "Specifications" popup (2026-11-04 evening; Skeleton accessories 2026-11-05 evening).
    The game shows the current values; the official item catalogue (equip.js, fetched 2026-10-31) is often older (reworked progression).
    Only items matched to the catalogue with high confidence (scratchpad map9.json). Keys use the catalogue stat names where they mean the same;
    values are the game's own text ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
@@ -41,5 +41,9 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "2546":{"en": "shield of illfang", "lvl": 10, "dmg": "1.5", "st": [["Defense", "+7"], ["Guard Durability", "40"], ["Block Chance", "+3%"], ["Max Health", "+35"], ["Movement Speed", "-7%"]]},
  "2542":{"en": "magician's pavise", "lvl": 7, "dmg": null, "st": [["Defense", "+4"], ["Guard Durability", "20"], ["Max Health", "+20"], ["Movement Speed", "-5%"]]},
  "1380":{"en": "boots of the foam", "lvl": 5, "dmg": null, "st": [["深海漫遊 X", ""]]},
- "2098":{"en": "putrid shield", "lvl": 10, "dmg": null, "st": [["Defense", "+3.5"], ["Max Health", "+30"]]}
+ "2098":{"en": "putrid shield", "lvl": 10, "dmg": null, "st": [["Defense", "+3.5"], ["Max Health", "+30"]]},
+ "2474":{"date": "2026-11-05", "en": "skeletal ring", "lvl": 6, "dmg": null, "st": [["Max Health", "+3"]]},
+ "2037":{"date": "2026-11-05", "en": "bony gloves", "lvl": 6, "dmg": null, "st": [["Defense", "+1"], ["Max Health", "+3"]]},
+ "1289":{"date": "2026-11-05", "en": "skeletal amulet", "lvl": 6, "dmg": null, "st": [["Max Health", "+3"]]},
+ "1450":{"date": "2026-11-05", "en": "skeleton skull", "lvl": 8, "dmg": null, "st": [["Skill Damage", "+1%"], ["Max Health", "+5"], ["Max Mana", "+1"], ["Max Stamina", "+1"], ["Health Regeneration", "+0.05/s"]]}
 }};

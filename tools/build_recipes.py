@@ -14,6 +14,15 @@ REF, CAT = sys.argv[1], sys.argv[2]
 # owner's in-game screenshots (2026-11-01, 2026-11-03 evening batch): npc -> [(name, rarity, seconds, mats, cost Col or "Free", category)]
 # loot buyers' Buy tab = potions sold for Col (no materials). Catalogue id comes from OID.
 SHOTS = {
+    # 2026-11-05 evening batch (in12): Skeleton Accessories' full list, and the Skeleton Skull secret smith (window title "Secret Skeleton Skull")
+    'Skeleton Accessories': [
+        ('Skeletal Ring', 'c', 15, [['Skeleton Bone', 8], ['Soul of the Ruins', 8]], '25', 'acc'),
+        ('Bony Gloves', 'b', 30, [['Skeleton Bone', 12], ['Reinforced Skeleton Bone', 8]], '28', 'acc'),
+        ('Skeletal Amulet', 'c', 15, [['Skeleton Bone', 4], ['Soul of the Ruins', 4], ['Oak String', 1]], '25', 'acc'),
+    ],
+    'Skeleton Skull': [
+        ('Skeleton Skull', 'a', 60, [['Reinforced Skeleton Bone', 20]], '35', 'acc'),
+    ],
     'Shark Accessories': [
         ('Ring of the Shark', 'c', 15, [['Shark Carapace', 8]], '30', 'acc'),
         ('Shark Amulet', 'c', 15, [['Shark Carapace', 8], ['Birch String', 1]], '30', 'acc'),
@@ -195,7 +204,7 @@ SHOTS = {
     ],
 }
 # the screenshot showed the NPC's whole list: drop reference-map rows the game no longer has
-FULL = {'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
+FULL = {'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
 SAME = {"Katana Training": "Training Katana", "Beginner Leggings": "Beginner's Leggings", "Bandit's Gloves": "Gloves of the Bandit", "Bracelet of the Sylvan": "Bracelet of the Sylve", "Amulet of the Sylvan": "Amulet of the Sylve"}          # reference-map name -> in-game name
 # material names used in game / by the reference map -> this site's ITEMS ids
 MAT = {"Shark Carapace": "Shark Shell", "Soul of the Ruins": "Souls of the Ruins", "Sylve Shoot": "Sylvan Sprout",
@@ -211,7 +220,7 @@ OID = {"Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "
        "Gelatinous Amulet": 1291, "Gelatinous Cloak": 1453, "Spider Bracelet": 1595, "Iron Ring": 2482, "Iron Bracelet": 1593,
        "Iron Gloves": 2042, "Iron Coin": 1457, "Iron Amulet": 1297, "Copper Ring": 2477, "Copper Bracelet": 1591,
        "Copper Gloves": 2039, "Copper Coin": 1452, "Copper Amulet": 1290, "Bracelet of the Sylvan": 1589, "Ring of the Sylve": 2473,
-       "Skeleton Skull": 1450, "Belt of the Stags": 1460, "Ring of the Wolf": 2480, "Albal's Necklace": 1296,
+       "Skeleton Skull": 1450, "Skeletal Ring": 2474, "Bony Gloves": 2037, "Skeletal Amulet": 1289, "Belt of the Stags": 1460, "Ring of the Wolf": 2480, "Albal's Necklace": 1296,
        "Stolen Cloak": 1454, "Sticky Ring": 2479, "Occult Skull": 1461,
        # potions, crystals, fortifiers, keys (official name and level both match; checked by hand 2026-11-01)
        "Quality Health Potion I": 2463, "Quality Health Potion II": 2464, "Quality Health Potion III": 2465,

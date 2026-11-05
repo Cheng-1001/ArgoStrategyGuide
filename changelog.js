@@ -3,6 +3,10 @@
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
  ["2026-11-05",[
+  "配方新增 Skeleton Accessories 的 Skeletal Ring、Bony Gloves、Skeletal Amulet，Skeleton Skull 補上製作時間和稀有度（遊戲截圖）",
+  "這 4 件骷髏飾品改用遊戲裡的等級和數值，加上遊戲說明、取得方式和 Standard Skeleton Set 套裝效果；Skeleton Bone、Reinforced Skeleton Bone、Oak String 補上遊戲寫的取得方式",
+  "萬聖節活動地下城 Sanctuary of Souls 加上遊戲 Dungeons 視窗的資料：首領、4 種難度、Easy 的時間限制和建議等級、通關寶箱 4 項",
+  "世界首領 Galiath 的抽獎改成遊戲裡的最新機率，新增 Casque du Colosse、Lame Senestre／Dextre du Colosse 三種獎勵，並列出排隊上限 20 人",
   "彈出視窗可以拖著標題列移動；切換分頁時會自動關掉",
   "裝備、道具面板的「查看配方」和配方面板的「查看圖鑑」改成在畫面中間開彈出視窗，不再切換分頁；視窗裡的連結和目前視窗屬於上方選單同一類就在同一個視窗換內容（「← 上一個」回去），不同類（例如從配方點 NPC）就另外疊一個視窗，「← 上一個」回去，Esc 或點旁邊關閉",
   "Key of Xal'Zirith 改用遊戲裡的銀色鑰匙圖示（官網圖鑑的圖和遊戲不一樣）",

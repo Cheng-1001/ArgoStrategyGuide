@@ -17,7 +17,23 @@ window.SAO_BOSSES = {
     ],
     guaranteed: "250 Cols（每位玩家）",
     rolls: 1,
+    // the game's queue sign (owner's screenshot 2026-11-05 20:51, auction-house tooltip): odds changed and 3 new rewards since the
+    // official page was fetched (2026-10-30); the site shows the game's list and keeps the official one in roulette0
     roulette: [
+      ["Colossus Fragments ×3", "Fragments du Colosse ×3", 45],
+      ["1,000 Cols purse", "Bourse de 1 000 Cols", 31],
+      ["Galiath's Core", "Noyau de Galiath", 5],
+      ["Colossus Helmet", "Casque du Colosse", 3],
+      ["Colossus Pavise（盾牌）", "Pavois du Colosse", 5],
+      ["500 Triggiums", "500 Triggiums", 5],
+      ["Colossus Left Blade", "Lame Senestre du Colosse", 2],
+      ["Colossus Right Blade", "Lame Dextre du Colosse", 2],
+      ["Four-Armed Halberd", "Hallebarde aux Quatre Bras", 1],
+      ["Galiath's Axe", "Hache de Galiath", 1]
+    ],
+    rouletteSrc: "遊戲裡的排隊告示（站長截圖 2026-11-05）",
+    queue: 20,
+    roulette0: [
       ["Colossus Fragments ×3", "Fragments du Colosse ×3", 40],
       ["1,000 Cols purse", "Bourse de 1 000 Cols", 27],
       ["Galiath's Core", "Noyau de Galiath", 15],

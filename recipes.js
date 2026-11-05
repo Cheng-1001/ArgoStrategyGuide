@@ -1762,13 +1762,82 @@ null,
 ]
 ]
 },
+"Skeleton Accessories": {
+"floor": 1,
+"items": [
+[
+2474,
+"Skeletal Ring",
+15,
+[
+[
+"Skeleton Bone",
+8
+],
+[
+"Souls of the Ruins",
+8
+]
+],
+"25",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2037,
+"Bony Gloves",
+30,
+[
+[
+"Skeleton Bone",
+12
+],
+[
+"Reinforced Skeleton Bone",
+8
+]
+],
+"28",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1289,
+"Skeletal Amulet",
+15,
+[
+[
+"Skeleton Bone",
+4
+],
+[
+"Souls of the Ruins",
+4
+],
+[
+"Oak String",
+1
+]
+],
+"25",
+"c",
+"acc",
+null,
+"shot"
+]
+]
+},
 "Skeleton Skull": {
 "floor": 1,
 "items": [
 [
 1450,
 "Skeleton Skull",
-null,
+60,
 [
 [
 "Reinforced Skeleton Bone",
@@ -1776,10 +1845,10 @@ null,
 ]
 ],
 "35",
-null,
+"a",
 "acc",
 8,
-"ref"
+"shot"
 ]
 ]
 },

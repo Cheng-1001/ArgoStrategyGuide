@@ -49,6 +49,11 @@ window.SAO_EVENTS = {
    extra: "Grappling Hook、Grappling Anchor（限弓箭手）各 3 個 Dark Gift Pumpkin。",
    lvNote: "需求等級是同一篇公告的平衡調整（原本都是 13）；Blunderbuss of the Outer Gods 的第 3 招傷害 20 → 5。另外 Archdemon Blade 需求等級 13 → 10。空白＝公告沒寫。"
   },
+  // the game's Dungeons window (owner's screenshots 2026-11-05 19:06): same block as the floor dungeons (dgInfoHTML)
+  dg: { date: "2026-11-05", boss: "Skeleton Colossus", bossZh: "骷髏巨像", key: "Key to the Sanctuary of Souls（遊戲寫在「Board - Sanctuary of Souls」製作）",
+        modes: ["Easy", "Initiate", "Hard", "Integrity"],
+        easy: [["時間限制", "60 分鐘"], ["失敗時", "送回原處（Sent back if you fall）"], ["人數", "1～4 人"], ["建議等級", "13 級以上"]],
+        loot: [["Skeletal Sword", "Skeleton Warrior", 0.5], ["Bone Dust", "Skeleton Warrior", 70], ["Skeleton Bone", "Skeleton Warrior", 15], ["Soul of the Ruins", "Skeleton Warrior", 80]] },
   soon: ["現有武器升級成第 2 層版本：公告寫「明天晚上」開放（法國時間 11/5 晚上），要先通關第 2 層才能用，NPC 會一直在，不用急。",
          "舊的萬聖節武器換成新武器：同樣是「明天晚上」開放。"]
  }],

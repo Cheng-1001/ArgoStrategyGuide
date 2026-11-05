@@ -1500,6 +1500,7 @@ function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<di
   return`<div class="phead"><span class="th" style="--ring:var(--boss)" aria-hidden="true">🎃</span><div class="ttl"><div class="num">限時活動・地下城</div><h2>${esc(d.n)}</h2><div class="sub">${esc(d.ev)}</div></div></div>
   <dl class="facts"><dt>人數</dt><dd>${esc(d.players)}</dd><dt>首領</dt><dd>${d.bosses.map(b=>`<b>${esc(b[0])}</b>：${esc(b[1])}`).join("<br>")}</dd><dt>通關寶箱</dt><dd>${d.chest.map(esc).join("<br>")}</dd></dl>
   <div class="note warn">官方公告沒有寫入口和惡魔區的位置，地圖上還沒有標示。知道位置的話，歡迎用「協作區」回報地點。</div>
+  ${d.dg?dgInfoHTML({dg:d.dg,floor:1,n:d.n}):""}
   <h3 class="sec">進場鑰匙</h3><p><b>${esc(d.key.n)}</b>：到 ${esc(d.key.npc)}（${esc(d.key.where)}）用 ${d.key.mats.map(m=>esc(m[0])+" ×"+m[1]).join("＋")} 換，${esc(d.key.note)}。</p>
   <h3 class="sec">鑰匙碎片：三個惡魔區</h3>${tb(["惡魔區","惡魔","首領","碎片"],d.zones.map(z=>[esc(z.n),z.mobs.map(esc).join("、"),esc(z.leader),`<b>${esc(z.frag)}</b>`]))}
   <div class="note">${esc(d.fragRate)}</div>
@@ -1683,7 +1684,7 @@ const EVT=window.SAO_EVENTS||{dungeons:[]};
 const GST=window.SAO_GAMESTATS||{items:{}};
 EQ.forEach(e=>{const g=GST.items[e.oid];if(!g)return;e.cat0={lv:e.lv,dmg:e.dmg,st:e.st};const st={};
   if(e.st["Classe requise"])st["Classe requise"]=e.st["Classe requise"];if(e.st["Arme à deux mains"])st["Arme à deux mains"]=e.st["Arme à deux mains"];
-  g.st.forEach(([k,v])=>{st[k]=v===""?"✓":v});e.st=st;e.dmg=g.dmg;if(g.lvl)e.lv=g.lvl;e.gst=1});
+  g.st.forEach(([k,v])=>{st[k]=v===""?"✓":v});e.st=st;e.dmg=g.dmg;if(g.lvl)e.lv=g.lvl;e.gst=1;e.gstDate=g.date||GST.date});
 // in-game item info (Specifications popup, owner's screenshots; gameinfo.js): English name = title (user 2026-11-04 option 1A),
 // "Obtainable" lines shown on the panel with a Chinese gloss (option 2)
 const GI=window.SAO_GAMEINFO||{items:[]},GI_OID={},GI_SITE={},GI_EN={};
@@ -1695,8 +1696,8 @@ Object.values(GI_OID).forEach(g=>{if(RECIC[g.en])g.oid.forEach(o=>{if(!OID_RECIC
 const obtZh=l=>{let m;
   if(m=l.match(/^Loot: (.+?) \(([\d.]+) ?%\)$/))return`怪物掉落：${m[1]}（${m[2]}%）`;
   if(m=l.match(/^Crafted at: (.+)$/))return`製作：${m[1]}`;
-  if(m=l.match(/^Bought back by (.+) \((\d+) Cols?\)$/))return`可以賣給：${m[1]}（收購價 ${m[2]} Col）`;
-  if(m=l.match(/^Sold by (.+) \((\d+) Cols?\)$/))return`販售：${m[1]}（${m[2]} Col）`;
+  if(m=l.match(/^Bought back by (.+) \(([\d.]+) Cols?\)$/))return`可以賣給：${m[1]}（收購價 ${m[2]} Col）`;
+  if(m=l.match(/^Sold by (.+) \(([\d.]+) Cols?\)$/))return`販售：${m[1]}（${m[2]} Col）`;
   if(m=l.match(/^(.+?) Chest(?: \((.+?)\))? \(([\d.]+) ?%\)$/))return`${m[1].replace(/'s$/,"")} 的寶箱${m[2]==="world boss"?"（世界首領）":m[2]?`（${m[2]}）`:""}（${m[3]}%）`;
   if(m=l.match(/^Mineable: (.+?)(?: \(([\d.]+) ?%\))?$/))return`挖礦：${m[1].replace("Fractured Underworld","破碎的地下世界")}${m[2]?`（${m[2]}%）`:""}`;
   if(m=l.match(/^Woodcutting: (.+)$/))return`伐木：${m[1]}`;
@@ -1755,7 +1756,7 @@ function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").val
     ${eqKey(e)?`<div class="estat">${esc(eqKey(e))}</div>`:""}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
   bindGo($("lEq"));markSel()}
 const gstNote=e=>{const c=e.cat0,r=Object.entries(c.st).filter(([k])=>k!=="Classe requise"&&k!=="Arme à deux mains");
-  return`<div class="note">🎮 等級和數值取自遊戲裡的物品說明（站長截圖 ${esc(GST.date)}）。官網圖鑑（2026-10-31）寫的是：等級 ${c.lv}${c.dmg?"、傷害 "+esc(c.dmg):""}${r.length?"、"+r.map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v)))).join("、"):""}。遊戲改版後官網圖鑑還沒更新，以遊戲為準。</div>`};
+  return`<div class="note">🎮 等級和數值取自遊戲裡的物品說明（站長截圖 ${esc(e.gstDate||GST.date)}）。官網圖鑑（2026-10-31）寫的是：等級 ${c.lv}${c.dmg?"、傷害 "+esc(c.dmg):""}${r.length?"、"+r.map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v)))).join("、"):""}。遊戲改版後官網圖鑑還沒更新，以遊戲為準。</div>`};
 const patchNote=e=>{const S=EVT.eqPatch.src;return`<div class="note warn">⚖️ 數值已照官方公告〈<a href="${esc(S.url)}" target="_blank" rel="noopener">${esc(S.title)}</a>〉（${esc(S.date)}）調整，官網圖鑑還沒更新。圖鑑上的舊數值：${Object.entries(e.patch.old).map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v))||"0")).join("、")}。${esc(e.patch.note)}</div>`};
 function equipDetail(id){GI_NODESC=1;try{return equipDetail0(id)}finally{GI_NODESC=0}}
 function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
@@ -1910,14 +1911,14 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
   <div class="rhead"><h2>首領</h2><span class="count">世界首領・獨特怪物・樓層首領</span></div>
   <article class="bcard">
     <div class="bhead"><img src="${g.img}" alt="" class="bimg"><div class="bttl"><span class="kick">世界首領 World Boss</span><h3>${esc(g.zh)}</h3><div class="sub">${esc(g.name)}</div>${status}</div></div>
-    <dl class="bfacts"><div><dt>需求等級</dt><dd class="mono">${g.level}</dd></div><div><dt>入場費</dt><dd class="mono">${money(g.price)} Col</dd></div><div><dt>人數上限</dt><dd class="mono">${g.maxPlayers} 人</dd></div><div><dt>保底獎勵</dt><dd>${esc(g.guaranteed)}</dd></div></dl>
+    <dl class="bfacts"><div><dt>需求等級</dt><dd class="mono">${g.level}</dd></div><div><dt>入場費</dt><dd class="mono">${money(g.price)} Col</dd></div><div><dt>人數上限</dt><dd class="mono">${g.maxPlayers} 人</dd></div>${g.queue?`<div><dt>排隊上限</dt><dd class="mono">${g.queue} 人</dd></div>`:""}<div><dt>保底獎勵</dt><dd>${esc(g.guaranteed)}</dd></div></dl>
     <p>${esc(g.desc)}</p>
     <div class="bcols">
       <section><h4 class="sec">每週開放時段 <span class="c">${myZone?"以你的時區（"+esc(myZone)+"）顯示":""}</span></h4>
         <ul class="sched">${slots.map(x=>`<li class="${x===open?"on":""}"><b>${fmtT(x.st)}</b> 起 ${x.s.minutes} 分鐘<span class="muted">（官方：${ZONE_ZH[x.s.zone]||x.s.zone} ${["週日","週一","週二","週三","週四","週五","週六"][x.s.day]} ${x.s.time}）</span></li>`).join("")}</ul>
         <div class="note">官方說明：時段可能臨時取消，會在遊戲內和 Discord 公告。</div></section>
       <section><h4 class="sec">結束時抽獎 <span class="c">${g.rolls} 次</span></h4>
-        <ul class="rows">${g.roulette.map(([en,fr,p])=>`<li class="lrowx"><span class="t"><b>${esc(en)}</b><span>${esc(fr)}</span></span><span class="v mono">${p}%</span></li><div class="bar"><b style="width:${p}%"></b></div>`).join("")}</ul></section>
+        <ul class="rows">${g.roulette.map(([en,fr,p])=>`<li class="lrowx"><span class="t"><b>${esc(en)}</b><span>${esc(fr)}</span></span><span class="v mono">${p}%</span></li><div class="bar"><b style="width:${p}%"></b></div>`).join("")}</ul>${g.rouletteSrc?`<div class="note">機率取自${esc(g.rouletteSrc)}。官網世界首領頁（2026-10-30 抓）寫的是：${(g.roulette0||[]).map(([en,fr,p])=>esc(fr)+" "+p+"%").join("、")}。</div>`:""}</section>
     </div>
     <h4 class="sec">攻擊招式</h4><ul class="atk">${g.attacks.map(([n,t])=>`<li><b>${esc(n)}</b>${esc(t)}</li>`).join("")}</ul>
     <div class="note warn"><b>弱點：</b>${esc(g.weakness)}</div>

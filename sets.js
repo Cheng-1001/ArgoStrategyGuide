@@ -3,7 +3,7 @@
    potions: {name, effects:[lines as in game]}. User 2026-11-05: 套裝效果、藥水效果也要寫進去. */
 window.SAO_SETS = {date:"2026-11-05", sets:[
  {"name": "Shark Set", "tiers": [[2, "+5% Ability Haste"], [3, "+3 Health"], [4, "+3% Physical Damage"]], "members": ["Ring of the Shark", "Shark Amulet", "Shark Fang", "Bracelet of the Shark", "Ring of the Leviathan"]},
- {"name": "Standard Skeleton Set", "tiers": [[2, "+5% Ability Haste"], [3, "+0.05 Health/s"], [4, "-2% Damage Reduction"]], "members": ["Skeleton Skull", "Ring of Narax"]},
+ {"name": "Standard Skeleton Set", "tiers": [[2, "+5% Ability Haste"], [3, "+0.05 Health/s"], [4, "-2% Damage Reduction"]], "members": ["Skeleton Skull", "Ring of Narax", "Skeletal Ring", "Bony Gloves", "Skeletal Amulet"]},
  {"name": "Shadow Neophyte Set", "tiers": [[2, "-0.6/s Health, -50% Healing Received"], [3, "-0.6/s Health"], [4, "-0.6/s Health"], [5, "-0.6/s Health"], [6, "-0.6/s Health"], [7, "-0.6/s Health"]], "members": ["Occult Bracelet", "Occult Amulet", "Occult Robe", "Occult Skull"]},
  {"name": "Hunter Necromancer Set", "tiers": [[2, "+0.3 Stamina/s"], [3, "+3% Crit Chance, +3% Crit Damage"], [4, "+4 Attack Damage"]], "members": ["Boots of the Hunter Necromancer"]},
  {"name": "Hunter Set", "tiers": [[2, "+0.1 Stamina/s"], [3, "+0.5% Critical Chance"]], "members": ["Hunter's Boots", "Hunter's Leggings"]},
