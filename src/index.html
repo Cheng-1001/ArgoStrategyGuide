@@ -1675,7 +1675,7 @@ function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
   const rows=Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
   const en=FR2ID[e.name];
   return`<div class="phead">${eslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${e.gen?esc(e.name)+"・":""}${esc(eqCat(e))}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
-    <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span class="muted" style="font-size:12px">等級 ${e.lv}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):"・不限職業"}</span></div></div></div>
+    <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span class="muted" style="font-size:12px">${icK("min_level")}等級 ${e.lv}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):"・不限職業"}</span></div></div></div>
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
   <dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
   ${e.patch?patchNote(e):""}${e.gst?gstNote(e):""}${setPotHTML(e.gen,en)}
@@ -1731,7 +1731,8 @@ const EFF_IC=[[/life ?steal|lifesteal|vampir|吸血/i,"🩸","lifesteal"],[/heal
   [/magic|魔法/i,"✨","magic_damage"],[/projectile|投射/i,"🏹","projectile_damage"],[/physical|物理/i,"⚔️","physical_damage"],[/skill damage|技能傷害/i,"⚔️","skill_damage"],[/damage|attack|傷害|攻擊/i,"⚔️","attack_damage"],
   [/fall|摔落/i,"🪂",""],[/rune|符文/i,"💎",""]];
 const STATIC=window.SAO_STATICONS||{};
-const effIc=t=>{const m=EFF_IC.find(([r])=>r.test(t));if(!m)return"";return STATIC[m[2]]?`<img class="effic" src="${esc(STATIC[m[2]])}" alt="" aria-hidden="true">`:`<span class="effic" aria-hidden="true">${m[1]}</span>`};
+const IC_FB={health_regen:"health",mana_regen:"mana",healing:"health"};   // no game icon of their own: borrow the family's
+const effIc=t=>{const m=EFF_IC.find(([r])=>r.test(t));if(!m)return"";const k=STATIC[m[2]]?m[2]:(STATIC[IC_FB[m[2]]]?IC_FB[m[2]]:"");return k?`<img class="effic" src="${esc(STATIC[k])}" alt="" aria-hidden="true">`:`<span class="effic" aria-hidden="true">${m[1]}</span>`};
 // Chinese reading of the game's effect lines (user 2026-11-05: 效果說明也要中文); the original stays in the tooltip and in small grey text
 const EFF_LAB={"attack speed":"攻擊速度","health/s":"生命回復","mana/s":"魔力回復","stamina/s":"耐力回復","health":"生命","max health":"最大生命","attack damage":"攻擊傷害","crit chance":"暴擊率","critical chance":"暴擊率",
   "critical power":"暴擊傷害","crit damage":"暴擊傷害","critical damage":"暴擊傷害","max mana":"最大魔力","mana":"魔力","stamina":"耐力","max stamina":"最大耐力","bonus healing":"治療加成","defense":"防禦","skill damage":"技能傷害",
@@ -1758,13 +1759,14 @@ const effZh=t=>{let m;t=String(t).trim();
   return out.every(Boolean)?out.join("、"):t};
 window.__effZh=t=>effZh(t);
 const effLine=x=>{const z=effZh(x);return`${effIc(x)}<span title="${esc(x)}">${esc(z)}</span>${z!==x?` <span class="effen">${esc(x)}</span>`:""}`};
+const icK=(k,emo)=>STATIC[k]?`<img class="effic" src="${esc(STATIC[k])}" alt="" aria-hidden="true">`:emo?`<span class="effic" aria-hidden="true">${emo}</span>`:"";
 const SETS=window.SAO_SETS||{sets:[],potions:[]},SET_BY={},POT_BY={};
 SETS.sets.forEach(st=>st.members.forEach(m=>SET_BY[norm(m)]=st));SETS.potions.forEach(p=>POT_BY[norm(p.name)]=p);
 const enGo=n=>{const k=norm(n);let e=EQ.find(x=>x.gen&&norm(x.gen)===k);if(e)return"e|"+e.oid;e=PR.find(x=>x.gen&&norm(x.gen)===k);if(e)return"p|"+e.oid;
   const it=Object.keys(ITEMS).find(x=>norm(x)===k);if(it)return"i|"+it;const ri=ALLREC.findIndex(r=>norm(r.en)===k);return ri>=0?"r|"+ri:null};
 const setPotHTML=(...names)=>{const ns=names.filter(Boolean).map(norm);const st=ns.map(n=>SET_BY[n]).find(Boolean),po=ns.map(n=>POT_BY[n]).find(Boolean);let h="";
   if(po)h+=`<h3 class="sec">遊戲寫的效果</h3><ul class="gieff">${po.effects.map(x=>`<li>${effLine(x)}</li>`).join("")}</ul>`;
-  if(st)h+=`<h3 class="sec">套裝效果・${esc(st.name)}</h3><table class="settbl"><tbody>${st.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${effLine(e)}</td></tr>`).join("")}</tbody></table>
+  if(st)h+=`<h3 class="sec">${icK("set")}套裝效果・${esc(st.name)}</h3><table class="settbl"><tbody>${st.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${effLine(e)}</td></tr>`).join("")}</tbody></table>
     <div class="muted" style="font-size:12.5px;margin-top:4px">同一套：${st.members.map(m=>{const g=enGo(m);return g&&!ns.includes(norm(m))?`<button class="linkbtn" data-go="${esc(g)}">${esc(m)}</button>`:esc(m)}).join("、")}</div>`;
   return h?h+`<div class="note srcn">套裝效果和藥水效果取自遊戲裡的物品提示（站長截圖 ${esc(SETS.date||"")}），原文照遊戲。</div>`:""};
 function propDetail(id){const e=prById[id];const en=FR2ID[e.name];
