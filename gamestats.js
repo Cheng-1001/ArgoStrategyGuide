@@ -1,0 +1,45 @@
+/* In-game stats of equipment, from the owner's screenshots of the item "Specifications" popup (2026-11-04 evening).
+   The game shows the current values; the official item catalogue (equip.js, fetched 2026-10-31) is often older (reworked progression).
+   Only items matched to the catalogue with high confidence (scratchpad map9.json). Keys use the catalogue stat names where they mean the same;
+   values are the game's own text ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
+   (user 2026-11-05: 裝備資料要照新上傳的截圖更新). */
+window.SAO_GAMESTATS = {date:"2026-11-04", items:{
+ "1334":{"en": "beginner's tunic", "lvl": 1, "dmg": null, "st": [["Max Health", "+2"]]},
+ "2482":{"en": "iron ring", "lvl": 5, "dmg": null, "st": [["Critical Strike Chance", "+1%"], ["Skill Critical Strike Chance", "+1%"], ["Max Health", "+1"]]},
+ "1593":{"en": "iron bracelet", "lvl": 5, "dmg": null, "st": [["Critical Strike Power", "+1%"], ["Skill Critical Strike Power", "+1%"], ["Max Health", "+1"]]},
+ "2042":{"en": "iron gloves", "lvl": 5, "dmg": null, "st": [["Defense", "+1.5"], ["Max Health", "+1"]]},
+ "1457":{"en": "iron coin", "lvl": 5, "dmg": "0.5", "st": [["Max Health", "+1"], ["Heal Bonus", "+1"]]},
+ "1297":{"en": "iron amulet", "lvl": 5, "dmg": null, "st": [["Max Health", "+1"], ["Max Mana", "+1"], ["Max Stamina", "+1"]]},
+ "2477":{"en": "copper ring", "lvl": 3, "dmg": null, "st": [["Critical Strike Chance", "+0.5%"], ["Skill Critical Strike Chance", "+0.5%"], ["Max Health", "+0.5"]]},
+ "1591":{"en": "copper bracelet", "lvl": 3, "dmg": null, "st": [["Critical Strike Power", "+0.5%"], ["Skill Critical Strike Power", "+0.5%"], ["Max Health", "+0.5"]]},
+ "2039":{"en": "copper gloves", "lvl": 3, "dmg": null, "st": [["Defense", "+1"], ["Max Health", "+0.5"]]},
+ "1452":{"en": "copper coin", "lvl": 3, "dmg": "0.25", "st": [["Max Health", "+0.5"], ["Heal Bonus", "+0.5"]]},
+ "1290":{"en": "copper amulet", "lvl": 3, "dmg": null, "st": [["Max Health", "+0.5"], ["Max Mana", "+0.5"], ["Max Stamina", "+0.5"]]},
+ "2545":{"en": "Forgotten Shield", "lvl": 9, "dmg": null, "st": [["Defense", "+5"], ["Guard Durability", "30"], ["Max Health", "+30"], ["Movement Speed", "-5%"]]},
+ "1458":{"en": "necklace of aragorn", "lvl": 8, "dmg": "0.5", "st": [["Fall Damage Reduction", "+15%"], ["Dodge", "+5%"]]},
+ "2480":{"en": "ring of the wolf", "lvl": 3, "dmg": "0.25", "st": [["Max Stamina", "+0.5"]]},
+ "2478":{"en": "slimy ring", "lvl": 4, "dmg": null, "st": [["Max Health", "+1"], ["Max Mana", "+0.5"], ["Max Stamina", "+0.5"]]},
+ "2616":{"en": "Royal Halberd", "lvl": 9, "dmg": "15", "st": [["Attack Speed", "1.2/s"], ["Skill Critical Strike Chance", "+1%"], ["Dodge", "+1.75%"], ["Movement Speed", "+25%"]]},
+ "1779":{"en": "katana of the herald", "lvl": 9, "dmg": "18", "st": [["Attack Speed", "1.2/s"], ["Lifesteal", "+5%"], ["Dodge", "+5%"], ["Movement Speed", "+15%"]]},
+ "2043":{"en": "gloves of the stags", "lvl": 7, "dmg": null, "st": [["Mana Regeneration", "+0.2/s"], ["Heal Bonus", "+0.5"]]},
+ "1460":{"en": "belt of the stags", "lvl": 7, "dmg": null, "st": [["Ability Haste", "+5%"], ["Max Health", "+2"], ["Heal Bonus", "+0.5"]]},
+ "2605":{"en": "Bone Sword", "lvl": 8, "dmg": "11", "st": [["Attack Speed", "1.1/s"], ["Health Regeneration", "+0.1/s"]]},
+ "2540":{"en": "Sylvan Shield", "lvl": 8, "dmg": null, "st": [["Defense", "+4"], ["Guard Durability", "24"], ["Max Health", "+24"], ["Health Regeneration", "+0.1/s"], ["Movement Speed", "-5%"]]},
+ "1451":{"en": "belt of the boar", "lvl": 1, "dmg": null, "st": [["Max Health", "+2"]]},
+ "1770":{"en": "Bandit Dagger", "lvl": 8, "dmg": "13.5", "st": [["Attack Speed", "1.4/s"], ["Critical Strike Chance", "+1%"]]},
+ "2570":{"en": "Sylvan Mage Staff", "lvl": 3, "dmg": "12.604", "st": [["Attack Speed", "1/s"]]},
+ "1594":{"en": "bracelet of the stags", "lvl": 7, "dmg": null, "st": [["Heal Bonus", "+1.5"]]},
+ "2619":{"en": "nodachi", "lvl": 10, "dmg": "20", "st": [["Attack Speed", "1.25/s"], ["Critical Strike Chance", "+3.5%"], ["Lifesteal", "+1%"]]},
+ "1784":{"en": "nodachi dagger", "lvl": 10, "dmg": "20", "st": [["Attack Speed", "1.4/s"], ["Critical Strike Chance", "+3.375%"], ["Lifesteal", "+1%"]]},
+ "2576":{"en": "nodachi magic staff", "lvl": 10, "dmg": "19", "st": [["Attack Speed", "1/s"], ["Magic Damage", "+3%"], ["Max Mana", "+6.5"]]},
+ "1462":{"en": "occult robe", "lvl": 10, "dmg": null, "st": [["Attack Speed", "0.05/s"], ["Dodge", "+2.5%"], ["Max Stamina", "+1"], ["Movement Speed", "+2.5%"]]},
+ "2048":{"en": "christmas mittens", "lvl": 10, "dmg": null, "st": [["Critical Strike Chance", "+1%"], ["Critical Strike Power", "+3%"], ["Skill Critical Strike Chance", "+1%"], ["Skill Critical Strike Power", "+3%"], ["Movement Speed", "+10%"]]},
+ "2044":{"en": "gloves of the wolves", "lvl": 5, "dmg": null, "st": [["Critical Strike Chance", "+1%"], ["Lifesteal", "+2.5%"], ["Movement Speed", "+5%"]]},
+ "1471":{"en": "crown of the solstice", "lvl": 10, "dmg": null, "st": [["Magic Damage", "+2%"], ["Ability Haste", "+5%"], ["Max Health", "+2"], ["Max Mana", "+1"], ["Max Stamina", "+1"]]},
+ "1461":{"en": "occult skull", "lvl": 10, "dmg": null, "st": [["Skill Critical Strike Power", "+5%"], ["Magic Damage", "+2%"], ["Max Mana", "+1"]]},
+ "2606":{"en": "Colossus Hammer", "lvl": 8, "dmg": "13", "st": [["Attack Speed", "0.9/s"], ["Skill Critical Strike Power", "+1.5%"], ["Defense", "+3"]]},
+ "2546":{"en": "shield of illfang", "lvl": 10, "dmg": "1.5", "st": [["Defense", "+7"], ["Guard Durability", "40"], ["Block Chance", "+3%"], ["Max Health", "+35"], ["Movement Speed", "-7%"]]},
+ "2542":{"en": "magician's pavise", "lvl": 7, "dmg": null, "st": [["Defense", "+4"], ["Guard Durability", "20"], ["Max Health", "+20"], ["Movement Speed", "-5%"]]},
+ "1380":{"en": "boots of the foam", "lvl": 5, "dmg": null, "st": [["深海漫遊 X", ""]]},
+ "2098":{"en": "putrid shield", "lvl": 10, "dmg": null, "st": [["Defense", "+3.5"], ["Max Health", "+30"]]}
+}};

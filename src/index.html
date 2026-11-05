@@ -791,6 +791,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="formcfg.js"></script>
 <script src="classes.js"></script>
 <script src="events.js"></script>
+<script src="gamestats.js"></script>
 <script src="recicons.js"></script>
 <script>
 (()=>{
@@ -972,7 +973,7 @@ const BEH_ZH={A:"主動攻擊（看到就打）",N:"中立（被打才反擊）"
 const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["傳說+","r-s",5],splusplus:["傳說++","r-s",6],ss:["SS","r-s",7]};
 const GROUP={material:"材料",food:"食物",ring:"飾品",artifact:"飾品",amulet:"飾品",bracelet:"飾品",shield:"防具",armor_set:"防具",bow:"武器",crossbow:"武器",dagger:"武器",sword:"武器",staff_mage:"武器",staff_shaman:"武器",lumberjack_job:"採集",miner_job:"採集",farmer_job:"採集",tool:"工具",gem_stone:"符文",fortifier:"藥水",unknown:"未收錄"};
 const CAT_ZH={material:"材料",food:"食物",ring:"戒指",artifact:"遺物",amulet:"項鍊",bracelet:"手環",shield:"盾牌",armor_set:"防具套裝",bow:"弓",crossbow:"弩",dagger:"匕首",sword:"近戰武器",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",lumberjack_job:"伐木採集",miner_job:"採礦",farmer_job:"農作",tool:"工具",gem_stone:"符文",fortifier:"強化藥水",unknown:"未收錄"};
-const STAT_ZH={"Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"最大生命","Max Mana":"最大魔力","Max Stamina":"最大體力","Attack Speed":"攻擊速度","Critical Strike Power":"暴擊傷害","Critical Strike Chance":"暴擊率","Skill Critical Strike Power":"技能暴擊傷害","Skill Critical Strike Chance":"技能暴擊率","Movement Speed":"移動速度","Health Regeneration":"生命回復","Mana Regeneration":"魔力回復","Stamina Regeneration":"體力回復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"治療加成","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"吸血","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋強度","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力","Required Strength":"需求力量","Required Dexterity":"需求敏捷","Required Defense":"需求防禦","Dodge Rating":"閃避率","HEAL_BONUS":"治療加成","HEAL BONUS":"治療加成","Range":"攻擊距離","Entity Interaction Range":"互動距離","Knockback Resistance":"擊退抗性","Faction Damage Dungeon":"地下城傷害","Dodge Cooldown Reduction":"閃避冷卻縮減","Fall Damage Reduction":"摔落傷害減免","Additional Esprit":"額外精神","Additional Defense":"額外防禦","Additional Strength":"額外力量","Additional Vitality":"額外體力","Additional Dexterity":"額外敏捷","Additional Intelligence":"額外智力"};
+const STAT_ZH={"Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"最大生命","Max Mana":"最大魔力","Max Stamina":"最大體力","Attack Speed":"攻擊速度","Critical Strike Power":"暴擊傷害","Critical Strike Chance":"暴擊率","Skill Critical Strike Power":"技能暴擊傷害","Skill Critical Strike Chance":"技能暴擊率","Movement Speed":"移動速度","Health Regeneration":"生命回復","Mana Regeneration":"魔力回復","Stamina Regeneration":"體力回復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"治療加成","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"吸血","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋強度","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力","Required Strength":"需求力量","Required Dexterity":"需求敏捷","Required Defense":"需求防禦","Dodge Rating":"閃避率","HEAL_BONUS":"治療加成","HEAL BONUS":"治療加成","Range":"攻擊距離","Entity Interaction Range":"互動距離","Knockback Resistance":"擊退抗性","Faction Damage Dungeon":"地下城傷害","Dodge Cooldown Reduction":"閃避冷卻縮減","Fall Damage Reduction":"摔落傷害減免","Additional Esprit":"額外精神","Additional Defense":"額外防禦","Additional Strength":"額外力量","Additional Vitality":"額外體力","Additional Dexterity":"額外敏捷","Additional Intelligence":"額外智力","Guard Durability":"格擋耐久","Block Chance":"格擋率","Ability Haste":"技能急速","深海漫遊 X":"特殊效果：深海漫遊 X"};
 const CLASS_ZH={guerrier:"戰士",archer:"弓箭手",mage:"法師",assassin:"刺客",shaman:"薩滿"};
 const FLN=f=>`第 ${f} 層`;
 const flBadge=f=>`<span class="fl fl${f}">F${f}</span>`;
@@ -1593,6 +1594,11 @@ const EQ=(window.SAO_EQUIP||[]).map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r
 const EVT=window.SAO_EVENTS||{dungeons:[]};
 {const P=(EVT.eqPatch||{}).items||{};EQ.forEach(e=>{const q=P[e.oid];if(!q)return;const old={};
   Object.entries(q.set).forEach(([k,v])=>{old[k]=e.st[k]===undefined?0:e.st[k];if(v===0)delete e.st[k];else e.st[k]=v});e.patch={old,note:q.note||""}})}
+// in-game stats from the owner's Specifications screenshots override the (older) catalogue values (gamestats.js; user 2026-11-05)
+const GST=window.SAO_GAMESTATS||{items:{}};
+EQ.forEach(e=>{const g=GST.items[e.oid];if(!g)return;e.cat0={lv:e.lv,dmg:e.dmg,st:e.st};const st={};
+  if(e.st["Classe requise"])st["Classe requise"]=e.st["Classe requise"];if(e.st["Arme à deux mains"])st["Arme à deux mains"]=e.st["Arme à deux mains"];
+  g.st.forEach(([k,v])=>{st[k]=v===""?"✓":v});e.st=st;e.dmg=g.dmg;if(g.lvl)e.lv=g.lvl;e.gst=1});
 // in-game item info (Specifications popup, owner's screenshots; gameinfo.js): English name = title (user 2026-11-04 option 1A),
 // "Obtainable" lines shown on the panel with a Chinese gloss (option 2)
 const GI=window.SAO_GAMEINFO||{items:[]},GI_OID={},GI_SITE={},GI_EN={};
@@ -1650,6 +1656,8 @@ function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").val
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span>等級 ${e.lv}</span>${cl.length?`<span>· ${cl.map(c=>CLASS_ZH[c]).join("、")}</span>`:""}</div>
     ${eqKey(e)?`<div class="estat">${esc(eqKey(e))}</div>`:""}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
   bindGo($("lEq"));markSel()}
+const gstNote=e=>{const c=e.cat0,r=Object.entries(c.st).filter(([k])=>k!=="Classe requise"&&k!=="Arme à deux mains");
+  return`<div class="note">🎮 等級和數值取自遊戲裡的物品說明（站長截圖 ${esc(GST.date)}）。官網圖鑑（2026-10-31）寫的是：等級 ${c.lv}${c.dmg?"、傷害 "+esc(c.dmg):""}${r.length?"、"+r.map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v)))).join("、"):""}。遊戲改版後官網圖鑑還沒更新，以遊戲為準。</div>`};
 const patchNote=e=>{const S=EVT.eqPatch.src;return`<div class="note warn">⚖️ 數值已照官方公告〈<a href="${esc(S.url)}" target="_blank" rel="noopener">${esc(S.title)}</a>〉（${esc(S.date)}）調整，官網圖鑑還沒更新。圖鑑上的舊數值：${Object.entries(e.patch.old).map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v))||"0")).join("、")}。${esc(e.patch.note)}</div>`};
 function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
   const rows=Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
@@ -1658,7 +1666,7 @@ function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span class="muted" style="font-size:12px">等級 ${e.lv}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):"・不限職業"}</span></div></div></div>
   ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
   <dl class="stats">${e.dmg?`<dt>傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
-  ${e.patch?patchNote(e):""}
+  ${e.patch?patchNote(e):""}${e.gst?gstNote(e):""}
   ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note srcn">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}</div>`}
