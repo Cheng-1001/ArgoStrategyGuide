@@ -63,12 +63,12 @@ ZH = {  # this site's Chinese rewrite of the wiki descriptions
     "Poing du Dragon": "引導內在能量，打出向前推進的龍形拳。",
 }
 STARS_ZH = {"Health": "生命", "Strength": "力量", "Resistance": "抗性", "Speed": "速度", "Dexterity": "敏捷",
-            "Magic": "魔法", "Mana": "魔力", "Stamina": "體力"}
+            "Magic": "魔法", "Mana": "魔力", "Stamina": "耐力"}
 REF_ZH = {"Health": "生命", "Damage": "傷害", "Mana": "魔力", "Attack Speed": "攻擊速度", "Critical Hit Chance": "暴擊率",
           "Critical Hit Damage": "暴擊傷害", "Movement Speed": "移動速度", "Evasion": "閃避", "Health Regeneration": "生命回復",
-          "Mana Regeneration": "魔力回復", "Stamina Regeneration": "體力回復", "Skill Critical Hit Damage": "技能暴擊傷害",
+          "Mana Regeneration": "魔力回復", "Stamina Regeneration": "耐力回復", "Skill Critical Hit Damage": "技能暴擊傷害",
           "Skill Critical Hit Chance": "技能暴擊率", "Projectile Damage": "投射物傷害", "Critical Power": "暴擊傷害",
-          "Critical Chance": "暴擊率", "Defense": "防禦", "Lifesteal": "吸血", "Stamina": "體力", "Max Health": "最大生命",
+          "Critical Chance": "暴擊率", "Defense": "防禦", "Lifesteal": "吸血", "Stamina": "耐力", "Max Health": "最大生命",
           "Attack Damage": "攻擊傷害", "Physical Damage": "物理傷害", "Dodge": "閃避", "Damage Reduction": "傷害減免",
           "Magic Damage": "魔法傷害", "Max Mana": "最大魔力", "Spell Vampirism": "法術吸血", "Skill Critical Chance": "技能暴擊率",
           "Skill Critical Power": "技能暴擊傷害", "Bonus Heal": "治療加成"}
