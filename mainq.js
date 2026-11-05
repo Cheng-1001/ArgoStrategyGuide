@@ -83,8 +83,9 @@ window.SAO_MAINQ = {1: [
  {t:"The Crystal of Tolbana", n:33, npc:"Mephisto", d:"Mephisto 帶你到鍛造場附近一扇很久沒開過的門。他會說：「Follow me. And don't touch anything.」「It hasn't been opened since before my time.」「Go down. I'll join you.」（站長 2026-11-05 截圖）",
   en:{1:"Meet him at the door, near the forge",2:"Follow him to the door"},
   s:[["回去找 Mephisto",3260,1403],["在鍛造場附近的門和他會合",3239,1461],["跟著他走到門口",3216,1445]]},
- {t:"Beneath the Crystal", n:34, npc:"Mephisto", d:"從那扇門往下走到水晶底下，再到 Kobold Tower 和 Mephisto 會合。",
+ {t:"Beneath the Crystal", n:34, npc:"Mephisto", d:"從那扇門往下走到水晶底下。水晶下面是浮空島，地上鋪了一條紅石粉，沿著紅石粉往上走就對了（站長 2026-11-06）；之後到 Kobold Tower 和 Mephisto 會合。",
   en:{0:"Go down beneath the crystal",1:"Meet Mephisto at the Kobold Tower"},
+  img:{0:[["img/quests/34_redstone.jpg","水晶底下的浮空島：地上有一條紅石粉（紅線），沿著它往上走"]]},
   s:[["下到水晶底下",3047,1208],["在 Kobold Tower 和 Mephisto 會合",3400,1080]]},
  {t:"Floor 2", n:35, npc:"—", d:"前往第 2 層。", en:{0:"Reach Floor 2"},
   s:[["抵達第 2 層",null,null]]}
