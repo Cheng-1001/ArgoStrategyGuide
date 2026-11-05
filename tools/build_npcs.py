@@ -31,7 +31,8 @@ SITE=[dict(c='beggar',n='臭乞丐',x=3336,z=1760,u=False,src='site'),
       dict(c='other',n='Accessory Recycling',x=1766,z=4123,u=False,src='site2'),
       dict(c='other',n='Auction House',x=1825,z=4086,u=False,src='site2'),
       dict(c='other',n='Vault',x=1825,z=4091,u=False,src='site2'),
-      dict(c='other',n='Labyrinth Archaeologist',x=2389,z=2412,u=False,src='site2')]   # Geldorak Mine entrance, owner's screenshot 2026-11-03 22:10   # Tolbana, owner's gameplay video 2026-10-30 (player position next to the NPC)
+      dict(c='other',n='Labyrinth Archaeologist',x=2389,z=2412,u=False,src='site2'),
+      dict(c='other',n='Web Archaeologist',x=1019,z=1178,u=False,src='site2')]   # Arakh'Nol, next to the Xal'Zirith guard; owner's screenshot 2026-11-06 01:58 (minimap x 1019 z 1178 y 116); its window is "Aragorn's Lair - Loot Info" (sell tab)   # Geldorak Mine entrance, owner's screenshot 2026-11-03 22:10   # Tolbana, owner's gameplay video 2026-10-30 (player position next to the NPC)
 res+=SITE
 res.sort(key=lambda r:((CATS+['beggar','other']).index(r['c']),r['n']))
 from collections import Counter

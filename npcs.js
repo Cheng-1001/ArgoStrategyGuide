@@ -84,5 +84,6 @@ window.SAO_NPCS={1:[
  ["other", "Labyrinth Archaeologist", 2389, 2412, "site2"],
  ["other", "Mine Archaeologist", 4280, 3891, "site2"],
  ["other", "Vault", 1825, 4091, "site2"],
- ["other", "Weapon Recycling", 1776, 4132, "site2"]
+ ["other", "Weapon Recycling", 1776, 4132, "site2"],
+ ["other", "Web Archaeologist", 1019, 1178, "site2"]
 ]};

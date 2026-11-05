@@ -3,6 +3,7 @@
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
  ["2026-11-06",[
+  "地圖新增 NPC Web Archaeologist（Arakh'Nol，Xal'Zirith 守衛旁，X 1019 Z 1178，站長截圖）",
   "「治療加成」（Heal Bonus／Bonus Healing）終於有遊戲圖示了：從 Belt of the Stags 的物品提示切出來的綠色十字，裝備數值、套裝效果都會用",
   "主線 33 The Crystal of Tolbana 編號確認（不再是推算），新增主線 34 Beneath the Crystal（下到水晶底下 → 到 Kobold Tower 找 Mephisto），Floor 2 改成主線 35；33 補上 Mephisto 的台詞和任務追蹤原文",
   "Sanctuary of Xal'Zirith 加上遊戲 Dungeons 視窗的資料：首領 Voras、鑰匙、Easy 30 分鐘／1～4 人／建議 7 級、通關寶箱 Necklace of Aragorn 3%、Spider Venom 25%、1000 Cols Pouch 100%",
