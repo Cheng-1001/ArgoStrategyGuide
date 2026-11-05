@@ -1075,7 +1075,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!panel.hidden)close
 function markSel(){const cur=!panel.hidden&&stack[stack.length-1];
   document.querySelectorAll(".card.sel").forEach(e=>e.classList.remove("sel"));document.querySelectorAll(".th.selm").forEach(e=>e.classList.remove("selm"));
   if(!cur)return;document.querySelectorAll(`[data-key="${cur.type}|${CSS.escape(cur.id)}"]`).forEach(e=>e.classList.add(e.classList.contains("th")?"selm":"sel"))}
-const soonNote=f=>FLOORS[f].status==="soon"?`<div class="note warn">${FLN(f)}預計 11/5（四）03:00（台灣時間）開放（官方公告：11/4 晚上 8 點巴黎時間）。這是 wiki 目前的資料，官方說會調整進度設計，開放後可能不同。</div>`:"";
+const soonNote=f=>FLOORS[f].status==="soon"?`<div class="note warn">${FLN(f)}預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）。這是 wiki 目前的資料，官方說會調整進度設計，開放後可能不同。</div>`:"";
 
 function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.zones[m.zone];const p=monPos(m);const st=STATUS[p.s];
   const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp,ww])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(iid)}</b><span>${ww?WIKI_ONLY:""}${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
@@ -1917,7 +1917,7 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
   const slots=g.schedule.map(s=>({s,...nextSlot(s,now)})).filter(x=>x.st).sort((a,b)=>a.st-b.st);
   const open=slots.find(x=>x.st<=now&&x.en>now),next=slots.find(x=>x.st>now);
   const status=open?`<span class="bstat on">開放中・剩 ${dur(open.en-now)}</span>`:next?`<span class="bstat">下次開放 ${fmtT(next.st)}・${dur(next.st-now)}後</span>`:"";
-  const floorBoss=FL_KEYS.map(f=>{const Fx=FLOORS[f];const m=Fx.M.find(x=>x.name.startsWith(Fx.boss));return`<li><span class="fl fl${f}">F${f}</span> <b>${esc(Fx.boss)}</b>${m?` <button class="linkbtn" data-go="m|${m.id}">看圖鑑</button>`:` <span class="muted">（圖鑑還沒有收錄）</span>`}${Fx.status==="soon"?' <span class="muted">・預計 11/4 開放</span>':""}</li>`}).join("");
+  const floorBoss=FL_KEYS.map(f=>{const Fx=FLOORS[f];const m=Fx.M.find(x=>x.name.startsWith(Fx.boss));return`<li><span class="fl fl${f}">F${f}</span> <b>${esc(Fx.boss)}</b>${m?` <button class="linkbtn" data-go="m|${m.id}">看圖鑑</button>`:` <span class="muted">（圖鑑還沒有收錄）</span>`}${Fx.status==="soon"?' <span class="muted">・預計 11/8 或 11/9 逐步開放</span>':""}</li>`}).join("");
   const u=BO.unique[0];
   $("bWrap").innerHTML=`
   <div class="rhead"><h2>首領</h2><span class="count">世界首領・獨特怪物・樓層首領</span></div>
@@ -2582,7 +2582,7 @@ document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>a.add
 const TOTAL=100;const flTrig=$("flTrig"),flPop=$("flPop");
 const flState=f=>FLOORS[f]?(FLOORS[f].status==="soon"?"soon":"open"):"lock";
 $("flGrid").innerHTML=Array.from({length:TOTAL},(_,i)=>{const f=i+1,st=flState(f);
-  const tip=st==="lock"?`第 ${f} 層・尚未開放`:`第 ${f} 層${st==="soon"?"（預計 11/5（四）03:00（台灣時間）開放）":""}`;
+  const tip=st==="lock"?`第 ${f} 層・尚未開放`:`第 ${f} 層${st==="soon"?"（預計 11/8 或 11/9 逐步開放）":""}`;
   return`<button class="flcell ${st}" data-f="${f}" title="${esc(tip)}" aria-label="${esc(tip)}" ${st==="lock"?'aria-disabled="true"':""}>${f}</button>`}).join("");
 function openPick(o){flPop.hidden=!o;flTrig.setAttribute("aria-expanded",o);$("flMsg").textContent="";if(o){$("flJump").value="";setTimeout(()=>$("flJump").focus(),0)}}
 flTrig.onclick=e=>{e.stopPropagation();openPick(flPop.hidden)};
@@ -2596,7 +2596,7 @@ $("flForm").onsubmit=e=>{e.preventDefault();pickFloor(parseInt($("flJump").value
 function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.ready=1;
   $("flNo").textContent=f+"F";$("flNm").textContent=`第 ${f} 層`;   // no floor name: the game has no confirmed floor names (user 2026-11-02 chose A)
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
-  const Fx=F();$("floorInfo").innerHTML=`<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/5（四）03:00（台灣時間）開放・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
+  const Fx=F();$("floorInfo").innerHTML=`<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PRV().length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
   $("nItem").textContent=matPool(f,false).length;
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}

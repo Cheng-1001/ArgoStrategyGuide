@@ -87,6 +87,6 @@ window.SAO_MAINQ = {1: [
   en:{0:"Go down beneath the crystal",1:"Meet Mephisto at the Kobold Tower"},
   img:{0:[["img/quests/34_redstone.jpg","水晶底下的浮空島：地上有一條紅石粉（紅線），沿著它往上走"]]},
   s:[["下到水晶底下",3047,1208],["在 Kobold Tower 和 Mephisto 會合",3400,1080]]},
- {t:"Floor 2", n:35, npc:"—", d:"前往第 2 層。", en:{0:"Reach Floor 2"},
+ {t:"Floor 2", n:35, npc:"—", d:"前往第 2 層。第 2 層還沒開放（官方 Discord：預計 11/8 或 11/9 逐步開放），任務追蹤會停在這一步。", en:{0:"Reach Floor 2"},
   s:[["抵達第 2 層",null,null]]}
 ]};
