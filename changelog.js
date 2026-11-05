@@ -3,6 +3,8 @@
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
  ["2026-11-05",[
+  "裝備的「暴擊率」「技能暴擊率」原本誤用暴擊傷害的圖示（多一個綠色箭頭），改回遊戲的圖示；數值圖示加上和遊戲一樣的深色陰影",
+  "配方的需求等級改成遊戲物品說明優先：Necklace of Aragorn 8、Gloves of the Wolves 5、Belt of the Stags 7、Ring of the Wolf 3 原本誤用官網圖鑑的舊等級，已改回；骷髏飾品 3 件補上等級 6",
   "配方新增 Skeleton Accessories 的 Skeletal Ring、Bony Gloves、Skeletal Amulet，Skeleton Skull 補上製作時間和稀有度（遊戲截圖）",
   "這 4 件骷髏飾品改用遊戲裡的等級和數值，加上遊戲說明、取得方式和 Standard Skeleton Set 套裝效果；Skeleton Bone、Reinforced Skeleton Bone、Oak String 補上遊戲寫的取得方式",
   "萬聖節活動地下城 Sanctuary of Souls 加上遊戲 Dungeons 視窗的資料：首領、4 種難度、Easy 的時間限制和建議等級、通關寶箱 4 項",
