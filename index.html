@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="876698e9f7">
+<meta name="sao-build" content="b27065cc00">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -176,7 +176,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .qside{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}.qside .qobj{grid-column:1;font-size:13px;overflow-wrap:anywhere}.qside .reward{grid-column:2;grid-row:1/span 2;text-align:right}
 .qmap{flex:none;width:80%;align-self:center;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#0d1218}.qmap svg{display:block;width:100%;height:auto;aspect-ratio:1}.qmap g.hl rect{fill:#e5484d}.qmap g.hl text{fill:#fff}.mqs .linkbtn.on{color:#e5484d;font-weight:700}
 .clday{margin:10px 0 14px}.clday .cld{font-family:var(--f-display);font-size:15px}.cll{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}.clold summary{cursor:pointer;color:var(--muted);padding:4px 0}
-.mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}.note.srcend{margin-top:14px}.gieff{margin:4px 0 0 0;padding:0;list-style:none}.gieff li{margin:3px 0}.effen{color:var(--muted);font-size:11.5px}.effic{display:inline-block;width:1.4em;text-align:center;margin-right:2px;font-size:.95em}img.effic{width:1.15em;height:1.15em;vertical-align:-.18em;image-rendering:pixelated;object-fit:contain}
+.mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}.note.srcend{margin-top:14px}.gieff{margin:4px 0 0 0;padding:0;list-style:none}.gieff li{margin:3px 0}.effen{color:var(--muted);font-size:11.5px;display:inline-block}.lore.lorefr{font-size:12px;color:var(--muted);margin-top:-4px}.effic{display:inline-block;width:1.4em;text-align:center;margin-right:2px;font-size:.95em}img.effic{width:1.15em;height:1.15em;vertical-align:-.18em;image-rendering:pixelated;object-fit:contain}
 @media (max-width:820px){.mgo{display:inline}}
 @media (max-width:820px){.mbonly{display:block}.pconly,.rwhead .muted{display:none!important}.qmap{width:100%}[data-route],[data-imap]{display:none!important}}
 @media (max-width:820px){.qside{grid-template-columns:minmax(0,1fr)}.qside .reward{grid-column:1;grid-row:auto;text-align:left}}
@@ -386,6 +386,12 @@ aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:
 .bwrap{max-width:980px;margin:0 auto;padding-block:16px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
 .rgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start}.rcol{display:flex;flex-direction:column;gap:16px;min-width:0}
 #rWrap:has(.rgrid){max-width:1320px}
+/* 介紹及資訊 left/right, 協作區 left/middle/right (user 2026-11-05) */
+.agrid,.cgrid3{display:grid;gap:16px;align-items:start}
+.agrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}#aWrap:has(.agrid){max-width:1240px}
+.cgrid3{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr) minmax(0,1fr)}#rWrap:has(.cgrid3:not([hidden])){max-width:1560px}
+@media (max-width:1100px){.cgrid3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.cgrid3>.rc-form{grid-column:1/-1;order:-1}}
+@media (max-width:900px){.agrid,.cgrid3{grid-template-columns:minmax(0,1fr)}.cgrid3>.rc-q{order:1}.cgrid3>.rc-side{order:2}}
 @media (max-width:900px){.rgrid{grid-template-columns:minmax(0,1fr)}}
 .bcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .bcard p{margin:0}
@@ -785,7 +791,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=33d643eb"></script>
+<script src="data.js?v=f9836ff7"></script>
 <script src="data23.js?v=bc83d65b"></script>
 <script src="bosses.js?v=41309c3c"></script>
 <script src="reports.js?v=a17dd6f0"></script>
@@ -793,18 +799,19 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="codex.js?v=48141603"></script>
 <script src="mainq.js?v=a1e4cc24"></script>
 <script src="equip.js?v=4e53bcf2"></script>
-<script src="props.js?v=0e9f806f"></script>
-<script src="gameinfo.js?v=c5fe6b67"></script>
+<script src="props.js?v=f46e1a91"></script>
+<script src="gameinfo.js?v=6b149110"></script>
 <script src="npcs.js?v=3a3bf3bc"></script>
-<script src="changelog.js?v=31f9c681"></script>
+<script src="changelog.js?v=de44524a"></script>
 <script src="recipes.js?v=747aafd1"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=45515bcb"></script>
 <script src="events.js?v=911a772d"></script>
 <script src="gamestats.js?v=0dd893c8"></script>
-<script src="sets.js?v=4aebe313"></script>
+<script src="sets.js?v=fd2b2ec0"></script>
 <script src="staticons.js?v=a279d18a"></script>
+<script src="gameicons.js?v=d855911f"></script>
 <script src="recicons.js?v=9e931339"></script>
 <script>
 (()=>{
@@ -986,7 +993,7 @@ const BEH_ZH={A:"主動攻擊（看到就打）",N:"中立（被打才反擊）"
 const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["傳說+","r-s",5],splusplus:["傳說++","r-s",6],ss:["SS","r-s",7]};
 const GROUP={material:"材料",food:"食物",ring:"飾品",artifact:"飾品",amulet:"飾品",bracelet:"飾品",shield:"防具",armor_set:"防具",bow:"武器",crossbow:"武器",dagger:"武器",sword:"武器",staff_mage:"武器",staff_shaman:"武器",lumberjack_job:"採集",miner_job:"採集",farmer_job:"採集",tool:"工具",gem_stone:"符文",fortifier:"藥水",unknown:"未收錄"};
 const CAT_ZH={material:"材料",food:"食物",ring:"戒指",artifact:"遺物",amulet:"項鍊",bracelet:"手環",shield:"盾牌",armor_set:"防具套裝",bow:"弓",crossbow:"弩",dagger:"匕首",sword:"近戰武器",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",lumberjack_job:"伐木採集",miner_job:"採礦",farmer_job:"農作",tool:"工具",gem_stone:"符文",fortifier:"強化藥水",unknown:"未收錄"};
-const STAT_ZH={"Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"最大生命","Max Mana":"最大魔力","Max Stamina":"最大耐力","Attack Speed":"攻擊速度","Critical Strike Power":"暴擊傷害","Critical Strike Chance":"暴擊率","Skill Critical Strike Power":"技能暴擊傷害","Skill Critical Strike Chance":"技能暴擊率","Movement Speed":"移動速度","Health Regeneration":"生命回復","Mana Regeneration":"魔力回復","Stamina Regeneration":"耐力回復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"治療加成","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"吸血","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋強度","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力","Required Strength":"需求力量","Required Dexterity":"需求敏捷","Required Defense":"需求防禦","Dodge Rating":"閃避率","HEAL_BONUS":"治療加成","HEAL BONUS":"治療加成","Range":"攻擊距離","Entity Interaction Range":"互動距離","Knockback Resistance":"擊退抗性","Faction Damage Dungeon":"地下城傷害","Dodge Cooldown Reduction":"閃避冷卻縮減","Fall Damage Reduction":"摔落傷害減免","Additional Esprit":"額外精神","Additional Defense":"額外防禦","Additional Strength":"額外力量","Additional Vitality":"額外體力","Additional Dexterity":"額外敏捷","Additional Intelligence":"額外智力","Guard Durability":"格擋耐久","Block Chance":"格擋率","Ability Haste":"技能急速","深海漫遊 X":"特殊效果：深海漫遊 X"};
+const STAT_ZH={"Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"最大生命","Max Mana":"最大魔力","Max Stamina":"最大耐力","Attack Speed":"攻擊速度","Critical Strike Power":"暴擊傷害","Critical Strike Chance":"暴擊率","Skill Critical Strike Power":"技能暴擊傷害","Skill Critical Strike Chance":"技能暴擊率","Movement Speed":"移動速度","Health Regeneration":"生命回復","Mana Regeneration":"魔力回復","Stamina Regeneration":"耐力回復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"治療加成","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"吸血","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋強度","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力","Required Strength":"需求力量","Required Dexterity":"需求敏捷","Required Defense":"需求防禦","Dodge Rating":"閃避率","HEAL_BONUS":"治療加成","HEAL BONUS":"治療加成","Range":"攻擊距離","Entity Interaction Range":"互動距離","Knockback Resistance":"擊退抗性","Faction Damage Dungeon":"地下城傷害","Dodge Cooldown Reduction":"閃避冷卻縮減","Fall Damage Reduction":"摔落傷害減免","Additional Esprit":"額外精神","Additional Defense":"額外防禦","Additional Strength":"額外力量","Additional Vitality":"額外體力","Additional Dexterity":"額外敏捷","Additional Intelligence":"額外智力","Durability Bar":"耐久條","Inedible":"不能吃","Max Consume":"可用次數","Max Item Damage":"最大耐久","Max Stack Size":"堆疊上限","Movement_speed":"移動速度","Pickaxe Power":"採集等級","Random Unsocket":"隨機拆下符文","Repair Percent":"修理比例（%）","Restore Health":"回復生命","Restore Mana":"回復魔力","Restore Saturation":"回復飽和度","Restore Stamina":"回復耐力","Guard Durability":"格擋耐久","Block Chance":"格擋率","Ability Haste":"技能急速","深海漫遊 X":"特殊效果：深海漫遊 X"};
 // Chinese potion names (user 2026-11-05: Health 生命、Mana 魔力、Stamina 耐力，Quality 翻「優質」); shown as subtitle, the title stays the game name
 const POT_ZH={health:"生命",vie:"生命",mana:"魔力",stamina:"耐力"};
 const potZh=n=>{const m=/^(Quality |Qualité )?(?:(Health|Mana|Stamina) Potion|Potion de (Vie|Mana|Stamina)) ([IVX]+)$/i.exec(String(n||"").trim());return m?(m[1]?"優質":"")+POT_ZH[(m[2]||m[3]).toLowerCase()]+"藥水 "+m[4].toUpperCase():""};
@@ -999,7 +1006,8 @@ const flBadge=f=>`<span class="fl fl${f}">F${f}</span>`;
 const cls=t=>t==="Boss"?"boss":t==="Mini-Boss"?"mini":t==="Minion"?"minion":"";
 const face=m=>S1.PHOTO[m.name]&&m.floor===1?`<img class="face" src="${S1.PHOTO[m.name]}" alt="">`:`<span aria-hidden="true">${m.icon}</span>`;
 const thHTML=(m,extra="")=>`<span class="th ${cls(m.type)} ${extra}" aria-hidden="true">${face(m)}<i class="beh beh-${m.beh}"></i></span>`;
-const slot=(id,s=36)=>{const it=ITEMS[id];const n=it?it.ic:-1;
+const GICON=window.SAO_GAMEICONS||{};   // icons cut from the owner's screenshots (gameicons.js)
+const slot=(id,s=36)=>{const it=ITEMS[id];const n=it?it.ic:-1;if(n<0&&GICON[id])return recicImg(GICON[id],s);
   if(n<0)return`<span class="slot empty" style="--s:${s}px" aria-hidden="true">${it&&it.vanilla?"MC":"?"}</span>`;
   return`<span class="slot" style="--s:${s}px;background-size:${8*s}px auto;background-position:${-(n%8)*s}px ${-Math.floor(n/8)*s}px" aria-hidden="true"></span>`};
 const rarPill=it=>it.r&&RAR[it.r]?`<span class="pill ${RAR[it.r][1]}">${RAR[it.r][0]}</span>`:`<span class="pill r-x">未收錄</span>`;
@@ -1240,7 +1248,7 @@ let itemGroup="all",itemRar="all";
 // four-tab codex (user 2026-11-04): 怪物／裝備／道具／素材. A site item belongs to 裝備 or 道具 when the official
 // catalogue has it there (not a material); everything else (materials, gathered things, unlisted) is 素材.
 const MATG=e=>!!e&&(PR_GROUP[e.cat]==="材料"||PR_GROUP[e.cat]==="採集");
-const redirI=id=>{const o=offOf(id);return o&&(o.v==="equip"||!MATG(o.e))?[o.t,String(o.e.oid)]:null};
+const redirI=id=>{if(EQX_BY[id])return["e",EQX_BY[id]];const o=offOf(id);return o&&(o.v==="equip"||!MATG(o.e))?[o.t,String(o.e.oid)]:null};
 const redirP=oid=>{const e=prById[String(oid)];if(!MATG(e))return null;const en=FR2ID[e.name];return en&&ITEMS[en]?["i",en]:null};
 let OFF_CACHE=null;
 const offOf=id=>{if(!OFF_CACHE){OFF_CACHE={};const eb={},pb={};EQ.forEach(e=>eb[e.name]=e);PR.forEach(e=>pb[e.name]=e);
@@ -1255,7 +1263,7 @@ chipsInto($("fItemRar"),[["all","全部"],["c","普通"],["b","稀有"],["a","�
 ["fItemQuest","fItemDrop","fItemSort","fItemAll"].forEach(i=>$(i).onchange=renderItems);
 // default: every material (this site's + the official catalogue's; fishing etc. have no floor data yet);
 // 「只看這一層有取得資料的」 keeps only this site's items with a drop / gather / quest on this floor (user 2026-11-04)
-const matPool=(f,here)=>{const site=Object.keys(ITEMS).filter(id=>!redirI(id)&&(here?itemFloors(id).includes(f):itemFloors(id).length||ITEMS[id].fr)).map(id=>({k:"i",id}));
+const matPool=(f,here)=>{const site=Object.keys(ITEMS).filter(id=>!redirI(id)&&!["armor_set","tool"].includes(ITEMS[id].cat)&&(here?itemFloors(id).includes(f):itemFloors(id).length||ITEMS[id].fr)).map(id=>({k:"i",id}));
   if(here)return site;return site.concat(PR.filter(e=>MATG(e)&&!(FR2ID[e.name]&&ITEMS[FR2ID[e.name]])).map(e=>({k:"p",e})))};
 function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").checked;
   const pool=matPool(FL,!all);
@@ -1517,16 +1525,13 @@ function changelogCard(){const C=window.SAO_CHANGELOG||[];if(!C.length)return"";
 function renderChangelog(){$("clWrap").innerHTML=`<div class="rhead"><h2>更新紀錄</h2><span class="count">網站改了什麼</span></div>${changelogCard()}`;$("view-changelog").scrollTop=0}
 function renderAbout(){const iss=GH_ISSUES;
   $("aWrap").innerHTML=`<div class="rhead"><h2>介紹及資訊</h2><span class="count">本站介紹・官方連結・資料來源・版權聲明</span></div>
+  <div class="agrid"><div class="rcol">
   <article class="bcard" id="aboutSite"><h4 class="sec">本站介紹</h4>
     <p>阿爾戈的攻略本：把 SAO Minecraft 艾恩葛朗特（Aincrad）的地圖、怪物、裝備、配方、任務、職業技能、世界王互相連結，點任何名稱都能跳到相關資料。</p>
     <p>此攻略由中文玩家社群協力製作，提供中文玩家使用。資料有錯或缺漏，歡迎到<a href="#report">協作區</a>回報。</p>
     <h4 class="sec">遊戲官方連結</h4>
     <div class="olinks"><a class="repbtn ghost" href="https://saominecraft.com/" target="_blank" rel="noopener">🌐 遊戲官網 ↗</a><a class="repbtn ghost" href="https://discord.gg/HdHba5awgn" target="_blank" rel="noopener">💬 官方 Discord ↗</a></div>
     <div class="note">開放時段異動、維護等公告會發在官方 Discord 和遊戲內。本站的原始碼在 <a href="https://github.com/Cheng-1001/ArgoStrategyGuide" target="_blank" rel="noopener">GitHub</a>。</div>
-  </article>
-  <article class="bcard" id="aboutSrc"><h4 class="sec">資料來源 <span class="c">每筆資料旁也會標示來源</span></h4>
-    <ul class="srcl">${ABOUT_SRC.map(([n,u,w])=>`<li><b>${n}</b><span class="w">${u}${w?`<small>${w}</small>`:""}</span></li>`).join("")}</ul>
-    <div class="note">怪物名稱以遊戲內圖鑑為準；wiki 或參考地圖的舊名會保留成別名，搜尋時仍找得到。第 2、3 層是開放前的 wiki 資料，開放後可能變動。</div>
   </article>
   <article class="bcard" id="legal"><h4 class="sec">版權聲明 <span class="c">非官方玩家攻略</span></h4>
   <ul class="uses">
@@ -1538,7 +1543,13 @@ function renderAbout(){const iss=GH_ISSUES;
   </ul>
   <div class="note" lang="fr">Guide communautaire non officiel, réalisé de façon collaborative par la communauté sinophone pour les joueurs chinois ; gratuit et sans publicité. Il n’est ni affilié à Triggers SAO ni approuvé par Triggers SAO. Les contenus du jeu (icônes, noms, descriptions, captures) appartiennent à Triggers SAO ou à leurs titulaires respectifs. Sur simple demande des ayants droit, tout élément sera retiré : <a href="${iss}" target="_blank" rel="noopener">GitHub Issues</a>.</div>
   <div class="note">NOT AN OFFICIAL MINECRAFT PRODUCT. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.</div>
-  </article>`;
+  </article></div>
+  <div class="rcol">
+  <article class="bcard" id="aboutSrc"><h4 class="sec">資料來源 <span class="c">每筆資料旁也會標示來源</span></h4>
+    <ul class="srcl">${ABOUT_SRC.map(([n,u,w])=>`<li><b>${n}</b><span class="w">${u}${w?`<small>${w}</small>`:""}</span></li>`).join("")}</ul>
+    <div class="note">怪物名稱以遊戲內圖鑑為準；wiki 或參考地圖的舊名會保留成別名，搜尋時仍找得到。第 2、3 層是開放前的 wiki 資料，開放後可能變動。</div>
+  </article>
+  </div></div>`;
   const sv=$("view-about");if(aboutJump){const el=$(aboutJump);aboutJump=null;if(el)requestAnimationFrame(()=>el.scrollIntoView({block:"start"}))}else sv.scrollTop=0}
 // the crafted item's own data, shown right in the recipe panel (no extra click; 使用者 2026-11-02)
 function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
@@ -1546,7 +1557,7 @@ function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
   const other=(RECIPE_BY_EQ[e.oid]||[]).filter(x=>x.npc!==r.npc);
   return`<h3 class="sec">${isE?"裝備":"道具"}資料 <span class="c">官方圖鑑 #${e.oid}</span></h3>
   <div class="muted" style="font-size:12.5px">${esc(isE?eqCat(e):PR_CAT[e.cat]||e.cat)}${e.lv>1?"・等級 "+e.lv:""}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):""}</div>
-  ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
+  ${loreHTML(e)}
   ${e.dmg||rows?`<dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>`:""}
   ${en?`<ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>${isE?"掉落來源、任務需求":"掉落來源、掉落率、任務需求"}</span></span><span class="v">›</span></button></li></ul>`:""}
   ${other.length?`<h3 class="sec">${other.some(x=>isShop(x))?"其他製作或購買地點":"其他製作地點"}</h3>${recipeTable(other,true)}`:""}
@@ -1639,8 +1650,15 @@ const obtZh=l=>{let m;
   if(l==="Gacha machine")return"轉蛋機（Gacha machine）";
   if(l==="No known source")return"遊戲寫「No known source」：目前沒有已知來源";
   return l};
-const giHTML=g=>g?`<h3 class="sec">遊戲寫的取得方式</h3><ul class="glist">${g.obt.map(l=>`<li title="${esc(l)}">${esc(obtZh(l))}</li>`).join("")}${g.note?`<li>${esc(g.note)}</li>`:""}${g.obt.length||g.note?"":"<li>說明視窗沒有寫取得方式</li>"}</ul>${g.desc?`<p class="lore">${esc(g.desc)}</p>`:""}<div class="note srcn">遊戲名稱、取得方式和英文說明取自遊戲的物品說明視窗（站長 ${GI.date} 截圖）${g.lvl?`；需求等級 ${g.lvl}`:""}。</div>`:"";
+let GI_NODESC=0;   // equipment / props panels show the game description at the top (loreHTML), not again under 取得方式
+const giHTML=g=>g?`<h3 class="sec">遊戲寫的取得方式</h3><ul class="glist">${g.obt.map(l=>`<li title="${esc(l)}">${esc(obtZh(l))}</li>`).join("")}${g.note?`<li>${esc(g.note)}</li>`:""}${g.obt.length||g.note?"":"<li>說明視窗沒有寫取得方式</li>"}</ul>${g.desc&&!GI_NODESC?`<p class="lore">${esc(g.desc)}</p>`:""}<div class="note srcn">遊戲名稱、取得方式和英文說明取自遊戲的物品說明視窗（站長 ${GI.date} 截圖）${g.lvl?`；需求等級 ${g.lvl}`:""}。</div>`:"";
 const dn=e=>e.gen||e.name;
+const loreHTML=(e,hideFr)=>{const g=GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen||"")]:null);
+  if(g&&g.desc)return`<p class="lore">${esc(g.desc)}</p>${e.lore&&!hideFr?`<p class="lore lorefr" title="官網物品圖鑑的法文說明">官網法文說明：${esc(e.lore)}</p>`:""}`;
+  return e.lore&&!hideFr?`<p class="lore">${esc(e.lore)}</p>`:""};
+const EQX_CATS=new Set(["artifact","sword","dagger","bow","crossbow","staff_mage","staff_shaman","shield","armor","ring","amulet","bracelet","gloves"]),EQX_BY={};
+{let k=0;Object.keys(ITEMS).forEach(id=>{const it=ITEMS[id];if(it.fr||!EQX_CATS.has(it.cat))return;const st={...(it.st||{})};const dmg=st["Attack Damage"]||null;delete st["Attack Damage"];
+  const e={oid:"x"+(++k),name:id,gen:id,cat:it.cat,r:it.r,lv:it.lv||0,dmg,lore:"",st,ic:-1,itemId:id,extra:1};EQ.push(e);EQX_BY[id]=e.oid})}
 const eqById=Object.fromEntries(EQ.map(e=>[String(e.oid),e]));EQ.forEach(e=>{if(GI_OID[e.oid])e.gen=GI_OID[e.oid].en});
 const FR2ID={};Object.keys(ITEMS).forEach(id=>{if(ITEMS[id].fr)FR2ID[ITEMS[id].fr]=id});
 const EQ_PART={sword:"weapon",dagger:"weapon",bow:"weapon",crossbow:"weapon",staff_mage:"weapon",staff_shaman:"weapon",catalyst:"off",shield:"off",armor:"armor",gloves:"acc",ring:"acc",amulet:"acc",bracelet:"acc",artifact:"acc"};
@@ -1654,8 +1672,9 @@ const eqSub=e=>e.cat==="armor"?(e.slot||"armor"):e.cat;
 const EQ_SUBS={weapon:["sword","dagger","bow","crossbow","staff_mage","staff_shaman"],off:["shield","catalyst"],armor:["head","chest","legs","feet"],acc:["amulet","ring","bracelet","gloves","artifact"]};
 const subLab=k=>SLOT_ZH[k]||EQ_CAT[k]||k;
 const eqClasses=e=>String(e.st["Classe requise"]||"").split(/,\s*/).map(c=>c.toLowerCase()).filter(c=>CLASS_ZH[c]);
-const eslot=(e,s=44)=>e.ps?pslot(e,s):e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
-const statVal=(k,v)=>k==="Classe requise"?String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]).filter(Boolean).join("、")||"不限":k==="Arme à deux mains"?"是":typeof v==="number"&&!k.startsWith("Required")?(v>0?"+":"")+v:v;
+const eslot=(e,s=44)=>e.ps?pslot(e,s):e.itemId?(GICON[e.itemId]?recicImg(GICON[e.itemId],s):slot(e.itemId,s)):e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
+const NOSIGN=new Set(["Max Consume","Max Stack Size","Max Item Damage","Max Durability","Durability Bar","Pickaxe Power","Item Cooldown","Repair Percent"]);
+const statVal=(k,v)=>k==="Inedible"||k==="Durability Bar"?"是":NOSIGN.has(k)?v:k==="Classe requise"?String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]).filter(Boolean).join("、")||"不限":k==="Arme à deux mains"?"是":typeof v==="number"&&!k.startsWith("Required")?(v>0?"+":"")+v:v;
 const eqKey=e=>{const o=[];if(e.dmg)o.push("傷害 "+e.dmg);["Defense","Max Health","Magic Damage","Physical Damage","Skill Damage","Critical Strike Chance"].forEach(k=>{if(e.st[k]!=null&&o.length<3)o.push((STAT_ZH[k]||k)+" "+statVal(k,e.st[k]))});return o.join("・")};
 let eqPart="all",eqClass="all",eqRar="all",eqSubV="all";
 const fillEqSub=()=>{const g=$("gEqSub"),ks=EQ_SUBS[eqPart];g.hidden=!ks;eqSubV="all";if(ks)chipsInto($("fEqSub"),[["all","全部"],...ks.map(k=>[k,`${subLab(k)} <span class="cn">${EQ.filter(e=>EQ_PART[e.cat]===eqPart&&eqSub(e)===k).length}</span>`])],()=>eqSubV,v=>eqSubV=v,renderEquip)};
@@ -1682,17 +1701,18 @@ function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").val
 const gstNote=e=>{const c=e.cat0,r=Object.entries(c.st).filter(([k])=>k!=="Classe requise"&&k!=="Arme à deux mains");
   return`<div class="note">🎮 等級和數值取自遊戲裡的物品說明（站長截圖 ${esc(GST.date)}）。官網圖鑑（2026-10-31）寫的是：等級 ${c.lv}${c.dmg?"、傷害 "+esc(c.dmg):""}${r.length?"、"+r.map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v)))).join("、"):""}。遊戲改版後官網圖鑑還沒更新，以遊戲為準。</div>`};
 const patchNote=e=>{const S=EVT.eqPatch.src;return`<div class="note warn">⚖️ 數值已照官方公告〈<a href="${esc(S.url)}" target="_blank" rel="noopener">${esc(S.title)}</a>〉（${esc(S.date)}）調整，官網圖鑑還沒更新。圖鑑上的舊數值：${Object.entries(e.patch.old).map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v))||"0")).join("、")}。${esc(e.patch.note)}</div>`};
-function equipDetail(id){const e=eqById[id];const cl=eqClasses(e);
+function equipDetail(id){GI_NODESC=1;try{return equipDetail0(id)}finally{GI_NODESC=0}}
+function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
   const rows=Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
-  const en=FR2ID[e.name];
+  const en=e.itemId||FR2ID[e.name];
   return`<div class="phead">${eslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${e.gen?esc(e.name)+"・":""}${esc(eqCat(e))}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span class="muted" style="font-size:12px">${icK("min_level")}等級 ${e.lv}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):"・不限職業"}</span></div></div></div>
-  ${e.lore?`<p class="lore">${esc(e.lore)}</p>`:""}
+  ${loreHTML(e)}
   <dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
   ${e.patch?patchNote(e):""}${e.gst?gstNote(e):""}${setPotHTML(e.gen,en)}
   ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
-  <div class="note srcn">官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}</div>`}
+  <div class="note srcn">${e.extra?"官網物品圖鑑沒有收錄這件裝備；名稱和數值取自遊戲截圖或 wiki，掉落取自本站怪物資料。":`官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}`}</div>`}
 
 // ================= props tab (official catalogue, non-equipment) =================
 const PR=(window.SAO_PROPS||[]).filter(r=>r[2]!=="catalyst").map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
@@ -1706,15 +1726,21 @@ PR.forEach(e=>{if(!/^potion_/.test(e.cat))return;const n=(e.gen||"")+" "+e.name;
     const cat=/potion/i.test(n)?(/health|vie/i.test(n)?"potion_heal":/mana/i.test(n)?"potion_mana":"potion_stamina"):/crystal/i.test(n)?"crystal":/candy|drag[ée]e|caramel|swirl/i.test(n)?"halloween":/meat|chocolate/i.test(n)?"food":"consumable";
     const e={oid:id,name:n,gen:n,cat,r:null,lv:0,lore:"",st:{},ic:-1,extra:1};PR.push(e);prById[id]=e;if(RECIC[n])OID_RECIC[id]=RECIC[n];
     const rows=ALLREC.filter(r=>norm(r.en)===norm(n));if(rows.length)RECIPE_BY_EQ[id]=rows})}
+PR.forEach(e=>{const n=((e.gen||"")+" "+e.name).toLowerCase();
+  if(e.cat==="tool")e.cat=/pioche|pickaxe/.test(n)?"tool_pick":/houe|serpe|\bhoe\b/.test(n)?"tool_hoe":/hache|\baxe\b/.test(n)?"tool_axe":/canne|fishing rod/.test(n)?"tool_rod":/marteau|hammer/.test(n)?"tool_hammer":/torch/.test(n)?"tool_torch":"tool";
+  else if(/réparation|repair kit/.test(n))e.cat="tool_repair"});
+// sub-category order inside a group (user 2026-11-05): potions → crystals → food → other consumables; keys: dungeon then chest
+const SUB_ORDER=["生命藥水","魔力藥水","耐力藥水","水晶","食物","消耗品","鎬子","斧頭","鋤頭","釣竿","錘子","修理包","火把","其他工具","地下城鑰匙","寶箱鑰匙","符文寶石","強化藥劑"];
+const subRank=c=>{const i=SUB_ORDER.indexOf(PR_SUBLAB(c));return i<0?99:i};
 const PRV=()=>PR.filter(e=>!MATG(e));   // the 道具 tab: materials and gathered things live in 素材
-const PR_CAT={material:"材料",fishing_job:"漁獲",miner_job:"礦物",lumberjack_job:"木材",farmer_job:"作物",consumable_item:"消耗品",consumable:"消耗品",food:"食物",potion_stamina:"耐力藥水",potion_heal:"生命藥水",potion_mana:"魔力藥水",gem_stone:"符文寶石",fortifier:"強化藥劑",catalyst:"催化劑",crystal:"水晶",tool:"工具",key_crate:"寶箱鑰匙",dungeon_key:"地下城鑰匙",halloween:"萬聖節活動",noel2025:"聖誕節活動（2025）",saint_valentin:"情人節活動",lunar:"農曆新年活動"};
-const PR_GROUP={material:"材料",fishing_job:"採集",miner_job:"採集",lumberjack_job:"採集",farmer_job:"採集",consumable_item:"消耗品",consumable:"消耗品",food:"消耗品",potion_stamina:"消耗品",potion_heal:"消耗品",potion_mana:"消耗品",gem_stone:"符文・強化",fortifier:"符文・強化",crystal:"消耗品",tool:"工具",key_crate:"鑰匙",dungeon_key:"鑰匙",halloween:"活動",noel2025:"活動",saint_valentin:"活動",lunar:"活動"};
+const PR_CAT={material:"材料",fishing_job:"漁獲",miner_job:"礦物",lumberjack_job:"木材",farmer_job:"作物",consumable_item:"消耗品",consumable:"消耗品",food:"食物",potion_stamina:"耐力藥水",potion_heal:"生命藥水",potion_mana:"魔力藥水",gem_stone:"符文寶石",fortifier:"強化藥劑",catalyst:"催化劑",crystal:"水晶",tool:"其他工具",tool_pick:"鎬子",tool_axe:"斧頭",tool_hoe:"鋤頭",tool_rod:"釣竿",tool_hammer:"錘子",tool_repair:"修理包",tool_torch:"火把",key_crate:"寶箱鑰匙",dungeon_key:"地下城鑰匙",halloween:"萬聖節活動",noel2025:"聖誕節活動（2025）",saint_valentin:"情人節活動",lunar:"農曆新年活動"};
+const PR_GROUP={material:"材料",fishing_job:"採集",miner_job:"採集",lumberjack_job:"採集",farmer_job:"採集",consumable_item:"消耗品",consumable:"消耗品",food:"消耗品",potion_stamina:"消耗品",potion_heal:"消耗品",potion_mana:"消耗品",gem_stone:"符文・強化",fortifier:"符文・強化",crystal:"消耗品",tool:"工具",tool_pick:"工具",tool_axe:"工具",tool_hoe:"工具",tool_rod:"工具",tool_hammer:"工具",tool_repair:"工具",tool_torch:"工具",key_crate:"鑰匙",dungeon_key:"鑰匙",halloween:"活動",noel2025:"活動",saint_valentin:"活動",lunar:"活動"};
 const PR_ICON={材料:"🧱",採集:"⛏️",消耗品:"🧪","符文・強化":"💎",工具:"🔧",鑰匙:"🗝️",活動:"🎉"};
-const pslot=(e,s=44)=>OID_RECIC[e.oid]?recicImg(OID_RECIC[e.oid],s):e.ic<0&&FR2ID[e.name]&&ITEMS[FR2ID[e.name]].ic>=0?slot(FR2ID[e.name],s):e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${PR_ICON[PR_GROUP[e.cat]]||"❔"}</span>`:`<span class="eslot pslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
+const pslot=(e,s=44)=>OID_RECIC[e.oid]?recicImg(OID_RECIC[e.oid],s):e.gen&&GICON[e.gen]?recicImg(GICON[e.gen],s):e.ic<0&&FR2ID[e.name]&&ITEMS[FR2ID[e.name]].ic>=0?slot(FR2ID[e.name],s):e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${PR_ICON[PR_GROUP[e.cat]]||"❔"}</span>`:`<span class="eslot pslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
 let prGroup="all",prRar="all",prSubV="all";
 const PR_EVYEAR={noel2025:2025}; // only years the official catalogue category names (Noël 2025)
 const PR_SUBLAB=c=>PR_GROUP[c]==="活動"?PR_CAT[c].replace("活動",""):PR_CAT[c];
-const fillPrSub=()=>{const g=$("gPrSub");prSubV="all";const labs=[...new Set(PRV().filter(e=>PR_GROUP[e.cat]===prGroup).map(e=>PR_SUBLAB(e.cat)))];g.hidden=prGroup==="all"||labs.length<2;
+const fillPrSub=()=>{const g=$("gPrSub");prSubV="all";const labs=[...new Set(PRV().filter(e=>PR_GROUP[e.cat]===prGroup).map(e=>PR_SUBLAB(e.cat)))].sort((a,b)=>{const ia=SUB_ORDER.indexOf(a),ib=SUB_ORDER.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)});g.hidden=prGroup==="all"||labs.length<2;
   if(!g.hidden)chipsInto($("fPrSub"),[["all","全部"],...labs.map(l=>[l,`${esc(l)} <span class="cn">${PRV().filter(e=>PR_GROUP[e.cat]===prGroup&&PR_SUBLAB(e.cat)===l).length}</span>`])],()=>prSubV,v=>prSubV=v,renderProps)};
 chipsInto($("fPrGroup"),[["all","全部"],...[...new Set(Object.values(PR_GROUP))].filter(g=>g!=="材料"&&g!=="採集").map(g=>[g,g==="活動"?"活動道具":g])],()=>prGroup,v=>{prGroup=v;fillPrSub()},renderProps);
 chipsInto($("fPrRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,RAR[r][0]])],()=>prRar,v=>prRar=v,renderProps);
@@ -1725,6 +1751,7 @@ function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?R
   $("fPrSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>PR_SUBLAB(e.cat)===c.dataset.v).length});
   let a=base.filter(e=>prSubV==="all"||PR_SUBLAB(e.cat)===prSubV);
   a.sort((x,y)=>so==="rar"?rv(y)-rv(x)||x.name.localeCompare(y.name):so==="lv"?x.lv-y.lv||x.name.localeCompare(y.name):x.name.localeCompare(y.name));
+  if(prGroup!=="all"&&prSubV==="all")a.sort((x,y)=>subRank(x.cat)-subRank(y.cat));   // stable: keeps the chosen order inside each sub-category
   $("cPr").textContent=`${a.length} / ${PRV().length} 件`;const shown=a.slice(0,240);
   $("lPr").innerHTML=a.length?shown.map(e=>`<button class="card" data-key="p|${e.oid}" data-go="p|${e.oid}">
     <div class="chead">${pslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${potZhE(e)?esc(potZhE(e))+"・":""}${e.gen&&!e.extra?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":""}${esc(PR_CAT[e.cat]||e.cat)}</span></div></div>
@@ -1742,6 +1769,8 @@ const EFF_IC=[[/life ?steal|lifesteal|vampir|吸血/i,"🩸","lifesteal"],[/heal
   [/magic|魔法/i,"✨","magic_damage"],[/projectile|投射/i,"🏹","projectile_damage"],[/physical|物理/i,"⚔️","physical_damage"],[/skill damage|技能傷害/i,"⚔️","skill_damage"],[/damage|attack|傷害|攻擊/i,"⚔️","attack_damage"],
   [/fall|摔落/i,"🪂",""],[/rune|符文/i,"💎",""]];
 const STATIC=window.SAO_STATICONS||{};
+// fetch every stat icon once at start-up, so the first panel opened already has them (user 2026-11-05: 第一次點的時候不會馬上載入)
+const STATIC_PRE=Object.values(STATIC).map(u=>{const im=new Image();im.decoding="async";im.src=u;return im});
 const IC_FB={health_regen:"health",mana_regen:"mana",healing:"health"};   // no game icon of their own: borrow the family's
 const effIc=t=>{const m=EFF_IC.find(([r])=>r.test(t));if(!m)return"";const k=STATIC[m[2]]?m[2]:(STATIC[IC_FB[m[2]]]?IC_FB[m[2]]:"");return k?`<img class="effic" src="${esc(STATIC[k])}" alt="" aria-hidden="true">`:`<span class="effic" aria-hidden="true">${m[1]}</span>`};
 // Chinese reading of the game's effect lines (user 2026-11-05: 效果說明也要中文); the original stays in the tooltip and in small grey text
@@ -1761,6 +1790,8 @@ const effZh=t=>{let m;t=String(t).trim();
   if(m=/^Boost les Dégâts armes de ([\d.]+%) - (\d+)sec/i.exec(t))return`${m[2]} 秒內武器傷害 +${m[1]}`;
   if(m=/^(\d+s) cooldown on all (.+)$/i.exec(t))return`所有 ${m[2].replace(/candies/i,"糖果")} 共用 ${durZh(m[1])}冷卻`;
   if(m=/^On consumption, applies (\d+)h of cooldown on all fortifiers$/i.exec(t))return`使用後，所有強化藥都要冷卻 ${m[1]} 小時`;
+  if(/^Allows you to revive a comrade fallen in battle within (\d+)s/i.test(t))return`在允許的區域，隊友倒下後 ${/within (\d+)s/i.exec(t)[1]} 秒內可以把他救起來`;
+  if(m=/^Boosts Weapon Damage and Magic Damage by ([\d.]+%) - (\d+)\s*min$/i.exec(t))return`${m[2]} 分鐘內武器傷害和魔法傷害 +${m[1]}`;
   if(m=/^Single use - cooldown of (\d+)\s*min$/i.exec(t))return`只能用一次，冷卻 ${m[1]} 分鐘`;
   if(m=/^(?:Uses Remaining|Utilisations restantes)\s*:\s*(\d+)$/i.exec(t))return`剩餘次數：${m[1]}`;
   if(m=/^Repair\s*:\s*(.+)$/i.exec(t))return`修理 ${m[1]}`;
@@ -1784,13 +1815,14 @@ const setPotHTML=(...names)=>{const ns=names.filter(Boolean).map(norm);const st=
   if(st)h+=`<h3 class="sec">${icK("set")}套裝效果・${esc(st.name)}</h3><table class="settbl"><tbody>${st.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${effLine(e)}</td></tr>`).join("")}</tbody></table>
     <div class="muted" style="font-size:12.5px;margin-top:4px">同一套：${st.members.map(m=>{const g=enGo(m);return g&&!ns.includes(norm(m))?`<button class="linkbtn" data-go="${esc(g)}">${esc(m)}</button>`:esc(m)}).join("、")}</div>`;
   return h?h+`<div class="note srcn">套裝效果和藥水效果取自遊戲裡的物品提示（站長截圖 ${esc(SETS.date||"")}），原文照遊戲。</div>`:""};
-function propDetail(id){const e=prById[id];const en=FR2ID[e.name];
+function propDetail(id){GI_NODESC=1;try{return propDetail0(id)}finally{GI_NODESC=0}}
+function propDetail0(id){const e=prById[id];const en=FR2ID[e.name];
   // potions: the catalogue's restore values are wrong (health potions list "Restore Stamina"); when the game's effect lines exist, show those instead
-  const potGame=/^potion_/.test(e.cat)&&[e.gen,en].some(n=>n&&POT_BY[norm(n)]);
+  const potGame=[e.gen,en].some(n=>n&&POT_BY[norm(n)]);   // game effect lines exist → they replace the catalogue numbers (user 2026-11-05: Boar Meat 效果寫了兩次)
   const rows=potGame?"":Object.entries(e.st).map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
   return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${potZhE(e)?esc(potZhE(e))+"・":""}${e.gen&&!e.extra?esc(e.name)+"・":""}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
-  ${e.lore&&!potGame?`<p class="lore">${esc(e.lore)}</p>`:""}${rows?`<dl class="stats">${rows}</dl>`:""}${setPotHTML(e.gen,en)}
+  ${loreHTML(e,potGame&&/^potion_/.test(e.cat))}${rows?`<dl class="stats">${rows}</dl>`:""}${setPotHTML(e.gen,en)}
   ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen)]:null))}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note srcn">${e.extra?"官網物品圖鑑沒有收錄這個物品，名稱和效果取自遊戲截圖。":`官方圖鑑 #${e.oid}。`}${PR_GROUP[e.cat]==="活動"?(PR_EVYEAR[e.cat]?`活動年份 ${PR_EVYEAR[e.cat]} 取自官網圖鑑的分類名稱。`:"官網圖鑑的這個活動分類沒有寫年份，所以不標年份。"):""}${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
@@ -2142,7 +2174,22 @@ function showCollab(){const w=$("rWrap");if(!w.querySelector(".csub"))return;
 function buildFormReport(){
   $("rWrap").innerHTML=collabHead()+`<div id="rFeedW" hidden>${feedbackHTML()}</div>
   <div id="rData">
-  <div class="rgrid"><div class="rcol">
+  <div class="cgrid3"><div class="rcol rc-side">
+  <article class="bcard"><h4 class="sec">審核流程</h4>
+    <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表，幾分鐘內會出現在右邊的「處理中的回報」。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線；「處理中的回報」會標「退回」。想補截圖可以重新回報一次。</li></ol>
+    <div class="muted" style="font-size:12.5px">想當審核員？請聯絡網站管理者。</div></article>
+  <article class="bcard pconly" id="jmPack"><h4 class="sec">🗺️ 打包探索地圖（JourneyMap）</h4>
+    <p style="margin:0">把你的 JourneyMap 地圖整理成可以上傳的壓縮檔，網站會把你探索過、網站還沒有的地方合併進「探索地圖」。<b>檔案只在你的瀏覽器裡處理，不會傳到任何地方</b>，直到你自己把壓縮檔上傳到表單。目前只收第 1 層。</p>
+    <ol class="steps">
+      <li>按下面的按鈕。在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。</li>
+      <li>瀏覽器會問「要將 N 個檔案上傳到這個網站嗎？」，按「上傳」。這只是讓網頁讀取，檔案不會被送出。</li>
+      <li>工具會自動找出第 1 層的地圖（mp 裡每個 <code>Triggers_</code> 資料夾是一個世界，不用自己挑），只留網站還沒有的區域，按「下載壓縮檔」。</li>
+      <li>按中間的「填寫回報表單」，回報種類選 <b>探索地圖</b>，上傳這個壓縮檔後送出。<b>不用截圖</b>，送出後會自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
+    <label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden>
+    <div class="muted" style="font-size:12.5px">要在電腦上用 Chrome 或 Edge。</div>
+    <div id="jmOut" class="jmout" aria-live="polite"></div>
+  </article>
+  </div><div class="rcol rc-form">
   <article class="bcard rform">
     <a class="repbtn big" id="formGo" target="_blank" rel="noopener">填寫回報表單 ↗</a>
     <ol class="steps big">
@@ -2154,7 +2201,7 @@ function buildFormReport(){
           <li><b>拍配方</b>：打開 NPC 的製作或購買選單，點到那個物品再按 F2，材料、數量、費用、時間都要看得到。</li>
           <li><b>拍任務追蹤</b>：畫面右側的任務追蹤（Tracked quest）有任務編號和目前步驟，直接按 F2。</li>
           <li><b>拍技能</b>：打開技能選單，點到那個技能再按 F2，名稱、解鎖等級、說明都要看得到。</li>
-          <li class="pconly"><b>上傳探索地圖（JourneyMap）</b>：不用截圖，用下面的「打包探索地圖」產生壓縮檔，回報種類選「探索地圖」上傳。送出後自動檢查、合併，目前只合併第 1 層。</li>
+          <li class="pconly"><b>上傳探索地圖（JourneyMap）</b>：不用截圖，用左邊的「打包探索地圖」產生壓縮檔，回報種類選「探索地圖」上傳。送出後自動檢查、合併，目前只合併第 1 層。</li>
           <li><b>檔案位置</b>：<code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots</code><br>按 <kbd>Win</kbd>＋<kbd>R</kbd>，貼上這一行按 Enter，就會直接打開資料夾。檔名就是拍攝時間，最新的排在最後面。</li>
           <li><b>上傳</b>：表單最後一頁按「新增檔案」→「瀏覽」→ 到上面的資料夾選檔。按住 <kbd>Ctrl</kbd> 可以一次選多張（最多 5 張，每張 10 MB 以內，F2 的截圖都在範圍內）。</li>
           <li>不用裁切，也不用另外壓縮，原圖直接上傳。審核通過後網站會自動縮小。</li>
@@ -2165,21 +2212,7 @@ function buildFormReport(){
     <div class="note">審核員核對截圖後按「核准」，網站會在幾分鐘內自動更新。工具裡還沒有的怪物、物品、地點、配方、技能也可以回報；配方會直接更新配方分頁，任務追蹤會校正主線編號，技能會列在職業資料裡。</div>
     <div class="note mbonly">🗺️ 上傳探索地圖（JourneyMap）要在電腦上開本站，用「打包探索地圖」產生壓縮檔。</div>
   </article>
-  <article class="bcard pconly" id="jmPack"><h4 class="sec">🗺️ 打包探索地圖（JourneyMap）</h4>
-    <p style="margin:0">把你的 JourneyMap 地圖整理成可以上傳的壓縮檔，網站會把你探索過、網站還沒有的地方合併進「探索地圖」。<b>檔案只在你的瀏覽器裡處理，不會傳到任何地方</b>，直到你自己把壓縮檔上傳到表單。目前只收第 1 層。</p>
-    <ol class="steps">
-      <li>按下面的按鈕。在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。</li>
-      <li>瀏覽器會問「要將 N 個檔案上傳到這個網站嗎？」，按「上傳」。這只是讓網頁讀取，檔案不會被送出。</li>
-      <li>工具會自動找出第 1 層的地圖（mp 裡每個 <code>Triggers_</code> 資料夾是一個世界，不用自己挑），只留網站還沒有的區域，按「下載壓縮檔」。</li>
-      <li>按上面的「填寫回報表單」，回報種類選 <b>探索地圖</b>，上傳這個壓縮檔後送出。<b>不用截圖</b>，送出後會自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
-    <label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden>
-    <div class="muted" style="font-size:12.5px">要在電腦上用 Chrome 或 Edge。</div>
-    <div id="jmOut" class="jmout" aria-live="polite"></div>
-  </article>
-  <article class="bcard"><h4 class="sec">審核流程</h4>
-    <ol class="steps"><li><b>待審核</b>：送出後進到審核用的試算表，幾分鐘內會出現在右邊的「處理中的回報」。</li><li><b>核准</b>：審核員確認截圖和填寫的內容一致，網站自動更新，截圖也會存一份在網站裡。</li><li><b>退回</b>：截圖看不出內容或資料不符，不會上線；「處理中的回報」會標「退回」。想補截圖可以重新回報一次。</li></ol>
-    <div class="muted" style="font-size:12.5px">想當審核員？請聯絡網站管理者。</div></article>
-  </div><div class="rcol">
+  </div><div class="rcol rc-q">
   <article class="bcard" id="qCard"><h4 class="sec">處理中的回報 <span class="c" id="qC"></span></h4><div id="qL" class="muted">讀取中…</div>
     <div class="muted" style="font-size:12.5px">為了不公開還沒審核的內容，這裡只列回報編號、種類、樓層和送出時間，請用送出時間找你的回報。核准後名稱和內容會出現在下面的「已收錄」；退回的回報保留 14 天。</div></article>
   <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article></div></div></div>`;

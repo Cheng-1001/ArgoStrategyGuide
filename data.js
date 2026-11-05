@@ -208,7 +208,7 @@ const RAW = {
 "Swordsman's Scroll":[null,null,null,"unknown",null,null,null,-1],
 "Archer's Scroll":[null,null,null,"unknown",null,null,null,-1],
 "Mage's Scroll":[null,null,null,"unknown",null,null,null,-1],
-"Magic Staff of the Revenants":[null,null,null,"unknown",null,null,null,-1]
+"Magic Staff of the Revenants":[null,null,8,"staff_shaman",null,null,{"Attack Damage":"14","Attack Speed":"1/s","Critical Strike Chance":"+1%","Classe requise":"shaman"},-1]
 };
 
 // How each item is obtained besides monster drops (source text) and what it is used for (paraphrased from its official description).
