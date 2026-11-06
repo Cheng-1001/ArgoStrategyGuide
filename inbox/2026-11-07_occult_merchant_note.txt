@@ -1,0 +1,3 @@
+站長 2026-11-07（附這批 02:59～03:18 截圖）：
+Occult Merchant 全部都在地下室。
+（npcs.js / recipes.js 的 Occult Merchant - Amulet / Artifacts / Bracelet / Gloves / Ring，位置要註明「地下室」。）
