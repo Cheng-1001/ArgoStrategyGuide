@@ -103,7 +103,8 @@ try:
               "nothing is picked to start with; the download button is beside the folder button, greyed")
         check(pg.locator(".jmtools #jmPick").count() == 1 and pg.locator(".jmtools #jmDl").count() == 1 and not pg.locator("#jmOut .repbtn").count(),
               "folder picker and download are together, apart from the selection")
-        h0 = pg.evaluate("[document.querySelector('#jmPack').getBoundingClientRect().height, document.querySelector('.jmsum').getBoundingClientRect().height, document.querySelector('.jmdlnote').getBoundingClientRect().height]")
+        HJS = "[document.querySelector('#jmPack').getBoundingClientRect().height, document.querySelector('.jmsum').getBoundingClientRect().height, document.querySelector('.jmdlnote').getBoundingClientRect().height]"
+        h0 = pg.evaluate(HJS)
         # flat layout (使用者 2026-11-06): no nested boxes or floor tabs, a section per floor and one for the dungeons,
         # 全選／清除 beside each heading (not next to the count), dungeons are picture tiles like the squares
         check(pg.locator(".jmsec").count() == 2 and pg.locator(".jmsec .jmmap").count() == 1 and pg.locator(".jmdgt[data-jmdg]").count() == 1
@@ -111,11 +112,35 @@ try:
               and pg.locator(".jmsech #jmRegAll").count() == 1 and pg.locator(".jmsech #jmDgAll").count() == 1 and not pg.locator("#jmRegSum #jmRegAll").count()
               and pg.locator("#jmFloor").count() == 1, "flat layout: floor and dungeon sections with their own 全選／清除, no tabs, no boxes")
         fo = pg.eval_on_selector_all("#jmFloor option", "o=>o.map(x=>[x.textContent,x.disabled])")
-        check(fo[0] == ["第 1 層", False] and len(fo) == 3 and all(d and "尚未開放" in t for t, d in fo[1:]), f"the floor is a drop-down: floor 1, floors 2 and 3 greyed until they open ({fo})")
-        check(pg.locator(".jmhint").count() == 1 and pg.locator("#jmOpts .muted").count() <= 3, "one hint line instead of notes everywhere")
+        check(fo[0] == ["第 1 層", False] and len(fo) == 3 and all(not d and "尚未開放" in t for t, d in fo[1:]), f"the floor menu lists floors 1-3; 2 and 3 can be picked to see how switching works ({fo})")
+        # the selection help and the picked places fold out from the selection area (使用者 2026-11-06)
+        check(not pg.locator("#jmHelp, #jmNames, .jmhint").count() and pg.locator(".jmselbar #jmHelpBtn").count() == 1, "the selection help is behind 「ⓘ 說明」 in the selection area")
+        pg.click("#jmHelpBtn"); pg.wait_for_timeout(100)
+        check(pg.is_visible("#jmHelp") and "停一下" in pg.inner_text("#jmHelp") and "橘框" in pg.inner_text("#jmHelp"), "「ⓘ 說明」 opens the selection help")
+        pg.click("#jmHelpBtn"); pg.wait_for_timeout(100)
+        check(not pg.locator("#jmHelp").count(), "and closes it again")
         pg.click("#jmRegAll"); pg.click("#jmDgAll"); pg.wait_for_timeout(150)
-        h1 = pg.evaluate("[document.querySelector('#jmPack').getBoundingClientRect().height, document.querySelector('.jmsum').getBoundingClientRect().height, document.querySelector('.jmdlnote').getBoundingClientRect().height]")
+        h1 = pg.evaluate(HJS)
         check(h0 == h1 and pg.is_enabled("#jmDl .repbtn"), f"picking everything changes nothing but the button and the text: the card keeps its height ({h0} -> {h1})")
+        pg.click("#jmNamesBtn"); pg.wait_for_timeout(100)
+        nt = pg.inner_text("#jmNames"); hn = pg.evaluate(HJS)
+        check("Geldorack Dungeon" in nt and "第 1 層" in nt, f"「已選的地方」 lists every picked place in full ({nt[:80]})")
+        pg.click("#jmRegNone"); pg.wait_for_timeout(100); hn2 = pg.evaluate(HJS)
+        check(hn == hn2, f"with the list open, clearing does not change the height either ({hn} -> {hn2})")
+        pg.click("#jmRegAll"); pg.click("#jmNamesBtn"); pg.wait_for_timeout(100)
+        # switching floors: 2 shows its greyed map and what will appear, 3 has no map yet, back to 1 keeps the picks
+        pg.select_option("#jmFloor", "2"); pg.wait_for_timeout(200)
+        f2 = [pg.locator("[data-jmreg]").count(), pg.locator(".jmsoon img").count(), pg.inner_text("#jmOpts")]
+        if os.environ.get("SHOT_DIR"):
+            pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_floor2.png"))
+        pg.select_option("#jmFloor", "3"); pg.wait_for_timeout(200)
+        f3 = [pg.locator("[data-jmreg]").count(), pg.locator(".jmsoonx").count(), pg.inner_text("#jmRegSum")]
+        if os.environ.get("SHOT_DIR"):
+            pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_floor3.png"))
+        pg.select_option("#jmFloor", "1"); pg.wait_for_timeout(300)
+        check(f2[0] == 0 and f2[1] == 1 and "第 2 層開放後" in f2[2] and f3[0] == 0 and f3[1] == 1 and "地下城 1／1" in f3[2]
+              and pg.locator("[data-jmreg]").count() > 0 and pg.evaluate("window.__jm.sel.off") == [] and pg.input_value("#jmFloor") == "1",
+              f"switching floors 1 → 2 → 3 → 1 shows each floor and keeps the picks ({f2[:2]}, {f3})")
         J = pg.evaluate("window.__jm")
         st = {g["label"]: g for g in J["groups"]}
         check(J["found"].get("c1") == 1 and J["found"].get("c2") == 6 and J["found"].get("c0") == 1 and J["found"].get("day", 0) >= 1,
@@ -157,12 +182,22 @@ try:
         zw = pg.evaluate("document.querySelector('.jmzoom img').getBoundingClientRect().width")
         check(pw[0] >= 300 and pw[1] >= 300 and zw >= 500 and "Geldorack" in pg.inner_text(".jmzoom span"), f"previews are large; clicking a dungeon preview zooms it ({pw}, zoom {zw})")
         pg.keyboard.press("Escape"); pg.wait_for_timeout(100)
-        pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_selector("#jmPop canvas", timeout=5000)
-        pg.click("#jmPop canvas"); pg.wait_for_selector(".jmzoom img", timeout=10000); pg.wait_for_timeout(200)
-        zs = pg.evaluate("(()=>{const i=document.querySelector('.jmzoom img');return [i.naturalWidth,i.naturalHeight,document.querySelector('.jmzoom span').textContent]})()")
-        check(zs[0] == 1536 and zs[1] == 1536 and "3×3" in zs[2], f"zooming a square shows it with its 3×3 surroundings on the site's map ({zs})")
+        # a real mouse: rest on the square whose way to the preview window crosses the most other squares, then move there
+        # like a person (about 0.4 s) and click the picture — the preview must still be that square (使用者 2026-11-06)
+        pg.locator(".jmmap").evaluate("e=>e.scrollIntoView({block:'center'})"); pg.wait_for_timeout(200)
+        cr = pg.evaluate("(()=>{const r=document.querySelector('#jmPop canvas').getBoundingClientRect();return [r.x+r.width/2,r.y+r.height/2]})()")
+        best = pg.evaluate("""([cx,cy])=>{let best=null;for(const e of document.querySelectorAll('[data-jmreg]')){const r=e.getBoundingClientRect(),x0=r.x+r.width/2,y0=r.y+r.height/2,seen=new Set();
+            for(let i=1;i<60;i++){const x=x0+(cx-x0)*i/60,y=y0+(cy-y0)*i/60,h=document.elementFromPoint(x,y);if(h&&h.dataset&&h.dataset.jmreg&&h!==e)seen.add(h.dataset.jmreg)}
+            if(!best||seen.size>best[3])best=[e.dataset.jmreg,x0,y0,seen.size]}return best}""", cr)
+        pg.mouse.move(best[1], best[2]); pg.wait_for_timeout(700)
+        for i in range(1, 26):
+            pg.mouse.move(best[1] + (cr[0] - best[1]) * i / 25, best[2] + (cr[1] - best[2]) * i / 25); pg.wait_for_timeout(16)
+        pv = pg.evaluate("window.__jmPv"); title = pg.inner_text("#jmPopT")
+        pg.mouse.click(cr[0], cr[1]); pg.wait_for_selector(".jmzoom img", timeout=5000)
         if os.environ.get("SHOT_DIR"):
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_zoom.png"))
+        cap = pg.inner_text(".jmzoom span")
+        check(best[3] >= 2 and pv == best[0] and title in cap, f"moving from square {best[0]} to the preview across {best[3]} other squares keeps its preview, and its picture zooms ({pv}, {cap})")
         pg.keyboard.press("Escape"); pg.wait_for_timeout(100)
         check(not pg.locator(".jmzoom").count(), "Esc closes the zoom")
         check("Geldorack Dungeon" in lt and "2 次進場" in lt and "backrooms" in lt and pg.get_attribute("[data-jmdg=geldorack]", "aria-pressed") == "true", "the dungeon tiles name the dungeon and its runs")

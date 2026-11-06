@@ -125,9 +125,10 @@ const F3 = {
     earan:   { n:"Earan Forest", zh:"Earan 森林" },
     cage:    { n:"Adoryll's Cage", zh:"Adoryll 之籠" },
     lab:     { n:"Labyrinth", zh:"迷宮" },
-    labE:    { n:"Labyrinth Entrance", zh:"迷宮入口" }
+    labE:    { n:"Labyrinth Entrance", zh:"迷宮入口" },
+    none:    { n:"Unlisted", zh:"還不知道在哪個區域" }
   },
-  order: ["wolfF","mist","orc","swamp","zumfut","caverns","pit","banditC","weiss","earan","cage","labE","lab"],
+  order: ["wolfF","mist","orc","swamp","zumfut","caverns","pit","banditC","weiss","earan","cage","labE","lab","none"],
   M: mk("f3m",[
     ["","Woodland Wolf","Monster","N","wolfF",1,[["Woodland Claw",85],["Woodland Fur",75],["Woodland Tail",50]],"","🐺"],
     ["","Misty Wolf","Monster","N","mist",1,[["Misty Claw",85],["Misty Fur",75],["Misty Tail",50]],"","🐺"],
@@ -164,7 +165,10 @@ const F3 = {
     ["","Cave King","Boss","A","pit",3,[["Goblin Blood",100],["Goblin Eye",80],["Goblin Essence",20]],"","👑"],
     ["","Adoryll, the Caged Bird","Boss","A","cage",2,[["Adoryll's Talons",100],["Skyblue Feather",50],["Majestic Essence",5]],"","🦅"],
     ["","Bandit Chief","Boss","A","banditC",3,[["Small Pouch",100],["Medium Pouch",80],["Bandit Gold Coin",80]],"","🎩"],
-    ["","Furacas, Guardian of the Labyrinth","Boss","A","labE",5,[["Labyrinth Rune",5]],"wiki 的樓層總表寫第 3 層樓層首領是 Nerius，圖鑑還沒有收錄。","🌋"]
+    ["","Furacas, Guardian of the Labyrinth","Boss","A","labE",5,[["Labyrinth Rune",5]],"wiki 的樓層總表寫第 3 層樓層首領是 Nerius（官網 2026-10-28 新聞的怪物表有 Nerius the Evil Treant）。","🌋"],
+    // 2026-11-06：官網新聞〈Floors 2 & 3 Postponed…〉（2026-10-28）怪物表有、wiki 圖鑑表沒有的兩隻（名稱照官網原文）
+    ["","Nerius the Evil Treant","Boss","A","none",0,[],"官網 2026-10-28 新聞的怪物表有這隻；wiki 的樓層總表寫第 3 層樓層首領是 Nerius。區域、掉落還不知道。","🌳"],
+    ["","Jeune pousse","Monster","A","none",0,[],"官網 2026-10-28 新聞的怪物表有這隻（法文名，意思是「幼苗」；新聞沒有附圖）。區域、掉落還不知道。","🌱"]
   ]),
   towns: [], spots: [], quests: []
 };
