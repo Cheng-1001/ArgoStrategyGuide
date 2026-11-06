@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="c3a86ef2f5">
+<meta name="sao-build" content="ff9392dbfc">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -2486,7 +2486,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
       return[d,{inst:dgOk.filter(g=>g.dg===d).length,news:dgNews(d),bounds:its.length?[Math.min(...its.map(i=>i.rx)),Math.min(...its.map(i=>i.rz)),Math.max(...its.map(i=>i.rx)),Math.max(...its.map(i=>i.rz))]:null}]})),
     groups:groups.map(g=>({label:g.label,leaf:g.leaf,dg:g.dg,state:g.state,overlap:g.overlap,med:g.med,files:g.files.length,news:(g.news||[]).length,
       layers:Object.fromEntries(Object.values(g.layers).map(L=>[L.key,{files:L.items.length,news:(L.news||[]).length}]))})),
-    found:Object.fromEntries(found),sel:{layers:[...JMSEL.layers],off:[...JMSEL.off],dgOff:[...JMSEL.dgOff]},
+    found:Object.fromEntries(found),nNew,sel:{layers:[...JMSEL.layers],off:[...JMSEL.off],dgOff:[...JMSEL.dgOff]},
     parts:parts.map(p=>({n:p.items.length,bytes:p.bytes,ov:p.ov,anchors:p.anchors,names:p.items.map(({g,it})=>g.key+"/"+it.dir+"/"+it.f.name)}))};
   const order={f1:0,dg:1,dgunk:2,dgno:3,few:4,other:5,noday:6,out:7};
   const rows=groups.slice().sort((a,b)=>order[a.state]-order[b.state]||b.latest-a.latest).map(g=>{const [t,c]=JM_ST[g.state];

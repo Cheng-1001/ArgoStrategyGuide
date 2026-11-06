@@ -186,7 +186,10 @@ try:
             pg.locator("#jmOut").scroll_into_view_if_needed()
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_card.png"))
         lt = pg.inner_text("#jmOut")
-        check("地面 3 張" in lt and "地底 8 張" in lt and not pg.locator("#jmOut [data-jmbox], #jmOut [data-jmlay]").count(),
+        # counts come from the tool's own numbers: the fixture picks regions from the site's current map, so they change
+        # whenever a real upload makes the map bigger (R0006, 2026-11-06)
+        nday = J["found"].get("day", 0); ncave = sum(v for k, v in J["found"].items() if k != "day")
+        check(f"地面 {nday} 張" in lt and f"地底 {ncave} 張" in lt and nday >= 1 and ncave == 8 and not pg.locator("#jmOut [data-jmbox], #jmOut [data-jmlay]").count(),
               "no height or coordinate fields: the summary counts surface and underground maps")
         pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(200)
         pg.wait_for_selector("#jmPop canvas", timeout=5000)
@@ -250,7 +253,8 @@ try:
               "other worlds with real-looking terrain and noise are not floor 1 (" + ", ".join("%.0f" % st[k]["med"] for k in ("Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d")) + ")")
         check(st["Triggers_lone~e"]["state"] == "few" and st["Triggers_out~f"]["state"] == "out", "no overlap -> cannot confirm; outside the floor -> skipped")
         t = pg.inner_text("#jmOut")
-        check("共 14 張" in pg.inner_text("#jmDlNote") and "下載壓縮檔" in pg.inner_text("#jmDl"), "the note counts the maps and the zip is offered")
+        nall = pg.evaluate("window.__jm.nNew")
+        check(f"共 {nall} 張" in pg.inner_text("#jmDlNote") and "下載壓縮檔" in pg.inner_text("#jmDl"), f"the note counts the maps ({nall}) and the zip is offered")
         pg.locator("[data-jmpart]").first.evaluate("e=>e.scrollIntoView({block:'center'})")
         with pg.expect_download() as dl:
             pg.click("[data-jmpart]")
