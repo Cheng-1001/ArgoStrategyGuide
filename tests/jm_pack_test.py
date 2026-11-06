@@ -98,7 +98,7 @@ try:
         pg.set_input_files("#jmDir", mp)
         pg.wait_for_function("window.__jm", timeout=60000)
         J0 = pg.evaluate("window.__jm")
-        check(not J0["parts"] and not pg.locator("[data-jmpart]").count() and pg.is_disabled("#jmDl .repbtn") and "還沒選要上傳的地方" in pg.inner_text("#jmDlNote")
+        check(not J0["parts"] and not pg.locator("[data-jmpart]").count() and pg.is_disabled("#jmDl .repbtn") and "還沒選" in pg.inner_text("#jmDlNote")
               and "第 1 層 0／" in pg.inner_text("#jmRegSum") and "地下城 0／1" in pg.inner_text("#jmRegSum"),
               "nothing is picked to start with; the download button is beside the folder button, greyed")
         pk = pg.evaluate("(()=>{const a=document.querySelector('#jmPick').getBoundingClientRect(),b=document.querySelector('#jmDl .repbtn').getBoundingClientRect();return [Math.abs(a.top-b.top)<4,b.left>a.right]})()")
@@ -143,13 +143,13 @@ try:
         check(h0 == h1 and pg.is_enabled("#jmDl .repbtn"), f"picking everything changes nothing but the button and the text: the card keeps its height ({h0} -> {h1})")
         # the same at other widths (使用者 2026-11-06 的畫面：沒選時說明一行、全選後兩行，高度跳了；1280 剛好都是兩行沒抓到)
         hw = []
-        for w in (1100, 1440, 1600, 1920):
+        for w in (1101, 1200, 1100, 1440, 1600, 1920):
             pg.set_viewport_size({"width": w, "height": 900}); pg.wait_for_timeout(150)
             pg.click("#jmRegNone"); pg.click("#jmDgNone"); pg.wait_for_timeout(120); a0 = pg.evaluate(HJS)
             pg.click("#jmRegAll"); pg.click("#jmDgAll"); pg.wait_for_timeout(120); a1 = pg.evaluate(HJS)
-            hw.append((w, a0 == a1, a0[2], a1[2]))
+            hw.append((w, a0 == a1 and a0[2] < 25, a0[2], a1[2]))
         pg.set_viewport_size({"width": 1280, "height": 900}); pg.wait_for_timeout(150)
-        check(all(x[1] for x in hw), f"none ↔ everything keeps the card height at 1100/1440/1600/1920 too ({hw})")
+        check(all(x[1] for x in hw), f"none ↔ everything keeps the card height, and the note stays one line (no blank line), at 1101/1200/1100/1440/1600/1920 ({hw})")
         pg.click("#jmNamesBtn"); pg.wait_for_timeout(100)
         nt = pg.inner_text("#jmNames"); hn = pg.evaluate(HJS)
         inside = pg.evaluate("(()=>{const C=document.querySelector('#jmPack').getBoundingClientRect();return ['#jmNames'].concat(document.querySelector('#jmHelp')&&!document.querySelector('#jmHelp').hidden?['#jmHelp']:[]).every(q=>{const r=document.querySelector(q).getBoundingClientRect();return r.left>=C.left&&r.right<=C.right})})()")
@@ -250,7 +250,7 @@ try:
               "other worlds with real-looking terrain and noise are not floor 1 (" + ", ".join("%.0f" % st[k]["med"] for k in ("Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d")) + ")")
         check(st["Triggers_lone~e"]["state"] == "few" and st["Triggers_out~f"]["state"] == "out", "no overlap -> cannot confirm; outside the floor -> skipped")
         t = pg.inner_text("#jmOut")
-        check("共 14 張地圖" in pg.inner_text("#jmDlNote") and "下載壓縮檔" in pg.inner_text("#jmDl"), "the note counts the maps and the zip is offered")
+        check("共 14 張" in pg.inner_text("#jmDlNote") and "下載壓縮檔" in pg.inner_text("#jmDl"), "the note counts the maps and the zip is offered")
         pg.locator("[data-jmpart]").first.evaluate("e=>e.scrollIntoView({block:'center'})")
         with pg.expect_download() as dl:
             pg.click("[data-jmpart]")
@@ -277,14 +277,14 @@ try:
         pg.click("[data-jmdg=geldorack]"); pg.wait_for_timeout(100)
         check(not any("_geldorack/" in x for x in names_now()) and pg.get_attribute("[data-jmdg=geldorack]", "aria-pressed") == "false", "clicking a picked dungeon tile leaves it out")
         pg.click("#jmRegNone"); pg.wait_for_timeout(100)
-        check(not pg.locator("[data-jmpart]").count() and pg.is_disabled("#jmDl .repbtn") and "還沒選要上傳的地方" in pg.inner_text("#jmDlNote"), "nothing picked -> the download button greys out, the note says what to do")
+        check(not pg.locator("[data-jmpart]").count() and pg.is_disabled("#jmDl .repbtn") and "還沒選" in pg.inner_text("#jmDlNote"), "nothing picked -> the download button greys out, the note says what to do")
         pg.click("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(100)
         J2 = pg.evaluate("window.__jm")
         nn = names_now()
         inside = [x for x in nn if x.endswith("/5,9.png")]
         anchors = [x for x in nn if not x.endswith("/5,9.png")]
         check("mp/Triggers_f1~a/overworld/1/5,9.png" in inside and all("/day/" in x for x in anchors) and J2["parts"][0]["ov"] >= 60
-              and (J2["parts"][0]["anchors"] >= 1 and "另含" in pg.inner_text("#jmDlNote") if not any("/day/" in x for x in inside) else True)
+              and (J2["parts"][0]["anchors"] >= 1 and "另含" in (pg.get_attribute("[data-jmpart]", "title") or "") if not any("/day/" in x for x in inside) else True)
               and "第 1 層 1／" in pg.inner_text("#jmRegSum"),
               f"one square with only underground data carries surface anchors ({J2['parts']}, {pg.inner_text('#jmRegSum')})")
         pg.locator("[data-jmpart]").first.evaluate("e=>e.scrollIntoView({block:'center'})")
@@ -316,7 +316,7 @@ try:
         pg.wait_for_function("window.__jm", timeout=60000)
         pg.click("#jmRegAll"); pg.click("#jmDgAll"); pg.wait_for_timeout(150)
         parts = pg.evaluate("window.__jm.parts")
-        check(len(parts) >= 2 and all(q["ov"] >= 40 for q in parts) and pg.locator("[data-jmpart]").count() == len(parts) and "每份都要各送出一次表單" in pg.inner_text("#jmDlNote"),
+        check(len(parts) >= 2 and all(q["ov"] >= 40 for q in parts) and pg.locator("[data-jmpart]").count() == len(parts) and "每份都要各送一次表單" in pg.inner_text("#jmDlNote") and pg.evaluate("document.querySelector('#jmDlNote').getBoundingClientRect().height") < 25,
               f"an upload over the size limit is split into parts ({parts})")
         pg.set_viewport_size({"width": 390, "height": 844}); pg.wait_for_timeout(200)
         check(pg.evaluate("document.documentElement.scrollWidth") <= 390, "no sideways scrolling on a phone")
