@@ -123,9 +123,9 @@ try:
         check(D.get("geldorack", {}).get("inst") == 2 and D["geldorack"]["news"] == 3 and D["geldorack"]["bounds"] == [-1, -1, -1, -1]
               and st2["bb0000b0-5d0c-4000-8000-000000000001_backrooms"]["state"] == "dgunk" and st2["03b352fd-5d0c-4000-8000-000000000002_xalzirith"]["state"] == "dgno",
               f"dungeons are recognised by folder name; unknown and unconfirmed ones are listed but not packed ({D}, {[(k, v['state']) for k, v in st2.items() if v.get('dg')]})")
-        pg.click("[data-jmdgpv=geldorack]"); pg.wait_for_function("document.querySelector('#jmPop')&&document.querySelector('#jmPop').innerText.includes('合在一起')", timeout=10000)
+        pg.hover(".jmdg:has([data-jmdg=geldorack]) .n"); pg.wait_for_function("document.querySelector('#jmPop')&&document.querySelector('#jmPop').innerText.includes('合在一起')", timeout=10000)
         cw = pg.evaluate("[document.querySelector('#jmPop canvas').width,document.querySelector('#jmPop canvas').height]")
-        check(cw[0] > 100 and cw[1] > 30 and "Geldorack Dungeon" in pg.inner_text("#jmPopT"), f"a dungeon preview uses the same floating window ({cw})")
+        check(cw[0] > 100 and cw[1] > 30 and "Geldorack Dungeon" in pg.inner_text("#jmPopT"), f"pointing at a dungeon row previews it in the same floating window ({cw})")
         if os.environ.get("SHOT_DIR"):
             pg.locator(".jmmap").scroll_into_view_if_needed(); pg.wait_for_timeout(200)
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_dgprev.png"))
