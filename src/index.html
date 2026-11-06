@@ -2332,7 +2332,7 @@ async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];{const h=
   for(let i=0;i<dgOk.length;i++){O.firstElementChild.textContent=`正在整理地下城地圖：${dgName(dgOk[i].dg)}（${i+1}／${dgOk.length}）…`;await jmLayers(dgOk[i])}
   for(let i=0;i<f1.length;i++){const n=Object.values(f1[i].layers).reduce((s,L)=>s+L.items.length,0);if(!n)continue;
     O.firstElementChild.textContent=`正在整理高度層（地底）地圖：第 ${i+1}／${f1.length} 個世界，${n} 張…`;await jmLayers(f1[i])}
-  jmPopClose();JMPOP.closed=false;JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();O.innerHTML=`<div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
+  jmPopClose();JMPOP.closed=false;for(const k in JMDGC)delete JMDGC[k];JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();O.innerHTML=`<div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
 // preview of one square: the player's own JourneyMap image of it (surface first, else the first underground one)
 const JMURL=new Map();const jmUrl=f=>{if(!JMURL.has(f))JMURL.set(f,URL.createObjectURL(f));return JMURL.get(f)};
 // crop a region image to where it has data (a small cave room fills the preview instead of a black square)
@@ -2367,7 +2367,11 @@ async function jmPreview(k,force){if(!force&&JMPOP.closed)return;const tk=++JMPV
   if(cv){cv.title="點了放大";cv.dataset.jmzoom="";P.querySelector(".jmpvimg").appendChild(cv)}}
 // preview of a dungeon: every run of it drawn together (oldest first) on the height with the most images, cropped to
 // where there is data. It shows the player's whole map of the dungeon, not only the part the site lacks.
-async function jmDgPreview(d){if(!jmPop(true))return;$("jmPopT").textContent=dgName(d);const P=$("jmPopB"),tk=++JMPV;const inst=JMG.filter(g=>g.state==="dg"&&g.dg===d).sort((a,b)=>a.latest-b.latest);
+// hovering a dungeon row previews it like a map square (使用者 2026-11-06); the drawing is cached per dungeon
+const JMDGC={};
+async function jmDgPreview(d,force){if(!force&&JMPOP.closed)return;const tk=++JMPV;
+  if(JMDGC[d]){const P0=jmPop(force);if(!P0)return;$("jmPopT").textContent=dgName(d);const P=$("jmPopB");P.innerHTML=JMDGC[d].html;P.querySelector(".jmpvimg").appendChild(JMDGC[d].cv);return}
+  if(!jmPop(force))return;$("jmPopT").textContent=dgName(d);const P=$("jmPopB");const inst=JMG.filter(g=>g.state==="dg"&&g.dg===d).sort((a,b)=>a.latest-b.latest);
   const cnt={};inst.forEach(g=>Object.values(g.layers).forEach(L=>cnt[L.key]=(cnt[L.key]||0)+L.items.length));
   const key=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];if(!key)return;
   const its=inst.flatMap(g=>(g.layers[key]||{items:[]}).items);
@@ -2382,8 +2386,8 @@ async function jmDgPreview(d){if(!jmPop(true))return;$("jmPopT").textContent=dgN
   a=Math.max(0,a-8);b=Math.max(0,b-8);e=Math.min(c.width,e+10);f=Math.min(c.height,f+10);
   const w=e-a,h=f-b,k=Math.min(8,1024/Math.max(w,h)),o=document.createElement("canvas");o.width=Math.round(w*k);o.height=Math.round(h*k);
   const ox=o.getContext("2d");ox.imageSmoothingEnabled=k<1;ox.fillStyle="#070c11";ox.fillRect(0,0,o.width,o.height);ox.drawImage(c,a,b,w,h,0,0,o.width,o.height);
-  P.innerHTML=`<span class="jmpvimg"></span><span class="muted">${inst.length} 次進場合在一起・${key==="day"?"地面":`Y ${+key.slice(1)*16}～${+key.slice(1)*16+15}`}（圖最多的那一層）</span>`;
-  o.title="點了放大";o.dataset.jmzoom="";P.querySelector(".jmpvimg").appendChild(o)}
+  const html=`<span class="jmpvimg"></span><span class="muted">${inst.length} 次進場合在一起・${key==="day"?"地面":`Y ${+key.slice(1)*16}～${+key.slice(1)*16+15}`}（圖最多的那一層）</span>`;
+  o.title="點了放大";o.dataset.jmzoom="";JMDGC[d]={html,cv:o};if(tk!==JMPV||!$("jmPop"))return;P.innerHTML=html;P.querySelector(".jmpvimg").appendChild(o)}
 // click a preview to see it as large as the window allows (Esc / click closes)
 document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest("[data-jmzoom]");if(!t)return;
   const src=t.tagName==="CANVAS"?t.toDataURL("image/png"):t.src,z=document.createElement("div");z.className="jmzoom";z.setAttribute("role","dialog");z.setAttribute("aria-label","放大的地圖");
@@ -2425,9 +2429,9 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   const v=JMV(),C=2560,R=2487;
   const unk=[...new Set(groups.filter(g=>g.state==="dgunk"&&g.anc).map(g=>g.dg.slice(1)))];   // only next to the floor 1 overworld (memoryice etc. are the Underworld)
   const dgOpts=dgList.length||unk.length?`<div class="jmopt"><div class="jmoh">地下城</div>
-    <div class="muted" style="font-size:12px">工具從 JourneyMap 的資料夾名稱認出地下城，同一個地下城進場好幾次的地圖會合成一張。不想上傳的取消勾選。</div>
+    <div class="muted" style="font-size:12px">工具從 JourneyMap 的資料夾名稱認出地下城，同一個地下城進場好幾次的地圖會合成一張。滑鼠指到那一列會在預覽視窗顯示；不想上傳的取消勾選。</div>
     <div class="jmdgl">${dgList.map(d=>{const n=dgNews(d),k=dgOk.filter(g=>g.dg===d).length;
-      return`<div class="jmdg"><label><input type="checkbox" data-jmdg="${d}"${JMSEL.dgOff.has(d)?"":" checked"}${n?"":" disabled"}><b>${esc(dgName(d))}</b></label><span class="n">${k} 次進場・${n?n+" 張新的":"網站都已經有了"}</span><button class="linkbtn" data-jmdgpv="${d}">預覽</button></div>`}).join("")}</div>
+      return`<div class="jmdg"><label><input type="checkbox" data-jmdg="${d}"${JMSEL.dgOff.has(d)?"":" checked"}${n?"":" disabled"}><b>${esc(dgName(d))}</b></label><span class="n">${k} 次進場・${n?n+" 張新的":"網站都已經有了"}</span><button class="linkbtn" data-jmdgpv="${d}" title="滑鼠指到這一列也會顯示">預覽</button></div>`}).join("")}</div>
     ${unk.length?`<div class="muted" style="font-size:12px">網站還不認得、先不收的：${unk.map(esc).join("、")}</div>`:""}</div>`:"";
   const opts=(f1.length&&regs.size?`<div class="jmopt"><div class="jmoh">要上傳哪些地方</div>
     <div class="muted" style="font-size:12px">亮橘色的方格是你有、網站還沒有的地方（地面 ${nDay} 張・地底洞穴 ${nCave} 張，地底由工具自動判斷）。點一下方格可以取消或加回。</div>
@@ -2439,7 +2443,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
         return`<rect class="jmreg" data-jmreg="${k}" x="${r.rx*512+8}" y="${r.rz*512+8}" width="496" height="496" rx="40" tabindex="0" role="checkbox"><title>${esc(nm.join("、")||"這一格")}：地面 ${r.day} 張、地底 ${r.cave} 張</title></rect>`}).join("")}
       ${FLOORS[1].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(t.n)}</text></g>`).join("")}
     </svg>
-    <div class="muted" style="font-size:12px">滑鼠指到方格，會在浮動的預覽視窗顯示那一格是你哪一張地圖。</div>
+    <div class="muted" style="font-size:12px">滑鼠指到方格，會在浮動的預覽視窗顯示那一格是你哪一張地圖（地下城也一樣，指到那一列就好）。</div>
     <div class="jmregbar"><span id="jmRegSum"></span><button class="linkbtn" id="jmRegAll">全部選</button><button class="linkbtn" id="jmPrevOpen" hidden>打開預覽視窗</button><button class="linkbtn" id="jmRegNone">全部取消</button></div>
     </div>`:"")+dgOpts;
   let head;
@@ -2452,7 +2456,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   O.querySelectorAll("[data-jmreg]").forEach(e=>{const pv=()=>jmPreview(e.dataset.jmreg);e.addEventListener("mouseenter",pv);e.addEventListener("focus",pv);
     const t=()=>{const k=e.dataset.jmreg;JMSEL.off.has(k)?JMSEL.off.delete(k):JMSEL.off.add(k);jmShow();pv()};
     e.addEventListener("click",t);e.addEventListener("keydown",ev=>{if(ev.key===" "||ev.key==="Enter"){ev.preventDefault();t()}})});
-  O.querySelectorAll("[data-jmdgpv]").forEach(b=>b.onclick=()=>jmDgPreview(b.dataset.jmdgpv));
+  O.querySelectorAll("[data-jmdgpv]").forEach(b=>{b.onclick=()=>jmDgPreview(b.dataset.jmdgpv,true);const row=b.closest(".jmdg");if(row)row.addEventListener("mouseenter",()=>jmDgPreview(b.dataset.jmdgpv))});
   O.querySelectorAll("[data-jmdg]").forEach(c=>c.onchange=()=>{c.checked?JMSEL.dgOff.delete(c.dataset.jmdg):JMSEL.dgOff.add(c.dataset.jmdg);jmShow()});
   {const po=$("jmPrevOpen");if(po)po.onclick=()=>{JMPOP.closed=false;jmPop(true);$("jmPopT").textContent="預覽";$("jmPopB").innerHTML=`<span class="muted">滑鼠指到方格就會顯示。</span>`}}
   const ra=$("jmRegAll"),rn=$("jmRegNone");if(ra)ra.onclick=()=>{JMSEL.off.clear();jmShow()};if(rn)rn.onclick=()=>{(JMG.regs||new Map()).forEach((_,k)=>JMSEL.off.add(k));jmShow()}}
