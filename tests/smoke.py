@@ -490,6 +490,8 @@ with sync_playwright() as p:
     check(pg.locator(".gvback").count() == 0 and pg.is_visible("#panel"), "Esc closes the pop-ups, not the side panel")
     ic = pg.evaluate("['Critical Strike Chance','Skill Critical Strike Chance','Critical Strike Power','Fall Damage Reduction'].map(k=>window.__effIc(k))")
     check(ic[:3] == ["crit_chance", "skill_crit_chance", "crit_damage"] and ic[3] != "damage_reduction", f"stat icons: crit chance is not the crit damage icon ({ic})")
+    ic2 = pg.evaluate("['Heal Bonus','HEAL BONUS','HEAL_BONUS','Magic Damage','Skill Damage'].map(k=>window.__effIc(k))")
+    check(ic2 == ["healing", "healing", "healing", "magic_damage", "skill_damage"], f"stat icons: every spelling of Heal Bonus gets the healing icon ({ic2})")
     # calibration mode is for the owner only (?edit)
     pg.goto(base + "#map"); pg.wait_for_timeout(500)
     check(pg.is_hidden("#editToggle") and pg.is_hidden(".mapfoot"), "players do not see the calibration button")
