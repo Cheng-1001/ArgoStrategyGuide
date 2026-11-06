@@ -97,6 +97,13 @@ try:
         check(pg.is_visible("#jmPick") and "journeymap\\data" in pg.inner_text("#jmPack"), "the packer is on the data page, with the folder path")
         pg.set_input_files("#jmDir", mp)
         pg.wait_for_function("window.__jm", timeout=60000)
+        J0 = pg.evaluate("window.__jm")
+        check(not J0["parts"] and not pg.locator("[data-jmpart]").count() and "下載按鈕會出現在這裡" in pg.inner_text("#jmOut")
+              and "已選 第 1 層 0／" in pg.inner_text("#jmRegSum") and "地下城 0／1" in pg.inner_text("#jmRegSum"),
+              "nothing is picked to start with; the picked count is at the top of the box")
+        check(pg.locator(".jmopt").count() == 1 and pg.locator(".jmopt .jmmap").count() == 1 and pg.locator(".jmopt [data-jmdg]").count() == 1
+              and not pg.locator("button[data-jmdgpv]").count(), "the map and the dungeons are in one box, without preview buttons")
+        pg.click("#jmRegAll"); pg.wait_for_timeout(150)
         J = pg.evaluate("window.__jm")
         st = {g["label"]: g for g in J["groups"]}
         check(J["found"].get("c1") == 1 and J["found"].get("c2") == 6 and J["found"].get("c0") == 1 and J["found"].get("day", 0) >= 1,
@@ -141,7 +148,7 @@ try:
         check("Geldorack Dungeon" in lt and "2 次進場" in lt and "backrooms" in lt and pg.locator("[data-jmdg=geldorack]").is_checked(), "the dungeon list names the dungeon and its runs")
         regs = pg.eval_on_selector_all("[data-jmreg]", "e=>e.map(x=>x.dataset.jmreg)")
         check("5,9" in regs and "2,2" in regs and "40,40" not in regs and pg.locator(".jmmap .jmtown").count() >= 5
-              and "已選 %d／%d 格" % (len(regs), len(regs)) in lt, f"the squares with new data are on a small map with town names ({regs})")
+              and "第 1 層 %d／%d 格" % (len(regs), len(regs)) in pg.inner_text("#jmRegSum"), f"the squares with new data are on a small map with town names ({regs})")
         check(set(st) == {"Triggers_f1~a", "Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d", "Triggers_lone~e", "Triggers_out~f"},
               "one entry per world folder (night / cave layers are not separate worlds)")
         check(st["Triggers_f1~a"]["state"] == "f1" and st["Triggers_f1~a"]["files"] == 4, f"the floor 1 world is recognised ({st['Triggers_f1~a']})")
@@ -175,7 +182,7 @@ try:
         pg.uncheck("[data-jmdg=geldorack]"); pg.wait_for_timeout(100)
         check(not any("_geldorack/" in x for x in names_now()), "unticking a dungeon leaves it out")
         pg.click("#jmRegNone"); pg.wait_for_timeout(100)
-        check(not pg.locator("[data-jmpart]").count() and "請在下面的地圖上點選方格" in pg.inner_text("#jmOut"), "nothing picked -> no download, the note says what to do")
+        check(not pg.locator("[data-jmpart]").count() and "在下面點選要上傳的方格" in pg.inner_text("#jmOut"), "nothing picked -> no download, the note says what to do")
         pg.click("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(100)
         J2 = pg.evaluate("window.__jm")
         nn = names_now()
@@ -183,7 +190,7 @@ try:
         anchors = [x for x in nn if not x.endswith("/5,9.png")]
         check("mp/Triggers_f1~a/overworld/1/5,9.png" in inside and all("/day/" in x for x in anchors) and J2["parts"][0]["ov"] >= 60
               and (J2["parts"][0]["anchors"] >= 1 and "另含" in pg.inner_text("#jmOut") if not any("/day/" in x for x in inside) else True)
-              and "已選 1／" in pg.inner_text("#jmRegSum"),
+              and "第 1 層 1／" in pg.inner_text("#jmRegSum"),
               f"one square with only underground data carries surface anchors ({J2['parts']}, {pg.inner_text('#jmRegSum')})")
         with pg.expect_download() as dl2:
             pg.click("[data-jmpart]")
@@ -209,6 +216,7 @@ try:
         pg.evaluate("__JMP.BUDGET=1.2*1048576; __JMP.ANCHOR=40"); pg.evaluate("window.__jm=null")
         pg.set_input_files("#jmDir", mp)
         pg.wait_for_function("window.__jm", timeout=60000)
+        pg.click("#jmRegAll"); pg.wait_for_timeout(150)
         parts = pg.evaluate("window.__jm.parts")
         check(len(parts) >= 2 and all(q["ov"] >= 40 for q in parts) and pg.locator("[data-jmpart]").count() == len(parts) and "每一份都要各送出一次表單" in pg.inner_text("#jmOut"),
               f"an upload over the size limit is split into parts ({parts})")
