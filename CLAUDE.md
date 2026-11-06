@@ -33,6 +33,7 @@
 | `data.js` | 第 1 層：`window.SAO` = MAP、STATUS、ZONES、M（怪物）、ITEMS、EXTRA、TOWNS、SPOTS、QUESTS |
 | `data23.js` | 第 2、3 層：`SAO23_ITEMS`、`SAO23.floors[2/3]`（第 3 層沒有地圖） |
 | `bosses.js` | 世界首領 Galiath、獨特怪物 Seraphel、wiki 列的其他首領 |
+| `img/bosses/` | 世界王頁的首領模型圖（2026-11-06，使用者選 A）：官網世界首領頁 2026-11-05 改版成「Bestiary」，「See up close」視窗有 `/da/bestiary/<id>-34.webp`（3/4）和 `-face.webp`（正面），透明背景、高 1024px，伺服器時間台灣 11/5 15:01 上傳。裁到模型範圍、縮成高 520px 的 webp，`bosses.js` 的 `img`／`imgFront`，`bFig` 畫圖框和「3/4／正面」切換；原本的徽章插畫 wb_galiath.jpg／wb_seraphel.jpg 已刪。**只有這兩隻**：用 Playwright 跑過官網 sitemap 全部 23 頁、點開視窗，並用本站 136 個怪物名稱試 `/da/bestiary/<名稱>-34.webp`，都沒有其他怪物；官網的 /bestiary、/monsters、/codex 是 404，/map 暫停（「not available for now」），/aincrad-academy 還沒有課程。官網 Bestiary 的文字資料和 10/30 抓的一樣（輪盤仍是舊的 7 項，本站用遊戲排隊告示的 10 項） |
 | `reports.js` | 已收錄的玩家回報。格式必須維持 `window.SAO_REPORTS = <JSON 陣列>;`，Google 程式會自動讀寫它 |
 | `mainq.js` | 第 1 層主線任務 `window.SAO_MAINQ[1]`：說明取自 wiki 主線表，步驟順序和座標取自參考互動地圖，步驟文字是本站中文改寫。步驟格式 `[文字, x, z, 約略]` |
 | `equip.js`、`equip.png` | 裝備分頁：官網物品圖鑑的 656 件裝備（武器、盾、防具、飾品），由 scratchpad 的 `build_equip.py` 產生，不要手改。`equip.png` 48px 一格、一列 16 格 |

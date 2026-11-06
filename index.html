@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="7d59977bae">
+<meta name="sao-build" content="95155a90cb">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -407,7 +407,11 @@ aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:
 .bcard{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
 .bcard p{margin:0}
 .bhead{display:flex;gap:14px;align-items:center}
-.bimg{width:96px;height:96px;border-radius:12px;background:#20262d;object-fit:cover;flex:none}
+.bfig{flex:none;display:flex;flex-direction:column;align-items:center;gap:6px}
+.bimg{width:150px;height:190px;border-radius:12px;background:radial-gradient(circle at 50% 58%,#3a2a5c 0,#241b38 46%,#14121c 72%);object-fit:contain;padding:8px;box-sizing:border-box;display:block}
+.bview{display:flex;gap:4px}.bview button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--panel-2);color:var(--muted);border-radius:999px;padding:1px 10px;cursor:pointer}
+.bview button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);font-weight:600}
+@media (max-width:820px){.bimg{width:118px;height:150px}}
 .bttl{min-width:0;display:flex;flex-direction:column;gap:2px;align-items:flex-start}
 .bttl .kick{font-family:var(--f-display);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
 .bttl h3{margin:0;font-family:var(--f-display);font-size:21px;line-height:1.2}
@@ -806,7 +810,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 
 <script src="data.js?v=1da4fb02"></script>
 <script src="data23.js?v=bc83d65b"></script>
-<script src="bosses.js?v=d0ec66da"></script>
+<script src="bosses.js?v=02fabd90"></script>
 <script src="reports.js?v=a17dd6f0"></script>
 <script src="hints.js?v=fcf000d6"></script>
 <script src="codex.js?v=48141603"></script>
@@ -815,7 +819,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=6d247e25"></script>
 <script src="npcs.js?v=576b7565"></script>
-<script src="changelog.js?v=5f718090"></script>
+<script src="changelog.js?v=cf3a0aca"></script>
 <script src="recipes.js?v=36e8b52c"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1924,6 +1928,7 @@ const fmtT=d=>d.toLocaleString("zh-TW",{weekday:"short",month:"numeric",day:"num
 const dur=ms=>{const m=Math.round(ms/6e4),dd=Math.floor(m/1440),hh=Math.floor(m%1440/60),mm=m%60;return(dd?dd+" 天 ":"")+(hh?hh+" 小時 ":"")+mm+" 分"};
 const ZONE_ZH={"Europe/Paris":"巴黎","America/New_York":"紐約","America/Los_Angeles":"洛杉磯"};
 let bossTimer=null;
+const bFig=b=>`<div class="bfig"><img src="${b.img}" alt="${esc(b.name)} 模型圖" class="bimg" data-v34="${b.img}" data-vf="${b.imgFront||b.img}">${b.imgFront?`<div class="bview" role="group" aria-label="模型角度"><button type="button" data-bv="34" aria-pressed="true">3/4</button><button type="button" data-bv="f" aria-pressed="false">正面</button></div>`:""}</div>`;
 function renderBosses(){const now=new Date();const g=BO.world[0];
   const slots=g.schedule.map(s=>({s,...nextSlot(s,now)})).filter(x=>x.st).sort((a,b)=>a.st-b.st);
   const open=slots.find(x=>x.st<=now&&x.en>now),next=slots.find(x=>x.st>now);
@@ -1933,7 +1938,7 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
   $("bWrap").innerHTML=`
   <div class="rhead"><h2>首領</h2><span class="count">世界首領・獨特怪物・樓層首領</span></div>
   <article class="bcard">
-    <div class="bhead"><img src="${g.img}" alt="" class="bimg"><div class="bttl"><span class="kick">世界首領 World Boss</span><h3>${esc(g.zh)}</h3><div class="sub">${esc(g.name)}</div>${status}</div></div>
+    <div class="bhead">${bFig(g)}<div class="bttl"><span class="kick">世界首領 World Boss</span><h3>${esc(g.zh)}</h3><div class="sub">${esc(g.name)}</div>${status}</div></div>
     <dl class="bfacts"><div><dt>需求等級</dt><dd class="mono">${g.level}</dd></div><div><dt>入場費</dt><dd class="mono">${money(g.price)} Col</dd></div><div><dt>人數上限</dt><dd class="mono">${g.maxPlayers} 人</dd></div>${g.queue?`<div><dt>排隊上限</dt><dd class="mono">${g.queue} 人</dd></div>`:""}<div><dt>保底獎勵</dt><dd>${esc(g.guaranteed)}</dd></div></dl>
     <p>${esc(g.desc)}</p>
     <div class="bcols">
@@ -1946,9 +1951,10 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
     <h4 class="sec">攻擊招式</h4><ul class="atk">${g.attacks.map(([n,t])=>`<li><b>${esc(n)}</b>${esc(t)}</li>`).join("")}</ul>
     <div class="note warn"><b>弱點：</b>${esc(g.weakness)}</div>
     <div class="note">${esc(g.access)}</div>
+    <div class="note srcn">圖片：官網世界首領頁（Bestiary）「See up close」的模型圖，可切換 3/4 和正面。</div>
   </article>
   <article class="bcard">
-    <div class="bhead"><img src="${u.img}" alt="" class="bimg"><div class="bttl"><span class="kick">獨特怪物 Unique Monster・${esc(u.unit)}</span><h3>${esc(u.zh)}</h3><div class="sub">${esc(u.name)}</div><span class="bstat ${u.available?"on":""}">${u.available?"已開放":"未開放"}</span></div></div>
+    <div class="bhead">${bFig(u)}<div class="bttl"><span class="kick">獨特怪物 Unique Monster・${esc(u.unit)}</span><h3>${esc(u.zh)}</h3><div class="sub">${esc(u.name)}</div><span class="bstat ${u.available?"on":""}">${u.available?"已開放":"未開放"}</span></div></div>
     <dl class="bfacts"><div><dt>等級</dt><dd class="mono">${u.level} <span class="muted" style="font-size:11px">（wiki）</span></dd></div><div><dt>樓層</dt><dd>第 ${u.floor} 層</dd></div><div><dt>出現方式</dt><dd>隱藏條件</dd></div></dl>
     <h4 class="sec">攻擊招式</h4><ul class="atk">${u.attacks.map(([n,t])=>`<li><b>${esc(n)}</b>${esc(t)}</li>`).join("")}</ul>
     <div class="note warn"><b>階段：</b>${esc(u.phases)}</div>
@@ -1964,6 +1970,7 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
     <div class="note">以下 5 隻只出現在 wiki；官方網站目前只有 Galiath，這些可能是規劃中或舊資料。</div>
     <div class="tblwrap"><table class="btbl"><thead><tr><th>名稱</th><th>等級</th><th>難度</th></tr></thead><tbody>${BO.wikiWorld.map(r=>`<tr><td>${esc(r[0])}</td><td class="mono">${r[1]}</td><td>${r[2]}</td></tr>`).join("")}</tbody></table></div>
   </article>`;
+  $("bWrap").querySelectorAll(".bfig").forEach(f=>f.querySelectorAll("[data-bv]").forEach(btn=>btn.onclick=()=>{const im=f.querySelector("img");im.src=btn.dataset.bv==="f"?im.dataset.vf:im.dataset.v34;f.querySelectorAll("[data-bv]").forEach(x=>x.setAttribute("aria-pressed",x===btn?"true":"false"))}));
   bindGo($("bWrap"));
   clearTimeout(bossTimer);bossTimer=setTimeout(()=>{if(view==="bosses")renderBosses()},30000)}
 

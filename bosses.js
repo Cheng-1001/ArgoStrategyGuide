@@ -1,11 +1,13 @@
 /* World bosses and unique monsters.
    Sources (fetched 2026-10-30):
    - saominecraft.com/world-boss (official bestiary: level, entry, schedule, rewards, attacks, weak point, phases)
+   - model renders img/bosses/*.webp: the bestiary's 「See up close」 window (/da/bestiary/<id>-34.webp and -face.webp, uploaded 2026-11-05),
+     cropped to the model and resized to 520px tall; they replace the emblem pictures used before
    - saominecraft.wiki.gg/wiki/World_Boss and /wiki/Unique_Monsters (how to access, wiki-listed bosses, UNIT levels)
 */
 window.SAO_BOSSES = {
   world: [{
-    id: "galiath", img: "wb_galiath.jpg",
+    id: "galiath", img: "img/bosses/galiath-34.webp", imgFront: "img/bosses/galiath-face.webp",
     name: "Galiath, the Four-Armed Colossus", fr: "Galiath, le Colosse aux Quatre Bras", zh: "四臂巨像 Galiath",
     desc: "被關在競技場裡的四臂巨像。需要整隊人一起打的團隊戰。",
     level: 12, price: 5000, maxPlayers: 2,
@@ -53,7 +55,7 @@ window.SAO_BOSSES = {
     access: "要先在破碎的地下世界（Fractured Underworld）用 Cardinal Relay 的 System Creation 做出「World Boss Altar」，再於每週開放時段參加（wiki）。"
   }],
   unique: [{
-    id: "seraphel", img: "wb_seraphel.jpg",
+    id: "seraphel", img: "img/bosses/seraphel-34.webp", imgFront: "img/bosses/seraphel-face.webp",
     name: "UNIT-01 — Seraphel, the Fallen Arbiter", fr: "Seraphel, le Séraphin du Jugement", zh: "墮落的仲裁者 Seraphel",
     unit: "UNIT-001", floor: 1, level: 5, levelSrc: "wiki", available: true,
     attacks: [
