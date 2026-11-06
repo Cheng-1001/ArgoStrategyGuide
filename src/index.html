@@ -513,16 +513,24 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .jmlays{font-size:12.5px}.jmlays .muted{font-size:11.5px;margin-left:4px}
 .hint.mph .mphr{display:flex;gap:10px;align-items:center;margin-top:6px}.hint.mph .mphr img{width:56px;height:56px;object-fit:contain;flex:none;background:radial-gradient(circle,#f3efe6 0,#e3dccd 70%);border-radius:50%}
 .hint.mph .mphn{width:56px;height:56px;flex:none;display:flex;align-items:center;justify-content:center;font-size:26px;background:var(--panel-2);border-radius:50%}
-.jmtools{display:flex;flex-direction:column;gap:6px;align-items:flex-start}.jmtools .repbtn{align-self:auto}.jmtools .repbtn:disabled{opacity:.45;cursor:not-allowed}
+.jmtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#jmDl{display:contents}.jmtools .repbtn{align-self:auto}.jmtools .repbtn:disabled{opacity:.45;cursor:not-allowed}
 .jmdlnote{font-size:12.5px;min-height:1.5em}.jmdlnote .warn{color:var(--warn)}
 .jmout{border-top:1px solid var(--line);padding-top:8px}.jmout:empty{display:none}
 .jmselbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:13px}.jmselbar select{font:inherit;font-weight:600;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
 .jmanch{position:relative;display:inline-block}.jmanch>.linkbtn{font-size:12.5px;white-space:nowrap}
+button.jmpb{font-family:inherit;cursor:pointer}button.jmpb:hover,button.jmpb[aria-expanded="true"]{background:color-mix(in srgb,var(--rare) 14%,var(--panel-2))}
+.jmpoptt{font-weight:600;margin-bottom:2px}
+.jmmapw{position:relative}.jmhelpa{position:absolute;left:0;top:0;z-index:3}.jmmapw.jmtight{padding-top:28px}.jmmapw.jmdghelp{min-height:24px}
+.jmfl{position:relative;display:inline-flex;align-items:center;gap:4px;font-weight:600}.jmfl input{width:3.2em;font:inherit;font-weight:600;text-align:center;padding:2px 4px;border:1px solid var(--line);border-radius:6px 0 0 6px;background:var(--panel);color:var(--fg);margin-left:2px}
+.jmflb{font:inherit;padding:2px 6px;border:1px solid var(--line);border-left:0;border-radius:0 6px 6px 0;background:var(--panel-2);color:var(--fg);cursor:pointer;margin-left:-4px;margin-right:2px}
+.jmflist{position:absolute;left:0;top:calc(100% + 4px);z-index:30;margin:0;padding:4px;list-style:none;min-width:150px;background:var(--panel);border:1px solid var(--line);border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.jmflist button{display:block;width:100%;text-align:left;font:inherit;font-weight:400;padding:4px 8px;border:0;border-radius:6px;background:none;color:var(--fg);cursor:pointer}.jmflist button:hover,.jmflist button[aria-current]{background:var(--panel-2)}
+.jmzx{position:absolute;top:12px;right:12px;width:36px;height:36px;font-size:18px;border-radius:50%;border:1px solid #556;background:#0b1219;color:#e6edf3;cursor:pointer}
 .jmpopov{position:absolute;left:0;top:calc(100% + 4px);z-index:30;width:min(340px,80vw);max-height:260px;overflow:auto;font-size:12.5px;font-weight:400;line-height:1.6;color:var(--fg);text-align:left;white-space:normal;padding:8px 12px;border-radius:8px;background:var(--panel);border:1px solid var(--line);box-shadow:0 8px 24px rgba(0,0,0,.35)}
 .jmpopov ul{margin:0;padding-left:18px}.jmpopov .nw{white-space:nowrap}.jmpopov[hidden]{display:none}
 .jmsoon{position:relative;width:100%;max-width:340px;aspect-ratio:1;margin:2px auto;border-radius:8px;overflow:hidden;background:#070c11;display:flex;align-items:center;justify-content:center}
 .jmsoon img{width:100%;height:100%;object-fit:contain;filter:grayscale(.7) brightness(.55)}.jmsoonx{color:#9aa7b2;font-size:13px}.jmsoonn{font-size:12px}
-.jmzoom{position:fixed;inset:0;z-index:95;background:rgba(4,8,12,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:zoom-out;padding:16px}
+.jmzoom{position:fixed;inset:0;z-index:95;background:rgba(4,8,12,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px}
 .jmzoom img{max-width:min(96vw,1400px);max-height:88vh;width:auto;height:auto;min-width:min(90vw,512px);object-fit:contain;image-rendering:pixelated;background:#070c11;border-radius:6px}.jmzoom span{color:#cfd8df;font-size:12.5px}
 .jmk{display:inline-block;width:12px;height:12px;border-radius:3px;border:2px dashed rgba(127,127,127,.7);vertical-align:-2px;margin:0 2px 0 1px}.jmk.on{border:2px solid #e8a23a;background:rgba(232,162,58,.42)}
 .jmsec{display:flex;flex-direction:column;gap:6px}.jmsech{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;font-size:13px;border-bottom:1px solid var(--line);padding-bottom:4px}
@@ -2420,21 +2428,29 @@ document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.clos
   const z=document.createElement("div");z.className="jmzoom";z.setAttribute("role","dialog");z.setAttribute("aria-label","放大的地圖");
   document.body.appendChild(z);
   const close=()=>{z.remove();document.removeEventListener("keydown",onEsc,true)},onEsc=e=>{if(e.key==="Escape"){e.stopPropagation();close()}};   // not "esc": that is the HTML escaper
-  z.onclick=close;document.addEventListener("keydown",onEsc,true);
+  document.addEventListener("keydown",onEsc,true);
   const src=t.tagName==="CANVAS"?t.toDataURL("image/png"):t.src,cap=t.closest(".jmpopb")?$("jmPopT").textContent:"";
-  z.innerHTML=`<img src="${src}" alt=""><span>${esc(cap)}・點一下或按 Esc 關閉</span>`});
+  z.innerHTML=`<button type="button" class="jmzx" aria-label="關閉放大">✕</button><img src="${src}" alt=""><span>${esc(cap)}・按 Esc 或點右上 ✕ 關閉</span>`;
+  z.querySelector(".jmzx").onclick=close;z.onclick=e=>{if(e.target===z)close()}});
 // the small picture on a dungeon tile (使用者 2026-11-06：樓層是圖、地下城是文字 → both are pictures you click)
 async function jmDgThumb(d,box){const r=await jmDgDraw(d);if(!r||!box.isConnected)return;
   const W=240,H=150,s=Math.min(W/r.cv.width,H/r.cv.height),t=document.createElement("canvas");t.width=Math.max(1,Math.round(r.cv.width*s));t.height=Math.max(1,Math.round(r.cv.height*s));
   t.getContext("2d").drawImage(r.cv,0,0,t.width,t.height);box.replaceChildren(t)}
+// 「ⓘ 說明」 sits in the empty corner left of the map; when the column is too narrow for that, the map moves down by the
+// button's height so the button never covers a square
+const jmHelpFit=()=>{const w=document.querySelector(".jmmapw:not(.jmdghelp)");if(!w)return;const a=w.querySelector(".jmhelpa"),m=w.querySelector(".jmmap");if(!a||!m)return;
+  w.classList.remove("jmtight");const ar=a.getBoundingClientRect(),mr=m.getBoundingClientRect();if(mr.left<ar.right+6)w.classList.add("jmtight")};
+addEventListener("resize",()=>jmHelpFit());
 // keep a pop-over inside the card: start at the button's left edge, slide left if it would stick out on the right
 const jmFitPop=el=>{if(!el||el.hidden)return;const C=$("jmPack").getBoundingClientRect();el.style.left="0px";el.style.right="auto";
   const r=el.getBoundingClientRect();if(r.right>C.right-8)el.style.left=(C.right-8-r.right)+"px";const r2=el.getBoundingClientRect();if(r2.left<C.left+8)el.style.left=(parseFloat(el.style.left)+C.left+8-r2.left)+"px"};
-// the pop-overs (ⓘ 說明, 已選的地方) close on a click outside them or Esc
-const jmPopovClose=()=>{const h=$("jmHelp"),hb=$("jmHelpBtn");if(h&&!h.hidden){h.hidden=true;hb.setAttribute("aria-expanded","false");hb.textContent="ⓘ 說明 ▾"}
-  if(JMSEL.ui&&JMSEL.ui.names){JMSEL.ui.names=false;jmShow()}};
-document.addEventListener("click",ev=>{if(ev.target.closest&&ev.target.closest(".jmpopov"))return;jmPopovClose()});
-document.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&!document.querySelector(".jmzoom"))jmPopovClose()});
+// the pop-overs (ⓘ 說明, 已選區塊) close on a click outside them or Esc
+const jmPopovClose=()=>{let n=0;const h=$("jmHelp"),hb=$("jmHelpBtn");if(h&&!h.hidden){h.hidden=true;hb.setAttribute("aria-expanded","false");n++}
+  const L=$("jmFloorList");if(L&&!L.hidden){L.hidden=true;$("jmFloorBtn").setAttribute("aria-expanded","false");n++}
+  if(JMSEL.ui&&JMSEL.ui.names){JMSEL.ui.names=false;jmShow();n++}return n};
+document.addEventListener("click",ev=>{if(ev.target.closest&&ev.target.closest(".jmpopov,.jmflist"))return;jmPopovClose()});
+// Esc: the zoom closes first (its own capture handler), then an open pop-over, then the preview window (使用者 2026-11-06：預覽視窗 ESC 失效)
+document.addEventListener("keydown",ev=>{if(ev.key!=="Escape"||document.querySelector(".jmzoom"))return;if(jmPopovClose())return;const P=$("jmPop");if(P){P.remove();ev.stopPropagation()}},true);
 // layers found in the floor 1 worlds, surface first, then by height
 function jmFound(){const m=new Map();for(const g of JMG)if(g.state==="f1"){
     m.set("day",(m.get("day")||0)+g.news.length);
@@ -2478,24 +2494,25 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   // flat layout (使用者 2026-11-06：畫面雜亂、框太多層): status + download on top, one hint line, then a section per
   // floor and one for dungeons, each with its own 全選・清除 beside the heading; scanned folders fold away at the bottom
   const FLv=JMSEL.floor||1;
-  const help=`<span class="jmanch"><button class="linkbtn" id="jmHelpBtn" aria-expanded="false" aria-controls="jmHelp">ⓘ 說明 ▾</button><div class="jmpopov" id="jmHelp" hidden><ul>
-        <li>點方格或地下城的圖選取：<span class="nw"><span class="jmk on"></span>橘框＝要上傳</span>、<span class="nw"><span class="jmk"></span>虛線＝不上傳</span>；「全選／清除」在各段標題右邊。</li>
-        <li>滑鼠在方格或地下城上<b>停一下</b>，右下角的預覽視窗就會顯示那一塊的地圖；之後把滑鼠移到預覽視窗，途中經過別的方格不會換掉。預覽視窗關掉後，再停一下就會重新打開。</li>
-        <li>點預覽視窗裡的圖可以放大，按 Esc 或點一下關閉。</li>
+  // 「ⓘ 說明」: a pill like the rarity tags, in the top-left corner of the map (使用者 2026-11-06 指定位置、樣式和文字)
+  const help=`<span class="jmanch jmhelpa"><button type="button" class="pill r-b jmpb" id="jmHelpBtn" aria-expanded="false" aria-controls="jmHelp">ⓘ 說明</button><div class="jmpopov" id="jmHelp" hidden><ul>
+        <li>選取示意：<span class="nw"><span class="jmk on"></span>橘框＝要上傳</span>、<span class="nw"><span class="jmk"></span>虛線＝不上傳</span>。</li>
+        <li>滑鼠在方格或地下城上停留，預覽視窗就會顯示該區塊的地圖。</li>
+        <li>點預覽視窗裡的圖可以放大，按 Esc 或點右上 ✕ 關閉。</li>
         <li>地底（洞穴、地下室）的地圖會跟著方格一起打包，不用另外選。</li></ul></div></span>`;
   const mapPart=f1.length&&regs.size?`<section class="jmsec"><div class="jmsech"><b>地圖</b><span class="muted">地面 ${nDay} 張・地底 ${nCave} 張</span>
-      <span class="jmact"><button class="linkbtn" id="jmRegAll">全選</button><button class="linkbtn" id="jmRegNone">清除</button>${help}</span></div>
-    <svg class="jmmap" viewBox="70 70 4980 4980" role="group" aria-label="要上傳的地方">
+      <span class="jmact"><button class="linkbtn" id="jmRegAll">全選</button><button class="linkbtn" id="jmRegNone">清除</button></span></div>
+    <div class="jmmapw">${help}<svg class="jmmap" viewBox="70 70 4980 4980" role="group" aria-label="要上傳的地方">
       <defs><clipPath id="jmClip"><circle cx="${C}" cy="${C}" r="${R}"/></clipPath></defs>
       <circle cx="${C}" cy="${C}" r="${R}" fill="#070c11"/>
       <g clip-path="url(#jmClip)">${[0,1,2].flatMap(r=>[0,1,2].map(c=>`<image href="tiles/f1jm/0/${c}_${r}.jpg?v=${v}" x="${70+c*2048}" y="${70+r*2048}" width="2048" height="2048" preserveAspectRatio="none"/>`)).join("")}</g>
       ${[...regs.values()].map(r=>{const nm=jmRegNames(r.rx,r.rz),k=r.rx+","+r.rz;
         return`<rect class="jmreg" data-jmreg="${k}" x="${r.rx*512+8}" y="${r.rz*512+8}" width="496" height="496" rx="40" tabindex="0" role="checkbox"><title>${esc(nm.join("、")||"這一格")}：地面 ${r.day} 張、地底 ${r.cave} 張</title></rect>`}).join("")}
       ${FLOORS[1].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(t.n)}</text></g>`).join("")}
-    </svg></section>`:"";
+    </svg></div></section>`:"";
   const dgPart=dgList.length?`<section class="jmsec"><div class="jmsech"><b>地下城</b><span class="muted">同一個地下城進場幾次都合成一張</span>
-      ${dgNew.length||!(f1.length&&regs.size)?`<span class="jmact">${dgNew.length?`<button class="linkbtn" id="jmDgAll">全選</button><button class="linkbtn" id="jmDgNone">清除</button>`:""}${f1.length&&regs.size?"":help}</span>`:""}</div>
-    <div class="jmdgs">${dgList.map(d=>{const n=dgNews(d),k=dgOk.filter(g=>g.dg===d).length;
+      ${dgNew.length?`<span class="jmact"><button class="linkbtn" id="jmDgAll">全選</button><button class="linkbtn" id="jmDgNone">清除</button></span>`:""}</div>
+    ${f1.length&&regs.size?"":`<div class="jmmapw jmdghelp">${help}</div>`}<div class="jmdgs">${dgList.map(d=>{const n=dgNews(d),k=dgOk.filter(g=>g.dg===d).length;
       return`<button type="button" class="jmdgt${n?"":" none"}" data-jmdg="${d}" aria-pressed="false"${n?"":` aria-disabled="true" title="網站都已經有了"`}><span class="jmdgth" data-jmdgth="${d}"></span><b>${esc(dgName(d))}</b><span class="n">${k} 次進場・${n?n+" 張新的":"網站都已經有了"}</span></button>`}).join("")}</div>
     ${unk.length?`<div class="muted jmunk">網站還不認得、先不收：${unk.map(esc).join("、")}</div>`:""}</section>`:"";
   // a floor that is not open yet: its map (if any) greyed, and what will appear here once it opens (使用者 2026-11-06：
@@ -2508,22 +2525,28 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   const opts=FLv===1?mapPart+dgPart:flSoon(FLv);
   // download beside the folder button (使用者 2026-11-06：資料夾選擇跟壓縮檔下載要跟區塊選取分開); the button is
   // always there (greyed until something is picked) and the lines are one line each, so nothing jumps when you pick
-  const dlBtn=parts.length?parts.map((p,i)=>`<button class="repbtn" data-jmpart="${i}">⬇ 下載壓縮檔${parts.length>1?` ${i+1}／${parts.length}`:""}（${mb(p.bytes)}）</button>`).join(""):`<button class="repbtn" disabled title="先在下面點選要上傳的地方">⬇ 下載壓縮檔</button>`;
+  const dlBtn=parts.length?parts.map((p,i)=>`<button class="repbtn" data-jmpart="${i}" title="${mb(p.bytes)}">⬇ 下載壓縮檔${parts.length>1?` ${i+1}／${parts.length}`:""}</button>`).join(""):`<button class="repbtn" disabled title="先在下面點選要上傳的地方">⬇ 下載壓縮檔</button>`;
   $("jmDl").innerHTML=dlBtn;
   $("jmDlNote").innerHTML=!f1.length?`沒有找到第 1 層的地圖：可能還沒在第 1 層探索過，或探索的地方和網站現有地圖完全沒有重疊（原因看下面「掃描到的資料夾」）。`
     :!regs.size&&!dgNew.length?`找到第 1 層的地圖，但你探索過的地方網站都已經有了，不用上傳。謝謝！`
-    :parts.length?`共 ${nNew} 張地圖${nAnc?`，另含 ${nAnc} 張用來確認位置的地面圖`:""}。${parts.length>1?`<b class="warn">檔案比較大，分成 ${parts.length} 份，每一份都要各送出一次表單。</b>`:"下載後按左邊的「填寫回報表單」，回報種類選「探索地圖」上傳。"}`
+    :parts.length?`共 ${nNew} 張地圖${nAnc?`，另含 ${nAnc} 張用來確認位置的地面圖`:""}（${parts.map(p=>mb(p.bytes)).join("＋")}）。${parts.length>1?`<b class="warn">檔案比較大，分成 ${parts.length} 份，每一份都要各送出一次表單。</b>`:"下載後按左邊的「填寫回報表單」，回報種類選「探索地圖」上傳。"}`
     :`還沒選要上傳的地方。在下面點方格或地下城的圖選取，下載按鈕就會亮起來。`;
   let head="";
   if(regs.size||dgNew.length){const on=[...regs.values()].filter(r=>!JMSEL.off.has(r.rx+","+r.rz)),nm=[...new Set(on.flatMap(r=>jmRegNames(r.rx,r.rz)))],dOn=dgNew.filter(d=>!JMSEL.dgOff.has(d));
     const U=JMSEL.ui||(JMSEL.ui={});
-    head=`<div class="jmselbar"><select id="jmFloor" aria-label="樓層">${JM_FLOORS.map(o=>`<option value="${o.f}"${o.f===FLv?" selected":""}>第 ${o.f} 層${o.open?"":"（尚未開放）"}</option>`).join("")}</select>
-        <span class="jmsum" id="jmRegSum"><b>已選</b>：第 1 層 ${on.length}／${regs.size} 格${dgNew.length?`・地下城 ${dOn.length}／${dgNew.length} 個`:""}</span>
-        <span class="jmanch"><button class="linkbtn" id="jmNamesBtn" aria-expanded="${!!U.names}" aria-controls="jmNames">已選的地方 ${U.names?"▴":"▾"}</button>${U.names?`<div class="jmpopov" id="jmNames">${on.length||dOn.length?`${on.length?`<div><b>第 1 層</b>：${esc(nm.join("、"))}</div>`:""}${dOn.length?`<div><b>地下城</b>：${esc(dOn.map(dgName).join("、"))}</div>`:""}`:`<span class="muted">還沒選。</span>`}</div>`:""}</span></div>`}
+    const pk=`已選：第 1 層 ${on.length}／${regs.size} 格${dgNew.length?`・地下城 ${dOn.length}／${dgNew.length} 個`:""}`;
+    head=`<div class="jmselbar"><span class="jmfl">第<input id="jmFloorIn" inputmode="numeric" autocomplete="off" maxlength="3" value="${FLv}" aria-label="樓層（可以直接輸入數字）" title="可以直接輸入樓層數字"><button type="button" class="jmflb" id="jmFloorBtn" aria-label="選擇樓層" aria-expanded="false">▾</button>層
+          <ul class="jmflist" id="jmFloorList" hidden>${JM_FLOORS.map(o=>`<li><button type="button" data-jmfl="${o.f}"${o.f===FLv?' aria-current="true"':""}>第 ${o.f} 層${o.open?"":"（尚未開放）"}</button></li>`).join("")}</ul></span>
+        <span class="jmanch"><button type="button" class="pill r-b jmpb" id="jmNamesBtn" aria-expanded="${!!U.names}" aria-controls="jmNames"><span id="jmRegSum">${pk}</span></button>${U.names?`<div class="jmpopov" id="jmNames"><div class="jmpoptt">已選區塊</div>${on.length||dOn.length?`${on.length?`<div><b>第 1 層</b>：${esc(nm.join("、"))}</div>`:""}${dOn.length?`<div><b>地下城</b>：${esc(dOn.map(dgName).join("、"))}</div>`:""}`:`<span class="muted">還沒選。</span>`}</div>`:""}</span></div>`}
   $("jmHead").innerHTML=head;jmFitPop($("jmNames"));
   {const U=JMSEL.ui||{},b=(id,f)=>{const e=$(id);if(e)e.onclick=f};
     b("jmNamesBtn",ev=>{ev.stopPropagation();U.names=!U.names;jmShow()});
-    const fs=$("jmFloor");if(fs)fs.onchange=()=>{JMSEL.floor=+fs.value;jmShow(true)}}
+    // floor: type a number (Enter or leaving the box), or pick from the ▾ list; 1～100, anything else goes back
+    // compare with the live floor, not FLv: redrawing removes the focused box, whose blur fires change once more
+    const setFl=f=>{f=parseInt(f,10);const cur=JMSEL.floor||1;if(!(f>=1&&f<=100)){const i=$("jmFloorIn");if(i)i.value=cur;return}if(f!==cur){JMSEL.floor=f;jmShow(true)}};
+    const fi=$("jmFloorIn");if(fi){fi.onkeydown=ev=>{if(ev.key==="Enter"){ev.preventDefault();setFl(fi.value)}};fi.onchange=()=>setFl(fi.value);fi.onfocus=()=>fi.select()}
+    b("jmFloorBtn",ev=>{ev.stopPropagation();const L=$("jmFloorList"),o=L.hidden;L.hidden=!o;$("jmFloorBtn").setAttribute("aria-expanded",o)});
+    document.querySelectorAll("#jmFloorList [data-jmfl]").forEach(x=>x.onclick=ev=>{ev.stopPropagation();$("jmFloorList").hidden=true;setFl(x.dataset.jmfl)})}
   if(all){$("jmOpts").innerHTML=opts;
     $("jmRows").innerHTML=`<details class="jmfold"${f1.length?"":" open"}><summary>掃描到的資料夾（${groups.length} 個）</summary><div>${rows}</div></details>`;
     const dwell=(e,pv)=>{let t=0;e.addEventListener("mouseenter",()=>{clearTimeout(t);t=setTimeout(pv,JMP.DWELL)});e.addEventListener("mouseleave",()=>clearTimeout(t));e.addEventListener("focus",pv)};
@@ -2533,7 +2556,8 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
     O.querySelectorAll("[data-jmdg]").forEach(b=>{const d=b.dataset.jmdg,pv=()=>jmDgPreview(d);dwell(b,pv);
       b.onclick=()=>{if(b.getAttribute("aria-disabled"))return;JMSEL.dgOff.has(d)?JMSEL.dgOff.delete(d):JMSEL.dgOff.add(d);jmShow();pv()}});
     O.querySelectorAll("[data-jmdgth]").forEach(e=>jmDgThumb(e.dataset.jmdgth,e));
-    {const hb=$("jmHelpBtn");if(hb)hb.onclick=ev=>{ev.stopPropagation();const h=$("jmHelp"),o=h.hidden;h.hidden=!o;hb.setAttribute("aria-expanded",o);hb.textContent=o?"ⓘ 說明 ▴":"ⓘ 說明 ▾";jmFitPop(h)}}
+    {const hb=$("jmHelpBtn");if(hb)hb.onclick=ev=>{ev.stopPropagation();const h=$("jmHelp"),o=h.hidden;h.hidden=!o;hb.setAttribute("aria-expanded",o);jmFitPop(h)}}
+    jmHelpFit()
     const on=(id,f)=>{const b=$(id);if(b)b.onclick=()=>{f();jmShow()}};
     on("jmRegAll",()=>JMSEL.off.clear());on("jmRegNone",()=>regs.forEach((_,k)=>JMSEL.off.add(k)));
     on("jmDgAll",()=>JMSEL.dgOff.clear());on("jmDgNone",()=>dgList.forEach(d=>JMSEL.dgOff.add(d)))}
@@ -2599,7 +2623,7 @@ function buildFormReport(){
       <li><b>看結果</b>：工具自動找出第 1 層的地圖和地下城，只留網站還沒有的部分，不用自己挑資料夾。</li>
       <li><b>挑要上傳的</b>：在小地圖上點方格、點地下城的圖選取（或按各段的「全選」）。滑鼠指著會在右下角的預覽視窗先看那一塊的地圖。</li>
       <li><b>上傳</b>：按「下載壓縮檔」，再按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>、上傳壓縮檔後送出。不用截圖，送出後自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
-    <div class="jmscope"><span><b>會收</b>：第 1 層的地面、地底（洞穴、地下室）、地下城（Geldorack Dungeon、Sanctuary of Xal'Zirith、Labyrinth of the Fallen）</span><span><b>不收</b>：其他樓層、破碎的地下世界、活動區域（例如 backrooms）</span></div>
+    <div class="jmscope"><span><b>會收</b>：第 1 層的地面、地底（洞穴、地下室）和地下城（Geldorack Dungeon、Labyrinth of the Fallen、Sanctuary of Xal'Zirith）</span><span><b>不收</b>：還沒開放打包的樓層（第 2 層以後，開放後再加）、破碎的地下世界、限時活動的場地</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden><span id="jmDl"></span></div>
     <div class="muted jmdlnote" id="jmDlNote">要在電腦上用 Chrome 或 Edge。選好資料夾、點選要上傳的地方後，下載按鈕會亮起來。</div>

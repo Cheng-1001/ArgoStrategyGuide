@@ -101,27 +101,39 @@ try:
         check(not J0["parts"] and not pg.locator("[data-jmpart]").count() and pg.is_disabled("#jmDl .repbtn") and "還沒選要上傳的地方" in pg.inner_text("#jmDlNote")
               and "第 1 層 0／" in pg.inner_text("#jmRegSum") and "地下城 0／1" in pg.inner_text("#jmRegSum"),
               "nothing is picked to start with; the download button is beside the folder button, greyed")
-        check(pg.locator(".jmtools #jmPick").count() == 1 and pg.locator(".jmtools #jmDl").count() == 1 and not pg.locator("#jmOut .repbtn").count(),
-              "folder picker and download are together, apart from the selection")
-        HJS = "[document.querySelector('#jmPack').getBoundingClientRect().height, document.querySelector('.jmsum').getBoundingClientRect().height, document.querySelector('.jmdlnote').getBoundingClientRect().height]"
+        pk = pg.evaluate("(()=>{const a=document.querySelector('#jmPick').getBoundingClientRect(),b=document.querySelector('#jmDl .repbtn').getBoundingClientRect();return [Math.abs(a.top-b.top)<4,b.left>a.right]})()")
+        check(pg.locator(".jmtools #jmPick").count() == 1 and pg.locator(".jmtools #jmDl").count() == 1 and not pg.locator("#jmOut .repbtn").count() and pk == [True, True],
+              f"the download button is to the right of the folder button, apart from the selection ({pk})")
+        HJS = "[document.querySelector('#jmPack').getBoundingClientRect().height, document.querySelector('#jmNamesBtn').getBoundingClientRect().height, document.querySelector('.jmdlnote').getBoundingClientRect().height]"
         h0 = pg.evaluate(HJS)
         # flat layout (使用者 2026-11-06): no nested boxes or floor tabs, a section per floor and one for the dungeons,
         # 全選／清除 beside each heading (not next to the count), dungeons are picture tiles like the squares
         check(pg.locator(".jmsec").count() == 2 and pg.locator(".jmsec .jmmap").count() == 1 and pg.locator(".jmdgt[data-jmdg]").count() == 1
-              and not pg.locator(".jmopt, .jmfl, [data-jmfl], .jmregbar, [data-jmdgpv], input[data-jmdg]").count()
+              and not pg.locator(".jmopt, .jmflb[role=tab], .jmregbar, [data-jmdgpv], input[data-jmdg], select#jmFloor").count()
               and pg.locator(".jmsech #jmRegAll").count() == 1 and pg.locator(".jmsech #jmDgAll").count() == 1 and not pg.locator("#jmRegSum #jmRegAll").count()
-              and pg.locator("#jmFloor").count() == 1, "flat layout: floor and dungeon sections with their own 全選／清除, no tabs, no boxes")
-        fo = pg.eval_on_selector_all("#jmFloor option", "o=>o.map(x=>[x.textContent,x.disabled])")
-        check(fo[0] == ["第 1 層", False] and len(fo) == 3 and all(not d and "尚未開放" in t for t, d in fo[1:]), f"the floor menu lists floors 1-3; 2 and 3 can be picked to see how switching works ({fo})")
-        # 「ⓘ 說明」 sits beside the map (in its heading, next to 全選／清除); 「已選的地方」 right after the count; both open
-        # as pop-overs that do not change the height (使用者 2026-11-06)
-        check(pg.locator(".jmsech #jmHelpBtn").count() == 1 and pg.locator(".jmsech:has(#jmRegAll) #jmHelpBtn").count() == 1
-              and pg.locator(".jmselbar #jmNamesBtn").count() == 1 and not pg.locator(".jmselbar #jmHelpBtn, .jmtools #jmHelpBtn, #jmPrevOpen, .jmhint").count()
-              and not pg.is_visible("#jmHelp"), "「ⓘ 說明」 is in the map heading, 「已選的地方」 by the count, no 「打開預覽視窗」 button")
+              and pg.locator("#jmFloorIn").count() == 1, "flat layout: floor and dungeon sections with their own 全選／清除, no tabs, no boxes")
+        # the floor: a narrow box you can type a number into, with ▾ for the list (使用者 2026-11-06)
+        fw = pg.evaluate("document.querySelector('.jmfl').getBoundingClientRect().width")
+        pg.click("#jmFloorBtn"); pg.wait_for_timeout(100)
+        fo = pg.eval_on_selector_all("#jmFloorList [data-jmfl]", "o=>o.map(x=>x.textContent)")
+        check(pg.input_value("#jmFloorIn") == "1" and fw < 130 and fo[0] == "第 1 層" and len(fo) == 3 and all("尚未開放" in t for t in fo[1:]),
+              f"the floor box is narrow ({fw:.0f}px), shows 1, and its list has floors 1-3 ({fo})")
+        pg.keyboard.press("Escape"); pg.wait_for_timeout(100)
+        check(not pg.is_visible("#jmFloorList"), "Esc closes the floor list")
+        # 「ⓘ 說明」 in the top-left corner of the map; the picked count is itself the button that lists the picked squares;
+        # both look like the rarity pills and open as pop-overs that do not change the height (使用者 2026-11-06)
+        hp = pg.evaluate("""(()=>{const b=document.querySelector('#jmHelpBtn').getBoundingClientRect(),m=document.querySelector('.jmmapw').getBoundingClientRect(),
+            hit=[...document.querySelectorAll('[data-jmreg]')].some(e=>{const r=e.getBoundingClientRect();return !(r.right<=b.left||r.left>=b.right||r.bottom<=b.top||r.top>=b.bottom)});
+            return [Math.round(b.left-m.left),Math.round(b.top-m.top),hit]})()""")
+        check(pg.locator(".jmmapw .jmhelpa #jmHelpBtn").count() == 1 and hp[0] == 0 and hp[1] == 0 and not hp[2]
+              and pg.locator(".jmselbar #jmNamesBtn #jmRegSum").count() == 1 and "已選：第 1 層" in pg.inner_text("#jmNamesBtn") and "已選的地方" not in pg.inner_text("#jmOut")
+              and all("pill" in pg.get_attribute(q, "class") and "r-b" in pg.get_attribute(q, "class") for q in ("#jmHelpBtn", "#jmNamesBtn"))
+              and not pg.locator(".jmselbar #jmHelpBtn, .jmtools #jmHelpBtn, #jmPrevOpen, .jmhint").count() and not pg.is_visible("#jmHelp"),
+              f"「ⓘ 說明」 is in the map's top-left corner without covering a square ({hp}); the count is a rarity-style button")
         pg.click("#jmHelpBtn"); pg.wait_for_timeout(100)
         hh = pg.evaluate(HJS)
         hin = pg.evaluate("(()=>{const C=document.querySelector('#jmPack').getBoundingClientRect(),r=document.querySelector('#jmHelp').getBoundingClientRect();return r.left>=C.left&&r.right<=C.right})()")
-        check(pg.is_visible("#jmHelp") and "停一下" in pg.inner_text("#jmHelp") and "橘框" in pg.inner_text("#jmHelp") and hh == h0 and hin, f"「ⓘ 說明」 opens the selection help without changing the height ({h0} -> {hh})")
+        check(pg.is_visible("#jmHelp") and "停留" in pg.inner_text("#jmHelp") and "右上 ✕" in pg.inner_text("#jmHelp") and "選取示意" in pg.inner_text("#jmHelp") and hh == h0 and hin, f"「ⓘ 說明」 opens the selection help without changing the height ({h0} -> {hh})")
         if os.environ.get("SHOT_DIR"):
             pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_help.png"))
         pg.keyboard.press("Escape"); pg.wait_for_timeout(100)
@@ -133,24 +145,28 @@ try:
         nt = pg.inner_text("#jmNames"); hn = pg.evaluate(HJS)
         inside = pg.evaluate("(()=>{const C=document.querySelector('#jmPack').getBoundingClientRect();return ['#jmNames'].concat(document.querySelector('#jmHelp')&&!document.querySelector('#jmHelp').hidden?['#jmHelp']:[]).every(q=>{const r=document.querySelector(q).getBoundingClientRect();return r.left>=C.left&&r.right<=C.right})})()")
         check(inside, "the pop-over stays inside the card")
-        check("Geldorack Dungeon" in nt and "第 1 層" in nt and hn == h0, f"「已選的地方」 lists every picked place in full, without changing the height ({nt[:60]}, {hn})")
+        check("已選區塊" in nt and "Geldorack Dungeon" in nt and "第 1 層" in nt and hn == h0, f"「已選的地方」 lists every picked place in full, without changing the height ({nt[:60]}, {hn})")
         if os.environ.get("SHOT_DIR"):
             pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_names.png"))
         pg.mouse.click(5, 5); pg.wait_for_timeout(100)
         check(not pg.locator("#jmNames").count(), "a click elsewhere closes it")
         # switching floors: 2 shows its greyed map and what will appear, 3 has no map yet, back to 1 keeps the picks
-        pg.select_option("#jmFloor", "2"); pg.wait_for_timeout(200)
+        pg.click("#jmFloorBtn"); pg.click("#jmFloorList [data-jmfl='2']"); pg.wait_for_timeout(200)
         f2 = [pg.locator("[data-jmreg]").count(), pg.locator(".jmsoon img").count(), pg.inner_text("#jmOpts")]
         if os.environ.get("SHOT_DIR"):
             pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_floor2.png"))
-        pg.select_option("#jmFloor", "3"); pg.wait_for_timeout(200)
+        pg.fill("#jmFloorIn", "3"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(200)
         f3 = [pg.locator("[data-jmreg]").count(), pg.locator(".jmsoonx").count(), pg.inner_text("#jmRegSum")]
         if os.environ.get("SHOT_DIR"):
             pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_floor3.png"))
-        pg.select_option("#jmFloor", "1"); pg.wait_for_timeout(300)
-        check(f2[0] == 0 and f2[1] == 1 and "第 2 層開放後" in f2[2] and f3[0] == 0 and f3[1] == 1 and "地下城 1／1" in f3[2]
-              and pg.locator("[data-jmreg]").count() > 0 and pg.evaluate("window.__jm.sel.off") == [] and pg.input_value("#jmFloor") == "1",
-              f"switching floors 1 → 2 → 3 → 1 shows each floor and keeps the picks ({f2[:2]}, {f3})")
+        pg.fill("#jmFloorIn", "12"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(200)
+        f12 = [pg.input_value("#jmFloorIn"), "第 12 層" in pg.inner_text("#jmOpts")]
+        pg.fill("#jmFloorIn", "abc"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(100)
+        bad = pg.input_value("#jmFloorIn")
+        pg.fill("#jmFloorIn", "1"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(300)
+        check(f2[0] == 0 and f2[1] == 1 and "第 2 層開放後" in f2[2] and f3[0] == 0 and f3[1] == 1 and "地下城 1／1" in f3[2] and f12 == ["12", True] and bad == "12"
+              and pg.locator("[data-jmreg]").count() > 0 and pg.evaluate("window.__jm.sel.off") == [] and pg.input_value("#jmFloorIn") == "1",
+              f"floors switch by the list (2) and by typing (3, 12, back to 1); a non-number goes back; the picks stay ({f2[:2]}, {f3}, {f12}, {bad})")
         J = pg.evaluate("window.__jm")
         st = {g["label"]: g for g in J["groups"]}
         check(J["found"].get("c1") == 1 and J["found"].get("c2") == 6 and J["found"].get("c0") == 1 and J["found"].get("day", 0) >= 1,
@@ -169,7 +185,9 @@ try:
         sqw = pg.evaluate("document.querySelector('#jmPop canvas').getBoundingClientRect().width")
         pg.click("#jmPopX"); pg.wait_for_timeout(100); closed = not pg.locator("#jmPop").count()
         pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_selector("#jmPop canvas", timeout=5000)
-        check(closed, "✕ hides the preview; resting on a square opens it again")
+        pg.keyboard.press("Escape"); pg.wait_for_timeout(100); esc_closed = not pg.locator("#jmPop").count()
+        pg.hover("[data-jmreg='2,2']", force=True); pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_selector("#jmPop canvas", timeout=5000)
+        check(closed and esc_closed, "✕ or Esc closes the preview; resting on a square opens it again")
         if os.environ.get("SHOT_DIR"):
             pg.locator("#jmOut").scroll_into_view_if_needed()
             pg.locator("#jmOut").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_opts.png"))
@@ -209,7 +227,9 @@ try:
         cap = pg.inner_text(".jmzoom span")
         check(best[3] >= 2 and pv == best[0] and title in cap, f"moving from square {best[0]} to the preview across {best[3]} other squares keeps its preview, and its picture zooms ({pv}, {cap})")
         pg.keyboard.press("Escape"); pg.wait_for_timeout(100)
-        check(not pg.locator(".jmzoom").count(), "Esc closes the zoom")
+        zc = [not pg.locator(".jmzoom").count(), pg.locator("#jmPop").count() == 1]
+        pg.click("#jmPop canvas"); pg.wait_for_selector(".jmzoom .jmzx", timeout=5000); pg.click(".jmzoom .jmzx"); pg.wait_for_timeout(100)
+        check(zc == [True, True] and not pg.locator(".jmzoom").count(), f"Esc closes only the zoom (the preview stays); the ✕ at the top right closes it too ({zc})")
         check("Geldorack Dungeon" in lt and "2 次進場" in lt and "backrooms" in lt and pg.get_attribute("[data-jmdg=geldorack]", "aria-pressed") == "true", "the dungeon tiles name the dungeon and its runs")
         regs = pg.eval_on_selector_all("[data-jmreg]", "e=>e.map(x=>x.dataset.jmreg)")
         check("5,9" in regs and "2,2" in regs and "40,40" not in regs and pg.locator(".jmmap .jmtown").count() >= 5
