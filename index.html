@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="d6652d1144">
+<meta name="sao-build" content="997e29ff66">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -808,7 +808,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=d8b434d1"></script>
+<script src="data.js?v=28d92fb7"></script>
 <script src="data23.js?v=bc83d65b"></script>
 <script src="bosses.js?v=02fabd90"></script>
 <script src="reports.js?v=a17dd6f0"></script>
@@ -1754,7 +1754,7 @@ const SLOT_BY_NAME=[[/^(Casque|Masque|Diad[eè]me|Heaume|Capuche|Chapeau|Couronn
 EQ.forEach(e=>{if(e.cat==="armor"&&!e.slot){const m=SLOT_BY_NAME.find(([re])=>re.test(e.name));if(m)e.slot=m[1]}});
 const eqCat=e=>e.cat==="armor"&&e.slot?SLOT_ZH[e.slot]:EQ_CAT[e.cat]||e.cat;
 const eqSub=e=>e.cat==="armor"?(e.slot||"armor"):e.cat;
-const EQ_SUBS={weapon:["sword","dagger","bow","crossbow","staff_mage","staff_shaman"],off:["shield","catalyst"],armor:["head","chest","legs","feet"],acc:["amulet","ring","bracelet","gloves","artifact","acc"]};
+const EQ_SUBS={weapon:["sword","dagger","bow","crossbow","staff_mage","staff_shaman"],off:["shield","catalyst"],armor:["head","chest","legs","feet"],acc:["amulet","ring","bracelet","gloves","artifact"].concat(EQ.some(e=>e.cat==="acc")?["acc"]:[])};
 const subLab=k=>k==="acc"?"部位未確認":SLOT_ZH[k]||EQ_CAT[k]||k;
 const eqClasses=e=>String(e.st["Classe requise"]||"").split(/,\s*/).map(c=>c.toLowerCase()).filter(c=>CLASS_ZH[c]);
 const eslot=(e,s=44)=>e.ps?pslot(e,s):e.itemId&&(GICON[e.itemId]||(ITEMS[e.itemId]||{}).ic>=0)?(GICON[e.itemId]?recicImg(GICON[e.itemId],s):slot(e.itemId,s)):e.itemId?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
