@@ -2,7 +2,7 @@
    日期一律用台灣時間（UTC+8，使用者 2026-11-03 指定）；git log 用 TZ=Asia/Taipei 看。
    只寫玩家看得到的改動，用中文、一行一件事。玩家回報自動收錄、探索地圖自動合併不列。 */
 window.SAO_CHANGELOG=[
- ["2026-11-06",["Elite Treant 套裝 4 件加進裝備分頁：手套和 Carapace 有遊戲數值、說明和圖示，配方面板也看得到裝備資料","世界王頁的 Galiath 和 Seraphel 改用官網新的模型圖，可以切換 3/4 和正面","第 2、3 層開放時間依官方 Discord 改成 11/8 或 11/9 逐步開放（原定 11/5 因伺服器事故延後）；萬聖節活動補上開始、結束時間和停機補償","主線 34 Beneath the Crystal 補上走法：沿著紅石粉往上走，並附上截圖",
+ ["2026-11-06",["裝備分頁再補 28 件官網圖鑑沒收錄的裝備：Shark、冰系、Nepenthes、Spider 飾品，Galiath 的武器和盾，Rhitta、Lostvayne、箭袋等，數值取自遊戲截圖","Elite Treant 套裝 4 件加進裝備分頁：手套和 Carapace 有遊戲數值、說明和圖示，配方面板也看得到裝備資料","世界王頁的 Galiath 和 Seraphel 改用官網新的模型圖，可以切換 3/4 和正面","第 2、3 層開放時間依官方 Discord 改成 11/8 或 11/9 逐步開放（原定 11/5 因伺服器事故延後）；萬聖節活動補上開始、結束時間和停機補償","主線 34 Beneath the Crystal 補上走法：沿著紅石粉往上走，並附上截圖",
   "地圖新增 NPC Web Archaeologist（Arakh'Nol，Xal'Zirith 守衛旁，X 1019 Z 1178，站長截圖）",
   "「治療加成」（Heal Bonus／Bonus Healing）終於有遊戲圖示了：從 Belt of the Stags 的物品提示切出來的綠色十字，裝備數值、套裝效果都會用",
   "主線 33 The Crystal of Tolbana 編號確認（不再是推算），新增主線 34 Beneath the Crystal（下到水晶底下 → 到 Kobold Tower 找 Mephisto），Floor 2 改成主線 35；33 補上 Mephisto 的台詞和任務追蹤原文",

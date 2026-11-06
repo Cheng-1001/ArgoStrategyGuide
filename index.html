@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="997e29ff66">
+<meta name="sao-build" content="6f779ec4d7">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -808,7 +808,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=28d92fb7"></script>
+<script src="data.js?v=57455bda"></script>
 <script src="data23.js?v=bc83d65b"></script>
 <script src="bosses.js?v=02fabd90"></script>
 <script src="reports.js?v=a17dd6f0"></script>
@@ -817,9 +817,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="mainq.js?v=38ee28a4"></script>
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=a6c9503f"></script>
-<script src="gameinfo.js?v=49dcc26a"></script>
+<script src="gameinfo.js?v=916dbc3e"></script>
 <script src="npcs.js?v=576b7565"></script>
-<script src="changelog.js?v=bb8ccf12"></script>
+<script src="changelog.js?v=ee7ceed1"></script>
 <script src="recipes.js?v=36e8b52c"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1014,7 +1014,7 @@ const BEH_ZH={A:"主動攻擊（看到就打）",N:"中立（被打才反擊）"
 const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["傳說+","r-s",5],splusplus:["傳說++","r-s",6],ss:["SS","r-s",7]};
 const GROUP={material:"材料",food:"食物",ring:"飾品",artifact:"飾品",amulet:"飾品",bracelet:"飾品",shield:"防具",armor_set:"防具",bow:"武器",crossbow:"武器",dagger:"武器",sword:"武器",staff_mage:"武器",staff_shaman:"武器",lumberjack_job:"採集",miner_job:"採集",farmer_job:"採集",tool:"工具",gem_stone:"符文",fortifier:"藥水",unknown:"未收錄"};
 const CAT_ZH={material:"材料",food:"食物",ring:"戒指",artifact:"遺物",amulet:"項鍊",bracelet:"手環",shield:"盾牌",armor_set:"防具套裝",bow:"弓",crossbow:"弩",dagger:"匕首",sword:"近戰武器",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",lumberjack_job:"伐木採集",miner_job:"採礦",farmer_job:"農作",tool:"工具",gem_stone:"符文",fortifier:"強化藥水",unknown:"未收錄"};
-const STAT_ZH={"Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"最大生命","Max Mana":"最大魔力","Max Stamina":"最大耐力","Attack Speed":"攻擊速度","Critical Strike Power":"暴擊傷害","Critical Strike Chance":"暴擊率","Skill Critical Strike Power":"技能暴擊傷害","Skill Critical Strike Chance":"技能暴擊率","Movement Speed":"移動速度","Health Regeneration":"生命回復","Mana Regeneration":"魔力回復","Stamina Regeneration":"耐力回復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"治療加成","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"吸血","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋強度","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力","Required Strength":"需求力量","Required Dexterity":"需求敏捷","Required Defense":"需求防禦","Dodge Rating":"閃避率","HEAL_BONUS":"治療加成","HEAL BONUS":"治療加成","Range":"攻擊距離","Entity Interaction Range":"互動距離","Knockback Resistance":"擊退抗性","Faction Damage Dungeon":"地下城傷害","Dodge Cooldown Reduction":"閃避冷卻縮減","Fall Damage Reduction":"摔落傷害減免","Additional Esprit":"額外精神","Additional Defense":"額外防禦","Additional Strength":"額外力量","Additional Vitality":"額外體力","Additional Dexterity":"額外敏捷","Additional Intelligence":"額外智力","Durability Bar":"耐久條","Inedible":"不能吃","Max Consume":"可用次數","Max Item Damage":"最大耐久","Max Stack Size":"堆疊上限","Movement_speed":"移動速度","Pickaxe Power":"採集等級","Random Unsocket":"隨機拆下符文","Repair Percent":"修理比例（%）","Restore Health":"回復生命","Restore Mana":"回復魔力","Restore Saturation":"回復飽和度","Restore Stamina":"回復耐力","Guard Durability":"格擋耐久","Block Chance":"格擋率","Ability Haste":"技能急速","深海漫遊 X":"特殊效果：深海漫遊 X"};
+const STAT_ZH={"Cooldown":"冷卻時間","Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"最大生命","Max Mana":"最大魔力","Max Stamina":"最大耐力","Attack Speed":"攻擊速度","Critical Strike Power":"暴擊傷害","Critical Strike Chance":"暴擊率","Skill Critical Strike Power":"技能暴擊傷害","Skill Critical Strike Chance":"技能暴擊率","Movement Speed":"移動速度","Health Regeneration":"生命回復","Mana Regeneration":"魔力回復","Stamina Regeneration":"耐力回復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"治療加成","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"吸血","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋強度","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力","Required Strength":"需求力量","Required Dexterity":"需求敏捷","Required Defense":"需求防禦","Dodge Rating":"閃避率","HEAL_BONUS":"治療加成","HEAL BONUS":"治療加成","Range":"攻擊距離","Entity Interaction Range":"互動距離","Knockback Resistance":"擊退抗性","Faction Damage Dungeon":"地下城傷害","Dodge Cooldown Reduction":"閃避冷卻縮減","Fall Damage Reduction":"摔落傷害減免","Additional Esprit":"額外精神","Additional Defense":"額外防禦","Additional Strength":"額外力量","Additional Vitality":"額外體力","Additional Dexterity":"額外敏捷","Additional Intelligence":"額外智力","Durability Bar":"耐久條","Inedible":"不能吃","Max Consume":"可用次數","Max Item Damage":"最大耐久","Max Stack Size":"堆疊上限","Movement_speed":"移動速度","Pickaxe Power":"採集等級","Random Unsocket":"隨機拆下符文","Repair Percent":"修理比例（%）","Restore Health":"回復生命","Restore Mana":"回復魔力","Restore Saturation":"回復飽和度","Restore Stamina":"回復耐力","Guard Durability":"格擋耐久","Block Chance":"格擋率","Ability Haste":"技能急速","深海漫遊 X":"特殊效果：深海漫遊 X"};
 // Chinese potion names (user 2026-11-05: Health 生命、Mana 魔力、Stamina 耐力，Quality 翻「優質」); shown as subtitle, the title stays the game name
 const POT_ZH={health:"生命",vie:"生命",mana:"魔力",stamina:"耐力"};
 const potZh=n=>{const m=/^(Quality |Qualité )?(?:(Health|Mana|Stamina) Potion|Potion de (Vie|Mana|Stamina)) ([IVX]+)$/i.exec(String(n||"").trim());return m?(m[1]?"優質":"")+POT_ZH[(m[2]||m[3]).toLowerCase()]+"藥水 "+m[4].toUpperCase():""};
@@ -1739,22 +1739,22 @@ const dn=e=>e.gen||e.name;
 const loreHTML=(e,hideFr)=>{const g=GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen||"")]:null);
   if(g&&g.desc)return`<p class="lore">${esc(g.desc)}</p>${e.lore&&!hideFr?`<p class="lore lorefr" title="官網物品圖鑑的法文說明">官網法文說明：${esc(e.lore)}</p>`:""}`;
   return e.lore&&!hideFr?`<p class="lore">${esc(e.lore)}</p>`:""};
-const EQX_CATS=new Set(["acc","artifact","sword","dagger","bow","crossbow","staff_mage","staff_shaman","shield","armor","ring","amulet","bracelet","gloves"]),EQX_BY={};
+const EQX_CATS=new Set(["acc","quiver","artifact","sword","dagger","bow","crossbow","staff_mage","staff_shaman","shield","armor","ring","amulet","bracelet","gloves"]),EQX_BY={};
 {let k=0;Object.keys(ITEMS).forEach(id=>{const it=ITEMS[id];if(it.fr||!EQX_CATS.has(it.cat))return;const st={...(it.st||{})};const dmg=st["Attack Damage"]||null;delete st["Attack Damage"];
   const e={oid:"x"+(++k),name:id,gen:id,cat:it.cat,r:it.r,lv:it.lv||0,dmg,lore:"",st,ic:-1,itemId:id,extra:1};EQ.push(e);EQX_BY[id]=e.oid;
   // game-only equipment (not in the official catalogue, e.g. the Elite Treant set) gets its recipes by in-game English name (user 2026-11-06: elite套裝有截過圖，為什麼網頁沒有使用)
   const rows=ALLREC.filter(r=>norm(r.en)===norm(id));if(rows.length)RECIPE_BY_EQ[e.oid]=rows})}
 const eqById=Object.fromEntries(EQ.map(e=>[String(e.oid),e]));EQ.forEach(e=>{if(GI_OID[e.oid])e.gen=GI_OID[e.oid].en});
 const FR2ID={};Object.keys(ITEMS).forEach(id=>{if(ITEMS[id].fr)FR2ID[ITEMS[id].fr]=id});
-const EQ_PART={sword:"weapon",dagger:"weapon",bow:"weapon",crossbow:"weapon",staff_mage:"weapon",staff_shaman:"weapon",catalyst:"off",shield:"off",armor:"armor",gloves:"acc",ring:"acc",amulet:"acc",bracelet:"acc",artifact:"acc",acc:"acc"};
-const EQ_CAT={sword:"近戰武器",dagger:"匕首",bow:"弓",crossbow:"弩",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",catalyst:"催化器（副手）",shield:"盾牌",armor:"防具",gloves:"手套",ring:"戒指",amulet:"項鍊",bracelet:"手環",artifact:"遺物",acc:"飾品（部位未確認）"};
+const EQ_PART={sword:"weapon",dagger:"weapon",bow:"weapon",crossbow:"weapon",staff_mage:"weapon",staff_shaman:"weapon",catalyst:"off",quiver:"off",shield:"off",armor:"armor",gloves:"acc",ring:"acc",amulet:"acc",bracelet:"acc",artifact:"acc",acc:"acc"};
+const EQ_CAT={sword:"近戰武器",dagger:"匕首",bow:"弓",crossbow:"弩",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",catalyst:"催化器（副手）",quiver:"箭袋（副手）",shield:"盾牌",armor:"防具",gloves:"手套",ring:"戒指",amulet:"項鍊",bracelet:"手環",artifact:"遺物",acc:"飾品（部位未確認）"};
 const SLOT_ZH={head:"頭盔",chest:"胸甲",legs:"護腿",feet:"靴子"};
 // armour without a slot in the catalogue: take it from the French name (Casque/Masque = head, Plastron/Tunique/Robe = chest…)
 const SLOT_BY_NAME=[[/^(Casque|Masque|Diad[eè]me|Heaume|Capuche|Chapeau|Couronne)/i,"head"],[/^(Plastron|Tunique|Robe)/i,"chest"],[/^Jambi[eè]re/i,"legs"],[/^(Bottes|Bottines|Sandales)/i,"feet"]];
 EQ.forEach(e=>{if(e.cat==="armor"&&!e.slot){const m=SLOT_BY_NAME.find(([re])=>re.test(e.name));if(m)e.slot=m[1]}});
 const eqCat=e=>e.cat==="armor"&&e.slot?SLOT_ZH[e.slot]:EQ_CAT[e.cat]||e.cat;
 const eqSub=e=>e.cat==="armor"?(e.slot||"armor"):e.cat;
-const EQ_SUBS={weapon:["sword","dagger","bow","crossbow","staff_mage","staff_shaman"],off:["shield","catalyst"],armor:["head","chest","legs","feet"],acc:["amulet","ring","bracelet","gloves","artifact"].concat(EQ.some(e=>e.cat==="acc")?["acc"]:[])};
+const EQ_SUBS={weapon:["sword","dagger","bow","crossbow","staff_mage","staff_shaman"],off:["shield","catalyst"].concat(EQ.some(e=>e.cat==="quiver")?["quiver"]:[]),armor:["head","chest","legs","feet"],acc:["amulet","ring","bracelet","gloves","artifact"].concat(EQ.some(e=>e.cat==="acc")?["acc"]:[])};
 const subLab=k=>k==="acc"?"部位未確認":SLOT_ZH[k]||EQ_CAT[k]||k;
 const eqClasses=e=>String(e.st["Classe requise"]||"").split(/,\s*/).map(c=>c.toLowerCase()).filter(c=>CLASS_ZH[c]);
 const eslot=(e,s=44)=>e.ps?pslot(e,s):e.itemId&&(GICON[e.itemId]||(ITEMS[e.itemId]||{}).ic>=0)?(GICON[e.itemId]?recicImg(GICON[e.itemId],s):slot(e.itemId,s)):e.itemId?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
@@ -1767,7 +1767,7 @@ chipsInto($("fEqPart"),[["all","全部"],["weapon","武器（主手）"],["off",
 chipsInto($("fEqClass"),[["all","全部"],...Object.entries(CLASS_ZH)],()=>eqClass,v=>eqClass=v,renderEquip);
 chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
 ["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
-const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory",acc:"accessory"};
+const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",quiver:"quiver offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory",acc:"accessory"};
 const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value;
   const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s));
