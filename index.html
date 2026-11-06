@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="cbe8436854">
+<meta name="sao-build" content="cd70a4c8fe">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -510,6 +510,8 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
   .mapnote.open{white-space:normal}
 }
 @media (min-width:821px){.jmcredit{left:220px}}
+.jmlead{margin:0}.jmhow{border:1px solid var(--line);border-radius:8px;padding:6px 10px}.jmhow>summary{cursor:pointer;font-size:13px;color:var(--accent);font-weight:600}
+.jmhow .steps{margin:8px 0 6px}.jmscope{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:6px}
 .jmout{display:flex;flex-direction:column;gap:8px;font-size:13px}
 .jmout .jmrow{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:5px 2px;border-top:1px solid var(--line)}
 .jmout .jmrow:first-child{border-top:0}
@@ -525,8 +527,11 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .jmmap .jmreg:hover,.jmmap .jmreg:focus-visible{stroke:#fff}
 .jmmap .jmtown{pointer-events:none}.jmmap .jmtown circle{fill:#fff;stroke:#111;stroke-width:14}
 .jmmap .jmtown text{font:600 150px var(--f-body);fill:#fff;stroke:#0b1219;stroke-width:34;paint-order:stroke;text-anchor:middle}
-.jmdgl{display:flex;flex-direction:column;gap:4px}.jmdg{display:flex;align-items:baseline;gap:8px;font-size:12.5px;cursor:pointer;padding:3px 0;border-top:1px solid var(--line)}
-.jmdg:first-child{border-top:0}.jmdg input{align-self:center;margin:0}.jmdg b{font-weight:600}.jmdg .n{margin-left:auto;color:var(--muted);font-size:11.5px;white-space:nowrap}
+.jmdgl{display:flex;flex-direction:column;gap:4px}.jmdg{display:flex;align-items:center;gap:10px;font-size:12.5px;padding:3px 0;border-top:1px solid var(--line)}
+.jmdg:first-child{border-top:0}.jmdg label{display:flex;align-items:center;gap:6px;cursor:pointer;min-width:0}.jmdg input{margin:0}.jmdg b{font-weight:600}
+.jmdg .n{margin-left:auto;color:var(--muted);font-size:11.5px;white-space:nowrap}.jmdg .linkbtn{font-size:12px;white-space:nowrap}
+.jmdgprev{display:flex;flex-direction:column;gap:6px;align-items:flex-start}.jmdgprev canvas{max-width:100%;border:1px solid var(--line);border-radius:6px;image-rendering:pixelated}
+.jmdgpvh{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;font-size:12.5px}
 .jmprev{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;min-height:40px}.jmprev img{width:96px;height:96px;flex:none;image-rendering:pixelated;border:1px solid var(--line);border-radius:4px;background:#070c11}
 .jmprev .warn{color:var(--warn)}
 .jmregbar{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:12.5px}.jmregbar #jmRegSum{flex:1 1 100%}
@@ -839,7 +844,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=b9c0a8b1"></script>
 <script src="npcs.js?v=576b7565"></script>
-<script src="changelog.js?v=051c3b81"></script>
+<script src="changelog.js?v=2ba8f8f7"></script>
 <script src="recipes.js?v=36e8b52c"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -2316,7 +2321,7 @@ async function jmZip(entries){const enc=new TextEncoder(),body=[],cen=[];let off
 const JM_ST={f1:["第 1 層","ok"],other:["不是第 1 層","no"],few:["和網站地圖重疊太少，無法確認","no"],out:["不在第 1 層的範圍","no"],noday:["沒有地面地圖，無法確認","no"],dg:["地下城","ok"],dgno:["旁邊沒有第 1 層地圖，無法確認","no"],dgunk:["網站還不認得的副本","no"]};
 const mb=b=>(b/1048576).toFixed(1)+" MB";
 let JMG=[];
-async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];
+async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];{const h=$("jmHow");if(h)h.open=false}   // the results need the room; the steps stay one click away
   const groups=jmGroups(files);
   if(!groups.length){O.innerHTML=`<div class="note warn">選的資料夾裡找不到 JourneyMap 的地圖（<code>day</code> 或高度層資料夾裡 <code>3,7.png</code> 這種檔案）。請確認選的是 <code>journeymap\\data\\mp</code>。</div>`;return}
   O.innerHTML=`<div class="muted">找到 ${groups.length} 個世界資料夾，正在和網站地圖比對…</div>`;
@@ -2340,6 +2345,24 @@ function jmPreview(k){const P=$("jmPrev");if(!P)return;const [rx,rz]=k.split(","
   const it=day[0]||cave[0];if(!it)return;const cx=rx*512+256-2560,cz=rz*512+256-2560,out=Math.hypot(cx,cz)>2487+256;
   const nm=jmRegNames(rx,rz);
   P.innerHTML=`<img src="${jmUrl(it.f)}" alt=""><span><b>${esc(nm.join("、")||"這一格")}</b>${out?"<br><span class=\"warn\">在第 1 層的島外面（地圖邊緣以外）</span>":""}<br>地面 ${day.length} 張・地底 ${cave.length} 張${!day.length?"<br>（這一格只有地底的資料，圖是地底那一層）":""}<br><span class="muted">${JMSEL.off.has(k)?"目前：不上傳":"目前：會上傳"}</span></span>`}
+// preview of a dungeon: every run of it drawn together (oldest first) on the height with the most images, cropped to
+// where there is data. It shows the player's whole map of the dungeon, not only the part the site lacks.
+async function jmDgPreview(d){const P=$("jmDgPrev");if(!P)return;const inst=JMG.filter(g=>g.state==="dg"&&g.dg===d).sort((a,b)=>a.latest-b.latest);
+  const cnt={};inst.forEach(g=>Object.values(g.layers).forEach(L=>cnt[L.key]=(cnt[L.key]||0)+L.items.length));
+  const key=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a])[0];if(!key)return;
+  const its=inst.flatMap(g=>(g.layers[key]||{items:[]}).items);
+  const x0=Math.min(...its.map(i=>i.rx)),z0=Math.min(...its.map(i=>i.rz)),nx=Math.max(...its.map(i=>i.rx))-x0+1,nz=Math.max(...its.map(i=>i.rz))-z0+1;
+  P.hidden=false;P.innerHTML=`<span class="muted">正在畫 ${esc(dgName(d))} 的預覽…</span>`;
+  const c=document.createElement("canvas");c.width=nx*512;c.height=nz*512;const x=c.getContext("2d",{willReadFrequently:true});
+  for(const it of its){try{const bm=await createImageBitmap(it.f);x.drawImage(bm,(it.rx-x0)*512,(it.rz-z0)*512);bm.close&&bm.close()}catch(e){}}
+  const D=x.getImageData(0,0,c.width,c.height).data;let a=c.width,b=c.height,e=-1,f=-1;
+  for(let y=0;y<c.height;y+=2)for(let q=0;q<c.width;q+=2)if(D[(y*c.width+q)*4+3]){if(q<a)a=q;if(q>e)e=q;if(y<b)b=y;if(y>f)f=y}
+  if(e<0){P.innerHTML=`<span class="muted">${esc(dgName(d))} 這一層沒有畫面。</span>`;return}
+  a=Math.max(0,a-8);b=Math.max(0,b-8);e=Math.min(c.width,e+10);f=Math.min(c.height,f+10);
+  const w=e-a,h=f-b,k=Math.min(4,260/Math.max(w,h)),o=document.createElement("canvas");o.width=Math.round(w*k);o.height=Math.round(h*k);
+  const ox=o.getContext("2d");ox.imageSmoothingEnabled=k<1;ox.fillStyle="#070c11";ox.fillRect(0,0,o.width,o.height);ox.drawImage(c,a,b,w,h,0,0,o.width,o.height);
+  P.innerHTML=`<div class="jmdgpvh"><b>${esc(dgName(d))}</b><span class="muted">${inst.length} 次進場合在一起・${key==="day"?"地面":`Y ${+key.slice(1)*16}～${+key.slice(1)*16+15}`}（圖最多的那一層）</span><button class="linkbtn" id="jmDgPrevX">收起</button></div>`;
+  P.appendChild(o);$("jmDgPrevX").onclick=()=>{P.hidden=true;P.innerHTML=""}}
 // layers found in the floor 1 worlds, surface first, then by height
 function jmFound(){const m=new Map();for(const g of JMG)if(g.state==="f1"){
     m.set("day",(m.get("day")||0)+g.news.length);
@@ -2377,7 +2400,8 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   const dgOpts=dgList.length||unk.length?`<div class="jmopt"><div class="jmoh">地下城</div>
     <div class="muted" style="font-size:12px">工具從 JourneyMap 的資料夾名稱認出地下城，同一個地下城進場好幾次的地圖會合成一張。不想上傳的取消勾選。</div>
     <div class="jmdgl">${dgList.map(d=>{const n=dgNews(d),k=dgOk.filter(g=>g.dg===d).length;
-      return`<label class="jmdg"><input type="checkbox" data-jmdg="${d}"${JMSEL.dgOff.has(d)?"":" checked"}${n?"":" disabled"}><b>${esc(dgName(d))}</b><span class="n">${k} 次進場・${n?n+" 張新的":"網站都已經有了"}</span></label>`}).join("")}</div>
+      return`<div class="jmdg"><label><input type="checkbox" data-jmdg="${d}"${JMSEL.dgOff.has(d)?"":" checked"}${n?"":" disabled"}><b>${esc(dgName(d))}</b></label><span class="n">${k} 次進場・${n?n+" 張新的":"網站都已經有了"}</span><button class="linkbtn" data-jmdgpv="${d}">預覽</button></div>`}).join("")}</div>
+    <div class="jmdgprev" id="jmDgPrev" hidden></div>
     ${unk.length?`<div class="muted" style="font-size:12px">網站還不認得、先不收的：${unk.map(esc).join("、")}</div>`:""}</div>`:"";
   const opts=(f1.length&&regs.size?`<div class="jmopt"><div class="jmoh">要上傳哪些地方</div>
     <div class="muted" style="font-size:12px">亮橘色的方格是你有、網站還沒有的地方（地面 ${nDay} 張・地底洞穴 ${nCave} 張，地底由工具自動判斷）。點一下方格可以取消或加回。</div>
@@ -2402,6 +2426,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   O.querySelectorAll("[data-jmreg]").forEach(e=>{const pv=()=>jmPreview(e.dataset.jmreg);e.addEventListener("mouseenter",pv);e.addEventListener("focus",pv);
     const t=()=>{const k=e.dataset.jmreg;JMSEL.off.has(k)?JMSEL.off.delete(k):JMSEL.off.add(k);jmShow();pv()};
     e.addEventListener("click",t);e.addEventListener("keydown",ev=>{if(ev.key===" "||ev.key==="Enter"){ev.preventDefault();t()}})});
+  O.querySelectorAll("[data-jmdgpv]").forEach(b=>b.onclick=()=>jmDgPreview(b.dataset.jmdgpv));
   O.querySelectorAll("[data-jmdg]").forEach(c=>c.onchange=()=>{c.checked?JMSEL.dgOff.delete(c.dataset.jmdg):JMSEL.dgOff.add(c.dataset.jmdg);jmShow()});
   const ra=$("jmRegAll"),rn=$("jmRegNone");if(ra)ra.onclick=()=>{JMSEL.off.clear();jmShow()};if(rn)rn.onclick=()=>{(JMG.regs||new Map()).forEach((_,k)=>JMSEL.off.add(k));jmShow()}}
   // picked squares: highlight and a spoken-style summary ("Tolbana、Candelia 一帶")
@@ -2460,12 +2485,15 @@ function buildFormReport(){
     <div class="muted" style="font-size:12.5px">想當審核員？請聯絡網站管理者。</div></article>
   </div><div class="rcol rc-jm pconly">
   <article class="bcard pconly" id="jmPack"><h4 class="sec">🗺️ 打包探索地圖（JourneyMap）</h4>
-    <p style="margin:0">把你的 JourneyMap 地圖整理成可以上傳的壓縮檔，網站會把你探索過、網站還沒有的地方合併進「探索地圖」。<b>檔案只在你的瀏覽器裡處理，不會傳到任何地方</b>，直到你自己把壓縮檔上傳到表單。目前只收第 1 層，地面和地底（洞穴、地下室）都會收，可以在地圖上點選只上傳一部分。地下城是另外的世界，不收。</p>
+    <p class="jmlead">把你的 JourneyMap 地圖打包成壓縮檔，上傳後會合併進網站的「探索地圖」。<b>檔案只在你的瀏覽器裡處理</b>，你自己上傳到表單之前不會送到任何地方。</p>
+    <details class="jmhow" id="jmHow" open><summary>怎麼用（4 步）</summary>
     <ol class="steps">
-      <li>按下面的按鈕。在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。</li>
-      <li>瀏覽器會問「要將 N 個檔案上傳到這個網站嗎？」，按「上傳」。這只是讓網頁讀取，檔案不會被送出。</li>
-      <li>工具會自動找出第 1 層的地圖（mp 裡每個 <code>Triggers_</code> 資料夾是一個世界，不用自己挑），只留網站還沒有的區域。要的話在小地圖上點掉不想上傳的方格，再按「下載壓縮檔」。</li>
-      <li>按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>，上傳這個壓縮檔後送出。<b>不用截圖</b>，送出後會自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
+      <li><b>選資料夾</b>：按下面的按鈕，在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。瀏覽器問「要將 N 個檔案上傳到這個網站嗎？」也按「上傳」，這只是讓網頁讀取。</li>
+      <li><b>看結果</b>：工具自動找出第 1 層的地圖和地下城，只留網站還沒有的部分，不用自己挑資料夾。</li>
+      <li><b>挑要上傳的</b>（可略過）：小地圖上點掉不想上傳的方格、地下城取消勾選。指到方格或按地下城的「預覽」可以先看那一塊的地圖。</li>
+      <li><b>上傳</b>：按「下載壓縮檔」，再按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>、上傳壓縮檔後送出。不用截圖，送出後自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
+    <div class="jmscope"><span><b>會收</b>：第 1 層的地面、地底（洞穴、地下室）、地下城（Geldorack Dungeon、Sanctuary of Xal'Zirith、Labyrinth of the Fallen）</span><span><b>不收</b>：其他樓層、破碎的地下世界、活動區域（例如 backrooms）</span></div>
+    </details>
     <label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden>
     <div class="muted" style="font-size:12.5px">要在電腦上用 Chrome 或 Edge。</div>
     <div id="jmOut" class="jmout" aria-live="polite"></div>

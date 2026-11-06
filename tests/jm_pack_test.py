@@ -118,6 +118,13 @@ try:
         check(D.get("geldorack", {}).get("inst") == 2 and D["geldorack"]["news"] == 3 and D["geldorack"]["bounds"] == [-1, -1, -1, -1]
               and st2["bb0000b0-5d0c-4000-8000-000000000001_backrooms"]["state"] == "dgunk" and st2["03b352fd-5d0c-4000-8000-000000000002_xalzirith"]["state"] == "dgno",
               f"dungeons are recognised by folder name; unknown and unconfirmed ones are listed but not packed ({D}, {[(k, v['state']) for k, v in st2.items() if v.get('dg')]})")
+        pg.click("[data-jmdgpv=geldorack]"); pg.wait_for_selector("#jmDgPrev canvas", timeout=10000)
+        cw = pg.evaluate("[document.querySelector('#jmDgPrev canvas').width,document.querySelector('#jmDgPrev canvas').height]")
+        check(cw[0] > 100 and cw[1] > 30 and "2 次進場合在一起" in pg.inner_text("#jmDgPrev"), f"a dungeon can be previewed, its runs drawn together ({cw})")
+        if os.environ.get("SHOT_DIR"):
+            pg.locator("#jmDgPrev").scroll_into_view_if_needed(); pg.wait_for_timeout(200)
+            pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_dgprev.png"))
+        check(not pg.evaluate("document.getElementById('jmHow').open"), "the how-to folds away once a folder is picked")
         check("Geldorack Dungeon" in lt and "2 次進場" in lt and "backrooms" in lt and pg.locator("[data-jmdg=geldorack]").is_checked(), "the dungeon list names the dungeon and its runs")
         regs = pg.eval_on_selector_all("[data-jmreg]", "e=>e.map(x=>x.dataset.jmreg)")
         check("5,9" in regs and "2,2" in regs and "40,40" not in regs and pg.locator(".jmmap .jmtown").count() >= 5
