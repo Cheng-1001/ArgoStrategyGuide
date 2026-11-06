@@ -1,5 +1,5 @@
 /* Floor 1 NPCs by role, from DelayedCode's SAO MC Interactive Map (titles, roles and X / Z only).
-   Row: [category, name, x, z, src, underground?]; src "ref" = Current Data, "beta" = only in the reference
+   Row: [category, name, x, z, src, underground?] (1 = underground, 2 = in a basement, owner-confirmed); src "ref" = Current Data, "beta" = only in the reference
    map's Beta-test data (may have moved since). Beta rows are used only for roles that Current Data does not list at all.
    "site" = located in game by the site owner (SITE list in tools/build_npcs.py). */
 window.SAO_NPCS={1:[
@@ -38,11 +38,11 @@ window.SAO_NPCS={1:[
  ["toolMerchants", "Starting Town - Tools", 1787, 4161, "ref"],
  ["accessoriesMerchants", "Accessories Merchant", 3322, 1610, "beta"],
  ["accessoriesMerchants", "Accessories Merchant", 485, 3058, "beta"],
- ["occultMerchants", "Occult Merchant - Amulet", 3320, 1665, "ref"],
- ["occultMerchants", "Occult Merchant - Artifacts", 867, 4033, "ref"],
- ["occultMerchants", "Occult Merchant - Bracelet", 3348, 1634, "ref"],
- ["occultMerchants", "Occult Merchant - Gloves", 3371, 1698, "ref"],
- ["occultMerchants", "Occult Merchant - Ring", 3319, 1722, "ref"],
+ ["occultMerchants", "Occult Merchant - Amulet", 3320, 1665, "ref", 2],
+ ["occultMerchants", "Occult Merchant - Artifacts", 867, 4033, "ref", 2],
+ ["occultMerchants", "Occult Merchant - Bracelet", 3348, 1634, "ref", 2],
+ ["occultMerchants", "Occult Merchant - Gloves", 3371, 1698, "ref", 2],
+ ["occultMerchants", "Occult Merchant - Ring", 3319, 1722, "ref", 2],
  ["consumablesMerchants", "PvP Purification Alchemist", 1813, 4180, "ref"],
  ["consumablesMerchants", "The Assistant", 1772, 4102, "ref"],
  ["weaponsmith", "Labyrinth Weaponsmith", 2419, 2390, "beta", 1],
@@ -57,6 +57,7 @@ window.SAO_NPCS={1:[
  ["materialsBlacksmith", "Sewer Reshaper", 2864, 4740, "ref", 1],
  ["accessoriesBlacksmith", "Bandit Accessories", 4169, 3933, "ref"],
  ["accessoriesBlacksmith", "Copper Accessories", 1771, 4131, "ref"],
+ ["accessoriesBlacksmith", "Corrupted Boar Accessories", 1778, 3530, "site2"],
  ["accessoriesBlacksmith", "Deer Accessories", 3232, 1474, "ref"],
  ["accessoriesBlacksmith", "Elite Treant Accessories", 1491, 3419, "ref"],
  ["accessoriesBlacksmith", "Ice Golem Accessories", 3238, 1477, "ref"],

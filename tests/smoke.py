@@ -341,8 +341,8 @@ with sync_playwright() as p:
 
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
     zl = pg.inner_text("#zlist")
-    check("傳送點－城鎮 7" in zl and "傳送點－地標 6" in zl and pg.locator(".town.tp").count() == 13 and pg.locator(".town.land").count() == 3,
-          "13 teleports (7 towns, 6 landmarks) share one marker style; landmarks (Vallhat, hidden well, Lac des Nénuphars) another")
+    check("傳送點－城鎮 7" in zl and "傳送點－地標 6" in zl and pg.locator(".town.tp").count() == 13 and pg.locator(".town.land").count() == 4,
+          "13 teleports (7 towns, 6 landmarks) share one marker style; landmarks (Vallhat, hidden well, Lac des Nénuphars, Valley of Petals) another")
     check(pg.locator(".areas path").count() >= 13 and pg.get_attribute(".areas path", "vector-effect") == "non-scaling-stroke",
           "monster areas are outlined with a zoom-independent line width")
     n = pg.locator(".zone.npc").count()

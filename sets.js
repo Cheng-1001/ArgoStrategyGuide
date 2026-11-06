@@ -1,15 +1,16 @@
 /* Equipment set bonuses and potion effects as shown in the game's item tooltips (owner's screenshots; not published).
    sets: {name, tiers:[[pieces, effect text as in game]], members:[English item names whose tooltip shows the set]}
    potions: {name, effects:[lines as in game]}. User 2026-11-05: 套裝效果、藥水效果也要寫進去. */
-window.SAO_SETS = {date:"2026-11-05", sets:[
+window.SAO_SETS = {date:"2026-11-07", sets:[
+ {"name": "Misty Fangs Set", "tiers": [[2, "+1% Lifesteal"], [3, "+5% Crit Chance, +2.5% Crit Damage"], [4, "+5 Attack Damage, +5% Attack Speed"]], "members": ["Misty Ring"]},
  {"name": "Shark Set", "tiers": [[2, "+5% Ability Haste"], [3, "+3 Health"], [4, "+3% Physical Damage"]], "members": ["Ring of the Shark", "Shark Amulet", "Shark Fang", "Bracelet of the Shark", "Ring of the Leviathan"]},
  {"name": "Standard Skeleton Set", "tiers": [[2, "+5% Ability Haste"], [3, "+0.05 Health/s"], [4, "-2% Damage Reduction"]], "members": ["Skeleton Skull", "Ring of Narax", "Skeletal Ring", "Bony Gloves", "Skeletal Amulet"]},
- {"name": "Shadow Neophyte Set", "tiers": [[2, "-0.6/s Health, -50% Healing Received"], [3, "-0.6/s Health"], [4, "-0.6/s Health"], [5, "-0.6/s Health"], [6, "-0.6/s Health"], [7, "-0.6/s Health"]], "members": ["Occult Bracelet", "Occult Amulet", "Occult Robe", "Occult Skull"]},
+ {"name": "Shadow Neophyte Set", "tiers": [[2, "-0.6/s Health, -50% Healing Received"], [3, "-0.6/s Health"], [4, "-0.6/s Health"], [5, "-0.6/s Health"], [6, "-0.6/s Health"], [7, "-0.6/s Health"]], "members": ["Occult Bracelet", "Occult Amulet", "Occult Robe", "Occult Skull", "Occult Hood", "Occult Ring", "Occult Gloves"]},
  {"name": "Hunter Necromancer Set", "tiers": [[2, "+0.3 Stamina/s"], [3, "+3% Crit Chance, +3% Crit Damage"], [4, "+4 Attack Damage"]], "members": ["Boots of the Hunter Necromancer"]},
  {"name": "Hunter Set", "tiers": [[2, "+0.1 Stamina/s"], [3, "+0.5% Critical Chance"]], "members": ["Hunter's Boots", "Hunter's Leggings"]},
- {"name": "Bandit Set", "tiers": [[2, "+1 Health, +2% Critical Power"], [3, "+0.5 Attack Damage"], [4, "+1% Critical Chance"]], "members": ["Stolen Cloak", "Stolen Amulet"]},
+ {"name": "Bandit Set", "tiers": [[2, "+1 Health, +2% Critical Power"], [3, "+0.5 Attack Damage"], [4, "+1% Critical Chance"]], "members": ["Stolen Cloak", "Stolen Amulet", "Bandit Coin"]},
  {"name": "Little Slime Set", "tiers": [[2, "+2 Health"], [3, "+0.05 Health/s, +0.05 Mana/s, +0.05 Stamina/s"], [4, "+5% Cooldown Reduction"]], "members": ["Gelatinous Bracelet", "Gelatinous Cloak", "Slimy Ring"]},
- {"name": "Elite Treant Set", "tiers": [[2, "+0.5% Critical Chance"], [3, "+2% Movement Speed"], [4, "+5% Projectile Damage"]], "members": ["Elite Gloves", "Elite Carapace"]},
+ {"name": "Elite Treant Set", "tiers": [[2, "+0.5% Critical Chance"], [3, "+2% Movement Speed"], [4, "+5% Projectile Damage"]], "members": ["Elite Gloves", "Elite Carapace", "Elite Bracelet"]},
  {"name": "Corrupted Boar Set", "tiers": [[2, "+0.25 Attack Damage"], [3, "+2 Health"], [4, "+0.25 Attack Damage"]], "members": ["Gloves of the Boar", "Bracelet of the Boar", "Belt of the Boar"]},
  {"name": "Ice Golem Set", "tiers": [[2, "+5 Health"], [3, "+3% Ability Haste, +0.1 Health/s"], [4, "+1 Defense, +2 Health, +2% Skill Damage"]], "members": ["Frozen Bracelet", "Frozen Ring", "Frozen Gloves", "Frozen Amulet", "Bracelet of Ice"]},
  {"name": "Ice Spirits Set", "tiers": [[2, "+1.5% Skill Crit Chance"], [3, "+1 Max Mana"], [4, "+3% Magic Damage"]], "members": ["Glacial Essence", "Glacial Ring", "Glacial Antenna", "Glacial Amulet"]},
@@ -64,6 +65,8 @@ window.SAO_SETS = {date:"2026-11-05", sets:[
  {"name": "Potion of Albal", "effects": ["Cooldown: 1800s", "Uses Remaining: 1"]},
  {"name": "Drop of Sap", "effects": ["Cooldown: 1800s", "Uses Remaining: 1"]},
  {"name": "Potion of the Martyr", "effects": ["Restaure 250❤", "Utilisations restantes: 1", "Boost les Dégâts armes de 10% - 30sec !"]},
+ {"name": "Aincrad Crystal", "effects": ["Restores 150 HP, 150 mana and 150 stamina immediately.", "Boosts Crit Chance and Crit Damage by 10% - 10min !", "Boosts Weapon Damage and Magic Damage by 20% - 10min !", "Cooldown: 180s", "Uses Remaining: 3"]},
+ {"name": "Cursed Jewel", "effects": ["Cooldown: 60s", "Uses Remaining: 1", "Max health +15, defense +5 and magic damage +5% for 30min", "60s cooldown on all Reapkin candies"]},
  {"name": "Witch's Dragée", "effects": ["Cooldown: 60s", "Uses Remaining: 1", "Regenerates 0.1/s of mana and 0.1/s of stamina for 15min", "60s cooldown on all Reapkin candies"]},
  {"name": "Bloody Swirl", "effects": ["Cooldown: 60s", "Uses Remaining: 1", "Attack damage +6% and skill critical strike power +4% for 20min", "60s cooldown on all Reapkin candies"]},
  {"name": "Pumpkin Caramel", "effects": ["Cooldown: 60s", "Uses Remaining: 1"]},

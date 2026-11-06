@@ -26,6 +26,7 @@ for b in beta:
 # NPCs the site owner located in game (not in the reference map); src "site"
 SITE=[dict(c='beggar',n='臭乞丐',x=3336,z=1760,u=False,src='site'),
       dict(c='other',n='Mine Archaeologist',x=4280,z=3891,u=False,src='site2'),   # Geldorak Mine entrance, owner's screenshot 2026-11-03 22:10
+      dict(c='accessoriesBlacksmith',n='Corrupted Boar Accessories',x=1778,z=3530,u=False,src='site2'),   # Boar Zone smith ([NPC] Accessory Blacksmith), owner's screenshots 2026-11-07 02:20 (player X 1778 Z 3527-3533)
       # owner's screenshots 2026-11-03 22:40-23:00 (player position next to the NPC)
       dict(c='other',n='Weapon Recycling',x=1776,z=4132,u=False,src='site2'),
       dict(c='other',n='Accessory Recycling',x=1766,z=4123,u=False,src='site2'),
@@ -34,12 +35,15 @@ SITE=[dict(c='beggar',n='臭乞丐',x=3336,z=1760,u=False,src='site'),
       dict(c='other',n='Labyrinth Archaeologist',x=2389,z=2412,u=False,src='site2'),
       dict(c='other',n='Web Archaeologist',x=1019,z=1178,u=False,src='site2')]   # Arakh'Nol, next to the Xal'Zirith guard; owner's screenshot 2026-11-06 01:58 (minimap x 1019 z 1178 y 116); its window is "Aragorn's Lair - Loot Info" (sell tab)   # Geldorak Mine entrance, owner's screenshot 2026-11-03 22:10   # Tolbana, owner's gameplay video 2026-10-30 (player position next to the NPC)
 res+=SITE
+# owner 2026-11-07: every Occult Merchant (Amulet / Artifacts / Bracelet / Gloves / Ring) is in a basement -> u = 2 ("地下室")
+for r in res:
+    if r['n'].startswith('Occult Merchant'): r['u']=2
 res.sort(key=lambda r:((CATS+['beggar','other']).index(r['c']),r['n']))
 from collections import Counter
 print(len(res),Counter(r['c'] for r in res)); print(Counter(r['src'] for r in res))
-rows=',\n'.join(' '+json.dumps([r['c'],r['n'],r['x'],r['z'],r['src']]+([1] if r['u'] else []),ensure_ascii=False) for r in res)
+rows=',\n'.join(' '+json.dumps([r['c'],r['n'],r['x'],r['z'],r['src']]+([2 if r['u']==2 else 1] if r['u'] else []),ensure_ascii=False) for r in res)
 hdr='''/* Floor 1 NPCs by role, from DelayedCode's SAO MC Interactive Map (titles, roles and X / Z only).
-   Row: [category, name, x, z, src, underground?]; src "ref" = Current Data, "beta" = only in the reference
+   Row: [category, name, x, z, src, underground?] (1 = underground, 2 = in a basement, owner-confirmed); src "ref" = Current Data, "beta" = only in the reference
    map's Beta-test data (may have moved since). Beta rows are used only for roles that Current Data does not list at all.
    "site" = located in game by the site owner (SITE list in tools/build_npcs.py). */
 window.SAO_NPCS={1:[

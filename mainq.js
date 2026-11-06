@@ -14,7 +14,7 @@
    7 = Bury Them (between 6 and the wiki's 8). A New World and A Decisive Choice have no number in the game.
    Step: [text, x, z, approx]   x/z null = no coordinate; approx 1 = "about here". */
 window.SAO_MAINQ = {1: [
- {t:"A New World", npc:"Yui", lv:"1", d:"在起始之城醒來，Yui 把你送進艾恩葛朗特。",
+ {t:"A New World", npc:"Yui", lv:"1", d:"在虛空中有個聲音迎接你，腳下就是巨大的艾恩葛朗特。",
   s:[["和神秘人物對話（教學區，不在樓層地圖上）",null,null]]},
  {t:"A Decisive Choice", npc:"The Master Swordsman", lv:"1", d:"劍術大師介紹所有職業和職業選單。之後隨時可以換職業；選好後前往起始之城。",
   s:[["和劍術大師對話（教學區）",null,null],["依序試用戰士、弓箭手、薩滿、法師、刺客五種職業",null,null],["回去找劍術大師",null,null]]},
@@ -28,7 +28,7 @@ window.SAO_MAINQ = {1: [
   s:[["告訴鍊金術士碎片的事",1772,4096],["去找劍術大師",1089,4289],["前往花瓣谷的墜落地點",1051,4367]]},
  {t:"What No One Will Touch（續）", npc:"The Master Swordsman", d:"從破碎的地下世界回到艾恩葛朗特後，繼續這段主線。",
   s:[["從遊戲選單點艾恩葛朗特（Aincrad）圖示回到艾恩葛朗特",null,null],["去找劍術大師",1089,4289],["前往 Hanaka",1576,3460,1]]},
- {t:"The Assault", n:5, npc:"Mayor of Hanaka", d:"Hanaka 遭到襲擊。",
+ {t:"The Assault", n:5, npc:"Mayor of Hanaka", d:"Hanaka 遭到襲擊：樹人從森林走出來、朝廣場前進，大家發現一名全身被腐化覆蓋的村民。",
   s:[["擋下三波敵人（每波 5 隻）",null,null],["右鍵救出被抓的村民",null,null],["和村長對話",1526,3412]]},
  {t:"The Forest of Small Webs", n:6, npc:"Mayor of Hanaka", d:"村長有事要拜託吸收了腐化之力的你。",
   s:[["前往小蛛網森林",1358,3539],["找到第二具屍體",1341,3521],["找到第三具屍體",1375,3512],["回報村長",1526,3412]]},
