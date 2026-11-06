@@ -11,6 +11,17 @@ window.SAO_GAMEICONS = {
  "Daily Stamina Crystal": "icons/game/daily_stamina_crystal.png",
  "Radiant Power Crystal": "icons/game/radiant_power_crystal.png",
  "Box of Chocolates": "icons/game/box_of_chocolates.png",
- "Elite Gloves": "icons/game/elite_gloves.png",       // auction house 2026-11-04 22:42 (selected listing, white disk removed)
- "Elite Carapace": "icons/game/elite_carapace.png",   // auction house 2026-11-04 22:45
+ // game-only equipment (2026-11-06): rebuilt on the 16 px pixel grid from big screenshots (auction tile k≈4.7 screen px per
+ // texture px, crafting-window detail k≈3.8; scratchpad gridfit.py / rebuild.py), checked against the official icons.
+ // tools/equip_icons.py (resource pack, owner's PC) replaces these with the exact textures.
+ "Bracelet of the Nepenthes": "icons/game/bracelet_of_the_nepenthes.png",
+ "Amulet of the Nepenthes": "icons/game/amulet_of_the_nepenthes.png",
+ "Frozen Bracelet": "icons/game/frozen_bracelet.png",
+ "Frozen Ring": "icons/game/frozen_ring.png",
+ "Glacial Ring": "icons/game/glacial_ring.png",
+ "Shark Fang": "icons/game/shark_fang.png",
+ "Elite Gloves": "icons/game/elite_gloves.png",
+ "Elite Carapace": "icons/game/elite_carapace.png",
+ "Ring of the Shark": "icons/game/ring_of_the_shark.png",
+ "Glacial Essence": "icons/game/glacial_essence.png"
 };
