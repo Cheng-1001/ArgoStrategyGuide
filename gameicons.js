@@ -10,5 +10,7 @@ window.SAO_GAMEICONS = {
  "Stamina Shard": "icons/game/stamina_shard.png",
  "Daily Stamina Crystal": "icons/game/daily_stamina_crystal.png",
  "Radiant Power Crystal": "icons/game/radiant_power_crystal.png",
- "Box of Chocolates": "icons/game/box_of_chocolates.png"
+ "Box of Chocolates": "icons/game/box_of_chocolates.png",
+ "Elite Gloves": "icons/game/elite_gloves.png",       // auction house 2026-11-04 22:42 (selected listing, white disk removed)
+ "Elite Carapace": "icons/game/elite_carapace.png"    // auction house 2026-11-04 22:45
 };

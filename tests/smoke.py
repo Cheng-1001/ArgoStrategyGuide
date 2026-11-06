@@ -301,6 +301,16 @@ with sync_playwright() as p:
     names = pg.evaluate("[...document.querySelectorAll('#lItem .card b')].map(b=>b.textContent)")
     check(tabs == ["怪物", "裝備", "道具", "素材"] and "Allium Flower" in names and "Sylvan Bow" not in names and "Boar Meat" not in names,
           f"codex tabs 怪物／裝備／道具／素材; 素材 holds materials, not equipment or food ({tabs})")
+    # game-only equipment (not in the official catalogue): the Elite Treant set comes from the owner's tooltips + recipe windows (user 2026-11-06)
+    pg.goto(base + "#equip"); pg.wait_for_timeout(400); pg.click('#fEqPart .chip[data-v="all"]'); pg.wait_for_timeout(200)
+    pg.fill("#q", "Elite"); pg.wait_for_timeout(400)
+    el = pg.evaluate("[...document.querySelectorAll('#lEq .card b')].map(b=>b.textContent).filter(t=>/^Elite /.test(t)).sort()")
+    check(el == ["Elite Amulet", "Elite Bracelet", "Elite Carapace", "Elite Gloves"], f"equipment tab lists the 4 Elite Treant accessories ({el})")
+    pg.evaluate("[...document.querySelectorAll('#lEq .card')].find(c=>c.querySelector('b').textContent==='Elite Gloves').click()"); pg.wait_for_timeout(300)
+    pb = pg.inner_text("#pBody")
+    check("+1%" in pb and "0.25" in pb and "Elite Treant Accessories" in pb and "查看配方" in pb and pg.locator("#pBody .phead .eslot img[src*='elite_gloves']").count() == 1,
+          f"Elite Gloves panel: game stats, recipe with 查看配方, icon cut from the auction screenshot ({['+1%' in pb, '0.25' in pb, 'Elite Treant Accessories' in pb, '查看配方' in pb, pg.locator('#pBody .phead img').count()]})")
+    pg.fill("#q", ""); pg.wait_for_timeout(200); pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#props"); pg.wait_for_timeout(300)
     check(pg.locator('#fPrGroup .chip[data-v="材料"]').count() == 0 and pg.locator('#fPrGroup .chip[data-v="採集"]').count() == 0, "道具 no longer lists materials / gathered things")
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
