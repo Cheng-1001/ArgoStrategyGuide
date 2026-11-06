@@ -109,6 +109,11 @@ try:
         lt = pg.inner_text("#jmOut")
         check("地面 3 張" in lt and "地底洞穴 8 張" in lt and not pg.locator("#jmOut [data-jmbox], #jmOut [data-jmlay]").count(),
               "no height or coordinate fields: the summary counts surface and underground maps")
+        pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(200)
+        check(pg.locator("#jmPrev img").count() == 1 and "地底 1 張" in pg.inner_text("#jmPrev"), "pointing at a square previews the player's own map of it")
+        if os.environ.get("SHOT_DIR"):
+            pg.locator(".jmopt").first.scroll_into_view_if_needed()
+            pg.locator("#jmOpts").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_opts.png"))
         D = J["dgs"]; st2 = {(g["leaf"] or ""): g for g in J["groups"]}
         check(D.get("geldorack", {}).get("inst") == 2 and D["geldorack"]["news"] == 3 and D["geldorack"]["bounds"] == [-1, -1, -1, -1]
               and st2["bb0000b0-5d0c-4000-8000-000000000001_backrooms"]["state"] == "dgunk" and st2["03b352fd-5d0c-4000-8000-000000000002_xalzirith"]["state"] == "dgno",
