@@ -98,8 +98,11 @@ try:
             pg.locator("#jmOut").scroll_into_view_if_needed()
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_card.png"))
         lt = pg.inner_text("#jmOut")
-        check("地面 3 張" in lt and "地底（洞穴、地下室）8 張" in lt and not pg.locator("#jmOut input[type=checkbox]").count(),
-              "no height choice: the summary counts surface and underground maps")
+        check("地面 3 張" in lt and "地底洞穴 8 張" in lt and not pg.locator("#jmOut input").count(),
+              "no height or coordinate fields: the summary counts surface and underground maps")
+        regs = pg.eval_on_selector_all("[data-jmreg]", "e=>e.map(x=>x.dataset.jmreg)")
+        check("5,9" in regs and "2,2" in regs and "40,40" not in regs and pg.locator(".jmmap .jmtown").count() >= 5
+              and "已選 %d／%d 格" % (len(regs), len(regs)) in lt, f"the squares with new data are on a small map with town names ({regs})")
         check(set(st) == {"Triggers_f1~a", "Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d", "Triggers_lone~e", "Triggers_out~f"},
               "one entry per world folder (night / cave layers are not separate worlds)")
         check(st["Triggers_f1~a"]["state"] == "f1" and st["Triggers_f1~a"]["files"] == 4, f"the floor 1 world is recognised ({st['Triggers_f1~a']})")
@@ -123,37 +126,35 @@ try:
               "files are stored byte for byte")
         def names_now():
             return pg.evaluate("window.__jm.parts.flatMap(p=>p.names)")
-        # an X/Z box around the ink room (layer 1, region 5,9): only that region plus surface anchors from elsewhere
-        pg.fill("[data-jmbox=x0]", "2600"); pg.fill("[data-jmbox=x1]", "2700"); pg.fill("[data-jmbox=z0]", "4700"); pg.fill("[data-jmbox=z1]", "4800")
-        pg.wait_for_timeout(400)
+        # only the ink room square (layer 1, region 5,9): that square plus surface anchors from elsewhere
+        pg.click("#jmRegNone"); pg.wait_for_timeout(100)
+        check(not pg.locator("[data-jmpart]").count() and "請在下面的地圖上點選方格" in pg.inner_text("#jmOut"), "nothing picked -> no download, the note says what to do")
+        pg.click("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(100)
         J2 = pg.evaluate("window.__jm")
         nn = names_now()
         inside = [x for x in nn if x.endswith("/5,9.png")]
         anchors = [x for x in nn if not x.endswith("/5,9.png")]
         check("mp/Triggers_f1~a/overworld/1/5,9.png" in inside and all("/day/" in x for x in anchors) and J2["parts"][0]["ov"] >= 60
-              and (J2["parts"][0]["anchors"] >= 1 and "另含" in pg.inner_text("#jmOut") if not any("/day/" in x for x in inside) else True),
-              f"a box with only underground data carries surface anchors ({J2['parts']})")
+              and (J2["parts"][0]["anchors"] >= 1 and "另含" in pg.inner_text("#jmOut") if not any("/day/" in x for x in inside) else True)
+              and "已選 1／" in pg.inner_text("#jmRegSum"),
+              f"one square with only underground data carries surface anchors ({J2['parts']}, {pg.inner_text('#jmRegSum')})")
         with pg.expect_download() as dl2:
             pg.click("[data-jmpart]")
         zl = os.path.join(tmp, "layer.zip")
         dl2.value.save_as(zl)
-        pg.click("#jmBoxClr"); pg.wait_for_timeout(100)
-        pg.fill("[data-jmbox=x0]", "1100"); pg.fill("[data-jmbox=x1]", "1500"); pg.fill("[data-jmbox=z0]", "1100"); pg.fill("[data-jmbox=z1]", "1200")
-        pg.wait_for_timeout(400)
+        pg.click("[data-jmreg='5,9']", force=True); pg.click("[data-jmreg='2,2']", force=True); pg.wait_for_timeout(100)
         nn = names_now()
         packed = [x for x in nn if "/overworld/2/" in x]
-        check(sorted(packed) == ["mp/Triggers_f1~a/overworld/2/2,2.png"] and "/overworld/1/5,9.png" not in " ".join(nn) and pg.is_visible("#jmBoxClr"),
-              f"an X/Z box keeps only the regions that touch it ({packed})")
-        pg.click("#jmBoxClr"); pg.wait_for_timeout(100)
-        check(pg.evaluate("window.__jm.sel.box") is None and len(names_now()) == len(names), "clearing the box packs everything again")
-        pg.fill("[data-jmbox=x0]", "1100"); pg.fill("[data-jmbox=x1]", "1500")
-        with pg.expect_download(timeout=5000) as dl3:      # typed, then straight to 下載 (the blur rebuilds the buttons)
-            pg.click("[data-jmpart]")
-        z3 = zipfile.ZipFile(dl3.value.path())
-        check(not any("/overworld/2/" in i.filename and not i.filename.endswith("/2,2.png") for i in z3.infolist()),
-              "typing a range and clicking 下載 right away downloads the pack for that range")
-        pg.click("#jmBoxClr"); pg.wait_for_timeout(100)
-        pg.evaluate("__JMP.MAXN=8"); pg.fill("[data-jmbox=x0]", "0"); pg.wait_for_timeout(400)   # re-plan (x >= 0 keeps every region)
+        check(packed == ["mp/Triggers_f1~a/overworld/2/2,2.png"] and "/overworld/1/5,9.png" not in " ".join(nn)
+              and pg.get_attribute("[data-jmreg='5,9']", "aria-checked") == "false", f"clicking squares changes what is packed ({packed})")
+        pg.click("#jmRegAll"); pg.wait_for_timeout(100)
+        check(pg.evaluate("window.__jm.sel.off") == [] and len(names_now()) == len(names), "全部選 packs everything again")
+        if os.environ.get("SHOT_DIR"):
+            pg.click("[data-jmreg='2,2']", force=True); pg.wait_for_timeout(100)
+            pg.locator(".jmmap").scroll_into_view_if_needed()
+            pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_map.png"))
+            pg.click("#jmRegAll"); pg.wait_for_timeout(100)
+        pg.evaluate("__JMP.MAXN=8"); pg.click("#jmRegAll"); pg.wait_for_timeout(100)
         cp = pg.evaluate("window.__jm.parts")
         check(len(cp) >= 2 and all(q["n"] <= 8 and q["ov"] >= 60 for q in cp), f"the file cap splits a pack, every part verifiable ({[(q['n'], q['ov']) for q in cp]})")
         pg.evaluate("__JMP.MAXN=1500")
