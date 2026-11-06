@@ -4,11 +4,16 @@ Usage:
   python3 -I tools/jm_merge.py <upload.zip | folder> [--report R0005] [--date YYYY-MM-DD] [--min-overlap 20]
   python3 -I tools/jm_merge.py --init-mask        (one-off: derive the explored mask from the current tiles)
 
-The upload holds JourneyMap "day" folders: region images "x,z.png" (512 x 512, 1 block = 1 px, region x,z starts at
-block x*512, z*512). The site's 「打包探索地圖」 tool builds it from the player's whole journeymap/data/mp folder
-(one sub-folder per world the player visited; only the floor 1 ones are packed), but a hand-made zip works too:
-images are grouped by the folder they are in and only folders named "day" (or the zip root) are used, so night /
-topo / cave layers are ignored. Run by .github/workflows/jm_merge.yml for every 「探索地圖」 report (approved
+The upload holds JourneyMap region images "x,z.png" (512 x 512, 1 block = 1 px, region x,z starts at block x*512,
+z*512) in "day" folders (the surface) and, since 2026-11-06, in the height-layer folders next to them: JourneyMap names
+those by the 16-block slice number (folder "1" = Y 16-31, the in-game minimap shows "y: 24 (1)"; negative numbers too).
+The site's 「打包探索地圖」 tool builds it from the player's journeymap/data/mp folder (one sub-folder per world the
+player visited; only the floor 1 ones are packed; the player picks the layers and, optionally, an X/Z area), but a
+hand-made zip works too. Images are grouped by WORLD (the folder that holds "day" and the layer folders); night / topo /
+biome folders are ignored. A world is accepted only through its "day" images (the colour check below), so a pack with
+only height layers still carries a few surface regions as anchors; layer data of a world that fails the check is dropped.
+Height layers go to their own tiles (tiles/f1jm_c<n>/, dark background, own explored mask) and never change the
+surface map, its explored share, the contributor list or floor1_jm.jpg. Run by .github/workflows/jm_merge.yml for every 「探索地圖」 report (approved
 automatically: the checks below are the review), or by the owner locally (use this instead of jm_tiles.py so other
 players' data is kept).
 
@@ -38,7 +43,8 @@ META = os.path.join(ROOT, "jmmeta.js")
 X0, SIZE, FULL, T, CH, MW = 70, 4980, 5120, 256, 16, 320
 BG = (7, 12, 17)
 NAME = re.compile(r"(?:^|/)(-?\d+),(-?\d+)\.png$")
-MAX_REGIONS, MAX_BYTES = 600, 4 * 1024 * 1024
+LAYER = re.compile(r"-?\d+")    # JourneyMap height-layer folder (16-block slice number)
+MAX_REGIONS, MAX_BYTES = 1500, 4 * 1024 * 1024   # keep MAX_REGIONS in sync with JMP.MAXN in src/index.html
 MIN_OVERLAP = 20   # explored chunks a folder must cover (with matching colours) before it is accepted as floor 1
 C0, C1 = X0 // CH, (X0 + SIZE - 1) // CH          # chunk range inside the frame (inclusive)
 
@@ -48,13 +54,68 @@ def out(code, **kw):
     sys.exit(code)
 
 
-def load_canvas():
+def load_canvas(tiles=None):
+    tiles = tiles or TILES
     cv = Image.new("RGB", (FULL, FULL), BG)
-    for name in os.listdir(os.path.join(TILES, "3")):
+    d = os.path.join(tiles, "3")
+    for name in (os.listdir(d) if os.path.isdir(d) else []):
         m = re.fullmatch(r"(\d+)_(\d+)\.jpg", name)
         if m:
-            cv.paste(Image.open(os.path.join(TILES, "3", name)).convert("RGB"), (int(m[1]) * T, int(m[2]) * T))
+            cv.paste(Image.open(os.path.join(d, name)).convert("RGB"), (int(m[1]) * T, int(m[2]) * T))
     return cv
+
+
+def layer_dir(key):
+    return os.path.join(ROOT, "tiles", "f1jm_" + key)
+
+
+def pyramid(cv, tiles):
+    """levels 0-2 of a tile set from its full-resolution canvas"""
+    for L, size in enumerate((640, 1280, 2560)):
+        os.makedirs(os.path.join(tiles, str(L)), exist_ok=True)
+        im = cv.resize((size, size), Image.LANCZOS)
+        for r in range(size // T + (size % T > 0)):
+            for c in range(size // T + (size % T > 0)):
+                if c * T * FULL // size >= SIZE or r * T * FULL // size >= SIZE:
+                    continue
+                save_tile(im.crop((c * T, r * T, c * T + T, r * T + T)), os.path.join(tiles, str(L), f"{c}_{r}.jpg"))
+
+
+def merge_layer(key, worlds):
+    """paste the height-layer regions of the accepted worlds (oldest first) into tiles/f1jm_<key>; returns
+    (new chunks, regions). Only level-3 tiles that hold data exist; levels 0-2 are always complete."""
+    tiles = layer_dir(key)
+    os.makedirs(os.path.join(tiles, "3"), exist_ok=True)
+    cv = load_canvas(tiles)
+    mpath = os.path.join(tiles, "explored.png")
+    mask = Image.open(mpath).convert("L") if os.path.exists(mpath) else Image.new("L", (MW, MW), 0)
+    new, touched, n = set(), set(), 0
+    for g in sorted(worlds, key=lambda g: g["date"]):
+        for rx, rz, im in g["layers"].get(key, []):
+            if not (rx * 512 < X0 + SIZE and rz * 512 < X0 + SIZE and rx * 512 + 512 > X0 and rz * 512 + 512 > X0):
+                continue
+            n += 1
+            new |= new_in(rx, rz, im, mask)
+            alpha = im.getchannel("A")
+            for lz in range(0, 512, CH):            # every chunk with data counts as explored in this layer
+                for lx in range(0, 512, CH):
+                    cx, cz = (rx * 512 + lx) // CH, (rz * 512 + lz) // CH
+                    if C0 <= cx <= C1 and C0 <= cz <= C1 and alpha.crop((lx, lz, lx + CH, lz + CH)).getextrema()[1] > 0:
+                        mask.putpixel((cx, cz), 255)
+            ox, oz = rx * 512 - X0, rz * 512 - X0
+            cv.paste(im.convert("RGB"), (ox, oz), alpha)
+            for ty in range(max(0, oz) // T, min(SIZE - 1, oz + 511) // T + 1):
+                for tx in range(max(0, ox) // T, min(SIZE - 1, ox + 511) // T + 1):
+                    touched.add((tx, ty))
+    if not n:
+        return 0, 0
+    cv.paste(Image.new("RGB", (FULL - SIZE, FULL), BG), (SIZE, 0))
+    cv.paste(Image.new("RGB", (FULL, FULL - SIZE), BG), (0, SIZE))
+    mask.save(mpath, optimize=True)
+    for tx, ty in touched:
+        save_tile(cv.crop((tx * T, ty * T, tx * T + T, ty * T + T)), os.path.join(tiles, "3", f"{tx}_{ty}.jpg"))
+    pyramid(cv, tiles)
+    return len(new), n
 
 
 def dark_base():
@@ -100,21 +161,41 @@ def folder_label(d):
     return "/".join(parts) or "（壓縮檔根目錄）"
 
 
+def layer_of(folder):
+    """("world folder", layer key) for a folder of the upload: "day" = surface, "c<n>" = height layer n; None = ignore"""
+    parts = [p for p in folder.replace("\\", "/").split("/") if p]
+    if not parts:
+        return "", "day"                      # loose files at the zip root: surface (hand-made zips)
+    leaf = parts[-1]
+    if leaf.lower() == "day":
+        return "/".join(parts[:-1]), "day"
+    if LAYER.fullmatch(leaf):
+        return "/".join(parts[:-1]), "c" + str(int(leaf))
+    return None
+
+
+def layer_label(key):
+    if key == "day":
+        return "地面"
+    n = int(key[1:])
+    return f"Y {n * 16}～{n * 16 + 15}"
+
+
 def read_upload(src):
-    """[{"name", "date", "regions": [(rx, rz, RGBA image)]}], one entry per folder; raises ValueError with a reason
-    players can understand. Only images directly in a folder named "day" (or at the top level) are used."""
-    found = {}   # folder -> [(rx, rz, bytes, mtime)]
+    """[{"name", "date", "layers": {key: [(rx, rz, RGBA image)]}}], one entry per world folder; raises ValueError with a
+    reason players can understand."""
+    found = {}   # (world, layer) -> [(rx, rz, bytes, mtime)]
 
     def take(folder, name, size, read, mtime):
-        parent = os.path.basename(folder.rstrip("/"))
-        if folder and parent.lower() != "day":
+        wl = layer_of(folder)
+        if wl is None:
             return
         m = NAME.search("/" + name)
         if not m:
             return
         if size > MAX_BYTES:
             raise ValueError(f"{name} 超過 4 MB，不像 JourneyMap 的地圖圖片")
-        found.setdefault(folder, []).append((int(m[1]), int(m[2]), read, mtime))
+        found.setdefault(wl, []).append((int(m[1]), int(m[2]), read, mtime))
 
     if os.path.isdir(src):
         for dirpath, _, files in os.walk(src):
@@ -123,6 +204,9 @@ def read_upload(src):
             for f in sorted(files):
                 fp = os.path.join(dirpath, f)
                 take(rel, f, os.path.getsize(fp), (lambda fp=fp: open(fp, "rb").read()), os.path.getmtime(fp))
+        if sum(len(v) for v in found.values()) > MAX_REGIONS:
+            raise ValueError(f"資料夾裡有超過 {MAX_REGIONS} 張地圖圖片")
+        found = {k: [(rx, rz, rd(), t) for rx, rz, rd, t in v] for k, v in found.items()}
     else:
         with zipfile.ZipFile(src) as z:
             for i in z.infolist():
@@ -134,14 +218,10 @@ def read_upload(src):
             if total > MAX_REGIONS:
                 raise ValueError(f"壓縮檔裡有 {total} 張地圖圖片，超過上限 {MAX_REGIONS}")
             found = {k: [(rx, rz, rd(), t) for rx, rz, rd, t in v] for k, v in found.items()}
-    if os.path.isdir(src):
-        found = {k: [(rx, rz, rd(), t) for rx, rz, rd, t in v] for k, v in found.items()}
-        if sum(len(v) for v in found.values()) > MAX_REGIONS:
-            raise ValueError(f"資料夾裡有超過 {MAX_REGIONS} 張地圖圖片")
     if not found:
-        raise ValueError("壓縮檔裡沒有 JourneyMap 的白天地圖（day 資料夾裡 3,7.png 這種檔案）。請用網站協作區的「打包探索地圖」產生壓縮檔")
-    groups = []
-    for folder, items in found.items():
+        raise ValueError("壓縮檔裡沒有 JourneyMap 的地圖圖片（day 或高度層資料夾裡 3,7.png 這種檔案）。請用網站協作區的「打包探索地圖」產生壓縮檔")
+    worlds = {}
+    for (world, key), items in found.items():
         regions = []
         for rx, rz, data, _ in items:
             try:
@@ -152,8 +232,10 @@ def read_upload(src):
             if im.size != (512, 512):
                 raise ValueError(f"{rx},{rz}.png 的大小是 {im.size[0]}x{im.size[1]}，JourneyMap 的地圖圖片應該是 512x512")
             regions.append((rx, rz, im.convert("RGBA")))
-        groups.append({"name": folder_label(folder), "date": max(t for *_, t in items), "regions": regions})
-    return groups
+        w = worlds.setdefault(world, {"name": folder_label(world), "date": 0, "layers": {}})
+        w["layers"][key] = regions
+        w["date"] = max(w["date"], max(t for *_, t in items))
+    return list(worlds.values())
 
 
 def save_tile(im, path):
@@ -214,8 +296,11 @@ def main(argv):
     mask = Image.open(MASK).convert("L")
     accepted, skipped = [], []
     for g in groups:
-        inside = [(rx, rz, im) for rx, rz, im in g["regions"]
+        inside = [(rx, rz, im) for rx, rz, im in g["layers"].get("day", [])
                   if rx * 512 < X0 + SIZE and rz * 512 < X0 + SIZE and rx * 512 + 512 > X0 and rz * 512 + 512 > X0]
+        if not g["layers"].get("day"):
+            skipped.append((g["name"], "沒有地面（day）地圖，無法確認是第 1 層（只打包高度層時也要附上幾張地面圖）"))
+            continue
         if not inside:
             skipped.append((g["name"], "地圖圖片都在第 1 層的範圍外"))
             continue
@@ -250,23 +335,25 @@ def main(argv):
     cv.paste(Image.new("RGB", (FULL, FULL - SIZE), BG), (0, SIZE))
     for cx, cz in new_chunks:
         mask.putpixel((cx, cz), 255)
+    # surface regions are always written (newer terrain wins), as before; anchors of a layer-only pack paste the same picture
     mask.save(MASK, optimize=True)
     for tx, ty in touched:
         save_tile(cv.crop((tx * T, ty * T, tx * T + T, ty * T + T)), os.path.join(TILES, "3", f"{tx}_{ty}.jpg"))
-    for L, size in enumerate((640, 1280, 2560)):
-        im = cv.resize((size, size), Image.LANCZOS)
-        for r in range(size // T + (size % T > 0)):
-            for c in range(size // T + (size % T > 0)):
-                if c * T * FULL // size >= SIZE or r * T * FULL // size >= SIZE:
-                    continue
-                save_tile(im.crop((c * T, r * T, c * T + T, r * T + T)), os.path.join(TILES, str(L), f"{c}_{r}.jpg"))
+    pyramid(cv, TILES)
     cv.crop((0, 0, SIZE, SIZE)).resize((3000, 3000), Image.LANCZOS).save(os.path.join(ROOT, "floor1_jm.jpg"), quality=85, optimize=True)
     explored = sum(1 for cz in range(C0, C1 + 1) for cx in range(C0, C1 + 1) if mask.getpixel((cx, cz)))
     pct = round(100 * explored / (C1 - C0 + 1) ** 2, 1)
+    layers = {}
+    for key in sorted({k for g in accepted for k in g["layers"] if k != "day"}, key=lambda k: int(k[1:])):
+        nc, nr = merge_layer(key, accepted)
+        if nr:
+            layers[key] = {"newChunks": nc, "regions": nr}
     res = {"ok": True, "regions": sum(len(g["inside"]) for g in accepted), "newChunks": len(new_chunks),
            "overlap": sum(g["overlap"] for g in accepted), "pct": pct, "date": date,
            "folders": len(accepted), "skipped": len(skipped)}
-    write_meta(report, dict(res, chunks=explored))
+    if layers:
+        res["layers"] = {k: v["newChunks"] for k, v in layers.items()}
+    write_meta(report, dict(res, chunks=explored), layers)
     record(report, res)
     out(0, **res)
 
@@ -285,7 +372,7 @@ def save_meta(meta):
         "window.SAO_JM = " + json.dumps(meta, ensure_ascii=False, indent=1) + ";\n")
 
 
-def write_meta(report, res):
+def write_meta(report, res, layers=None):
     """per merge: date, explored share, total explored chunks ("chunks") and a log entry with the chunks it added.
     The site lists contributors by these numbers (the first log entry is the owner's map, its newChunks = the rest)."""
     meta = load_meta()
@@ -295,6 +382,16 @@ def write_meta(report, res):
     if f1["log"] and f1["log"][0].get("report") is None and "newChunks" not in f1["log"][0] and f1.get("chunks"):
         f1["log"][0]["newChunks"] = f1["chunks"] - res["newChunks"] - sum(e.get("newChunks", 0) for e in f1["log"][1:])
     f1["log"].append({"report": report, "date": res["date"], "regions": res["regions"], "newChunks": res["newChunks"]})
+    # height layers: own explored count, the level-3 tiles that exist (the viewer asks only for those) and a version
+    # string for cache-busting; kept apart from the surface numbers above
+    for key, v in (layers or {}).items():
+        tiles = layer_dir(key)
+        lm = Image.open(os.path.join(tiles, "explored.png")).convert("L")
+        chunks = sum(1 for cz in range(C0, C1 + 1) for cx in range(C0, C1 + 1) if lm.getpixel((cx, cz)))
+        l3 = sorted(n[:-4] for n in os.listdir(os.path.join(tiles, "3")) if n.endswith(".jpg"))
+        e = f1.setdefault("layers", {}).setdefault(key, {"log": []})
+        e.update({"label": layer_label(key), "date": res["date"], "chunks": chunks, "l3": l3, "v": f"{res['date']}-{chunks}"})
+        e["log"].append({"report": report, "date": res["date"], "regions": v["regions"], "newChunks": v["newChunks"]})
     save_meta(meta)
 
 

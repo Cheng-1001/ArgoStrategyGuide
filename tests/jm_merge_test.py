@@ -1,7 +1,8 @@
 """tools/jm_merge.py on a temporary copy of the map (the real tiles are not touched).
 
 Usage: python3 tests/jm_merge_test.py   (prints ALL PASSED, exits 1 on failure)
-Uploads tried: a real-looking one (explored area + a new area), one from another world, broken zips.
+Uploads tried: a real-looking one (explored area + a new area), one from another world, broken zips, height layers
+(2026-11-06: surface + layer merge, layer-only rejected, region cap).
 """
 import io, json, os, shutil, subprocess, sys, tempfile, zipfile
 from PIL import Image, ImageEnhance
@@ -130,7 +131,35 @@ try:
     check(px[0] > 180 and px[1] < 90 and px[2] > 180, f"where two floor 1 folders overlap, the newer one wins ({px})")
     after37 = cv3.crop((3 * 512 - 70, 7 * 512 - 70, 3 * 512 + 442, 7 * 512 + 442))
     from PIL import ImageChops as IC
-    check(max(IC.difference(before37, after37).getextrema()[i][1] for i in range(3)) < 40, "night / cave layers and the skipped folder change nothing")
+    check(max(IC.difference(before37, after37).getextrema()[i][1] for i in range(3)) < 40, "night, height layers and the skipped folder leave the surface map alone")
+    check(os.path.isdir(os.path.join(tmp, "tiles", "f1jm_c0", "3")), "the height-layer folder 0 of an accepted world goes to its own tiles (tiles/f1jm_c0)")
+    # 4b. surface + height layer 1 of the same world (the ink room under the old mill is in layer 1: "y: 24 (1)")
+    meta_before = json.loads(open(os.path.join(tmp, "jmmeta.js"), encoding="utf-8").read().split("window.SAO_JM =")[1].strip().rstrip(";"))
+    cave = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+    cave.paste(Image.new("RGBA", (90, 40), (120, 200, 60, 255)), (230, 70))     # a lit room, the rest unexplored (transparent)
+    up = zipped({"mp/Triggers_new/overworld/day/3,6.png": region(3, 6, canvas()),
+                 "mp/Triggers_new/overworld/1/5,9.png": cave, "mp/Triggers_new/overworld/topo/5,9.png": noise})
+    code, res = run(up, "--report", "T904", "--date", "2026-11-06")
+    mt = json.loads(open(os.path.join(tmp, "jmmeta.js"), encoding="utf-8").read().split("window.SAO_JM =")[1].strip().rstrip(";"))
+    L1 = mt["1"].get("layers", {}).get("c1", {})
+    check(code == 0 and res.get("layers", {}).get("c1", 0) > 0 and L1.get("chunks", 0) > 0 and L1.get("label") == "Y 16～31",
+          f"a surface + layer-1 pack merges the layer into its own map ({res.get('layers')}, {L1.get('label')})")
+    t3 = (5 * 512 + 250 - 70) // 256, (9 * 512 + 80 - 70) // 256
+    check(f"{t3[0]}_{t3[1]}" in L1.get("l3", []) and os.path.exists(os.path.join(tmp, "tiles", "f1jm_c1", "3", f"{t3[0]}_{t3[1]}.jpg")),
+          f"jmmeta.js lists the level-3 tiles the layer has ({len(L1.get('l3', []))})")
+    lpx = Image.open(os.path.join(tmp, "tiles", "f1jm_c1", "3", f"{t3[0]}_{t3[1]}.jpg")).getpixel(((5 * 512 + 270 - 70) % 256, (9 * 512 + 90 - 70) % 256))
+    check(lpx[1] > 150 and lpx[0] < 160, f"the layer's pixels are on its level-3 tile ({lpx})")
+    check(mt["1"]["pct"] == meta_before["1"]["pct"] and mt["1"]["chunks"] == meta_before["1"]["chunks"],
+          "height-layer data does not change the surface explored share or chunk count")
+    check(all(os.path.exists(os.path.join(tmp, "tiles", "f1jm_c1", str(L), "0_0.jpg")) for L in range(3)), "levels 0-2 of the layer are complete")
+    # 4c. a world with only height layers cannot be confirmed as floor 1
+    code, res = run(zipped({"mp/Triggers_x/overworld/1/5,9.png": cave}), "--report", "T905")
+    check(code == 2 and "沒有地面" in res["reason"], f"layer data without surface images is rejected ({res.get('reason')})")
+    # 4d. the region cap (cave images are tiny, so a 40 MB part could hold thousands)
+    tiny = io.BytesIO(); Image.new("RGBA", (512, 512)).save(tiny, "PNG"); tiny = tiny.getvalue()
+    many = {f"mp/W/overworld/1/{i % 60},{i // 60}.png": tiny for i in range(1501)}
+    code, res = run(zipped(many))
+    check(code == 2 and "1500" in res["reason"], f"more than 1500 images are rejected ({res.get('reason')})")
     # 5. broken uploads
     code, res = run(zipped({"notes.txt": b"hello"}))
     check(code == 2 and "沒有 JourneyMap" in res["reason"], "a zip without map images is rejected")
