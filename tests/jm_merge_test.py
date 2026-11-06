@@ -160,6 +160,43 @@ try:
     many = {f"mp/W/overworld/1/{i % 60},{i // 60}.png": tiny for i in range(1501)}
     code, res = run(zipped(many))
     check(code == 2 and "1500" in res["reason"], f"more than 1500 images are rejected ({res.get('reason')})")
+    # 4e. dungeons (2026-11-06): dimension folders "<uuid>_<name>" next to the floor 1 overworld; instances of one
+    # dungeon share one map; accepted only with an accepted floor 1 overworld in the same server folder
+    room = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+    room.paste(Image.new("RGBA", (120, 60), (200, 120, 40, 255)), (100, 300))
+    room2 = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+    room2.paste(Image.new("RGBA", (120, 60), (200, 120, 40, 255)), (100, 300))
+    room2.paste(Image.new("RGBA", (60, 60), (40, 120, 200, 255)), (300, 100))
+    up = zipped({"mp/Triggers_new/overworld/day/3,6.png": region(3, 6, canvas()),
+                 "mp/Triggers_new/a57676b0-5d0c-4000-8000-000000000001_geldorack/-1/-1,-1.png": room,
+                 "mp/Triggers_new/a57676b0-5d0c-4000-8000-000000000002_geldorack/-1/-1,-1.png": room2,
+                 "mp/Triggers_new/a57676b0-5d0c-4000-8000-000000000002_geldorack/day/-1,-1.png": Image.new("RGBA", (512, 512)),
+                 "mp/Triggers_new/ca72d386-5d0c-4000-8000-000000000001_labyrinthe/-3/0,0.png": room,
+                 "mp/Triggers_new/a57676b0-5d0c-4000-8000-000000000009_backrooms/5/0,0.png": room,
+                 "mp/Triggers_new/overworld/-398/3,6.png": room,
+                 "mp/Triggers_other/66ea2dea-5d0c-4000-8000-000000000003_xalzirith/0/0,0.png": room})
+    code, res = run(up, "--report", "T906", "--date", "2026-11-06")
+    mt = json.loads(open(os.path.join(tmp, "jmmeta.js"), encoding="utf-8").read().split("window.SAO_JM =")[1].strip().rstrip(";"))
+    G = mt.get("dg", {}).get("geldorack", {})
+    check(code == 0 and set(res.get("dungeons", {})) == {"geldorack", "labyrinthe"} and res["dungeons"]["geldorack"] > 0,
+          f"dungeon instances next to an accepted floor 1 overworld are merged ({res.get('dungeons')})")
+    check(any("backrooms" in w for w in res.get("skippedWhy", [])) and any("xalzirith" in w.lower() or "Triggers_other" in w for w in res.get("skippedWhy", [])),
+          f"an unknown dungeon name and a dungeon without a floor 1 overworld beside it are skipped ({res.get('skippedWhy')})")
+    check("c-398" not in mt["1"].get("layers", {}) and not os.path.isdir(os.path.join(tmp, "tiles", "f1jm_c-398")), "impossible height folders (-398) are ignored")
+    check(G.get("frame", {}).get("x0") == -512 and G.get("frame", {}).get("full") == 2048 and G.get("best") == "c-1"
+          and G["layers"]["c-1"]["l3"] and G["layers"]["c-1"]["l3"][0].startswith("-") and G.get("bounds", [0])[0] < 0,
+          f"the dungeon frame follows its data, negative coordinates included ({G.get('frame')}, {G.get('bounds')}, best {G.get('best')})")
+    gd = os.path.join(tmp, "tiles", "dg", "geldorack")
+    tp = os.path.join(gd, "c-1", "3", "-1_-2.jpg")      # room2's blue square: block (-212, -412) -> tile (-1, -2), pixel (44, 100)
+    t2 = Image.open(tp).getpixel((54, 110)) if os.path.exists(tp) else None
+    check(t2 is not None and t2[2] > 150 and os.path.exists(os.path.join(gd, "overview.jpg")) and all(os.path.isdir(os.path.join(gd, "c-1", str(L))) for L in range(3)),
+          f"both instances end up on one map, with levels 0-2 and an overview ({t2})")
+    # a later instance whose colours disagree with what the site has is skipped
+    wrong = Image.new("RGBA", (512, 512), (0, 0, 0, 0)); wrong.paste(Image.new("RGBA", (120, 60), (20, 240, 240, 255)), (100, 300))
+    code, res = run(zipped({"mp/Triggers_new/overworld/day/3,6.png": region(3, 6, canvas()),
+                            "mp/Triggers_new/a57676b0-5d0c-4000-8000-000000000003_geldorack/-1/-1,-1.png": wrong}), "--report", "T907")
+    check(code == 0 and "geldorack" not in res.get("dungeons", {}) and any("顏色對不上" in w for w in res.get("skippedWhy", [])),
+          f"a dungeon instance that does not match the site's map of it is skipped ({res.get('skippedWhy')})")
     # 5. broken uploads
     code, res = run(zipped({"notes.txt": b"hello"}))
     check(code == 2 and "沒有 JourneyMap" in res["reason"], "a zip without map images is rejected")

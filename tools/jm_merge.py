@@ -13,7 +13,15 @@ hand-made zip works too. Images are grouped by WORLD (the folder that holds "day
 biome folders are ignored. A world is accepted only through its "day" images (the colour check below), so a pack with
 only height layers still carries a few surface regions as anchors; layer data of a world that fails the check is dropped.
 Height layers go to their own tiles (tiles/f1jm_c<n>/, dark background, own explored mask) and never change the
-surface map, its explored share, the contributor list or floor1_jm.jpg. Run by .github/workflows/jm_merge.yml for every 「探索地圖」 report (approved
+surface map, its explored share, the contributor list or floor1_jm.jpg. Only slices -4..19 are used (Minecraft's world
+height -64..319); JourneyMap also keeps folders like "-398" that cannot be real heights, they are ignored.
+Dungeons (2026-11-06): JourneyMap keeps each dungeon instance as a dimension folder next to "overworld" in the same
+server folder, named "<uuid>_<dungeon>" (a57676b0-…-000000000001_geldorack, …_xalzirith, …_labyrinthe). A dungeon is
+merged only when the same server folder in the upload also holds a floor 1 overworld that passes the colour check (the
+packer adds a few surface regions for that), and only for the names in DUNGEONS; all its instances go into one map per
+dungeon and height (tiles/dg/<id>/<key>/, level-3 tiles named by absolute world tile index, levels 0-2 over a frame
+that grows with the data, chunks.json = explored chunks), plus overview.jpg for the dungeon panel. An instance whose
+colours do not match what the site already has for that dungeon is skipped. Run by .github/workflows/jm_merge.yml for every 「探索地圖」 report (approved
 automatically: the checks below are the review), or by the owner locally (use this instead of jm_tiles.py so other
 players' data is kept).
 
@@ -44,6 +52,12 @@ X0, SIZE, FULL, T, CH, MW = 70, 4980, 5120, 256, 16, 320
 BG = (7, 12, 17)
 NAME = re.compile(r"(?:^|/)(-?\d+),(-?\d+)\.png$")
 LAYER = re.compile(r"-?\d+")    # JourneyMap height-layer folder (16-block slice number)
+LAYER_MIN, LAYER_MAX = -4, 19   # world height -64..319; keep in sync with JMP.LMIN/LMAX in src/index.html
+DG_RE = re.compile(r"(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_)?([a-z0-9]+)")
+# JourneyMap dimension name suffix -> site name; keep in sync with DG_DIM in src/index.html
+DUNGEONS = {"xalzirith": "Sanctuary of Xal'Zirith", "geldorack": "Geldorack Dungeon", "labyrinthe": "Labyrinth of the Fallen"}
+DG_ROOT = os.path.join(ROOT, "tiles", "dg")
+DG_MIN_OVERLAP = 8   # dungeons are small: 8 matching chunks are enough to tell a wrong map
 MAX_REGIONS, MAX_BYTES = 1500, 4 * 1024 * 1024   # keep MAX_REGIONS in sync with JMP.MAXN in src/index.html
 MIN_OVERLAP = 20   # explored chunks a folder must cover (with matching colours) before it is accepted as floor 1
 C0, C1 = X0 // CH, (X0 + SIZE - 1) // CH          # chunk range inside the frame (inclusive)
@@ -118,6 +132,128 @@ def merge_layer(key, worlds):
     return len(new), n
 
 
+def tile_xy(name):
+    m = re.fullmatch(r"(-?\d+)_(-?\d+)\.jpg", name)
+    return (int(m[1]), int(m[2])) if m else None
+
+
+def merge_dungeon(d, instances, date, report):
+    """merge the instances of one dungeon (oldest first) into tiles/dg/<d>/<key>/; returns {newChunks, regions,
+    check (median colour difference against what the site had), skipped}"""
+    base = os.path.join(DG_ROOT, d)
+    meta = load_meta().get("dg", {}).get(d, {})
+    state = {}   # key -> {"tiles": {(tx,tz): RGB}, "touched": set, "chunks": set}
+
+    def st(key):
+        if key not in state:
+            kd = os.path.join(base, key)
+            cpath = os.path.join(kd, "chunks.json")
+            chunks = {tuple(c) for c in json.load(open(cpath))} if os.path.exists(cpath) else set()
+            state[key] = {"dir": kd, "tiles": {}, "touched": set(), "chunks": chunks, "old": set(chunks)}
+        return state[key]
+
+    def tile(s, tx, tz):
+        if (tx, tz) not in s["tiles"]:
+            p = os.path.join(s["dir"], "3", f"{tx}_{tz}.jpg")
+            s["tiles"][(tx, tz)] = Image.open(p).convert("RGB") if os.path.exists(p) else Image.new("RGB", (T, T), BG)
+        return s["tiles"][(tx, tz)]
+
+    new, regions, diffs_all, skipped = set(), 0, [], []
+    for g in sorted(instances, key=lambda g: g["date"]):
+        diffs = []                      # colour check against the map as it stands before this instance
+        for key, regs in g["layers"].items():
+            s = st(key)
+            for rx, rz, im in regs:
+                alpha = im.getchannel("A")
+                for lz in range(0, 512, CH):
+                    for lx in range(0, 512, CH):
+                        cx, cz = (rx * 512 + lx) // CH, (rz * 512 + lz) // CH
+                        if (cx, cz) not in s["chunks"]:
+                            continue
+                        a = alpha.crop((lx, lz, lx + CH, lz + CH))
+                        if ImageStat.Stat(a).mean[0] <= 200:
+                            continue
+                        wx, wz = rx * 512 + lx, rz * 512 + lz
+                        t = tile(s, wx // T, wz // T)
+                        diffs.append(mean_diff(im.crop((lx, lz, lx + CH, lz + CH)).convert("RGB"), t.crop((wx % T, wz % T, wx % T + CH, wz % T + CH))))
+        med = statistics.median(diffs) if diffs else None
+        if len(diffs) >= DG_MIN_OVERLAP and med > 32:
+            skipped.append((g["name"], f"和網站上 {DUNGEONS[d]} 的地圖重疊 {len(diffs)} 個區塊但顏色對不上（差異 {med:.0f}）"))
+            continue
+        diffs_all += diffs
+        for key, regs in g["layers"].items():
+            s = st(key)
+            for rx, rz, im in regs:
+                regions += 1
+                alpha = im.getchannel("A")
+                if alpha.getextrema()[1] == 0:
+                    continue
+                for lz in range(0, 512, CH):
+                    for lx in range(0, 512, CH):
+                        if alpha.crop((lx, lz, lx + CH, lz + CH)).getextrema()[1] > 0:
+                            c = ((rx * 512 + lx) // CH, (rz * 512 + lz) // CH)
+                            if c not in s["chunks"]:
+                                s["chunks"].add(c)
+                                new.add((key,) + c)
+                for oz in (0, T):
+                    for ox in (0, T):
+                        a = alpha.crop((ox, oz, ox + T, oz + T))
+                        if a.getextrema()[1] == 0:
+                            continue
+                        tx, tz = (rx * 512 + ox) // T, (rz * 512 + oz) // T
+                        tile(s, tx, tz).paste(im.crop((ox, oz, ox + T, oz + T)).convert("RGB"), (0, 0), a)
+                        s["touched"].add((tx, tz))
+    if not regions:
+        return {"newChunks": 0, "regions": 0, "skipped": skipped}
+    for key, s in state.items():
+        if not s["touched"]:
+            continue
+        os.makedirs(os.path.join(s["dir"], "3"), exist_ok=True)
+        for tx, tz in s["touched"]:
+            save_tile(s["tiles"][(tx, tz)], os.path.join(s["dir"], "3", f"{tx}_{tz}.jpg"))
+        json.dump(sorted(s["chunks"]), open(os.path.join(s["dir"], "chunks.json"), "w"), separators=(",", ":"))
+    # frame over every height of this dungeon (it grows with the data), then levels 0-2 and the overview
+    keys = sorted(k for k in os.listdir(base) if os.path.isdir(os.path.join(base, k, "3")))
+    l3 = {k: [xy for xy in map(tile_xy, os.listdir(os.path.join(base, k, "3"))) if xy] for k in keys}
+    allt = [xy for v in l3.values() for xy in v]
+    tx0, tz0 = min(x for x, _ in allt), min(z for _, z in allt)
+    span = max(max(x for x, _ in allt) - tx0 + 1, max(z for _, z in allt) - tz0 + 1) * T
+    full = -(-span // 2048) * 2048
+    chunks = {k: {tuple(c) for c in json.load(open(os.path.join(base, k, "chunks.json")))} for k in keys}
+    allc = [c for v in chunks.values() for c in v]
+    bounds = [min(c[0] for c in allc) * CH, min(c[1] for c in allc) * CH, (max(c[0] for c in allc) + 1) * CH, (max(c[1] for c in allc) + 1) * CH]
+    best = max(keys, key=lambda k: len(chunks[k]))
+    layers = {}
+    for k in keys:
+        cv = Image.new("RGB", (full, full), BG)
+        for tx, tz in l3[k]:
+            cv.paste(Image.open(os.path.join(base, k, "3", f"{tx}_{tz}.jpg")).convert("RGB"), ((tx - tx0) * T, (tz - tz0) * T))
+        for L, size in enumerate((full // 8, full // 4, full // 2)):
+            ld = os.path.join(base, k, str(L))
+            os.makedirs(ld, exist_ok=True)
+            for f in os.listdir(ld):
+                os.remove(os.path.join(ld, f))
+            im = cv.resize((size, size), Image.LANCZOS)
+            for r in range(-(-size // T)):
+                for c in range(-(-size // T)):
+                    save_tile(im.crop((c * T, r * T, c * T + T, r * T + T)), os.path.join(ld, f"{c}_{r}.jpg"))
+        if k == best:
+            bx = (max(0, bounds[0] - tx0 * T - 16), max(0, bounds[1] - tz0 * T - 16), min(full, bounds[2] - tx0 * T + 16), min(full, bounds[3] - tz0 * T + 16))
+            ov = cv.crop(bx)
+            ov.thumbnail((640, 640), Image.LANCZOS)
+            ov.save(os.path.join(base, "overview.jpg"), quality=85, optimize=True)
+        n = len(chunks[k])
+        layers[k] = {"label": layer_label(k), "chunks": n, "l3": sorted(f"{x}_{z}" for x, z in l3[k]), "v": f"{date}-{n}"}
+    newc = len(new)
+    allmeta = load_meta()
+    e = allmeta.setdefault("dg", {}).setdefault(d, {"log": []})
+    e.update({"name": DUNGEONS[d], "date": date, "frame": {"x0": tx0 * T, "z0": tz0 * T, "full": full}, "bounds": bounds,
+              "best": best, "layers": layers, "v": f"{date}-{len(allc)}"})
+    e["log"].append({"report": report, "date": date, "regions": regions, "newChunks": newc})
+    save_meta(allmeta)
+    return {"newChunks": newc, "regions": regions, "check": round(statistics.median(diffs_all), 1) if diffs_all else None, "skipped": skipped}
+
+
 def dark_base():
     base = Image.open(os.path.join(ROOT, "floor1.jpg")).convert("RGB").resize((SIZE, SIZE), Image.LANCZOS)
     return ImageEnhance.Brightness(ImageEnhance.Color(base).enhance(0.35)).enhance(0.45)
@@ -170,8 +306,25 @@ def layer_of(folder):
     if leaf.lower() == "day":
         return "/".join(parts[:-1]), "day"
     if LAYER.fullmatch(leaf):
-        return "/".join(parts[:-1]), "c" + str(int(leaf))
+        n = int(leaf)
+        return ("/".join(parts[:-1]), "c" + str(n)) if LAYER_MIN <= n <= LAYER_MAX else None
     return None
+
+
+def dungeon_of(world):
+    """dungeon id of a world folder ("…/<uuid>_geldorack" -> "geldorack"), "?name" for an unknown "<uuid>_name",
+    None for anything else"""
+    leaf = world.replace("\\", "/").rstrip("/").split("/")[-1].lower()
+    m = DG_RE.fullmatch(leaf)
+    if not m:
+        return None
+    if m[1] in DUNGEONS:
+        return m[1]
+    return "?" + m[1] if "_" in leaf else None
+
+
+def parent_of(world):
+    return "/".join(world.replace("\\", "/").rstrip("/").split("/")[:-1])
 
 
 def layer_label(key):
@@ -232,7 +385,7 @@ def read_upload(src):
             if im.size != (512, 512):
                 raise ValueError(f"{rx},{rz}.png 的大小是 {im.size[0]}x{im.size[1]}，JourneyMap 的地圖圖片應該是 512x512")
             regions.append((rx, rz, im.convert("RGBA")))
-        w = worlds.setdefault(world, {"name": folder_label(world), "date": 0, "layers": {}})
+        w = worlds.setdefault(world, {"name": folder_label(world), "path": world, "date": 0, "layers": {}})
         w["layers"][key] = regions
         w["date"] = max(w["date"], max(t for *_, t in items))
     return list(worlds.values())
@@ -294,8 +447,15 @@ def main(argv):
         out(2, ok=False, reason=str(e))
     cv = load_canvas()
     mask = Image.open(MASK).convert("L")
-    accepted, skipped = [], []
+    accepted, skipped, dgs = [], [], []
     for g in groups:
+        d = dungeon_of(g.get("path", ""))
+        if d and d.startswith("?"):
+            skipped.append((g["name"], f"網站還不認得的副本「{d[1:]}」，先不收"))
+            continue
+        if d:
+            dgs.append(dict(g, dg=d))
+            continue
         inside = [(rx, rz, im) for rx, rz, im in g["layers"].get("day", [])
                   if rx * 512 < X0 + SIZE and rz * 512 < X0 + SIZE and rx * 512 + 512 > X0 and rz * 512 + 512 > X0]
         if not g["layers"].get("day"):
@@ -353,6 +513,24 @@ def main(argv):
            "folders": len(accepted), "skipped": len(skipped)}
     if layers:
         res["layers"] = {k: v["newChunks"] for k, v in layers.items()}
+    # dungeons: only those whose server folder also holds an accepted floor 1 overworld
+    ok_parents = {parent_of(g.get("path", "")) for g in accepted}
+    dres = {}
+    for d in sorted({g["dg"] for g in dgs}):
+        inst = [g for g in dgs if g["dg"] == d and parent_of(g.get("path", "")) in ok_parents]
+        for g in dgs:
+            if g["dg"] == d and g not in inst:
+                skipped.append((g["name"], "同一個世界資料夾裡沒有確認過的第 1 層地圖，無法確認是這個伺服器的地下城"))
+        if inst:
+            r = merge_dungeon(d, inst, date, report)
+            skipped += r.pop("skipped")
+            if r["regions"]:
+                dres[d] = r
+    if dres:
+        res["dungeons"] = {d: r["newChunks"] for d, r in dres.items()}
+    if skipped:
+        res["skipped"] = len(skipped)
+        res["skippedWhy"] = [f"{n}：{w}" for n, w in skipped[:5]]
     write_meta(report, dict(res, chunks=explored), layers)
     record(report, res)
     out(0, **res)
