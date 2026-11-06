@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="1bfc3db014">
+<meta name="sao-build" content="3e543cca0f">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -858,7 +858,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=b7a7c423"></script>
+<script src="data.js?v=292aa4fc"></script>
 <script src="data23.js?v=7794cfbd"></script>
 <script src="bosses.js?v=02fabd90"></script>
 <script src="reports.js?v=fa5827c8"></script>
@@ -868,17 +868,17 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="mainq.js?v=f326aea4"></script>
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=a6c9503f"></script>
-<script src="gameinfo.js?v=5a2b92e7"></script>
+<script src="gameinfo.js?v=bf9110a4"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=b24e107c"></script>
-<script src="recipes.js?v=71b2ad69"></script>
+<script src="changelog.js?v=62479950"></script>
+<script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=45515bcb"></script>
 <script src="gameskills.js?v=020bca3e"></script>
 <script src="events.js?v=de9be90e"></script>
-<script src="gamestats.js?v=1520d2e6"></script>
-<script src="sets.js?v=ad5df616"></script>
+<script src="gamestats.js?v=553994fb"></script>
+<script src="sets.js?v=fbf69e31"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=75364391"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1544,6 +1544,10 @@ const NPC_NOTE={
   "Web Archaeologist":`<h3 class="sec">位置</h3><div class="note">在 Arakh'Nol 的 Xal'Zirith 地下城入口旁，和 Xal'Zirith Dungeon Guard 站在一起（站長 2026-11-06 截圖，玩家座標 X 1019 Z 1178 Y 116）。點他開的視窗叫「Aragorn's Lair - Loot Info」，只有 Sell（收購）分頁；收購清單還沒有截圖。</div>`,
   "Skeleton Skull":`<h3 class="sec">位置</h3><div class="note">在高處的小石室裡（站長 2026-11-07 截圖：玩家座標 X 1162 Z 3544 Y 42，羅盤寫「Cyclorium」）。NPC 頭上沒有名牌，點他開的視窗叫「Secret Skeleton Skull」。</div>`,
   "Occult Merchant - Artifacts":`<h3 class="sec">位置</h3><div class="note">在 Valley of Petals（花瓣谷）的<b>地底神壇</b>：從深色木造大建築旁的豎井往下（站長 2026-11-07 截圖：玩家座標 X 874 Z 4033 Y 4）。NPC 頭上沒有名牌；視窗「Occult Merchant - Artifacts」賣 Occult Skull／Robe／Hood，各 5 024.91 Col（LEGENDARY，有庫存數量）。物品說明的取得方式寫「Sold by Secret Occult Artifacts (5000 Cols)」。</div>`,
+  "Occult Merchant - Bracelet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅的<b>地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就到了（站長截圖：入口一帶 X 3352 · Z 1647，房間裡 X 3350 · Z 1639）。NPC 頭上沒有名牌；視窗「Occult Merchant - Bracelet」賣 1 件 Occult Bracelet（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
+  "Occult Merchant - Amulet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅的<b>地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就到了（站長截圖：入口一帶 X 3307 · Z 1671，房間裡 X 3314 · Z 1668）。NPC 頭上沒有名牌；視窗「Occult Merchant - Amulet」賣 1 件 Occult Amulet（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
+  "Occult Merchant - Ring":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅的<b>地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就到了（站長截圖：入口一帶 X 3326 · Z 1736，房間裡 X 3321 · Z 1731）。NPC 頭上沒有名牌；視窗「Occult Merchant - Ring」賣 1 件 Occult Ring（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
+  "Occult Merchant - Gloves":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅的<b>地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就到了（站長截圖，Gloves 的房間是依時間推斷：入口一帶 X 3363 · Z 1683，房間裡 X 3369 · Z 1689）。NPC 頭上沒有名牌；視窗「Occult Merchant - Gloves」賣 1 件 Occult Gloves（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
   "Corrupted Boar Accessories":`<h3 class="sec">位置</h3><div class="note">在 Boar Zone（野豬區）的小屋裡，名牌是「[NPC] Accessory Blacksmith」，點他開的視窗叫「Corrupted Boar Accessories」（站長 2026-11-07 截圖：玩家座標 X 1778 Z 3527～3533 Y 28）。參考互動地圖沒有這個 NPC。</div>`,
   "Auction House":`<h3 class="sec">拍賣場</h3><div class="note">玩家之間買賣物品的拍賣場，起始之城有好幾個 Auction House NPC。</div>`
 };

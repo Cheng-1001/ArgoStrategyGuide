@@ -22,6 +22,10 @@ SHOTS = {
         ('Bracelet of the Boar', 'b', 30, [['Boar Hide', 16], ['Corrupted Crystal', 8]], '28', 'acc'),
         ('Belt of the Boar', 'b', 30, [['Boar Hide', 16], ['Corrupted Crystal', 8]], '28', 'acc'),
     ],
+    'Wolf Accessories': [   # 2026-11-07 03:45 (in15): same as the reference map, plus rarity / time
+        ('Ring of the Wolf', 'b', 30, [['Wolf Fur', 16], ['Oak Log', 8]], '33', 'acc'),
+        ("Albal's Necklace", 'b', 30, [['Birch String', 1], ['Fangs of Albal', 4]], '33', 'acc'),
+    ],
     'Skeleton Accessories': [
         ('Skeletal Ring', 'c', 15, [['Skeleton Bone', 8], ['Soul of the Ruins', 8]], '25', 'acc'),
         ('Bony Gloves', 'b', 30, [['Skeleton Bone', 12], ['Reinforced Skeleton Bone', 8]], '28', 'acc'),
@@ -214,7 +218,7 @@ SHOTS = {
     ],
 }
 # the screenshot showed the NPC's whole list: drop reference-map rows the game no longer has
-FULL = {'Corrupted Boar Accessories', "Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
+FULL = {'Wolf Accessories', 'Corrupted Boar Accessories', "Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
 SAME = {"Katana Training": "Training Katana", "Beginner Leggings": "Beginner's Leggings", "Bandit's Gloves": "Gloves of the Bandit", "Bracelet of the Sylvan": "Bracelet of the Sylve", "Amulet of the Sylvan": "Amulet of the Sylve"}          # reference-map name -> in-game name
 # material names used in game / by the reference map -> this site's ITEMS ids
 MAT = {"Shark Carapace": "Shark Shell", "Soul of the Ruins": "Souls of the Ruins", "Sylve Shoot": "Sylvan Sprout",

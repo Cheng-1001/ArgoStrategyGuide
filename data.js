@@ -55,7 +55,7 @@ const M = [
 ["002","Pumba","Boss","N","boar",2,[["Boar Meat",100],["Boar Hide",100],["Corrupted Crystal",100],["Pumba's Ring",3]],"小首領級，會在起始之城外的野豬區定時重生（wiki 怪物頁）。","🐗"],
 ["003","White Dire Wolf","Monster","N","wolf",1,[["Wolf Fur",85],["Wolf Fangs",70]],"","🐺"],
 ["004","Black Dire Wolf","Monster","N","wolf",1,[["Wolf Fur",70],["Wolf Fangs",85]],"","🐺"],
-["006","Albal","Boss","N","wolf",2,[["Wolf Fur",100],["Wolf Fangs",70],["Fangs of Albal",20],["Skull of a Wolf",3]],"","🐺"],
+["006","Albal","Boss","N","wolf",2,[["Wolf Fur",100],["Wolf Fangs",70],["Fangs of Albal",35],["Skull of a Wolf",3]],"","🐺"],
 ["007","Nephentes","Monster","A","mizunari",2,[["Corrupted Spore",85],["Leaf Fragments",70],["Flower of a Nepenthes",0.5]],"","🪴"],
 ["009","Treant Warrior","Monster","A","putrid",2,[["Titan Bark",75],["Ancestral Root",35],["Sylvan Pavise",0.5]],"","🌳"],
 ["010","Elite Treant","Monster","A","putrid",2,[["Sylvan Bark",75],["Sylvan Bowstring",85],["Sylvan Bow",0.5]],"","🌲"],

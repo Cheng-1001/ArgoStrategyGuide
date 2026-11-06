@@ -2683,7 +2683,7 @@ null,
 [
 2480,
 "Ring of the Wolf",
-null,
+30,
 [
 [
 "Wolf Fur",
@@ -2695,15 +2695,15 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 1296,
 "Albal's Necklace",
-null,
+30,
 [
 [
 "Birch String",
@@ -2715,10 +2715,10 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 3,
-"ref"
+"shot"
 ]
 ]
 },
