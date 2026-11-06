@@ -4,7 +4,9 @@ Usage (repo root, after src/build.py): python3 tests/jm_pack_test.py   (prints A
 Builds world folders from the real explored map: a floor 1 world with a new area, two other worlds with real-looking
 terrain (shifted map), noise, a world that only covers unexplored land, one outside the floor and a night layer. Picks
 the folder in the browser, checks which folders are recognised, downloads the zip and runs tools/jm_merge.py on a
-temporary copy of the map with it (the real tiles are not touched).
+temporary copy of the map with it (the real tiles are not touched). Height layers (2026-11-06): cave folders "0", "1",
+"2" of the floor 1 world are found and packed; unticking a layer, packing only layers (surface anchors are added) and
+an X/Z box change the zip; the file cap splits a pack.
 """
 import functools, http.server, json, os, shutil, subprocess, sys, tempfile, threading, zipfile
 from PIL import Image, ImageEnhance
@@ -55,6 +57,12 @@ try:
     put("Triggers_f1~a/overworld/day", "%d,%d.png" % new, region(*new, wiki))
     put("Triggers_f1~a/overworld/night", "%d,%d.png" % top[0], noise)
     put("Triggers_f1~a/overworld/0", "%d,%d.png" % top[0], noise)
+    cave = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+    cave.paste(Image.new("RGBA", (90, 40), (120, 200, 60, 255)), (230, 70))   # a lit room (the ink room is in layer 1 at 5,9)
+    put("Triggers_f1~a/overworld/1", "5,9.png", cave)
+    for i in range(6):                                                           # layer 2: six small regions (file cap test)
+        put("Triggers_f1~a/overworld/2", f"{i + 1},2.png", cave)
+    put("Triggers_f1~a/overworld/2", "40,40.png", cave)                          # outside the floor: never packed
     for i, (rx, rz) in enumerate(top):
         put("Triggers_other~b/overworld/day", f"{rx},{rz}.png", region(rx, rz, cv, 700, -400) if i != 1 else region(rx, rz, cv, -900, 300))
     for rx, rz in top:
@@ -82,6 +90,15 @@ try:
         pg.wait_for_function("window.__jm", timeout=60000)
         J = pg.evaluate("window.__jm")
         st = {g["label"]: g for g in J["groups"]}
+        check(J["found"].get("c1") == 1 and J["found"].get("c2") == 6 and J["found"].get("c0") == 1 and J["found"].get("day", 0) >= 1,
+              f"the height layers of the floor 1 world are found ({J['found']})")
+        check(st["Triggers_f1~a"]["layers"]["c2"]["files"] == 7 and sorted(J["sel"]["layers"]) == ["c0", "c1", "c2", "day"],
+              "every layer is ticked to start with; a region outside the floor is not counted")
+        if os.environ.get("SHOT_DIR"):
+            pg.locator("#jmOut").scroll_into_view_if_needed()
+            pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_card.png"))
+        lt = pg.inner_text("#jmOut")
+        check("Y 16～31" in lt and "Y 32～47" in lt and "地面" in lt, "the layer checkboxes are labelled by height")
         check(set(st) == {"Triggers_f1~a", "Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d", "Triggers_lone~e", "Triggers_out~f"},
               "one entry per world folder (night / cave layers are not separate worlds)")
         check(st["Triggers_f1~a"]["state"] == "f1" and st["Triggers_f1~a"]["files"] == 4, f"the floor 1 world is recognised ({st['Triggers_f1~a']})")
@@ -97,10 +114,47 @@ try:
         z = zipfile.ZipFile(zp)
         names = [i.filename for i in z.infolist()]
         check(z.testzip() is None and dl.value.suggested_filename.endswith(".zip"), "the download is a valid zip")
-        check(names and all(nm.startswith("mp/Triggers_f1~a/overworld/day/") for nm in names) and "mp/Triggers_f1~a/overworld/day/%d,%d.png" % new in names,
-              f"the zip has only floor 1 day maps, including the new area ({names})")
+        check(names and all(nm.startswith("mp/Triggers_f1~a/overworld/") for nm in names) and "mp/Triggers_f1~a/overworld/day/%d,%d.png" % new in names
+              and "mp/Triggers_f1~a/overworld/1/5,9.png" in names and sum(nm.startswith("mp/Triggers_f1~a/overworld/2/") for nm in names) == 6
+              and "mp/Triggers_f1~a/overworld/2/40,40.png" not in names and not any("/night/" in nm for nm in names),
+              f"the zip has floor 1 surface and height-layer maps, including the new area ({names})")
         check(open(os.path.join(mp, "Triggers_f1~a", "overworld", "day", "%d,%d.png" % new), "rb").read() == z.read("mp/Triggers_f1~a/overworld/day/%d,%d.png" % new),
               "files are stored byte for byte")
+        def names_now():
+            return pg.evaluate("window.__jm.parts.flatMap(p=>p.names)")
+        pg.uncheck("[data-jmlay=c0]"); pg.wait_for_timeout(100)
+        nn = names_now()
+        check(nn and not any("/overworld/0/" in x for x in nn) and any("/overworld/1/" in x for x in nn), "an unticked layer is left out")
+        pg.uncheck("[data-jmlay=day]"); pg.uncheck("[data-jmlay=c2]"); pg.wait_for_timeout(100)
+        J2 = pg.evaluate("window.__jm")
+        nn = names_now()
+        check([x for x in nn if "/overworld/1/" in x] == ["mp/Triggers_f1~a/overworld/1/5,9.png"] and J2["parts"][0]["anchors"] >= 1
+              and all("/day/" in x for x in nn if "/overworld/1/" not in x) and J2["parts"][0]["ov"] >= 60 and "另含" in pg.inner_text("#jmOut"),
+              f"a layer-only pack carries surface anchors ({J2['parts']})")
+        with pg.expect_download() as dl2:
+            pg.click("[data-jmpart]")
+        zl = os.path.join(tmp, "layer.zip")
+        dl2.value.save_as(zl)
+        pg.check("[data-jmlay=day]"); pg.check("[data-jmlay=c2]"); pg.check("[data-jmlay=c0]")
+        pg.fill("[data-jmbox=x0]", "1100"); pg.fill("[data-jmbox=x1]", "1500"); pg.fill("[data-jmbox=z0]", "1100"); pg.fill("[data-jmbox=z1]", "1200")
+        pg.wait_for_timeout(400)
+        nn = names_now()
+        packed = [x for x in nn if "/overworld/2/" in x]
+        check(sorted(packed) == ["mp/Triggers_f1~a/overworld/2/2,2.png"] and "/overworld/1/5,9.png" not in " ".join(nn) and pg.is_visible("#jmBoxClr"),
+              f"an X/Z box keeps only the regions that touch it ({packed})")
+        pg.click("#jmBoxClr"); pg.wait_for_timeout(100)
+        check(pg.evaluate("window.__jm.sel.box") is None and len(names_now()) == len(names), "clearing the box packs everything again")
+        pg.fill("[data-jmbox=x0]", "1100"); pg.fill("[data-jmbox=x1]", "1500")
+        with pg.expect_download(timeout=5000) as dl3:      # typed, then straight to 下載 (the blur rebuilds the buttons)
+            pg.click("[data-jmpart]")
+        z3 = zipfile.ZipFile(dl3.value.path())
+        check(not any("/overworld/2/" in i.filename and not i.filename.endswith("/2,2.png") for i in z3.infolist()),
+              "typing a range and clicking 下載 right away downloads the pack for that range")
+        pg.click("#jmBoxClr"); pg.wait_for_timeout(100)
+        pg.evaluate("__JMP.MAXN=8"); pg.uncheck("[data-jmlay=c0]"); pg.wait_for_timeout(100)
+        cp = pg.evaluate("window.__jm.parts")
+        check(len(cp) >= 2 and all(q["n"] <= 8 and q["ov"] >= 60 for q in cp), f"the file cap splits a pack, every part verifiable ({[(q['n'], q['ov']) for q in cp]})")
+        pg.evaluate("__JMP.MAXN=1500")
         # a big upload is split; every part repeats overlapping regions so the server can still verify it
         pg.evaluate("__JMP.BUDGET=1.2*1048576; __JMP.ANCHOR=40"); pg.evaluate("window.__jm=null")
         pg.set_input_files("#jmDir", mp)
@@ -123,6 +177,42 @@ try:
     r = subprocess.run([sys.executable, "-I", os.path.join(w, "tools", "jm_merge.py"), zp, "--report", "T990"], capture_output=True, text=True)
     res = json.loads(r.stdout.strip().splitlines()[-1]) if r.stdout.strip() else {"stderr": r.stderr[-300:]}
     check(r.returncode == 0 and res.get("ok") and res.get("folders") == 1 and res.get("newChunks", 0) > 300, f"tools/jm_merge.py merges the packed zip ({res})")
+    check(set(res.get("layers", {})) == {"c0", "c1", "c2"} and res["layers"]["c1"] > 0, f"... and its height layers ({res.get('layers')})")
+    r = subprocess.run([sys.executable, "-I", os.path.join(w, "tools", "jm_merge.py"), zl, "--report", "T991"], capture_output=True, text=True)
+    res = json.loads(r.stdout.strip().splitlines()[-1]) if r.stdout.strip() else {"stderr": r.stderr[-300:]}
+    check(r.returncode == 0 and res.get("ok") and list(res.get("layers", {})) == ["c1"], f"the layer-only pack is accepted through its anchors ({res})")
+    # the map viewer: a merged height layer gets its own entry in the 高度 menu and only existing tiles are requested
+    site = os.path.join(tmp, "site")
+    shutil.copytree(ROOT, site, ignore=shutil.ignore_patterns(".git", "inbox"))
+    r = subprocess.run([sys.executable, "-I", os.path.join(site, "tools", "jm_merge.py"), zp, "--report", "T992"], capture_output=True, text=True)
+    check(r.returncode == 0, "merge into the site copy")
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(H, directory=site))
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    with sync_playwright() as p:
+        b = p.chromium.launch()
+        pg = b.new_page(viewport={"width": 1280, "height": 900})
+        bad, errs = [], []
+        pg.on("response", lambda q: bad.append(q.url) if q.status >= 400 and "/tiles/" in q.url else None)
+        pg.on("pageerror", lambda e: errs.append(str(e)))
+        pg.add_init_script("localStorage.setItem('sao-map-base','jm');localStorage.setItem('sao-tour-v1','1')")
+        pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/index.html#f1-map"); pg.wait_for_timeout(800)
+        opts = pg.eval_on_selector_all("#layerSel option", "o=>o.map(x=>x.textContent)")
+        check(pg.is_visible("#layerSel") and opts[0] == "高度：地面" and "地底 Y 16～31" in opts and len(opts) == 4, f"the explored map has a height menu ({opts})")
+        pg.select_option("#layerSel", "c1"); pg.wait_for_timeout(300)
+        pg.evaluate("__centerOn(5*512+275,9*512+90,10)"); pg.wait_for_timeout(1200)
+        srcs = pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")
+        check(srcs and all("tiles/f1jm_c1/" in x for x in srcs) and any("/3/" in x for x in srcs) and not bad,
+              f"layer tiles come from tiles/f1jm_c1, level 3 only where it exists ({len(srcs)} tiles, failed: {bad[:3]})")
+        check("Y 16～31" in pg.inner_text("#mapNote") and pg.is_hidden("#jmCredit"), "the note names the layer; the surface contributor box is hidden")
+        pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "layer_view.png"))
+        pg.select_option("#layerSel", "day"); pg.wait_for_timeout(500)
+        check(all("tiles/f1jm/" in x for x in pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")), "back to the surface tiles")
+        pg.select_option("#layerSel", "c1"); pg.set_viewport_size({"width": 390, "height": 844}); pg.wait_for_timeout(500)
+        check(pg.is_visible("#layerSel") and pg.evaluate("document.documentElement.scrollWidth") <= 390, "the height menu fits on a phone")
+        pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "layer_phone.png"))
+        check(not errs, "no page errors in the viewer" + ("" if not errs else ": " + errs[0]))
+        b.close()
+    srv.shutdown()
 finally:
     shutil.rmtree(tmp, ignore_errors=True)
 print("\n" + ("ALL PASSED" if not fails else f"{len(fails)} FAILED"))
