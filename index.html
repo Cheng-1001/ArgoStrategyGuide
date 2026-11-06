@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="ff3643819b">
+<meta name="sao-build" content="423c96aabd">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -2183,7 +2183,10 @@ const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576,MAXN:1500};
 window.__JMP=JMP;   // exposed for tests/jm_pack_test.py
 const JMV=()=>{const j=(window.SAO_JM||{})["1"]||{};return encodeURIComponent(String(j.date||"")+"-"+String(j.pct||"")+"-"+String(j.chunks||""))};
 let JMREF=null;
-const jmLoadImg=src=>new Promise((ok,no)=>{const im=new Image();im.onload=()=>ok(im);im.onerror=()=>no(new Error(src));im.src=src});
+// crossOrigin: the raw.githack.com preview redirects images to raw.githubusercontent.com (another origin, sends
+// Access-Control-Allow-Origin: *); without it the canvas is "tainted" and getImageData fails (使用者 2026-11-06 預覽上
+// 「讀不到網站的地圖資料」). Same-origin GitHub Pages is unaffected.
+const jmLoadImg=src=>new Promise((ok,no)=>{const im=new Image();im.crossOrigin="anonymous";im.onload=()=>ok(im);im.onerror=()=>no(new Error(src));im.src=src});
 async function jmRef(){if(JMREF)return JMREF;
   const v=JMV(),c=document.createElement("canvas");c.width=c.height=1280;const x=c.getContext("2d",{willReadFrequently:true});
   x.fillStyle="#070c11";x.fillRect(0,0,1280,1280);
