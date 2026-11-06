@@ -507,8 +507,7 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .jmdl{display:flex;flex-wrap:wrap;gap:8px}
 .jmopt{display:flex;flex-direction:column;gap:6px;padding:8px 10px;border:1px solid var(--line);border-radius:8px}
 .jmopt .jmoh{font-weight:600;font-size:12.5px}
-.jmlays{display:flex;flex-wrap:wrap;gap:4px 14px}.jmlay{display:flex;align-items:center;gap:5px;font-size:12.5px;cursor:pointer}
-.jmlay .n{font-size:11px;color:var(--muted);margin-left:2px}
+.jmlays{font-size:12.5px}.jmlays .muted{font-size:11.5px;margin-left:4px}
 .jmbox{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;font-size:12.5px}.jmbox label,.jmbox .ax{display:flex;align-items:center;gap:5px;white-space:nowrap}
 .jmbox input{width:64px;padding:3px 6px;font:inherit;font-family:var(--f-mono);background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:5px}
 .pill.rep{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
@@ -2162,7 +2161,7 @@ function jmCredits(){const j=(window.SAO_JM||{})["1"]||{},log=j.log||[],tot=j.ch
 // verify the folder again (it needs >= 20 matching chunks). The zip (stored, not compressed: PNGs are compressed
 // already) keeps each folder's path so the server checks every world on its own.
 // 2026-11-06 (使用者選 A＋選擇範圍): the height-layer folders (cave slices "0", "1", "-1"…) of floor 1 worlds are packed
-// too; the player ticks which layers (all by default) and may limit the pack to an X/Z box. A layer-only pack still
+// too, all of them (no height choice: players think in X/Z); the player may limit the pack to an X/Z box. A layer-only pack still
 // carries a few surface regions as anchors, because the server recognises floor 1 only by its surface colours.
 const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576,MAXN:1500};   // MAXN = MAX_REGIONS in tools/jm_merge.py
 window.__JMP=JMP;   // exposed for tests/jm_pack_test.py
@@ -2180,7 +2179,6 @@ async function jmRef(){if(JMREF)return JMREF;
 // group the picked files by WORLD (the folder that holds "day"): "day" = the surface, integer folders = JourneyMap's
 // height layers (16-block slices, folder "1" = Y 16-31; the in-game minimap shows "y: 24 (1)"). Night / topo / biome
 // folders are ignored. Only "x,z.png" directly inside those folders count.
-const jmLayerLabel=k=>{if(k==="day")return"地面";const n=+k.slice(1);return`Y ${n*16}～${n*16+15}`};
 function jmGroups(files){const g=new Map();
   for(const f of files){const p=(f.webkitRelativePath||f.name).split("/"),m=/^(-?\d+),(-?\d+)\.png$/i.exec(p[p.length-1]);
     if(!m||p.length<2)continue;const dir=p[p.length-2],day=dir.toLowerCase()==="day";if(!day&&!/^-?\d+$/.test(dir))continue;
@@ -2290,8 +2288,11 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
     const extra=g.state==="f1"?(g.news.length?`・網站還沒有的地面區域 ${g.news.length} 張`:"・地面網站都已經有了")+(nl?`・高度層 ${nl} 層`:""):"";
     return`<div class="jmrow"><span class="t"><b title="${esc(g.key)}">${esc(g.label.length>22?g.label.slice(0,22)+"…":g.label)}</b><span>${g.files.length} 張地面地圖${g.latest?"・最後更新 "+new Date(g.latest).toLocaleDateString("zh-TW"):""}${extra}</span></span><span class="pill ${c}">${t}</span></div>`}).join("");
   const B=JMSEL.box,bv=k=>B&&isFinite(B[k])?B[k]:"";
-  const opts=f1.length?`<div class="jmopt"><div class="jmoh">要打包的高度</div><div class="jmlays">${found.map(([k,n])=>`<label class="jmlay"><input type="checkbox" data-jmlay="${k}"${JMSEL.layers.has(k)?" checked":""}> ${jmLayerLabel(k)}${k==="day"?"":` <span class="muted">（地底）</span>`}<span class="n">${n} 張新的</span></label>`).join("")}</div>
-    <div class="jmoh">只打包這個範圍（選填，留白＝整層）</div>
+  // no height choice (使用者 2026-11-06：官方和遊戲裡都用 X／Z，選高度不方便回報): every height layer goes along,
+  // the player only limits the area
+  const nDay=(found.find(([k])=>k==="day")||[0,0])[1],nCave=found.filter(([k])=>k!=="day").reduce((s,[,n])=>s+n,0);
+  const opts=f1.length?`<div class="jmopt"><div class="jmoh">會一起打包</div><div class="jmlays">地面 ${nDay} 張・地底（洞穴、地下室）${nCave} 張<span class="muted">（工具自動判斷，不用選高度）</span></div>
+    <div class="jmoh">只打包這個範圍（選填，留白＝整層；用遊戲裡的 X／Z 座標）</div>
     <div class="jmbox"><span class="ax"><label>X <input type="number" data-jmbox="x0" value="${bv("x0")}" placeholder="從"></label>～<input type="number" data-jmbox="x1" value="${bv("x1")}" placeholder="到" aria-label="X 到"></span>
       <span class="ax"><label>Z <input type="number" data-jmbox="z0" value="${bv("z0")}" placeholder="從"></label>～<input type="number" data-jmbox="z1" value="${bv("z1")}" placeholder="到" aria-label="Z 到"></span>
       <button class="linkbtn" id="jmBoxClr" hidden>清除範圍</button></div>
@@ -2303,7 +2304,6 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
     <div class="jmdl">${parts.map((p,i)=>`<button class="repbtn" data-jmpart="${i}">⬇ 下載壓縮檔${parts.length>1?` ${i+1}／${parts.length}`:""}（${mb(p.bytes)}）</button>`).join("")}</div>`;
   $("jmHead").innerHTML=head;
   if(all){$("jmOpts").innerHTML=opts;$("jmRows").innerHTML=rows;
-  O.querySelectorAll("[data-jmlay]").forEach(c=>c.onchange=()=>{c.checked?JMSEL.layers.add(c.dataset.jmlay):JMSEL.layers.delete(c.dataset.jmlay);jmShow()});
   // re-plan only when the box really changed (a change event fired by the blur of a click on 下載 must not replace the
   // button under the pointer); typing updates the plan after a short pause, so it is current before the player clicks
   let boxT=0;const boxUpd=()=>{const v={};O.querySelectorAll("[data-jmbox]").forEach(e=>{v[e.dataset.jmbox]=e.value.trim()===""?NaN:+e.value});
@@ -2368,11 +2368,11 @@ function buildFormReport(){
     <div class="muted" style="font-size:12.5px">想當審核員？請聯絡網站管理者。</div></article>
   </div><div class="rcol rc-jm pconly">
   <article class="bcard pconly" id="jmPack"><h4 class="sec">🗺️ 打包探索地圖（JourneyMap）</h4>
-    <p style="margin:0">把你的 JourneyMap 地圖整理成可以上傳的壓縮檔，網站會把你探索過、網站還沒有的地方合併進「探索地圖」。<b>檔案只在你的瀏覽器裡處理，不會傳到任何地方</b>，直到你自己把壓縮檔上傳到表單。目前只收第 1 層：地面，以及地底的高度層（洞穴、地下室；可以選要哪幾層、哪個範圍）。地下城是另外的世界，不收。</p>
+    <p style="margin:0">把你的 JourneyMap 地圖整理成可以上傳的壓縮檔，網站會把你探索過、網站還沒有的地方合併進「探索地圖」。<b>檔案只在你的瀏覽器裡處理，不會傳到任何地方</b>，直到你自己把壓縮檔上傳到表單。目前只收第 1 層，地面和地底（洞穴、地下室）都會收，可以用 X／Z 座標只打包一部分。地下城是另外的世界，不收。</p>
     <ol class="steps">
       <li>按下面的按鈕。在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。</li>
       <li>瀏覽器會問「要將 N 個檔案上傳到這個網站嗎？」，按「上傳」。這只是讓網頁讀取，檔案不會被送出。</li>
-      <li>工具會自動找出第 1 層的地圖（mp 裡每個 <code>Triggers_</code> 資料夾是一個世界，不用自己挑），只留網站還沒有的區域。要的話取消不想上傳的高度，或填 X／Z 範圍只打包一部分，再按「下載壓縮檔」。</li>
+      <li>工具會自動找出第 1 層的地圖（mp 裡每個 <code>Triggers_</code> 資料夾是一個世界，不用自己挑），只留網站還沒有的區域。要的話填 X／Z 範圍只打包一部分，再按「下載壓縮檔」。</li>
       <li>按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>，上傳這個壓縮檔後送出。<b>不用截圖</b>，送出後會自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
     <label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden>
     <div class="muted" style="font-size:12.5px">要在電腦上用 Chrome 或 Edge。</div>
