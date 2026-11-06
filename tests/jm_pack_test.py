@@ -99,13 +99,16 @@ try:
         pg.wait_for_function("window.__jm", timeout=60000)
         J0 = pg.evaluate("window.__jm")
         check(not J0["parts"] and not pg.locator("[data-jmpart]").count() and "下載按鈕會出現在這裡" in pg.inner_text("#jmOut")
-              and "已選 第 1 層 0／" in pg.inner_text("#jmRegSum") and "地下城 0／1" in pg.inner_text("#jmRegSum"),
-              "nothing is picked to start with; the picked count is at the top of the box")
-        check(pg.locator(".jmopt").count() == 1 and pg.locator(".jmopt .jmmap").count() == 1 and pg.locator(".jmopt [data-jmdg]").count() == 1
-              and not pg.locator("button[data-jmdgpv]").count(), "the map and the dungeons are in one box, without preview buttons")
-        check(pg.get_attribute("[data-jmfl='1']", "aria-selected") == "true" and pg.is_disabled("[data-jmfl='2']") and "尚未開放" in pg.inner_text("[data-jmfl='3']"),
-              "floor tabs: floor 1 active, floors 2 and 3 greyed until they open")
-        pg.click("#jmRegAll"); pg.wait_for_timeout(150)
+              and "第 1 層 0／" in pg.inner_text("#jmRegSum") and "地下城 0／1" in pg.inner_text("#jmRegSum"),
+              "nothing is picked to start with; the picked count is at the top")
+        # flat layout (使用者 2026-11-06): no nested boxes or floor tabs, a section per floor and one for the dungeons,
+        # 全選／清除 beside each heading (not next to the count), dungeons are picture tiles like the squares
+        check(pg.locator(".jmsec").count() == 2 and pg.locator(".jmsec .jmmap").count() == 1 and pg.locator(".jmdgt[data-jmdg]").count() == 1
+              and not pg.locator(".jmopt, .jmfl, [data-jmfl], .jmregbar, [data-jmdgpv], input[data-jmdg]").count()
+              and pg.locator(".jmsech #jmRegAll").count() == 1 and pg.locator(".jmsech #jmDgAll").count() == 1 and not pg.locator("#jmRegSum #jmRegAll").count()
+              and not pg.locator("#jmFloor").count(), "flat layout: floor and dungeon sections with their own 全選／清除, no tabs, no boxes")
+        check(pg.locator(".jmhint").count() == 1 and pg.locator("#jmOpts .muted").count() <= 3, "one hint line instead of notes everywhere")
+        pg.click("#jmRegAll"); pg.click("#jmDgAll"); pg.wait_for_timeout(150)
         J = pg.evaluate("window.__jm")
         st = {g["label"]: g for g in J["groups"]}
         check(J["found"].get("c1") == 1 and J["found"].get("c2") == 6 and J["found"].get("c0") == 1 and J["found"].get("day", 0) >= 1,
@@ -116,7 +119,7 @@ try:
             pg.locator("#jmOut").scroll_into_view_if_needed()
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_card.png"))
         lt = pg.inner_text("#jmOut")
-        check("地面 3 張" in lt and "地底洞穴 8 張" in lt and not pg.locator("#jmOut [data-jmbox], #jmOut [data-jmlay]").count(),
+        check("地面 3 張" in lt and "地底 8 張" in lt and not pg.locator("#jmOut [data-jmbox], #jmOut [data-jmlay]").count(),
               "no height or coordinate fields: the summary counts surface and underground maps")
         pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(200)
         pg.wait_for_selector("#jmPop canvas", timeout=5000)
@@ -126,28 +129,27 @@ try:
         check(not pg.locator("#jmPop").count() and pg.is_visible("#jmPrevOpen"), "a closed preview window stays closed until reopened")
         pg.click("#jmPrevOpen"); pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_selector("#jmPop canvas", timeout=5000)
         if os.environ.get("SHOT_DIR"):
-            pg.locator(".jmopt").first.scroll_into_view_if_needed()
-            pg.locator("#jmOpts").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_opts.png"))
+            pg.locator("#jmOut").scroll_into_view_if_needed()
+            pg.locator("#jmOut").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_opts.png"))
         D = J["dgs"]; st2 = {(g["leaf"] or ""): g for g in J["groups"]}
         check(D.get("geldorack", {}).get("inst") == 2 and D["geldorack"]["news"] == 3 and D["geldorack"]["bounds"] == [-1, -1, -1, -1]
               and st2["bb0000b0-5d0c-4000-8000-000000000001_backrooms"]["state"] == "dgunk" and st2["03b352fd-5d0c-4000-8000-000000000002_xalzirith"]["state"] == "dgno",
               f"dungeons are recognised by folder name; unknown and unconfirmed ones are listed but not packed ({D}, {[(k, v['state']) for k, v in st2.items() if v.get('dg')]})")
-        pg.hover(".jmdg:has([data-jmdg=geldorack]) .n"); pg.wait_for_function("document.querySelector('#jmPop')&&document.querySelector('#jmPop').innerText.includes('合在一起')", timeout=10000)
+        pg.hover("[data-jmdg=geldorack] .n"); pg.wait_for_function("document.querySelector('#jmPop')&&document.querySelector('#jmPop').innerText.includes('合在一起')", timeout=10000)
         cw = pg.evaluate("[document.querySelector('#jmPop canvas').width,document.querySelector('#jmPop canvas').height]")
-        check(cw[0] > 100 and cw[1] > 30 and "Geldorack Dungeon" in pg.inner_text("#jmPopT"), f"pointing at a dungeon row previews it in the same floating window ({cw})")
+        check(cw[0] > 100 and cw[1] > 30 and "Geldorack Dungeon" in pg.inner_text("#jmPopT"), f"pointing at a dungeon tile previews it in the same floating window ({cw})")
+        pg.wait_for_selector("[data-jmdgth=geldorack] canvas", timeout=10000)
+        tw = pg.evaluate("document.querySelector('[data-jmdgth=geldorack] canvas').getBoundingClientRect().width")
+        check(tw > 40, f"the dungeon tile carries a thumbnail of the player's map ({tw})")
         if os.environ.get("SHOT_DIR"):
             pg.locator(".jmmap").scroll_into_view_if_needed(); pg.wait_for_timeout(200)
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_dgprev.png"))
         check(not pg.evaluate("document.getElementById('jmHow').open"), "the how-to folds away once a folder is picked")
         pw = [sqw, pg.evaluate("document.querySelector('#jmPop canvas').getBoundingClientRect().width")]
         pg.click("#jmPop canvas"); pg.wait_for_timeout(200)
-        zw = pg.evaluate("document.querySelector('.jmzoom img')&&document.querySelector('.jmzoom img').getBoundingClientRect().width")
-        if os.environ.get("SHOT_DIR"):
-            pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_zoom.png"))
-        pg.keyboard.press("Escape"); pg.wait_for_timeout(100)
-        check(pw[0] >= 300 and pw[1] >= 300 and zw and zw >= 500 and not pg.locator(".jmzoom").count(),
-              f"previews are large and open full-size on click, Esc closes ({pw}, zoom {zw})")
-        check("Geldorack Dungeon" in lt and "2 次進場" in lt and "backrooms" in lt and pg.locator("[data-jmdg=geldorack]").is_checked(), "the dungeon list names the dungeon and its runs")
+        check(pw[0] >= 300 and pw[1] >= 300 and not pg.locator(".jmzoom").count() and pg.locator("#jmPop").count() == 1,
+              f"previews are large; clicking one no longer opens a full-screen zoom ({pw})")
+        check("Geldorack Dungeon" in lt and "2 次進場" in lt and "backrooms" in lt and pg.get_attribute("[data-jmdg=geldorack]", "aria-pressed") == "true", "the dungeon tiles name the dungeon and its runs")
         regs = pg.eval_on_selector_all("[data-jmreg]", "e=>e.map(x=>x.dataset.jmreg)")
         check("5,9" in regs and "2,2" in regs and "40,40" not in regs and pg.locator(".jmmap .jmtown").count() >= 5
               and "第 1 層 %d／%d 格" % (len(regs), len(regs)) in pg.inner_text("#jmRegSum"), f"the squares with new data are on a small map with town names ({regs})")
@@ -158,7 +160,7 @@ try:
               "other worlds with real-looking terrain and noise are not floor 1 (" + ", ".join("%.0f" % st[k]["med"] for k in ("Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d")) + ")")
         check(st["Triggers_lone~e"]["state"] == "few" and st["Triggers_out~f"]["state"] == "out", "no overlap -> cannot confirm; outside the floor -> skipped")
         t = pg.inner_text("#jmOut")
-        check("找到 1 個第 1 層的資料夾" in t and "下載壓縮檔" in t, "the summary names the floor 1 folder and offers the zip")
+        check("來自 1 個第 1 層的資料夾" in t and "下載壓縮檔" in t, "the summary names the floor 1 folder and offers the zip")
         with pg.expect_download() as dl:
             pg.click("[data-jmpart]")
         zp = os.path.join(tmp, "up.zip")
@@ -181,10 +183,10 @@ try:
         def names_now():
             return pg.evaluate("window.__jm.parts.flatMap(p=>p.names)")
         # only the ink room square (layer 1, region 5,9): that square plus surface anchors from elsewhere
-        pg.uncheck("[data-jmdg=geldorack]"); pg.wait_for_timeout(100)
-        check(not any("_geldorack/" in x for x in names_now()), "unticking a dungeon leaves it out")
+        pg.click("[data-jmdg=geldorack]"); pg.wait_for_timeout(100)
+        check(not any("_geldorack/" in x for x in names_now()) and pg.get_attribute("[data-jmdg=geldorack]", "aria-pressed") == "false", "clicking a picked dungeon tile leaves it out")
         pg.click("#jmRegNone"); pg.wait_for_timeout(100)
-        check(not pg.locator("[data-jmpart]").count() and "在下面點選要上傳的方格" in pg.inner_text("#jmOut"), "nothing picked -> no download, the note says what to do")
+        check(not pg.locator("[data-jmpart]").count() and "在下面點選要上傳的地方" in pg.inner_text("#jmOut"), "nothing picked -> no download, the note says what to do")
         pg.click("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(100)
         J2 = pg.evaluate("window.__jm")
         nn = names_now()
@@ -203,8 +205,10 @@ try:
         packed = [x for x in nn if "/overworld/2/" in x]
         check(packed == ["mp/Triggers_f1~a/overworld/2/2,2.png"] and "/overworld/1/5,9.png" not in " ".join(nn)
               and pg.get_attribute("[data-jmreg='5,9']", "aria-checked") == "false", f"clicking squares changes what is packed ({packed})")
-        pg.click("#jmRegAll"); pg.check("[data-jmdg=geldorack]"); pg.wait_for_timeout(100)
-        check(pg.evaluate("window.__jm.sel.off") == [] and len(names_now()) == len(names), "全部選 packs everything again")
+        pg.click("#jmRegAll"); pg.wait_for_timeout(100)
+        check(pg.evaluate("window.__jm.sel.off") == [] and pg.evaluate("window.__jm.sel.dgOff") == ["geldorack"], "the floor's 全選 picks the squares only, not the dungeons")
+        pg.click("#jmDgAll"); pg.wait_for_timeout(100)
+        check(pg.evaluate("window.__jm.sel.dgOff") == [] and len(names_now()) == len(names), "the dungeons' 全選 picks them again; everything is packed")
         if os.environ.get("SHOT_DIR"):
             pg.click("[data-jmreg='2,2']", force=True); pg.wait_for_timeout(100)
             pg.locator(".jmmap").scroll_into_view_if_needed()
@@ -218,7 +222,7 @@ try:
         pg.evaluate("__JMP.BUDGET=1.2*1048576; __JMP.ANCHOR=40"); pg.evaluate("window.__jm=null")
         pg.set_input_files("#jmDir", mp)
         pg.wait_for_function("window.__jm", timeout=60000)
-        pg.click("#jmRegAll"); pg.wait_for_timeout(150)
+        pg.click("#jmRegAll"); pg.click("#jmDgAll"); pg.wait_for_timeout(150)
         parts = pg.evaluate("window.__jm.parts")
         check(len(parts) >= 2 and all(q["ov"] >= 40 for q in parts) and pg.locator("[data-jmpart]").count() == len(parts) and "每一份都要各送出一次表單" in pg.inner_text("#jmOut"),
               f"an upload over the size limit is split into parts ({parts})")
