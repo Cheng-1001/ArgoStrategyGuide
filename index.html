@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="2c244fc131">
+<meta name="sao-build" content="0ebeb55089">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -819,7 +819,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=b9c0a8b1"></script>
 <script src="npcs.js?v=576b7565"></script>
-<script src="changelog.js?v=27d31468"></script>
+<script src="changelog.js?v=4a1dcc48"></script>
 <script src="recipes.js?v=36e8b52c"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -828,7 +828,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="gamestats.js?v=5262b715"></script>
 <script src="sets.js?v=0fe90063"></script>
 <script src="staticons.js?v=dadb2164"></script>
-<script src="gameicons.js?v=3f067e3c"></script>
+<script src="gameicons.js?v=0c29b9da"></script>
 <script src="recicons.js?v=9e931339"></script>
 <script>
 (()=>{
@@ -1744,7 +1744,9 @@ const EQX_CATS=new Set(["acc","quiver","artifact","sword","dagger","bow","crossb
   const e={oid:"x"+(++k),name:id,gen:id,cat:it.cat,r:it.r,lv:it.lv||0,dmg,lore:"",st,ic:-1,itemId:id,extra:1};EQ.push(e);EQX_BY[id]=e.oid;
   // game-only equipment (not in the official catalogue, e.g. the Elite Treant set) gets its recipes by in-game English name (user 2026-11-06: elite套裝有截過圖，為什麼網頁沒有使用)
   const rows=ALLREC.filter(r=>norm(r.en)===norm(id));if(rows.length)RECIPE_BY_EQ[e.oid]=rows})}
-const eqById=Object.fromEntries(EQ.map(e=>[String(e.oid),e]));EQ.forEach(e=>{if(GI_OID[e.oid])e.gen=GI_OID[e.oid].en});
+const eqById=Object.fromEntries(EQ.map(e=>[String(e.oid),e]));
+// Nodachi upgrades (★2～★5, game-only) look the same as the catalogue Nodachi / Arc Nodachi: borrow their icon
+EQ.forEach(e=>{const m=e.extra&&/^Nodachi( Bow)? ★{2,5}$/.exec(e.name);if(m)e.icFrom=m[1]?"1573":"2619"});EQ.forEach(e=>{if(GI_OID[e.oid])e.gen=GI_OID[e.oid].en});
 const FR2ID={};Object.keys(ITEMS).forEach(id=>{if(ITEMS[id].fr)FR2ID[ITEMS[id].fr]=id});
 const EQ_PART={sword:"weapon",dagger:"weapon",bow:"weapon",crossbow:"weapon",staff_mage:"weapon",staff_shaman:"weapon",catalyst:"off",quiver:"off",shield:"off",armor:"armor",gloves:"acc",ring:"acc",amulet:"acc",bracelet:"acc",artifact:"acc",acc:"acc"};
 const EQ_CAT={sword:"近戰武器",dagger:"匕首",bow:"弓",crossbow:"弩",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",catalyst:"催化器（副手）",quiver:"箭袋（副手）",shield:"盾牌",armor:"防具",gloves:"手套",ring:"戒指",amulet:"項鍊",bracelet:"手環",artifact:"遺物",acc:"飾品（部位未確認）"};
@@ -1757,7 +1759,7 @@ const eqSub=e=>e.cat==="armor"?(e.slot||"armor"):e.cat;
 const EQ_SUBS={weapon:["sword","dagger","bow","crossbow","staff_mage","staff_shaman"],off:["shield","catalyst"].concat(EQ.some(e=>e.cat==="quiver")?["quiver"]:[]),armor:["head","chest","legs","feet"],acc:["amulet","ring","bracelet","gloves","artifact"].concat(EQ.some(e=>e.cat==="acc")?["acc"]:[])};
 const subLab=k=>k==="acc"?"部位未確認":SLOT_ZH[k]||EQ_CAT[k]||k;
 const eqClasses=e=>String(e.st["Classe requise"]||"").split(/,\s*/).map(c=>c.toLowerCase()).filter(c=>CLASS_ZH[c]);
-const eslot=(e,s=44)=>e.ps?pslot(e,s):e.itemId&&(GICON[e.itemId]||(ITEMS[e.itemId]||{}).ic>=0)?(GICON[e.itemId]?recicImg(GICON[e.itemId],s):slot(e.itemId,s)):e.itemId?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
+const eslot=(e,s=44)=>e.icFrom&&eqById[e.icFrom]?eslot(eqById[e.icFrom],s):e.ps?pslot(e,s):e.itemId&&(GICON[e.itemId]||(ITEMS[e.itemId]||{}).ic>=0)?(GICON[e.itemId]?recicImg(GICON[e.itemId],s):slot(e.itemId,s)):e.itemId?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
 const NOSIGN=new Set(["Max Consume","Max Stack Size","Max Item Damage","Max Durability","Durability Bar","Pickaxe Power","Item Cooldown","Repair Percent"]);
 const statVal=(k,v)=>k==="Inedible"||k==="Durability Bar"?"是":NOSIGN.has(k)?v:k==="Classe requise"?String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]).filter(Boolean).join("、")||"不限":k==="Arme à deux mains"?"是":typeof v==="number"&&!k.startsWith("Required")?(v>0?"+":"")+v:v;
 const eqKey=e=>{const o=[];if(e.dmg)o.push("傷害 "+e.dmg);["Defense","Max Health","Magic Damage","Physical Damage","Skill Damage","Critical Strike Chance"].forEach(k=>{if(e.st[k]!=null&&o.length<3)o.push((STAT_ZH[k]||k)+" "+statVal(k,e.st[k]))});return o.join("・")};
