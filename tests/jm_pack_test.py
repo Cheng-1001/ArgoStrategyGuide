@@ -98,7 +98,8 @@ try:
             pg.locator("#jmOut").scroll_into_view_if_needed()
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_card.png"))
         lt = pg.inner_text("#jmOut")
-        check("Y 16～31" in lt and "Y 32～47" in lt and "地面" in lt, "the layer checkboxes are labelled by height")
+        check("地面 3 張" in lt and "地底（洞穴、地下室）8 張" in lt and not pg.locator("#jmOut input[type=checkbox]").count(),
+              "no height choice: the summary counts surface and underground maps")
         check(set(st) == {"Triggers_f1~a", "Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d", "Triggers_lone~e", "Triggers_out~f"},
               "one entry per world folder (night / cave layers are not separate worlds)")
         check(st["Triggers_f1~a"]["state"] == "f1" and st["Triggers_f1~a"]["files"] == 4, f"the floor 1 world is recognised ({st['Triggers_f1~a']})")
@@ -122,20 +123,21 @@ try:
               "files are stored byte for byte")
         def names_now():
             return pg.evaluate("window.__jm.parts.flatMap(p=>p.names)")
-        pg.uncheck("[data-jmlay=c0]"); pg.wait_for_timeout(100)
-        nn = names_now()
-        check(nn and not any("/overworld/0/" in x for x in nn) and any("/overworld/1/" in x for x in nn), "an unticked layer is left out")
-        pg.uncheck("[data-jmlay=day]"); pg.uncheck("[data-jmlay=c2]"); pg.wait_for_timeout(100)
+        # an X/Z box around the ink room (layer 1, region 5,9): only that region plus surface anchors from elsewhere
+        pg.fill("[data-jmbox=x0]", "2600"); pg.fill("[data-jmbox=x1]", "2700"); pg.fill("[data-jmbox=z0]", "4700"); pg.fill("[data-jmbox=z1]", "4800")
+        pg.wait_for_timeout(400)
         J2 = pg.evaluate("window.__jm")
         nn = names_now()
-        check([x for x in nn if "/overworld/1/" in x] == ["mp/Triggers_f1~a/overworld/1/5,9.png"] and J2["parts"][0]["anchors"] >= 1
-              and all("/day/" in x for x in nn if "/overworld/1/" not in x) and J2["parts"][0]["ov"] >= 60 and "另含" in pg.inner_text("#jmOut"),
-              f"a layer-only pack carries surface anchors ({J2['parts']})")
+        inside = [x for x in nn if x.endswith("/5,9.png")]
+        anchors = [x for x in nn if not x.endswith("/5,9.png")]
+        check("mp/Triggers_f1~a/overworld/1/5,9.png" in inside and all("/day/" in x for x in anchors) and J2["parts"][0]["ov"] >= 60
+              and (J2["parts"][0]["anchors"] >= 1 and "另含" in pg.inner_text("#jmOut") if not any("/day/" in x for x in inside) else True),
+              f"a box with only underground data carries surface anchors ({J2['parts']})")
         with pg.expect_download() as dl2:
             pg.click("[data-jmpart]")
         zl = os.path.join(tmp, "layer.zip")
         dl2.value.save_as(zl)
-        pg.check("[data-jmlay=day]"); pg.check("[data-jmlay=c2]"); pg.check("[data-jmlay=c0]")
+        pg.click("#jmBoxClr"); pg.wait_for_timeout(100)
         pg.fill("[data-jmbox=x0]", "1100"); pg.fill("[data-jmbox=x1]", "1500"); pg.fill("[data-jmbox=z0]", "1100"); pg.fill("[data-jmbox=z1]", "1200")
         pg.wait_for_timeout(400)
         nn = names_now()
@@ -151,7 +153,7 @@ try:
         check(not any("/overworld/2/" in i.filename and not i.filename.endswith("/2,2.png") for i in z3.infolist()),
               "typing a range and clicking 下載 right away downloads the pack for that range")
         pg.click("#jmBoxClr"); pg.wait_for_timeout(100)
-        pg.evaluate("__JMP.MAXN=8"); pg.uncheck("[data-jmlay=c0]"); pg.wait_for_timeout(100)
+        pg.evaluate("__JMP.MAXN=8"); pg.fill("[data-jmbox=x0]", "0"); pg.wait_for_timeout(400)   # re-plan (x >= 0 keeps every region)
         cp = pg.evaluate("window.__jm.parts")
         check(len(cp) >= 2 and all(q["n"] <= 8 and q["ov"] >= 60 for q in cp), f"the file cap splits a pack, every part verifiable ({[(q['n'], q['ov']) for q in cp]})")
         pg.evaluate("__JMP.MAXN=1500")
@@ -180,7 +182,7 @@ try:
     check(set(res.get("layers", {})) == {"c0", "c1", "c2"} and res["layers"]["c1"] > 0, f"... and its height layers ({res.get('layers')})")
     r = subprocess.run([sys.executable, "-I", os.path.join(w, "tools", "jm_merge.py"), zl, "--report", "T991"], capture_output=True, text=True)
     res = json.loads(r.stdout.strip().splitlines()[-1]) if r.stdout.strip() else {"stderr": r.stderr[-300:]}
-    check(r.returncode == 0 and res.get("ok") and list(res.get("layers", {})) == ["c1"], f"the layer-only pack is accepted through its anchors ({res})")
+    check(r.returncode == 0 and res.get("ok") and list(res.get("layers", {})) == ["c1"], f"the underground-only pack is accepted through its anchors ({res})")
     # the map viewer: a merged height layer gets its own entry in the 高度 menu and only existing tiles are requested
     site = os.path.join(tmp, "site")
     shutil.copytree(ROOT, site, ignore=shutil.ignore_patterns(".git", "inbox"))
