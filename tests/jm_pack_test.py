@@ -103,6 +103,8 @@ try:
               "nothing is picked to start with; the picked count is at the top of the box")
         check(pg.locator(".jmopt").count() == 1 and pg.locator(".jmopt .jmmap").count() == 1 and pg.locator(".jmopt [data-jmdg]").count() == 1
               and not pg.locator("button[data-jmdgpv]").count(), "the map and the dungeons are in one box, without preview buttons")
+        check(pg.get_attribute("[data-jmfl='1']", "aria-selected") == "true" and pg.is_disabled("[data-jmfl='2']") and "尚未開放" in pg.inner_text("[data-jmfl='3']"),
+              "floor tabs: floor 1 active, floors 2 and 3 greyed until they open")
         pg.click("#jmRegAll"); pg.wait_for_timeout(150)
         J = pg.evaluate("window.__jm")
         st = {g["label"]: g for g in J["groups"]}

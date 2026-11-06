@@ -533,6 +533,8 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .jmprev{display:none}.jmprev canvas{display:block;width:100%;max-width:512px;height:auto;image-rendering:pixelated;border:1px solid var(--line);border-radius:6px;background:#070c11;cursor:zoom-in}
 .jmprev .warn{color:var(--warn)}
 .jmregbar{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:12.5px;padding:6px 8px;border-radius:6px;background:var(--panel-2)}.jmregbar #jmRegSum{flex:1 1 100%}
+.jmfl{display:flex;gap:4px;border-bottom:1px solid var(--line)}.jmflb{font:inherit;font-size:12.5px;font-weight:600;padding:5px 12px;border:1px solid var(--line);border-bottom:0;border-radius:6px 6px 0 0;background:var(--panel-2);color:var(--fg);cursor:pointer;margin-bottom:-1px}
+.jmflb[aria-selected="true"]{background:var(--panel);color:var(--accent);border-bottom:1px solid var(--panel)}.jmflb:disabled{cursor:not-allowed;opacity:.55}.jmflb span{font-weight:400;font-size:11px;margin-left:5px;color:var(--muted)}
 .jmopt .jmsub{margin-top:6px;padding-top:8px;border-top:1px solid var(--line)}.jmdg[data-jmdgpv]{cursor:default}
 .pill.rep{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
 .repbtn{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;border:1px solid var(--accent)}
@@ -2448,7 +2450,12 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
         return`<rect class="jmreg" data-jmreg="${k}" x="${r.rx*512+8}" y="${r.rz*512+8}" width="496" height="496" rx="40" tabindex="0" role="checkbox"><title>${esc(nm.join("、")||"這一格")}：地面 ${r.day} 張、地底 ${r.cave} 張</title></rect>`}).join("")}
       ${FLOORS[1].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(t.n)}</text></g>`).join("")}
     </svg>`:"";
-  const opts=mapPart||dgRows?`<div class="jmopt"><div class="jmoh">要上傳哪些地方</div>
+  // floor tabs (使用者 2026-11-06 選「加第2、3層切換」): only floor 1 can be packed for now; floors 2 and 3 are shown
+  // greyed until they open and we have seen how JourneyMap stores them (the site needs a map of a floor to check uploads)
+  const flTabs=`<div class="jmfl" role="tablist" aria-label="樓層">${Object.keys(FLOORS).map(Number).filter(f=>f<=3).map(f=>f===1
+      ?`<button class="jmflb" role="tab" aria-selected="true" data-jmfl="1">第 1 層</button>`
+      :`<button class="jmflb" role="tab" aria-selected="false" disabled data-jmfl="${f}" title="第 ${f} 層開放後，確認 JourneyMap 怎麼存這一層，再開放打包">第 ${f} 層<span>尚未開放</span></button>`).join("")}</div>`;
+  const opts=mapPart||dgRows?`<div class="jmopt"><div class="jmoh">要上傳哪些地方</div>${flTabs}
     <div class="jmregbar"><span id="jmRegSum"></span><button class="linkbtn" id="jmRegAll">全部選</button><button class="linkbtn" id="jmRegNone">全部取消</button><button class="linkbtn" id="jmPrevOpen" hidden>打開預覽視窗</button></div>
     ${mapPart}${dgRows}</div>`:"";
   let head;
