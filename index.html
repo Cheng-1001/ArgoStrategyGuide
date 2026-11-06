@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="e750c9e516">
+<meta name="sao-build" content="0ee20d2338">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -404,7 +404,7 @@ aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:
 /* 介紹及資訊 left/right, 協作區 left/middle/right (user 2026-11-05) */
 .agrid,.cgrid3{display:grid;gap:16px;align-items:start}
 .agrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}#aWrap:has(.agrid){max-width:1240px}
-.cgrid3{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr) minmax(0,1fr)}#rWrap:has(.cgrid3:not([hidden])){max-width:1560px}
+.cgrid3{grid-template-columns:minmax(0,1.1fr) minmax(0,1.2fr) minmax(0,.8fr)}#rWrap:has(.cgrid3:not([hidden])){max-width:1560px}
 @media (max-width:1100px){.cgrid3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.cgrid3>.rc-jm{grid-column:1/-1;order:2}}
 @media (max-width:900px){.agrid,.cgrid3{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:900px){.rgrid{grid-template-columns:minmax(0,1fr)}}
@@ -525,6 +525,10 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .jmmap .jmreg:hover,.jmmap .jmreg:focus-visible{stroke:#fff}
 .jmmap .jmtown{pointer-events:none}.jmmap .jmtown circle{fill:#fff;stroke:#111;stroke-width:14}
 .jmmap .jmtown text{font:600 150px var(--f-body);fill:#fff;stroke:#0b1219;stroke-width:34;paint-order:stroke;text-anchor:middle}
+.jmdgl{display:flex;flex-direction:column;gap:4px}.jmdg{display:flex;align-items:baseline;gap:8px;font-size:12.5px;cursor:pointer;padding:3px 0;border-top:1px solid var(--line)}
+.jmdg:first-child{border-top:0}.jmdg input{align-self:center;margin:0}.jmdg b{font-weight:600}.jmdg .n{margin-left:auto;color:var(--muted);font-size:11.5px;white-space:nowrap}
+.jmprev{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;min-height:40px}.jmprev img{width:96px;height:96px;flex:none;image-rendering:pixelated;border:1px solid var(--line);border-radius:4px;background:#070c11}
+.jmprev .warn{color:var(--warn)}
 .jmregbar{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:12.5px}.jmregbar #jmRegSum{flex:1 1 100%}
 .pill.rep{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
 .repbtn{display:inline-flex;align-items:center;gap:6px;align-self:flex-start;font-size:13px;font-weight:600;padding:6px 12px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;border:1px solid var(--accent)}
@@ -2329,6 +2333,13 @@ async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];
   for(let i=0;i<f1.length;i++){const n=Object.values(f1[i].layers).reduce((s,L)=>s+L.items.length,0);if(!n)continue;
     O.firstElementChild.textContent=`正在整理高度層（地底）地圖：第 ${i+1}／${f1.length} 個世界，${n} 張…`;await jmLayers(f1[i])}
   JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();O.innerHTML=`<div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
+// preview of one square: the player's own JourneyMap image of it (surface first, else the first underground one)
+const JMURL=new Map();const jmUrl=f=>{if(!JMURL.has(f))JMURL.set(f,URL.createObjectURL(f));return JMURL.get(f)};
+function jmPreview(k){const P=$("jmPrev");if(!P)return;const [rx,rz]=k.split(",").map(Number),f1=JMG.filter(g=>g.state==="f1");
+  const day=f1.flatMap(g=>g.news).filter(it=>it.rx===rx&&it.rz===rz),cave=f1.flatMap(g=>Object.values(g.layers).flatMap(L=>L.news||[])).filter(it=>it.rx===rx&&it.rz===rz);
+  const it=day[0]||cave[0];if(!it)return;const cx=rx*512+256-2560,cz=rz*512+256-2560,out=Math.hypot(cx,cz)>2487+256;
+  const nm=jmRegNames(rx,rz);
+  P.innerHTML=`<img src="${jmUrl(it.f)}" alt=""><span><b>${esc(nm.join("、")||"這一格")}</b>${out?"<br><span class=\"warn\">在第 1 層的島外面（地圖邊緣以外）</span>":""}<br>地面 ${day.length} 張・地底 ${cave.length} 張${!day.length?"<br>（這一格只有地底的資料，圖是地底那一層）":""}<br><span class="muted">${JMSEL.off.has(k)?"目前：不上傳":"目前：會上傳"}</span></span>`}
 // layers found in the floor 1 worlds, surface first, then by height
 function jmFound(){const m=new Map();for(const g of JMG)if(g.state==="f1"){
     m.set("day",(m.get("day")||0)+g.news.length);
@@ -2362,11 +2373,11 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
     for(const L of Object.values(g.layers))for(const it of L.news||[]){const k=it.rx+","+it.rz,r=regs.get(k)||{rx:it.rx,rz:it.rz,day:0,cave:0};r.cave++;regs.set(k,r)}}
   JMG.regs=regs;
   const v=JMV(),C=2560,R=2487;
-  const unk=[...new Set(groups.filter(g=>g.state==="dgunk").map(g=>g.dg.slice(1)))];
+  const unk=[...new Set(groups.filter(g=>g.state==="dgunk"&&g.anc).map(g=>g.dg.slice(1)))];   // only next to the floor 1 overworld (memoryice etc. are the Underworld)
   const dgOpts=dgList.length||unk.length?`<div class="jmopt"><div class="jmoh">地下城</div>
     <div class="muted" style="font-size:12px">工具從 JourneyMap 的資料夾名稱認出地下城，同一個地下城進場好幾次的地圖會合成一張。不想上傳的取消勾選。</div>
-    <div class="jmlays">${dgList.map(d=>{const n=dgNews(d),k=dgOk.filter(g=>g.dg===d).length;
-      return`<label class="jmlay"><input type="checkbox" data-jmdg="${d}"${JMSEL.dgOff.has(d)?"":" checked"}${n?"":" disabled"}> ${esc(dgName(d))}<span class="n">${k} 次進場・${n?n+" 張新的":"網站都已經有了"}</span></label>`}).join("")}</div>
+    <div class="jmdgl">${dgList.map(d=>{const n=dgNews(d),k=dgOk.filter(g=>g.dg===d).length;
+      return`<label class="jmdg"><input type="checkbox" data-jmdg="${d}"${JMSEL.dgOff.has(d)?"":" checked"}${n?"":" disabled"}><b>${esc(dgName(d))}</b><span class="n">${k} 次進場・${n?n+" 張新的":"網站都已經有了"}</span></label>`}).join("")}</div>
     ${unk.length?`<div class="muted" style="font-size:12px">網站還不認得、先不收的：${unk.map(esc).join("、")}</div>`:""}</div>`:"";
   const opts=(f1.length&&regs.size?`<div class="jmopt"><div class="jmoh">要上傳哪些地方</div>
     <div class="muted" style="font-size:12px">亮橘色的方格是你有、網站還沒有的地方（地面 ${nDay} 張・地底洞穴 ${nCave} 張，地底由工具自動判斷）。點一下方格可以取消或加回。</div>
@@ -2378,6 +2389,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
         return`<rect class="jmreg" data-jmreg="${k}" x="${r.rx*512+8}" y="${r.rz*512+8}" width="496" height="496" rx="40" tabindex="0" role="checkbox"><title>${esc(nm.join("、")||"這一格")}：地面 ${r.day} 張、地底 ${r.cave} 張</title></rect>`}).join("")}
       ${FLOORS[1].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(t.n)}</text></g>`).join("")}
     </svg>
+    <div class="jmprev" id="jmPrev"><span class="muted">把滑鼠移到方格上（手機點一下），這裡會顯示那一格是你哪一張地圖。</span></div>
     <div class="jmregbar"><span id="jmRegSum"></span><button class="linkbtn" id="jmRegAll">全部選</button><button class="linkbtn" id="jmRegNone">全部取消</button></div>
     </div>`:"")+dgOpts;
   let head;
@@ -2387,7 +2399,8 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
     <div class="jmdl">${parts.map((p,i)=>`<button class="repbtn" data-jmpart="${i}">⬇ 下載壓縮檔${parts.length>1?` ${i+1}／${parts.length}`:""}（${mb(p.bytes)}）</button>`).join("")}</div>`;
   $("jmHead").innerHTML=head;
   if(all){$("jmOpts").innerHTML=opts;$("jmRows").innerHTML=rows;
-  O.querySelectorAll("[data-jmreg]").forEach(e=>{const t=()=>{const k=e.dataset.jmreg;JMSEL.off.has(k)?JMSEL.off.delete(k):JMSEL.off.add(k);jmShow()};
+  O.querySelectorAll("[data-jmreg]").forEach(e=>{const pv=()=>jmPreview(e.dataset.jmreg);e.addEventListener("mouseenter",pv);e.addEventListener("focus",pv);
+    const t=()=>{const k=e.dataset.jmreg;JMSEL.off.has(k)?JMSEL.off.delete(k):JMSEL.off.add(k);jmShow();pv()};
     e.addEventListener("click",t);e.addEventListener("keydown",ev=>{if(ev.key===" "||ev.key==="Enter"){ev.preventDefault();t()}})});
   O.querySelectorAll("[data-jmdg]").forEach(c=>c.onchange=()=>{c.checked?JMSEL.dgOff.delete(c.dataset.jmdg):JMSEL.dgOff.add(c.dataset.jmdg);jmShow()});
   const ra=$("jmRegAll"),rn=$("jmRegNone");if(ra)ra.onclick=()=>{JMSEL.off.clear();jmShow()};if(rn)rn.onclick=()=>{(JMG.regs||new Map()).forEach((_,k)=>JMSEL.off.add(k));jmShow()}}
