@@ -4,33 +4,34 @@
 用法：python3 -I tools/build_mobphotos.py <news 資料夾>
   資料夾裡要有 news.json（官網新聞頁解析出來的 monsters 表：name、floor_en、local_img、changes_en、verdict_en）
   和 imgs/*.png（200×200 透明 PNG）。目前只有 2026-10-28 那篇新聞有怪物表。
-做法：裁掉透明邊、補成正方形、縮成 128px；首領（BOSS）左右翻轉成臉朝右（使用者 2026-11-06：「首領圖片改都不朝左」）；
-對照表 MAP 把官網名稱（法文）對到本站怪物名稱，GUESS 是依外觀對應的（官網三張都叫 Gobelin de la Caverne 等）。
+做法：裁掉透明邊、補成正方形、縮成 128px，不翻轉；對照表 MAP 依官網名稱（法文）對到本站怪物，表上每一列都收。
 """
 import json, os, re, sys
 from PIL import Image
 
+# 官網怪物表的名稱（法文）→ 本站怪物。全部依名稱對應（直譯或同名），一列都不丟：
+#  - 同一隻有多列的（Gobelin de la Caverne 三列、Sentinelle Kobold＋召喚版）放在同一隻底下當「變體」，每列各自的圖和數值
+#  - Chef de la Tribu（部族首領）：第 3 層沒有叫 Tribe Chief 的怪物；wiki 的 Orc Samurai Boss 掉 Tribe Essence（部族精華）＝WHY
+#  - Nerius the Evil Treant、Jeune pousse：wiki 圖鑑表沒有，data23.js 照官網名稱新增
+# 圖片不翻轉（使用者 2026-11-04 選 B、2026-11-06「首領不轉向」）。
 MAP = {
- (1,"bandit-archer-palier-1"):"Bandit Archer",(1,"bandit-assassin-palier-1"):"Bandit Assassin",(1,"bandit-robuste-palier-1"):"Sturdy Bandit",
- (1,"guerrier-kobold-palier-1"):"Kobold Warrior",(1,"petit-kobold-palier-1"):"Small Kobold",(1,"sentinelle-kobold-palier-1"):"Kobold Sentinel",
- (1,"larcher-malicieux-palier-1"):"The Mischievous Archer",
- (2,"loup-des-montagnes-palier-2"):"Mountain Wolf",(2,"loup-des-savanes-palier-2"):"Savanna Wolf",(2,"taureau-palier-2"):"Bull",
- (3,"adoryll-palier-3"):"Adoryll, the Caged Bird",(3,"alpha-des-bois-palier-3"):"Woodland Alpha",
- (3,"araignee-luminescente-palier-3"):"Luminescent Spider",(3,"araignee-noir-palier-3"):"Black Spider",(3,"araignee-spectrale-palier-3"):"Shadow Spider",
- (3,"araignee-volante-palier-3"):"Flying Spider",(3,"araignee-d-amethyste-palier-3"):"Amethyst Spider",
- (3,"bandit-archer-palier-3"):"Bandit Archer",(3,"bandit-assassin-palier-3"):"Bandit Assassin",(3,"bandit-robuste-palier-3"):"Sturdy Bandit",
- (3,"chef-de-la-tribu-palier-3"):"Orc Samurai Boss",(3,"chef-des-bandits-palier-3"):"Bandit Chief",(3,"gardien-du-labyrinthe-palier-3"):"Furacas, Guardian of the Labyrinth",
- (3,"gobelin-de-la-caverne-palier-3"):"Goblin Soldier",(3,"gobelin-de-la-caverne-palier-3-2"):"Cave Goblin",(3,"gobelin-de-la-caverne-palier-3-3"):"Goblin Archer",
- (3,"goblin-shaman-palier-3"):"Goblin Shaman",(3,"loup-esclave-palier-3"):"Slave Wolf",(3,"muffet-palier-3"):"Muffet, Mother of Black Spiders",
- (3,"orc-samourai-palier-3"):"Orc Samurai",(3,"orc-shaman-palier-3"):"Orc Shaman",(3,"roi-de-la-caverne-palier-3"):"Cave King",
- (3,"sylnovar-archer-exile-palier-3"):"Sylnovar Archer",(3,"sylnovar-garde-exile-palier-3"):"Sylnovar Guard",(3,"sylnovar-mage-exile-palier-3"):"Sylnovar Mage",
- (3,"sylvaer-archer-exile-palier-3"):"Sylvaer Archer",(3,"sylvaer-garde-corrompu-palier-3"):"Sylvaer Guard",(3,"sylvaer-mage-exile-palier-3"):"Sylvaer Mage",
- (3,"treant-ancien-du-labyrinthe-palier-3"):"Ancient Labyrinth Treant",(3,"treant-juvenile-palier-3"):"Juvenile Treant",(3,"treant-ravageur-palier-3"):"Ravager Treant",(3,"treant-du-labyrinthe-palier-3"):"Labyrinth Treant",
+ (1,"Bandit Archer"):"Bandit Archer",(1,"Bandit Assassin"):"Bandit Assassin",(1,"Bandit Robuste"):"Sturdy Bandit",
+ (1,"Guerrier Kobold"):"Kobold Warrior",(1,"Petit Kobold"):"Small Kobold",(1,"Sentinelle Kobold"):"Kobold Sentinel",
+ (1,"Kobold_sentinel_em_summoned"):"Kobold Sentinel",(1,"l’Archer Malicieux"):"The Mischievous Archer",
+ (2,"Loup des Montagnes"):"Mountain Wolf",(2,"Loup des Savanes"):"Savanna Wolf",(2,"Taureau"):"Bull",
+ (3,"Adoryll"):"Adoryll, the Caged Bird",(3,"Alpha des Bois"):"Woodland Alpha",
+ (3,"Araignée Luminescente"):"Luminescent Spider",(3,"Araignée Noir"):"Black Spider",(3,"Araignée Spectrale"):"Shadow Spider",
+ (3,"Araignée Volante"):"Flying Spider",(3,"Araignée d'Améthyste"):"Amethyst Spider",
+ (3,"Bandit Archer"):"Bandit Archer",(3,"Bandit Assassin"):"Bandit Assassin",(3,"Bandit Robuste"):"Sturdy Bandit",
+ (3,"Chef de la Tribu"):"Orc Samurai Boss",(3,"Chef des bandits"):"Bandit Chief",(3,"Gardien du Labyrinthe"):"Furacas, Guardian of the Labyrinth",
+ (3,"Gobelin de la Caverne"):"Cave Goblin",(3,"Goblin_Shaman"):"Goblin Shaman",(3,"Jeune pousse"):"Jeune pousse",(3,"Loup Esclave"):"Slave Wolf",
+ (3,"Muffet"):"Muffet, Mother of Black Spiders",(3,"Nerius the Evil Treant"):"Nerius the Evil Treant",
+ (3,"Orc Samourai"):"Orc Samurai",(3,"Orc Shaman"):"Orc Shaman",(3,"Roi de la Caverne"):"Cave King",
+ (3,"Sylnovar Archer Exilé"):"Sylnovar Archer",(3,"Sylnovar Garde Exilé"):"Sylnovar Guard",(3,"Sylnovar Mage Exilé"):"Sylnovar Mage",
+ (3,"Sylvaer Archer Exilé"):"Sylvaer Archer",(3,"Sylvaer Garde Corrompu"):"Sylvaer Guard",(3,"Sylvaer Mage Exilé"):"Sylvaer Mage",
+ (3,"Tréant Ancien du Labyrinthe"):"Ancient Labyrinth Treant",(3,"Tréant Juvenile"):"Juvenile Treant",(3,"Tréant Ravageur"):"Ravager Treant",(3,"Tréant du Labyrinthe"):"Labyrinth Treant",
 }
-GUESS = {"Goblin Soldier","Cave Goblin","Goblin Archer","Orc Samurai Boss","Bull"}
-BOSS = {"Adoryll, the Caged Bird","Woodland Alpha","Orc Samurai Boss","Bandit Chief","Furacas, Guardian of the Labyrinth","Muffet, Mother of Black Spiders","Cave King"}
-# not used: Kobold_sentinel_em_summoned (same model as the sentinel; its numbers are added to Kobold Sentinel),
-# Jeune pousse (no image), Nerius the Evil Treant (not on the site)
+WHY = {"Orc Samurai Boss":"官網寫 Chef de la Tribu（部族首領）。第 3 層沒有叫這個名字的怪物；wiki 的 Orc Samurai Boss 在獸人營地、掉 Tribe Essence（部族精華），所以放在這裡。"}
 
 def main(src):
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -39,30 +40,27 @@ def main(src):
     by = {"1": {}, "2": {}, "3": {}}; unused = []
     for m in d["monsters"]:
         fl = int(m["floor_en"].split()[-1]); li = m.get("local_img")
-        key = (fl, os.path.basename(li)[:-4]) if li else None
-        if not li or key not in MAP:
-            unused.append((fl, m["name"], li)); continue
-        name = MAP[key]
-        im = Image.open(os.path.join(src, li)).convert("RGBA"); im = im.crop(im.getchannel("A").getbbox())
-        s = max(im.size); sq = Image.new("RGBA", (s + 8, s + 8), (0, 0, 0, 0)); sq.paste(im, ((s + 8 - im.width) // 2, (s + 8 - im.height) // 2))
-        sq = sq.resize((128, 128), Image.LANCZOS)
-        flip = name in BOSS
-        if flip: sq = sq.transpose(Image.FLIP_LEFT_RIGHT)
-        fn = "img/mobs/f%d_%s.png" % (fl, re.sub(r"[^a-z0-9]+", "_", name.lower()).strip("_"))
-        sq.save(os.path.join(root, fn), optimize=True)
-        e = {"f": fn, "fr": m["name"], "ch": [c["raw"] for c in m.get("changes_en", [])], "v": m.get("verdict_en", "")}
-        if flip: e["flip"] = 1
-        if name in GUESS: e["guess"] = 1
-        by[str(fl)][name] = e
-    for m in d["monsters"]:
-        if m["name"].startswith("Kobold_sentinel"):
-            by["1"]["Kobold Sentinel"]["ch"] += ["（Kobold_sentinel_em_summoned）" + c["raw"] for c in m["changes_en"]]
+        name = MAP.get((fl, m["name"]))
+        if not name:
+            unused.append((fl, m["name"])); continue
+        row = {"fr": m["name"], "ch": [c["raw"] for c in m.get("changes_en", [])], "v": m.get("verdict_en", "")}
+        if li:
+            im = Image.open(os.path.join(src, li)).convert("RGBA"); im = im.crop(im.getchannel("A").getbbox())
+            s = max(im.size); sq = Image.new("RGBA", (s + 8, s + 8), (0, 0, 0, 0)); sq.paste(im, ((s + 8 - im.width) // 2, (s + 8 - im.height) // 2))
+            sq = sq.resize((128, 128), Image.LANCZOS)
+            fn = "img/mobs/" + os.path.basename(li)          # the news' own file name (floor and variant number in it)
+            sq.save(os.path.join(root, fn), optimize=True); row["f"] = fn
+        e = by[str(fl)].setdefault(name, {"rows": []})
+        e["rows"].append(row)
+        if "f" in row and "f" not in e: e["f"] = row["f"]   # the first picture is the monster's face
+        if name in WHY: e["why"] = WHY[name]
+    if unused: raise SystemExit("not mapped: %r" % unused)
     meta = {"src": {"title": d["title_en"], "title_fr": d["title"], "url": d["url_en"], "date": "2026-10-28"}, "by": by}
     open(os.path.join(root, "mobphotos.js"), "w", encoding="utf-8").write(
-        "/* 官網新聞〈" + d["title_en"] + "〉（2026-10-28）的怪物圖片（200×200 透明 PNG → 裁邊、縮成 128px，首領左右翻轉成臉朝右）和平衡調整數值。\n"
-        "   tools/build_mobphotos.py 產生，不要手改。使用者 2026-11-06 選 A（全用）、「首領圖片改都不朝左」。guess=1：官網名稱和本站不同，依外觀對應。 */\n"
+        "/* 官網新聞〈" + d["title_en"] + "〉（2026-10-28）的怪物表：圖片（200×200 透明 PNG → 裁邊、縮成 128px）和平衡調整數值。\n"
+        "   tools/build_mobphotos.py 產生，不要手改。使用者 2026-11-06 選 A（全用）；圖片不翻轉。rows＝官網表的每一列（同名多列＝變體），why＝官網名稱和本站名稱不同時的對應依據。 */\n"
         "window.SAO_MOBPHOTO=" + json.dumps(meta, ensure_ascii=False, separators=(",", ":")) + ";\n")
-    print("images:", sum(len(v) for v in by.values()), "unused:", unused)
+    print("monsters:", sum(len(v) for v in by.values()), "rows:", sum(len(e["rows"]) for v in by.values() for e in v.values()))
 
 if __name__ == "__main__":
     main(sys.argv[1])
