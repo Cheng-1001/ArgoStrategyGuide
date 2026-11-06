@@ -29,6 +29,7 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "1770":{"en": "Bandit Dagger", "lvl": 8, "dmg": "13.5", "st": [["Attack Speed", "1.4/s"], ["Critical Strike Chance", "+1%"]]},
  "2570":{"en": "Sylvan Mage Staff", "lvl": 3, "dmg": "12.604", "st": [["Attack Speed", "1/s"]]},
  "1594":{"en": "bracelet of the stags", "lvl": 7, "dmg": null, "st": [["Heal Bonus", "+1.5"]]},
+ "1573":{"en": "nodachi bow ★", "lvl": 10, "date": "2026-11-05", "dmg": "18.75", "st": [["Attack Speed", "1.2/s"], ["Critical Strike Chance", "+3.5%"], ["Critical Strike Power", "+1%"]]},
  "2619":{"en": "nodachi", "lvl": 10, "dmg": "20", "st": [["Attack Speed", "1.25/s"], ["Critical Strike Chance", "+3.5%"], ["Lifesteal", "+1%"]]},
  "1784":{"en": "nodachi dagger", "lvl": 10, "dmg": "20", "st": [["Attack Speed", "1.4/s"], ["Critical Strike Chance", "+3.375%"], ["Lifesteal", "+1%"]]},
  "2576":{"en": "nodachi magic staff", "lvl": 10, "dmg": "19", "st": [["Attack Speed", "1/s"], ["Magic Damage", "+3%"], ["Max Mana", "+6.5"]]},
