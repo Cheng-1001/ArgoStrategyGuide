@@ -207,7 +207,7 @@ const RAW = {
 "Flower of a Nepenthes":[null,null,5,"artifact",null,null,{"Magic Damage":2.5,"Max Health":2,"Max Mana":0.5},188],
 "Leg of a Spider":[null,"a",7,"artifact","The leg of a giant spider, quick and unpredictable, it dodges as much as it stings",null,{"Critical Strike Chance":1,"Projectile Damage":2,"Dodge":2.5},182],
 "Elite Gloves":[null,"c",3,"gloves","Gloves sheathed in bark, cut from an elite Treant, they strike sharper",null,{"Attack Damage":"0.25","Critical Strike Power":"+1%"},-1],
-"Elite Carapace":[null,"b",3,"acc","A shard of bark from an elite Treant, hard as a carapace, it toughens its bearer",null,{"Attack Damage":"0.5","Max Health":"+2"},-1],
+"Elite Carapace":[null,"b",3,"artifact","A shard of bark from an elite Treant, hard as a carapace, it toughens its bearer",null,{"Attack Damage":"0.5","Max Health":"+2"},-1],
 "Elite Amulet":[null,"c",3,"amulet",null,null,{},-1],
 "Elite Bracelet":[null,"b",3,"bracelet",null,null,{},-1],
 "Swordsman's Scroll":[null,null,null,"unknown",null,null,null,-1],
@@ -220,7 +220,7 @@ const RAW = {
 const EXTRA = {
 "Flower of a Nepenthes":{note:"名稱和數值取自遊戲的物品說明視窗（站長 2026-11-04 截圖）：飾品，需求等級 5，屬於 Nepenthes Set；說明「The flower of a Nepenthes torn off alive; it pours its magic into the veins of its bearer」。取得：Nephentes 掉落 0.5%；Shop - Mizunari 收購 25 Cols。圖示取自站長的圖鑑截圖。"},
 "Elite Gloves":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自遊戲的物品提示（站長 2026-11-04 拍賣場截圖）；稀有度取自製作視窗（COMMON）。圖示取自同一批拍賣場截圖。"},
-"Elite Carapace":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自遊戲的物品提示（站長 2026-11-04 拍賣場截圖）；稀有度取自製作視窗（RARE）。提示沒有寫裝備部位，所以只標「飾品」；同類的怪物飾品（Skull of a Wolf、Leg of a Spider、Flower of a Nepenthes）都是遺物，這件可能也是。圖示取自同一批拍賣場截圖。"},
+"Elite Carapace":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自遊戲的物品提示（站長 2026-11-04 拍賣場截圖）；稀有度取自製作視窗（RARE）。提示沒有寫裝備部位；部位是遺物（站長 2026-11-06 確認）。圖示取自同一批拍賣場截圖。"},
 "Elite Amulet":{note:"官網物品圖鑑沒有收錄，也還沒有這件的物品提示截圖：只有製作視窗（COMMON、15 秒、25 Col）。等級 3 取自參考互動地圖，數值未知。"},
 "Elite Bracelet":{note:"官網物品圖鑑沒有收錄，也還沒有這件的物品提示截圖：只有製作視窗（RARE、30 秒、28 Col）。等級 3 取自參考互動地圖，數值未知。"},
 "Leg of a Spider":{set:{name:"Spider Set（蜘蛛套裝）",tiers:[[2,"+2.5% 移動速度"],[3,"+0.025 攻擊速度"],[4,"+2.5% 閃避"],[5,"+0.25 攻擊傷害、+1% 暴擊率"]]},note:"套裝效果的名稱、數值、說明取自社群截圖（2026-10-30），法文名稱未知；wiki 原本寫成 Leg of Spider。圖示來自遊戲資源包（patte_araignee），與截圖一致。當時拍賣行最低價約 300 Col。"},

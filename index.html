@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="4f0bb7584d">
+<meta name="sao-build" content="d6652d1144">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -817,7 +817,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="mainq.js?v=38ee28a4"></script>
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=a6c9503f"></script>
-<script src="gameinfo.js?v=761267db"></script>
+<script src="gameinfo.js?v=49dcc26a"></script>
 <script src="npcs.js?v=576b7565"></script>
 <script src="changelog.js?v=bb8ccf12"></script>
 <script src="recipes.js?v=36e8b52c"></script>
@@ -1637,7 +1637,7 @@ function renderAbout(){const iss=GH_ISSUES;
 function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
   const rows=Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
   const other=(RECIPE_BY_EQ[e.oid]||[]).filter(x=>x.npc!==r.npc);
-  return`<h3 class="sec">${isE?"裝備":"道具"}資料 <span class="c">${e.extra?"官網圖鑑沒有收錄，取自遊戲截圖":"官方圖鑑 #"+e.oid}</span></h3>
+  return`<h3 class="sec">${isE?"裝備":"道具"}資料 <span class="c">${e.extra?(e.dmg||Object.keys(e.st).length?"官網圖鑑沒有收錄，取自遊戲截圖":"官網圖鑑沒有收錄，還沒有物品提示截圖"):"官方圖鑑 #"+e.oid}</span></h3>
   <div class="muted" style="font-size:12.5px">${esc(isE?eqCat(e):PR_CAT[e.cat]||e.cat)}${e.lv>1?"・等級 "+e.lv:""}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):""}</div>
   ${e.extra?"":loreHTML(e)}
   ${e.dmg||rows?`<dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>`:""}
@@ -1734,7 +1734,7 @@ const obtZh=l=>{let m;
   if(l==="No known source")return"遊戲寫「No known source」：目前沒有已知來源";
   return l};
 let GI_NODESC=0;   // equipment / props panels show the game description at the top (loreHTML), not again under 取得方式
-const giHTML=g=>g?`<h3 class="sec">遊戲寫的取得方式</h3><ul class="glist">${g.obt.map(l=>`<li title="${esc(l)}">${esc(obtZh(l))}</li>`).join("")}${g.note?`<li>${esc(g.note)}</li>`:""}${g.obt.length||g.note?"":"<li>說明視窗沒有寫取得方式</li>"}</ul>${g.desc&&!GI_NODESC?`<p class="lore">${esc(g.desc)}</p>`:""}<div class="note srcn">遊戲名稱、取得方式和英文說明取自遊戲的物品說明視窗（站長 ${GI.date} 截圖）${g.lvl?`；需求等級 ${g.lvl}`:""}。</div>`:"";
+const giHTML=g=>g?`<h3 class="sec">遊戲寫的取得方式</h3><ul class="glist">${g.obt.map(l=>`<li title="${esc(l)}">${esc(obtZh(l))}</li>`).join("")}${g.note?`<li>${esc(g.note)}</li>`:""}${g.obt.length||g.note?"":"<li>說明視窗沒有寫取得方式</li>"}</ul>${g.desc&&!GI_NODESC?`<p class="lore">${esc(g.desc)}</p>`:""}<div class="note srcn">遊戲名稱、取得方式和英文說明取自遊戲的物品說明視窗（站長 ${g.date||GI.date} 截圖）${g.lvl?`；需求等級 ${g.lvl}`:""}。</div>`:"";
 const dn=e=>e.gen||e.name;
 const loreHTML=(e,hideFr)=>{const g=GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen||"")]:null);
   if(g&&g.desc)return`<p class="lore">${esc(g.desc)}</p>${e.lore&&!hideFr?`<p class="lore lorefr" title="官網物品圖鑑的法文說明">官網法文說明：${esc(e.lore)}</p>`:""}`;
@@ -1754,8 +1754,8 @@ const SLOT_BY_NAME=[[/^(Casque|Masque|Diad[eè]me|Heaume|Capuche|Chapeau|Couronn
 EQ.forEach(e=>{if(e.cat==="armor"&&!e.slot){const m=SLOT_BY_NAME.find(([re])=>re.test(e.name));if(m)e.slot=m[1]}});
 const eqCat=e=>e.cat==="armor"&&e.slot?SLOT_ZH[e.slot]:EQ_CAT[e.cat]||e.cat;
 const eqSub=e=>e.cat==="armor"?(e.slot||"armor"):e.cat;
-const EQ_SUBS={weapon:["sword","dagger","bow","crossbow","staff_mage","staff_shaman"],off:["shield","catalyst"],armor:["head","chest","legs","feet"],acc:["amulet","ring","bracelet","gloves","artifact"]};
-const subLab=k=>SLOT_ZH[k]||EQ_CAT[k]||k;
+const EQ_SUBS={weapon:["sword","dagger","bow","crossbow","staff_mage","staff_shaman"],off:["shield","catalyst"],armor:["head","chest","legs","feet"],acc:["amulet","ring","bracelet","gloves","artifact","acc"]};
+const subLab=k=>k==="acc"?"部位未確認":SLOT_ZH[k]||EQ_CAT[k]||k;
 const eqClasses=e=>String(e.st["Classe requise"]||"").split(/,\s*/).map(c=>c.toLowerCase()).filter(c=>CLASS_ZH[c]);
 const eslot=(e,s=44)=>e.ps?pslot(e,s):e.itemId&&(GICON[e.itemId]||(ITEMS[e.itemId]||{}).ic>=0)?(GICON[e.itemId]?recicImg(GICON[e.itemId],s):slot(e.itemId,s)):e.itemId?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
 const NOSIGN=new Set(["Max Consume","Max Stack Size","Max Item Damage","Max Durability","Durability Bar","Pickaxe Power","Item Cooldown","Repair Percent"]);
@@ -1779,7 +1779,7 @@ function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").val
   $("cEq").textContent=`${a.length} / ${EQ.length} 件`;
   const shown=a.slice(0,240);
   $("lEq").innerHTML=a.length?shown.map(e=>{const cl=eqClasses(e);return`<button class="card" data-key="e|${e.oid}" data-go="e|${e.oid}">
-    <div class="chead">${eslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${e.gen?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":""}${esc(eqCat(e))}</span></div></div>
+    <div class="chead">${eslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${e.gen&&e.gen!==e.name?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":""}${esc(eqCat(e))}</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span>等級 ${e.lv}</span>${cl.length?`<span>· ${cl.map(c=>CLASS_ZH[c]).join("、")}</span>`:""}</div>
     ${eqKey(e)?`<div class="estat">${esc(eqKey(e))}</div>`:""}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
   bindGo($("lEq"));markSel()}
@@ -1798,7 +1798,7 @@ function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
   ${e.extra?((SOURCES[en]||[]).length||(GATHER[en]||[]).length||(USES[en]||[]).length?itemObtainHTML(en):"")+giHTML(GI_EN[norm(e.gen||"")]):en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   ${e.extra&&ITEMS[en]&&ITEMS[en].note?`<div class="note">${esc(ITEMS[en].note)}</div>`:""}
-  <div class="note srcn">${e.extra?"官網物品圖鑑沒有收錄這件裝備；名稱和數值取自遊戲截圖或 wiki，掉落取自本站怪物資料。":`官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}`}</div>`}
+  <div class="note srcn">${e.extra?(ITEMS[en]&&ITEMS[en].note?"官網物品圖鑑沒有收錄這件裝備。":"官網物品圖鑑沒有收錄這件裝備；名稱和數值取自遊戲截圖或 wiki，掉落取自本站怪物資料。"):`官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}`}</div>`}
 
 // ================= props tab (official catalogue, non-equipment) =================
 const PR=(window.SAO_PROPS||[]).filter(r=>r[2]!=="catalyst").map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
