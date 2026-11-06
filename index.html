@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="423c96aabd">
+<meta name="sao-build" content="e750c9e516">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -304,7 +304,10 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .world .tiles{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;overflow:hidden}
 .world .tiles img{position:absolute;display:block;max-width:none;user-select:none;image-rendering:auto}
 .world .tiles img.l0{z-index:0}.world .tiles img.mid{z-index:1}.world .tiles img.hi{z-index:2}
-.legend select.lsel{appearance:auto;padding:2px 6px;max-width:150px}
+.legend select.lsel{appearance:auto;padding:2px 6px;max-width:170px}.legend select#dgSel{max-width:240px}
+.stage.dgmode .fpanel,.stage.dgmode #filterBtn,.stage.dgmode #fpFly{display:none!important}
+.dgmap{margin:4px 0 10px}.dgmap .dgov{display:block;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#070c11;cursor:zoom-in;width:100%}
+.dgmap .dgov img{display:block;width:100%;height:auto;image-rendering:pixelated}.dgmap figcaption{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:12.5px;margin-top:4px}
 .legend .lgt{background:none;border:1px solid rgba(255,255,255,.28);color:inherit;border-radius:999px;padding:1px 8px 1px 6px;cursor:pointer;font-size:11.5px}
 .legend .lgt:hover{border-color:#fff}
 @media (min-width:821px){.legend{left:220px;top:12px;padding:0;background:none}}
@@ -677,6 +680,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="legend" role="group" aria-label="地圖顯示項目">
         <button class="lgb ghost" id="filterBtn" aria-expanded="false" aria-controls="fpanel">篩選 ▾</button>
         <button class="lgb" id="baseBtn" hidden title="切換底圖：wiki 地圖或 JourneyMap 探索地圖"></button>
+        <select class="lgb lsel" id="dgSel" hidden title="切換第 1 層和地下城的地圖（玩家上傳的 JourneyMap）" aria-label="地圖"></select>
         <select class="lgb lsel" id="layerSel" hidden title="探索地圖的高度：地面，或玩家上傳的地底高度層（JourneyMap 洞穴地圖）" aria-label="探索地圖的高度"></select>
       </div>
       <div class="fpanel" id="fpanel" hidden role="dialog" aria-label="地圖篩選">
@@ -831,7 +835,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=b9c0a8b1"></script>
 <script src="npcs.js?v=576b7565"></script>
-<script src="changelog.js?v=961aa656"></script>
+<script src="changelog.js?v=4718cc3d"></script>
 <script src="recipes.js?v=36e8b52c"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1192,6 +1196,12 @@ function dgKeys(sp){const want=(String(sp.note||"").match(/Cl[ée] [^（）(),�
   return{want,hit}}
 // dungeon window (owner's screenshot): boss, difficulties, loot table; game names, linked to this site's items / monsters when they match
 const DG_ITEM={};  // dungeon-window names now match the item keys (renamed to the game's English names 2026-11-04)
+// dungeon map from players' JourneyMap uploads (tools/jm_merge.py: tiles/dg/<id>/overview.jpg, jmmeta.js dg[id])
+const dgMeta=()=>((window.SAO_JM||{}).dg)||{};
+const dgOfSpot=id=>Object.keys(DG_DIM).find(d=>DG_DIM[d][0]===id&&dgMeta()[d]);
+function dgMapHTML(spotId){const d=dgOfSpot(spotId);if(!d)return"";const e=dgMeta()[d];
+  return`<h3 class="sec">地圖</h3><figure class="dgmap"><button class="dgov" data-dgmap="${d}" title="在地圖分頁打開（可以放大、切換高度）"><img src="tiles/dg/${d}/overview.jpg?v=${encodeURIComponent(e.v||"")}" alt="${esc(dgName(d))} 的地圖" loading="lazy"></button>
+    <figcaption><button class="linkbtn" data-dgmap="${d}">在地圖上看（可以放大、切換高度）</button><span class="muted">玩家上傳的 JourneyMap 地圖，${esc(e.date||"")} 更新</span></figcaption></figure>`}
 function dgInfoHTML(sp){const d=sp.dg;if(!d)return"";
   const mon=nm=>{const m=nm&&ALLM.find(x=>x.floor===sp.floor&&(x.name===nm||(x.aka||[]).includes(nm)));return m?`<button class="linkbtn" data-go="m|${m.id}">${esc(nm)}</button>`:esc(nm||"")};
   const item=nm=>{const k=ITEMS[nm]?nm:DG_ITEM[nm];return k&&ITEMS[k]?`<button class="linkbtn" data-go="i|${esc(k)}">${esc(nm)}</button>`:esc(nm)};
@@ -1213,7 +1223,7 @@ function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">�
   ${sp.u?`<div class="note">在地下，要從入口走下去。</div>`:""}${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}${sp.rep?`<div class="note srcn">這個地點來自核准的玩家回報（${repLink(sp.rep)}）。</div>`:""}
   ${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${repLink(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}
   <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>
-  ${sp.kind==="dungeon"?dgKeyHTML(sp)+dgInfoHTML(sp):""}
+  ${sp.kind==="dungeon"?dgMapHTML(sp.id)+dgKeyHTML(sp)+dgInfoHTML(sp):""}
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(m.name)}</b><span>${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
   ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(i)}</b><span>${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}`}
 
@@ -2179,7 +2189,7 @@ function jmCredits(){const j=(window.SAO_JM||{})["1"]||{},log=j.log||[],tot=j.ch
 // 2026-11-06 (使用者選 A＋選擇範圍): the height-layer folders (cave slices "0", "1", "-1"…) of floor 1 worlds are packed
 // too, all of them (no height choice); the player may take squares out on a small map. A layer-only pack still
 // carries a few surface regions as anchors, because the server recognises floor 1 only by its surface colours.
-const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576,MAXN:1500};   // MAXN = MAX_REGIONS in tools/jm_merge.py
+const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576,MAXN:1500,LMIN:-4,LMAX:19};   // MAXN = MAX_REGIONS in tools/jm_merge.py
 window.__JMP=JMP;   // exposed for tests/jm_pack_test.py
 const JMV=()=>{const j=(window.SAO_JM||{})["1"]||{};return encodeURIComponent(String(j.date||"")+"-"+String(j.pct||"")+"-"+String(j.chunks||""))};
 let JMREF=null;
@@ -2198,12 +2208,22 @@ async function jmRef(){if(JMREF)return JMREF;
 // group the picked files by WORLD (the folder that holds "day"): "day" = the surface, integer folders = JourneyMap's
 // height layers (16-block slices, folder "1" = Y 16-31; the in-game minimap shows "y: 24 (1)"). Night / topo / biome
 // folders are ignored. Only "x,z.png" directly inside those folders count.
+// Dungeons (2026-11-06): JourneyMap keeps each dungeon instance as a folder next to "overworld" in the same server
+// folder, named "<uuid>_<dungeon>" (…_geldorack, …_xalzirith, …_labyrinthe); DG_DIM maps that name to the site's
+// dungeon (keep in sync with DUNGEONS in tools/jm_merge.py). Height folders outside -4..19 (world height -64..319)
+// cannot be real slices (JourneyMap keeps folders like "-398") and are ignored.
+const DG_DIM={xalzirith:["xal","Sanctuary of Xal'Zirith"],geldorack:["geldorakd","Geldorack Dungeon"],labyrinthe:["fallen","Labyrinth of the Fallen"]};
+const dgOf=leaf=>{const m=/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_)?([a-z0-9]+)$/.exec(String(leaf||"").toLowerCase());
+  return!m?null:DG_DIM[m[1]]?m[1]:leaf.includes("_")?"?"+m[1]:null};
+const dgName=d=>{const e=DG_DIM[d];if(!e)return d;const sp=(FLOORS[1].spots||[]).find(x=>x.id===e[0]);return sp?sp.n:e[1]};
 function jmGroups(files){const g=new Map();
   for(const f of files){const p=(f.webkitRelativePath||f.name).split("/"),m=/^(-?\d+),(-?\d+)\.png$/i.exec(p[p.length-1]);
     if(!m||p.length<2)continue;const dir=p[p.length-2],day=dir.toLowerCase()==="day";if(!day&&!/^-?\d+$/.test(dir))continue;
-    const key=p.slice(0,-2).join("/");if(!g.has(key))g.set(key,{key,label:p.find(s=>/^triggers/i.test(s))||key||"（根目錄）",files:[],layers:{},latest:0});
+    if(!day&&(+dir<JMP.LMIN||+dir>JMP.LMAX))continue;
+    const key=p.slice(0,-2).join("/");if(!g.has(key)){const leaf=p.length>=3?p[p.length-3]:"";
+      g.set(key,{key,label:p.find(s=>/^triggers/i.test(s))||key||"（根目錄）",leaf,parent:p.slice(0,-3).join("/"),dg:dgOf(leaf),files:[],layers:{},latest:0})}
     const e=g.get(key),it={f,rx:+m[1],rz:+m[2],dir};
-    if(day)e.files.push(it);else{const lk="c"+parseInt(dir,10);(e.layers[lk]=e.layers[lk]||{key:lk,items:[]}).items.push(it)}
+    if(day&&!e.dg)e.files.push(it);else{const lk=day?"day":"c"+parseInt(dir,10);(e.layers[lk]=e.layers[lk]||{key:lk,items:[]}).items.push(it)}
     e.latest=Math.max(e.latest,f.lastModified||0)}
   return[...g.values()].sort((a,b)=>b.latest-a.latest)}
 const jmInFrame=it=>{const x0=it.rx*512,z0=it.rz*512;return!(x0>=JMP.X0+JMP.SIZE||z0>=JMP.X0+JMP.SIZE||x0+512<=JMP.X0||z0+512<=JMP.X0)};
@@ -2233,21 +2253,27 @@ async function jmLayerMask(k){if(k in JMLM)return JMLM[k];const L=((((window.SAO
     const x=c.getContext("2d",{willReadFrequently:true});x.drawImage(im,0,0);const d=x.getImageData(0,0,c.width,c.height).data,w=c.width;
     JMLM[k]=(cx,cz)=>cx>=0&&cz>=0&&cx<w&&cz<w&&d[(cz*w+cx)*4]>127}catch(e){}
   return JMLM[k]}
+// dungeons: what the site already has of a dungeon height is tiles/dg/<id>/<key>/chunks.json
+const JMDM={};
+async function jmDgMask(d,k){const id=d+"/"+k;if(id in JMDM)return JMDM[id];const L=(((((window.SAO_JM||{}).dg)||{})[d]||{}).layers||{})[k];JMDM[id]=null;
+  if(L)try{const r=await fetch(`tiles/dg/${d}/${k}/chunks.json?v=${encodeURIComponent(L.v||"")}`);if(r.ok){const set=new Set((await r.json()).map(([a,b])=>a+","+b));JMDM[id]=(cx,cz)=>set.has(cx+","+cz)}}catch(e){}
+  return JMDM[id]}
 async function jmLayers(g){const c=document.createElement("canvas");c.width=c.height=128;const x=c.getContext("2d",{willReadFrequently:true});x.imageSmoothingQuality="high";
-  for(const L of Object.values(g.layers)){const mask=await jmLayerMask(L.key);L.inFrame=[];L.news=[];
-    for(const it of L.items){if(!jmInFrame(it))continue;
+  const dg=g.dg&&!g.dg.startsWith("?")?g.dg:null,inF=it=>dg?true:jmInFrame(it);
+  for(const L of Object.values(g.layers)){const mask=dg?await jmDgMask(dg,L.key):await jmLayerMask(L.key);L.inFrame=[];L.news=[];
+    for(const it of L.items){if(!inF(it))continue;
       try{const bm=await createImageBitmap(it.f);if(bm.width!==512||bm.height!==512){bm.close&&bm.close();continue}
         x.clearRect(0,0,128,128);x.drawImage(bm,0,0,128,128);bm.close&&bm.close();L.inFrame.push(it);
         const d=x.getImageData(0,0,128,128).data,nw=new Set();
         for(let py=0;py<128;py++)for(let px=0;px<128;px++){if(!d[(py*128+px)*4+3])continue;
-          const bx=it.rx*512+px*4,bz=it.rz*512+py*4;if(bx<JMP.X0||bz<JMP.X0||bx>=JMP.X0+JMP.SIZE||bz>=JMP.X0+JMP.SIZE)continue;
-          const cx=bx>>4,cz=bz>>4;if(!mask||!mask(cx,cz))nw.add(cz*1000+cx)}
+          const bx=it.rx*512+px*4,bz=it.rz*512+py*4;if(!dg&&(bx<JMP.X0||bz<JMP.X0||bx>=JMP.X0+JMP.SIZE||bz>=JMP.X0+JMP.SIZE))continue;
+          const cx=Math.floor(bx/16),cz=Math.floor(bz/16);if(!mask||!mask(cx,cz))nw.add(cx+","+cz)}
         it.newChunks=nw.size;if(nw.size)L.news.push(it)}catch(e){}}}}
 // the player's choice: which layers ("day" + "c<n>") and, optionally, an X/Z box (whole 512-block regions that touch it)
 // area choice on a small map (使用者 2026-11-06：玩家看地圖、用地名溝通，不用座標): every JourneyMap file is one
 // 512 x 512 square; the squares with new data are drawn on the explored map with town names, all picked at first,
 // a click takes one out or puts it back. JMSEL.off = squares the player took out ("rx,rz")
-const JMSEL={layers:null,off:new Set()};
+const JMSEL={layers:null,off:new Set(),dgOff:new Set()};
 const jmInBox=it=>!JMSEL.off.has(it.rx+","+it.rz);
 // place names of a square: towns / teleport points / dungeons inside it, else the nearest town ("… 附近")
 function jmRegNames(rx,rz){const F1=FLOORS[1],x0=rx*512,z0=rz*512,ins=p=>p.x>=x0&&p.x<x0+512&&p.z>=z0&&p.z<z0+512;
@@ -2259,10 +2285,10 @@ function jmRegNames(rx,rz){const F1=FLOORS[1],x0=rx*512,z0=rz*512,ins=p=>p.x>=x0
 // of a world gets surface regions of that world that overlap the site's map until they cover ANCHOR explored chunks, so
 // the server can verify every part on its own (also when only height layers are packed)
 function jmPlan(sel){const parts=[],cap=Math.max(1,JMP.MAXN-Math.min(40,JMP.MAXN>>2));   // room for the anchors
-  for(const {g,news} of sel){const byOv=g.inFrame.filter(it=>it.ov&&it.ov.size).sort((a,b)=>b.ov.size-a.ov.size);let batch=[],bb=0;
-    const close=()=>{if(!batch.length)return;const items=batch.slice();let ov=items.reduce((s,it)=>s+(it.ov&&it.dir.toLowerCase()==="day"?it.ov.size:0),0),anchors=0;
-      for(const it of byOv){if(ov>=JMP.ANCHOR)break;if(items.includes(it))continue;items.push(it);ov+=it.ov.size;anchors++}
-      parts.push({items:items.map(it=>({g,it})),bytes:items.reduce((s,it)=>s+it.f.size,0),ov,anchors});batch=[];bb=0};
+  for(const {g,news,anc} of sel){const src=anc||g,byOv=(src.inFrame||[]).filter(it=>it.ov&&it.ov.size).sort((a,b)=>b.ov.size-a.ov.size);let batch=[],bb=0;
+    const close=()=>{if(!batch.length)return;const items=batch.map(it=>({g,it}));let ov=anc?0:batch.reduce((s,it)=>s+(it.ov&&it.dir.toLowerCase()==="day"?it.ov.size:0),0),anchors=0;
+      for(const it of byOv){if(ov>=JMP.ANCHOR)break;if(items.some(x=>x.it===it))continue;items.push({g:src,it});ov+=it.ov.size;anchors++}
+      parts.push({items,bytes:items.reduce((s,x)=>s+x.it.f.size,0),ov,anchors});batch=[];bb=0};
     for(const it of news){if(batch.length&&(bb+it.f.size>JMP.BUDGET||batch.length>=cap))close();batch.push(it);bb+=it.f.size}close()}
   const out=[];   // put small parts (usually different worlds) together while they fit
   for(const p of parts){const last=out[out.length-1];
@@ -2283,7 +2309,7 @@ async function jmZip(entries){const enc=new TextEncoder(),body=[],cen=[];let off
   const cs=cen.reduce((s,v)=>s+v.byteLength,0),e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);
   e.setUint16(8,entries.length,true);e.setUint16(10,entries.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
   return new Blob([...body,...cen,e],{type:"application/zip"})}
-const JM_ST={f1:["第 1 層","ok"],other:["不是第 1 層","no"],few:["和網站地圖重疊太少，無法確認","no"],out:["不在第 1 層的範圍","no"],noday:["沒有地面地圖，無法確認","no"]};
+const JM_ST={f1:["第 1 層","ok"],other:["不是第 1 層","no"],few:["和網站地圖重疊太少，無法確認","no"],out:["不在第 1 層的範圍","no"],noday:["沒有地面地圖，無法確認","no"],dg:["地下城","ok"],dgno:["旁邊沒有第 1 層地圖，無法確認","no"],dgunk:["網站還不認得的副本","no"]};
 const mb=b=>(b/1048576).toFixed(1)+" MB";
 let JMG=[];
 async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];
@@ -2292,11 +2318,17 @@ async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];
   O.innerHTML=`<div class="muted">找到 ${groups.length} 個世界資料夾，正在和網站地圖比對…</div>`;
   let ref;try{ref=await jmRef()}catch(e){O.innerHTML=`<div class="note warn">讀不到網站的地圖資料，請重新整理頁面再試一次。</div>`;return}
   const cv=document.createElement("canvas");cv.width=cv.height=1280;
-  for(let i=0;i<groups.length;i++){O.firstElementChild.textContent=`正在比對第 ${i+1}／${groups.length} 個資料夾（${groups[i].files.length} 張地面地圖）…`;await jmAnalyze(groups[i],ref,cv)}
+  const worlds=groups.filter(g=>!g.dg);
+  for(let i=0;i<worlds.length;i++){O.firstElementChild.textContent=`正在比對第 ${i+1}／${worlds.length} 個資料夾（${worlds[i].files.length} 張地面地圖）…`;await jmAnalyze(worlds[i],ref,cv)}
   const f1=groups.filter(g=>g.state==="f1");
+  // a dungeon counts only when its server folder also holds a floor 1 overworld (that is how the server checks it too)
+  const dgs=groups.filter(g=>g.dg);
+  for(const g of dgs){g.inFrame=[];g.news=[];g.anc=f1.find(w=>w.parent===g.parent)||null;g.state=g.dg.startsWith("?")?"dgunk":g.anc?"dg":"dgno"}
+  const dgOk=dgs.filter(g=>g.state==="dg");
+  for(let i=0;i<dgOk.length;i++){O.firstElementChild.textContent=`正在整理地下城地圖：${dgName(dgOk[i].dg)}（${i+1}／${dgOk.length}）…`;await jmLayers(dgOk[i])}
   for(let i=0;i<f1.length;i++){const n=Object.values(f1[i].layers).reduce((s,L)=>s+L.items.length,0);if(!n)continue;
     O.firstElementChild.textContent=`正在整理高度層（地底）地圖：第 ${i+1}／${f1.length} 個世界，${n} 張…`;await jmLayers(f1[i])}
-  JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();O.innerHTML=`<div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
+  JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();O.innerHTML=`<div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
 // layers found in the floor 1 worlds, surface first, then by height
 function jmFound(){const m=new Map();for(const g of JMG)if(g.state==="f1"){
     m.set("day",(m.get("day")||0)+g.news.length);
@@ -2305,14 +2337,22 @@ function jmFound(){const m=new Map();for(const g of JMG)if(g.state==="f1"){
 function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==="f1"),found=jmFound();
   if(!JMSEL.layers)JMSEL.layers=new Set(found.map(([k])=>k));   // every layer is ticked to start with
   const sel=f1.map(g=>({g,news:[...(JMSEL.layers.has("day")?g.news:[]),...Object.values(g.layers).filter(L=>JMSEL.layers.has(L.key)).flatMap(L=>L.news||[])].filter(jmInBox)})).filter(s=>s.news.length);
+  // dungeons: one checkbox per dungeon (all its instances), anchors come from the floor 1 overworld beside it
+  const dgOk=groups.filter(g=>g.state==="dg"),dgList=[...new Set(dgOk.map(g=>g.dg))].sort((a,b)=>dgName(a).localeCompare(dgName(b)));
+  const dgNews=d=>dgOk.filter(g=>g.dg===d).reduce((s,g)=>s+Object.values(g.layers).reduce((t,L)=>t+(L.news||[]).length,0),0);
+  for(const g of dgOk)if(!JMSEL.dgOff.has(g.dg)){const news=Object.values(g.layers).flatMap(L=>L.news||[]);if(news.length)sel.push({g,news,anc:g.anc})}
   const parts=jmPlan(sel),nNew=sel.reduce((s,x)=>s+x.news.length,0),nAnc=parts.reduce((s,p)=>s+p.anchors,0);
-  window.__jm={groups:groups.map(g=>({label:g.label,state:g.state,overlap:g.overlap,med:g.med,files:g.files.length,news:(g.news||[]).length,
+  window.__jm={dgs:Object.fromEntries(dgList.map(d=>{const its=dgOk.filter(g=>g.dg===d).flatMap(g=>Object.values(g.layers).flatMap(L=>L.items));
+      return[d,{inst:dgOk.filter(g=>g.dg===d).length,news:dgNews(d),bounds:its.length?[Math.min(...its.map(i=>i.rx)),Math.min(...its.map(i=>i.rz)),Math.max(...its.map(i=>i.rx)),Math.max(...its.map(i=>i.rz))]:null}]})),
+    groups:groups.map(g=>({label:g.label,leaf:g.leaf,dg:g.dg,state:g.state,overlap:g.overlap,med:g.med,files:g.files.length,news:(g.news||[]).length,
       layers:Object.fromEntries(Object.values(g.layers).map(L=>[L.key,{files:L.items.length,news:(L.news||[]).length}]))})),
-    found:Object.fromEntries(found),sel:{layers:[...JMSEL.layers],off:[...JMSEL.off]},
+    found:Object.fromEntries(found),sel:{layers:[...JMSEL.layers],off:[...JMSEL.off],dgOff:[...JMSEL.dgOff]},
     parts:parts.map(p=>({n:p.items.length,bytes:p.bytes,ov:p.ov,anchors:p.anchors,names:p.items.map(({g,it})=>g.key+"/"+it.dir+"/"+it.f.name)}))};
-  const order={f1:0,few:1,other:2,noday:3,out:4};
+  const order={f1:0,dg:1,dgunk:2,dgno:3,few:4,other:5,noday:6,out:7};
   const rows=groups.slice().sort((a,b)=>order[a.state]-order[b.state]||b.latest-a.latest).map(g=>{const [t,c]=JM_ST[g.state];
     const nl=Object.values(g.layers).filter(L=>L.inFrame&&L.inFrame.length).length;
+    if(g.dg){const n=Object.values(g.layers).reduce((s,L)=>s+L.items.length,0),nm=g.dg.startsWith("?")?g.dg.slice(1):dgName(g.dg);
+      return`<div class="jmrow"><span class="t"><b title="${esc(g.key)}">${esc(nm)}</b><span>${esc(g.label.length>22?g.label.slice(0,22)+"…":g.label)}・${n} 張地圖${g.latest?"・最後更新 "+new Date(g.latest).toLocaleDateString("zh-TW"):""}</span></span><span class="pill ${c}">${t}</span></div>`}
     const extra=g.state==="f1"?(g.news.length?`・網站還沒有的地面區域 ${g.news.length} 張`:"・地面網站都已經有了")+(nl?`・高度層 ${nl} 層`:""):"";
     return`<div class="jmrow"><span class="t"><b title="${esc(g.key)}">${esc(g.label.length>22?g.label.slice(0,22)+"…":g.label)}</b><span>${g.files.length} 張地面地圖${g.latest?"・最後更新 "+new Date(g.latest).toLocaleDateString("zh-TW"):""}${extra}</span></span><span class="pill ${c}">${t}</span></div>`}).join("");
   // no height choice (使用者 2026-11-06：選高度不方便回報): every height layer goes along; the area is picked on a map
@@ -2322,7 +2362,13 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
     for(const L of Object.values(g.layers))for(const it of L.news||[]){const k=it.rx+","+it.rz,r=regs.get(k)||{rx:it.rx,rz:it.rz,day:0,cave:0};r.cave++;regs.set(k,r)}}
   JMG.regs=regs;
   const v=JMV(),C=2560,R=2487;
-  const opts=f1.length&&regs.size?`<div class="jmopt"><div class="jmoh">要上傳哪些地方</div>
+  const unk=[...new Set(groups.filter(g=>g.state==="dgunk").map(g=>g.dg.slice(1)))];
+  const dgOpts=dgList.length||unk.length?`<div class="jmopt"><div class="jmoh">地下城</div>
+    <div class="muted" style="font-size:12px">工具從 JourneyMap 的資料夾名稱認出地下城，同一個地下城進場好幾次的地圖會合成一張。不想上傳的取消勾選。</div>
+    <div class="jmlays">${dgList.map(d=>{const n=dgNews(d),k=dgOk.filter(g=>g.dg===d).length;
+      return`<label class="jmlay"><input type="checkbox" data-jmdg="${d}"${JMSEL.dgOff.has(d)?"":" checked"}${n?"":" disabled"}> ${esc(dgName(d))}<span class="n">${k} 次進場・${n?n+" 張新的":"網站都已經有了"}</span></label>`}).join("")}</div>
+    ${unk.length?`<div class="muted" style="font-size:12px">網站還不認得、先不收的：${unk.map(esc).join("、")}</div>`:""}</div>`:"";
+  const opts=(f1.length&&regs.size?`<div class="jmopt"><div class="jmoh">要上傳哪些地方</div>
     <div class="muted" style="font-size:12px">亮橘色的方格是你有、網站還沒有的地方（地面 ${nDay} 張・地底洞穴 ${nCave} 張，地底由工具自動判斷）。點一下方格可以取消或加回。</div>
     <svg class="jmmap" viewBox="70 70 4980 4980" role="group" aria-label="要上傳的地方">
       <defs><clipPath id="jmClip"><circle cx="${C}" cy="${C}" r="${R}"/></clipPath></defs>
@@ -2333,16 +2379,17 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
       ${FLOORS[1].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(t.n)}</text></g>`).join("")}
     </svg>
     <div class="jmregbar"><span id="jmRegSum"></span><button class="linkbtn" id="jmRegAll">全部選</button><button class="linkbtn" id="jmRegNone">全部取消</button></div>
-    <div class="muted" style="font-size:12px">地下城（例如 Labyrinth of the Fallen）是另外的世界，不會打包。</div></div>`:"";
+    </div>`:"")+dgOpts;
   let head;
   if(!f1.length)head=`<div class="note warn">沒有找到第 1 層的地圖。可能你還沒在第 1 層探索過，或探索的地方和網站現有地圖完全沒有重疊（網站要靠重疊的部分確認是第 1 層）。</div>`;
-  else if(!parts.length)head=`<div class="note ok">找到第 1 層的地圖，但${JMSEL.off.size?"選的地方":"你探索過的地方"}${JMSEL.off.size?"沒有要上傳的，請在下面的地圖上點選方格。":"網站都已經有了，不用上傳。謝謝！"}</div>`;
+  else if(!parts.length)head=`<div class="note ok">找到第 1 層的地圖，但${JMSEL.off.size||JMSEL.dgOff.size?"選的地方沒有要上傳的，請在下面的地圖上點選方格或勾選地下城。":"你探索過的地方網站都已經有了，不用上傳。謝謝！"}</div>`;
   else head=`<div class="note ok">找到 ${f1.length} 個第 1 層的資料夾，要上傳 ${nNew} 張地圖${nAnc?`（另含 ${nAnc} 張用來確認位置的地面圖）`:""}。${parts.length>1?`檔案比較大，分成 ${parts.length} 份，<b>每一份都要各送出一次表單</b>。`:""}</div>
     <div class="jmdl">${parts.map((p,i)=>`<button class="repbtn" data-jmpart="${i}">⬇ 下載壓縮檔${parts.length>1?` ${i+1}／${parts.length}`:""}（${mb(p.bytes)}）</button>`).join("")}</div>`;
   $("jmHead").innerHTML=head;
   if(all){$("jmOpts").innerHTML=opts;$("jmRows").innerHTML=rows;
   O.querySelectorAll("[data-jmreg]").forEach(e=>{const t=()=>{const k=e.dataset.jmreg;JMSEL.off.has(k)?JMSEL.off.delete(k):JMSEL.off.add(k);jmShow()};
     e.addEventListener("click",t);e.addEventListener("keydown",ev=>{if(ev.key===" "||ev.key==="Enter"){ev.preventDefault();t()}})});
+  O.querySelectorAll("[data-jmdg]").forEach(c=>c.onchange=()=>{c.checked?JMSEL.dgOff.delete(c.dataset.jmdg):JMSEL.dgOff.add(c.dataset.jmdg);jmShow()});
   const ra=$("jmRegAll"),rn=$("jmRegNone");if(ra)ra.onclick=()=>{JMSEL.off.clear();jmShow()};if(rn)rn.onclick=()=>{(JMG.regs||new Map()).forEach((_,k)=>JMSEL.off.add(k));jmShow()}}
   // picked squares: highlight and a spoken-style summary ("Tolbana、Candelia 一帶")
   O.querySelectorAll("[data-jmreg]").forEach(e=>{const on=!JMSEL.off.has(e.dataset.jmreg);e.classList.toggle("off",!on);e.setAttribute("aria-checked",on)});
@@ -2434,13 +2481,17 @@ function renderReport(){
 
 // ================= map =================
 const stage=$("stage"),world=$("world"),mapImg=$("mapImg");let sc=1,tx=0,ty=0,fitted=false;
-const MP=()=>F().map;
+let DGV=null;const DJL={};   // dungeon shown on the map tab (jmmeta dg id) and its chosen height per dungeon
+const DGMAP={};
+const MP=()=>{if(DGV&&FL===1){const e=dgMeta()[DGV];if(e&&e.frame){const f=e.frame;
+    return DGMAP[DGV]=DGMAP[DGV]&&DGMAP[DGV].e===e?DGMAP[DGV]:{e,dg:DGV,size:f.full,x0:f.x0,z0:f.z0,tiles:"tiles/dg/"+DGV,tileFull:f.full}}DGV=null}return F().map};
+const dgKey=()=>{const e=dgMeta()[DGV]||{},k=DJL[DGV];return e.layers&&e.layers[k]?k:e.best};
 const toPxX=b=>(b-MP().x0)/MP().size*1000,toPxZ=b=>(b-MP().z0)/MP().size*1000;
 const fromPx=(px,pz)=>[px/1000*MP().size+MP().x0,pz/1000*MP().size+MP().z0];
 const fitSc=()=>{const r=stage.getBoundingClientRect();return Math.min(r.width,r.height)/1000};
 // ---------- tiled base map (JourneyMap at 1 block = 1 px): 256 px tiles, levels 0..3 = 640..5120 px ----------
 const tilesEl=$("tiles");const TL=new Map();let tileRaf=0,tileGC=0;
-const useTiles=()=>{const m=MP();return!!(m&&m.tiles&&BASE==="jm")};
+const useTiles=()=>{const m=MP();return!!(m&&m.tiles&&(m.dg||BASE==="jm"))};
 // height layers of the explored map (tools/jm_merge.py, jmmeta.js "1".layers): own tile sets tiles/f1jm_<key>, dark
 // where nobody has uploaded; only the level-3 tiles listed in "l3" exist, levels 0-2 are complete
 let JML="day";try{JML=localStorage.getItem("sao-map-layer")||"day"}catch(e){}
@@ -2449,13 +2500,14 @@ const curLayer=()=>{const L=jmLayersMeta()[JML];return JML!=="day"&&L?L:null};
 const layerLabel=k=>{const L=jmLayersMeta()[k];return L&&L.label||(k==="day"?"地面":k)};
 function updateTiles(){tileRaf=0;const m=MP();if(!useTiles()){if(TL.size){tilesEl.innerHTML="";TL.clear()}tilesEl.hidden=true;return}
   tilesEl.hidden=false;const r=stage.getBoundingClientRect();if(!r.width)return;
-  const need=sc*(window.devicePixelRatio||1);let L=0;const sizes=[640,1280,2560,5120];while(L<3&&sizes[L]/1000<need*0.9)L++;
-  const LY=curLayer(),base=LY?`tiles/f1jm_${JML}`:m.tiles,ver=LY?encodeURIComponent(LY.v||""):JMV(),l3=LY?new Set(LY.l3||[]):null;
+  const need=sc*(window.devicePixelRatio||1);let L=0;const sizes=[8,4,2,1].map(d=>m.tileFull/d);while(L<3&&sizes[L]/1000<need*0.9)L++;
+  let LY=curLayer(),base=LY?`tiles/f1jm_${JML}`:m.tiles,ver=LY?encodeURIComponent(LY.v||""):JMV(),l3=LY?new Set(LY.l3||[]):null,ox=0,oz=0;
+  if(m.dg){const k=dgKey(),L=m.e.layers[k];base=`${m.tiles}/${k}`;ver=encodeURIComponent(L.v||"");l3=new Set(L.l3||[]);ox=m.x0/256;oz=m.z0/256}   // dungeon level-3 tiles are named by absolute world tile index
   if(tilesEl.dataset.base!==base){tilesEl.innerHTML="";TL.clear();tilesEl.dataset.base=base}
-  const want=new Set();const add=(lv,c,rr,cls)=>{if(lv===3&&l3&&!l3.has(c+"_"+rr))return;const S=sizes[lv],k=lv+"/"+c+"_"+rr;want.add(k);if(TL.has(k))return;
+  const want=new Set();const add=(lv,c,rr,cls)=>{const nm=lv===3?(c+ox)+"_"+(rr+oz):c+"_"+rr;if(lv===3&&l3&&!l3.has(nm))return;const S=sizes[lv],k=lv+"/"+nm;want.add(k);if(TL.has(k))return;
     const u=256*(m.tileFull/S)*(1000/m.size);const im=new Image();im.className=cls;im.alt="";im.decoding="async";im.draggable=false;
     im.style.cssText=`left:${c*u}px;top:${rr*u}px;width:${u+0.6}px;height:${u+0.6}px`;im.src=`${base}/${k}.jpg?v=${ver}`;im.onerror=()=>im.remove();tilesEl.appendChild(im);TL.set(k,im)};
-  const n0=Math.ceil(640/256);for(let rr=0;rr<n0;rr++)for(let c=0;c<n0;c++)add(0,c,rr,"l0");
+  const n0=Math.ceil(sizes[0]/256);for(let rr=0;rr<n0;rr++)for(let c=0;c<n0;c++)add(0,c,rr,"l0");
   const view=(lv,cls)=>{const S=sizes[lv],u=256*(m.tileFull/S)*(1000/m.size),n=Math.ceil(S/256);
     const wx0=-tx/sc,wy0=-ty/sc,wx1=(r.width-tx)/sc,wy1=(r.height-ty)/sc;
     for(let rr=Math.max(0,Math.floor(wy0/u));rr<=Math.min(n-1,Math.floor(wy1/u));rr++)for(let c=Math.max(0,Math.floor(wx0/u));c<=Math.min(n-1,Math.floor(wx1/u));c++)add(lv,c,rr,cls)};
@@ -2490,7 +2542,17 @@ const typeKey=m=>m.type==="Boss"?"boss":m.type==="Mini-Boss"?"mini":"mob";
 let BASE="wiki";try{BASE=localStorage.getItem("sao-map-base")||"wiki"}catch(e){}
 
 $("baseBtn").addEventListener("click",ev=>{ev.stopPropagation();BASE=BASE==="jm"?"wiki":"jm";try{localStorage.setItem("sao-map-base",BASE)}catch(e){};renderMap()});
-$("layerSel").addEventListener("change",ev=>{JML=ev.target.value;try{localStorage.setItem("sao-map-layer",JML)}catch(e){};renderMap()});
+$("layerSel").addEventListener("change",ev=>{if(DGV){DJL[DGV]=ev.target.value;renderMap();return}JML=ev.target.value;try{localStorage.setItem("sao-map-layer",JML)}catch(e){};renderMap()});
+$("dgSel").addEventListener("change",ev=>{DGV=ev.target.value||null;fitted=false;renderMap();if(!DGV)requestAnimationFrame(fit)});
+["pointerdown","wheel"].forEach(t=>$("dgSel").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
+// dungeon mode: zoom to the part of the frame that has data
+function dgFit(){const m=MP();if(!m||!m.dg)return;fit();const r=stage.getBoundingClientRect(),b=m.e.bounds||[m.x0,m.z0,m.x0+m.size,m.z0+m.size];
+  const w=(b[2]-b[0])/m.size*1000,h=(b[3]-b[1])/m.size*1000;sc=Math.max(fitSc(),Math.min(fitSc()*10,0.85*Math.min(r.width/w,r.height/h)));
+  tx=r.width/2-toPxX((b[0]+b[2])/2)*sc;ty=r.height/2-toPxZ((b[1]+b[3])/2)*sc;apply();fitted=true}
+window.__dgMode=()=>DGV;
+// the dungeon panel's map: open it on the map tab
+document.addEventListener("click",ev=>{const b=ev.target.closest&&ev.target.closest("[data-dgmap]");if(!b)return;ev.stopPropagation();
+  DGV=b.dataset.dgmap;fitted=false;if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===1)renderMap();else go("map",1)},true);
 ["pointerdown","wheel"].forEach(t=>$("layerSel").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
 // ---- map filter panel ----
 function mapCounts(){const sp=spotsOf(FL),tw=F().towns,np=NPCS(FL);const c={tp:tw.filter(t=>t.tp).length+sp.filter(x=>x.tp).length,land:tw.filter(t=>!t.tp).length+sp.filter(x=>x.kind==="poi"&&!x.tp).length,npc:np.length};
@@ -2543,7 +2605,17 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
   $("mapNote").hidden=!(m&&m.note);if(m&&m.note)$("mapNote").textContent=m.note;
   if(!m){filterMap();return}
   const want=BASE==="jm"&&m.jm&&!m.tiles?m.jm:m.img;$("baseBtn").hidden=!m.jm;mapImg.style.visibility=useTiles()?"hidden":"";if(TL.size&&tilesEl.dataset.f!==String(FL)){tilesEl.innerHTML="";TL.clear()}tilesEl.dataset.f=String(FL);schedTiles();$("baseBtn").textContent=BASE==="jm"&&m.jm?"底圖：探索地圖":"底圖：wiki 地圖";
-  {const ls=$("layerSel"),keys=Object.keys(jmLayersMeta()).sort((a,b)=>+b.slice(1)-+a.slice(1));ls.hidden=!(useTiles()&&keys.length);
+  {const ds=$("dgSel"),dl=FL===1?Object.keys(dgMeta()).filter(d=>dgMeta()[d].frame):[];ds.hidden=!dl.length;   // 第 1 層 / dungeon switch
+   if(dl.length){ds.innerHTML=`<option value="">地圖：第 ${FL} 層</option>`+dl.map(d=>`<option value="${d}">地下城：${esc(dgName(d))}</option>`).join("");ds.value=m.dg||""}}
+  $("stage").classList.toggle("dgmode",!!m.dg);
+  if(m.dg){const ls=$("layerSel"),ks=Object.keys(m.e.layers).sort((a,b)=>(a==="day"?99:+a.slice(1))>(b==="day"?99:+b.slice(1))?-1:1);ls.hidden=ks.length<2;
+   ls.innerHTML=ks.map(k=>`<option value="${k}">高度：${esc(m.e.layers[k].label||k)}</option>`).join("");ls.value=dgKey();
+   $("baseBtn").hidden=true;$("jmCredit").hidden=true;mapImg.style.visibility="hidden";
+   [mapImg,$("tiles")].forEach(e=>{e.style.maskImage="";e.style.webkitMaskImage=""});
+   $("mapNote").hidden=false;$("mapNote").textContent=`正在看 ${dgName(m.dg)} 的地圖（玩家上傳的 JourneyMap，${m.e.date} 更新，${m.e.layers[dgKey()].label}）。黑色是還沒有人上傳的地方。地下城的座標和第 1 層不同；左上角的選單可以切回第 1 層。`;
+   $("stage").style.setProperty("--noteh","42px");world.querySelectorAll(".areas").forEach(n=>n.remove());
+   if(!fitted)requestAnimationFrame(dgFit);SRCH_ALL=false;return}
+  {const ls=$("layerSel"),keys=Object.keys(jmLayersMeta()).filter(k=>{const n=+k.slice(1);return n>=JMP.LMIN&&n<=JMP.LMAX}).sort((a,b)=>+b.slice(1)-+a.slice(1));ls.hidden=!(useTiles()&&keys.length);
    if(!ls.hidden){ls.innerHTML=[`<option value="day">高度：地面</option>`,...keys.map(k=>`<option value="${k}">地底 ${esc(layerLabel(k))}</option>`)].join("");ls.value=curLayer()?JML:"day"}}
   if(useTiles()&&curLayer()){const LY=curLayer();$("mapNote").hidden=false;$("mapNote").textContent=`正在看地底的高度層 ${LY.label}（JourneyMap 的洞穴地圖，${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳。可以到「協作區」用「打包探索地圖」上傳你的地底地圖。`}
   else if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate} 更新，${m.jmPct?"約佔地圖 "+m.jmPct+"%，":""}${m.jmN?"含 "+m.jmN+" 份玩家上傳，":""}1 格 1 像素，放大會更清楚），其餘為變暗的 wiki 地圖。可以到「協作區」上傳你的 JourneyMap 補上沒探索的地方。`}
@@ -2738,7 +2810,7 @@ function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.
   const Fx=F();$("floorInfo").innerHTML=`<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PRV().length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
   $("nItem").textContent=matPool(f,false).length;
-  fillZoneSelect();fillTownChips();if(editing)setEditing(false);fitted=false;renderMap();renderZoneList()}
+  fillZoneSelect();fillTownChips();if(editing)setEditing(false);if(f!==1)DGV=null;fitted=false;renderMap();renderZoneList()}
 // phones: fold bar for every browse tab's filters (hidden on wider screens by CSS)
 function fbarSync(){document.querySelectorAll(".browse .filters").forEach(F=>{const b=F.querySelector(':scope>.fbar [data-t="fopen"]');if(!b)return;
   const gs=[...F.querySelectorAll(":scope>.fbar~.fgroup")].filter(g=>!g.hidden);b.hidden=!gs.length;

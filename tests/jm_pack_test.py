@@ -70,6 +70,15 @@ try:
     put("Triggers_noise~d/overworld/day", "%d,%d.png" % top[0], noise)
     put("Triggers_lone~e/overworld/day", "%d,%d.png" % lone, region(*lone, wiki))
     put("Triggers_out~f/overworld/day", "40,40.png", region(*top[0], cv))
+    # dungeons: "<uuid>_<name>" folders next to the floor 1 overworld (two Geldorack runs), an unknown one, and one
+    # whose server folder has no floor 1 map
+    put("Triggers_f1~a/a57676b0-5d0c-4000-8000-000000000001_geldorack/-1", "-1,-1.png", cave)
+    put("Triggers_f1~a/a57676b0-5d0c-4000-8000-000000000002_geldorack/-1", "-1,-1.png", cave)
+    put("Triggers_f1~a/a57676b0-5d0c-4000-8000-000000000002_geldorack/-2", "-1,-1.png", cave)
+    put("Triggers_f1~a/a57676b0-5d0c-4000-8000-000000000002_geldorack/day", "-1,-1.png", Image.new("RGBA", (512, 512)))
+    put("Triggers_f1~a/bb0000b0-5d0c-4000-8000-000000000001_backrooms/5", "0,0.png", cave)
+    put("Triggers_other~b/03b352fd-5d0c-4000-8000-000000000002_xalzirith/0", "0,0.png", cave)
+    put("Triggers_f1~a/overworld/-398", "%d,%d.png" % top[0], cave)
     open(os.path.join(mp, "Triggers_f1~a", "overworld", "day", "notes.txt"), "w").write("x")
 
     class H(http.server.SimpleHTTPRequestHandler):
@@ -98,8 +107,13 @@ try:
             pg.locator("#jmOut").scroll_into_view_if_needed()
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_card.png"))
         lt = pg.inner_text("#jmOut")
-        check("地面 3 張" in lt and "地底洞穴 8 張" in lt and not pg.locator("#jmOut input").count(),
+        check("地面 3 張" in lt and "地底洞穴 8 張" in lt and not pg.locator("#jmOut [data-jmbox], #jmOut [data-jmlay]").count(),
               "no height or coordinate fields: the summary counts surface and underground maps")
+        D = J["dgs"]; st2 = {(g["leaf"] or ""): g for g in J["groups"]}
+        check(D.get("geldorack", {}).get("inst") == 2 and D["geldorack"]["news"] == 3 and D["geldorack"]["bounds"] == [-1, -1, -1, -1]
+              and st2["bb0000b0-5d0c-4000-8000-000000000001_backrooms"]["state"] == "dgunk" and st2["03b352fd-5d0c-4000-8000-000000000002_xalzirith"]["state"] == "dgno",
+              f"dungeons are recognised by folder name; unknown and unconfirmed ones are listed but not packed ({D}, {[(k, v['state']) for k, v in st2.items() if v.get('dg')]})")
+        check("Geldorack Dungeon" in lt and "2 次進場" in lt and "backrooms" in lt and pg.locator("[data-jmdg=geldorack]").is_checked(), "the dungeon list names the dungeon and its runs")
         regs = pg.eval_on_selector_all("[data-jmreg]", "e=>e.map(x=>x.dataset.jmreg)")
         check("5,9" in regs and "2,2" in regs and "40,40" not in regs and pg.locator(".jmmap .jmtown").count() >= 5
               and "已選 %d／%d 格" % (len(regs), len(regs)) in lt, f"the squares with new data are on a small map with town names ({regs})")
@@ -118,7 +132,13 @@ try:
         z = zipfile.ZipFile(zp)
         names = [i.filename for i in z.infolist()]
         check(z.testzip() is None and dl.value.suggested_filename.endswith(".zip"), "the download is a valid zip")
-        check(names and all(nm.startswith("mp/Triggers_f1~a/overworld/") for nm in names) and "mp/Triggers_f1~a/overworld/day/%d,%d.png" % new in names
+        dgn = [nm for nm in names if "_geldorack/" in nm]
+        check(sorted(dgn) == ["mp/Triggers_f1~a/a57676b0-5d0c-4000-8000-000000000001_geldorack/-1/-1,-1.png",
+                              "mp/Triggers_f1~a/a57676b0-5d0c-4000-8000-000000000002_geldorack/-1/-1,-1.png",
+                              "mp/Triggers_f1~a/a57676b0-5d0c-4000-8000-000000000002_geldorack/-2/-1,-1.png"]
+              and not any("backrooms" in nm or "xalzirith" in nm or "/-398/" in nm for nm in names), f"the zip has both Geldorack runs, not the unknown / unconfirmed ones ({dgn})")
+        names_fl = [nm for nm in names if "_geldorack/" not in nm]
+        check(names and all(nm.startswith("mp/Triggers_f1~a/overworld/") for nm in names_fl) and "mp/Triggers_f1~a/overworld/day/%d,%d.png" % new in names
               and "mp/Triggers_f1~a/overworld/1/5,9.png" in names and sum(nm.startswith("mp/Triggers_f1~a/overworld/2/") for nm in names) == 6
               and "mp/Triggers_f1~a/overworld/2/40,40.png" not in names and not any("/night/" in nm for nm in names),
               f"the zip has floor 1 surface and height-layer maps, including the new area ({names})")
@@ -127,6 +147,8 @@ try:
         def names_now():
             return pg.evaluate("window.__jm.parts.flatMap(p=>p.names)")
         # only the ink room square (layer 1, region 5,9): that square plus surface anchors from elsewhere
+        pg.uncheck("[data-jmdg=geldorack]"); pg.wait_for_timeout(100)
+        check(not any("_geldorack/" in x for x in names_now()), "unticking a dungeon leaves it out")
         pg.click("#jmRegNone"); pg.wait_for_timeout(100)
         check(not pg.locator("[data-jmpart]").count() and "請在下面的地圖上點選方格" in pg.inner_text("#jmOut"), "nothing picked -> no download, the note says what to do")
         pg.click("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(100)
@@ -147,7 +169,7 @@ try:
         packed = [x for x in nn if "/overworld/2/" in x]
         check(packed == ["mp/Triggers_f1~a/overworld/2/2,2.png"] and "/overworld/1/5,9.png" not in " ".join(nn)
               and pg.get_attribute("[data-jmreg='5,9']", "aria-checked") == "false", f"clicking squares changes what is packed ({packed})")
-        pg.click("#jmRegAll"); pg.wait_for_timeout(100)
+        pg.click("#jmRegAll"); pg.check("[data-jmdg=geldorack]"); pg.wait_for_timeout(100)
         check(pg.evaluate("window.__jm.sel.off") == [] and len(names_now()) == len(names), "全部選 packs everything again")
         if os.environ.get("SHOT_DIR"):
             pg.click("[data-jmreg='2,2']", force=True); pg.wait_for_timeout(100)
@@ -181,6 +203,7 @@ try:
     res = json.loads(r.stdout.strip().splitlines()[-1]) if r.stdout.strip() else {"stderr": r.stderr[-300:]}
     check(r.returncode == 0 and res.get("ok") and res.get("folders") == 1 and res.get("newChunks", 0) > 300, f"tools/jm_merge.py merges the packed zip ({res})")
     check(set(res.get("layers", {})) == {"c0", "c1", "c2"} and res["layers"]["c1"] > 0, f"... and its height layers ({res.get('layers')})")
+    check(set(res.get("dungeons", {})) == {"geldorack"} and res["dungeons"]["geldorack"] > 0, f"... and the dungeon ({res.get('dungeons')}, {res.get('skippedWhy')})")
     r = subprocess.run([sys.executable, "-I", os.path.join(w, "tools", "jm_merge.py"), zl, "--report", "T991"], capture_output=True, text=True)
     res = json.loads(r.stdout.strip().splitlines()[-1]) if r.stdout.strip() else {"stderr": r.stderr[-300:]}
     check(r.returncode == 0 and res.get("ok") and list(res.get("layers", {})) == ["c1"], f"the underground-only pack is accepted through its anchors ({res})")
@@ -208,6 +231,29 @@ try:
               f"layer tiles come from tiles/f1jm_c1, level 3 only where it exists ({len(srcs)} tiles, failed: {bad[:3]})")
         check("Y 16～31" in pg.inner_text("#mapNote") and pg.is_hidden("#jmCredit"), "the note names the layer; the surface contributor box is hidden")
         pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "layer_view.png"))
+        # dungeon map: the 地圖 switch and the dungeon panel
+        dopts = pg.eval_on_selector_all("#dgSel option", "o=>o.map(x=>x.textContent)")
+        check(pg.is_visible("#dgSel") and "地下城：Geldorack Dungeon" in dopts, f"the map has a 第 1 層／地下城 switch ({dopts})")
+        bad.clear(); pg.select_option("#dgSel", "geldorack"); pg.wait_for_timeout(1500)
+        srcs = pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")
+        check(srcs and all("tiles/dg/geldorack/c-1/" in x for x in srcs) and any("/3/-" in x for x in srcs) and not bad and pg.is_hidden("#fpanel")
+              and not pg.locator("#world .town").count() and "Geldorack Dungeon" in pg.inner_text("#mapNote"),
+              f"dungeon mode shows only the dungeon's tiles (absolute level-3 names), no floor markers ({len(srcs)}, failed {bad[:2]})")
+        pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "dg_view.png"))
+        pg.select_option("#layerSel", "c-2"); pg.wait_for_timeout(800)
+        check(all("tiles/dg/geldorack/c-2/" in x for x in pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")), "the height menu switches the dungeon's heights")
+        pg.select_option("#dgSel", ""); pg.wait_for_timeout(500)
+        check(pg.evaluate("window.__dgMode()") is None and pg.locator("#world .town").count() > 5, "back to floor 1 with its markers")
+        pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/index.html#f1-dungeons"); pg.wait_for_timeout(800)
+        pg.click("#lDg [data-go='s|geldorakd']"); pg.wait_for_timeout(600)
+        ov = pg.locator("#pBody .dgmap img")
+        check(ov.count() == 1 and pg.evaluate("document.querySelector('#pBody .dgmap img').naturalWidth") > 0, "the dungeon panel shows the dungeon's map")
+        pg.click("#pBody .dgmap figcaption [data-dgmap]"); pg.wait_for_timeout(1200)
+        check(pg.evaluate("window.__dgMode()") == "geldorack" and pg.is_visible("#view-map") and pg.locator("#tiles img[src*='tiles/dg/geldorack/']").count() > 0, f"its button opens the dungeon map on the map tab ({pg.evaluate('window.__dgMode()')}, {pg.url})")
+        pg.set_viewport_size({"width": 390, "height": 844}); pg.wait_for_timeout(400)
+        check(pg.evaluate("document.documentElement.scrollWidth") <= 390, "dungeon mode fits on a phone")
+        pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "dg_phone.png"))
+        pg.set_viewport_size({"width": 1280, "height": 900}); pg.select_option("#dgSel", ""); pg.wait_for_timeout(400)
         pg.select_option("#layerSel", "day"); pg.wait_for_timeout(500)
         check(all("tiles/f1jm/" in x for x in pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")), "back to the surface tiles")
         pg.select_option("#layerSel", "c1"); pg.set_viewport_size({"width": 390, "height": 844}); pg.wait_for_timeout(500)
