@@ -492,7 +492,8 @@ with sync_playwright() as p:
     check(ic[:3] == ["crit_chance", "skill_crit_chance", "crit_damage"] and ic[3] != "damage_reduction", f"stat icons: crit chance is not the crit damage icon ({ic})")
     # official news pictures of the monsters (mobphotos.js): every floor, bosses facing right, the note names the source
     ph = pg.evaluate("(()=>{const M=window.SAO_MOBPHOTO.by;return [M['1']['Bandit Archer'].f, Object.values(M).reduce((s,o)=>s+Object.values(o).reduce((t,e)=>t+e.rows.length,0),0), M['3']['Cave Goblin'].rows.length, JSON.stringify(M).includes('flip')]})()")
-    check(ph[0] == "img/mobs/bandit-archer-palier-1.png" and ph[1] == 45 and ph[2] == 3 and not ph[3], f"mobphotos.js: all 45 rows of the official table, matched by name, nothing flipped ({ph})")
+    check(ph[0] == "img/mobs/bandit-archer-palier-1.png" and ph[1] == 44 and ph[2] == 3 and not ph[3] and not pg.evaluate("'Orc Samurai Boss' in window.SAO_MOBPHOTO.by['3']"),
+          f"mobphotos.js: 44 rows of the official table matched by name (Chef de la Tribu left out), nothing flipped ({ph})")
     pg.goto(base + "#f3-monsters"); pg.wait_for_timeout(600)
     fc = pg.evaluate("[...document.querySelectorAll('#lMon img.face')].map(i=>i.getAttribute('src')).filter(s=>s.startsWith('img/mobs/')&&s.includes('palier-3')).length")
     check(fc >= 30, f"floor 3 monster cards show the official pictures ({fc})")
