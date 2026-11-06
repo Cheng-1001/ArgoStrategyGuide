@@ -141,6 +141,15 @@ try:
         pg.click("#jmRegAll"); pg.click("#jmDgAll"); pg.wait_for_timeout(150)
         h1 = pg.evaluate(HJS)
         check(h0 == h1 and pg.is_enabled("#jmDl .repbtn"), f"picking everything changes nothing but the button and the text: the card keeps its height ({h0} -> {h1})")
+        # the same at other widths (使用者 2026-11-06 的畫面：沒選時說明一行、全選後兩行，高度跳了；1280 剛好都是兩行沒抓到)
+        hw = []
+        for w in (1100, 1440, 1600, 1920):
+            pg.set_viewport_size({"width": w, "height": 900}); pg.wait_for_timeout(150)
+            pg.click("#jmRegNone"); pg.click("#jmDgNone"); pg.wait_for_timeout(120); a0 = pg.evaluate(HJS)
+            pg.click("#jmRegAll"); pg.click("#jmDgAll"); pg.wait_for_timeout(120); a1 = pg.evaluate(HJS)
+            hw.append((w, a0 == a1, a0[2], a1[2]))
+        pg.set_viewport_size({"width": 1280, "height": 900}); pg.wait_for_timeout(150)
+        check(all(x[1] for x in hw), f"none ↔ everything keeps the card height at 1100/1440/1600/1920 too ({hw})")
         pg.click("#jmNamesBtn"); pg.wait_for_timeout(100)
         nt = pg.inner_text("#jmNames"); hn = pg.evaluate(HJS)
         inside = pg.evaluate("(()=>{const C=document.querySelector('#jmPack').getBoundingClientRect();return ['#jmNames'].concat(document.querySelector('#jmHelp')&&!document.querySelector('#jmHelp').hidden?['#jmHelp']:[]).every(q=>{const r=document.querySelector(q).getBoundingClientRect();return r.left>=C.left&&r.right<=C.right})})()")
@@ -307,7 +316,7 @@ try:
         pg.wait_for_function("window.__jm", timeout=60000)
         pg.click("#jmRegAll"); pg.click("#jmDgAll"); pg.wait_for_timeout(150)
         parts = pg.evaluate("window.__jm.parts")
-        check(len(parts) >= 2 and all(q["ov"] >= 40 for q in parts) and pg.locator("[data-jmpart]").count() == len(parts) and "每一份都要各送出一次表單" in pg.inner_text("#jmDlNote"),
+        check(len(parts) >= 2 and all(q["ov"] >= 40 for q in parts) and pg.locator("[data-jmpart]").count() == len(parts) and "每份都要各送出一次表單" in pg.inner_text("#jmDlNote"),
               f"an upload over the size limit is split into parts ({parts})")
         pg.set_viewport_size({"width": 390, "height": 844}); pg.wait_for_timeout(200)
         check(pg.evaluate("document.documentElement.scrollWidth") <= 390, "no sideways scrolling on a phone")
