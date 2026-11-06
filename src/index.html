@@ -514,7 +514,7 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .hint.mph .mphr{display:flex;gap:10px;align-items:center;margin-top:6px}.hint.mph .mphr img{width:56px;height:56px;object-fit:contain;flex:none;background:radial-gradient(circle,#f3efe6 0,#e3dccd 70%);border-radius:50%}
 .hint.mph .mphn{width:56px;height:56px;flex:none;display:flex;align-items:center;justify-content:center;font-size:26px;background:var(--panel-2);border-radius:50%}
 .jmtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#jmDl{display:contents}.jmtools .repbtn{align-self:auto}.jmtools .repbtn:disabled{opacity:.45;cursor:not-allowed}
-.jmdlnote{font-size:12.5px;line-height:1.55;min-height:3.1em}.jmdlnote .warn{color:var(--warn)}
+.jmdlnote{font-size:12.5px;line-height:1.55;min-height:1.55em}.jmdlnote .warn{color:var(--warn)}
 .jmout{border-top:1px solid var(--line);padding-top:8px}.jmout:empty{display:none}
 .jmselbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:13px}.jmselbar select{font:inherit;font-weight:600;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
 .jmanch{position:relative;display:inline-block}.jmanch>.linkbtn{font-size:12.5px;white-space:nowrap}
@@ -2525,12 +2525,16 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   const opts=FLv===1?mapPart+dgPart:flSoon(FLv);
   // download beside the folder button (使用者 2026-11-06：資料夾選擇跟壓縮檔下載要跟區塊選取分開); the button is
   // always there (greyed until something is picked) and the lines are one line each, so nothing jumps when you pick
-  const dlBtn=parts.length?parts.map((p,i)=>`<button class="repbtn" data-jmpart="${i}" title="${mb(p.bytes)}">⬇ 下載壓縮檔${parts.length>1?` ${i+1}／${parts.length}`:""}</button>`).join(""):`<button class="repbtn" disabled title="先在下面點選要上傳的地方">⬇ 下載壓縮檔</button>`;
+  // one line in every state, even in the narrowest column (346px at a 1101px window): no blank second line and no jump
+  // when picking (使用者 2026-11-06：多留白了／全選後高度會變). The anchors and each part's size go in the button's tooltip.
+  const dlBtn=parts.length?parts.map((p,i)=>`<button class="repbtn" data-jmpart="${i}" title="${mb(p.bytes)}${p.anchors?`，另含 ${p.anchors} 張用來確認位置的地面圖`:""}">⬇ 下載壓縮檔${parts.length>1?` ${i+1}／${parts.length}`:""}</button>`).join(""):`<button class="repbtn" disabled title="先在下面點選要上傳的地方">⬇ 下載壓縮檔</button>`;
   $("jmDl").innerHTML=dlBtn;
-  $("jmDlNote").innerHTML=!f1.length?`沒有找到第 1 層的地圖：可能還沒在第 1 層探索過，或探索的地方和網站現有地圖完全沒有重疊（原因看下面「掃描到的資料夾」）。`
-    :!regs.size&&!dgNew.length?`找到第 1 層的地圖，但你探索過的地方網站都已經有了，不用上傳。謝謝！`
-    :parts.length?`共 ${nNew} 張地圖（${parts.map(p=>mb(p.bytes)).join("＋")}）${nAnc?`・另含 ${nAnc} 張定位用的地面圖`:""}。${parts.length>1?`<b class="warn">檔案較大分成 ${parts.length} 份，每份都要各送出一次表單。</b>`:"下載後到左邊的回報表單，種類選「探索地圖」上傳。"}`
-    :`還沒選要上傳的地方。在下面點方格或地下城的圖選取，下載按鈕就會亮起來。`;
+  const tot=mb(parts.reduce((t,p)=>t+p.bytes,0));
+  $("jmDlNote").innerHTML=!f1.length?`沒有找到第 1 層的地圖，原因看下面「掃描到的資料夾」。`
+    :!regs.size&&!dgNew.length?`你探索過的地方網站都已經有了，不用上傳，謝謝！`
+    :parts.length>1?`<b class="warn">分成 ${parts.length} 份（共 ${tot}），每份都要各送一次表單。</b>`
+    :parts.length?`共 ${nNew} 張（${tot}），下載後到左邊回報表單上傳。`
+    :`還沒選，選好要上傳的地方後下載按鈕會亮起來。`;
   let head="";
   if(regs.size||dgNew.length){const on=[...regs.values()].filter(r=>!JMSEL.off.has(r.rx+","+r.rz)),nm=[...new Set(on.flatMap(r=>jmRegNames(r.rx,r.rz)))],dOn=dgNew.filter(d=>!JMSEL.dgOff.has(d));
     const U=JMSEL.ui||(JMSEL.ui={});
@@ -2626,7 +2630,7 @@ function buildFormReport(){
     <div class="jmscope"><span><b>會收</b>：第 1 層的地面、地底（洞穴、地下室）和地下城（Geldorack Dungeon、Labyrinth of the Fallen、Sanctuary of Xal'Zirith）</span><span><b>不收</b>：還沒開放打包的樓層（第 2 層以後，開放後再加）、破碎的地下世界、限時活動的場地</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden><span id="jmDl"></span></div>
-    <div class="muted jmdlnote" id="jmDlNote">要在電腦上用 Chrome 或 Edge。選好資料夾、點選要上傳的地方後，下載按鈕會亮起來。</div>
+    <div class="muted jmdlnote" id="jmDlNote">要在電腦上用 Chrome 或 Edge 開本站。</div>
     <div id="jmOut" class="jmout" aria-live="polite"></div>
   </article>
   </div><div class="rcol rc-q">
