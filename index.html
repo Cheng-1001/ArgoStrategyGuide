@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="cd70a4c8fe">
+<meta name="sao-build" content="5a8d9231af">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -530,9 +530,11 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .jmdgl{display:flex;flex-direction:column;gap:4px}.jmdg{display:flex;align-items:center;gap:10px;font-size:12.5px;padding:3px 0;border-top:1px solid var(--line)}
 .jmdg:first-child{border-top:0}.jmdg label{display:flex;align-items:center;gap:6px;cursor:pointer;min-width:0}.jmdg input{margin:0}.jmdg b{font-weight:600}
 .jmdg .n{margin-left:auto;color:var(--muted);font-size:11.5px;white-space:nowrap}.jmdg .linkbtn{font-size:12px;white-space:nowrap}
-.jmdgprev{display:flex;flex-direction:column;gap:6px;align-items:flex-start}.jmdgprev canvas{max-width:100%;border:1px solid var(--line);border-radius:6px;image-rendering:pixelated}
+.jmdgprev{display:flex;flex-direction:column;gap:6px;align-items:flex-start}.jmdgprev{align-items:stretch}.jmdgprev canvas{width:100%;height:auto;max-height:70vh;object-fit:contain;border:1px solid var(--line);border-radius:6px;image-rendering:pixelated;background:#070c11;cursor:zoom-in}
+.jmzoom{position:fixed;inset:0;z-index:90;background:rgba(4,8,12,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:zoom-out;padding:16px}
+.jmzoom img{max-width:min(96vw,1400px);max-height:88vh;width:auto;height:auto;min-width:min(90vw,512px);object-fit:contain;image-rendering:pixelated;background:#070c11;border-radius:6px}.jmzoom span{color:#cfd8df;font-size:12.5px}
 .jmdgpvh{display:flex;flex-wrap:wrap;gap:2px 10px;align-items:baseline;font-size:12.5px}
-.jmprev{display:flex;gap:10px;align-items:flex-start;font-size:12.5px;min-height:40px}.jmprev img{width:96px;height:96px;flex:none;image-rendering:pixelated;border:1px solid var(--line);border-radius:4px;background:#070c11}
+.jmprev{display:flex;flex-direction:column;gap:6px;align-items:stretch;font-size:12.5px;min-height:40px}.jmprev canvas{display:block;width:100%;max-width:512px;height:auto;image-rendering:pixelated;border:1px solid var(--line);border-radius:6px;background:#070c11;cursor:zoom-in}
 .jmprev .warn{color:var(--warn)}
 .jmregbar{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:12.5px}.jmregbar #jmRegSum{flex:1 1 100%}
 .pill.rep{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent);border-color:color-mix(in srgb,var(--accent) 45%,transparent)}
@@ -844,7 +846,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=b9c0a8b1"></script>
 <script src="npcs.js?v=576b7565"></script>
-<script src="changelog.js?v=2ba8f8f7"></script>
+<script src="changelog.js?v=b1f5d224"></script>
 <script src="recipes.js?v=36e8b52c"></script>
 <script src="jmmeta.js?v=2a6f9fcd"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -2340,11 +2342,22 @@ async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];{const h=
   JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();O.innerHTML=`<div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
 // preview of one square: the player's own JourneyMap image of it (surface first, else the first underground one)
 const JMURL=new Map();const jmUrl=f=>{if(!JMURL.has(f))JMURL.set(f,URL.createObjectURL(f));return JMURL.get(f)};
-function jmPreview(k){const P=$("jmPrev");if(!P)return;const [rx,rz]=k.split(",").map(Number),f1=JMG.filter(g=>g.state==="f1");
+// crop a region image to where it has data (a small cave room fills the preview instead of a black square)
+async function jmCrop(f){const bm=await createImageBitmap(f),c=document.createElement("canvas");c.width=bm.width;c.height=bm.height;const x=c.getContext("2d",{willReadFrequently:true});x.drawImage(bm,0,0);bm.close&&bm.close();
+  const D=x.getImageData(0,0,c.width,c.height).data;let a=c.width,b=c.height,e=-1,g=-1;
+  for(let y=0;y<c.height;y+=2)for(let q=0;q<c.width;q+=2)if(D[(y*c.width+q)*4+3]){if(q<a)a=q;if(q>e)e=q;if(y<b)b=y;if(y>g)g=y}
+  if(e<0)return null;let w=Math.max(96,e-a+16),h=Math.max(96,g-b+16);const s=Math.max(w,h);w=h=Math.min(512,s);
+  let cx=Math.round((a+e)/2-w/2),cy=Math.round((b+g)/2-h/2);cx=Math.max(0,Math.min(512-w,cx));cy=Math.max(0,Math.min(512-h,cy));
+  const o=document.createElement("canvas"),k=Math.max(1,Math.floor(1024/w));o.width=w*k;o.height=h*k;const ox=o.getContext("2d");ox.imageSmoothingEnabled=false;
+  ox.fillStyle="#070c11";ox.fillRect(0,0,o.width,o.height);ox.drawImage(c,cx,cy,w,h,0,0,o.width,o.height);o.dataset.full=w===512?"1":"";return o}
+let JMPV=0;
+async function jmPreview(k){const P=$("jmPrev");if(!P)return;const tk=++JMPV;const [rx,rz]=k.split(",").map(Number),f1=JMG.filter(g=>g.state==="f1");
   const day=f1.flatMap(g=>g.news).filter(it=>it.rx===rx&&it.rz===rz),cave=f1.flatMap(g=>Object.values(g.layers).flatMap(L=>L.news||[])).filter(it=>it.rx===rx&&it.rz===rz);
   const it=day[0]||cave[0];if(!it)return;const cx=rx*512+256-2560,cz=rz*512+256-2560,out=Math.hypot(cx,cz)>2487+256;
   const nm=jmRegNames(rx,rz);
-  P.innerHTML=`<img src="${jmUrl(it.f)}" alt=""><span><b>${esc(nm.join("、")||"這一格")}</b>${out?"<br><span class=\"warn\">在第 1 層的島外面（地圖邊緣以外）</span>":""}<br>地面 ${day.length} 張・地底 ${cave.length} 張${!day.length?"<br>（這一格只有地底的資料，圖是地底那一層）":""}<br><span class="muted">${JMSEL.off.has(k)?"目前：不上傳":"目前：會上傳"}</span></span>`}
+  const cv=await jmCrop(it.f);if(tk!==JMPV)return;
+  P.innerHTML=`<span class="jmpvimg"></span><span><b>${esc(nm.join("、")||"這一格")}</b>${out?"<br><span class=\"warn\">在第 1 層的島外面（地圖邊緣以外）</span>":""}<br>地面 ${day.length} 張・地底 ${cave.length} 張${!day.length?"<br>（這一格只有地底的資料，圖是地底那一層）":""}<br><span class="muted">${JMSEL.off.has(k)?"目前：不上傳":"目前：會上傳"}${cv&&!cv.dataset.full?"・圖只裁出有畫面的部分":""}</span></span>`;
+  if(cv){cv.title="點了放大";cv.dataset.jmzoom="";P.querySelector(".jmpvimg").appendChild(cv)}}
 // preview of a dungeon: every run of it drawn together (oldest first) on the height with the most images, cropped to
 // where there is data. It shows the player's whole map of the dungeon, not only the part the site lacks.
 async function jmDgPreview(d){const P=$("jmDgPrev");if(!P)return;const inst=JMG.filter(g=>g.state==="dg"&&g.dg===d).sort((a,b)=>a.latest-b.latest);
@@ -2359,10 +2372,16 @@ async function jmDgPreview(d){const P=$("jmDgPrev");if(!P)return;const inst=JMG.
   for(let y=0;y<c.height;y+=2)for(let q=0;q<c.width;q+=2)if(D[(y*c.width+q)*4+3]){if(q<a)a=q;if(q>e)e=q;if(y<b)b=y;if(y>f)f=y}
   if(e<0){P.innerHTML=`<span class="muted">${esc(dgName(d))} 這一層沒有畫面。</span>`;return}
   a=Math.max(0,a-8);b=Math.max(0,b-8);e=Math.min(c.width,e+10);f=Math.min(c.height,f+10);
-  const w=e-a,h=f-b,k=Math.min(4,260/Math.max(w,h)),o=document.createElement("canvas");o.width=Math.round(w*k);o.height=Math.round(h*k);
+  const w=e-a,h=f-b,k=Math.min(8,1024/Math.max(w,h)),o=document.createElement("canvas");o.width=Math.round(w*k);o.height=Math.round(h*k);
   const ox=o.getContext("2d");ox.imageSmoothingEnabled=k<1;ox.fillStyle="#070c11";ox.fillRect(0,0,o.width,o.height);ox.drawImage(c,a,b,w,h,0,0,o.width,o.height);
   P.innerHTML=`<div class="jmdgpvh"><b>${esc(dgName(d))}</b><span class="muted">${inst.length} 次進場合在一起・${key==="day"?"地面":`Y ${+key.slice(1)*16}～${+key.slice(1)*16+15}`}（圖最多的那一層）</span><button class="linkbtn" id="jmDgPrevX">收起</button></div>`;
-  P.appendChild(o);$("jmDgPrevX").onclick=()=>{P.hidden=true;P.innerHTML=""}}
+  o.title="點了放大";o.dataset.jmzoom="";P.appendChild(o);$("jmDgPrevX").onclick=()=>{P.hidden=true;P.innerHTML=""}}
+// click a preview to see it as large as the window allows (Esc / click closes)
+document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest("[data-jmzoom]");if(!t)return;
+  const src=t.tagName==="CANVAS"?t.toDataURL("image/png"):t.src,z=document.createElement("div");z.className="jmzoom";z.setAttribute("role","dialog");z.setAttribute("aria-label","放大的地圖");
+  z.innerHTML=`<img src="${src}" alt=""><span>點一下或按 Esc 關閉</span>`;document.body.appendChild(z);
+  const close=()=>{z.remove();document.removeEventListener("keydown",esc,true)},esc=e=>{if(e.key==="Escape"){e.stopPropagation();close()}};
+  z.onclick=close;document.addEventListener("keydown",esc,true)});
 // layers found in the floor 1 worlds, surface first, then by height
 function jmFound(){const m=new Map();for(const g of JMG)if(g.state==="f1"){
     m.set("day",(m.get("day")||0)+g.news.length);

@@ -110,7 +110,8 @@ try:
         check("地面 3 張" in lt and "地底洞穴 8 張" in lt and not pg.locator("#jmOut [data-jmbox], #jmOut [data-jmlay]").count(),
               "no height or coordinate fields: the summary counts surface and underground maps")
         pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(200)
-        check(pg.locator("#jmPrev img").count() == 1 and "地底 1 張" in pg.inner_text("#jmPrev"), "pointing at a square previews the player's own map of it")
+        pg.wait_for_selector("#jmPrev canvas", timeout=5000)
+        check(pg.locator("#jmPrev canvas").count() == 1 and "地底 1 張" in pg.inner_text("#jmPrev"), "pointing at a square previews the player's own map of it")
         if os.environ.get("SHOT_DIR"):
             pg.locator(".jmopt").first.scroll_into_view_if_needed()
             pg.locator("#jmOpts").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_opts.png"))
@@ -125,6 +126,14 @@ try:
             pg.locator("#jmDgPrev").scroll_into_view_if_needed(); pg.wait_for_timeout(200)
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_dgprev.png"))
         check(not pg.evaluate("document.getElementById('jmHow').open"), "the how-to folds away once a folder is picked")
+        pw = pg.evaluate("[document.querySelector('#jmPrev canvas').getBoundingClientRect().width,document.querySelector('#jmDgPrev canvas').getBoundingClientRect().width]")
+        pg.click("#jmDgPrev canvas"); pg.wait_for_timeout(200)
+        zw = pg.evaluate("document.querySelector('.jmzoom img')&&document.querySelector('.jmzoom img').getBoundingClientRect().width")
+        if os.environ.get("SHOT_DIR"):
+            pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_zoom.png"))
+        pg.keyboard.press("Escape"); pg.wait_for_timeout(100)
+        check(pw[0] >= 300 and pw[1] >= 300 and zw and zw >= 500 and not pg.locator(".jmzoom").count(),
+              f"previews are large and open full-size on click, Esc closes ({pw}, zoom {zw})")
         check("Geldorack Dungeon" in lt and "2 次進場" in lt and "backrooms" in lt and pg.locator("[data-jmdg=geldorack]").is_checked(), "the dungeon list names the dungeon and its runs")
         regs = pg.eval_on_selector_all("[data-jmreg]", "e=>e.map(x=>x.dataset.jmreg)")
         check("5,9" in regs and "2,2" in regs and "40,40" not in regs and pg.locator(".jmmap .jmtown").count() >= 5
