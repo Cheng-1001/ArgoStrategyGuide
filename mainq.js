@@ -74,6 +74,7 @@ window.SAO_MAINQ = {1: [
  {t:"Mephisto", n:26, npc:"Mephisto", en:{0:"Speak with Mephisto to continue the main story",1:"Answer Mephisto's question",2:"Learn the mechanism: scroll + crystal"},
   s:[["和 Mephisto 對話",3260,1403],["回答他的問題（答案：An Instrument）",3260,1403],["學會卷軸加水晶的機制",3260,1403]]},
  {t:"Find a Way to Remake the Scroll", n:27, npc:"Emy", en:{0:"Find Emy in the Tolbana Forge",1:"Learn what it takes to remake the scroll",2:"Enter the old mill",3:"Harvest the ink (0/8)"},
+  img:{2:[["img/quests/27_mill.jpg","舊磨坊一帶（底圖是本站的探索地圖）：上方橘點是 Cursed Ruins 傳送點，往南走；3＝入口豎井（在岩石裡），4＝墨水房（磨坊地下，Y 24）"]],6:[["img/quests/27_virelune.jpg","Virelune 一帶（底圖是本站的探索地圖）：右邊橘點是 Virelune 傳送點；6＝Dorven，7＝要調查的岩石（湖的西岸）"]]},
   s:[["到 Tolbana 鍛造場找 Emy",3227,1495],["問清楚重做卷軸需要什麼",3227,1495],["進入舊磨坊（入口是岩石裡的豎井）",2765,4778],["在磨坊裡的黏液方塊房間，150 秒內收集 8 份墨水：用 Emy 的燈（右鍵，每 5 秒一次）照出墨水，時間到會重來",2851,4705],["前往 Virelune",1617,1958],["和 Dorven 對話",1618,1959],["調查岩石，看有沒有入口",1419,1986],["全部帶回去給 Emy",3227,1495]]},
  {t:"Request an audience with King Harald", n:28, aka:"Request an Audience with King Harald", npc:"King Harald", d:"Tolbana 的水晶屬於 Harald 家族，沒有他們同意，誰都不能靠近。（遊戲裡 28 之後直接是 32，沒有 29～31。）",
   s:[["前往 Harald 的宮殿",3199,1510],["和 Harald 國王對話",3198,1524],["得知檔案裡有關於他的記載",3198,1524]]},
