@@ -110,8 +110,12 @@ try:
         check("地面 3 張" in lt and "地底洞穴 8 張" in lt and not pg.locator("#jmOut [data-jmbox], #jmOut [data-jmlay]").count(),
               "no height or coordinate fields: the summary counts surface and underground maps")
         pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(200)
-        pg.wait_for_selector("#jmPrev canvas", timeout=5000)
-        check(pg.locator("#jmPrev canvas").count() == 1 and "地底 1 張" in pg.inner_text("#jmPrev"), "pointing at a square previews the player's own map of it")
+        pg.wait_for_selector("#jmPop canvas", timeout=5000)
+        check(pg.locator("#jmPop canvas").count() == 1 and "地底 1 張" in pg.inner_text("#jmPop"), "pointing at a square previews the player's own map of it in the floating window")
+        sqw = pg.evaluate("document.querySelector('#jmPop canvas').getBoundingClientRect().width")
+        pg.click("#jmPopX"); pg.wait_for_timeout(100); pg.hover("[data-jmreg='2,2']", force=True); pg.wait_for_timeout(300)
+        check(not pg.locator("#jmPop").count() and pg.is_visible("#jmPrevOpen"), "a closed preview window stays closed until reopened")
+        pg.click("#jmPrevOpen"); pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_selector("#jmPop canvas", timeout=5000)
         if os.environ.get("SHOT_DIR"):
             pg.locator(".jmopt").first.scroll_into_view_if_needed()
             pg.locator("#jmOpts").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_opts.png"))
@@ -119,15 +123,15 @@ try:
         check(D.get("geldorack", {}).get("inst") == 2 and D["geldorack"]["news"] == 3 and D["geldorack"]["bounds"] == [-1, -1, -1, -1]
               and st2["bb0000b0-5d0c-4000-8000-000000000001_backrooms"]["state"] == "dgunk" and st2["03b352fd-5d0c-4000-8000-000000000002_xalzirith"]["state"] == "dgno",
               f"dungeons are recognised by folder name; unknown and unconfirmed ones are listed but not packed ({D}, {[(k, v['state']) for k, v in st2.items() if v.get('dg')]})")
-        pg.click("[data-jmdgpv=geldorack]"); pg.wait_for_selector("#jmDgPrev canvas", timeout=10000)
-        cw = pg.evaluate("[document.querySelector('#jmDgPrev canvas').width,document.querySelector('#jmDgPrev canvas').height]")
-        check(cw[0] > 100 and cw[1] > 30 and "2 次進場合在一起" in pg.inner_text("#jmDgPrev"), f"a dungeon can be previewed, its runs drawn together ({cw})")
+        pg.click("[data-jmdgpv=geldorack]"); pg.wait_for_function("document.querySelector('#jmPop')&&document.querySelector('#jmPop').innerText.includes('合在一起')", timeout=10000)
+        cw = pg.evaluate("[document.querySelector('#jmPop canvas').width,document.querySelector('#jmPop canvas').height]")
+        check(cw[0] > 100 and cw[1] > 30 and "Geldorack Dungeon" in pg.inner_text("#jmPopT"), f"a dungeon preview uses the same floating window ({cw})")
         if os.environ.get("SHOT_DIR"):
-            pg.locator("#jmDgPrev").scroll_into_view_if_needed(); pg.wait_for_timeout(200)
+            pg.locator(".jmmap").scroll_into_view_if_needed(); pg.wait_for_timeout(200)
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_dgprev.png"))
         check(not pg.evaluate("document.getElementById('jmHow').open"), "the how-to folds away once a folder is picked")
-        pw = pg.evaluate("[document.querySelector('#jmPrev canvas').getBoundingClientRect().width,document.querySelector('#jmDgPrev canvas').getBoundingClientRect().width]")
-        pg.click("#jmDgPrev canvas"); pg.wait_for_timeout(200)
+        pw = [sqw, pg.evaluate("document.querySelector('#jmPop canvas').getBoundingClientRect().width")]
+        pg.click("#jmPop canvas"); pg.wait_for_timeout(200)
         zw = pg.evaluate("document.querySelector('.jmzoom img')&&document.querySelector('.jmzoom img').getBoundingClientRect().width")
         if os.environ.get("SHOT_DIR"):
             pg.screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_zoom.png"))
