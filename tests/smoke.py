@@ -256,6 +256,9 @@ with sync_playwright() as p:
     t = pg.inner_text("#pBody")
     check("技能（遊戲畫面）" in t and "迴避射擊" in t and "終極技能" in t and "等級上限 18" in t and "Embuscade" in t and "技能畫面裡都沒有出現" in t
           and "遊戲技能 15" in pg.inner_text("#lCls"), "Archer panel: in-game skills with slots and level caps; wiki list marked as not in the game")
+    gs = pg.evaluate("[...document.querySelectorAll('#pBody .gskg')].map(x=>x.textContent)")
+    check(pg.locator("#pBody img.gskic").count() == 7 and any(x.startswith("技能 3（主動）") and "同一欄位 3 個" in x for x in gs) and any(x.startswith("被動") and "同一欄位 3 個" in x for x in gs) and gs[-1] == "武器技能",
+          f"Archer skills grouped by slot (old skill window icons), 7 slot icons from the skills page ({gs})")
     pg.evaluate("document.querySelector('#lCls [data-go=\"c|guerrier\"]').click()"); pg.wait_for_timeout(300)
     cols = pg.evaluate("getComputedStyle(document.getElementById('lCls')).gridTemplateColumns.split(' ').length")
     pw = pg.locator("#panel").bounding_box()["width"]
