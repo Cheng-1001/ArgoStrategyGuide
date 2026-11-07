@@ -252,6 +252,11 @@ with sync_playwright() as p:
     check("Combinaison Brutale" in t and "Paladin" in t and "起始屬性" in t and "Physical Might" in t and "佔位圖" not in t,
           "Guerrier panel: skills, specialisations, base stats and talents")
     check(pg.locator("#pBody img").count() == 0, "no class or skill pictures")
+    pg.evaluate("document.querySelector('#lCls [data-go=\"c|archer\"]').click()"); pg.wait_for_timeout(300)
+    t = pg.inner_text("#pBody")
+    check("技能（遊戲畫面）" in t and "閃避射擊" in t and "終極技能" in t and "等級上限 18" in t and "Embuscade" in t and "技能畫面裡都沒有出現" in t
+          and "遊戲技能 15" in pg.inner_text("#lCls"), "Archer panel: in-game skills with slots and level caps; wiki list marked as not in the game")
+    pg.evaluate("document.querySelector('#lCls [data-go=\"c|guerrier\"]').click()"); pg.wait_for_timeout(300)
     cols = pg.evaluate("getComputedStyle(document.getElementById('lCls')).gridTemplateColumns.split(' ').length")
     pw = pg.locator("#panel").bounding_box()["width"]
     two = pg.evaluate("getComputedStyle(document.querySelector('#pBody .cls2')).gridTemplateColumns.split(' ').length")
@@ -341,8 +346,8 @@ with sync_playwright() as p:
 
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(500)
     zl = pg.inner_text("#zlist")
-    check("傳送點－城鎮 7" in zl and "傳送點－地標 6" in zl and pg.locator(".town.tp").count() == 13 and pg.locator(".town.land").count() == 3,
-          "13 teleports (7 towns, 6 landmarks) share one marker style; landmarks (Vallhat, hidden well, Lac des Nénuphars) another")
+    check("傳送點－城鎮 7" in zl and "傳送點－地標 6" in zl and pg.locator(".town.tp").count() == 13 and pg.locator(".town.land").count() == 4,
+          "13 teleports (7 towns, 6 landmarks) share one marker style; landmarks (Vallhat, hidden well, Lac des Nénuphars, Valley of Petals) another")
     check(pg.locator(".areas path").count() >= 13 and pg.get_attribute(".areas path", "vector-effect") == "non-scaling-stroke",
           "monster areas are outlined with a zoom-independent line width")
     n = pg.locator(".zone.npc").count()

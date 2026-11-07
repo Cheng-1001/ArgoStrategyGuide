@@ -560,6 +560,91 @@ null,
 ]
 ]
 },
+"Corrupted Boar Accessories": {
+"floor": 1,
+"items": [
+[
+2475,
+"Ring of the Boar",
+15,
+[
+[
+"Boar Hide",
+8
+],
+[
+"Corrupted Crystal",
+8
+]
+],
+"25",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2038,
+"Gloves of the Boar",
+15,
+[
+[
+"Boar Hide",
+8
+],
+[
+"Corrupted Crystal",
+8
+]
+],
+"25",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1590,
+"Bracelet of the Boar",
+30,
+[
+[
+"Boar Hide",
+16
+],
+[
+"Corrupted Crystal",
+8
+]
+],
+"28",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1451,
+"Belt of the Boar",
+30,
+[
+[
+"Boar Hide",
+16
+],
+[
+"Corrupted Crystal",
+8
+]
+],
+"28",
+"b",
+"acc",
+null,
+"shot"
+]
+]
+},
 "Crystallographer": {
 "floor": 1,
 "items": [
@@ -2598,7 +2683,7 @@ null,
 [
 2480,
 "Ring of the Wolf",
-null,
+30,
 [
 [
 "Wolf Fur",
@@ -2610,15 +2695,15 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 3,
-"ref"
+"shot"
 ],
 [
 1296,
 "Albal's Necklace",
-null,
+30,
 [
 [
 "Birch String",
@@ -2630,10 +2715,10 @@ null,
 ]
 ],
 "33",
-null,
+"b",
 "acc",
 3,
-"ref"
+"shot"
 ]
 ]
 },

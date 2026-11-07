@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="ff9392dbfc">
+<meta name="sao-build" content="4ca6237ca2">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -661,6 +661,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 .mqs .stimg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin:6px 0 4px}.mqs .stimg a{display:block;border-radius:6px;overflow:hidden;border:1px solid var(--line)}.mqs .stimg img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
 .shide{display:none!important}
 .npcw{font-size:13px;color:var(--muted)}.npcw .linkbtn{font-size:13px}.npcw-row{padding:0 12px 8px 56px;margin-top:-4px}
+.gskg{font-size:12.5px;font-weight:700;color:var(--muted);margin:10px 0 2px}.gskd{font-size:13px;margin:2px 0 4px 40px}.gskv{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 4px 40px}.gskv span{font-size:12px;padding:1px 7px;border-radius:10px;background:var(--chip,rgba(127,127,127,.12));cursor:help}
 </style>
 </head>
 <body>
@@ -857,28 +858,29 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=c3a3bb44"></script>
+<script src="data.js?v=292aa4fc"></script>
 <script src="data23.js?v=7794cfbd"></script>
 <script src="bosses.js?v=02fabd90"></script>
 <script src="reports.js?v=fa5827c8"></script>
 <script src="hints.js?v=fcf000d6"></script>
 <script src="codex.js?v=48141603"></script>
 <script src="mobphotos.js?v=4177d297"></script>
-<script src="mainq.js?v=9295ae3a"></script>
+<script src="mainq.js?v=f326aea4"></script>
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=a6c9503f"></script>
-<script src="gameinfo.js?v=b9c0a8b1"></script>
-<script src="npcs.js?v=576b7565"></script>
-<script src="changelog.js?v=b24e107c"></script>
-<script src="recipes.js?v=36e8b52c"></script>
+<script src="gameinfo.js?v=f88f9b65"></script>
+<script src="npcs.js?v=cbbfd938"></script>
+<script src="changelog.js?v=52d37a89"></script>
+<script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=45515bcb"></script>
-<script src="events.js?v=350d1125"></script>
-<script src="gamestats.js?v=5262b715"></script>
-<script src="sets.js?v=0fe90063"></script>
+<script src="gameskills.js?v=020bca3e"></script>
+<script src="events.js?v=de9be90e"></script>
+<script src="gamestats.js?v=553994fb"></script>
+<script src="sets.js?v=fbf69e31"></script>
 <script src="staticons.js?v=dadb2164"></script>
-<script src="gameicons.js?v=75364391"></script>
+<script src="gameicons.js?v=2dbd05ca"></script>
 <script src="recicons.js?v=9e931339"></script>
 <script>
 (()=>{
@@ -1032,7 +1034,7 @@ const NGRP={potion:["藥水・水晶","⚗️",["alchemist","consumablesMerchant
   acc:["飾品","💍",["accessoriesBlacksmith","secretAccessoryBlacksmith","occultMerchants","accessoriesMerchants"]],gear:["武器・防具","⚔️",["weaponsmith","armorBlacksmith","equipmentBlacksmith","equipmentMerchants"]],
   mat:["材料加工","🧱",["materialsBlacksmith","ingotBlacksmith","lumberjack"]],tool:["工具商人","🔧",["toolMerchants"]],travel:["旅行商人","🧳",["travelingMerchants"]],beggar:["臭乞丐","🧑",["beggar"]],other:["其他 NPC","🧑",["other"]]};
 const npcGrp=c=>Object.keys(NGRP).find(g=>NGRP[g][2].includes(c))||"other";
-const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:!!r[5],rep:r[6]}));
+const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:r[5]===2?2:!!r[5],rep:r[6]}));
 const npcById=id=>{const f=+id.slice(1).split("_")[0];return NPCS(f).find(n=>n.id===id)};
 // default (owner, 2026-11-01): teleports, landmarks, monster areas and regular monsters on; the rest off.
 // NPC sub-categories: only alchemist, loot buyers, key smith and accessory smith on (listed first: NPC_TOP).
@@ -1090,7 +1092,8 @@ const photoNote=m=>{const p=photoOf(m);if(!p||!p.rows)return"";const S=MPH.src||
   <div class="note srcn">🖼️ 圖片和數值取自官網新聞〈${esc(S.title||"")}〉（${esc(S.date||"")}）的怪物表，官網的名稱：${p.rows.map(r=>"「"+esc(r.fr)+"」").join("、")}。</div>`};
 const thHTML=(m,extra="")=>`<span class="th ${cls(m.type)} ${extra}" aria-hidden="true">${face(m)}<i class="beh beh-${m.beh}"></i></span>`;
 const GICON=window.SAO_GAMEICONS||{};   // icons cut from the owner's screenshots (gameicons.js)
-const slot=(id,s=36)=>{const it=ITEMS[id];const n=it?it.ic:-1;if(n<0&&GICON[id])return recicImg(GICON[id],s);if(n<0&&typeof redirI==="function"){const r=redirI(id);if(r&&r[0]==="e"){const e=EQ.find(x=>String(x.oid)===r[1]);if(e&&!e.itemId)return eslot(e,s)}}
+const slot=(id,s=36)=>{const it=ITEMS[id];const n=it?it.ic:-1;if(GICON[id])return recicImg(GICON[id],s);   // game icon (gameicons.js) wins over the sprite sheets (2026-11-07 icon audit)
+if(n<0&&typeof redirI==="function"){const r=redirI(id);if(r&&r[0]==="e"){const e=EQ.find(x=>String(x.oid)===r[1]);if(e&&!e.itemId)return eslot(e,s)}}
   if(n<0)return`<span class="slot empty" style="--s:${s}px" aria-hidden="true">${it&&it.vanilla?"MC":"?"}</span>`;
   return`<span class="slot" style="--s:${s}px;background-size:${8*s}px auto;background-position:${-(n%8)*s}px ${-Math.floor(n/8)*s}px" aria-hidden="true"></span>`};
 const rarPill=it=>it.r&&RAR[it.r]?`<span class="pill ${RAR[it.r][1]}">${RAR[it.r][0]}</span>`:`<span class="pill r-x">未收錄</span>`;
@@ -1163,18 +1166,18 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   <dt>圖鑑區域</dt><dd>${m.codexRegion?`${esc(m.codexRegion)} <span class="pill rep">遊戲圖鑑</span><br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`:`${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(nameSub(z))}</span>`}</dd>
   <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${SPAWN_OF[m.id]?"":p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd>${SPAWN_OF[m.id]?`<dt>重生點</dt><dd>${SPAWN_OF[m.id].map((w,i)=>`${SPAWN_OF[m.id].length>1?`<span class="rnum">${i+1}</span>`:""}<button class="linkbtn mono" data-rep="${m.floor}|${w.x}|${w.z}">X ${w.x} · Z ${w.z}${w.u?"（地下）":""}</button>`).join("<br>")}</dd>`:""}</dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
-  ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
-  ${(()=>{const H=(window.SAO_HINTS||{})[m.floor]||{};const h=H[m.name]||(m.aka||[]).map(a=>H[a]).find(Boolean);return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted"><span class="hfr">${esc(h[1])}</span>${h[2]?"":"<span class=\"hinf\">・依圖鑑順序推斷對應，可能不準</span>"}</span></div>`:""})()}
-  ${(()=>{const C=((window.SAO_CODEX||{})[m.floor]||{})[m.num];return C?`<div class="hint cdx"><span class="hk">遊戲圖鑑說明</span><span class="muted">#${esc(m.num)}${C.reg?"・"+esc(C.reg):""}${C.n!==m.name?"・圖鑑名稱 "+esc(C.n):""}</span><span>${esc(C.desc)}</span></div>`:""})()}
-  ${photoNote(m)}
+  ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
   ${m.dropsLocked&&m.dropsLocked.length?`<div class="note">另有 ${m.dropsLocked.length} 種掉落物在圖鑑上還沒解鎖（${m.dropsLocked.map(d=>pct(d[1])).join("、")}）。</div>`:""}
   ${m.dropSrc?`<div class="note srcn">掉落機率來自玩家回報（${repRef(m.dropSrc)}）。${m.wikiDrops.length?"wiki 原本寫："+m.wikiDrops.map(([i,p])=>esc(i)+" "+pct(p)).join("、")+"。":""}</div>`:""}
   ${m.repDropsText?`<div class="note">玩家回報的掉落物（名稱還沒對應到物品資料）：${m.repDropsText.map(esc).join("、")}</div>`:""}
-  ${repBlock(m)}
   ${kq.length?`<h3 class="sec">相關任務</h3><ul class="rows">${kq.map(qq=>`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>${killText(qq)}（${esc(qq.raw)}）</span></span><span class="v">${qq.xp?qq.xp+" xp":""}</span></button></li>`).join("")}</ul>`:""}
-  <div class="note srcn">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>
-  ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}`}
+  ${(()=>{const H=(window.SAO_HINTS||{})[m.floor]||{};const h=H[m.name]||(m.aka||[]).map(a=>H[a]).find(Boolean);return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted"><span class="hfr">${esc(h[1])}</span>${h[2]?"":"<span class=\"hinf\">・依圖鑑順序推斷對應，可能不準</span>"}</span></div>`:""})()}
+  ${(()=>{const C=((window.SAO_CODEX||{})[m.floor]||{})[m.num];return C?`<div class="hint cdx"><span class="hk">遊戲圖鑑說明</span><span class="muted">#${esc(m.num)}${C.reg?"・"+esc(C.reg):""}${C.n!==m.name?"・圖鑑名稱 "+esc(C.n):""}</span><span>${esc(C.desc)}</span></div>`:""})()}
+  ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
+  ${photoNote(m)}
+  ${repBlock(m)}
+  <div class="note srcn">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>`}
 // ---- player reports ----
 const REPO="https://github.com/Cheng-1001/ArgoStrategyGuide";
 const REPS=(window.SAO_REPORTS||[]);
@@ -1520,7 +1523,7 @@ const RECIPE_BY_EQ={},RECIPE_BY_MAT={};Object.entries(RECIPES).forEach(([npc,r])
 const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
 // NPC 的位置直接寫在配方／裝備資料裡（使用者 2026-11-03：原本要點 3 次才知道在哪裡做）：最近的城鎮或傳送點＋可點的座標
 const nearPlace=(f,x,z)=>{let b=null,d=1e9;FLOORS[f].towns.forEach(t=>{const k=Math.hypot(t.x-x,t.z-z);if(k<d){d=k;b=t.n}});spotsOf(f).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-x,p.z-z);if(k<d){d=k;b=p.n}});return d<=400?b:null};
-const npcWhere=n=>{if(!n)return"";const near=nearPlace(n.floor,n.x,n.z);return`<span class="npcw">📍 ${near?esc(near)+" 附近・":""}${FLOORS[n.floor].map?`<button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">X ${n.x} · Z ${n.z}</button>`:`X ${n.x} · Z ${n.z}`}${n.u?"（地下）":""}</span>`};
+const npcWhere=n=>{if(!n)return"";const near=nearPlace(n.floor,n.x,n.z);return`<span class="npcw">📍 ${near?esc(near)+" 附近・":""}${FLOORS[n.floor].map?`<button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">X ${n.x} · Z ${n.z}</button>`:`X ${n.x} · Z ${n.z}`}${n.u===2?"（地下室）":n.u?"（地下）":""}</span>`};
 const matText=mats=>mats.map(([m,q])=>`${ITEMS[m]?slot(m,22):""}<span>${esc(m)} ×${q}</span>`).join("・");
 const costText=c=>c==="Free"||c==="0"?"免費":c==null?"費用未知":esc(c)+" Col";
 // 查看配方 buttons under 製作方式 in the codex panels (one per NPC when several can make it)
@@ -1540,6 +1543,13 @@ const NPC_NOTE={
   "Crystallographer":`<h3 class="sec">位置</h3><div class="note">在起始之城建築的<b>二樓</b>，和「[NPC] Alchemist」在同一層。</div>`,
   "Vault":`<h3 class="sec">倉庫</h3><div class="note">個人倉庫（My vault），一開始有 1 頁，再買 1 頁要 25000 Col。</div>`,
   "Web Archaeologist":`<h3 class="sec">位置</h3><div class="note">在 Arakh'Nol 的 Xal'Zirith 地下城入口旁，和 Xal'Zirith Dungeon Guard 站在一起（站長 2026-11-06 截圖，玩家座標 X 1019 Z 1178 Y 116）。點他開的視窗叫「Aragorn's Lair - Loot Info」，只有 Sell（收購）分頁；收購清單還沒有截圖。</div>`,
+  "Skeleton Skull":`<h3 class="sec">位置</h3><div class="note">在高處的小石室裡（站長 2026-11-07 截圖：玩家座標 X 1162 Z 3544 Y 42，羅盤寫「Cyclorium」）。NPC 頭上沒有名牌，點他開的視窗叫「Secret Skeleton Skull」。</div>`,
+  "Occult Merchant - Artifacts":`<h3 class="sec">位置</h3><div class="note">在 Valley of Petals（花瓣谷）的<b>地底神壇</b>：從深色木造大建築旁的豎井往下（站長 2026-11-07 截圖：玩家座標 X 874 Z 4033 Y 4）。NPC 頭上沒有名牌；視窗「Occult Merchant - Artifacts」賣 Occult Skull／Robe／Hood，各 5 024.91 Col（LEGENDARY，有庫存數量）。物品說明的取得方式寫「Sold by Secret Occult Artifacts (5000 Cols)」。</div>`,
+  "Occult Merchant - Bracelet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3352 · Z 1647，房間裡 X 3350 · Z 1639）。NPC 頭上沒有名牌；視窗「Occult Merchant - Bracelet」賣 1 件 Occult Bracelet（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
+  "Occult Merchant - Amulet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3307 · Z 1671，房間裡 X 3314 · Z 1668）。NPC 頭上沒有名牌；視窗「Occult Merchant - Amulet」賣 1 件 Occult Amulet（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
+  "Occult Merchant - Ring":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3326 · Z 1736，房間裡 X 3321 · Z 1731）。NPC 頭上沒有名牌；視窗「Occult Merchant - Ring」賣 1 件 Occult Ring（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
+  "Occult Merchant - Gloves":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖，Gloves 的房間是依時間推斷：入口一帶 X 3363 · Z 1683，房間裡 X 3369 · Z 1689）。NPC 頭上沒有名牌；視窗「Occult Merchant - Gloves」賣 1 件 Occult Gloves（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
+  "Corrupted Boar Accessories":`<h3 class="sec">位置</h3><div class="note">在 Boar Zone（野豬區）的小屋裡，名牌是「[NPC] Accessory Blacksmith」，點他開的視窗叫「Corrupted Boar Accessories」（站長 2026-11-07 截圖：玩家座標 X 1778 Z 3527～3533 Y 28）。參考互動地圖沒有這個 NPC。</div>`,
   "Auction House":`<h3 class="sec">拍賣場</h3><div class="note">玩家之間買賣物品的拍賣場，起始之城有好幾個 Auction House NPC。</div>`
 };
 // loot buyers and the Starting Town merchants sell these for Col from their Buy tab: no crafting
@@ -1580,7 +1590,7 @@ function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value
   bindGo($("lRc"));markSel()}
 // ================= classes / skills tab =================
 const CLS=window.SAO_CLASSES||[];
-CLS.forEach(c=>{c.reps=(window.SAO_REPORTS||[]).filter(r=>r.type==="skill"&&norm(r.cls)===norm(c.name)).sort((a,b)=>(a.unlock||99)-(b.unlock||99))});
+CLS.forEach(c=>{c.game=(window.SAO_GAMESKILLS||{})[c.id]||null;c.reps=(window.SAO_REPORTS||[]).filter(r=>r.type==="skill"&&norm(r.cls)===norm(c.name)).sort((a,b)=>(a.unlock||99)-(b.unlock||99))});
 const clsWeap=c=>Object.entries(Object.assign({},c.weapons,(n=>n?{catalyst:n}:{})(EQ.filter(e=>e.cat==="catalyst"&&eqClasses(e).includes(c.id)).length))).map(([k,n])=>`${EQ_CAT[k]||k}（${n}）`).join("、");
 const clsSoon=c=>!Object.keys(c.weapons).length&&!c.base.length;
 // ---- dungeons tab (preliminary, user 2026-11-02: only the dungeon names for now; floor-boss towers are left out) ----
@@ -1604,10 +1614,10 @@ function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<di
   <div class="note">${esc(d.forge.extra)}</div><div class="note">${esc(d.forge.lvNote)}</div>
   <h3 class="sec">即將開放</h3><ul>${d.soon.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
   <div class="note srcn">資料來源：官方公告〈<a href="${esc(d.src.url)}" target="_blank" rel="noopener">${esc(d.src.title)}</a>〉（${esc(d.src.date)}），文字是本站改寫。</div>`}
-function renderClasses(){const s=Sq();const a=CLS.filter(c=>!s||norm([c.name,c.zh,c.role,...c.subs.map(x=>x[0]),...c.skills.map(x=>x[0])].join(" ")).includes(s));
+function renderClasses(){const s=Sq();const a=CLS.filter(c=>!s||norm([c.name,c.zh,c.role,...c.subs.map(x=>x[0]),...c.skills.map(x=>x[0]),...(c.game?c.game.list.map(x=>(x.fr||"")+" "+x.zh+" "+(x.en||"")):[])].join(" ")).includes(s));
   $("cCls").textContent=`${a.length} 個職業`;
   $("lCls").innerHTML=a.map(c=>`<button class="card" data-go="c|${c.id}" data-key="c|${c.id}"><div class="chead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="cname"><b>${esc(c.name)}</b><span>${esc(c.zh)}・${esc(c.role)}</span></div></div>
-    <div class="cmeta">${stars(c.diff)}${clsSoon(c)?'<span class="pill">可能尚未開放</span>':""}${c.reps.length?`<span class="pill rep">技能回報 ${c.reps.length}</span>`:c.skillsSure?"":'<span class="pill">技能待確認</span>'}</div>
+    <div class="cmeta">${stars(c.diff)}${clsSoon(c)?'<span class="pill">可能尚未開放</span>':""}${c.game?`<span class="pill rep">遊戲技能 ${c.game.list.length}</span>`:""}${c.reps.length?`<span class="pill rep">技能回報 ${c.reps.length}</span>`:c.skillsSure||c.game?"":'<span class="pill">技能待確認</span>'}</div>
     <div class="muted" style="font-size:12.5px">${clsWeap(c)?"武器："+clsWeap(c):"官方圖鑑還沒有這個職業的裝備"}</div>
     <div class="muted" style="font-size:12.5px">Lv 30 專精：${c.subs.map(x=>esc(x[0])).join(" / ")}</div></button>`).join("")||`<div class="empty-note">沒有符合的職業。</div>`;
   bindGo($("lCls"));markSel()}
@@ -1626,12 +1636,25 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
   ${keys.length?`<h3 class="sec">起始屬性和成長 <span class="c">參考互動地圖</span></h3>${tbl(keys.map(k=>`<tr><th>${esc(k)}</th><td class="mono">${esc(stat(c.base,k)??"—")}</td><td class="mono">${stat(c.perLv,k)!=null?"+"+esc(stat(c.perLv,k)):"—"}</td></tr>`).join(""),["屬性","Lv 1","每升 1 級"])}`:""}
   </div><div>
   ${c.reps.length?`<h3 class="sec">技能（玩家回報） <span class="c">${c.reps.length}</span></h3><ul class="rows">${c.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:${/被動/.test(r.stype)?"var(--ok)":"var(--accent)"}" aria-hidden="true">${r.unlock||"?"}</span><span class="t"><b>${esc(r.name)}</b><span>${r.unlock?"Lv "+r.unlock+"・":""}${esc(r.stype||"")}${r.scost?"・"+esc(r.scost):""}${r.sdesc?"・原文："+esc(r.sdesc):""}</span></span><span class="v">${repLink(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>`:""}
-  <h3 class="sec">技能${c.reps.length?"（wiki）":""} <span class="c">${c.skills.length}</span></h3>
-  ${c.skillsSure?"":`<div class="note warn">wiki 上這些技能的圖示都是佔位圖，清單可能是開服前的預定內容，和遊戲實際不同。</div>`}
+  ${c.game?gameSkillsHTML(c):""}
+  <h3 class="sec">技能${c.reps.length||c.game?"（wiki）":""} <span class="c">${c.skills.length}</span></h3>
+  ${c.game?`<div class="note warn">wiki 列的這些技能，遊戲的技能畫面裡都沒有出現（上面是遊戲實際的技能），應該是開服前的預定內容。</div>`:c.skillsSure?"":`<div class="note warn">wiki 上這些技能的圖示都是佔位圖，清單可能是開服前的預定內容，和遊戲實際不同。</div>`}
   <ul class="rows">${c.skills.map(([n,ty,lv,d])=>`<li><div class="lrow"><span class="th sm" style="--ring:${ty==="被動"?"var(--ok)":"var(--accent)"}" aria-hidden="true">${lv}</span><span class="t"><b>${esc(n)}</b><span>Lv ${lv}・${ty}・${esc(d)}</span></span></div></li>`).join("")}</ul>
   ${c.talents.length?`<h3 class="sec">天賦樹（被動點數） <span class="c">參考互動地圖</span></h3>${tbl(c.talents.map(([n,st,a,u,k])=>`<tr><th>${esc(n)}</th><td>${esc(st)} +${a}${u}／點</td><td class="mono">× ${k}</td></tr>`).join(""),["節點","效果","數量"])}<div class="muted" style="font-size:12px">同名節點合併計算；數值是參考互動地圖配裝計算器的資料，還沒有用遊戲畫面核對。</div>`:""}
   </div></div>
   <div class="note srcn">介紹和技能名稱來自 wiki（<a href="https://saominecraft.wiki.gg/wiki/${encodeURIComponent(c.name.replace(/ /g,"_"))}" target="_blank" rel="noopener">${esc(c.name)} 頁</a>），說明是本站改寫；本站不使用職業或技能的圖片。</div>`}
+// skills as shown in the game (gameskills.js, owner's screenshots of the skill tooltips)
+const GSK_T={passive:["被動","var(--ok)","說明寫 Passif"],scroll:["卷軸技能","var(--warn)","只能讀卷軸學會"],weapon:["武器技能","var(--accent2,var(--accent))","不能裝備，跟著武器"],"":["","var(--accent)",""]};
+function gameSkillsHTML(c){const g=c.game,SL={1:"技能 1",2:"技能 2",3:"技能 3",4:"技能 4",5:"技能 5",9:"終極技能",10:"被動"};
+  const eq=g.list.filter(x=>x.slot).sort((a,b)=>a.slot-b.slot),rest=g.list.filter(x=>!x.slot);
+  const grp=[["裝備中的技能（英文技能頁的欄位）",eq],["其他被動技能",rest.filter(x=>x.t==="passive")],["其他技能（說明沒寫主動或被動）",rest.filter(x=>x.t===""||x.t==="scroll")],["武器技能",rest.filter(x=>x.t==="weapon")]];
+  const tag=x=>[x.slot?SL[x.slot]:"",x.t==="passive"&&x.slot!==10?"被動":"",x.t==="scroll"?"卷軸技能":"",x.t==="weapon"?"武器技能（不能裝備）":"",x.max?"等級上限 "+x.max:""].filter(Boolean).join("・");
+  const ic=x=>x.slot===9?"終":x.slot===10||x.t==="passive"?"被":x.t==="weapon"?"武":x.slot?String(x.slot):"技";
+  return`<h3 class="sec">技能（遊戲畫面） <span class="c">${g.list.length}</span></h3>
+  <div class="muted" style="font-size:12px">${esc(c.zh)} ${g.lv} 級的技能畫面，數值都是 1 級（${g.date} 截圖）；中文是本站翻譯，滑鼠移到數值上看遊戲原文。</div>
+  ${grp.map(([lab,a])=>a.length?`<div class="gskg">${lab}</div><ul class="rows">${a.map(x=>`<li><div class="lrow"><span class="th sm" style="--ring:${GSK_T[x.t][1]}" aria-hidden="true">${ic(x)}</span><span class="t"><b>${esc(x.zh)}</b><span>${[x.en,x.fr].filter(Boolean).map(esc).join("・")}${tag(x)?"・"+tag(x):""}</span></span></div>
+    <div class="gskd">${esc(x.d)}</div><div class="gskv">${x.dz.map((z,i)=>`<span title="${esc(x.data[i]||"")}">${esc(z)}</span>`).join("")}</div></li>`).join("")}</ul>`:"").join("")}
+  <div class="note srcn">遊戲技能：站長 ${g.date} 的技能截圖（法文的技能提示，和英文的技能頁：欄位、等級上限）。說明和數值的中文是本站翻譯。</div>`}
 // floating window: equipment a class can use (like the quest route window)
 let CW=null;
 function openClassEquip(cid,part){const c=CLS.find(x=>x.id===cid);if(!c)return;CW={cid,part:part||"all",view};
@@ -1722,7 +1745,7 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   ${e?recItemInfo(r,e,isE):""}
   ${setPotHTML(r.en)}${r.oid?"":giHTML(GI_EN[norm(r.en)])}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
-  return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u?"・在地下":""}</div></div></div>
+  return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(n.n)}</h2><div class="sub">${c[0]}${n.u===2?"・在地下室":n.u?"・在地下":""}</div></div></div>
   ${ty&&ty[0]!==g[0]?`<dl class="facts"><dt>類型</dt><dd>${esc(ty[0])}<span class="muted">（參考互動地圖的分類）</span></dd></dl>`:""}
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
   ${RECIPES[n.n]?`${(()=>{const rs=RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)),mk=rs.filter(r=>!isShop(r)),sl=rs.filter(isShop);return(mk.length?`<h3 class="sec">可以製作 <span class="c">${mk.length}</span></h3>${recipeTable(mk)}`:"")+(sl.length?`<h3 class="sec">販售 <span class="c">${sl.length}</span></h3>${recipeTable(sl)}`:"")})()}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
@@ -1828,7 +1851,7 @@ const eqSub=e=>e.cat==="armor"?(e.slot||"armor"):e.cat;
 const EQ_SUBS={weapon:["sword","dagger","bow","crossbow","staff_mage","staff_shaman"],off:["shield","catalyst"].concat(EQ.some(e=>e.cat==="quiver")?["quiver"]:[]),armor:["head","chest","legs","feet"],acc:["amulet","ring","bracelet","gloves","artifact"].concat(EQ.some(e=>e.cat==="acc")?["acc"]:[])};
 const subLab=k=>k==="acc"?"部位未確認":SLOT_ZH[k]||EQ_CAT[k]||k;
 const eqClasses=e=>String(e.st["Classe requise"]||"").split(/,\s*/).map(c=>c.toLowerCase()).filter(c=>CLASS_ZH[c]);
-const eslot=(e,s=44)=>e.icFrom&&eqById[e.icFrom]?eslot(eqById[e.icFrom],s):e.ps?pslot(e,s):e.itemId&&(GICON[e.itemId]||(ITEMS[e.itemId]||{}).ic>=0)?(GICON[e.itemId]?recicImg(GICON[e.itemId],s):slot(e.itemId,s)):e.itemId?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
+const eslot=(e,s=44)=>e.icFrom&&eqById[e.icFrom]?eslot(eqById[e.icFrom],s):e.gen&&GICON[e.gen]?recicImg(GICON[e.gen],s):GICON[e.name]?recicImg(GICON[e.name],s):e.ps?pslot(e,s):e.itemId&&(GICON[e.itemId]||(ITEMS[e.itemId]||{}).ic>=0)?(GICON[e.itemId]?recicImg(GICON[e.itemId],s):slot(e.itemId,s)):e.itemId?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
 const NOSIGN=new Set(["Max Consume","Max Stack Size","Max Item Damage","Max Durability","Durability Bar","Pickaxe Power","Item Cooldown","Repair Percent"]);
 const statVal=(k,v)=>k==="Inedible"||k==="Durability Bar"?"是":NOSIGN.has(k)?v:k==="Classe requise"?String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]).filter(Boolean).join("、")||"不限":k==="Arme à deux mains"?"是":typeof v==="number"&&!k.startsWith("Required")?(v>0?"+":"")+v:v;
 const eqKey=e=>{const o=[];if(e.dmg)o.push("傷害 "+e.dmg);["Defense","Max Health","Magic Damage","Physical Damage","Skill Damage","Critical Strike Chance"].forEach(k=>{if(e.st[k]!=null&&o.length<3)o.push((STAT_ZH[k]||k)+" "+statVal(k,e.st[k]))});return o.join("・")};
@@ -1942,10 +1965,11 @@ const EFF_LAB={"attack speed":"攻擊速度","health/s":"生命回復","mana/s":
   "critical power":"暴擊傷害","crit damage":"暴擊傷害","critical damage":"暴擊傷害","max mana":"最大魔力","mana":"魔力","stamina":"耐力","max stamina":"最大耐力","bonus healing":"治療加成","defense":"防禦","skill damage":"技能傷害",
   "skill crit chance":"技能暴擊率","skill critical chance":"技能暴擊率","skill critical damage":"技能暴擊傷害","magic damage":"魔法傷害","physical damage":"物理傷害","projectile damage":"投射物傷害","ability haste":"技能急速",
   "movement speed":"移動速度","speed":"速度","attack damage":"攻擊傷害","max health":"最大生命","dodge chance":"閃避率","cooldown reduction":"冷卻縮減","healing received":"受到的治療","damage reduction":"傷害減免","block chance":"格擋率","block power":"格擋強度",
-  "knockback resistance":"擊退抗性","mana regeneration":"魔力回復","stamina regeneration":"耐力回復","max endurance":"最大耐力","skill critical skills":"技能暴擊","food":"飽食度","saturation":"飽和度","♥":"生命","❤":"生命"};
+  "knockback resistance":"擊退抗性","mana regeneration":"魔力回復","stamina regeneration":"耐力回復","max endurance":"最大耐力","skill critical skills":"技能暴擊","food":"飽食度","weapon damage":"武器傷害","saturation":"飽和度","♥":"生命","❤":"生命"};
 const durZh=t=>{const m=/^(\d+)\s*(s|sec|min|h)$/i.exec(t.trim());if(!m)return t;let n=+m[1],u=m[2].toLowerCase();if(u==="s"||u==="sec"){if(n>=3600&&n%3600===0)return n/3600+" 小時";if(n>=60&&n%60===0)return n/60+" 分鐘";return n+" 秒"}return n+(u==="min"?" 分鐘":" 小時")};
 const labZh=l=>EFF_LAB[l.trim().toLowerCase()]||l;
 const effZh=t=>{let m;t=String(t).trim();
+  if(m=/^Restores (\d+) HP, (\d+) mana and (\d+) stamina immediately\.?$/i.exec(t))return`立即回復 ${m[1]} 生命、${m[2]} 魔力、${m[3]} 耐力`;
   if(m=/^Restor(?:es|e)\s*:?\s*([\d.]+)\s*(.+)$/i.exec(t)||/^Restaure\s*([\d.]+)\s*(.+)$/i.exec(t))return`回復 ${m[1]} ${labZh(m[2])}`;
   if(m=/^Cooldown\s*:\s*(\d+s)$/i.exec(t))return`冷卻 ${durZh(m[1])}`;
   if(m=/^Boosts your (.+?) by ([\d.]+%?(?:\/s)?) for (\d+\s*\w+)$/i.exec(t))return`${durZh(m[3])}內${labZh(m[1])} +${m[2].replace("/s","/秒")}`;
@@ -1955,7 +1979,7 @@ const effZh=t=>{let m;t=String(t).trim();
   if(m=/^(\d+s) cooldown on all (.+)$/i.exec(t))return`所有 ${m[2].replace(/candies/i,"糖果")} 共用 ${durZh(m[1])}冷卻`;
   if(m=/^On consumption, applies (\d+)h of cooldown on all fortifiers$/i.exec(t))return`使用後，所有強化藥都要冷卻 ${m[1]} 小時`;
   if(/^Allows you to revive a comrade fallen in battle within (\d+)s/i.test(t))return`在允許的區域，隊友倒下後 ${/within (\d+)s/i.exec(t)[1]} 秒內可以把他救起來`;
-  if(m=/^Boosts Weapon Damage and Magic Damage by ([\d.]+%) - (\d+)\s*min$/i.exec(t))return`${m[2]} 分鐘內武器傷害和魔法傷害 +${m[1]}`;
+  if(m=/^Boosts (.+?) and (.+?) by ([\d.]+%) - (\d+)\s*min\s*!?$/i.exec(t))return`${m[4]} 分鐘內${labZh(m[1])}和${labZh(m[2])} +${m[3]}`;
   if(m=/^(.+?) for (\d+\s*(?:s|sec|min|h))$/i.exec(t)){const parts=m[1].split(/,\s*|\s+and\s+/).map(x=>{const k=/^(.+?)\s*([+-][\d.]+%?)$/.exec(x.trim());return k?`${labZh(k[1])} ${k[2]}`:null});if(parts.every(Boolean))return`${durZh(m[2])}內${parts.join("、")}`}
   if(m=/^Single use - cooldown of (\d+)\s*min$/i.exec(t))return`只能用一次，冷卻 ${m[1]} 分鐘`;
   if(m=/^(?:Uses Remaining|Utilisations restantes)\s*:\s*(\d+)$/i.exec(t))return`剩餘次數：${m[1]}`;
@@ -2841,7 +2865,7 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
     b.style.left=toPxX(w.x)+"px";b.style.top=toPxZ(w.z)+"px";b.innerHTML=face(m);b.title=`${m.name}・重生點 X ${w.x} · Z ${w.z}${w.u?"（地下）":""}`;b.setAttribute("aria-label",b.title);
     b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("m",m.id,"new")});world.appendChild(b)});
   NPCS(FL).forEach(n=>{if(!npcVisible(n))return;const d=document.createElement("div");d.className="zone poi shop npc";d.dataset.n=n.id;d.style.left=toPxX(n.x)+"px";d.style.top=toPxZ(n.z)+"px";
-    const lb=document.createElement("button");lb.className="zlabel";lb.textContent=NGRP[npcGrp(n.c)][1];lb.title=`${NGRP[npcGrp(n.c)][0]}：${n.n}${n.u?"（地下）":""}`;lb.setAttribute("aria-label",lb.title);
+    const lb=document.createElement("button");lb.className="zlabel";lb.textContent=NGRP[npcGrp(n.c)][1];lb.title=`${NGRP[npcGrp(n.c)][0]}：${n.n}${n.u===2?"（地下室）":n.u?"（地下）":""}`;lb.setAttribute("aria-label",lb.title);
     lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("n",n.id,"new")});d.appendChild(lb);world.appendChild(d)});
   SRCH_ALL=false;drawRoute();filterMap();markSel();requestAnimationFrame(declutter)}
 // label collision: teleport / dungeon names stay put; other names try nearby free spots (screen px), monster-area
@@ -2899,7 +2923,7 @@ function renderZoneList0(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(
     row.querySelector(".zn").onclick=()=>{centerOn(ws[0].x,ws[0].z,2.6);openP("m",m.id,"new")};row.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>repPin(+b.dataset.x,+b.dataset.z));zl.appendChild(row)})});
   const np=NPCS(FL).filter(npcVisible);
   if(np.length){sec("🧑 NPC",np.length);Object.keys(NGRP).forEach(c=>{np.filter(n=>npcGrp(n.c)===c).forEach(n=>{const row=document.createElement("div");row.className="zrow npcrow";row.dataset.tp=n.n+" "+NGRP[c][0]+" "+(NPCCAT[n.c]||[""])[0];
-    row.innerHTML=`<div class="zhead"><button class="zn">${NGRP[c][1]} ${esc(n.n)}</button><span class="zzh">${NGRP[c][0]}${n.u?"・地下":""}${n.src==="beta"?"・測試版資料":""}</span>${coord(n.x,n.z)}</div>`;
+    row.innerHTML=`<div class="zhead"><button class="zn">${NGRP[c][1]} ${esc(n.n)}</button><span class="zzh">${NGRP[c][0]}${n.u===2?"・地下室":n.u?"・地下":""}${n.src==="beta"?"・測試版資料":""}</span>${coord(n.x,n.z)}</div>`;
     row.querySelector(".zn").onclick=()=>{centerOn(n.x,n.z,2.8);openP("n",n.id,"new")};zl.appendChild(row)})})}
   const uz=unknownZones(FL).filter(z=>!userPos[FL][z]);
   if(uz.length){sec("位置未知",uz.length);

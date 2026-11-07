@@ -15,6 +15,17 @@ REF, CAT = sys.argv[1], sys.argv[2]
 # loot buyers' Buy tab = potions sold for Col (no materials). Catalogue id comes from OID.
 SHOTS = {
     # 2026-11-05 evening batch (in12): Skeleton Accessories' full list, and the Skeleton Skull secret smith (window title "Secret Skeleton Skull")
+    # 2026-11-07 batch (in14): new smith in the Boar Zone, window title "Corrupted Boar Accessories" (not in the reference map)
+    'Corrupted Boar Accessories': [
+        ('Ring of the Boar', 'c', 15, [['Boar Hide', 8], ['Corrupted Crystal', 8]], '25', 'acc'),
+        ('Gloves of the Boar', 'c', 15, [['Boar Hide', 8], ['Corrupted Crystal', 8]], '25', 'acc'),
+        ('Bracelet of the Boar', 'b', 30, [['Boar Hide', 16], ['Corrupted Crystal', 8]], '28', 'acc'),
+        ('Belt of the Boar', 'b', 30, [['Boar Hide', 16], ['Corrupted Crystal', 8]], '28', 'acc'),
+    ],
+    'Wolf Accessories': [   # 2026-11-07 03:45 (in15): same as the reference map, plus rarity / time
+        ('Ring of the Wolf', 'b', 30, [['Wolf Fur', 16], ['Oak Log', 8]], '33', 'acc'),
+        ("Albal's Necklace", 'b', 30, [['Birch String', 1], ['Fangs of Albal', 4]], '33', 'acc'),
+    ],
     'Skeleton Accessories': [
         ('Skeletal Ring', 'c', 15, [['Skeleton Bone', 8], ['Soul of the Ruins', 8]], '25', 'acc'),
         ('Bony Gloves', 'b', 30, [['Skeleton Bone', 12], ['Reinforced Skeleton Bone', 8]], '28', 'acc'),
@@ -207,14 +218,15 @@ SHOTS = {
     ],
 }
 # the screenshot showed the NPC's whole list: drop reference-map rows the game no longer has
-FULL = {"Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
+FULL = {'Wolf Accessories', 'Corrupted Boar Accessories', "Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
 SAME = {"Katana Training": "Training Katana", "Beginner Leggings": "Beginner's Leggings", "Bandit's Gloves": "Gloves of the Bandit", "Bracelet of the Sylvan": "Bracelet of the Sylve", "Amulet of the Sylvan": "Amulet of the Sylve"}          # reference-map name -> in-game name
 # material names used in game / by the reference map -> this site's ITEMS ids
 MAT = {"Shark Carapace": "Shark Shell", "Soul of the Ruins": "Souls of the Ruins", "Sylve Shoot": "Sylvan Sprout",
        "Hard Glacial Hide": "Glacial Hardhide", "Essence of Gorbel": "Gorbel Essence", "Heart of Nymbrea": "Nymbréa's Heart",
        "Fragment of the Bear's Soul": "Bear Soul Fragment", "Fangs of Albal": "Albal's Fangs", "Small Purse": "Small Pouch", "Leaf Fragments": "Leaf Fragment", "Allium Flower": "Allium", "Sylve Sprout": "Sylvan Sprout"}
 # item name -> official catalogue id (checked by hand: name keyword, level and set)
-OID = {"Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "Amulet of the Sylve": 1288, "Gloves of the Bandit": 2040, "Bandit Hood": 1456, "Stolen Amulet": 1292, "Bandit Coin": 1455, "Bracelet of the Sylve": 1589, "Health Potion II": 2458, "Health Potion III": 2459, "Stamina Potion II": 2472, "Ring of the Leviathan": 2485, "Necklace of Aragorn": 1458, "Bracelet of Ice": 1596, "Gloves of the Wolves": 2044, "Occult Amulet": 1298, "Occult Ring": 2486, "Occult Bracelet": 1597, "Occult Gloves": 2045,   # 2026-11-02: official names matched by hand (Anneau de Léviathan, Collier de Aragorn, Capuche/Robe Occulte…; level may differ, the site shows the official one)
+OID = {"Ring of the Boar": 2475, "Gloves of the Boar": 2038, "Bracelet of the Boar": 1590, "Belt of the Boar": 1451,   # 2026-11-07: Anneau/Gants/Bracelet/Ceinture de Sanglier (name, level-3 set; game level 1)
+       "Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "Amulet of the Sylve": 1288, "Gloves of the Bandit": 2040, "Bandit Hood": 1456, "Stolen Amulet": 1292, "Bandit Coin": 1455, "Bracelet of the Sylve": 1589, "Health Potion II": 2458, "Health Potion III": 2459, "Stamina Potion II": 2472, "Ring of the Leviathan": 2485, "Necklace of Aragorn": 1458, "Bracelet of Ice": 1596, "Gloves of the Wolves": 2044, "Occult Amulet": 1298, "Occult Ring": 2486, "Occult Bracelet": 1597, "Occult Gloves": 2045,   # 2026-11-02: official names matched by hand (Anneau de Léviathan, Collier de Aragorn, Capuche/Robe Occulte…; level may differ, the site shows the official one)
        "Training Sword": 2596, "Training Bow": 1566, "Training Crossbow": 1727, "Training Scythe": 1761, "Training Katana": 1762, "Training Dagger": 1760, "Training Pavise": 2534, "Training Buckler": 2533,
        "Boar Meat": 1957, "Chipped Axe": 2703, "Cracked Pickaxe": 2691, "Wooden Fishing Rod": 2709,
        "Training Magic Staff": 2569, "Unbound Grimoire": 1626, "Training Lantern": 1627, "Wild Grimoire": 1628,
