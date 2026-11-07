@@ -1615,7 +1615,7 @@ function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<di
   <h3 class="sec">鑰匙碎片：三個惡魔區</h3>${tb(["惡魔區","惡魔","首領","碎片"],d.zones.map(z=>[esc(z.n),z.mobs.map(esc).join("、"),esc(z.leader),`<b>${esc(z.frag)}</b>`]))}
   <div class="note">${esc(d.fragRate)}</div>
   <h3 class="sec">免費抽轉蛋的流程</h3><ol class="mqs">${d.loop.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
-  <h3 class="sec">萬聖節轉蛋</h3><p>${esc(d.banner.cost)}</p>${tb(["稀有度","內容","機率"],d.banner.rows.map(r=>r.map(esc)))}<div class="note">${esc(d.banner.pity)}</div>${(d.notes||[]).map(x=>`<div class="note">${esc(x)}</div>`).join("")}
+  <h3 class="sec">萬聖節轉蛋</h3><p>${esc(d.banner.cost)}</p>${tb((d.banner.rows[0].length>3?["稀有度","內容","一般抽取","含保底"]:["稀有度","內容","機率"]).map((h,k)=>k===1?h:`<span style="white-space:nowrap">${h}</span>`),d.banner.rows.map(r=>r.map((c,k)=>k===1?esc(c):`<span style="white-space:nowrap">${esc(c)}</span>`)))}<div class="note">${esc(d.banner.pity)}</div>${d.banner.src?`<div class="note srcn">轉蛋機率取自官網〈<a href="${esc(d.banner.src.url)}" target="_blank" rel="noopener">${esc(d.banner.src.title)}</a>〉（${esc(d.banner.src.date)}）。</div>`:""}${(d.notes||[]).map(x=>`<div class="note">${esc(x)}</div>`).join("")}
   <h3 class="sec">Halloween Forge：用 Dark Gift Pumpkin 換武器</h3><p>找 ${esc(d.forge.npc)}。</p>${tb(["武器","職業","南瓜","需求等級"],d.forge.rows.map(r=>[esc(r[0]),esc(r[1]),r[2],r[3]==null?"":r[3]]))}
   <div class="note">${esc(d.forge.extra)}</div><div class="note">${esc(d.forge.lvNote)}</div>
   <h3 class="sec">即將開放</h3><ul>${d.soon.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
