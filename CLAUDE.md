@@ -92,6 +92,7 @@
 | `google/SETUP.md` | 給使用者看的表單、審核設定說明 |
 | `tools/export_map.bat` | 使用者電腦上用的：把 JourneyMap 地圖複製到沒有「~」的資料夾 |
 | `tests/smoke.py` | Playwright 冒煙測試 |
+| `tests/site_audit.js` | **全站檢查**（2026-11-07 使用者「全站檢查」）：用 `window.__detail`／`__auditIds` 把每一筆資料的面板打開一次（怪物 141、裝備 733、道具 718、素材 239、配方 156、NPC 84、任務 106、地點 37、城鎮 15、職業 6），回報程式錯誤、「找不到／本站還沒有這個物品的資料／undefined／NaN」、指到不存在的 `data-go`、讀不到的圖片、佔位 emoji 圖示。`node tests/site_audit.js`（先開本機伺服器）。2026-11-07 結果：0 錯誤、0 壞連結、0 壞圖片；剩下的是已知缺資料：Iron String、Slime Essence／Tear（官網沒有）、Curved Bow（任務原文找不到物品），佔位圖示 19 個（世界王武器 4、羅斯特萬／莉塔＝七大罪原作武器不放圖、Dague glacé、Nodachi Staff、9 種沒截圖的素材、Torche、Aincrad Crystal、Effective Repair Kit）。配方材料 `matRef`：本站物品 → zhnames 的 en／配方的官網 id（`en2go`）→ `enGo`（gameinfo 英文名）|
 | `tests/jm_merge_test.py` | `tools/jm_merge.py` 在暫存複本上的測試（正常合併、別的世界被擋、壞檔被擋） |
 | `tests/report_types_test.py` | 新回報種類（配方、任務追蹤、技能、地點擴充）的整合測試，用假的已核准回報 |
 | `.github/ISSUE_TEMPLATE/` | 1～4 是舊的 GitHub 遊戲資料回報（保留但已不是主要管道）；5-bug、6-idea 是協作區「問題回報及建議」用的網站問題／建議範本 |

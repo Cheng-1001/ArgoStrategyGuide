@@ -85,6 +85,10 @@ window.SAO_GAMEICONS = {
  "Training Scepter": "icons/game/training_scepter_s.png",   // model nerfs_weapons:baton_shaman_entrainement, = Starting Merchant 22:39:13
  "Training Quiver": "icons/game/training_quiver_s.png",     // model nerfs_weapons:carquois_entrainement, = 22:39:24
  "Training Dagger (2)": "icons/game/training_short_dagger_s.png",   // model nerfs_weapons:seconde_dague_entrainement, = 22:39:23 (訓練用短劍, assassin off-hand)
+ // 2026-11-07 site-wide check (全站檢查): game-only weapons still on placeholders, official item-model index by name
+ "Dagger of Albal": "icons/game/dagger_of_albal_s.png",     // nerfs_weapons:seconde_dague_albal = auction tile 2026-11-04 22:4x (dark red blade, black guard)
+ "Iron Quiver": "icons/game/iron_quiver_s.png",             // nerfs_weapons:carquois_fer (name only; no screenshot of the icon yet)
+ "Hunter's Quiver": "icons/game/hunters_quiver_s.png",      // nerfs_weapons:carquois_chasseur (name only; no screenshot of the icon yet)
  "Witch's Dragée": "icons/game/witchs_dragee.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
  "Ring of the Nepenthes": "icons/game/ring_of_the_nepenthes.png",   // official item-model texture anneaunephente (2026-11-07)
  "Flower of a Nepenthes": "icons/game/flower_of_a_nepenthes.png",   // official item-model texture fleurnephente (2026-11-07)
