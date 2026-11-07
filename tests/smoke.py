@@ -161,7 +161,7 @@ with sync_playwright() as p:
           "main quest steps keep the in-game English text (searchable); close route points merge into one marker 1–4")
     pg.click("#pClose"); pg.fill("#q", ""); pg.evaluate("localStorage.removeItem('sao-map-filter-v5')"); pg.goto(base + "#map"); pg.reload(); pg.wait_for_timeout(800)
     n0 = pg.locator("#view-map .npc").count(); pg.fill("#q", "hanaka"); pg.wait_for_timeout(500)
-    check(n0 == 0 and pg.locator("#view-map .npc.hit").count() == 1 and pg.locator("#zlist", has_text="Hanaka - Loot Buyer").count() == 1,
+    check(n0 == 0 and pg.locator("#view-map .npc.hit").count() == 1 and pg.locator("#zlist", has_text="商店-哈娜卡").count() == 1,
           "map search shows matching NPCs even when the NPC filter is off")
     pg.fill("#q", ""); pg.wait_for_timeout(300); pg.click("#fpAll"); pg.wait_for_timeout(300)
     pg.goto(base + "#recipes"); pg.wait_for_timeout(400)
@@ -173,7 +173,7 @@ with sync_playwright() as p:
           "top tabs: recipes after quests, then dungeons, classes, world bosses; collaboration is a button by the changelog")
     pg.click('nav.tabs a[data-v="dungeons"]'); pg.wait_for_timeout(300)
     dn = pg.eval_on_selector_all("#lDg .card b", "e=>e.map(x=>x.textContent)")
-    check(len(dn) == 5 and dn[0] == "Sanctuary of Souls" and "Kobold Tower" not in dn and "Labyrinth of the Fallen" in dn, f"dungeons tab lists the event dungeon first, then the 4 floor-1 dungeons, not the boss tower ({dn})")
+    check(len(dn) == 5 and dn[0] == "Sanctuary of Souls" and "狗頭人之塔" not in dn and "墮落者迷宮區" in dn, f"dungeons tab lists the event dungeon first, then the 4 floor-1 dungeons, not the boss tower ({dn})")
     pg.click('#lDg [data-go="d|souls"]'); pg.wait_for_timeout(300)
     check("Sanctuary of Souls Key" in pg.inner_text("#pBody") and pg.locator("#pBody .btbl").count() == 3, "event dungeon panel: key recipe, fragment zones, banner and forge tables")
     pg.click("#pClose") if pg.locator("#pClose").count() else None
@@ -191,7 +191,7 @@ with sync_playwright() as p:
     pg.click('#fRcCat .chip[data-v="potion"]'); pg.wait_for_timeout(200)
     pg.locator("#lRc .rcard", has_text="Quality Health Potion I").first.click(); pg.wait_for_timeout(300)
     t = pg.inner_text("#pBody")
-    check(pg.locator("#lRc .rcard.sel").count() == 1 and "Alchemist" in t and "Sylve Sprout" in t and "× 8" in t,
+    check(pg.locator("#lRc .rcard.sel").count() == 1 and "煉金術士" in t and "Sylve Sprout" in t and "× 8" in t,
           "clicking one potion recipe selects only that card and opens its recipe panel")
     check(pg.locator('#lRc .rcard', has_text="Quality Health Potion I").first.locator('img[src="icons/recipes/quality_health_potion_i.png"]').count() == 1,
           "Quality Health Potion I uses the game icon from recicons.js (game icons win over the official catalogue)")
@@ -323,7 +323,7 @@ with sync_playwright() as p:
     pg.goto(base + "#props"); pg.wait_for_timeout(300)
     check(pg.locator('#fPrGroup .chip[data-v="材料"]').count() == 0 and pg.locator('#fPrGroup .chip[data-v="採集"]').count() == 0, "道具 no longer lists materials / gathered things")
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
-    pg.evaluate("[...document.querySelectorAll('#lMon .card')].find(c=>c.querySelector('b').textContent==='Elite Treant').click()"); pg.wait_for_timeout(300)
+    pg.evaluate("[...document.querySelectorAll('#lMon .card')].find(c=>c.querySelector('b').textContent==='菁英樹人').click()"); pg.wait_for_timeout(300)
     pg.evaluate("[...document.querySelectorAll('#pBody [data-go=\"i|Sylvan Bow\"]')][0].click()"); pg.wait_for_timeout(300)
     pb = pg.inner_text("#pBody")
     check(pg.inner_text("#pBody h2") == "森林之弓" and "Sylvan Bow・Arc Sylvestre" in pg.inner_text("#pBody .phead .sub") and "取得方式" in pb and "Elite Treant" in pb, "a dropped weapon opens its equipment panel (official Chinese name, English and French below) with drop rate and map")
@@ -383,7 +383,7 @@ with sync_playwright() as p:
       const w=document.getElementById('world').getBoundingClientRect();const k=w.width/1000;
       const x=w.left+(2351-70)/4980*1000*k, y=w.top+(3662-70)/4980*1000*k;return Math.hypot(b.left+b.width/2-x,b.top+b.height/2-y)})()""")
     check(off < 2, f"gathering-spot pin is centred on its coordinate (off by {off:.1f}px)")
-    tp = pg.evaluate("""(()=>{const e=[...document.querySelectorAll('.town.tp')].find(x=>x.textContent.trim()==='Hanaka');const b=e.querySelector('.pin').getBoundingClientRect(),n=e.querySelector('.tname').getBoundingClientRect();
+    tp = pg.evaluate("""(()=>{const e=[...document.querySelectorAll('.town.tp')].find(x=>x.textContent.trim()==='哈娜卡');const b=e.querySelector('.pin').getBoundingClientRect(),n=e.querySelector('.tname').getBoundingClientRect();
       const w=document.getElementById('world').getBoundingClientRect();const k=w.width/1000;
       const x=w.left+(1492-70)/4980*1000*k, y=w.top+(3453-70)/4980*1000*k;return [Math.hypot(b.left+b.width/2-x,b.top+b.height/2-y),n.bottom<=b.top+1,getComputedStyle(e.querySelector('.tname')).backgroundColor]})()""")
     check(tp[0] < 2 and tp[1] and tp[2] == "rgb(255, 255, 255)", f"teleport point: dot on the coordinate (off {tp[0]:.1f}px), white name box above it")
@@ -395,7 +395,7 @@ with sync_playwright() as p:
     w1 = pg.evaluate("getComputedStyle(document.querySelector('.areas path')).strokeWidth")
     check(sz1 < sz0 and float(w1.rstrip("px")) < float(w0.rstrip("px")), f"zooming in shrinks markers ({sz0:.1f}->{sz1:.1f}px) and area lines ({w0}->{w1})")
     pg.click("#zfit"); pg.wait_for_timeout(200)
-    check(pg.locator(".bsp").count() == 23 and pg.locator('.bsp[title*="Pumba"]').count() == 5, "23 boss spawn points drawn (Pumba has 5)")
+    check(pg.locator(".bsp").count() == 23 and pg.locator('.bsp[title*="Pumba"]').count() == 5 and pg.locator('.bsp[title^="澎巴"]').count() == 5, "23 boss spawn points drawn (Pumba has 5)")
     check(pg.is_visible("#fpanel") and pg.locator("#fpanel").bounding_box()["width"] <= 200, "filter panel stays open on the left and is narrow")
     pg.fill("#q", "Magic Mycelium"); pg.wait_for_timeout(300)
     check(pg.is_visible("#srchHint") and "Magic Mycelium" in pg.inner_text("#srchHint") and pg.locator(".zone.shide").count() > 0 and pg.locator(".town.shide").count() > 0
@@ -423,8 +423,8 @@ with sync_playwright() as p:
       for(let i=0;i<L.length;i++)for(let j=i+1;j<L.length;j++){const a=L[i][1],b=L[j][1];if(a.left<b.right-1&&a.right>b.left+1&&a.top<b.bottom-1&&a.bottom>b.top+1)bad.push(L[i][0]+'/'+L[j][0])}return bad})()""")
     check(not ov, f"map names do not cover each other; only teleport names may sit over a pin ({ov[:4]})")
     names = pg.eval_on_selector_all(".zone.mobarea .zlabel", "e=>e.map(x=>x.textContent.trim())")
-    check("Putrid Swamp" in names and "Boar Zone" in names and "Treants / Swamp" not in names, "monster areas keep their English names (Putrid Swamp, Boar Zone)")
-    pg.locator("#zlist .zn", has_text="Wolf Valley").first.click(); pg.wait_for_timeout(400)
+    check("腐臭沼澤" in names and "野豬區" in names and "Treants / Swamp" not in names, "monster areas use the official Chinese names (腐臭沼澤 Putrid Swamp, 野豬區 Boar Zone)")
+    pg.locator("#zlist .zn", has_text="狼之谷").first.click(); pg.wait_for_timeout(400)
     check("Vallée des Loups" in pg.inner_text("#pBody .phead .sub"), "confirmed French in-game name shows in the place subtitle (Vallée des Loups)")
     pg.click("#pClose"); pg.wait_for_timeout(200)
     st = pg.evaluate("""(()=>{const d=document.querySelector('.town.dungeon[data-s="fallen"]');const z=document.querySelector('.zone.mobarea .zlabel');

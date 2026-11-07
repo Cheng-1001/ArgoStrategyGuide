@@ -58,7 +58,8 @@ with sync_playwright() as p:
     def find(q):
         pg.goto(f"http://127.0.0.1:{PORT}/index.html#monsters"); pg.wait_for_timeout(300)
         pg.fill("#q", q); pg.wait_for_timeout(250)
-        return pg.eval_on_selector_all("#lMon .card .cname b", "e=>e.map(x=>x.textContent)")
+        # English name: the title, or the subtitle's first part when the title is the official Chinese name (zhnames.js)
+        return pg.eval_on_selector_all("#lMon .card .cname", "e=>e.map(c=>{const b=c.querySelector('b').textContent;return /[\\u4e00-\\u9fff]/.test(b)?c.querySelector('span').textContent.split(' · ')[0]:b})")
 
     def detail(q):
         find(q); pg.locator("#lMon .card").first.click(); pg.wait_for_timeout(300)

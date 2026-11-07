@@ -98,7 +98,7 @@ with sync_playwright() as p:
     zl = pg.inner_text("#zlist")
     check("Test Smith" in zl and "Test Gate" in zl, "place reports: new NPC and teleport point are on the map list")
     check(pg.locator('.bsp[title*="Pumba"]').count() == 6 and pg.locator('.bsp.ug[title*="Pumba"]').count() == 1, "boss place report adds an underground spawn")
-    pg.locator("#zlist .zn", has_text="Putrid Swamp").first.click(); pg.wait_for_timeout(300)
+    pg.locator("#zlist .zn", has_text="腐臭沼澤").first.click(); pg.wait_for_timeout(300)
     check("玩家回報的座標" in pg.inner_text("#pBody") and "T108" in pg.inner_text("#pBody"), "a report for a known place is attached, the point is not moved")
     pg.click('#pBody a[data-repgo="T108"]'); pg.wait_for_timeout(1200)
     li = pg.locator('#doneL li.replist[data-rid="T108"]')
