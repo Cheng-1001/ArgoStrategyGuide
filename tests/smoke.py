@@ -106,6 +106,15 @@ with sync_playwright() as p:
     seal = pg.locator(".qcard", has_text="The Truth About the Seal").first
     check(seal.locator(".mqn").inner_text() == "24" and pg.locator(".qcard", has_text="The Southern Marshes").locator(".mqn").inner_text() == "14",
           "main quests show the in-game numbers (Truth About the Seal = 24, as in report R0001; Southern Marshes = 14)")
+    c24 = seal.locator(".mqt b").inner_text()
+    pg.click("[data-go='q|mq1_33']"); pg.wait_for_timeout(400)
+    t34 = pg.inner_text("#pBody")
+    check(c24 == "封印的真相" and pg.inner_text("#pBody h2") == "水晶之下" and "Beneath the Crystal" in pg.inner_text("#pBody .sub")
+          and "門開了。梅菲斯特在托爾巴納的水晶下等候" in t34 and "遊戲：前往水晶下方（Go down beneath the crystal）" in t34 and "💡 水晶下面是浮空島" in t34,
+          "main quests use the official Chinese title and quest-log text (English as subtitle; objectives with the English line; our tip below)")
+    pg.fill("#q", "梅菲斯特"); pg.wait_for_timeout(300)
+    check(pg.locator("#lQ .qcard", has_text="梅菲斯特").count() >= 3, "searching a Chinese quest NPC name finds the main quests")
+    pg.fill("#q", ""); pg.wait_for_timeout(200)
     pg.click("[data-go='q|mq1_15']"); pg.wait_for_timeout(400)
     check(pg.locator("#pBody .qmap svg polyline").count() == 1 and pg.locator("#pBody .mqs li").count() >= 5,
           "clicking a main quest opens the panel with its steps and a route mini map")
@@ -120,6 +129,9 @@ with sync_playwright() as p:
     check(not pg.is_visible("#rwin"), "the route window closes")
     pg.goto(base + "#quests"); pg.wait_for_timeout(300)
     pg.click('#fQKind .chip[data-v="side"]'); pg.wait_for_timeout(300)
+    bone = pg.locator(".qside", has_text="白骨與塵土").first
+    check(bone.count() == 1 and "Bone and Dust" in bone.inner_text() and "檔案管理員歐林" in bone.inner_text(),
+          "side quests from the quest log show the official Chinese title and NPC (English title kept)")
     pg.locator(".qside", has_text="Daiki").first.click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")
     check("收集 Boar Hide ×5" in t and "掉落" in t and pg.locator("#pBody .qmap svg").count() == 1,

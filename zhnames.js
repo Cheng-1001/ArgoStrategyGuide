@@ -13,9 +13,11 @@ sets:{"Iron Set":"鐵套裝","Copper Set":"銅套裝","Weakling Wolf Set":"孱�
 // #023's full name from a drop line. mobsByName: from drop lines (ice monsters) and the Labyrinth of the Fallen loot list (item — monster — % matches data.js)
 mobs:{"001": "腐化野豬", "002": "澎巴", "003": "白色恐狼", "004": "黑色恐狼", "006": "阿爾巴爾", "007": "豬籠草", "008": "吞噬植物", "009": "樹人戰士", "010": "菁英樹人", "011": "迷你樹人", "012": "森林法師", "013": "巨型守護者", "014": "森林蜘蛛", "015": "狩獵蜘蛛", "016": "劇毒蜘蛛", "017": "絞殺蜘蛛", "018": "山鹿", "019": "史萊姆戰士", "020": "小史萊姆", "021": "史萊姆治療師", "022": "史萊姆魔法師", "023": "史萊姆之王戈爾貝爾", "024": "骷髏劍士", "025": "骷髏戰士", "026": "骷髏戟兵", "027": "骷髏弓箭手", "028": "骷髏坦克", "029": "骷髏巫師", "031": "墮落士兵", "032": "墮落戰士", "039": "強盜弓箭手", "040": "強盜刺客", "041": "健壯強盜", "042": "森林樹人", "043": "森林樹人", "044": "森林吞噬植物", "046": "森林蠻徒", "048": "墮落撕裂者", "049": "普莉希莉亞", "050": "尤拉", "051": "吉拉", "052": "卡蜜莉亞", "060": "鯊形魚", "062": "寧布蕾雅"},
 mobsByName:{"Ice Golem": "冰魔像", "Ice Spirit": "冰之精靈", "Ice Bear": "冰熊", "Fallen Guardian": "墮落守護者", "Fallen Herald": "墮落傳令官", "Fallen Reaper": "墮落死神", "Ornstein, Fallen Defender": "翁斯坦，墮落的守護者", "Smough, Fallen Devastator": "斯摩，墮落的破壞者"},
+// quests (2026-11-07 18:13～18:16 quest-log screenshots): site English title -> {zh, reg = journal region label, d = journal text, obj = objective lines by step index};
+// quest NPC names (Master Swordsman, Mephisto, Guard Tomas…) in npcs come from the same journal text.
 // places (site English name -> Chinese codex region / teleport map name); npcs (site NPC name -> nameplate, or the obtain line paired with the English one for the same item)
 places:{"Starting Town": "起始之鎮", "Hanaka": "哈娜卡", "Vallhat": "瓦爾哈特", "Tolbana": "托爾巴納", "Castelbrume": "霧堡", "Candelia": "坎德莉亞", "Virelune": "維勒倫", "Mizunari": "水成", "Wolf Valley": "狼之谷", "Boar Zone": "野豬區", "Arakh'Nol": "阿拉克諾", "Putrid Swamp": "腐臭沼澤", "Lac des Nénuphars": "睡蓮之湖", "Valley of Petals": "花瓣谷", "Giant's Garden": "巨人花園", "Kobold Tower": "狗頭人之塔", "Cursed Ruins": "骷髏詛咒遺跡", "Geldorack Mine": "蓋爾多拉克礦坑", "OG Quarter": "OG 區", "Merchant Guild": "商人公會", "Labyrinth of the Fallen": "墮落者迷宮區"},
-npcs:{"Alchemist": "煉金術士", "Crystallographer": "結晶學家", "The Assistant": "助手", "Starting Merchant": "新手商人", "Starting Town - Tools": "起始之鎮-工具", "Local Miner": "當地礦工", "Copper Accessories": "銅製飾品", "Iron Accessories": "鐵製飾品", "Shark Accessories": "鯊魚飾品", "Elite Treant Accessories": "菁英樹人飾品", "Ice Spirit Accessories": "冰之精靈飾品", "Spider Accessories": "蜘蛛飾品", "Ring of the Leviathan": "隱藏利維坦戒指", "Occult Merchant - Bracelet": "隱藏神祕手環", "Occult Merchant - Artifacts": "隱藏神祕神器", "Hanaka - Loot Buyer": "商店-哈娜卡", "Vallhat - Loot Buyer": "商店-瓦爾哈特", "Mizunari Loot Buyer": "商店-水成", "Cursed Ruins - Loot Buyer": "商店-受詛廢墟", "Cursed Ruins - Loot Buyer (2)": "商店-受詛廢墟（2）", "Accessory Recycling": "飾品回收", "Weapon Recycling": "武器回收", "Auction House": "拍賣場", "Vault": "保險箱", "PvP Purification Alchemist": "淨化煉金術士", "Geldorak Dungeon Guard - Starting Town": "蓋爾多拉克地下城守衛-起始之鎮"},
+npcs:{"Alchemist": "煉金術士", "Crystallographer": "結晶學家", "The Assistant": "助手", "Starting Merchant": "新手商人", "Starting Town - Tools": "起始之鎮-工具", "Local Miner": "當地礦工", "Copper Accessories": "銅製飾品", "Iron Accessories": "鐵製飾品", "Shark Accessories": "鯊魚飾品", "Elite Treant Accessories": "菁英樹人飾品", "Ice Spirit Accessories": "冰之精靈飾品", "Spider Accessories": "蜘蛛飾品", "Ring of the Leviathan": "隱藏利維坦戒指", "Occult Merchant - Bracelet": "隱藏神祕手環", "Occult Merchant - Artifacts": "隱藏神祕神器", "Hanaka - Loot Buyer": "商店-哈娜卡", "Vallhat - Loot Buyer": "商店-瓦爾哈特", "Mizunari Loot Buyer": "商店-水成", "Cursed Ruins - Loot Buyer": "商店-受詛廢墟", "Cursed Ruins - Loot Buyer (2)": "商店-受詛廢墟（2）", "Accessory Recycling": "飾品回收", "Weapon Recycling": "武器回收", "Auction House": "拍賣場", "Vault": "保險箱", "PvP Purification Alchemist": "淨化煉金術士", "Geldorak Dungeon Guard - Starting Town": "蓋爾多拉克地下城守衛-起始之鎮", "The Master Swordsman": "劍術大師", "Mayor of Hanaka": "哈娜卡鎮長", "The Trader": "貿易商", "Ceyla": "賽菈", "Zebulgarath": "澤布爾加拉斯", "Baldim": "巴爾迪姆", "Lisa": "麗莎", "Elma": "艾爾瑪", "Harrold": "哈羅德", "Bob": "鮑伯", "Velka": "薇爾卡", "Archivist Specter": "幽靈檔案官", "Catherine": "凱瑟琳", "Mephisto": "梅菲斯特", "Emy": "艾蜜", "King Harald": "哈拉爾德國王", "Guard Tomas": "衛兵托馬斯", "Scout Raphael": "斥候拉斐爾", "Archivist Orin": "檔案管理員歐林"},
 items:[
  {"zh": "75珂爾錢袋", "ids": ["p|1691"], "en": "75 Cols Pouch", "fr": "Bourse de 75Cols"},
  {"zh": "不純黑瑪瑙幣", "ids": ["e|1487"], "fr": "Pièce d'Onyx Impur"},
@@ -223,4 +225,190 @@ items:[
  {"zh": "黑暗魔杖", "ids": ["e|2574"], "en": "Dark Magic Staff", "fr": "Bâton Magique Obscur"},
  {"zh": "黑靴", "ids": ["e|1527"], "fr": "Bottes Noires"},
  {"zh": "龜裂十字鎬", "ids": ["p|2691"], "en": "Cracked Pickaxe", "fr": "Pioche Fêlée"}
-]};
+],
+"quests": {
+ "A New World": {
+ "zh": "新世界",
+ "d": "一個聲音在虛空中迎接你，你就站在巨大的艾恩葛朗特腳下。"
+ },
+ "A Decisive Choice": {
+ "zh": "決定性的抉擇",
+ "d": "劍術大師讓你先試遍五種職業，再選擇自己的道路。"
+ },
+ "A New Horizon": {
+ "zh": "新的地平線",
+ "d": "你一抵達起源之城，劍術大師便多打量了你一秒。你身上什麼也沒穿，手裡什麼也沒拿：他打算解決這件事。"
+ },
+ "Show Me": {
+ "zh": "讓我看看",
+ "d": "劍術大師派你到平原的野豬身上試武器，由他的一道回響在旁看著。有個鐵匠學徒正獨自在那裡苦撐。"
+ },
+ "The Essentials": {
+ "zh": "必需品",
+ "d": "並非所有傷口都能靠劍刃治癒。鎮上的煉金術士有東西要給你看。"
+ },
+ "What No One Will Touch": {
+ "zh": "無人碰觸之物",
+ "d": "煉金術士替你調製藥水，卻不肯碰你從田裡撿來的東西。劍術大師也一樣沉默。"
+ },
+ "The Assault": {
+ "zh": "突襲",
+ "d": "哈娜卡遭到攻擊。樹人從森林走出，朝廣場進軍；一名村民被發現時全身布滿腐化。",
+ "reg": "哈娜卡"
+ },
+ "The Forest of Small Webs": {
+ "zh": "小蛛網之森",
+ "d": "若要繼續主線故事，請去找哈娜卡鎮長。他有事要請託吸收了腐化的人。",
+ "reg": "哈娜卡"
+ },
+ "Bury Them": {
+ "zh": "埋葬他們",
+ "d": "哈娜卡鎮長請你埋葬他的三個人。不散去的東西，會餵養森林裡蠢動之物。",
+ "reg": "哈娜卡"
+ },
+ "The Trader": {
+ "zh": "貿易商",
+ "d": "鎮長信守承諾，把他的貿易商介紹給你。這人不講客套：他要細網之森的毒液，而且付錢。",
+ "reg": "哈娜卡"
+ },
+ "The Slime Marsh": {
+ "zh": "史萊姆沼澤",
+ "d": "貿易商還有話要告訴你。去找他以繼續主線。",
+ "reg": "哈娜卡"
+ },
+ "The Foot of the Island": {
+ "zh": "島嶼之麓",
+ "d": "在島嶼腳下，通往瓦爾哈特的傳送裝置已經失效。它的看守者賽菈比任何人都清楚。去找她，繼續主線劇情。",
+ "reg": "瓦爾哈特"
+ },
+ "By the Branches of the Ancients": {
+ "zh": "穿越先人的枝椏",
+ "d": "巨人花園裡住著一個人，早在傳送裝置出現前就在那裡了，他會和鳥說話。與澤布爾加拉斯交談，繼續主線劇情。",
+ "reg": "瓦爾哈特"
+ },
+ "The Broken Knot": {
+ "zh": "斷裂之結",
+ "d": "澤布爾加拉斯答應要修好島腳下的傳送器。他說他會比你先到。",
+ "reg": "瓦爾哈特"
+ },
+ "The Suspended City": {
+ "zh": "懸空之城",
+ "d": "傳送器恢復運作。巴爾迪姆回到上面，他的城市瓦爾哈特去了。到上面找他以繼續主線。",
+ "reg": "瓦爾哈特"
+ },
+ "The Southern Marshes": {
+ "zh": "南方沼澤",
+ "d": "麗莎看到以撒往南走了。史萊姆之王戈爾貝爾就在沼澤裡遊蕩。",
+ "reg": "瓦爾哈特"
+ },
+ "What Emanates From You": {
+ "zh": "自你散發之物",
+ "d": "巴爾迪姆尋找兒子時，曾在哈娜卡北方的沼澤感覺到某種存在。他說不出那是什麼。",
+ "reg": "哈娜卡"
+ },
+ "He Came": {
+ "zh": "他來了",
+ "d": "劍術大師在沼澤裡找到了你。他派你前往水成，那座供養首都的村莊。",
+ "reg": "水成"
+ },
+ "At Elma's": {
+ "zh": "在艾爾瑪家",
+ "d": "劍術大師要你到水成找艾爾瑪。她收留過路的人，村裡大小事都知道。",
+ "reg": "水成"
+ },
+ "What Harrold Saw": {
+ "zh": "哈羅德所見之事",
+ "d": "哈羅德在艾爾瑪家等你。他說你們得談談。",
+ "reg": "水成"
+ },
+ "The Chamber Beneath the Fields": {
+ "zh": "田野下的密室",
+ "d": "哈羅德提過東邊的路上有口井，夜裡能看見光。",
+ "reg": "水成"
+ },
+ "The Geldorak Mine": {
+ "zh": "蓋爾多拉克礦坑",
+ "d": "在蓋爾多拉克礦坑底下，盜匪鑿穿了一面不該鑿穿的牆。鮑伯看守著那扇門。",
+ "reg": "水成"
+ },
+ "Velka, and the Ruins of the Dream": {
+ "zh": "薇爾卡與夢之廢墟",
+ "d": "那道聲音向你提起霧堡的一位學者：薇爾卡。他開始夢見自己無法理解的事物。別給他看封印碎片，而是把水成田裡被腐化的小麥--奇異麥穗--交到他手上。",
+ "reg": "水成"
+ },
+ "The Archivist Specter": {
+ "zh": "幽靈檔案官",
+ "d": "在南方廢墟底下，一個被囚禁的靈魂守著一扇封印之門。它不會免費開門。",
+ "reg": "水成"
+ },
+ "Behind the Great Door": {
+ "zh": "大門之後",
+ "d": "幽靈已收下報酬。遺跡底下封住的門不再封閉。",
+ "reg": "水成"
+ },
+ "The Truth About the Seal": {
+ "zh": "封印的真相",
+ "d": "凱瑟琳守著墮落者迷宮區的入口。回響提到的那兩個人留在了那裡。",
+ "reg": "水成"
+ },
+ "The Calamity": {
+ "zh": "災厄",
+ "d": "劍術大師在等你。他想知道你在迷宮區看到了什麼。",
+ "reg": "水成"
+ },
+ "Mephisto": {
+ "zh": "梅菲斯特",
+ "d": "梅菲斯特是最後一個知道如何開啟那道入口的人，就在最頂端。他誰都拒絕。",
+ "reg": "水成"
+ },
+ "Find a Way to Remake the Scroll": {
+ "zh": "尋找重製卷軸的方法",
+ "d": "托爾巴納的鐵匠艾蜜，是唯一能重製開門卷軸的人。不過她要的東西，還得有人替她帶回來。",
+ "reg": "水成"
+ },
+ "Request an audience with King Harald": {
+ "zh": "請求晉見哈拉爾德國王",
+ "d": "托爾巴納的水晶屬於哈拉爾德家族。沒有他們的同意，誰也別想靠近。",
+ "reg": "水成"
+ },
+ "The Trial of the Haralds": {
+ "zh": "哈拉爾德的試煉",
+ "d": "三位死去的國王守護著水晶。你必須下到他們的陵墓，親自拜見他們。",
+ "reg": "水成"
+ },
+ "The Crystal of Tolbana": {
+ "zh": "托爾巴納水晶",
+ "d": "卷軸和哈拉爾德家族的同意：梅菲斯特從頭到尾只要這兩樣。",
+ "reg": "水成"
+ },
+ "Beneath the Crystal": {
+ "zh": "水晶之下",
+ "d": "門開了。梅菲斯特在托爾巴納的水晶下等候，接著到狗頭人之塔前。",
+ "reg": "水成",
+ "obj": {
+ "0": "前往水晶下方",
+ "1": "到狗頭人之塔前與梅菲斯特會合"
+ }
+ },
+ "Too Many Boars": {
+ "zh": "野豬太多了",
+ "d": "城外的平原上滿是腐化野豬。衛兵托馬斯要我們殺掉十隻，把道路清出來。",
+ "reg": "起始之鎮"
+ },
+ "Clearing the Marsh": {
+ "zh": "清理沼澤",
+ "d": "史萊姆入侵了奈莎採集植物的沼澤。她請人消滅二十隻。",
+ "reg": "哈娜卡"
+ },
+ "Webs to Burn": {
+ "zh": "燒毀蛛網",
+ "d": "狩獵蜘蛛封住了森林小徑。斥候拉斐爾要人先解決十五隻，才能重新開路。",
+ "reg": "哈娜卡"
+ },
+ "Bone and Dust": {
+ "zh": "白骨與塵土",
+ "d": "詛咒遺跡被昔日的守衛占據。檔案管理員歐林要先解決二十名骷髏戰士，才肯派抄寫員過去。",
+ "reg": "水成"
+ }
+ }
+};

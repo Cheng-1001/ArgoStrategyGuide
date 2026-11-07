@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="ca5df55c17">
+<meta name="sao-build" content="a3f5ded77d">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -777,7 +777,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup" id="gQTown"><span class="flabel">村鎮</span><div class="chips" id="fQTown"></div></div>
       <div class="fgroup" id="gQSort"><span class="flabel">排序</span><select class="sel" id="fQSort" aria-label="排序">
         <option value="town">依村鎮</option><option value="xp">經驗值（高→低）</option><option value="col">珂爾（高→低）</option></select></div>
-      <div class="note" id="qNoteMain" hidden>主線依劇情順序排列。圓圈數字是遊戲任務追蹤上的編號（虛線圈是依順序推算的，灰點是編號還沒確認）。說明取自 wiki 主線任務表；步驟順序和座標取自參考互動地圖（DelayedCode），步驟文字是本站改寫。標「約」的是大約位置。按「在地圖上看路線」會在地圖上畫出步驟順序。破碎的地下世界（Fractured Underworld）裡的主線不列在這裡。</div>
+      <div class="note" id="qNoteMain" hidden>主線依劇情順序排列。圓圈數字是遊戲任務追蹤上的編號（虛線圈是依順序推算的，灰點是編號還沒確認）。任務名稱和說明取自遊戲中文版的任務日誌；步驟順序和座標取自參考互動地圖（DelayedCode），步驟文字是本站改寫。標「約」的是大約位置。按「在地圖上看路線」會在地圖上畫出步驟順序。破碎的地下世界（Fractured Underworld）裡的主線不列在這裡。</div>
       <div class="note" id="qNoteSide">任務需求與座標來自 wiki 支線任務表。標有<span class="inf"> 推斷 </span>的物品是依任務原文的簡寫推斷，原文可在詳細資料裡看到。</div>
     </div>
     <div class="results"><div class="rhead"><h2 id="hQ">支線任務</h2><span class="count" id="cQ"></span></div><div id="lQ" style="display:flex;flex-direction:column;gap:10px"></div></div>
@@ -865,12 +865,12 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="hints.js?v=fcf000d6"></script>
 <script src="codex.js?v=48141603"></script>
 <script src="mobphotos.js?v=4177d297"></script>
-<script src="mainq.js?v=e192a52d"></script>
+<script src="mainq.js?v=36767e2d"></script>
 <script src="equip.js?v=4e53bcf2"></script>
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=349916ca"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=abac87fa"></script>
+<script src="changelog.js?v=7663d546"></script>
 <script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -879,7 +879,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="events.js?v=9477972d"></script>
 <script src="gamestats.js?v=553994fb"></script>
 <script src="sets.js?v=fbf69e31"></script>
-<script src="zhnames.js?v=d74d317a"></script>
+<script src="zhnames.js?v=21a0e068"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=2dbd05ca"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1058,6 +1058,12 @@ const ZHO=window.SAO_ZHNAMES||{},ZMOB=ZHO.mobs||{},ZMOBN=ZHO.mobsByName||{},ZPL=
 const mN=m=>(m.floor===1&&m.num&&ZMOB[m.num])||ZMOBN[m.name]||m.name;
 const pN=o=>(o&&ZPL[o.n])||(o&&o.n)||"";
 const npcN=s=>ZNPC[s]||s;
+// official Chinese quest titles + journal text (zhnames.js quests, keyed by the site's English title; user 2026-11-07)
+const ZQ=ZHO.quests||{};
+const qZ=qq=>{const k=qq.t||qq.title||"";if(ZQ[k])return ZQ[k];const m=k.match(/^(.*?)（續）$/);return m&&ZQ[m[1]]?{zh:ZQ[m[1]].zh+"（續）",cont:1}:null};
+const qT=qq=>{const z=qZ(qq);return z?z.zh:(qq.t||qq.title||"")};
+const qNpc=s=>(s||"").split("、").map(npcN).join("、");
+const qNpcFull=s=>{const z=qNpc(s);return z!==s?`${z}（${s}）`:s};
 const nameSub=x=>{const t=pN(x);return[...new Set([t!==x.n?x.n:"",typeof x.csrc==="string"?x.csrc:"",x.tp||"",x.fr||""])].filter(v=>v&&v!==t).concat(x.zh&&t===x.n?[x.zh]:[]).join("・")};
 const spotsOf=f=>{const Fx=FLOORS[f];return Fx.spots.concat(Object.entries(userPos[f]).filter(([z])=>Fx.zones[z]).map(([z,p])=>({id:"u"+f+"-"+z,floor:f,zone:z,kind:"mob",n:Fx.zones[z].n,zh:Fx.zones[z].zh,x:p.x,z:p.z,src:"user",items:[],
   mons:Fx.M.filter(m=>m.zone===z&&!HAS_POS(m.id)).map(m=>m.name)})).filter(sp=>sp.mons.length||sp.items.length))};
@@ -1112,7 +1118,7 @@ const q=$("q");const norm=s=>String(s||"").toLowerCase().normalize("NFD").replac
 const Sq=()=>norm(q.value.trim());
 function itemHit(id,s,shallow){if(!s)return true;const it=ITEMS[id];if(norm(id).includes(s)||norm(zhI(id)).includes(s)||norm(it.fr).includes(s)||(it.aka||[]).some(a=>norm(a).includes(s)))return true;if(shallow)return false;return!!(CAT_ZH[it.cat]&&CAT_ZH[it.cat].includes(q.value.trim()))}
 const monHit=(m,s)=>{if(!s)return true;const z=FLOORS[m.floor].zones[m.zone];return norm(m.name+" "+mN(m)).includes(s)||(m.aka||[]).some(a=>norm(a).includes(s))||m.num.includes(s)||norm(z.n+" "+pN(z)+" "+z.zh+" "+(z.old||"")).includes(s)||m.drops.some(d=>itemHit(d[0],s,true))};
-const questHit=(qq,s)=>{if(!s)return true;const t=townById[qq.town];return norm([qq.title,qq.bonus,qq.tnote,...sideSteps(qq).map(x=>x[0]),...(qq.reps||[]).map(r=>r.step)].join(" ")).includes(s)||norm(qq.npc).includes(s)||norm(t.n+" "+(t.zh||"")+" "+(t.en||"")).includes(s)||norm(qq.raw).includes(s)||norm(qq.task).includes(s)||qq.need.some(n=>itemHit(n[0],s,true))||(qq.kill&&qq.kill[0].some(k=>norm(k).includes(s)))};
+const questHit=(qq,s)=>{if(!s)return true;const t=townById[qq.town];return norm([qq.title,qq.title?qT(qq):"",(qZ(qq)||{}).d,qNpc(qq.npc),qq.bonus,qq.tnote,...sideSteps(qq).map(x=>x[0]),...(qq.reps||[]).map(r=>r.step)].join(" ")).includes(s)||norm(qq.npc).includes(s)||norm(t.n+" "+(t.zh||"")+" "+(t.en||"")).includes(s)||norm(qq.raw).includes(s)||norm(qq.task).includes(s)||qq.need.some(n=>itemHit(n[0],s,true))||(qq.kill&&qq.kill[0].some(k=>norm(k).includes(s)))};
 
 // ================= detail drawer =================
 const panel=$("panel"),pBody=$("pBody");let stack=[];
@@ -1293,7 +1299,7 @@ function townDetail(id){const t=townById[id];const qs=ALLQ.filter(x=>x.town===id
   <button class="linkbtn" data-town="${id}">在地圖上查看</button>
   <h3 class="sec">支線任務 <span class="c">${qs.length}</span></h3>
   <div style="display:flex;flex-direction:column;gap:10px">${qs.map(qq=>`<div style="border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px">
-    <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><b style="font-family:var(--f-display);font-size:15px">${esc(qq.npc)}</b><span class="mono muted" style="font-size:11.5px">X ${qq.x} · Z ${qq.z}</span></div>
+    <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><b style="font-family:var(--f-display);font-size:15px">${qq.title?esc(qT(qq))+"・":""}${esc(qNpc(qq.npc))}</b><span class="mono muted" style="font-size:11.5px">X ${qq.x} · Z ${qq.z}</span></div>
     <div class="reqs">${reqChips(qq)}</div>
     <div class="muted" style="font-size:12px">原文：${esc(qq.raw)}</div>
     <div style="font-size:12.5px">${rewardText(qq)}</div></div>`).join("")}</div>`}
@@ -1448,21 +1454,21 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").c
 let qTown="all",qKind="main";const MQ=f=>(window.SAO_MAINQ||{})[f]||[];
 chipsInto($("fQKind"),[["main","主線"],["side","支線"]],()=>qKind,v=>qKind=v,renderQuests);
 const mqNo=qq=>qq.n?`#${qq.n}${qq.nEst?"?":""}`:"";const mqLabel=qq=>qq.n?`主線 #${qq.n}${qq.nEst?"（推算）":""}`:"主線";
-const mqHit=(qq,s)=>!s||norm([qq.t,qq.aka,qq.npc,qq.d,qq.rw,qq.bonus,...qq.s.map(x=>x[0]),...Object.values(qq.en||{}),...(qq.reps||[]).map(r=>r.step)].join(" ")).includes(s);
-function questById(id){if(id.startsWith("mq")){const [f,i]=id.slice(2).split("_").map(Number);const qq=MQ(f)[i];return qq?{main:1,f,i,q:qq,title:qq.t,steps:qq.s}:null}
-  const qq=ALLQ.find(x=>x.id===id);return qq?{main:0,f:qq.floor,q:qq,title:qq.title||`${qq.npc} 的委託`,steps:sideSteps(qq)}:null}
+const mqHit=(qq,s)=>!s||norm([qq.t,qT(qq),(qZ(qq)||{}).d,qq.tip,...Object.values((qZ(qq)||{}).obj||{}),qq.aka,qq.npc,qNpc(qq.npc),qq.d,qq.rw,qq.bonus,...qq.s.map(x=>x[0]),...Object.values(qq.en||{}),...(qq.reps||[]).map(r=>r.step)].join(" ")).includes(s);
+function questById(id){if(id.startsWith("mq")){const [f,i]=id.slice(2).split("_").map(Number);const qq=MQ(f)[i];return qq?{main:1,f,i,q:qq,title:qT(qq),en:qq.t,steps:qq.s}:null}
+  const qq=ALLQ.find(x=>x.id===id);return qq?{main:0,f:qq.floor,q:qq,title:qq.title?qT(qq):`${qNpc(qq.npc)} 的委託`,en:qq.title&&qT(qq)!==qq.title?qq.title:"",steps:sideSteps(qq)}:null}
 function bestSource(id,floor){const it=ITEMS[id];
   const src=(SOURCES[id]||[]).filter(x=>x.m.floor===floor).map(o=>({...o,pos:monPos(o.m)})).sort((a,b)=>(b.pos.x!=null)-(a.pos.x!=null)||(a.m.type!=="Monster")-(b.m.type!=="Monster")||(b.p||0)-(a.p||0));
   if(src.length){const o=src[0];return{t:`${mN(o.m)} 掉落（${pct(o.p)}）${o.pos.spot?"・"+o.pos.spot.zh:""}`,x:o.pos.x,z:o.pos.z,a:o.pos.s==="est"?1:0}}
   const g=(GATHER[id]||[]).find(sp=>sp.floor===floor);if(g)return{t:`在 ${g.zh} 採集`,x:g.x,z:g.z};
   return{t:it&&it.src?it.src:"取得方式未知",x:null,z:null}}
-function sideSteps(qq){const t=townById[qq.town]||{n:""};const st=[[`到 ${t.n} 找 ${qq.npc}`,qq.x,qq.z]];
+function sideSteps(qq){const t=townById[qq.town]||{n:""};const st=[[`到 ${pN(t)} 找 ${qNpc(qq.npc)}`,qq.x,qq.z]];
   qq.need.forEach(([id,n,inf])=>{const b=bestSource(id,qq.floor);st.push([`收集 ${id} ×${n}${inf?"（名稱依原文推斷）":""}：${b.t}`,b.x,b.z,b.a])});
   if(qq.kill){const many=qq.kill[0].length>1&&!qq.kill[2];
     qq.kill[0].forEach(name=>{const m=FLOORS[qq.floor].monByName[name];const p=m?monPos(m):{};st.push([`擊殺 ${name}${many?"":" ×"+qq.kill[1]}${p.spot?"："+p.spot.zh:""}`,p.x??null,p.z??null,p.s==="est"?1:0])});
     if(many)st.push([`以上合計擊殺 ${qq.kill[1]} 隻`,null,null])}
   if(qq.task)st.push([qq.task,null,null]);
-  st.push([`回去交給 ${qq.npc}，領取獎勵`,qq.x,qq.z]);return st}
+  st.push([`回去交給 ${qNpc(qq.npc)}，領取獎勵`,qq.x,qq.z]);return st}
 // sharper route minimap: the explored-map tiles (1 block = 1 px) for the minimap's area; on the wiki base only the explored chunks are drawn over it
 let MT_ID=0;
 function miniTiles(m,cx,cz,span){if(!m.tiles||!m.tileFull||span>500)return"";
@@ -1766,29 +1772,29 @@ function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不
   ${n.n==="Nodachi Blacksmith"?`<h3 class="sec">Nodachi Altar（升階）</h3><div class="note">打開製作選單是「Nodachi Altar」：把兩把同種的 Nodachi 武器合成升一階。共 5 種武器（Nodachi、Nodachi Dagger、Nodachi Bow、Nodachi Magic Staff、Nodachi Staff），每種 5 階，製作時間 10 秒、20 秒、30 秒、45 秒、1 分鐘，全部神話級（MYTHIC）、免費。第 1 階的材料是同一把武器 ×2，之後每階是兩把各 1；每一階要哪一階的武器，畫面上沒寫，還在確認（站長 2026-11-03 的截圖）。</div>`:""}
   <div class="note srcn">${n.src==="rep"?`位置和類別來自核准的玩家回報（${repLink(n.rep)}）。`:n.src==="site"?"位置取自站長的遊戲影片（2026-10-30），座標是站在 NPC 旁邊時的位置。":n.src==="site2"?"位置取自站長的遊戲截圖（2026-11-03 起陸續補上），座標是站在 NPC 旁邊時的玩家座標。":n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
-  const facts=Q.main?[["NPC",qq.npc],["等級",qq.lv]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")+`<dt>獎勵</dt><dd class="reward" style="text-align:left">${rewardText(qq,true)}</dd>`
-    :`<dt>NPC</dt><dd>${esc(qq.npc)}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?t.n:"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq,true)}</dd>`;
-  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">📜</span><div class="ttl"><div class="num">${flBadge(f)} ${Q.main?mqLabel(qq):"支線"}</div><h2>${esc(Q.title)}</h2>${!Q.main&&qq.src==="ref"?`<div class="sub">目前版本的支線（參考互動地圖）</div>`:""}</div></div>
-  <dl class="facts">${facts}</dl>${Q.main&&qq.d?`<p class="lore" style="font-style:normal">${esc(qq.d)}</p>`:""}
-  <h3 class="sec">步驟</h3><ol class="mqs">${Q.steps.map((x,k)=>`<li>${esc(x[0])}${x[1]!=null&&FLOORS[f].map?`<button class="linkbtn" data-rep="${f}|${x[1]}|${x[2]}">${x[3]?"約 ":""}X ${x[1]} · Z ${x[2]}</button>`:""}${Q.main&&qq.en&&qq.en[k]?`<span class="sten">遊戲原文：${esc(qq.en[k])}</span>`:""}${Q.main&&qq.img&&qq.img[k]?`<span class="stimg">${qq.img[k].map(([u,c])=>`<a href="${esc(u)}" target="_blank" rel="noopener" title="${esc(c)}（點了看大圖）"><img src="${esc(u)}" alt="${esc(c)}" loading="lazy"></a>`).join("")}</span>`:""}</li>`).join("")}</ol>
+  const Z=qZ(qq)||{},facts=Q.main?[["NPC",qq.npc&&qNpcFull(qq.npc)],["等級",qq.lv]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")+`<dt>獎勵</dt><dd class="reward" style="text-align:left">${rewardText(qq,true)}</dd>`
+    :`<dt>NPC</dt><dd>${esc(qNpcFull(qq.npc))}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?pN(t):"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq,true)}</dd>`;
+  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">📜</span><div class="ttl"><div class="num">${flBadge(f)} ${Q.main?mqLabel(qq):"支線"}</div><h2>${esc(Q.title)}</h2>${(s=>s?`<div class="sub">${esc(s)}</div>`:"")([Q.main&&Q.title!==qq.t?qq.t:Q.en||"",Z.reg?"任務日誌："+Z.reg:"",!Q.main&&qq.src==="ref"?"目前版本的支線（參考互動地圖）":""].filter(Boolean).join("・"))}</div></div>
+  <dl class="facts">${facts}</dl>${Z.d||(Q.main&&qq.d)?`<p class="lore" style="font-style:normal">${esc(Z.d||qq.d)}</p>`:""}${Q.main&&qq.tip?`<div class="note">💡 ${esc(qq.tip)}</div>`:""}
+  <h3 class="sec">步驟</h3><ol class="mqs">${Q.steps.map((x,k)=>`<li>${esc(x[0])}${x[1]!=null&&FLOORS[f].map?`<button class="linkbtn" data-rep="${f}|${x[1]}|${x[2]}">${x[3]?"約 ":""}X ${x[1]} · Z ${x[2]}</button>`:""}${Q.main&&Z.obj&&Z.obj[k]?`<span class="sten">遊戲：${esc(Z.obj[k])}${qq.en&&qq.en[k]?"（"+esc(qq.en[k])+"）":""}</span>`:Q.main&&qq.en&&qq.en[k]?`<span class="sten">遊戲原文：${esc(qq.en[k])}</span>`:""}${Q.main&&qq.img&&qq.img[k]?`<span class="stimg">${qq.img[k].map(([u,c])=>`<a href="${esc(u)}" target="_blank" rel="noopener" title="${esc(c)}（點了看大圖）"><img src="${esc(u)}" alt="${esc(c)}" loading="lazy"></a>`).join("")}</span>`:""}</li>`).join("")}</ol>
 
   ${!Q.main&&(qq.need.length||qq.kill)?`<h3 class="sec">需要的物品和目標</h3><div class="reqs">${reqChips(qq)}</div>`:""}
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
-  <div class="note srcn">${Q.main?"說明取自 wiki 主線表；步驟順序和座標取自參考互動地圖，文字是本站改寫。"+(qq.img?"步驟圖片是站長的遊戲截圖。":""):qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
+  <div class="note srcn">${Z.zh&&!Z.cont?"任務名稱和說明取自遊戲中文版的任務日誌（站長 2026-11-07 截圖）。":""}${Q.main?(Z.d?"":"說明取自 wiki 主線表，")+"步驟順序和座標取自參考互動地圖，文字是本站改寫。"+(qq.img?"步驟圖片是站長的遊戲截圖。":""):qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
   ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${repLink(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
   ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}`}
-function mqCard(qq,i){const meta=[qq.npc&&("NPC "+qq.npc),qq.lv&&("等級 "+qq.lv)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
-  return`<button class="card qcard" data-key="q|${id}" data-go="q|${id}"><div class="mqh"><span class="mqn${qq.n?"":" nonum"}${qq.nEst?" est":""}" title="${qq.n?(qq.nEst?"遊戲任務編號（依順序推算）":"遊戲任務編號"):"遊戲編號未確認"}">${qq.n?qq.n:"·"}</span><div class="mqt"><b>${esc(qq.t)}</b>${meta?`<span>${meta}</span>`:""}</div><div class="reward">${rewardText(qq)}</div></div>
-  ${qq.d?`<p class="qd">${esc(qq.d)}</p>`:""}<span class="muted" style="font-size:12px">${qq.s.length} 個步驟${qq.s.some(x=>x[1]!=null)?"・有路線圖":""}</span></button>`}
+function mqCard(qq,i){const Z=qZ(qq)||{},meta=[qT(qq)!==qq.t&&qq.t,qq.npc&&("NPC "+qNpc(qq.npc)),qq.lv&&("等級 "+qq.lv)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
+  return`<button class="card qcard" data-key="q|${id}" data-go="q|${id}"><div class="mqh"><span class="mqn${qq.n?"":" nonum"}${qq.nEst?" est":""}" title="${qq.n?(qq.nEst?"遊戲任務編號（依順序推算）":"遊戲任務編號"):"遊戲編號未確認"}">${qq.n?qq.n:"·"}</span><div class="mqt"><b>${esc(qT(qq))}</b>${meta?`<span>${meta}</span>`:""}</div><div class="reward">${rewardText(qq)}</div></div>
+  ${Z.d||qq.d?`<p class="qd">${esc(Z.d||qq.d)}</p>`:""}<span class="muted" style="font-size:12px">${qq.s.length} 個步驟${qq.s.some(x=>x[1]!=null)?"・有路線圖":""}</span></button>`}
 function renderMainQ(s){const all=MQ(FL);const idx=all.map((qq,i)=>[qq,i]).filter(([qq])=>mqHit(qq,s));
   $("cQ").textContent=all.length?`${idx.length} / ${all.length} 段`:"";
   $("lQ").innerHTML=all.length?(idx.map(([qq,i])=>mqCard(qq,i)).join("")||`<div class="empty-note">沒有符合條件的主線任務。</div>`):`<div class="empty-note">${FLN(FL)}還沒有主線任務資料。</div>`;
   bindGo($("lQ"));markSel()}
 $("fQSort").onchange=renderQuests;
-function fillTownChips(){qTown="all";chipsInto($("fQTown"),[["all","全部"],...F().towns.map(t=>[t.id,t.n])],()=>qTown,v=>qTown=v,renderQuests)}
+function fillTownChips(){qTown="all";chipsInto($("fQTown"),[["all","全部"],...F().towns.map(t=>[t.id,pN(t)])],()=>qTown,v=>qTown=v,renderQuests)}
 function objText(qq){const a=qq.need.map(([id,n])=>`${id} ×${n}`);if(qq.kill)a.push(`${qq.need.length?"擊殺 ":""}${qq.kill[0].join("／")} ×${qq.kill[1]}`);if(qq.task)a.push(qq.task);return a.join("、")}
 function qRow(qq,showTown){const t=townById[qq.town];return`<button class="card qcard qside" data-key="q|${qq.id}" data-go="q|${qq.id}">
-  <div class="mqt"><b>${esc(qq.title||qq.npc)}</b><span>${qq.title?esc(qq.npc)+"・":""}${showTown&&t?esc(pN(t))+"・":""}X ${qq.x} · Z ${qq.z}${qq.src==="ref"?"・目前版本":""}</span></div>
+  <div class="mqt"><b>${esc(qq.title?qT(qq):qNpc(qq.npc))}</b><span>${qq.title&&qT(qq)!==qq.title?esc(qq.title)+"・":""}${qq.title?esc(qNpc(qq.npc))+"・":""}${showTown&&t?esc(pN(t))+"・":""}X ${qq.x} · Z ${qq.z}${qq.src==="ref"?"・目前版本":""}</span></div>
   <div class="qobj"><span class="muted">${qq.kill&&!qq.need.length?"擊殺":"收集並交回"}</span> ${esc(objText(qq))}</div><div class="reward">${rewardText(qq)}</div></button>`}
 function renderQuests(){const s=Sq(),so=$("fQSort").value;const QS=F().quests;
   const main=qKind==="main";$("gQTown").hidden=main;$("gQSort").hidden=main;$("qNoteMain").hidden=!main;$("qNoteSide").hidden=main;$("hQ").textContent=main?"主線任務":"支線任務";
@@ -1797,7 +1803,7 @@ function renderQuests(){const s=Sq(),so=$("fQSort").value;const QS=F().quests;
   let a=QS.filter(qq=>(qTown==="all"||qq.town===qTown)&&questHit(qq,s));
   $("cQ").textContent=`${a.length} / ${QS.length} 個`;let html="";
   if(so==="town"){F().towns.forEach(t=>{const g=a.filter(qq=>qq.town===t.id);if(!g.length)return;
-    html+=`<div class="qtown"><h3><button data-go="t|${t.id}">${esc(t.n)}</button><span class="mono muted" style="font-size:12px">X ${t.x} · Z ${t.z} · ${g.length} 個任務</span></h3>${g.map(x=>qRow(x)).join("")}</div>`})}
+    html+=`<div class="qtown"><h3><button data-go="t|${t.id}">${esc(pN(t))}</button><span class="mono muted" style="font-size:12px">X ${t.x} · Z ${t.z} · ${g.length} 個任務</span></h3>${g.map(x=>qRow(x)).join("")}</div>`})}
   else{a=[...a].sort((x,y)=>so==="xp"?(y.xp||0)-(x.xp||0):(y.money||0)-(x.money||0));html=a.map(x=>qRow(x,true)).join("")}
   $("lQ").innerHTML=html||`<div class="empty-note">沒有符合條件的任務。</div>`;bindGo($("lQ"));markSel()}
 
@@ -2966,7 +2972,7 @@ function drawRoute(){world.querySelectorAll(".route,.rstep").forEach(n=>n.remove
   sv.appendChild(pl);world.appendChild(sv);
   const grp=new Map();pts.forEach(p=>{const k=p[1]+","+p[2];grp.set(k,(grp.get(k)||[]).concat(p[0]))});
   grp.forEach((ns_,k)=>{const [x,z]=k.split(",").map(Number);const d=document.createElement("div");d.className="rstep";d.style.left=toPxX(x)+"px";d.style.top=toPxZ(z)+"px";d.textContent=ns_.join("・");d.title="步驟 "+ns_.join("、")+"："+ns_.map(n=>ROUTE.q.s[n-1][0]).join("／");world.appendChild(d)})}
-function showRoute(qq,i){ROUTE={q:qq,i};if(matchMedia("(max-width:820px)").matches)stage.scrollIntoView({block:"center"});$("routeName").textContent=`${typeof i==="number"?"主線 "+(i+1):i}・${qq.t}`;$("routeBar").hidden=false;drawRoute();
+function showRoute(qq,i){ROUTE={q:qq,i};if(matchMedia("(max-width:820px)").matches)stage.scrollIntoView({block:"center"});$("routeName").textContent=`${typeof i==="number"?"主線 "+(i+1):i}・${qT(qq)}`;$("routeBar").hidden=false;drawRoute();
   const pts=qq.s.filter(x=>x[1]!=null);if(!pts.length)return;const xs=pts.map(p=>p[1]),zs=pts.map(p=>p[2]);
   const x0=Math.min(...xs),x1=Math.max(...xs),z0=Math.min(...zs),z1=Math.max(...zs);if(!fitted)fit();const r=stage.getBoundingClientRect();
   const span=Math.max(x1-x0,z1-z0,250)/MP().size*1000;sc=Math.min(fitSc()*3.2,Math.max(fitSc(),Math.min(r.width,r.height)*0.6/span));
