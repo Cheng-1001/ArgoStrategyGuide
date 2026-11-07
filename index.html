@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="c554473161">
+<meta name="sao-build" content="ff00a6c537">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -200,10 +200,11 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .cwbody{flex:1;overflow:auto;padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
 .cwbody .chips{margin-bottom:2px}.cwbody .grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
 /* classes: 3 columns, wide two-column panel */
-@media (min-width:821px){#view-classes.browse{grid-template-columns:minmax(0,1fr)}#view-classes .filters{display:none}#lCls{grid-template-columns:minmax(0,1fr);max-width:290px;gap:8px}#lCls .card{padding:10px 12px}body.panel-xwide #panel{width:var(--clsw,min(880px,calc(100vw - 40px)))}body.cls-one .cls2{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:821px){#view-classes.browse{grid-template-columns:minmax(0,1fr)}#view-classes .filters{display:none}#lCls,#lDg{grid-template-columns:minmax(0,1fr);max-width:290px;gap:6px}#view-dungeons.browse{grid-template-columns:minmax(0,1fr)}#view-dungeons .filters{display:none}#lDg .card{padding:9px 12px;gap:4px}body.cls-inline[data-view="dungeons"] #pBody>*{max-width:880px}#lCls .card{padding:7px 11px;gap:3px}#lCls .chead .th{width:34px;height:34px;font-size:17px}#lCls .cname b{font-size:15px}#lCls .cname span{font-size:12px}#lCls .clx{font-size:12px!important;line-height:1.4}#lCls .cmeta .pill{padding:0 7px;font-size:11.5px}body.cls-inline #panel{left:var(--clsl);right:0;top:var(--clst);bottom:0;width:auto!important;max-width:none;border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none;background:var(--bg);z-index:5}body.cls-inline #panel .ptop{display:none}body.cls-inline #pBody{padding-top:14px}body.panel-xwide #panel{width:var(--clsw,min(880px,calc(100vw - 40px)))}body.cls-one .cls2{grid-template-columns:minmax(0,1fr)}}
 @media (min-width:1800px){body.panel-open.panel-xwide:not([data-view="classes"]) .results{padding-right:900px}}
 @media (min-width:1180px) and (max-width:1799px){body.panel-open.panel-xwide .results{padding-right:0}}
-.cls2{display:grid;gap:4px 28px}@media (min-width:821px){.cls2{grid-template-columns:300px minmax(0,1fr)}}
+.th.dgk{background:var(--slot);display:grid;place-items:center;overflow:hidden}.th.dgk .eslot{box-shadow:none;border-radius:0}.dgkn{font-size:12px}
+.cls2{display:grid;gap:4px 32px}@media (min-width:821px){.cls2{grid-template-columns:340px minmax(0,1fr)}}.cls2>div:first-child>h3.sec{margin-top:22px}.cls2>div:first-child .settbl th,.cls2>div:first-child .settbl td{padding-top:7px;padding-bottom:7px}.cls2>div:first-child .settbl th{padding-left:10px}.cls2>div:first-child .clsbtns{margin-top:12px}
 .cls2>div{min-width:0}
 .rwhead{display:flex;gap:8px;align-items:center;padding:6px 8px 6px 14px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
 .rwhead b{font-family:var(--f-display);font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -871,7 +872,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=349916ca"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=ad6f1607"></script>
+<script src="changelog.js?v=d01fa5db"></script>
 <script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1123,7 +1124,8 @@ const questHit=(qq,s)=>{if(!s)return true;const t=townById[qq.town];return norm(
 
 // ================= detail drawer =================
 const panel=$("panel"),pBody=$("pBody");let stack=[];
-function openP(type,id,mode){if(type==="i"){const r=redirI(id);if(r)[type,id]=r}else if(type==="p"){const r=redirP(id);if(r)[type,id]=r}
+let lastCls=null,lastDg=null;
+function openP(type,id,mode){if(type==="c")lastCls=id;else if(isDgP({type,id}))lastDg=type+"|"+id;if(type==="i"){const r=redirI(id);if(r)[type,id]=r}else if(type==="p"){const r=redirP(id);if(r)[type,id]=r}
   if(mode==="push"&&!panel.hidden&&stack.length)stack.push({type,id});else stack=[{type,id}];
   renderP();panel.hidden=false;document.body.classList.add("panel-open");pBody.scrollTop=0;markSel();fixCols()}
 let pending=null;
@@ -1138,8 +1140,16 @@ function goMapThen(f,fn){const ph=matchMedia("(max-width:820px)").matches;if(ph)
 const nameOf=s=>s.type==="c"?(c=>c?cN(c):"職業")(CLS.find(c=>c.id===s.id)):s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:s.type==="d"?(EVT.dungeons.find(d=>d.id===s.id)||{n:"活動"}).n:townById[s.id].n;
 const detailHTML=(t,i)=>t==="c"?classDetail(i):t==="r"?recipeDetail(i):t==="n"?npcDetail(i):t==="q"?questDetail(i):t==="m"?monDetail(i):t==="i"?itemDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):t==="s"?spotDetail(i):t==="d"?evDgDetail(i):townDetail(i);
 // class panel (user 2026-11-07「調整一下版面」): on the classes tab the panel fills the space right of the class column; one inner column when that is narrow
-function fitClsPanel(){const b=document.body,L=$("lCls");if(!(b.classList.contains("panel-xwide")&&view==="classes"&&innerWidth>820&&L&&L.offsetParent)){b.style.removeProperty("--clsw");b.classList.remove("cls-one");return}
-  const w=Math.max(560,Math.round(innerWidth-L.getBoundingClientRect().right-26));b.style.setProperty("--clsw",w+"px");b.classList.toggle("cls-one",w<900)}
+// desktop (user 2026-11-07「右邊沒必要再開一個視窗」): on the classes tab the class panel is part of the page — no frame, title bar or ✕,
+// it fills everything right of the class column (cls-inline); another panel opened from it is a normal panel again
+// the dungeons tab works the same way (user 2026-11-07「地下城排成直的」): vertical list, the dungeon shown next to it
+const isDgP=t=>!!t&&(t.type==="d"||(t.type==="s"&&(spotById(t.id)||{}).kind==="dungeon"));
+const INL={classes:{list:"lCls",ok:t=>!!t&&t.type==="c"},dungeons:{list:"lDg",ok:isDgP}};
+function fitClsPanel(){const b=document.body,cfg=INL[view],L=cfg&&$(cfg.list),cur=stack[stack.length-1];
+  if(!(cfg&&innerWidth>820&&L&&L.offsetParent&&cfg.ok(cur))){b.style.removeProperty("--clsw");b.classList.remove("cls-one","cls-inline");return}
+  const r=L.getBoundingClientRect(),V=$("view-"+view).getBoundingClientRect(),w=Math.max(560,Math.round(innerWidth-r.right-18));
+  b.style.setProperty("--clsw",w+"px");b.style.setProperty("--clsl",Math.round(r.right+18)+"px");b.style.setProperty("--clst",Math.round(V.top)+"px");
+  b.classList.toggle("cls-one",w<900);b.classList.toggle("cls-inline",!panel.hidden)}
 addEventListener("resize",()=>fitClsPanel());
 function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");fitClsPanel();
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");document.body.classList.toggle("pdeep",stack.length>1);
@@ -1167,8 +1177,8 @@ function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.
 }
 $("pBack").onclick=()=>{stack.pop();renderP();markSel()};
 $("pClose").onclick=closeP;
-function closeP(){panel.hidden=true;stack=[];document.body.classList.remove("panel-open");markSel();fixCols()}
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!panel.hidden)closeP()});
+function closeP(){panel.hidden=true;stack=[];document.body.classList.remove("panel-open","cls-inline");markSel();fixCols()}
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!panel.hidden&&!document.body.classList.contains("cls-inline"))closeP()});
 function markSel(){const cur=!panel.hidden&&stack[stack.length-1];
   document.querySelectorAll(".card.sel").forEach(e=>e.classList.remove("sel"));document.querySelectorAll(".th.selm").forEach(e=>e.classList.remove("selm"));
   if(!cur)return;document.querySelectorAll(`[data-key="${cur.type}|${CSS.escape(cur.id)}"]`).forEach(e=>e.classList.add(e.classList.contains("th")?"selm":"sel"))}
@@ -1563,7 +1573,7 @@ const NPC_NOTE={
   "Skeleton Skull":`<h3 class="sec">位置</h3><div class="note">在高處的小石室裡（站長 2026-11-07 截圖：玩家座標 X 1162 Z 3544 Y 42，羅盤寫「Cyclorium」）。NPC 頭上沒有名牌，點他開的視窗叫「Secret Skeleton Skull」。</div>`,
   "Occult Merchant - Artifacts":`<h3 class="sec">位置</h3><div class="note">在 Valley of Petals（花瓣谷）的<b>地底神壇</b>：從深色木造大建築旁的豎井往下（站長 2026-11-07 截圖：玩家座標 X 874 Z 4033 Y 4）。NPC 頭上沒有名牌；視窗「Occult Merchant - Artifacts」賣 Occult Skull／Robe／Hood，各 5 024.91 珂爾（LEGENDARY，有庫存數量）。物品說明的取得方式寫「Sold by Secret Occult Artifacts (5000 Cols)」。</div>`,
   "Occult Merchant - Bracelet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3352 · Z 1647，房間裡 X 3350 · Z 1639）。NPC 頭上沒有名牌；視窗「Occult Merchant - Bracelet」賣 1 件 Occult Bracelet（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
-  "Occult Merchant - Amulet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3307 · Z 1671，房間裡 X 3314 · Z 1668）。NPC 頭上沒有名牌；視窗「Occult Merchant - Amulet」賣 1 件 Occult Amulet（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
+  "Occult Merchant - Amulet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3307 · Z 1671，房間裡 X 3314 · Z 1668）。NPC 頭上沒有名牌；視窗「Occult Merchant - Amulet」賣 1 件 Occult Amulet（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div><h3 class="sec">補貨</h3><div class="note">⏰ 神祕護身符在<b>台灣時間 19:00</b>（巴黎時間 12:00）刷新，刷新後庫存 <b>5 個</b>，賣完就顯示 Stock 0（站長 2026-11-07 實測）。其他 4 個神祕商人的刷新時間還沒測。</div>`,
   "Occult Merchant - Ring":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3326 · Z 1736，房間裡 X 3321 · Z 1731）。NPC 頭上沒有名牌；視窗「Occult Merchant - Ring」賣 1 件 Occult Ring（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
   "Occult Merchant - Gloves":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖，Gloves 的房間是依時間推斷：入口一帶 X 3363 · Z 1683，房間裡 X 3369 · Z 1689）。NPC 頭上沒有名牌；視窗「Occult Merchant - Gloves」賣 1 件 Occult Gloves（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
   "Corrupted Boar Accessories":`<h3 class="sec">位置</h3><div class="note">在 Boar Zone（野豬區）的小屋裡，名牌是「[NPC] Accessory Blacksmith」，點他開的視窗叫「Corrupted Boar Accessories」（站長 2026-11-07 截圖：玩家座標 X 1778 Z 3527～3533 Y 28）。參考互動地圖沒有這個 NPC。</div>`,
@@ -1616,8 +1626,14 @@ const clsSoon=c=>!Object.keys(c.weapons).length&&!c.base.length;
 function renderDungeons(){const s=Sq();const a=spotsOf(FL).filter(x=>x.kind==="dungeon"&&!/樓層首領/.test(x.zh||"")&&(!s||norm([x.n,x.zh].join(" ")).includes(s)));
   const ev=EVT.dungeons.filter(d=>!s||norm(JSON.stringify(d)).includes(s));
   $("cDg").textContent=`${a.length+ev.length} 個`;
-  $("lDg").innerHTML=ev.map(d=>`<button class="card" data-go="d|${d.id}" data-key="d|${d.id}"><div class="chead"><span class="th" style="--ring:var(--boss)" aria-hidden="true">🎃</span><div class="cname"><b>${esc(d.n)}</b><span>${esc(d.zh)}</span></div></div><div class="cmeta"><span class="pill">限時活動</span><span class="pill">各層通用</span></div></button>`).join("")+a.map(sp=>`<button class="card" data-go="s|${sp.id}" data-key="s|${sp.id}"><div class="chead"><span class="th" style="--ring:var(--boss)" aria-hidden="true">⚔️</span><div class="cname"><b>${esc(pN(sp))}</b><span>${esc(pN(sp)!==sp.n?sp.n:sp.zh)}</span></div></div></button>`).join("")||`<div class="empty-note">${s?"沒有符合的地下城。":"這一層還沒有地下城資料。"}</div>`;
-  bindGo($("lDg"));markSel()}
+  // card icon = the dungeon's own key (user 2026-11-07「圖示用各自的鑰匙」); no key known / no clean key picture → the old emoji
+  const keyOf=sp=>{const k=dgKeys(sp).hit[0];return k?{r:k,n:recZh(k)||k.en}:null};
+  const ic=(k,emo)=>k?`<span class="th dgk" style="--ring:var(--boss)" aria-hidden="true">${recIcon(k.r,30)}</span>`:`<span class="th" style="--ring:var(--boss)" aria-hidden="true">${emo}</span>`;
+  $("lDg").innerHTML=ev.map(d=>`<button class="card" data-go="d|${d.id}" data-key="d|${d.id}"><div class="chead">${ic(null,"🎃")}<div class="cname"><b>${esc(d.n)}</b><span>${esc(d.zh)}</span></div></div><div class="cmeta"><span class="pill">限時活動</span><span class="pill">各層通用</span></div><div class="muted dgkn">鑰匙：${esc(d.key.n)}</div></button>`).join("")
+    +a.map(sp=>{const k=keyOf(sp);return`<button class="card" data-go="s|${sp.id}" data-key="s|${sp.id}"><div class="chead">${ic(k,"⚔️")}<div class="cname"><b>${esc(pN(sp))}</b><span>${esc(pN(sp)!==sp.n?sp.n:sp.zh)}</span></div></div><div class="muted dgkn">${k?"鑰匙："+esc(k.n):"鑰匙：還沒有資料"}</div></button>`}).join("")||`<div class="empty-note">${s?"沒有符合的地下城。":"這一層還沒有地下城資料。"}</div>`;
+  bindGo($("lDg"));
+  if(innerWidth>820&&(ev.length||a.length)&&(panel.hidden||!isDgP(stack[0]))){const all=[...ev.map(d=>"d|"+d.id),...a.map(sp=>"s|"+sp.id)];const [t,i]=(all.includes(lastDg)?lastDg:all[0]).split("|");openP(t,i)}
+  markSel();fitClsPanel()}
 function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<div class="note">找不到這個活動。</div>`;
   const tb=(head,rows)=>`<div class="tblwrap"><table class="btbl"><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
   return`<div class="phead"><span class="th" style="--ring:var(--boss)" aria-hidden="true">🎃</span><div class="ttl"><div class="num">限時活動・地下城</div><h2>${esc(d.n)}</h2><div class="sub">${esc(d.ev)}</div></div></div>
@@ -1636,10 +1652,13 @@ function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<di
 function renderClasses(){const s=Sq();const a=CLS.filter(c=>!s||norm([c.name,c.zh,c.role,...c.subs.map(x=>x[0]),...c.skills.map(x=>x[0]),...(c.game?c.game.list.map(x=>(x.fr||"")+" "+x.zh+" "+(x.en||"")):[])].join(" ")).includes(s));
   $("cCls").textContent=`${a.length} 個職業`;
   $("lCls").innerHTML=a.map(c=>`<button class="card" data-go="c|${c.id}" data-key="c|${c.id}"><div class="chead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="cname"><b>${esc(cN(c))}</b><span>${esc(cSub(c))}</span></div></div>
-    <div class="cmeta">${stars(c.diff)}${clsSoon(c)?'<span class="pill">可能尚未開放</span>':""}${c.game?`<span class="pill rep">遊戲技能 ${c.game.list.length}</span>`:""}${c.reps.length?`<span class="pill rep">技能回報 ${c.reps.length}</span>`:c.skillsSure||c.game?"":'<span class="pill">技能待確認</span>'}</div>
+    <div class="cmeta clsm">${stars(c.diff)}${clsSoon(c)?'<span class="pill">可能尚未開放</span>':""}${c.game?`<span class="pill rep">遊戲技能 ${c.game.list.length}</span>`:""}${c.reps.length?`<span class="pill rep">技能回報 ${c.reps.length}</span>`:c.skillsSure||c.game?"":'<span class="pill">技能待確認</span>'}</div>
     <div class="muted clx" style="font-size:12.5px">${clsWeap(c)?"武器："+clsWeap(c):"官方圖鑑還沒有這個職業的裝備"}</div>
     <div class="muted clx" style="font-size:12.5px">Lv 30 專精：${c.subs.map(x=>esc(x[0])).join(" / ")}</div></button>`).join("")||`<div class="empty-note">沒有符合的職業。</div>`;
-  bindGo($("lCls"));markSel()}
+  bindGo($("lCls"));
+  // desktop: the classes tab always shows one class next to the list (the last one looked at, else the first)
+  if(innerWidth>820&&a.length&&(panel.hidden||!stack[0]||stack[0].type!=="c"))openP("c",(a.find(c=>c.id===lastCls)||a[0]).id);
+  markSel();fitClsPanel()}
 function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class="note">找不到這個職業。</div>`;
   const bar=n=>`<span class="stars">${"★".repeat(n)}<span class="off">${"★".repeat(5-n)}</span></span>`;
   const tbl=(rows,head)=>`<table class="settbl">${head?`<thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`:""}<tbody>${rows}</tbody></table>`;
@@ -3074,7 +3093,7 @@ document.querySelectorAll(".browse .filters").forEach(F=>{const gs=F.querySelect
   const sy=()=>requestAnimationFrame(fbarSync);F.addEventListener("click",sy);F.addEventListener("change",sy);F.addEventListener("input",sy)});
 function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback|about|changelog|dungeons)$/);
   view=mm?mm[2]:"map";if(view==="feedback"){view="report";rSub="feedback"}else if(view==="report")rSub="data";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
-  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;fitClsPanel();if(pv!==view&&GVW.length)gvCloseAll();if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about"||view==="changelog"||(pv!==view&&!viewPending&&matchMedia("(max-width:820px)").matches))&&!panel.hidden)closeP();
+  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(INL[pv]&&view!==pv&&!panel.hidden&&INL[pv].ok(stack[0])&&innerWidth>820)closeP();fitClsPanel();if(pv!==view&&GVW.length)gvCloseAll();if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about"||view==="changelog"||(pv!==view&&!viewPending&&matchMedia("(max-width:820px)").matches))&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
   document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
