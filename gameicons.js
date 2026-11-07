@@ -46,5 +46,11 @@ window.SAO_GAMEICONS = {
  "Pumpkin Caramel": "icons/game/pumpkin_caramel.png",   // auction tile (in9), k≈4.65
  "Pumpkin Wrapped Candy": "icons/game/pumpkin_wrapped_candy.png",   // auction tile (in9), k≈4.65
  "Reapkin King's Lollipop": "icons/game/reapkin_kings_lollipop.png",   // auction tile (in9), k≈4.65
+ "Oak String": "icons/game/oak_string.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
+ "Copper Gloves": "icons/game/copper_gloves.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
+ "Iron Gloves": "icons/game/iron_gloves.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
+ "Christmas Mittens": "icons/game/christmas_mittens.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
+ "Occult Bracelet": "icons/game/occult_bracelet.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
+ "Witch's Dragée": "icons/game/witchs_dragee.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
  "Boots of the Foam": "icons/game/boots_of_the_foam.png"   // auction tile in9 2026-11-05 01:00:15, k≈4.64 (official catalogue has no icon for Bottes de l’écume)
 };
