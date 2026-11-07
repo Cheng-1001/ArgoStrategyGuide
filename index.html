@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="475f74c088">
+<meta name="sao-build" content="b7178d7280">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -177,9 +177,9 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .qmap{flex:none;width:80%;align-self:center;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#0d1218}.qmap svg{display:block;width:100%;height:auto;aspect-ratio:1}.qmap g.hl rect{fill:#e5484d}.qmap g.hl text{fill:#fff}.mqs .linkbtn.on{color:#e5484d;font-weight:700}
 .clday{margin:10px 0 14px}.clday .cld{font-family:var(--f-display);font-size:15px}.cll{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}
 .clmode{flex:0 0 auto;margin-left:auto;align-self:center}.cln{font-size:12px;color:var(--muted);margin-left:8px}
-.cll.clsum{gap:2px}.clit>summary{cursor:pointer;list-style:none}.clit>summary::-webkit-details-marker{display:none}
-.clit>summary::after{content:" ▸";color:var(--muted);font-size:11px}.clit[open]>summary::after{content:" ▾"}.clit[open]>summary{font-weight:600}
-.clfull{color:var(--muted);font-size:13.5px;margin:2px 0 6px}.clold summary{cursor:pointer;color:var(--muted);padding:4px 0}
+.clline{margin:6px 0 6px;line-height:1.6}.clline b{color:var(--accent)}.clcats{display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start}
+.clcat{border:1px solid var(--line);border-radius:999px;background:var(--panel)}.clcat>summary{cursor:pointer;list-style:none;padding:3px 12px;font-size:13px}.clcat>summary::-webkit-details-marker{display:none}
+.clcat[open]{flex-basis:100%;border-radius:10px;background:var(--panel-2)}.clcat[open]>summary{font-weight:600}.clcat>.cll{margin:0 12px 10px}.clold summary{cursor:pointer;color:var(--muted);padding:4px 0}
 .mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}.note.srcend{margin-top:14px}.gieff{margin:4px 0 0 0;padding:0;list-style:none}.gieff li{margin:3px 0}.effen{color:var(--muted);font-size:11.5px;display:inline-block}.lore.lorefr{font-size:12px;color:var(--muted);margin-top:-4px}.effic{display:inline-block;width:1.4em;text-align:center;margin-right:2px;font-size:.95em}img.effic{width:1.15em;height:1.15em;vertical-align:-.18em;image-rendering:pixelated;object-fit:contain;filter:drop-shadow(.072em .072em 0 rgba(0,0,0,.72))}
 @media (max-width:820px){.mgo{display:inline}}
 @media (max-width:820px){.mbonly{display:block}.pconly,.rwhead .muted{display:none!important}.qmap{width:100%}[data-route],[data-imap]{display:none!important}}
@@ -896,7 +896,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=2bb99626"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=0d9506a7"></script>
+<script src="changelog.js?v=73640054"></script>
 <script src="recipes.js?v=5279ff8b"></script>
 <script src="jmmeta.js?v=5b0ffd74"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1829,18 +1829,22 @@ const ABOUT_SRC=[
 ];
 let aboutJump=null;
 // 更新紀錄 (changelog.js): newest 3 days open, older ones folded
-// 更新紀錄 has two modes (user 2026-11-07「更新紀錄做切換按鈕，詳細跟摘要模式」): 摘要 shows each entry's headline
-// (the part before 「：」, or its first clause; long lists are cut at a 「、」 and end with 「等」), click it to expand;
-// 詳細 shows every entry in full. The choice is remembered per viewer (localStorage sao-cl-mode, default 摘要)
-const clSum=t=>{const i=t.search(/[：:]/);if(i>0&&i<=30)return t.slice(0,i);let m=t.split(/[，；。（(]/)[0];
-  if(m.length>36){const k=m.lastIndexOf("、",34);m=k>8?m.slice(0,k)+"等":m.slice(0,34)+"…"}return m};
+// 更新紀錄 has two modes (user 2026-11-07「更新紀錄做切換按鈕，詳細跟摘要模式」): 摘要 = category counts per day, 詳細 = every entry in full. The choice is remembered per viewer (localStorage sao-cl-mode, default 摘要)
+// 摘要 is coarse (user 2026-11-07「摘要分得粗略一點：更新XX個裝備資料、敘述、圖示之類的」): each day is one line of
+// category counts, and each category opens to its entries. Category = first rule matching the entry's first clause, else its full text
+const CL_CATS=[["圖示",/圖示|圖片|縮圖|模型圖/],["地下城",/地下城|副本|寶箱|Dungeon|Sanctuary|Labyrinth|Geldorack/],["任務",/任務|主線|支線/],["職業・技能",/職業|技能|天賦/],
+  ["協作區・回報",/回報|協作|表單|打包|審核/],["地圖",/地圖|地標|座標|傳送點|探索/],["NPC・配方",/NPC|商人|配方|收購|煉金|製作|販售|鐵匠|商店/],["怪物",/怪物|首領|掉落|Boss/],
+  ["裝備・物品資料",/裝備|道具|素材|物品|數值|效果|套裝|藥水|名稱|等級|稀有度|中文|遺物|飾品/],["介面",/頁|版面|按鈕|搜尋|篩選|手機|電腦版|視窗|選單|說明|紀錄/]];
+const clCat=t=>{const h=t.split(/[：:，；（(]/)[0];for(const [n,r] of CL_CATS)if(r.test(h))return n;for(const [n,r] of CL_CATS)if(r.test(t))return n;return"其他"};
 let CLM=(()=>{try{return localStorage.getItem("sao-cl-mode")==="full"?"full":"sum"}catch(e){return"sum"}})();
 function changelogCard(){const C=window.SAO_CHANGELOG||[];if(!C.length)return"";
-  const li=t=>{const h=clSum(t);return CLM==="sum"&&h!==t?`<li><details class="clit"><summary>${esc(h)}</summary><div class="clfull">${esc(t)}</div></details></li>`:`<li>${esc(t)}</li>`};
-  const day=([d,items])=>{const [,m,dd]=d.split("-").map(Number);return`<div class="clday"><b class="cld">${m}/${dd}</b><span class="cln">${items.length} 項</span><ul class="cll${CLM==="sum"?" clsum":""}">${items.map(li).join("")}</ul></div>`};
+  const sumDay=items=>{const g=new Map();items.forEach(t=>{const c=clCat(t);if(!g.has(c))g.set(c,[]);g.get(c).push(t)});
+    const cs=[...g].sort((a,b)=>b[1].length-a[1].length||(a[0]==="其他")-(b[0]==="其他"));
+    return`<div class="clline">更新 ${cs.map(([c,l])=>`${esc(c)} <b>${l.length}</b> 項`).join("、")}</div><div class="clcats">${cs.map(([c,l])=>`<details class="clcat"><summary>${esc(c)}<span class="cln">${l.length} 項</span></summary><ul class="cll">${l.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></details>`).join("")}</div>`};
+  const day=([d,items])=>{const [,m,dd]=d.split("-").map(Number);return`<div class="clday"><b class="cld">${m}/${dd}</b><span class="cln">${items.length} 項</span>${CLM==="sum"?sumDay(items):`<ul class="cll">${items.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`}</div>`};
   return`<article class="bcard" id="clCard">${C.slice(0,3).map(day).join("")}${C.length>3?`<details class="clold"><summary>較早的更新（${C.length-3} 天）</summary>${C.slice(3).map(day).join("")}</details>`:""}</article>`}
 function renderChangelog(){const W=$("clWrap"),old=W.querySelector(".clold"),oldOpen=!!(old&&old.open),V=$("view-changelog"),y=V.scrollTop;
-  W.innerHTML=`<div class="rhead"><h2>更新紀錄</h2><span class="count">網站改了什麼</span><div class="chips clmode" role="group" aria-label="顯示方式"><button class="chip" data-clm="sum" aria-pressed="${CLM==="sum"}" title="每一項只列標題，點了展開">摘要</button><button class="chip" data-clm="full" aria-pressed="${CLM==="full"}" title="每一項都顯示完整說明">詳細</button></div></div>${changelogCard()}`;
+  W.innerHTML=`<div class="rhead"><h2>更新紀錄</h2><span class="count">網站改了什麼</span><div class="chips clmode" role="group" aria-label="顯示方式"><button class="chip" data-clm="sum" aria-pressed="${CLM==="sum"}" title="每天依類別統計，點類別看內容">摘要</button><button class="chip" data-clm="full" aria-pressed="${CLM==="full"}" title="每一項都顯示完整說明">詳細</button></div></div>${changelogCard()}`;
   const o=W.querySelector(".clold");if(o&&oldOpen)o.open=true;
   W.querySelectorAll("[data-clm]").forEach(b=>b.onclick=()=>{if(CLM===b.dataset.clm)return;CLM=b.dataset.clm;try{localStorage.setItem("sao-cl-mode",CLM)}catch(e){}renderChangelog.keep=1;renderChangelog()});
   V.scrollTop=renderChangelog.keep?y:0;renderChangelog.keep=0}
