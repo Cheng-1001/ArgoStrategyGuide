@@ -53,6 +53,8 @@
   "Nodachi Staff"
  ],
  "_rebuilt": [
+  "Occult Ring",
+  "Occult Amulet",
   "Bracelet of the Nepenthes",
   "Amulet of the Nepenthes",
   "Frozen Bracelet",
@@ -108,7 +110,7 @@
  "Ring of the Shark": "",
  "Glacial Essence": "",
  "_wrong": {
-  "_note": "2026-11-07 icon audit: the site icon does not match the game (auction screenshots), and the screenshot icon could not be rebuilt on a clean 16 px grid (hi-res / 3D texture). Take these from the resource pack. Keys may be the English game name or the official French name (gameicons.js accepts both).",
+  "_note": "2026-11-07 icon audit: the site icon does not match the game (auction screenshots), and the screenshot icon could not be rebuilt on a clean 16 px grid (hi-res / 3D texture). Take these from the resource pack. Until then the site shows smooth cut-outs of the auction tiles (icons/game/*_s.png, gameicons.js); the resource-pack icon replaces them (build deletes same-name lines). Training Bow (Arc d'Entraînement) added 2026-11-07: the catalogue maps it to goblin_bow and the official arc_entrainement model is an older purple one. Keys may be the English game name or the official French name (gameicons.js accepts both).",
   "Leaf Fragments": "site shows the official 3D model edge-on (a stick); the game icon is a flat leaf cluster",
   "Arbalète d'Entraînement": "Training Crossbow: the official catalogue uses one generic crossbow image for all 16 crossbows; the game icon is brown/different",
   "Arbalète en Cuivre": "Copper Crossbow: same generic image; game icon is copper-coloured",
@@ -128,5 +130,7 @@
  "Arc de l'Héraut": "",
  "Bouclier de Illfang": "",
  "Bouclier Putride": "",
- "Arc Nodachi": ""
+ "Arc Nodachi": "",
+ "Occult Ring": "",
+ "Occult Amulet": ""
 }

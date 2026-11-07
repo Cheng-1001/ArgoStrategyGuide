@@ -4,6 +4,33 @@
    values are the game's own text; r = rarity from the tooltip frame colour when it differs from the catalogue ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
    (user 2026-11-05: 裝備資料要照新上傳的截圖更新). */
 window.SAO_GAMESTATS = {date:"2026-11-04", items:{
+ // level-only (st null = keep the catalogue's stats; 2026-11-07 merchant audit, tooltips' minimum level): Gelatinous Cloak 7 (catalogue 5), Bracelet of Ice 8 (catalogue 9)
+ "1453":{"date": "2026-11-04", "en": "gelatinous cloak", "lvl": 7, "dmg": null, "st": null},
+ "1596":{"date": "2026-11-04", "en": "bracelet of ice", "lvl": 8, "dmg": null, "st": null},
+ "1335":{"date": "2026-11-07", "en": "jambières du débutant", "lvl": 1, "dmg": null, "st": [["Max Health", "+1"]]},   // 新手護腿 中文提示 2026-11-07_15.01.53.png
+ "1336":{"date": "2026-11-07", "en": "bottes du débutant", "lvl": 1, "dmg": null, "st": [["Max Health", "+1"]]},   // 新手之靴 中文提示 2026-11-07_15.01.58.png
+ "2596":{"date": "2026-11-07", "en": "épée d’entraînement", "lvl": 1, "dmg": "2.5", "st": [["Attack Speed", "1.1/s"]]},   // 訓練用劍 中文提示 2026-11-07_15.02.02.png
+ "1760":{"date": "2026-11-07", "en": "dague d'entraînement", "lvl": 1, "dmg": "3", "st": [["Attack Speed", "1.4/s"]]},   // 訓練用匕首 中文提示 2026-11-07_15.02.14.png
+ "1761":{"date": "2026-11-07", "en": "faux d'entraînement", "lvl": 1, "dmg": "4.5", "st": [["Attack Speed", "0.9/s"], ["Skill Critical Strike Chance", "+0.5%"], ["Stamina Regeneration", "+0.05/s"]]},   // 訓練用巨鐮 中文提示 2026-11-07_15.02.20.png
+ "1762":{"date": "2026-11-07", "en": "katana d'entraînement", "lvl": 1, "dmg": "3.5", "st": [["Attack Speed", "1.2/s"], ["Lifesteal", "+5%"], ["Dodge Rating", "+5%"], ["Movement Speed", "+15%"]]},   // 訓練用武士刀 中文提示 2026-11-07_15.02.24.png
+ "2569":{"date": "2026-11-07", "en": "bâton magique d'entraînement", "lvl": 1, "dmg": "3.5", "st": [["Attack Speed", "1/s"]]},   // 訓練用魔杖 中文提示 2026-11-07_15.02.28.png
+ "1626":{"date": "2026-11-07", "en": "grimoire délié", "lvl": 1, "dmg": null, "st": [["Max Mana", "+1"]]},   // 解縛魔法書 中文提示 2026-11-07_15.02.35.png
+ "1627":{"date": "2026-11-07", "en": "lanterne d'entraînement", "lvl": 1, "dmg": null, "st": [["Magic Damage", "+1%"]]},   // 訓練用提燈 中文提示 2026-11-07_15.02.39.png
+ "1628":{"date": "2026-11-07", "en": "grimoire sauvage", "lvl": 1, "dmg": null, "st": [["Heal Bonus", "+1"]]},   // 野性魔法書 中文提示 2026-11-07_15.02.43.png
+ "2534":{"date": "2026-11-07", "en": "pavois d'entraînement", "lvl": 1, "dmg": null, "st": [["Defense", "+1"], ["Guard Durability", "8"], ["Max Health", "+8"], ["Movement Speed", "-5%"]]},   // 訓練用塔盾 中文提示 2026-11-07_15.02.58.png
+ "2533":{"date": "2026-11-07", "en": "rondache d'entraînement", "lvl": 1, "dmg": "0.25", "st": [["Guard Durability", "4"], ["Max Health", "+4"]]},   // 訓練用圓盾 中文提示 2026-11-07_15.03.02.png
+ "1569":{"date": "2026-11-07", "en": "sylvan bow", "lvl": 8, "dmg": "16", "st": [["Attack Speed", "1.2/s"], ["Critical Strike Chance", "+1%"]]},   // 森林之弓 中文提示 2026-11-07_15.06.03.png
+ "1358":{"date": "2026-11-07", "en": "tunique du chasseur", "lvl": 7, "dmg": null, "st": [["Defense", "+3"], ["Max Health", "+15"]]},   // 獵人束衣 中文提示 2026-11-07_15.06.51.png
+ "1359":{"date": "2026-11-07", "en": "hunter's leggings", "lvl": 7, "dmg": null, "st": [["Defense", "+2"], ["Max Health", "+9"]]},   // 獵人護腿 中文提示 2026-11-07_15.06.54.png
+ "2485":{"date": "2026-11-07", "en": "ring of the leviathan", "r": "s", "lvl": 7, "dmg": "1", "st": [["Defense", "+3"], ["Max Health", "+5"]]},   // 利維坦之戒 中文提示 2026-11-07_15.07.08.png
+ "2481":{"date": "2026-11-07", "en": "ring of the pact", "lvl": 10, "dmg": null, "st": [["Defense", "+2"], ["Max Health", "+3"], ["Max Mana", "+1"], ["Max Stamina", "+1"], ["Movement Speed", "+10%"]], "auc": 1},   // 契約之戒 拍賣場 2026-11-07_15.14.39.png
+ "1487":{"date": "2026-11-07", "en": "pièce d'onyx impur", "lvl": 13, "dmg": "1.25", "st": [["Max Health", "+2.5"], ["Heal Bonus", "+2.5"]], "auc": 1},   // 不純黑瑪瑙幣 拍賣場 2026-11-07_15.16.51.png
+ "1605":{"date": "2026-11-07", "en": "bracelet d’onyx impur", "lvl": 13, "dmg": null, "st": [["Critical Strike Power", "+2.5%"], ["Skill Critical Strike Power", "+2.5%"], ["Max Health", "+2.5"]], "auc": 1},   // 不純黑瑪瑙手環 拍賣場 2026-11-07_15.16.55.png
+ "1598":{"date": "2026-11-07", "en": "bracelet de wolnir", "lvl": 10, "dmg": null, "st": [["Attack Speed", "0.2/s"]], "auc": 1},   // 沃爾尼爾手環 拍賣場 2026-11-07_15.19.07.png
+ "1405":{"date": "2026-11-07", "en": "masque du necromancien", "lvl": 14, "dmg": null, "st": [["Skill Critical Strike Chance", "+5%"], ["Skill Critical Strike Power", "+5%"], ["Defense", "+10"], ["Max Health", "+45"]], "auc": 1},   // 死靈法師面具 拍賣場 2026-11-07_15.19.35.png
+ "2620":{"date": "2026-11-07", "en": "epée déchue", "lvl": 10, "dmg": "14", "st": [["Attack Speed", "1.1/s"], ["Defense", "+3"]], "auc": 1},   // 墮落之劍 拍賣場 2026-11-07_15.20.45.png
+ "1527":{"date": "2026-11-07", "en": "bottes noires", "lvl": 16, "dmg": null, "st": [["Skill Critical Strike Chance", "+10%"], ["Magic Damage", "+4.5%"], ["Damage Reduction", "-25%"], ["Max Mana", "+10"], ["Mana Regeneration", "+0.35/s"], ["Movement Speed", "+12.5%"], ["Sneaking Speed", "+250"]], "auc": 1},   // 黑靴 拍賣場 2026-11-07_15.20.48.png
+ "1317":{"date": "2026-11-07", "en": "collier du gardien", "lvl": 13, "dmg": null, "st": [["Max Health", "+10"], ["Max Mana", "+2"], ["Max Stamina", "+2"], ["Mana Regeneration", "+0.2/s"], ["Stamina Regeneration", "+0.2/s"]], "auc": 1},   // 守護者項鍊 拍賣場 2026-11-07_15.20.55.png
  "1334":{"en": "beginner's tunic", "lvl": 1, "dmg": null, "st": [["Max Health", "+2"]]},
  "2482":{"en": "iron ring", "lvl": 5, "dmg": null, "st": [["Critical Strike Chance", "+1%"], ["Skill Critical Strike Chance", "+1%"], ["Max Health", "+1"]]},
  "1593":{"en": "iron bracelet", "lvl": 5, "dmg": null, "st": [["Critical Strike Power", "+1%"], ["Skill Critical Strike Power", "+1%"], ["Max Health", "+1"]]},
@@ -17,6 +44,8 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "1290":{"en": "copper amulet", "lvl": 3, "dmg": null, "st": [["Max Health", "+0.5"], ["Max Mana", "+0.5"], ["Max Stamina", "+0.5"]]},
  "2545":{"en": "Forgotten Shield", "lvl": 9, "dmg": null, "st": [["Defense", "+5"], ["Guard Durability", "30"], ["Max Health", "+30"], ["Movement Speed", "-5%"]]},
  "1458":{"en": "necklace of aragorn", "lvl": 8, "dmg": "0.5", "st": [["Fall Damage Reduction", "+15%"], ["Dodge", "+5%"]]},
+ "1566":{"date": "2026-11-07", "en": "training bow", "lvl": 1, "dmg": "3", "st": [["Attack Speed", "1.2/s"]]},   // auction tooltip 2026-11-04 19:22:26 + zh tooltip 11-07 15:02:05
+ "1727":{"date": "2026-11-07", "en": "training crossbow", "lvl": 1, "dmg": "2", "st": [["Attack Speed", "1/s"], ["Skill Critical Strike Chance", "+0.5%"]]},   // zh tooltip 11-07 15:02:10
  "2480":{"date": "2026-11-07", "en": "ring of the wolf", "lvl": 3, "dmg": "0.25", "st": [["Max Stamina", "+0.5"]]},
  "2478":{"en": "slimy ring", "lvl": 4, "dmg": null, "st": [["Max Health", "+1"], ["Max Mana", "+0.5"], ["Max Stamina", "+0.5"]]},
  "2616":{"en": "Royal Halberd", "lvl": 9, "dmg": "15", "st": [["Attack Speed", "1.2/s"], ["Skill Critical Strike Chance", "+1%"], ["Dodge", "+1.75%"], ["Movement Speed", "+25%"]]},

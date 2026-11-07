@@ -1,10 +1,11 @@
 /* Equipment set bonuses and potion effects as shown in the game's item tooltips (owner's screenshots; not published).
    sets: {name, tiers:[[pieces, effect text as in game]], members:[English item names whose tooltip shows the set]}
-   potions: {name, effects:[lines as in game]}. User 2026-11-05: 套裝效果、藥水效果也要寫進去. */
+   potions: {name, effects:[lines as in game]}. User 2026-11-05: 套裝效果、藥水效果也要寫進去.
+   2026-11-07 checked against the Chinese tooltips: Standard Skeleton Set [4] is +2% Damage Reduction (was -2%); the rest match. */
 window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "Misty Fangs Set", "tiers": [[2, "+1% Lifesteal"], [3, "+5% Crit Chance, +2.5% Crit Damage"], [4, "+5 Attack Damage, +5% Attack Speed"]], "members": ["Misty Ring"]},
  {"name": "Shark Set", "tiers": [[2, "+5% Ability Haste"], [3, "+3 Health"], [4, "+3% Physical Damage"]], "members": ["Ring of the Shark", "Shark Amulet", "Shark Fang", "Bracelet of the Shark", "Ring of the Leviathan"]},
- {"name": "Standard Skeleton Set", "tiers": [[2, "+5% Ability Haste"], [3, "+0.05 Health/s"], [4, "-2% Damage Reduction"]], "members": ["Skeleton Skull", "Ring of Narax", "Skeletal Ring", "Bony Gloves", "Skeletal Amulet"]},
+ {"name": "Standard Skeleton Set", "tiers": [[2, "+5% Ability Haste"], [3, "+0.05 Health/s"], [4, "+2% Damage Reduction"]], "members": ["Skeleton Skull", "Ring of Narax", "Skeletal Ring", "Bony Gloves", "Skeletal Amulet"]},
  {"name": "Shadow Neophyte Set", "tiers": [[2, "-0.6/s Health, -50% Healing Received"], [3, "-0.6/s Health"], [4, "-0.6/s Health"], [5, "-0.6/s Health"], [6, "-0.6/s Health"], [7, "-0.6/s Health"]], "members": ["Occult Bracelet", "Occult Amulet", "Occult Robe", "Occult Skull", "Occult Hood", "Occult Ring", "Occult Gloves"]},
  {"name": "Hunter Necromancer Set", "tiers": [[2, "+0.3 Stamina/s"], [3, "+3% Crit Chance, +3% Crit Damage"], [4, "+4 Attack Damage"]], "members": ["Boots of the Hunter Necromancer"]},
  {"name": "Hunter Set", "tiers": [[2, "+0.1 Stamina/s"], [3, "+0.5% Critical Chance"]], "members": ["Hunter's Boots", "Hunter's Leggings"]},

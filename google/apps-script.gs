@@ -771,8 +771,10 @@ function decorateRow_(sh, row) {
  * 會下載、檢查、合併到網站的探索地圖，然後刪掉這個 Release。重試時同一個 Release 不會重複上傳。
  */
 function publishJmap_(id, fileId) {
-  const blob = DriveApp.getFileById(fileId).getBlob();
-  const mb = blob.getBytes().length / 1048576;
+  // 大小用 Drive 的檔案資訊，不要 blob.getBytes()：getBytes 會把整個壓縮檔轉成 JavaScript 數字陣列（幾十 MB 的檔案要好幾百 MB 記憶體），
+  // 2026-11-07 R0007 在 retryApproved 出現「記憶體不足，導致發生錯誤」。上傳時也直接傳 blob。
+  const file = DriveApp.getFileById(fileId);
+  const mb = file.getSize() / 1048576;
   if (mb > CFG.JMAP_MAX_MB) throw new Error('壓縮檔 ' + mb.toFixed(1) + ' MB，超過 ' + CFG.JMAP_MAX_MB + ' MB。請用網站的「打包探索地圖」產生壓縮檔（會自動分成 40 MB 以內的幾份）');
   const tag = 'jmap-' + id;
   // 先建「草稿」：Release 一發佈 GitHub Actions 就會開始合併，所以要等壓縮檔上傳完才發佈（2026-11-02 R0002 就是發佈得太早、Actions 找不到檔案）。
@@ -783,7 +785,7 @@ function publishJmap_(id, fileId) {
     body: '玩家回報 ' + id + ' 的 JourneyMap 地圖。GitHub Actions 合併完會自動刪除這個 Release。' });
   if (!(rel.assets || []).length) {
     const r = UrlFetchApp.fetch(String(rel.upload_url).replace(/\{.*\}$/, '') + '?name=' + encodeURIComponent(id + '.zip'), {
-      method: 'post', contentType: 'application/zip', payload: blob.getBytes(), muteHttpExceptions: true,
+      method: 'post', contentType: 'application/zip', payload: file.getBlob(), muteHttpExceptions: true,
       headers: { Authorization: 'Bearer ' + P().getProperty('GITHUB_TOKEN'), Accept: 'application/vnd.github+json' } });
     if (r.getResponseCode() >= 300) throw new Error('上傳探索地圖到 GitHub 失敗 ' + r.getResponseCode() + '：' + r.getContentText().slice(0, 150));
   }

@@ -251,13 +251,14 @@ const rows = () => [HDR,
   let release = null;
   const resp = (code, obj) => ({ getResponseCode: () => code, getContentText: () => JSON.stringify(obj || {}) });
   const ctx = { console, Logger: { log: () => {} }, PropertiesService: { getScriptProperties: () => ({ getProperty: k => k === 'GITHUB_TOKEN' ? 'tok' : 'X' }) },
-    DriveApp: { getFileById: id => ({ getBlob: () => ({ getBytes: () => ({ length: id === 'BIG' ? 46 * 1048576 : 1000 }) }) }) },
+    // getBytes throws: a zip of tens of MB as a JavaScript array ran out of memory (2026-11-07 R0007), size comes from getSize
+    DriveApp: { getFileById: id => ({ getSize: () => id === 'BIG' ? 46 * 1048576 : 1000, getBlob: () => ({ isBlob: true, getBytes: () => { throw new Error('getBytes called'); } }) }) },
     UrlFetchApp: { fetch: (url, opt) => {
       const m = (opt.method || 'get').toLowerCase();
       calls.push(m + ' ' + url.replace('https://api.github.com/repos/Cheng-1001/ArgoStrategyGuide', '') + (m === 'patch' ? ' ' + opt.payload : ''));
       if (url.includes('/releases?per_page')) return resp(200, release ? [release] : []);
       if (url.endsWith('/releases') && m === 'post') { release = { id: 9, tag_name: 'jmap-R0009', draft: JSON.parse(opt.payload).draft, upload_url: 'https://uploads.github.com/repos/x/y/releases/9/assets{?name,label}', assets: [] }; return resp(201, release); }
-      if (url.includes('uploads.github.com')) { if (release.draft !== true) return resp(500, { m: 'published before the upload' }); release.assets.push({}); return resp(201, {}); }
+      if (url.includes('uploads.github.com')) { if (!(opt.payload && opt.payload.isBlob)) return resp(500, { m: 'payload is not the Drive blob' }); if (release.draft !== true) return resp(500, { m: 'published before the upload' }); release.assets.push({}); return resp(201, {}); }
       if (url.endsWith('/releases/9') && m === 'patch') { release.draft = false; return resp(200, release); }
       return resp(500);
     } } };

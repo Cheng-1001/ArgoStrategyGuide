@@ -12,11 +12,11 @@ window.SAO_RECIPES = {
 5,
 [
 [
-"Sylvan Sprout",
+"Sylve Sprout",
 8
 ],
 [
-"Allium",
+"Allium Flower",
 8
 ]
 ],
@@ -32,7 +32,7 @@ window.SAO_RECIPES = {
 5,
 [
 [
-"Sylvan Sprout",
+"Sylve Sprout",
 8
 ],
 [
@@ -40,7 +40,7 @@ window.SAO_RECIPES = {
 8
 ],
 [
-"Allium",
+"Allium Flower",
 12
 ]
 ],
@@ -56,7 +56,7 @@ window.SAO_RECIPES = {
 5,
 [
 [
-"Sylvan Sprout",
+"Sylve Sprout",
 8
 ],
 [
@@ -68,7 +68,7 @@ window.SAO_RECIPES = {
 1
 ],
 [
-"Allium",
+"Allium Flower",
 16
 ]
 ],
@@ -84,11 +84,11 @@ null,
 5,
 [
 [
-"Souls of the Ruins",
+"Soul of the Ruins",
 8
 ],
 [
-"Allium",
+"Allium Flower",
 8
 ]
 ],
@@ -104,7 +104,7 @@ null,
 5,
 [
 [
-"Souls of the Ruins",
+"Soul of the Ruins",
 8
 ],
 [
@@ -112,7 +112,7 @@ null,
 8
 ],
 [
-"Allium",
+"Allium Flower",
 12
 ]
 ],
@@ -128,7 +128,7 @@ null,
 5,
 [
 [
-"Souls of the Ruins",
+"Soul of the Ruins",
 8
 ],
 [
@@ -140,7 +140,7 @@ null,
 1
 ],
 [
-"Allium",
+"Allium Flower",
 16
 ]
 ],
@@ -160,7 +160,7 @@ null,
 8
 ],
 [
-"Allium",
+"Allium Flower",
 8
 ]
 ],
@@ -184,7 +184,7 @@ null,
 8
 ],
 [
-"Allium",
+"Allium Flower",
 12
 ]
 ],
@@ -212,7 +212,7 @@ null,
 1
 ],
 [
-"Allium",
+"Allium Flower",
 16
 ]
 ],
@@ -241,7 +241,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+3,
 "shot"
 ],
 [
@@ -252,7 +252,7 @@ null,
 "15.07",
 "c",
 "potion",
-null,
+5,
 "shot"
 ],
 [
@@ -274,7 +274,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+5,
 "shot"
 ],
 [
@@ -285,7 +285,7 @@ null,
 "15.07",
 "c",
 "potion",
-null,
+8,
 "shot"
 ],
 [
@@ -307,7 +307,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+5,
 "shot"
 ],
 [
@@ -318,7 +318,7 @@ null,
 "15.07",
 "c",
 "potion",
-null,
+8,
 "shot"
 ]
 ]
@@ -332,7 +332,7 @@ null,
 15,
 [
 [
-"Small Pouch",
+"Small Purse",
 16
 ]
 ],
@@ -348,7 +348,7 @@ null,
 15,
 [
 [
-"Small Pouch",
+"Small Purse",
 16
 ]
 ],
@@ -364,7 +364,7 @@ null,
 30,
 [
 [
-"Small Pouch",
+"Small Purse",
 24
 ]
 ],
@@ -380,7 +380,7 @@ null,
 30,
 [
 [
-"Small Pouch",
+"Small Purse",
 24
 ]
 ],
@@ -396,7 +396,7 @@ null,
 30,
 [
 [
-"Small Pouch",
+"Small Purse",
 24
 ]
 ],
@@ -417,11 +417,11 @@ null,
 null,
 [
 [
-"Bear Soul Fragment",
+"Fragment of the Bear's Soul",
 3
 ],
 [
-"Glacial Hardhide",
+"Hard Glacial Hide",
 24
 ]
 ],
@@ -444,7 +444,7 @@ null,
 "15.07",
 "c",
 "potion",
-null,
+5,
 "shot"
 ],
 [
@@ -455,7 +455,7 @@ null,
 "15.07",
 "c",
 "potion",
-null,
+8,
 "shot"
 ],
 [
@@ -466,7 +466,7 @@ null,
 "15.07",
 "c",
 "potion",
-null,
+8,
 "shot"
 ]
 ]
@@ -662,7 +662,7 @@ null,
 4
 ],
 [
-"Gorbel Essence",
+"Essence of Gorbel",
 1
 ],
 [
@@ -690,7 +690,7 @@ null,
 4
 ],
 [
-"Gorbel Essence",
+"Essence of Gorbel",
 1
 ],
 [
@@ -718,11 +718,11 @@ null,
 4
 ],
 [
-"Gorbel Essence",
+"Essence of Gorbel",
 1
 ],
 [
-"Glacial Hardhide",
+"Hard Glacial Hide",
 32
 ]
 ],
@@ -745,7 +745,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+3,
 "shot"
 ],
 [
@@ -756,7 +756,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+5,
 "shot"
 ],
 [
@@ -767,7 +767,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+5,
 "shot"
 ]
 ]
@@ -783,7 +783,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+3,
 "shot"
 ],
 [
@@ -794,7 +794,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+5,
 "shot"
 ],
 [
@@ -805,7 +805,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+5,
 "shot"
 ]
 ]
@@ -924,7 +924,7 @@ null,
 8
 ],
 [
-"Sylvan Sprout",
+"Sylve Sprout",
 8
 ]
 ],
@@ -945,7 +945,7 @@ null,
 60,
 [
 [
-"Leaf Fragment",
+"Leaf Fragments",
 8
 ],
 [
@@ -1037,7 +1037,7 @@ null,
 30,
 [
 [
-"Glacial Hardhide",
+"Hard Glacial Hide",
 12
 ],
 [
@@ -1057,7 +1057,7 @@ null,
 30,
 [
 [
-"Glacial Hardhide",
+"Hard Glacial Hide",
 16
 ]
 ],
@@ -1073,7 +1073,7 @@ null,
 15,
 [
 [
-"Glacial Hardhide",
+"Hard Glacial Hide",
 12
 ]
 ],
@@ -1089,7 +1089,7 @@ null,
 15,
 [
 [
-"Glacial Hardhide",
+"Hard Glacial Hide",
 8
 ],
 [
@@ -1298,7 +1298,7 @@ null,
 "15.07",
 "c",
 "potion",
-null,
+5,
 "shot"
 ],
 [
@@ -1309,7 +1309,7 @@ null,
 "15.07",
 "c",
 "potion",
-null,
+8,
 "shot"
 ],
 [
@@ -1320,7 +1320,7 @@ null,
 "15.07",
 "c",
 "potion",
-null,
+8,
 "shot"
 ]
 ]
@@ -1336,7 +1336,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+3,
 "shot"
 ],
 [
@@ -1347,7 +1347,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+5,
 "shot"
 ],
 [
@@ -1358,7 +1358,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+5,
 "shot"
 ]
 ]
@@ -1401,7 +1401,7 @@ null,
 15,
 [
 [
-"Leaf Fragment",
+"Leaf Fragments",
 8
 ],
 [
@@ -1421,7 +1421,7 @@ null,
 30,
 [
 [
-"Leaf Fragment",
+"Leaf Fragments",
 12
 ]
 ],
@@ -1437,7 +1437,7 @@ null,
 15,
 [
 [
-"Leaf Fragment",
+"Leaf Fragments",
 4
 ],
 [
@@ -1465,11 +1465,11 @@ null,
 "Occult Amulet",
 null,
 [],
-"5000",
-null,
+"5024.91",
+"s",
 "acc",
 10,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1481,33 +1481,33 @@ null,
 "Occult Skull",
 null,
 [],
-"5000",
-null,
+"5024.91",
+"s",
 "acc",
 10,
-"ref"
+"shot"
 ],
 [
 1462,
 "Occult Robe",
 null,
 [],
-"5000",
-null,
+"5024.91",
+"s",
 "acc",
 10,
-"ref"
+"shot"
 ],
 [
 1463,
 "Occult Hood",
 null,
 [],
-"5000",
-null,
+"5024.91",
+"s",
 "acc",
 10,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1519,11 +1519,11 @@ null,
 "Occult Bracelet",
 null,
 [],
-"5000",
-null,
+"5024.91",
+"s",
 "acc",
 10,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1535,11 +1535,11 @@ null,
 "Occult Gloves",
 null,
 [],
-"5000",
-null,
+"5024.91",
+"s",
 "acc",
 10,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1551,11 +1551,11 @@ null,
 "Occult Ring",
 null,
 [],
-"5000",
-null,
+"5024.91",
+"s",
 "acc",
 10,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1601,11 +1601,11 @@ null,
 null,
 [
 [
-"Shark Shell",
+"Shark Carapace",
 24
 ],
 [
-"Nymbréa's Heart",
+"Heart of Nymbrea",
 3
 ],
 [
@@ -1680,11 +1680,11 @@ null,
 1
 ],
 [
-"Essence Slime",
+"Slime Essence",
 1
 ],
 [
-"Tear Slime",
+"Slime Tear",
 1
 ]
 ],
@@ -1709,7 +1709,7 @@ null,
 12
 ],
 [
-"Gorbel Essence",
+"Essence of Gorbel",
 3
 ],
 [
@@ -1738,7 +1738,7 @@ null,
 16
 ],
 [
-"Gorbel Essence",
+"Essence of Gorbel",
 1
 ]
 ],
@@ -1775,7 +1775,7 @@ null,
 15,
 [
 [
-"Shark Shell",
+"Shark Carapace",
 8
 ]
 ],
@@ -1791,7 +1791,7 @@ null,
 15,
 [
 [
-"Shark Shell",
+"Shark Carapace",
 8
 ],
 [
@@ -1811,7 +1811,7 @@ null,
 30,
 [
 [
-"Shark Shell",
+"Shark Carapace",
 12
 ],
 [
@@ -1831,7 +1831,7 @@ null,
 30,
 [
 [
-"Shark Shell",
+"Shark Carapace",
 12
 ],
 [
@@ -1860,7 +1860,7 @@ null,
 8
 ],
 [
-"Souls of the Ruins",
+"Soul of the Ruins",
 8
 ]
 ],
@@ -1900,7 +1900,7 @@ null,
 4
 ],
 [
-"Souls of the Ruins",
+"Soul of the Ruins",
 4
 ],
 [
@@ -2093,7 +2093,7 @@ null,
 [],
 "301.49",
 "s",
-"potion",
+"other",
 null,
 "shot"
 ],
@@ -2105,7 +2105,7 @@ null,
 "1.00",
 "c",
 "other",
-null,
+1,
 "shot"
 ],
 [
@@ -2259,7 +2259,7 @@ null,
 "1.00",
 "c",
 "weapon",
-null,
+1,
 "shot"
 ],
 [
@@ -2326,6 +2326,28 @@ null,
 "c",
 "weapon",
 null,
+"shot"
+],
+[
+null,
+"Training Dagger (2)",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+1,
+"shot"
+],
+[
+1627,
+"Training Lantern (2)",
+null,
+[],
+"1.00",
+"c",
+"weapon",
+1,
 "shot"
 ]
 ]
@@ -2432,7 +2454,7 @@ null,
 8
 ],
 [
-"Allium",
+"Allium Flower",
 8
 ],
 [
@@ -2493,7 +2515,7 @@ null,
 2
 ],
 [
-"Albal's Fangs",
+"Fangs of Albal",
 1
 ]
 ],
@@ -2509,7 +2531,7 @@ null,
 10,
 [
 [
-"Allium",
+"Allium Flower",
 16
 ],
 [
@@ -2557,7 +2579,7 @@ null,
 10,
 [
 [
-"Glacial Hardhide",
+"Hard Glacial Hide",
 16
 ],
 [
@@ -2581,7 +2603,7 @@ null,
 10,
 [
 [
-"Souls of the Ruins",
+"Soul of the Ruins",
 16
 ],
 [
@@ -2589,7 +2611,7 @@ null,
 8
 ],
 [
-"Bear Soul Fragment",
+"Fragment of the Bear's Soul",
 1
 ]
 ],
@@ -2650,7 +2672,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+3,
 "shot"
 ],
 [
@@ -2661,7 +2683,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+5,
 "shot"
 ],
 [
@@ -2672,7 +2694,7 @@ null,
 "10.05",
 "c",
 "potion",
-null,
+5,
 "shot"
 ]
 ]
@@ -2710,7 +2732,7 @@ null,
 1
 ],
 [
-"Albal's Fangs",
+"Fangs of Albal",
 4
 ]
 ],
@@ -2748,3 +2770,4 @@ null,
 ]
 }
 };
+window.SAO_RECIPE_QTY = {"Alchemist|Quality Health Potion I": 3, "Alchemist|Quality Health Potion II": 3, "Alchemist|Quality Health Potion III": 3, "Alchemist|Quality Mana Potion I": 3, "Alchemist|Quality Mana Potion II": 3, "Alchemist|Quality Mana Potion III": 3, "Alchemist|Quality Stamina Potion I": 3, "Alchemist|Quality Stamina Potion II": 3, "Alchemist|Quality Stamina Potion III": 3};

@@ -23,6 +23,17 @@ def check(c, msg):
 
 
 tmp = tempfile.mkdtemp()
+# The fake upload adds height layers and a dungeon. The real site has had those since R0007 (2026-11-07), so the test
+# runs on a copy of the site without them: otherwise its "new" squares and dungeon are already on the map.
+BASE = os.path.join(tmp, "base")
+def _ign(d, names):
+    return [n for n in names if n in (".git", "inbox") or n.startswith("f1jm_c") or (os.path.abspath(d) == os.path.join(ROOT, "tiles") and n == "dg")]
+shutil.copytree(ROOT, BASE, ignore=_ign)
+_jm = open(os.path.join(ROOT, "jmmeta.js"), encoding="utf-8").read()
+_i = _jm.index("window.SAO_JM = ") + len("window.SAO_JM = ")
+_J = json.loads(_jm[_i:_jm.rindex(";")])
+_J["1"].pop("layers", None); _J.pop("dg", None)
+open(os.path.join(BASE, "jmmeta.js"), "w", encoding="utf-8").write(_jm[:_i] + json.dumps(_J, ensure_ascii=False, indent=1) + ";\n")
 try:
     cv = Image.new("RGB", (5120, 5120))
     d = os.path.join(ROOT, "tiles", "f1jm", "3")
@@ -85,7 +96,7 @@ try:
         def log_message(self, *a):
             pass
 
-    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(H, directory=ROOT))
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(H, directory=BASE))
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{srv.server_address[1]}/index.html"
     with sync_playwright() as p:
@@ -189,11 +200,11 @@ try:
         # counts come from the tool's own numbers: the fixture picks regions from the site's current map, so they change
         # whenever a real upload makes the map bigger (R0006, 2026-11-06)
         nday = J["found"].get("day", 0); ncave = sum(v for k, v in J["found"].items() if k != "day")
-        check(f"地面 {nday} 張" in lt and f"地底 {ncave} 張" in lt and nday >= 1 and ncave == 8 and not pg.locator("#jmOut [data-jmbox], #jmOut [data-jmlay]").count(),
+        check(f"地面 {nday} 張" in lt and f"室內・洞穴 {ncave} 張" in lt and nday >= 1 and ncave == 8 and not pg.locator("#jmOut [data-jmbox], #jmOut [data-jmlay]").count(),
               "no height or coordinate fields: the summary counts surface and underground maps")
         pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_timeout(200)
         pg.wait_for_selector("#jmPop canvas", timeout=5000)
-        check(pg.locator("#jmPop canvas").count() == 1 and "地底 1 張" in pg.inner_text("#jmPop"), "pointing at a square previews the player's own map of it in the floating window")
+        check(pg.locator("#jmPop canvas").count() == 1 and "室內・洞穴 1 張" in pg.inner_text("#jmPop"), "pointing at a square previews the player's own map of it in the floating window")
         sqw = pg.evaluate("document.querySelector('#jmPop canvas').getBoundingClientRect().width")
         pg.click("#jmPopX"); pg.wait_for_timeout(100); closed = not pg.locator("#jmPop").count()
         pg.hover("[data-jmreg='5,9']", force=True); pg.wait_for_selector("#jmPop canvas", timeout=5000)
@@ -331,9 +342,9 @@ try:
     w = os.path.join(tmp, "work")
     os.makedirs(os.path.join(w, "tools"))
     shutil.copy(os.path.join(ROOT, "tools", "jm_merge.py"), os.path.join(w, "tools"))
-    shutil.copytree(os.path.join(ROOT, "tiles", "f1jm"), os.path.join(w, "tiles", "f1jm"))
+    shutil.copytree(os.path.join(BASE, "tiles", "f1jm"), os.path.join(w, "tiles", "f1jm"))
     for f in ("floor1.jpg", "floor1_jm.jpg", "jmmeta.js"):
-        shutil.copy(os.path.join(ROOT, f), w)
+        shutil.copy(os.path.join(BASE, f), w)
     r = subprocess.run([sys.executable, "-I", os.path.join(w, "tools", "jm_merge.py"), zp, "--report", "T990"], capture_output=True, text=True)
     res = json.loads(r.stdout.strip().splitlines()[-1]) if r.stdout.strip() else {"stderr": r.stderr[-300:]}
     check(r.returncode == 0 and res.get("ok") and res.get("folders") == 1 and res.get("newChunks", 0) > 300, f"tools/jm_merge.py merges the packed zip ({res})")
@@ -344,7 +355,7 @@ try:
     check(r.returncode == 0 and res.get("ok") and list(res.get("layers", {})) == ["c1"], f"the underground-only pack is accepted through its anchors ({res})")
     # the map viewer: a merged height layer gets its own entry in the 高度 menu and only existing tiles are requested
     site = os.path.join(tmp, "site")
-    shutil.copytree(ROOT, site, ignore=shutil.ignore_patterns(".git", "inbox"))
+    shutil.copytree(BASE, site)
     r = subprocess.run([sys.executable, "-I", os.path.join(site, "tools", "jm_merge.py"), zp, "--report", "T992"], capture_output=True, text=True)
     check(r.returncode == 0, "merge into the site copy")
     srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(H, directory=site))
@@ -358,7 +369,7 @@ try:
         pg.add_init_script("localStorage.setItem('sao-map-base','jm');localStorage.setItem('sao-tour-v1','1')")
         pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/index.html#f1-map"); pg.wait_for_timeout(800)
         opts = pg.eval_on_selector_all("#layerSel option", "o=>o.map(x=>x.textContent)")
-        check(pg.is_visible("#layerSel") and opts[0] == "高度：地面" and "地底 Y 16～31" in opts and len(opts) == 4, f"the explored map has a height menu ({opts})")
+        check(pg.is_visible("#layerSel") and opts[0] == "高度：地面" and "高度 Y 16～31" in opts and len(opts) == 4, f"the explored map has a height menu ({opts})")
         pg.select_option("#layerSel", "c1"); pg.wait_for_timeout(300)
         pg.evaluate("__centerOn(5*512+275,9*512+90,10)"); pg.wait_for_timeout(1200)
         srcs = pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")
