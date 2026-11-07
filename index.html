@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="67af7ab9f9">
+<meta name="sao-build" content="39082cda48">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -200,7 +200,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .cwbody{flex:1;overflow:auto;padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
 .cwbody .chips{margin-bottom:2px}.cwbody .grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
 /* classes: 3 columns, wide two-column panel */
-@media (min-width:821px){#lCls{grid-template-columns:repeat(6,minmax(0,1fr))}#lCls .chead{flex-direction:column;align-items:flex-start;gap:6px}#lCls .cname b{white-space:nowrap}#lCls .cname{min-width:0;width:100%}body.panel-xwide #panel{width:min(880px,calc(100vw - 40px))}}
+@media (min-width:821px){#lCls{grid-template-columns:minmax(0,1fr);max-width:460px}body.panel-xwide #panel{width:min(880px,calc(100vw - 40px))}}
 @media (min-width:1800px){body.panel-open.panel-xwide .results{padding-right:900px}}
 @media (min-width:1180px) and (max-width:1799px){body.panel-open.panel-xwide .results{padding-right:0}}
 .cls2{display:grid;gap:4px 24px}@media (min-width:821px){.cls2{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}}
@@ -661,7 +661,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 .mqs .stimg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin:6px 0 4px}.mqs .stimg a{display:block;border-radius:6px;overflow:hidden;border:1px solid var(--line)}.mqs .stimg img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
 .shide{display:none!important}
 .npcw{font-size:13px;color:var(--muted)}.npcw .linkbtn{font-size:13px}.npcw-row{padding:0 12px 8px 56px;margin-top:-4px}
-.gskg{font-size:12.5px;font-weight:700;color:var(--muted);margin:10px 0 2px}.gskg .c{font-weight:400}.gsks{font-size:12px;font-weight:700;color:var(--accent);margin:2px 0 0 4px}.gskic{width:34px;height:34px;flex:none;border-radius:6px;image-rendering:auto;box-shadow:0 0 0 1px var(--line)}.gskd{font-size:13px;margin:2px 0 4px 40px}.gskv{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 4px 40px}.gskv span{font-size:12px;padding:1px 7px;border-radius:10px;background:var(--chip,rgba(127,127,127,.12));cursor:help}
+.gskg{font-size:12.5px;font-weight:700;color:var(--muted);margin:10px 0 2px}.gskg .c{font-weight:400}.gskup{margin:2px 0 6px 40px}.gskup>summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--accent);padding:2px 0}.gskup>ul{margin-top:4px;padding-left:8px;border-left:2px solid var(--line)}.gskic{width:34px;height:34px;flex:none;border-radius:6px;image-rendering:auto;box-shadow:0 0 0 1px var(--line)}.gskd{font-size:13px;margin:2px 0 4px 40px}.gskv{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 4px 40px}.gskv span{font-size:12px;padding:1px 7px;border-radius:10px;background:var(--chip,rgba(127,127,127,.12));cursor:help}
 </style>
 </head>
 <body>
@@ -870,7 +870,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=349916ca"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=916110e0"></script>
+<script src="changelog.js?v=52e2b668"></script>
 <script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1657,14 +1657,14 @@ function gameSkillsHTML(c){const g=c.game,SL={1:"技能 1",2:"技能 2",3:"技�
   // gets the slot icon (user 2026-11-07「好幾個沒圖示」); the equipped one first. Combo Explosif (weapon) only shows its own icon under a tooltip: no icon
   const tag=x=>[x.g?(x.slot?"初始":"升級"):"",x.t==="scroll"?"卷軸技能":"",x.t==="weapon"?"武器技能（不能裝備）":"",x.max?"等級上限 "+x.max:""].filter(Boolean).join("・");
   const ic=x=>x.g&&IC[x.g]?`<img class="gskic" src="${esc(IC[x.g])}" alt="" aria-hidden="true">`:`<span class="th sm" style="--ring:${GSK_T[x.t][1]}" aria-hidden="true">${x.g===9?"終":x.g===10?"被":x.t==="weapon"?"武":x.g||"技"}</span>`;
-  const row=x=>`<li><div class="lrow">${ic(x)}<span class="t"><b>${esc(x.zh)}</b><span>${[x.en,x.fr].filter(Boolean).map(esc).join("・")}・${tag(x)}</span></span></div>
-    <div class="gskd">${esc(x.d)}</div><div class="gskv">${x.dz.map((z,i)=>`<span title="${esc(x.data[i]||"")}">${esc(z)}</span>`).join("")}</div></li>`;
+  const row=(x,up)=>`<li><div class="lrow">${ic(x)}<span class="t"><b>${esc(x.zh)}</b><span>${[x.en,x.fr].filter(Boolean).map(esc).join("・")}・${tag(x)}</span></span></div>
+    <div class="gskd">${esc(x.d)}</div><div class="gskv">${x.dz.map((z,i)=>`<span title="${esc(x.data[i]||"")}">${esc(z)}</span>`).join("")}</div>${up&&up.length?`<details class="gskup"><summary>升級 ${up.length} 個：${up.map(u=>esc(u.zh)).join("、")}</summary><ul class="rows">${up.map(u=>row(u)).join("")}</ul></details>`:""}</li>`;
   // each slot: the initial skill (the one on the skills page at level 1), then its upgrades (user 2026-11-07: 技能分初始跟升級)
-  const grp=[1,2,3,4,5,9,10].map(n=>{const a=g.list.filter(x=>x.g===n),ini=a.filter(x=>x.slot),up=a.filter(x=>!x.slot);return a.length?[`${SL[n]}${n===10?"":"（主動）"}${up.length?` <span class="c">升級 ${up.length} 個</span>`:""}`,ini,up]:null}).filter(Boolean)
+  const grp=[1,2,3,4,5,9,10].map(n=>{const a=g.list.filter(x=>x.g===n),ini=a.filter(x=>x.slot),up=a.filter(x=>!x.slot);return a.length?[`${SL[n]}${n===10?"":"（主動）"}`,ini,up]:null}).filter(Boolean)
     .concat([["武器技能",g.list.filter(x=>!x.g),[]]]);
   return`<h3 class="sec">技能（遊戲畫面） <span class="c">${g.list.length}</span></h3>
-  <div class="muted" style="font-size:12px">${esc(c.zh)} ${g.lv} 級的技能畫面，數值都是 1 級（${g.date} 截圖）；依欄位分組，每個欄位先列初始技能，再列升級後的技能。說明和數值的中文是本站翻譯，滑鼠移到數值上看遊戲原文。</div>
-  ${grp.map(([lab,a,up])=>a.length||up.length?`<div class="gskg">${lab}</div><ul class="rows">${a.map(row).join("")}</ul>${up.length?`<div class="gsks">升級</div><ul class="rows">${up.map(row).join("")}</ul>`:""}`:"").join("")}
+  <div class="muted" style="font-size:12px">${esc(c.zh)} ${g.lv} 級的技能畫面，數值都是 1 級（${g.date} 截圖）；依欄位分組，列出每個欄位的初始技能，升級後的技能點「升級」展開。說明和數值的中文是本站翻譯，滑鼠移到數值上看遊戲原文。</div>
+  ${grp.map(([lab,a,up])=>a.length||up.length?`<div class="gskg">${lab}</div><ul class="rows">${a.map(x=>row(x,up)).join("")}</ul>${!a.length&&up.length?`<ul class="rows">${up.map(u=>row(u)).join("")}</ul>`:""}`:"").join("")}
   <div class="note srcn">遊戲技能：站長 ${g.date} 的技能截圖。欄位依舊版技能視窗的圖示分組（同一個欄位的技能畫同一個圖示；法文技能提示 01:51～02:27）；每個欄位的初始技能是技能頁上 1 級的那一個，其他是升級後的技能（站長 2026-11-07 說明）。初始技能和等級上限取自英文技能頁（03:48），技能名稱和圖示取自中文技能頁（15:35）；爆裂連擊的圖示在截圖裡被說明框蓋住，沒有放。</div>`}
 // floating window: equipment a class can use (like the quest route window)
 let CW=null;
