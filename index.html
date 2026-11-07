@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="25f2a3499d">
+<meta name="sao-build" content="5385278bae">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -661,7 +661,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 .mqs .stimg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin:6px 0 4px}.mqs .stimg a{display:block;border-radius:6px;overflow:hidden;border:1px solid var(--line)}.mqs .stimg img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
 .shide{display:none!important}
 .npcw{font-size:13px;color:var(--muted)}.npcw .linkbtn{font-size:13px}.npcw-row{padding:0 12px 8px 56px;margin-top:-4px}
-.gskg{font-size:12.5px;font-weight:700;color:var(--muted);margin:10px 0 2px}.gskd{font-size:13px;margin:2px 0 4px 40px}.gskv{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 4px 40px}.gskv span{font-size:12px;padding:1px 7px;border-radius:10px;background:var(--chip,rgba(127,127,127,.12));cursor:help}
+.gskg{font-size:12.5px;font-weight:700;color:var(--muted);margin:10px 0 2px}.gskg .c{font-weight:400}.gskic{width:34px;height:34px;flex:none;border-radius:6px;image-rendering:auto;box-shadow:0 0 0 1px var(--line)}.gskd{font-size:13px;margin:2px 0 4px 40px}.gskv{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 4px 40px}.gskv span{font-size:12px;padding:1px 7px;border-radius:10px;background:var(--chip,rgba(127,127,127,.12));cursor:help}
 </style>
 </head>
 <body>
@@ -870,12 +870,12 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=349916ca"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=5b8e7bb6"></script>
+<script src="changelog.js?v=f13d3008"></script>
 <script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=877782cc"></script>
-<script src="gameskills.js?v=b9ec2fce"></script>
+<script src="gameskills.js?v=e6e43aa3"></script>
 <script src="events.js?v=9477972d"></script>
 <script src="gamestats.js?v=553994fb"></script>
 <script src="sets.js?v=fbf69e31"></script>
@@ -1652,16 +1652,18 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
   <div class="note srcn">介紹和技能名稱來自 wiki（<a href="https://saominecraft.wiki.gg/wiki/${encodeURIComponent(c.name.replace(/ /g,"_"))}" target="_blank" rel="noopener">${esc(c.name)} 頁</a>），說明是本站改寫；本站不使用職業或技能的圖片。</div>`}
 // skills as shown in the game (gameskills.js, owner's screenshots of the skill tooltips)
 const GSK_T={passive:["被動","var(--ok)","說明寫 Passif"],scroll:["卷軸技能","var(--warn)","只能讀卷軸學會"],weapon:["武器技能","var(--accent2,var(--accent))","不能裝備，跟著武器"],"":["","var(--accent)",""]};
-function gameSkillsHTML(c){const g=c.game,SL={1:"技能 1",2:"技能 2",3:"技能 3",4:"技能 4",5:"技能 5",9:"終極技能",10:"被動"};
-  const eq=g.list.filter(x=>x.slot).sort((a,b)=>a.slot-b.slot),rest=g.list.filter(x=>!x.slot);
-  const grp=[["裝備中的技能（英文技能頁的欄位）",eq],["其他被動技能",rest.filter(x=>x.t==="passive")],["其他技能（說明沒寫主動或被動）",rest.filter(x=>x.t===""||x.t==="scroll")],["武器技能",rest.filter(x=>x.t==="weapon")]];
-  const tag=x=>[x.slot?SL[x.slot]:"",x.t==="passive"&&x.slot!==10?"被動":"",x.t==="scroll"?"卷軸技能":"",x.t==="weapon"?"武器技能（不能裝備）":"",x.max?"等級上限 "+x.max:""].filter(Boolean).join("・");
-  const ic=x=>x.slot===9?"終":x.slot===10||x.t==="passive"?"被":x.t==="weapon"?"武":x.slot?String(x.slot):"技";
+function gameSkillsHTML(c){const g=c.game,SL={1:"技能 1",2:"技能 2",3:"技能 3",4:"技能 4",5:"技能 5",9:"終極技能",10:"被動"},IC=g.icons||{};
+  // grouped by slot (user 2026-11-07: 用圖示對照修改對應的技能): the old skill window shows every skill of a slot with that slot's icon; the equipped one first
+  const tag=x=>[x.slot?"裝備中":"沒有裝備",x.t==="scroll"?"卷軸技能":"",x.t==="weapon"?"武器技能（不能裝備）":"",x.max?"等級上限 "+x.max:""].filter(Boolean).join("・");
+  const ic=x=>x.g&&IC[x.g]&&x.slot?`<img class="gskic" src="${esc(IC[x.g])}" alt="" aria-hidden="true">`:`<span class="th sm" style="--ring:${GSK_T[x.t][1]}" aria-hidden="true">${x.g===9?"終":x.g===10?"被":x.t==="weapon"?"武":x.g||"技"}</span>`;
+  const row=x=>`<li><div class="lrow">${ic(x)}<span class="t"><b>${esc(x.zh)}</b><span>${[x.en,x.fr].filter(Boolean).map(esc).join("・")}・${tag(x)}</span></span></div>
+    <div class="gskd">${esc(x.d)}</div><div class="gskv">${x.dz.map((z,i)=>`<span title="${esc(x.data[i]||"")}">${esc(z)}</span>`).join("")}</div></li>`;
+  const grp=[1,2,3,4,5,9,10].map(n=>{const a=g.list.filter(x=>x.g===n).sort((x,y)=>(y.slot?1:0)-(x.slot?1:0));return a.length?[`${SL[n]}${n===10?"":"（主動）"}${a.length>1?` <span class="c">同一欄位 ${a.length} 個</span>`:""}`,a]:null}).filter(Boolean)
+    .concat([["武器技能",g.list.filter(x=>!x.g)]]);
   return`<h3 class="sec">技能（遊戲畫面） <span class="c">${g.list.length}</span></h3>
-  <div class="muted" style="font-size:12px">${esc(c.zh)} ${g.lv} 級的技能畫面，數值都是 1 級（${g.date} 截圖）；中文是本站翻譯，滑鼠移到數值上看遊戲原文。</div>
-  ${grp.map(([lab,a])=>a.length?`<div class="gskg">${lab}</div><ul class="rows">${a.map(x=>`<li><div class="lrow"><span class="th sm" style="--ring:${GSK_T[x.t][1]}" aria-hidden="true">${ic(x)}</span><span class="t"><b>${esc(x.zh)}</b><span>${[x.en,x.fr].filter(Boolean).map(esc).join("・")}${tag(x)?"・"+tag(x):""}</span></span></div>
-    <div class="gskd">${esc(x.d)}</div><div class="gskv">${x.dz.map((z,i)=>`<span title="${esc(x.data[i]||"")}">${esc(z)}</span>`).join("")}</div></li>`).join("")}</ul>`:"").join("")}
-  <div class="note srcn">遊戲技能：站長 ${g.date} 的技能截圖（法文的技能提示，和英文的技能頁：欄位、等級上限）。說明和數值的中文是本站翻譯。</div>`}
+  <div class="muted" style="font-size:12px">${esc(c.zh)} ${g.lv} 級的技能畫面，數值都是 1 級（${g.date} 截圖）；依欄位分組，每組第一個是目前裝備的技能。說明和數值的中文是本站翻譯，滑鼠移到數值上看遊戲原文。</div>
+  ${grp.map(([lab,a])=>a.length?`<div class="gskg">${lab}</div><ul class="rows">${a.map(row).join("")}</ul>`:"").join("")}
+  <div class="note srcn">遊戲技能：站長 ${g.date} 的技能截圖。欄位依舊版技能視窗的圖示分組（同一個欄位的技能用同一個圖示；法文技能提示 01:51～02:27），裝備中的技能和等級上限取自英文技能頁（03:48），技能名稱和圖示取自中文技能頁（15:35）。</div>`}
 // floating window: equipment a class can use (like the quest route window)
 let CW=null;
 function openClassEquip(cid,part){const c=CLS.find(x=>x.id===cid);if(!c)return;CW={cid,part:part||"all",view};
