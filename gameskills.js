@@ -5,7 +5,12 @@
    "scroll" (description: learned only by reading a scroll), "weapon" (red line: Compétence d'arme — ne s'équipe pas), "" = the tooltip does not say.
    slot / max / en: from the English Skills page (2026-11-07 03:48): 1-5 = "Skill 1"-"Skill 5", 9 = "Ultimate skill", 10 = "Passive"; max = the level cap shown
    ("Lvl 1 / 18"). zh of the 7 equipped skills = official Chinese name (skills screen after the localisation, 2026-11-07 15:35); the others are this site's translation.
-   Evasive Shot is only on the English page (no French tooltip screenshot), so fr is null.
+   Evasive Shot = Tir Évasif (same numbers; French tooltip sent by the owner 2026-11-07, with Percée Fulgurante, Repli Renforcé (slot-1 icon),
+   Tempête de Flèches and Tir de Choc: a golden fan icon. The Chinese skills page (owner 2026-11-07 18:1x) shows that icon as 箭矢齊射, a level-1 base skill
+   (French tooltip "Pluie de Flèches", same name as the Khan scroll skill but other icon and numbers), so g "x" = the 箭矢齊射 family (base: 1), not equipped.
+   g = the skill family (base skill + its upgrades, same icon in the old window); the "Replace" list on the skills page shows the base skills are not tied
+   to one slot (迴避射擊, 疾速箭矢, 箭矢齊射, 疾風戰刃, 穿刺天降, 箭雨 can all go in skill 1); slot = where the base skill is equipped now.
+   dOff = d is the official Chinese description (skills page); the others are this site's translation. icons.w = Combo Explosif (tooltip 2026-11-07, not covered).
    g = the slot the skill belongs to (user 2026-11-07「用圖示對照修改對應的技能」): in the old French skill window (01:51～02:27) every skill of a slot shows that
    slot's icon (all 3 passives the crosshair, Déluge Concentré / Céleste / Barrage Céleste the rain icon of skill 3, …), and the ACTIF bar holds slots 1-5 + ultimate.
    icons = the slot icons of the skills page after the Chinese localisation (11/7 15:35, 2560 px; skills 2 and 5 are 32 px pixel art rebuilt on their grid,
@@ -14,13 +19,38 @@
    The wiki's skill list for the archer (Tir Précis, Flèche Perforante…) does not appear in the game at all. */
 window.SAO_GAMESKILLS = {
  archer: {date: "2026-11-07", lv: 11,
-  icons: {1: "icons/skills/archer_evasive_shot.png", 2: "icons/skills/archer_aeroglaive.png", 3: "icons/skills/archer_piercing_skyfall.png", 4: "icons/skills/archer_rapid_arrows.png", 5: "icons/skills/archer_rain_of_arrows.png", 9: "icons/skills/archer_shot_of_destruction.png", 10: "icons/skills/archer_ambush.png"},
+  icons: {x: "icons/skills/archer_gold_fan.png", w: "icons/skills/archer_combo_explosif.png", 1: "icons/skills/archer_evasive_shot.png", 2: "icons/skills/archer_aeroglaive.png", 3: "icons/skills/archer_piercing_skyfall.png", 4: "icons/skills/archer_rapid_arrows.png", 5: "icons/skills/archer_rain_of_arrows.png", 9: "icons/skills/archer_shot_of_destruction.png", 10: "icons/skills/archer_ambush.png"},
   list: [
-  {g: 1, fr: null, en: "Evasive Shot", zh: "迴避射擊", t: "", slot: 1, max: 18,
-   d: "向後跳，再朝正前方射出 3 支箭，傷害遞增（說明這樣寫，但技能頁的數值是 125／100／125）。",
+  {g: 1, fr: "Tir Évasif", en: "Evasive Shot", zh: "迴避射擊", t: "", slot: 1, max: 18,
+   d: "向後躍起，接著射出 3 支箭直衝正前方，傷害逐漸提升。", dOff: 1,
    lore: "Leap backward, then fire 3 arrows straight ahead of you, with increasing damage. Damage type: Skill · Projectile",
    data: ["Total damage, 1st arrow 125", "Total damage, 2nd arrow 100", "Total damage, 3rd arrow 125", "Cooldown in seconds 8", "Stamina required 7"],
    dz: ["第 1 支總傷害 125", "第 2 支總傷害 100", "第 3 支總傷害 125", "冷卻 8 秒", "耐力 7"]},
+  {g: 1, fr: "Percée Fulgurante", zh: "閃電突進", t: "",
+   d: "向前衝刺，接著一次朝前方射出 3 支扇形的箭。",
+   lore: "Foncez en avant, puis décochez 3 flèches en éventail devant vous d''un seul coup.",
+   data: ["Nature des dégâts : Compétence · Projectile", "125 Dégâts totaux par flèche", "3 Distance de la percée en blocs", "11 Temps de recharge en secondes", "8 Stamina nécessaire"],
+   dz: ["傷害類型：技能・投射物", "每支箭總傷害 125", "突進距離 3 格", "冷卻 11 秒", "耐力 8"]},
+  {g: 1, fr: "Repli Renforcé", zh: "強化後撤", t: "",
+   d: "用力往後跳一大步，不射箭。",
+   lore: "Effectuez un puissant bond en arrière, sans décocher de flèche.",
+   data: ["150 Puissance du bond en pourcentage", "10 Temps de recharge en secondes", "8 Stamina nécessaire"],
+   dz: ["跳躍力道 150%", "冷卻 10 秒", "耐力 8"]},
+  {g: "x", base: 1, fr: "Pluie de Flèches", zh: "箭矢齊射", t: "", max: 18,
+   d: "蓄力向前射擊，擊退敵人。", dOff: 1,
+   lore: "Chargez un tir vers l'avant qui repousse les ennemis.",
+   data: ["Nature des dégâts : Compétence · Projectile", "125 Dégâts totaux en pourcentage", "10 Force de repoussement", "13 Temps de recharge en secondes", "7 Stamina nécessaire"],
+   dz: ["傷害類型：技能・投射物", "總傷害 125%", "擊退力 10", "冷卻 13 秒", "耐力 7"]},
+  {g: "x", fr: "Tempête de Flèches", zh: "箭矢風暴", t: "",
+   d: "蓄力射出一發會擊退敵人的強力射擊，接著馬上再射出一波箭。",
+   lore: "Chargez un tir puissant qui repousse les ennemis, puis enchaînez aussitôt une seconde volée de flèches.",
+   data: ["Nature des dégâts : Compétence · Projectile", "175 Dégâts par salve en pourcentage", "5 Force de repoussement", "15 Temps de recharge en secondes", "10 Stamina nécessaire"],
+   dz: ["傷害類型：技能・投射物", "每波傷害 175%", "擊退力 5", "冷卻 15 秒", "耐力 10"]},
+  {g: "x", fr: "Tir de Choc", zh: "衝擊射擊", t: "",
+   d: "把全部力量集中在一發射擊，強力擊退並暈眩目標。",
+   lore: "Concentrez toute votre puissance dans un unique tir qui repousse fortement et étourdit sa cible.",
+   data: ["Nature des dégâts : Compétence · Projectile", "150 Dégâts totaux en pourcentage", "10 Force de repoussement", "1 Durée d''étourdissement en secondes", "14 Temps de recharge en secondes", "9 Stamina nécessaire"],
+   dz: ["傷害類型：技能・投射物", "總傷害 150%", "擊退力 10", "暈眩 1 秒", "冷卻 14 秒", "耐力 9"]},
   {g: 10, fr: "Marque du Chasseur", zh: "獵人印記", t: "passive",
    d: "第一次射中目標時留下印記；之後目標每被打一次（你或隊友都算）印記就變大，滿了就爆炸。所有人都能幫忙引爆。",
    lore: "Votre premier tir sur une cible y appose une marque. Chaque coup qu'elle subit ensuite — de vous ou de vos alliés — la fait grandir, jusqu'à exploser. Tout le monde peut contribuer à faire exploser la marque.",
@@ -42,7 +72,7 @@ window.SAO_GAMESKILLS = {
    data: ["Nature des dégâts : Compétence · Projectile", "175 Dégâts totaux en pourcentage", "8 Portée en blocs", "13 Temps de recharge en secondes", "10 Stamina nécessaire"],
    dz: ["傷害類型：技能・投射物", "總傷害 175%", "範圍 8 格", "冷卻 13 秒", "耐力 10"]},
   {g: 3, fr: "Déluge Céleste", en: "Piercing Skyfall", slot: 3, max: 18, zh: "穿刺天降", t: "",
-   d: "向天空射出多支箭，落成一直線，貫穿路徑上所有敵人。",
+   d: "朝天空射出多支箭矢，落下時排成一直線，貫穿沿途所有敵人。", dOff: 1,
    lore: "Tirez plusieurs flèches vers le ciel qui retombent en ligne, transperçant tous les ennemis sur leur passage.",
    data: ["Nature des dégâts : Compétence · Projectile", "125 Dégâts totaux en pourcentage", "12 Temps de recharge en secondes", "8 Stamina nécessaire"],
    dz: ["傷害類型：技能・投射物", "總傷害 125%", "冷卻 12 秒", "耐力 8"]},
@@ -57,7 +87,7 @@ window.SAO_GAMESKILLS = {
    data: ["Nature des dégâts : Compétence · Projectile", "35 Dégâts par flèche", "17 Temps de recharge en secondes", "11 Stamina nécessaire"],
    dz: ["傷害類型：技能・投射物", "每支箭傷害 35", "冷卻 17 秒", "耐力 11"]},
   {g: 4, fr: "Flèches Rapides", en: "Rapid Arrows", slot: 4, max: 18, zh: "疾速箭矢", t: "",
-   d: "自由瞄準、連續射出 10 支箭：前 7 支傷害較低，最後 3 支是全額傷害。",
+   d: "連續射出 10 支箭，可自由瞄準。前 7 支傷害較低，後 3 支則發揮全部威力。", dOff: 1,
    lore: "Décochez 10 flèches en rafale, en visant librement. Les 7 premières font moins de dégâts, les 3 dernières infligent le plein potentiel.",
    data: ["Nature des dégâts : Compétence · Projectile", "50 Dégâts des 7 premières flèches", "100 Dégâts des 3 dernières flèches", "15 Temps de recharge en secondes", "10 Stamina nécessaire"],
    dz: ["傷害類型：技能・投射物", "前 7 支傷害 50", "後 3 支傷害 100", "冷卻 15 秒", "耐力 10"]},

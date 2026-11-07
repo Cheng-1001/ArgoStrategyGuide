@@ -255,16 +255,17 @@ with sync_playwright() as p:
     pg.evaluate("document.querySelector('#lCls [data-go=\"c|archer\"]').click()"); pg.wait_for_timeout(300)
     t = pg.inner_text("#pBody")
     check("技能（遊戲畫面）" in t and "迴避射擊" in t and "終極技能" in t and "等級上限 18" in t and "Embuscade" in t and "技能畫面裡都沒有出現" in t
-          and "遊戲技能 15" in pg.inner_text("#lCls"), "Archer panel: in-game skills with slots and level caps; wiki list marked as not in the game")
-    gs = pg.evaluate("[...document.querySelectorAll('#pBody .gskg')].map(x=>x.textContent)")
-    check(pg.locator("#pBody img.gskic").count() == 14 and pg.locator("#pBody details.gskup").count() == 4 and "升級 2 個：集中箭雨、天空彈幕" in pg.inner_text("#pBody") and pg.locator("#pBody details.gskup[open]").count() == 0 and gs[-1] == "武器技能",
-          f"Archer skills grouped by slot (old skill window icons), initial skill with its upgrades folded under it, every slot skill has its slot icon (14; the weapon skill has none) ({gs})")
+          and "遊戲技能 20" in pg.inner_text("#lCls"), "Archer panel: in-game skills with slots and level caps; wiki list marked as not in the game")
+    rows = pg.evaluate("[...document.querySelectorAll('#pBody .gsklist>li>.lrow b')].map(x=>x.textContent)"); pb = pg.inner_text("#pBody")
+    check(pg.locator("#pBody img.gskic").count() == 20 and pg.locator("#pBody details.gskup").count() == 6 and pg.locator("#pBody details.gskup[open]").count() == 0
+          and rows[:2] == ["迴避射擊", "疾風戰刃"] and rows[-2:] == ["箭矢齊射", "爆裂連擊"] and "目前沒有裝備" in pb and "升級 2 個：集中箭雨、天空彈幕" in pb and "Tir Évasif" in pb,
+          f"Archer skills: one row per base skill (equipped ones in slot order, then 箭矢齊射, then the weapon skill), upgrades folded, every skill has an icon ({rows})")
     pg.evaluate("document.querySelector('#lCls [data-go=\"c|guerrier\"]').click()"); pg.wait_for_timeout(300)
     cols = pg.evaluate("getComputedStyle(document.getElementById('lCls')).gridTemplateColumns.split(' ').length")
     pw = pg.locator("#panel").bounding_box()["width"]
     two = pg.evaluate("getComputedStyle(document.querySelector('#pBody .cls2')).gridTemplateColumns.split(' ').length")
     lr = pg.evaluate("document.getElementById('lCls').getBoundingClientRect().right"); px = pg.locator("#panel").bounding_box()["x"]
-    check(cols == 1 and px >= lr and pw > 600 and two == 1, f"classes: one column, the panel fills the space right of it ({px:.0f}>={lr:.0f}, {pw:.0f}px), one inner column at 1280 ({two})")
+    check(cols == 1 and px >= lr and pw > 900 and two == 2, f"classes: one compact column, the panel fills the space right of it ({px:.0f}>={lr:.0f}, {pw:.0f}px), two inner columns at 1280 ({two})")
     pg.set_viewport_size({"width": 2000, "height": 1000}); pg.wait_for_timeout(300)
     two2 = pg.evaluate("getComputedStyle(document.querySelector('#pBody .cls2')).gridTemplateColumns.split(' ').length"); pw2 = pg.locator("#panel").bounding_box()["width"]
     check(two2 == 2 and pw2 > 1200, f"classes at 2000px: wide panel ({pw2:.0f}px) split in two ({two2})")

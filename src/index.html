@@ -192,10 +192,10 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .cwbody{flex:1;overflow:auto;padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
 .cwbody .chips{margin-bottom:2px}.cwbody .grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
 /* classes: 3 columns, wide two-column panel */
-@media (min-width:821px){#lCls{grid-template-columns:minmax(0,1fr);max-width:320px}body.panel-xwide #panel{width:var(--clsw,min(880px,calc(100vw - 40px)))}body.cls-one .cls2{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:821px){#view-classes.browse{grid-template-columns:minmax(0,1fr)}#view-classes .filters{display:none}#lCls{grid-template-columns:minmax(0,1fr);max-width:270px;gap:8px}#lCls .card{padding:10px 12px}#lCls .clx{display:none}body.panel-xwide #panel{width:var(--clsw,min(880px,calc(100vw - 40px)))}body.cls-one .cls2{grid-template-columns:minmax(0,1fr)}}
 @media (min-width:1800px){body.panel-open.panel-xwide:not([data-view="classes"]) .results{padding-right:900px}}
 @media (min-width:1180px) and (max-width:1799px){body.panel-open.panel-xwide .results{padding-right:0}}
-.cls2{display:grid;gap:4px 28px}@media (min-width:821px){.cls2{grid-template-columns:minmax(300px,1fr) minmax(0,1.7fr)}}
+.cls2{display:grid;gap:4px 28px}@media (min-width:821px){.cls2{grid-template-columns:300px minmax(0,1fr)}}
 .cls2>div{min-width:0}
 .rwhead{display:flex;gap:8px;align-items:center;padding:6px 8px 6px 14px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
 .rwhead b{font-family:var(--f-display);font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -653,7 +653,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 .mqs .stimg{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin:6px 0 4px}.mqs .stimg a{display:block;border-radius:6px;overflow:hidden;border:1px solid var(--line)}.mqs .stimg img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
 .shide{display:none!important}
 .npcw{font-size:13px;color:var(--muted)}.npcw .linkbtn{font-size:13px}.npcw-row{padding:0 12px 8px 56px;margin-top:-4px}
-.gskg{font-size:12.5px;font-weight:700;color:var(--muted);margin:10px 0 2px}.gskg .c{font-weight:400}.gskup{margin:2px 0 6px 40px}.gskup>summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--accent);padding:2px 0}.gskup>ul{margin-top:4px;padding-left:8px;border-left:2px solid var(--line)}.gskic{width:34px;height:34px;flex:none;border-radius:6px;image-rendering:auto;box-shadow:0 0 0 1px var(--line)}.gskd{font-size:13px;margin:2px 0 4px 40px}.gskv{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 4px 40px}.gskv span{font-size:12px;padding:1px 7px;border-radius:10px;background:var(--chip,rgba(127,127,127,.12));cursor:help}
+.gskg{font-size:12.5px;font-weight:700;color:var(--muted);margin:10px 0 2px}.gskg .c{font-weight:400}.clsbtns{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0}.clsbtns>*{flex:1 1 160px;margin:0!important}.gsklist{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(440px,100%),1fr));column-gap:24px;align-items:start}.gskwiki{margin:12px 0 4px}.gskwiki>summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--muted)}.gskup{margin:2px 0 6px 40px}.gskup>summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--accent);padding:2px 0}.gskup>ul{margin-top:4px;padding-left:8px;border-left:2px solid var(--line)}.gskic{width:34px;height:34px;flex:none;border-radius:6px;image-rendering:auto;box-shadow:0 0 0 1px var(--line)}.gskd{font-size:13px;margin:2px 0 4px 40px}.gskv{display:flex;flex-wrap:wrap;gap:4px;margin:0 0 4px 40px}.gskv span{font-size:12px;padding:1px 7px;border-radius:10px;background:var(--chip,rgba(127,127,127,.12));cursor:help}
 </style>
 
 <div class="app">
@@ -1618,8 +1618,8 @@ function renderClasses(){const s=Sq();const a=CLS.filter(c=>!s||norm([c.name,c.z
   $("cCls").textContent=`${a.length} 個職業`;
   $("lCls").innerHTML=a.map(c=>`<button class="card" data-go="c|${c.id}" data-key="c|${c.id}"><div class="chead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="cname"><b>${esc(c.name)}</b><span>${esc(c.zh)}・${esc(c.role)}</span></div></div>
     <div class="cmeta">${stars(c.diff)}${clsSoon(c)?'<span class="pill">可能尚未開放</span>':""}${c.game?`<span class="pill rep">遊戲技能 ${c.game.list.length}</span>`:""}${c.reps.length?`<span class="pill rep">技能回報 ${c.reps.length}</span>`:c.skillsSure||c.game?"":'<span class="pill">技能待確認</span>'}</div>
-    <div class="muted" style="font-size:12.5px">${clsWeap(c)?"武器："+clsWeap(c):"官方圖鑑還沒有這個職業的裝備"}</div>
-    <div class="muted" style="font-size:12.5px">Lv 30 專精：${c.subs.map(x=>esc(x[0])).join(" / ")}</div></button>`).join("")||`<div class="empty-note">沒有符合的職業。</div>`;
+    <div class="muted clx" style="font-size:12.5px">${clsWeap(c)?"武器："+clsWeap(c):"官方圖鑑還沒有這個職業的裝備"}</div>
+    <div class="muted clx" style="font-size:12.5px">Lv 30 專精：${c.subs.map(x=>esc(x[0])).join(" / ")}</div></button>`).join("")||`<div class="empty-note">沒有符合的職業。</div>`;
   bindGo($("lCls"));markSel()}
 function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class="note">找不到這個職業。</div>`;
   const bar=n=>`<span class="stars">${"★".repeat(n)}<span class="off">${"★".repeat(5-n)}</span></span>`;
@@ -1629,36 +1629,33 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
   <p class="lore" style="font-style:normal">${esc(c.about)}</p>
   ${clsSoon(c)?`<div class="note warn">官方物品圖鑑沒有這個職業的裝備，參考互動地圖也沒有它的屬性資料，可能還沒開放。下面只有 wiki 的介紹。</div>`:""}
   <dl class="facts"><dt>難度</dt><dd>${stars(c.diff)}</dd><dt>可用武器</dt><dd>${clsWeap(c)||'<span class="muted">官方圖鑑沒有資料</span>'}</dd><dt>Lv 30 專精</dt><dd>${c.subs.map(x=>`<b>${esc(x[0])}</b>：${esc(x[1])}`).join("<br>")}<br><span class="muted" style="font-size:12px">wiki 註明專精還在準備中。</span></dd></dl>
-  ${Object.keys(c.weapons).length&&CLASS_ZH[c.id]?`<button class="btn" data-eqcls="${c.id}">查看這個職業可用的裝備（另開視窗）</button>`:""}
-  <a class="btn" style="display:block;text-align:center;text-decoration:none;margin-top:6px" href="https://saominecraft.com/builds?class=${c.id==="martial"?"martial_artist":c.id}" target="_blank" rel="noopener">官網的玩家配裝（${esc(c.zh)}）↗</a>
+  <div class="clsbtns">${Object.keys(c.weapons).length&&CLASS_ZH[c.id]?`<button class="btn" data-eqcls="${c.id}">可用的裝備（另開視窗）</button>`:""}
+  <a class="btn" style="display:block;text-align:center;text-decoration:none;margin-top:6px" href="https://saominecraft.com/builds?class=${c.id==="martial"?"martial_artist":c.id}" target="_blank" rel="noopener">官網的玩家配裝 ↗</a></div>
   <div class="cls2"><div>
   <h3 class="sec">能力傾向 <span class="c">wiki 星等</span></h3>${tbl(c.stars.map(([k,n])=>`<tr><th>${esc(k)}</th><td>${n?bar(n):'<span class="muted">—</span>'}</td></tr>`).join(""),null)}
   ${keys.length?`<h3 class="sec">起始屬性和成長 <span class="c">參考互動地圖</span></h3>${tbl(keys.map(k=>`<tr><th>${esc(k)}</th><td class="mono">${esc(stat(c.base,k)??"—")}</td><td class="mono">${stat(c.perLv,k)!=null?"+"+esc(stat(c.perLv,k)):"—"}</td></tr>`).join(""),["屬性","Lv 1","每升 1 級"])}`:""}
   </div><div>
   ${c.reps.length?`<h3 class="sec">技能（玩家回報） <span class="c">${c.reps.length}</span></h3><ul class="rows">${c.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:${/被動/.test(r.stype)?"var(--ok)":"var(--accent)"}" aria-hidden="true">${r.unlock||"?"}</span><span class="t"><b>${esc(r.name)}</b><span>${r.unlock?"Lv "+r.unlock+"・":""}${esc(r.stype||"")}${r.scost?"・"+esc(r.scost):""}${r.sdesc?"・原文："+esc(r.sdesc):""}</span></span><span class="v">${repLink(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>`:""}
   ${c.game?gameSkillsHTML(c):""}
-  <h3 class="sec">技能${c.reps.length||c.game?"（wiki）":""} <span class="c">${c.skills.length}</span></h3>
-  ${c.game?`<div class="note warn">wiki 列的這些技能，遊戲的技能畫面裡都沒有出現（上面是遊戲實際的技能），應該是開服前的預定內容。</div>`:c.skillsSure?"":`<div class="note warn">wiki 上這些技能的圖示都是佔位圖，清單可能是開服前的預定內容，和遊戲實際不同。</div>`}
-  <ul class="rows">${c.skills.map(([n,ty,lv,d])=>`<li><div class="lrow"><span class="th sm" style="--ring:${ty==="被動"?"var(--ok)":"var(--accent)"}" aria-hidden="true">${lv}</span><span class="t"><b>${esc(n)}</b><span>Lv ${lv}・${ty}・${esc(d)}</span></span></div></li>`).join("")}</ul>
+  ${(w=>c.game?`<details class="gskwiki"><summary>wiki 的技能清單 ${c.skills.length} 個（遊戲的技能畫面裡都沒有出現）</summary>${w}</details>`:`<h3 class="sec">技能${c.reps.length?"（wiki）":""} <span class="c">${c.skills.length}</span></h3>${c.skillsSure?"":`<div class="note warn">wiki 上這些技能的圖示都是佔位圖，清單可能是開服前的預定內容，和遊戲實際不同。</div>`}${w}`)(`<ul class="rows">${c.skills.map(([n,ty,lv,d])=>`<li><div class="lrow"><span class="th sm" style="--ring:${ty==="被動"?"var(--ok)":"var(--accent)"}" aria-hidden="true">${lv}</span><span class="t"><b>${esc(n)}</b><span>Lv ${lv}・${ty}・${esc(d)}</span></span></div></li>`).join("")}</ul>`)}
   ${c.talents.length?`<h3 class="sec">天賦樹（被動點數） <span class="c">參考互動地圖</span></h3>${tbl(c.talents.map(([n,st,a,u,k])=>`<tr><th>${esc(n)}</th><td>${esc(st)} +${a}${u}／點</td><td class="mono">× ${k}</td></tr>`).join(""),["節點","效果","數量"])}<div class="muted" style="font-size:12px">同名節點合併計算；數值是參考互動地圖配裝計算器的資料，還沒有用遊戲畫面核對。</div>`:""}
   </div></div>
   <div class="note srcn">介紹和技能名稱來自 wiki（<a href="https://saominecraft.wiki.gg/wiki/${encodeURIComponent(c.name.replace(/ /g,"_"))}" target="_blank" rel="noopener">${esc(c.name)} 頁</a>），說明是本站改寫；本站不使用職業或技能的圖片。</div>`}
 // skills as shown in the game (gameskills.js, owner's screenshots of the skill tooltips)
 const GSK_T={passive:["被動","var(--ok)","說明寫 Passif"],scroll:["卷軸技能","var(--warn)","只能讀卷軸學會"],weapon:["武器技能","var(--accent2,var(--accent))","不能裝備，跟著武器"],"":["","var(--accent)",""]};
-function gameSkillsHTML(c){const g=c.game,SL={1:"技能 1",2:"技能 2",3:"技能 3",4:"技能 4",5:"技能 5",9:"終極技能",10:"被動"},IC=g.icons||{};
-  // grouped by slot (user 2026-11-07: 用圖示對照修改對應的技能): the old skill window shows every skill of a slot with that slot's icon, so every skill of a slot
-  // gets the slot icon (user 2026-11-07「好幾個沒圖示」); the equipped one first. Combo Explosif (weapon) only shows its own icon under a tooltip: no icon
-  const tag=x=>[x.g?(x.slot?"初始":"升級"):"",x.t==="scroll"?"卷軸技能":"",x.t==="weapon"?"武器技能（不能裝備）":"",x.max?"等級上限 "+x.max:""].filter(Boolean).join("・");
-  const ic=x=>x.g&&IC[x.g]?`<img class="gskic" src="${esc(IC[x.g])}" alt="" aria-hidden="true">`:`<span class="th sm" style="--ring:${GSK_T[x.t][1]}" aria-hidden="true">${x.g===9?"終":x.g===10?"被":x.t==="weapon"?"武":x.g||"技"}</span>`;
-  const row=(x,up)=>`<li><div class="lrow">${ic(x)}<span class="t"><b>${esc(x.zh)}</b><span>${[x.en,x.fr].filter(Boolean).map(esc).join("・")}・${tag(x)}</span></span></div>
+function gameSkillsHTML(c){const g=c.game,SL={1:"裝在技能 1",2:"裝在技能 2",3:"裝在技能 3",4:"裝在技能 4",5:"裝在技能 5",9:"終極技能",10:"被動"},IC=g.icons||{};
+  // one row per skill family (base skill + its upgrades, folded under it; user 2026-11-07「技能分初始跟升級」「升級在各技能用展開的」「說明文字也一堆」):
+  // families with an equipped base skill in slot order, then families not equipped, then the weapon skill
+  const icon=x=>{const u=x.t==="weapon"?IC.w:IC[x.g];return u?`<img class="gskic" src="${esc(u)}" alt="" aria-hidden="true">`:`<span class="th sm" style="--ring:${GSK_T[x.t][1]}" aria-hidden="true">${x.t==="weapon"?"武":"技"}</span>`};
+  const tag=x=>[x.slot?SL[x.slot]:x.base?"目前沒有裝備":"",x.g&&!x.slot&&!x.base?"升級":"",x.t==="scroll"?"卷軸技能":"",x.t==="weapon"?"武器技能（不能裝備）":"",x.max?"等級上限 "+x.max:""].filter(Boolean).join("・");
+  const row=(x,up)=>`<li><div class="lrow">${icon(x)}<span class="t"><b>${esc(x.zh)}</b><span>${[x.en,x.fr].filter(Boolean).map(esc).join("・")}・${tag(x)}</span></span></div>
     <div class="gskd">${esc(x.d)}</div><div class="gskv">${x.dz.map((z,i)=>`<span title="${esc(x.data[i]||"")}">${esc(z)}</span>`).join("")}</div>${up&&up.length?`<details class="gskup"><summary>升級 ${up.length} 個：${up.map(u=>esc(u.zh)).join("、")}</summary><ul class="rows">${up.map(u=>row(u)).join("")}</ul></details>`:""}</li>`;
-  // each slot: the initial skill (the one on the skills page at level 1), then its upgrades (user 2026-11-07: 技能分初始跟升級)
-  const grp=[1,2,3,4,5,9,10].map(n=>{const a=g.list.filter(x=>x.g===n),ini=a.filter(x=>x.slot),up=a.filter(x=>!x.slot);return a.length?[`${SL[n]}${n===10?"":"（主動）"}`,ini,up]:null}).filter(Boolean)
-    .concat([["武器技能",g.list.filter(x=>!x.g),[]]]);
+  const fams=[...new Set(g.list.filter(x=>x.g).map(x=>x.g))].map(f=>{const a=g.list.filter(x=>x.g===f);return{ini:a.find(x=>x.slot||x.base),up:a.filter(x=>!x.slot&&!x.base)}}).filter(f=>f.ini)
+    .sort((a,b)=>(a.ini.slot||99)-(b.ini.slot||99));
   return`<h3 class="sec">技能（遊戲畫面） <span class="c">${g.list.length}</span></h3>
-  <div class="muted" style="font-size:12px">${esc(c.zh)} ${g.lv} 級的技能畫面，數值都是 1 級（${g.date} 截圖）；依欄位分組，列出每個欄位的初始技能，升級後的技能點「升級」展開。說明和數值的中文是本站翻譯，滑鼠移到數值上看遊戲原文。</div>
-  ${grp.map(([lab,a,up])=>a.length||up.length?`<div class="gskg">${lab}</div><ul class="rows">${a.map(x=>row(x,up)).join("")}</ul>${!a.length&&up.length?`<ul class="rows">${up.map(u=>row(u)).join("")}</ul>`:""}`:"").join("")}
-  <div class="note srcn">遊戲技能：站長 ${g.date} 的技能截圖。欄位依舊版技能視窗的圖示分組（同一個欄位的技能畫同一個圖示；法文技能提示 01:51～02:27）；每個欄位的初始技能是技能頁上 1 級的那一個，其他是升級後的技能（站長 2026-11-07 說明）。初始技能和等級上限取自英文技能頁（03:48），技能名稱和圖示取自中文技能頁（15:35）；爆裂連擊的圖示在截圖裡被說明框蓋住，沒有放。</div>`}
+  <div class="muted" style="font-size:12px">1 級數值；滑鼠移到數值上看原文。</div>
+  <ul class="rows gsklist">${fams.map(f=>row(f.ini,f.up)).join("")}${g.list.filter(x=>!x.g).map(x=>row(x)).join("")}</ul>
+  <div class="note srcn">遊戲技能：站長 ${g.date} 的技能截圖。每一列是一個初始技能，升級後的技能收在它下面（舊版技能視窗裡同一系列用同一個圖示）；技能名稱、圖示和部分說明取自中文技能頁，其餘說明和數值的中文是本站翻譯；「裝在技能 N」是截圖當時的配置，技能頁的 Replace 清單顯示初始技能可以換到任一格。</div>`}
 // floating window: equipment a class can use (like the quest route window)
 let CW=null;
 function openClassEquip(cid,part){const c=CLS.find(x=>x.id===cid);if(!c)return;CW={cid,part:part||"all",view};
