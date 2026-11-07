@@ -424,7 +424,7 @@ with sync_playwright() as p:
         pg.click("#pClose"); pg.wait_for_timeout(200)
     pg.locator("#zlist .npcrow", has_text="Bandit Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")
-    check("可以製作\n5" in t and "Bandit Coin" in t and "Stolen Cloak" in t and "Small Pouch ×24" in t, "Bandit Accessories lists its 5 recipes (4 from screenshots, 1 from the reference map)")
+    check("可以製作\n5" in t and "Bandit Coin" in t and "Stolen Cloak" in t and "Small Purse ×24" in t, "Bandit Accessories lists its 5 recipes (4 from screenshots, 1 from the reference map)")
     pg.click("#pClose"); pg.wait_for_timeout(200)
     pg.locator("#zlist .npcrow", has_text="Shark Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")

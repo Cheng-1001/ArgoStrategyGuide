@@ -142,7 +142,7 @@ SHOTS = {
     ],
     # 2026-11-03 22:38-23:18 batch (Starting Town shops, Tolbana dungeon guard)
     'Starting Merchant': [                                     # Buy tab, 4 pages, all sold for Col (Potion I is bought here, not crafted)
-        ('Teleportation Crystal', 's', None, [], '301.49', 'potion'),
+        ('Teleportation Crystal', 's', None, [], '301.49', 'other'),    # a teleport item, not a potion (2026-11-07 audit)
         ('Boar Meat', 'c', None, [], '1.00', 'other'),
         ('Health Potion I', 'c', None, [], '5.02', 'potion'),
         ('Mana Potion I', 'c', None, [], '5.02', 'potion'),
@@ -164,7 +164,17 @@ SHOTS = {
         ('Training Quiver', 'c', None, [], '1.00', 'weapon'),
         ('Training Pavise', 'c', None, [], '1.00', 'weapon'),
         ('Training Buckler', 'c', None, [], '1.00', 'weapon'),
+        # page 4 also lists a second "Training Dagger" (訓練用短劍: thin blade, assassin, 爆擊率 +0.5%; in16 15:02:51, in3 22:39:23) and a second
+        # "Training Lantern" (the shaman one; page 3 is the mage one, in16 15:02:47 vs 15:02:39). Same English names in the game: "(2)" on the site.
+        ('Training Dagger (2)', 'c', None, [], '1.00', 'weapon'),
+        ('Training Lantern (2)', 'c', None, [], '1.00', 'weapon'),
     ],
+    # Occult Merchants (owner's screenshots 2026-11-07 02:09-03:18): Buy tab, LEGENDARY, 5 024.91 Col (the item's Obtainable line says 5000 Cols)
+    'Occult Merchant - Amulet': [('Occult Amulet', 's', None, [], '5024.91', 'acc')],
+    'Occult Merchant - Bracelet': [('Occult Bracelet', 's', None, [], '5024.91', 'acc')],
+    'Occult Merchant - Ring': [('Occult Ring', 's', None, [], '5024.91', 'acc')],
+    'Occult Merchant - Gloves': [('Occult Gloves', 's', None, [], '5024.91', 'acc')],
+    'Occult Merchant - Artifacts': [('Occult Skull', 's', None, [], '5024.91', 'acc'), ('Occult Robe', 's', None, [], '5024.91', 'acc'), ('Occult Hood', 's', None, [], '5024.91', 'acc')],
     'Starting Town - Tools': [                                 # in game "F1 - Starting City - Tools", Buy tab
         ('Chipped Axe', 'c', None, [], '50.25', 'other'),
         ('Cracked Pickaxe', 'c', None, [], '50.25', 'other'),
@@ -218,18 +228,18 @@ SHOTS = {
     ],
 }
 # the screenshot showed the NPC's whole list: drop reference-map rows the game no longer has
-FULL = {'Wolf Accessories', 'Corrupted Boar Accessories', "Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
+FULL = {'Occult Merchant - Amulet', 'Occult Merchant - Bracelet', 'Occult Merchant - Ring', 'Occult Merchant - Gloves', 'Occult Merchant - Artifacts', 'Wolf Accessories', 'Corrupted Boar Accessories', "Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
 SAME = {"Katana Training": "Training Katana", "Beginner Leggings": "Beginner's Leggings", "Bandit's Gloves": "Gloves of the Bandit", "Bracelet of the Sylvan": "Bracelet of the Sylve", "Amulet of the Sylvan": "Amulet of the Sylve"}          # reference-map name -> in-game name
 # material names used in game / by the reference map -> this site's ITEMS ids
-MAT = {"Shark Carapace": "Shark Shell", "Soul of the Ruins": "Souls of the Ruins", "Sylve Shoot": "Sylvan Sprout",
-       "Hard Glacial Hide": "Glacial Hardhide", "Essence of Gorbel": "Gorbel Essence", "Heart of Nymbrea": "Nymbréa's Heart",
-       "Fragment of the Bear's Soul": "Bear Soul Fragment", "Fangs of Albal": "Albal's Fangs", "Small Purse": "Small Pouch", "Leaf Fragments": "Leaf Fragment", "Allium Flower": "Allium", "Sylve Sprout": "Sylvan Sprout"}
+MAT = {"Sylve Shoot": "Sylve Sprout", "Sylvan Sprout": "Sylve Sprout", "Essence Slime": "Slime Essence", "Tear Slime": "Slime Tear"}   # reference-map name -> in-game name. 2026-11-07 merchant audit: the other
+# entries used to turn the game's names into old wiki item names (Shark Carapace -> Shark Shell, Small Purse -> Small Pouch, Leaf Fragments ->
+# Leaf Fragment…); the site's items now use the game names (old names resolve through ITEM_OLD), so materials keep the game spelling.
 # item name -> official catalogue id (checked by hand: name keyword, level and set)
 OID = {"Ring of the Boar": 2475, "Gloves of the Boar": 2038, "Bracelet of the Boar": 1590, "Belt of the Boar": 1451,   # 2026-11-07: Anneau/Gants/Bracelet/Ceinture de Sanglier (name, level-3 set; game level 1)
        "Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "Amulet of the Sylve": 1288, "Gloves of the Bandit": 2040, "Bandit Hood": 1456, "Stolen Amulet": 1292, "Bandit Coin": 1455, "Bracelet of the Sylve": 1589, "Health Potion II": 2458, "Health Potion III": 2459, "Stamina Potion II": 2472, "Ring of the Leviathan": 2485, "Necklace of Aragorn": 1458, "Bracelet of Ice": 1596, "Gloves of the Wolves": 2044, "Occult Amulet": 1298, "Occult Ring": 2486, "Occult Bracelet": 1597, "Occult Gloves": 2045,   # 2026-11-02: official names matched by hand (Anneau de Léviathan, Collier de Aragorn, Capuche/Robe Occulte…; level may differ, the site shows the official one)
        "Training Sword": 2596, "Training Bow": 1566, "Training Crossbow": 1727, "Training Scythe": 1761, "Training Katana": 1762, "Training Dagger": 1760, "Training Pavise": 2534, "Training Buckler": 2533,
        "Boar Meat": 1957, "Chipped Axe": 2703, "Cracked Pickaxe": 2691, "Wooden Fishing Rod": 2709,
-       "Training Magic Staff": 2569, "Unbound Grimoire": 1626, "Training Lantern": 1627, "Wild Grimoire": 1628,
+       "Training Magic Staff": 2569, "Unbound Grimoire": 1626, "Training Lantern": 1627, "Training Lantern (2)": 1627, "Wild Grimoire": 1628,
        "Beginner's Tunic": 1334, "Beginner's Leggings": 1335, "Beginner's Boots": 1336,
        "Bracelet of the Stags": 1594, "Gloves of the Stags": 2043, "Slimy Ring": 2478, "Gelatinous Bracelet": 1592,
        "Gelatinous Amulet": 1291, "Gelatinous Cloak": 1453, "Spider Bracelet": 1595, "Iron Ring": 2482, "Iron Bracelet": 1593,
@@ -269,9 +279,14 @@ for k, (pos, sec) in enumerate(secs):
         for npc in npc_list:
             npcs.setdefault(npc, []).append([OID.get(name), name, None, [m[:] for m in mats], col, None, cat, int(lv[1]) if lv else None, "ref"])
 
+# levels from the game tooltips (2026-11-07 merchant audit: Potion II/III cards had no level)
+LV = {"Health Potion II": 3, "Health Potion III": 5, "Mana Potion II": 5, "Mana Potion III": 8, "Stamina Potion II": 5, "Stamina Potion III": 8,
+      "Boar Meat": 1, "Training Scepter": 1, "Training Quiver": 1, "Training Dagger (2)": 1, "Training Lantern (2)": 1}
+# output per craft (game window "×3"): npc|item -> quantity
+QTY = {"Alchemist|Quality %s Potion %s" % (k, n): 3 for k in ("Health", "Mana", "Stamina") for n in ("I", "II", "III")}
 for npc, rows in SHOTS.items():                              # screenshots replace the same item, keep the rest
     old = {r[1]: r for r in npcs.get(npc, [])}
-    new = [[OID.get(n), n, sec, [[MAT.get(m, m), q] for m, q in mats], cost, rar, cat, (old.get(n) or [None] * 8)[7], "shot"] for n, rar, sec, mats, cost, cat in rows]
+    new = [[OID.get(n), n, sec, [[MAT.get(m, m), q] for m, q in mats], cost, rar, cat, LV.get(n) or (old.get(n) or [None] * 8)[7], "shot"] for n, rar, sec, mats, cost, cat in rows]
     names = {r[1] for r in new}
     npcs[npc] = new + ([] if npc in FULL else [r for r in npcs.get(npc, []) if r[1] not in names])
 
@@ -285,7 +300,7 @@ hdr = """/* Floor 1 recipes by NPC (key = NPC name; matches npcs.js where that N
    Weapons and armour here are only the starter gear sold by the Starting Merchant; smiths' recipes still need screenshots. */
 window.SAO_RECIPES = """
 out = {npc: {"floor": 1, "items": rows} for npc, rows in sorted(npcs.items())}
-open(os.path.join(ROOT, "recipes.js"), "w", encoding="utf-8").write(hdr + json.dumps(out, ensure_ascii=False, indent=0) + ";\n")
+open(os.path.join(ROOT, "recipes.js"), "w", encoding="utf-8").write(hdr + json.dumps(out, ensure_ascii=False, indent=0) + ";\nwindow.SAO_RECIPE_QTY = " + json.dumps(QTY, ensure_ascii=False) + ";\n")
 n = sum(len(r) for r in npcs.values())
 from collections import Counter
 print(n, "recipes,", len(npcs), "NPCs", Counter(r[6] for rows in npcs.values() for r in rows), Counter(r[8] for rows in npcs.values() for r in rows))

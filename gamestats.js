@@ -4,6 +4,9 @@
    values are the game's own text; r = rarity from the tooltip frame colour when it differs from the catalogue ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
    (user 2026-11-05: 裝備資料要照新上傳的截圖更新). */
 window.SAO_GAMESTATS = {date:"2026-11-04", items:{
+ // level-only (st null = keep the catalogue's stats; 2026-11-07 merchant audit, tooltips' minimum level): Gelatinous Cloak 7 (catalogue 5), Bracelet of Ice 8 (catalogue 9)
+ "1453":{"date": "2026-11-04", "en": "gelatinous cloak", "lvl": 7, "dmg": null, "st": null},
+ "1596":{"date": "2026-11-04", "en": "bracelet of ice", "lvl": 8, "dmg": null, "st": null},
  "1335":{"date": "2026-11-07", "en": "jambières du débutant", "lvl": 1, "dmg": null, "st": [["Max Health", "+1"]]},   // 新手護腿 中文提示 2026-11-07_15.01.53.png
  "1336":{"date": "2026-11-07", "en": "bottes du débutant", "lvl": 1, "dmg": null, "st": [["Max Health", "+1"]]},   // 新手之靴 中文提示 2026-11-07_15.01.58.png
  "2596":{"date": "2026-11-07", "en": "épée d’entraînement", "lvl": 1, "dmg": "2.5", "st": [["Attack Speed", "1.1/s"]]},   // 訓練用劍 中文提示 2026-11-07_15.02.02.png
@@ -19,7 +22,7 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "1569":{"date": "2026-11-07", "en": "sylvan bow", "lvl": 8, "dmg": "16", "st": [["Attack Speed", "1.2/s"], ["Critical Strike Chance", "+1%"]]},   // 森林之弓 中文提示 2026-11-07_15.06.03.png
  "1358":{"date": "2026-11-07", "en": "tunique du chasseur", "lvl": 7, "dmg": null, "st": [["Defense", "+3"], ["Max Health", "+15"]]},   // 獵人束衣 中文提示 2026-11-07_15.06.51.png
  "1359":{"date": "2026-11-07", "en": "hunter's leggings", "lvl": 7, "dmg": null, "st": [["Defense", "+2"], ["Max Health", "+9"]]},   // 獵人護腿 中文提示 2026-11-07_15.06.54.png
- "2485":{"date": "2026-11-07", "en": "ring of the leviathan", "lvl": 7, "dmg": "1", "st": [["Defense", "+3"], ["Max Health", "+5"]]},   // 利維坦之戒 中文提示 2026-11-07_15.07.08.png
+ "2485":{"date": "2026-11-07", "en": "ring of the leviathan", "r": "s", "lvl": 7, "dmg": "1", "st": [["Defense", "+3"], ["Max Health", "+5"]]},   // 利維坦之戒 中文提示 2026-11-07_15.07.08.png
  "2481":{"date": "2026-11-07", "en": "ring of the pact", "lvl": 10, "dmg": null, "st": [["Defense", "+2"], ["Max Health", "+3"], ["Max Mana", "+1"], ["Max Stamina", "+1"], ["Movement Speed", "+10%"]], "auc": 1},   // 契約之戒 拍賣場 2026-11-07_15.14.39.png
  "1487":{"date": "2026-11-07", "en": "pièce d'onyx impur", "lvl": 13, "dmg": "1.25", "st": [["Max Health", "+2.5"], ["Heal Bonus", "+2.5"]], "auc": 1},   // 不純黑瑪瑙幣 拍賣場 2026-11-07_15.16.51.png
  "1605":{"date": "2026-11-07", "en": "bracelet d’onyx impur", "lvl": 13, "dmg": null, "st": [["Critical Strike Power", "+2.5%"], ["Skill Critical Strike Power", "+2.5%"], ["Max Health", "+2.5"]], "auc": 1},   // 不純黑瑪瑙手環 拍賣場 2026-11-07_15.16.55.png

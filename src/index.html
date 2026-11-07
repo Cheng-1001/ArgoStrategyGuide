@@ -884,7 +884,7 @@ const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const STATUS={...S1.STATUS,quest:{t:"任務座標",c:"s-player",d:"座標寫在 wiki 的任務說明裡。"},rep:{t:"玩家回報",c:"s-player",d:"位置來自核准的玩家回報（附遊戲截圖）。"}};
 // material names used in game / by players -> this site's item names (same table as tools/build_recipes.py MAT)
-const REP_MAT={"Shark Carapace":"Shark Shell","Sylve Shoot":"Sylve Sprout","Small Purse":"Small Pouch"};  // other old names resolve through ITEM_OLD / ikey
+const REP_MAT={"Sylve Shoot":"Sylve Sprout"};  // other old names resolve through ITEM_OLD / ikey
 
 // ---------- floors ----------
 const FLOORS={
@@ -976,7 +976,7 @@ const ITEMS={...S1.ITEMS};
 Object.entries(window.SAO23_ITEMS).forEach(([id,r])=>{ITEMS[id]={id,fr:r[0],r:r[1],lv:r[2],cat:r[3],lore:r[4],dmg:r[5],st:r[6],ic:r[7],...(S23.extra[id]||{})}});
 Object.entries(S23.unknown).forEach(([id,x])=>{ITEMS[id]={id,fr:null,r:null,lv:null,cat:"unknown",lore:null,dmg:null,st:null,ic:-1,...x}});
 // 2026-11-04 (user option 1A): items renamed to the English name the game shows; old wiki names still resolve and are searchable
-const ITEM_OLD={"Skeleton Mage Staff": "Magic Staff of the Ruins", "Narax's Ring": "Ring of Narax", "Bandit Crossbow": "Crossbow of the Bandits", "Reaper's Ring": "Ring of the Fallen", "Warden's Soul": "Soul of the Warden", "Herald's Soul": "Soul of the Herald", "Reaper's Soul": "Soul of the Reaper", "Swordsmans Scroll": "Swordsman's Scroll", "Archers Scroll": "Archer's Scroll", "Souls of the Ruins": "Soul of the Ruins", "Albal's Fangs": "Fangs of Albal", "Nymbréa's Heart": "Heart of Nymbrea", "Sylvan Sprout": "Sylve Sprout", "Glacial Hardhide": "Hard Glacial Hide", "Gorbel Essence": "Essence of Gorbel", "Allium": "Allium Flower", "Bear Soul Fragment": "Fragment of the Bear's Soul", "Spectral Mane Piece": "Piece of Spectral Mane", "Colossus Hammer": "Hammer of the Colossus", "Royal Halberd": "Halberd of the Warden", "Bone Sword": "Skeletal Sword", "Bandit Dagger": "Bandit's Dagger", "Sylvan Shield": "Sylvan Pavise", "Sylvan Mage Staff": "Sylvan Staff", "Skeleton Shaman Staff": "Magic Staff of the Revenants"};
+const ITEM_OLD={"Shark Shell": "Shark Carapace", "Small Pouch": "Small Purse", "Leaf Fragment": "Leaf Fragments", "Skeleton Mage Staff": "Magic Staff of the Ruins", "Narax's Ring": "Ring of Narax", "Bandit Crossbow": "Crossbow of the Bandits", "Reaper's Ring": "Ring of the Fallen", "Warden's Soul": "Soul of the Warden", "Herald's Soul": "Soul of the Herald", "Reaper's Soul": "Soul of the Reaper", "Swordsmans Scroll": "Swordsman's Scroll", "Archers Scroll": "Archer's Scroll", "Souls of the Ruins": "Soul of the Ruins", "Albal's Fangs": "Fangs of Albal", "Nymbréa's Heart": "Heart of Nymbrea", "Sylvan Sprout": "Sylve Sprout", "Glacial Hardhide": "Hard Glacial Hide", "Gorbel Essence": "Essence of Gorbel", "Allium": "Allium Flower", "Bear Soul Fragment": "Fragment of the Bear's Soul", "Spectral Mane Piece": "Piece of Spectral Mane", "Colossus Hammer": "Hammer of the Colossus", "Royal Halberd": "Halberd of the Warden", "Bone Sword": "Skeletal Sword", "Bandit Dagger": "Bandit's Dagger", "Sylvan Shield": "Sylvan Pavise", "Sylvan Mage Staff": "Sylvan Staff", "Skeleton Shaman Staff": "Magic Staff of the Revenants"};
 const ikey=n=>ITEMS[n]?n:(ITEM_OLD[n]&&ITEMS[ITEM_OLD[n]]?ITEM_OLD[n]:n);
 Object.entries(ITEM_OLD).forEach(([o,n])=>{if(ITEMS[n])(ITEMS[n].aka=ITEMS[n].aka||[]).push(o)});
 (window.SAO_REPORTS||[]).forEach(r=>{(r.drops||[]).forEach(d=>{d[0]=ikey(d[0])});(r.mats||[]).forEach(m=>{m[0]=ikey(m[0])})});
@@ -1536,7 +1536,8 @@ Object.values(RECIPES).forEach(v=>v.items.forEach(it=>(it[3]||[]).forEach(m=>{m[
   const cost=r.cost===""||r.cost==null?o[4]:(+r.cost?String(+r.cost):"Free");
   const row=[o[0],o[1],r.sec??o[2],r.mats.length?r.mats:o[3],cost,RAR_ZH[r.rar]||o[5],RC_ZH[r.rcat]||o[6],r.rlv??o[7],"rep",r.id];
   if(i>=0)Rn.items[i]=row;else Rn.items.push(row)})}
-const recRow=(npc,f,it)=>({npc,f,oid:it[0],en:it[1],sec:it[2],mats:it[3],cost:it[4],r:it[5],cat:it[6]||"acc",lv:it[7],src:it[8]||"shot",rep:it[9]});
+const RQTY=window.SAO_RECIPE_QTY||{};   // output per craft (recipes.js, 2026-11-07: the Alchemist makes ×3)
+const recRow=(npc,f,it)=>({npc,f,oid:it[0],en:it[1],sec:it[2],mats:(it[3]||[]).map(([m,q])=>[ikey(m),q]),cost:it[4],r:it[5],cat:it[6]||"acc",lv:it[7],src:it[8]||"shot",rep:it[9]});
 const RECIPE_BY_EQ={},RECIPE_BY_MAT={};Object.entries(RECIPES).forEach(([npc,r])=>r.items.forEach(it=>{const row=recRow(npc,r.floor,it);
   if(it[0]!=null)(RECIPE_BY_EQ[it[0]]=RECIPE_BY_EQ[it[0]]||[]).push(row);it[3].forEach(([m])=>(RECIPE_BY_MAT[m]=RECIPE_BY_MAT[m]||[]).push(row))}));
 const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
@@ -1765,11 +1766,12 @@ function renderAbout(){const iss=GH_ISSUES;
   const sv=$("view-about");if(aboutJump){const el=$(aboutJump);aboutJump=null;if(el)requestAnimationFrame(()=>el.scrollIntoView({block:"start"}))}else sv.scrollTop=0}
 // the crafted item's own data, shown right in the recipe panel (no extra click; 使用者 2026-11-02)
 function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
-  const rows=Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
+  const pg=!isE&&[e.gen,en,r.en].some(n=>n&&POT_BY[norm(n)]);   // game effect lines replace the catalogue numbers (same as the item panel; 2026-11-07: Quality Health Potion I showed the catalogue's "回復耐力 +10")
+  const rows=pg?"":Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
   const other=(RECIPE_BY_EQ[e.oid]||[]).filter(x=>x.npc!==r.npc);
   return`<h3 class="sec">${isE?"裝備":"道具"}資料 <span class="c">${e.extra?(e.dmg||Object.keys(e.st).length?"官網圖鑑沒有收錄，取自遊戲截圖":"官網圖鑑沒有收錄，還沒有物品提示截圖"):"官方圖鑑 #"+e.oid}</span></h3>
   <div class="muted" style="font-size:12.5px">${esc(isE?eqCat(e):PR_CAT[e.cat]||e.cat)}${e.lv>1?"・等級 "+e.lv:""}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):""}</div>
-  ${e.extra?"":loreHTML(e)}
+  ${e.extra?"":loreHTML(e,pg&&/^potion_/.test(e.cat))}
   ${e.dmg||rows?`<dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>`:""}
   ${en?`<ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>${isE?"掉落來源、任務需求":"掉落來源、掉落率、任務需求"}</span></span><span class="v">›</span></button></li></ul>`:""}
   ${other.length?`<h3 class="sec">${other.some(x=>isShop(x))?"其他製作或購買地點":"其他製作地點"}</h3>${recipeTable(other,true)}`:""}
@@ -1778,8 +1780,8 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   const eX=r.oid==null&&EQX_BY[r.en]?eqById[EQX_BY[r.en]]:null;   // game-only equipment (Elite Treant set…): no catalogue id, matched by English name
   const e=eX||eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),shop=isShop(r),rar=e?e.r:r.r,isE=!!(eX||eqById[String(r.oid)]);
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} ${shop?"NPC 販售":"配方"}・${RC_CAT[r.cat][0]}</div><h2>${esc(recZh(r,e)||r.en)}</h2>${e||potZh(r.en)||recZh(r,e)?`<div class="sub">${(recZh(r,e)?[r.en,e&&!e.extra&&e.name]:[potZh(r.en),e&&e.name]).filter(Boolean).map(esc).join("・")}</div>`:""}</div></div>
-  <dl class="facts"><dt>${shop?"在哪裡買":"在哪裡做"}</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button><br>${npcWhere(n)}`:esc(npcN(r.npc))}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvSrc==="game"?` <span class="muted" style="font-size:12px">（遊戲物品說明${r.lvRef?`；${esc(r.lvRefSrc)}寫 ${r.lvRef}`:""}）</span>`:r.lvRef?` <span class="muted" style="font-size:12px">（${esc(r.lvRefSrc)}寫 ${r.lvRef}，遊戲截圖還沒有這件，暫用官網圖鑑）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(pN(x))}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
-  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
+  <dl class="facts"><dt>${shop?"在哪裡買":"在哪裡做"}</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button><br>${npcWhere(n)}`:esc(npcN(r.npc))}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvSrc==="game"?` <span class="muted" style="font-size:12px">（遊戲物品說明${r.lvRef?`；${esc(r.lvRefSrc)}寫 ${r.lvRef}`:""}）</span>`:r.lvRef?` <span class="muted" style="font-size:12px">（${esc(r.lvRefSrc)}寫 ${r.lvRef}，遊戲截圖還沒有這件，暫用官網圖鑑）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(pN(x))}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RQTY[r.npc+"|"+r.en]?`<dt>產量</dt><dd>每次做 ${RQTY[r.npc+"|"+r.en]} 個</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
+  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m0,q])=>{const m=ikey(m0);return ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow">${GICON[m]?recicImg(GICON[m],32):""}<span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`}).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
   ${setPotHTML(r.en)}${r.oid?"":giHTML(GI_EN[norm(r.en)])+gachaHTML(r.en)}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
@@ -1838,7 +1840,7 @@ const EVT=window.SAO_EVENTS||{dungeons:[]};
   Object.entries(q.set).forEach(([k,v])=>{old[k]=e.st[k]===undefined?0:e.st[k];if(v===0)delete e.st[k];else e.st[k]=v});e.patch={old,note:q.note||""}})}
 // in-game stats from the owner's Specifications screenshots override the (older) catalogue values (gamestats.js; user 2026-11-05)
 const GST=window.SAO_GAMESTATS||{items:{}};
-EQ.forEach(e=>{const g=GST.items[e.oid];if(!g)return;e.cat0={lv:e.lv,dmg:e.dmg,st:e.st};const st={};
+EQ.forEach(e=>{const g=GST.items[e.oid];if(!g)return;if(g.st==null){if(g.lvl){e.lv0=e.lv;e.lv=g.lvl}if(g.r)e.r=g.r;e.gstLv=g.date||GST.date;return}e.cat0={lv:e.lv,dmg:e.dmg,st:e.st};const st={};
   if(e.st["Classe requise"])st["Classe requise"]=e.st["Classe requise"];if(e.st["Arme à deux mains"])st["Arme à deux mains"]=e.st["Arme à deux mains"];
   g.st.forEach(([k,v])=>{st[k]=v===""?"✓":v});e.st=st;e.dmg=g.dmg;if(g.lvl)e.lv=g.lvl;e.gst=1;e.gstDate=g.date||GST.date;e.gstAuc=!!g.auc;if(g.r)e.r=g.r});
 // in-game item info (Specifications popup, owner's screenshots; gameinfo.js): English name = title (user 2026-11-04 option 1A),
@@ -1954,7 +1956,7 @@ function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span class="muted" style="font-size:12px">${icK("min_level")}等級 ${e.lv}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):"・不限職業"}</span></div></div></div>
   ${loreHTML(e)}
   <dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
-  ${e.patch?patchNote(e):""}${e.gst?gstNote(e):""}${setPotHTML(e.gen,en)}
+  ${e.patch?patchNote(e):""}${e.gst?gstNote(e):""}${e.gstLv?`<div class="note">🎮 等級（和稀有度）取自遊戲裡的物品說明（站長截圖 ${esc(e.gstLv)}）${e.lv0!=null?`，官網圖鑑寫等級 ${e.lv0}`:""}；數值還沒有遊戲截圖，暫用官網圖鑑。</div>`:""}${setPotHTML(e.gen,en)}
   ${e.extra?((SOURCES[en]||[]).length||(GATHER[en]||[]).length||(USES[en]||[]).length?itemObtainHTML(en):"")+giHTML(GI_EN[norm(e.gen||"")]):en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}${gachaHTML("e|"+e.oid,e.gen,en)}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   ${e.extra&&ITEMS[en]&&ITEMS[en].note?`<div class="note">${esc(ITEMS[en].note)}</div>`:""}
@@ -1963,6 +1965,10 @@ function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
 // ================= props tab (official catalogue, non-equipment) =================
 const PR=(window.SAO_PROPS||[]).filter(r=>r[2]!=="catalyst").map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
 const prById=Object.fromEntries(PR.map(e=>[String(e.oid),e]));PR.forEach(e=>{if(GI_OID[e.oid])e.gen=GI_OID[e.oid].en});
+// rarity seen in the game's shop / crafting windows (recipes.js rows from screenshots) wins over the official catalogue (2026-11-07 merchant
+// audit: Forest Key, Spider Bracelet are COMMON and Gloves of the Stags RARE in the game; the catalogue says otherwise). A tooltip rarity
+// in gamestats.js (r) is kept.
+ALLREC.forEach(r=>{if(r.src!=="shot"||!r.r||r.oid==null)return;const e=eqById[String(r.oid)]||prById[String(r.oid)];if(!e||e.r===r.r||(GST.items[e.oid]||{}).r)return;e.r0=e.r;e.r=r.r});
 // the official catalogue files every potion (health, mana) under potion_stamina; use the in-game English / French name (user 2026-11-05: 藥水分類有問題)
 PR.forEach(e=>{if(!/^potion_/.test(e.cat))return;const n=(e.gen||"")+" "+e.name;e.cat=/health|\bvie\b/i.test(n)?"potion_heal":/mana/i.test(n)?"potion_mana":"potion_stamina"});
 // consumables the game has but the official catalogue does not (Mana Potion I/II, Quality Mana/Stamina potions, crystals, candies…), from sets.js

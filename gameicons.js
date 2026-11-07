@@ -73,6 +73,18 @@ window.SAO_GAMEICONS = {
  "Occult Bracelet": "icons/game/occult_bracelet.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
  "Occult Ring": "icons/game/occult_ring.png",       // 2026-11-07 (user: 神祕戒指圖示要檢查): official icon is an older black ring; game shows a crimson one. Auction tile 2026-11-07 00:47:31, k≈4.70
  "Occult Amulet": "icons/game/occult_amulet.png",   // same check: official icon is a grey chain; game chain is dark red. Auction tile 2026-11-04 19:20:11, k≈4.66 (4 screenshots agree)
+ // 2026-11-07 merchant audit (user: 所有的商人都要再看一次): shop-window icons that differed from the site.
+ "Occult Gloves": "icons/game/occult_gloves.png",       // shop version (Occult Merchant - Gloves 03:18, level 10) = official model texture nerfs:item/ia_auto/gantsocculte ×4; the auction's black glove is the older level-14 version
+ "Copper Amulet": "icons/game/copper_amulet.png",       // nerfs:item/ia_auto/amulettecuivre ×4 = Copper Accessories window 2026-11-03 22:40:39 (catalogue showed a black chain)
+ "Iron Amulet": "icons/game/iron_amulet.png",           // nerfs:item/ia_auto/amulettefer ×4 = Iron Accessories window 22:40:21
+ "Slime Tear": "icons/game/slime_tear_s.png",           // nerfs:item/ia_auto/larmeslime (64 px texture) = Sewer Reshaper window 21:55:42
+ "Slime Essence": "icons/game/slime_essence_s.png",     // auction tile 2026-11-04 22:47:16 (cut-out; 3D/hi-res)
+ "Teleportation Crystal": "icons/game/teleportation_crystal_s.png",   // auction tile 2026-11-05 20:23:51 (cut-out)
+ "Kobold Key": "icons/game/kobold_key_s.png",           // auction tile 2026-11-04 22:37:22 (cut-out)
+ "Twisted Hoe": "icons/game/twisted_hoe_s.png",         // model elitecreatures:rogue_assortment/rogue_hoe (same set as the other starter tools), checked against Starting City - Tools 22:39:47
+ "Training Scepter": "icons/game/training_scepter_s.png",   // model nerfs_weapons:baton_shaman_entrainement, = Starting Merchant 22:39:13
+ "Training Quiver": "icons/game/training_quiver_s.png",     // model nerfs_weapons:carquois_entrainement, = 22:39:24
+ "Training Dagger (2)": "icons/game/training_short_dagger_s.png",   // model nerfs_weapons:seconde_dague_entrainement, = 22:39:23 (訓練用短劍, assassin off-hand)
  "Witch's Dragée": "icons/game/witchs_dragee.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
  "Ring of the Nepenthes": "icons/game/ring_of_the_nepenthes.png",   // official item-model texture anneaunephente (2026-11-07)
  "Flower of a Nepenthes": "icons/game/flower_of_a_nepenthes.png",   // official item-model texture fleurnephente (2026-11-07)
