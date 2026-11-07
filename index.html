@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="5a7d69c49c">
+<meta name="sao-build" content="ed7b10a7d7">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -175,7 +175,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .qcard{gap:6px}.qcard .qd{margin:0;font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .qside{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}.qside .qobj{grid-column:1;font-size:13px;overflow-wrap:anywhere}.qside .reward{grid-column:2;grid-row:1/span 2;text-align:right}
 .qmap{flex:none;width:80%;align-self:center;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#0d1218}.qmap svg{display:block;width:100%;height:auto;aspect-ratio:1}.qmap g.hl rect{fill:#e5484d}.qmap g.hl text{fill:#fff}.mqs .linkbtn.on{color:#e5484d;font-weight:700}
-.clday{margin:10px 0 14px}.clday .cld{font-family:var(--f-display);font-size:15px}.cll{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}
+#clCard,.cloldl{display:flex;flex-direction:column;gap:12px}.cloldl{margin-top:12px}.clday{margin:0;gap:4px}.clhd{display:flex;align-items:baseline;gap:8px}.clhd .cln{margin-left:0}.clold>summary{cursor:pointer;padding:4px 2px}.clday .cld{font-family:var(--f-display);font-size:15px}.cll{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}
 .clmode{flex:0 0 auto;margin-left:auto;align-self:center}.cln{font-size:12px;color:var(--muted);margin-left:8px}
 .cll.clsum{gap:6px}.cll.clsum b{color:var(--accent)}
 .mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}.note.srcend{margin-top:14px}.gieff{margin:4px 0 0 0;padding:0;list-style:none}.gieff li{margin:3px 0}.effen{color:var(--muted);font-size:11.5px;display:inline-block}.lore.lorefr{font-size:12px;color:var(--muted);margin-top:-4px}.effic{display:inline-block;width:1.4em;text-align:center;margin-right:2px;font-size:.95em}img.effic{width:1.15em;height:1.15em;vertical-align:-.18em;image-rendering:pixelated;object-fit:contain;filter:drop-shadow(.072em .072em 0 rgba(0,0,0,.72))}
@@ -882,7 +882,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=a0dab804"></script>
+<script src="data.js?v=376c1a61"></script>
 <script src="data23.js?v=cfc1cce9"></script>
 <script src="bosses.js?v=77b7ad43"></script>
 <script src="reports.js?v=091d538a"></script>
@@ -894,13 +894,13 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=14cfc23a"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=4436b953"></script>
+<script src="changelog.js?v=ba5394fa"></script>
 <script src="recipes.js?v=5279ff8b"></script>
 <script src="jmmeta.js?v=5b0ffd74"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=877782cc"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
-<script src="events.js?v=ef6d04bc"></script>
+<script src="events.js?v=25b1cec9"></script>
 <script src="gacha.js?v=48cf03e8"></script>
 <script src="gamestats.js?v=289d1a40"></script>
 <script src="sets.js?v=f82a42f6"></script>
@@ -1325,8 +1325,8 @@ function dgLootHTML(sp,pre){const d=sp.dg;if(!d||!d.loot)return"";
     return`<li>${r.go?`<button class="lrow" data-go="${r.go}">${inner}</button>`:`<div class="lrow nolink">${inner}</div>`}</li>`}).join("")}</ul>
   <div class="note srcn">地下城資料取自站長的遊戲截圖（${esc(d.date)}，遊戲的 Dungeons 視窗${d.title&&d.title!==sp.n?`，視窗名稱寫「${esc(d.title)}」`:""}）。其他難度的掉落還沒有截圖。</div>`}
 function dgKeyRows(sp){const {want,hit}=dgKeys(sp);
-  return hit.length?`<ul class="rows">${hit.map(r=>{const p=prById[String(r.oid)],n=npcByName(r.f,r.npc),pz=p&&zhE(p);
-    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(pz||r.en)}${pz?` <span class="muted" style="font-weight:400">${esc(r.en)}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(matRef(m).nm)+" ×"+q).join("・"):"只要珂爾"}</span></span><span class="v">${costText(r.cost)}</span></button>${n?`<div class="muted" style="font-size:12.5px;margin:2px 0 0 44px">在 <button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button> 製作（X ${n.x} · Z ${n.z}）</div>`:""}</li>`}).join("")}</ul>`
+  return hit.length?`<ul class="rows">${hit.map(r=>{const p=prById[String(r.oid)],pz=p&&zhE(p);
+    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(pz||r.en)}${pz?` <span class="muted" style="font-weight:400">${esc(r.en)}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(matRef(m).nm)+" ×"+q).join("・"):"只要珂爾"}</span></span><span class="v">${costText(r.cost)}</span></button></li>`}).join("")}</ul>`
     :want?`<div class="note">需要 ${esc(want)}，本站還沒有它的製作方式。</div>`:`<div class="muted dgcap">還沒有這個地下城的鑰匙資料。</div>`}
 function dgEntryHTML(sp){
   return`<h3 class="sec">怎麼進去</h3><dl class="facts"><dt>入口</dt><dd><span class="mono">X ${sp.x} · Z ${sp.z}</span>${sp.u?"（在地下）":""}　<button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button></dd>${sp.tp?`<dt>傳送</dt><dd>🌀 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl><div class="dgsub">需要的鑰匙</div>${dgKeyRows(sp)}
@@ -1836,8 +1836,8 @@ function changelogCard(){const C=window.SAO_CHANGELOG||[];if(!C.length)return"";
   const SUM=window.SAO_CHANGELOG_SUM||{},list=(l,c)=>`<ul class="cll${c||""}">${l.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`;
   const sumLine=t=>{const i=t.indexOf("：");return i>0&&i<=8?`<b>${esc(t.slice(0,i))}</b>：${esc(t.slice(i+1))}`:esc(t)};
   const day=([d,items])=>{const [,m,dd]=d.split("-").map(Number),sm=CLM==="sum"&&SUM[d];
-    return`<div class="clday"><b class="cld">${m}/${dd}</b><span class="cln">${sm?`${items.length} 項更新的重點`:`${items.length} 項`}</span>${sm?`<ul class="cll clsum">${sm.map(t=>`<li>${sumLine(t)}</li>`).join("")}</ul>`:list(items)}</div>`};
-  return`<article class="bcard" id="clCard">${C.slice(0,3).map(day).join("")}${C.length>3?`<details class="clold"><summary>較早的更新（${C.length-3} 天）</summary>${C.slice(3).map(day).join("")}</details>`:""}</article>`}
+    return`<article class="bcard clday"><div class="clhd"><b class="cld">${m}/${dd}</b><span class="cln">${items.length} 項</span></div>${sm?`<ul class="cll clsum">${sm.map(t=>`<li>${sumLine(t)}</li>`).join("")}</ul>`:list(items)}</article>`};
+  return`<div id="clCard">${C.slice(0,3).map(day).join("")}${C.length>3?`<details class="clold"><summary>較早的更新（${C.length-3} 天）</summary><div class="cloldl">${C.slice(3).map(day).join("")}</div></details>`:""}</div>`}
 function renderChangelog(){const W=$("clWrap"),old=W.querySelector(".clold"),oldOpen=!!(old&&old.open),V=$("view-changelog"),y=V.scrollTop;
   W.innerHTML=`<div class="rhead"><h2>更新紀錄</h2><span class="count">網站改了什麼</span><div class="chips clmode" role="group" aria-label="顯示方式"><button class="chip" data-clm="sum" aria-pressed="${CLM==="sum"}" title="每天幾行重點">摘要</button><button class="chip" data-clm="full" aria-pressed="${CLM==="full"}" title="每一項都顯示完整說明">詳細</button></div></div>${changelogCard()}`;
   const o=W.querySelector(".clold");if(o&&oldOpen)o.open=true;
