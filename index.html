@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="5385278bae">
+<meta name="sao-build" content="2ed4e7df0c">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -870,12 +870,12 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=349916ca"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=f13d3008"></script>
+<script src="changelog.js?v=973b1560"></script>
 <script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=877782cc"></script>
-<script src="gameskills.js?v=e6e43aa3"></script>
+<script src="gameskills.js?v=6fb2c057"></script>
 <script src="events.js?v=9477972d"></script>
 <script src="gamestats.js?v=553994fb"></script>
 <script src="sets.js?v=fbf69e31"></script>
@@ -1653,9 +1653,10 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
 // skills as shown in the game (gameskills.js, owner's screenshots of the skill tooltips)
 const GSK_T={passive:["被動","var(--ok)","說明寫 Passif"],scroll:["卷軸技能","var(--warn)","只能讀卷軸學會"],weapon:["武器技能","var(--accent2,var(--accent))","不能裝備，跟著武器"],"":["","var(--accent)",""]};
 function gameSkillsHTML(c){const g=c.game,SL={1:"技能 1",2:"技能 2",3:"技能 3",4:"技能 4",5:"技能 5",9:"終極技能",10:"被動"},IC=g.icons||{};
-  // grouped by slot (user 2026-11-07: 用圖示對照修改對應的技能): the old skill window shows every skill of a slot with that slot's icon; the equipped one first
+  // grouped by slot (user 2026-11-07: 用圖示對照修改對應的技能): the old skill window shows every skill of a slot with that slot's icon, so every skill of a slot
+  // gets the slot icon (user 2026-11-07「好幾個沒圖示」); the equipped one first. Combo Explosif (weapon) only shows its own icon under a tooltip: no icon
   const tag=x=>[x.slot?"裝備中":"沒有裝備",x.t==="scroll"?"卷軸技能":"",x.t==="weapon"?"武器技能（不能裝備）":"",x.max?"等級上限 "+x.max:""].filter(Boolean).join("・");
-  const ic=x=>x.g&&IC[x.g]&&x.slot?`<img class="gskic" src="${esc(IC[x.g])}" alt="" aria-hidden="true">`:`<span class="th sm" style="--ring:${GSK_T[x.t][1]}" aria-hidden="true">${x.g===9?"終":x.g===10?"被":x.t==="weapon"?"武":x.g||"技"}</span>`;
+  const ic=x=>x.g&&IC[x.g]?`<img class="gskic" src="${esc(IC[x.g])}" alt="" aria-hidden="true">`:`<span class="th sm" style="--ring:${GSK_T[x.t][1]}" aria-hidden="true">${x.g===9?"終":x.g===10?"被":x.t==="weapon"?"武":x.g||"技"}</span>`;
   const row=x=>`<li><div class="lrow">${ic(x)}<span class="t"><b>${esc(x.zh)}</b><span>${[x.en,x.fr].filter(Boolean).map(esc).join("・")}・${tag(x)}</span></span></div>
     <div class="gskd">${esc(x.d)}</div><div class="gskv">${x.dz.map((z,i)=>`<span title="${esc(x.data[i]||"")}">${esc(z)}</span>`).join("")}</div></li>`;
   const grp=[1,2,3,4,5,9,10].map(n=>{const a=g.list.filter(x=>x.g===n).sort((x,y)=>(y.slot?1:0)-(x.slot?1:0));return a.length?[`${SL[n]}${n===10?"":"（主動）"}${a.length>1?` <span class="c">同一欄位 ${a.length} 個</span>`:""}`,a]:null}).filter(Boolean)
@@ -1663,7 +1664,7 @@ function gameSkillsHTML(c){const g=c.game,SL={1:"技能 1",2:"技能 2",3:"技�
   return`<h3 class="sec">技能（遊戲畫面） <span class="c">${g.list.length}</span></h3>
   <div class="muted" style="font-size:12px">${esc(c.zh)} ${g.lv} 級的技能畫面，數值都是 1 級（${g.date} 截圖）；依欄位分組，每組第一個是目前裝備的技能。說明和數值的中文是本站翻譯，滑鼠移到數值上看遊戲原文。</div>
   ${grp.map(([lab,a])=>a.length?`<div class="gskg">${lab}</div><ul class="rows">${a.map(row).join("")}</ul>`:"").join("")}
-  <div class="note srcn">遊戲技能：站長 ${g.date} 的技能截圖。欄位依舊版技能視窗的圖示分組（同一個欄位的技能用同一個圖示；法文技能提示 01:51～02:27），裝備中的技能和等級上限取自英文技能頁（03:48），技能名稱和圖示取自中文技能頁（15:35）。</div>`}
+  <div class="note srcn">遊戲技能：站長 ${g.date} 的技能截圖。欄位依舊版技能視窗的圖示分組（同一個欄位的技能用同一個圖示；法文技能提示 01:51～02:27），同一欄位的技能用同一個圖示（舊版視窗也是這樣畫）。裝備中的技能和等級上限取自英文技能頁（03:48），技能名稱和圖示取自中文技能頁（15:35）；爆裂連擊的圖示在截圖裡被說明框蓋住，沒有放。</div>`}
 // floating window: equipment a class can use (like the quest route window)
 let CW=null;
 function openClassEquip(cid,part){const c=CLS.find(x=>x.id===cid);if(!c)return;CW={cid,part:part||"all",view};

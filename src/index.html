@@ -1642,9 +1642,10 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
 // skills as shown in the game (gameskills.js, owner's screenshots of the skill tooltips)
 const GSK_T={passive:["被動","var(--ok)","說明寫 Passif"],scroll:["卷軸技能","var(--warn)","只能讀卷軸學會"],weapon:["武器技能","var(--accent2,var(--accent))","不能裝備，跟著武器"],"":["","var(--accent)",""]};
 function gameSkillsHTML(c){const g=c.game,SL={1:"技能 1",2:"技能 2",3:"技能 3",4:"技能 4",5:"技能 5",9:"終極技能",10:"被動"},IC=g.icons||{};
-  // grouped by slot (user 2026-11-07: 用圖示對照修改對應的技能): the old skill window shows every skill of a slot with that slot's icon; the equipped one first
+  // grouped by slot (user 2026-11-07: 用圖示對照修改對應的技能): the old skill window shows every skill of a slot with that slot's icon, so every skill of a slot
+  // gets the slot icon (user 2026-11-07「好幾個沒圖示」); the equipped one first. Combo Explosif (weapon) only shows its own icon under a tooltip: no icon
   const tag=x=>[x.slot?"裝備中":"沒有裝備",x.t==="scroll"?"卷軸技能":"",x.t==="weapon"?"武器技能（不能裝備）":"",x.max?"等級上限 "+x.max:""].filter(Boolean).join("・");
-  const ic=x=>x.g&&IC[x.g]&&x.slot?`<img class="gskic" src="${esc(IC[x.g])}" alt="" aria-hidden="true">`:`<span class="th sm" style="--ring:${GSK_T[x.t][1]}" aria-hidden="true">${x.g===9?"終":x.g===10?"被":x.t==="weapon"?"武":x.g||"技"}</span>`;
+  const ic=x=>x.g&&IC[x.g]?`<img class="gskic" src="${esc(IC[x.g])}" alt="" aria-hidden="true">`:`<span class="th sm" style="--ring:${GSK_T[x.t][1]}" aria-hidden="true">${x.g===9?"終":x.g===10?"被":x.t==="weapon"?"武":x.g||"技"}</span>`;
   const row=x=>`<li><div class="lrow">${ic(x)}<span class="t"><b>${esc(x.zh)}</b><span>${[x.en,x.fr].filter(Boolean).map(esc).join("・")}・${tag(x)}</span></span></div>
     <div class="gskd">${esc(x.d)}</div><div class="gskv">${x.dz.map((z,i)=>`<span title="${esc(x.data[i]||"")}">${esc(z)}</span>`).join("")}</div></li>`;
   const grp=[1,2,3,4,5,9,10].map(n=>{const a=g.list.filter(x=>x.g===n).sort((x,y)=>(y.slot?1:0)-(x.slot?1:0));return a.length?[`${SL[n]}${n===10?"":"（主動）"}${a.length>1?` <span class="c">同一欄位 ${a.length} 個</span>`:""}`,a]:null}).filter(Boolean)
@@ -1652,7 +1653,7 @@ function gameSkillsHTML(c){const g=c.game,SL={1:"技能 1",2:"技能 2",3:"技�
   return`<h3 class="sec">技能（遊戲畫面） <span class="c">${g.list.length}</span></h3>
   <div class="muted" style="font-size:12px">${esc(c.zh)} ${g.lv} 級的技能畫面，數值都是 1 級（${g.date} 截圖）；依欄位分組，每組第一個是目前裝備的技能。說明和數值的中文是本站翻譯，滑鼠移到數值上看遊戲原文。</div>
   ${grp.map(([lab,a])=>a.length?`<div class="gskg">${lab}</div><ul class="rows">${a.map(row).join("")}</ul>`:"").join("")}
-  <div class="note srcn">遊戲技能：站長 ${g.date} 的技能截圖。欄位依舊版技能視窗的圖示分組（同一個欄位的技能用同一個圖示；法文技能提示 01:51～02:27），裝備中的技能和等級上限取自英文技能頁（03:48），技能名稱和圖示取自中文技能頁（15:35）。</div>`}
+  <div class="note srcn">遊戲技能：站長 ${g.date} 的技能截圖。欄位依舊版技能視窗的圖示分組（同一個欄位的技能用同一個圖示；法文技能提示 01:51～02:27），同一欄位的技能用同一個圖示（舊版視窗也是這樣畫）。裝備中的技能和等級上限取自英文技能頁（03:48），技能名稱和圖示取自中文技能頁（15:35）；爆裂連擊的圖示在截圖裡被說明框蓋住，沒有放。</div>`}
 // floating window: equipment a class can use (like the quest route window)
 let CW=null;
 function openClassEquip(cid,part){const c=CLS.find(x=>x.id===cid);if(!c)return;CW={cid,part:part||"all",view};
