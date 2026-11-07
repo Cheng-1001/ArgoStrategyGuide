@@ -92,7 +92,6 @@ with sync_playwright() as p:
     card.click(); pg.wait_for_timeout(300)
     t = pg.inner_text("#pBody")
     check("技能（玩家回報）" in t and "Boule de Feu" in t and "Lance une boule de feu" in t, "class panel lists reported skills before the wiki list")
-    pg.click("#pClose")
     # places
     pg.goto(base + "#f1-map"); pg.wait_for_timeout(800)
     zl = pg.inner_text("#zlist")

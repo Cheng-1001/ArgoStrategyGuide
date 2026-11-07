@@ -193,7 +193,11 @@ with sync_playwright() as p:
     check(len(dn) == 5 and dn[0] == "Sanctuary of Souls" and "狗頭人之塔" not in dn and "墮落者迷宮區" in dn, f"dungeons tab lists the event dungeon first, then the 4 floor-1 dungeons, not the boss tower ({dn})")
     pg.click('#lDg [data-go="d|souls"]'); pg.wait_for_timeout(300)
     check("Sanctuary of Souls Key" in pg.inner_text("#pBody") and pg.locator("#pBody .btbl").count() == 3, "event dungeon panel: key recipe, fragment zones, banner and forge tables")
-    pg.click("#pClose") if pg.locator("#pClose").count() else None
+    dg = pg.evaluate("(()=>({cols:getComputedStyle(document.getElementById('lDg')).gridTemplateColumns.split(' ').length,keys:document.querySelectorAll('#lDg .th.dgk').length,inline:document.body.classList.contains('cls-inline'),close:!!document.getElementById('pClose').offsetParent,kn:[...document.querySelectorAll('#lDg .dgkn')].map(e=>e.textContent)}))()")
+    check(dg["cols"] == 1 and dg["keys"] == 3 and dg["inline"] and not dg["close"] and "鑰匙：森林鑰匙" in dg["kn"],
+          f"dungeons: one column, each floor dungeon shows its own key icon, the dungeon is shown on the page next to the list (no window frame) ({dg})")
+    pg.keyboard.press("Escape"); pg.wait_for_timeout(150)
+    check(not pg.is_hidden("#panel"), "Esc does not close the dungeon shown on the page")
     pg.click("#legalBtn"); pg.wait_for_timeout(350)
     t = pg.inner_text("#legal")
     check("about" in pg.url and pg.is_visible("#view-about") and "非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t and "中文玩家社群協力製作" in t,
@@ -298,10 +302,9 @@ with sync_playwright() as p:
     pg.click("#cwBack"); pg.wait_for_timeout(200)
     check(pg.locator("#cwBody .card").count() == n, "back to the equipment list")
     pg.click("#cwX"); pg.wait_for_timeout(150)
-    pg.click("#pClose"); pg.wait_for_timeout(150)
+    check(not pg.locator("#pClose").is_visible() and pg.evaluate("document.body.classList.contains('cls-inline')"), "the class is shown on the page (no ✕ / window frame)")
     pg.locator("#lCls .card", has_text="Martial Artist").click(); pg.wait_for_timeout(300)
     check("可能還沒開放" in pg.inner_text("#pBody") and "佔位圖" in pg.inner_text("#pBody"), "Martial Artist flagged as possibly unreleased, skills unconfirmed")
-    pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
     vt = pg.evaluate("""(()=>{const F=document.querySelector('#view-monsters .filters');const n=F.firstElementChild;
       return {cls:n.className,cur:n.querySelector('a[aria-current=page]')?.dataset.v,links:n.querySelectorAll('a').length,}})()""")
