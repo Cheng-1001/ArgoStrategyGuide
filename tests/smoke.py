@@ -263,7 +263,12 @@ with sync_playwright() as p:
     cols = pg.evaluate("getComputedStyle(document.getElementById('lCls')).gridTemplateColumns.split(' ').length")
     pw = pg.locator("#panel").bounding_box()["width"]
     two = pg.evaluate("getComputedStyle(document.querySelector('#pBody .cls2')).gridTemplateColumns.split(' ').length")
-    check(cols == 1 and pw > 700 and two == 2, f"classes: one column (user 2026-11-07 職業排成直列) ({cols}), wide panel ({pw:.0f}px) split in two ({two})")
+    lr = pg.evaluate("document.getElementById('lCls').getBoundingClientRect().right"); px = pg.locator("#panel").bounding_box()["x"]
+    check(cols == 1 and px >= lr and pw > 600 and two == 1, f"classes: one column, the panel fills the space right of it ({px:.0f}>={lr:.0f}, {pw:.0f}px), one inner column at 1280 ({two})")
+    pg.set_viewport_size({"width": 2000, "height": 1000}); pg.wait_for_timeout(300)
+    two2 = pg.evaluate("getComputedStyle(document.querySelector('#pBody .cls2')).gridTemplateColumns.split(' ').length"); pw2 = pg.locator("#panel").bounding_box()["width"]
+    check(two2 == 2 and pw2 > 1200, f"classes at 2000px: wide panel ({pw2:.0f}px) split in two ({two2})")
+    pg.set_viewport_size({"width": 1280, "height": 900}); pg.wait_for_timeout(300)
     pg.click("#pBody [data-eqcls]"); pg.wait_for_timeout(300)
     n = pg.locator("#cwBody .card").count()
     check(pg.is_visible("#cwin") and n > 50 and "#equip" not in pg.url, f"equipment window opens over the classes tab ({n} items)")
