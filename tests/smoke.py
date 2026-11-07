@@ -257,13 +257,13 @@ with sync_playwright() as p:
     check("技能（遊戲畫面）" in t and "迴避射擊" in t and "終極技能" in t and "等級上限 18" in t and "Embuscade" in t and "技能畫面裡都沒有出現" in t
           and "遊戲技能 15" in pg.inner_text("#lCls"), "Archer panel: in-game skills with slots and level caps; wiki list marked as not in the game")
     gs = pg.evaluate("[...document.querySelectorAll('#pBody .gskg')].map(x=>x.textContent)")
-    check(pg.locator("#pBody img.gskic").count() == 14 and any(x.startswith("技能 3（主動）") and "同一欄位 3 個" in x for x in gs) and any(x.startswith("被動") and "同一欄位 3 個" in x for x in gs) and gs[-1] == "武器技能",
-          f"Archer skills grouped by slot (old skill window icons), every slot skill has its slot icon (14; the weapon skill has none) ({gs})")
+    check(pg.locator("#pBody img.gskic").count() == 14 and any(x.startswith("技能 3（主動）") and "升級 2 個" in x for x in gs) and any(x.startswith("被動") and "升級 2 個" in x for x in gs) and pg.locator("#pBody .gsks").count() == 4 and gs[-1] == "武器技能",
+          f"Archer skills grouped by slot (old skill window icons), initial skill then upgrades, every slot skill has its slot icon (14; the weapon skill has none) ({gs})")
     pg.evaluate("document.querySelector('#lCls [data-go=\"c|guerrier\"]').click()"); pg.wait_for_timeout(300)
     cols = pg.evaluate("getComputedStyle(document.getElementById('lCls')).gridTemplateColumns.split(' ').length")
     pw = pg.locator("#panel").bounding_box()["width"]
     two = pg.evaluate("getComputedStyle(document.querySelector('#pBody .cls2')).gridTemplateColumns.split(' ').length")
-    check(cols == 3 and pw > 700 and two == 2, f"classes: 3 columns ({cols}), wide panel ({pw:.0f}px) split in two ({two})")
+    check(cols == 6 and pw > 700 and two == 2, f"classes: one row of 6 (user 2026-11-07 職業排成一列) ({cols}), wide panel ({pw:.0f}px) split in two ({two})")
     pg.click("#pBody [data-eqcls]"); pg.wait_for_timeout(300)
     n = pg.locator("#cwBody .card").count()
     check(pg.is_visible("#cwin") and n > 50 and "#equip" not in pg.url, f"equipment window opens over the classes tab ({n} items)")
