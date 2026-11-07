@@ -707,7 +707,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
         <button class="lgb ghost" id="filterBtn" aria-expanded="false" aria-controls="fpanel">篩選 ▾</button>
         <button class="lgb" id="baseBtn" hidden title="切換底圖：wiki 地圖或 JourneyMap 探索地圖"></button>
         <select class="lgb lsel" id="dgSel" hidden title="切換第 1 層和地下城的地圖（玩家上傳的 JourneyMap）" aria-label="地圖"></select>
-        <select class="lgb lsel" id="layerSel" hidden title="探索地圖的高度：地面，或玩家上傳的地底高度層（JourneyMap 洞穴地圖）" aria-label="探索地圖的高度"></select>
+        <select class="lgb lsel" id="layerSel" hidden title="探索地圖的高度：地面，或玩家上傳的室內・洞穴地圖（JourneyMap 洞穴地圖，依高度分層）" aria-label="探索地圖的高度"></select>
       </div>
       <div class="fpanel" id="fpanel" hidden role="dialog" aria-label="地圖篩選">
         <div class="fphead"><b>篩選</b><button class="linkbtn" id="fpAll">全部顯示</button><button class="iconbtn" id="fpX" aria-label="關閉">✕</button></div>
@@ -917,7 +917,7 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
   o.by=g(/遊戲內暱稱/).slice(0,32);
   if(r.type==="idea"){o.idea=g(/建議・內容/);o.ipage=g(/建議・相關頁面/);o.reply=String(r.review||"").replace(/^審核[:：][^｜|]*[｜|]?/,"").trim();o.summary=o.idea}
   if(r.type==="jmap"){const res=((window.SAO_JM||{}).results||{})[r.id];o.merge=res;
-    o.summary=!res?"合併中（核准後約 3～5 分鐘）":res.ok?`已合併：${res.layers&&!res.newChunks?"地面沒有新區塊":`新增 ${res.newChunks} 個區塊，地圖探索約 ${res.pct}%`}${res.layers?"；地底 "+Object.entries(res.layers).map(([k,n])=>`${(((((window.SAO_JM||{})["1"]||{}).layers)||{})[k]||{}).label||k} 新增 ${n} 個區塊`).join("、"):""}`:`沒有合併：${res.reason}`}
+    o.summary=!res?"合併中（核准後約 3～5 分鐘）":res.ok?`已合併：${res.layers&&!res.newChunks?"地面沒有新區塊":`新增 ${res.newChunks} 個區塊，地圖探索約 ${res.pct}%`}${res.layers?"；室內・洞穴 "+Object.entries(res.layers).map(([k,n])=>`${(((((window.SAO_JM||{})["1"]||{}).layers)||{})[k]||{}).label||k} 新增 ${n} 個區塊`).join("、"):""}`:`沒有合併：${res.reason}`}
   if(r.type==="place"){o.ug=/地下/.test(g(/地點・在地下嗎/));o.tpName=g(/地點・傳送選單名稱/);o.npcCat=g(/地點・NPC 類別/)}
   if(!o.summary){const t=[];if(o.level!=null)t.push("等級 "+o.level);if(o.codexNo)t.push("圖鑑 "+o.codexNo);if(o.drops)t.push("掉落物 "+o.drops.length+" 種");if(o.how)t.push(o.how+(o.from?"："+o.from:""));if(o.kind&&r.type==="place")t.push(o.kind);o.summary=t.join("・")}
   return o}
@@ -1873,6 +1873,7 @@ const gachaHTML=(...keys)=>{const K=new Set(keys.filter(Boolean).map(k=>/^[ep]\|
 // official Chinese names (zhnames.js, from the owner's screenshots after the official Chinese localisation 2026-11-07; user: 中文標題，英法文放副標)
 const ZHL=(window.SAO_ZHNAMES||{}).items||[],ZH_ID={},ZH_EN={},ZH_FR={};
 ZHL.forEach(r=>{(r.ids||[]).forEach(i=>ZH_ID[i]=r.zh);if(r.en)ZH_EN[norm(r.en)]=r.zh;if(r.fr)ZH_FR[norm(r.fr)]=r.zh});
+const ZH_SRCH=(window.SAO_ZHNAMES||{}).search||{};const zhS=e=>(ZH_SRCH[(e.ps?"p|":"e|")+e.oid]||[]).join(" ");   // search-only aliases (zhnames.js search)
 const zhE=e=>ZH_ID[(e.ps?"p|":"e|")+e.oid]||ZH_ID["e|"+e.oid]||ZH_ID["p|"+e.oid]||(e.itemId&&ZH_ID["i|"+e.itemId])||(e.gen&&(ZH_ID["g|"+e.gen]||ZH_ID["i|"+e.gen]||ZH_EN[norm(e.gen)]))||(!e.extra&&ZH_FR[norm(e.name)])||(FR2ID[e.name]&&ZH_ID["i|"+FR2ID[e.name]])||"";
 const zhI=id=>{const it=ITEMS[id]||{};const o=offOf(id);return ZH_ID["i|"+id]||ZH_ID["g|"+id]||(o&&zhE(o.e))||ZH_EN[norm(id)]||(it.fr&&ZH_FR[norm(it.fr)])||""};
 const dn=e=>zhE(e)||e.gen||e.name;
@@ -1919,7 +1920,7 @@ $("fEqEff").addEventListener("input",()=>requestAnimationFrame(actSync));
 {const L=new Set();EQ.forEach(e=>eqStats(e).forEach(([zh])=>L.add(zh)));$("dlEqEff").innerHTML=[...L].sort((a,b)=>a.localeCompare(b,"zh-Hant")).map(x=>`<option value="${esc(x)}">`).join("")}
 const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",quiver:"quiver offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory",acc:"accessory"};
 const eqSetN=e=>{const st=[e.gen,FR2ID[e.name]].filter(Boolean).map(n=>SET_BY[norm(n)]).find(Boolean);return st?st.name+" "+(SET_ZH[st.name]||""):""};
-const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
+const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ef=norm($("fEqEff").value.trim());
   const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&(!ef||eqEffHit(e,ef).length));
   // sub-part counts follow the other filters (class, rarity, level, search), so they match the list
@@ -1986,7 +1987,7 @@ const fillPrSub=()=>{const g=$("gPrSub");prSubV="all";const labs=[...new Set(PRV
 chipsInto($("fPrGroup"),[["all","全部"],...[...new Set(Object.values(PR_GROUP))].filter(g=>g!=="材料"&&g!=="採集").map(g=>[g,g==="活動"?"活動道具":g])],()=>prGroup,v=>{prGroup=v;fillPrSub()},renderProps);
 chipsInto($("fPrRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,RAR[r][0]])],()=>prRar,v=>prRar=v,renderProps);
 $("fPrSort").onchange=renderProps;
-const prHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+(PR_CAT[e.cat]||"")+" "+e.lore).includes(s);
+const prHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+(PR_CAT[e.cat]||"")+" "+e.lore).includes(s);
 function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
   const base=PRV().filter(e=>(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
   $("fPrSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>PR_SUBLAB(e.cat)===c.dataset.v).length});
@@ -2459,7 +2460,7 @@ async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];{const h=
   const dgOk=dgs.filter(g=>g.state==="dg");
   for(let i=0;i<dgOk.length;i++){O.firstElementChild.textContent=`正在整理地下城地圖：${dgName(dgOk[i].dg)}（${i+1}／${dgOk.length}）…`;await jmLayers(dgOk[i])}
   for(let i=0;i<f1.length;i++){const n=Object.values(f1[i].layers).reduce((s,L)=>s+L.items.length,0);if(!n)continue;
-    O.firstElementChild.textContent=`正在整理高度層（地底）地圖：第 ${i+1}／${f1.length} 個世界，${n} 張…`;await jmLayers(f1[i])}
+    O.firstElementChild.textContent=`正在整理室內・洞穴（高度層）地圖：第 ${i+1}／${f1.length} 個世界，${n} 張…`;await jmLayers(f1[i])}
   jmPopClose();for(const k in JMDGC)delete JMDGC[k];JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();JMSEL.fresh=true;JMSEL.floor=1;O.innerHTML=`<div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
 // preview of one square: the player's own JourneyMap image of it (surface first, else the first underground one)
 const JMURL=new Map();const jmUrl=f=>{if(!JMURL.has(f))JMURL.set(f,URL.createObjectURL(f));return JMURL.get(f)};
@@ -2491,7 +2492,7 @@ async function jmPreview(k){const tk=++JMPV;window.__jmPv=k;   // __jmPv: the sq
   const it=day[0]||cave[0];if(!it)return;const cx=rx*512+256-2560,cz=rz*512+256-2560,out=Math.hypot(cx,cz)>2487+256;
   const nm=jmRegNames(rx,rz);
   const cv=await jmCrop(it.f);if(tk!==JMPV)return;jmPop();$("jmPopT").textContent=nm.join("、")||"這一格";const P=$("jmPopB");
-  P.innerHTML=`<span class="jmpvimg"></span><span>${out?"<span class=\"warn\">在第 1 層的島外面（地圖邊緣以外）</span><br>":""}地面 ${day.length} 張・地底 ${cave.length} 張${!day.length?"<br>（這一格只有地底的資料，圖是地底那一層）":""}<br><span class="muted">${JMSEL.off.has(k)?"目前：不上傳":"目前：會上傳"}${cv&&!cv.dataset.full?"・圖只裁出有畫面的部分":""}</span></span>`;
+  P.innerHTML=`<span class="jmpvimg"></span><span>${out?"<span class=\"warn\">在第 1 層的島外面（地圖邊緣以外）</span><br>":""}地面 ${day.length} 張・室內・洞穴 ${cave.length} 張${!day.length?"<br>（這一格只有室內・洞穴的資料，圖是那一層）":""}<br><span class="muted">${JMSEL.off.has(k)?"目前：不上傳":"目前：會上傳"}${cv&&!cv.dataset.full?"・圖只裁出有畫面的部分":""}</span></span>`;
   if(cv){cv.title="點了放大";cv.dataset.jmzoom="";P.querySelector(".jmpvimg").appendChild(cv)}}
 // a dungeon drawn once: every run of it together (oldest first) on the height with the most images, cropped to where
 // there is data. Used for the tile's thumbnail and the floating preview (cached as a promise per dungeon).
@@ -2602,15 +2603,15 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
         <li>選取示意：<span class="nw"><span class="jmk on"></span>橘框＝要上傳</span>、<span class="nw"><span class="jmk"></span>虛線＝不上傳</span>。</li>
         <li>滑鼠在方格或地下城上停留，預覽視窗就會顯示該區塊的地圖。</li>
         <li>點預覽視窗裡的圖可以放大，按 Esc 或點右上 ✕ 關閉。</li>
-        <li>地底（洞穴、地下室）的地圖會跟著方格一起打包，不用另外選。</li></ul></div></span>`;
-  const mapPart=f1.length&&regs.size?`<section class="jmsec"><div class="jmsech"><b>地圖</b><span class="muted">地面 ${nDay} 張・地底 ${nCave} 張</span>
+        <li>室內・洞穴（洞穴、地下室、建築內）的地圖會跟著方格一起打包，不用另外選。</li></ul></div></span>`;
+  const mapPart=f1.length&&regs.size?`<section class="jmsec"><div class="jmsech"><b>地圖</b><span class="muted">地面 ${nDay} 張・室內・洞穴 ${nCave} 張</span>
       <span class="jmact"><button class="linkbtn" id="jmRegAll">全選</button><button class="linkbtn" id="jmRegNone">清除</button></span></div>
     <div class="jmmapw">${help}<svg class="jmmap" viewBox="70 70 4980 4980" role="group" aria-label="要上傳的地方">
       <defs><clipPath id="jmClip"><circle cx="${C}" cy="${C}" r="${R}"/></clipPath></defs>
       <circle cx="${C}" cy="${C}" r="${R}" fill="#070c11"/>
       <g clip-path="url(#jmClip)">${[0,1,2].flatMap(r=>[0,1,2].map(c=>`<image href="tiles/f1jm/0/${c}_${r}.jpg?v=${v}" x="${70+c*2048}" y="${70+r*2048}" width="2048" height="2048" preserveAspectRatio="none"/>`)).join("")}</g>
       ${[...regs.values()].map(r=>{const nm=jmRegNames(r.rx,r.rz),k=r.rx+","+r.rz;
-        return`<rect class="jmreg" data-jmreg="${k}" x="${r.rx*512+8}" y="${r.rz*512+8}" width="496" height="496" rx="40" tabindex="0" role="checkbox"><title>${esc(nm.join("、")||"這一格")}：地面 ${r.day} 張、地底 ${r.cave} 張</title></rect>`}).join("")}
+        return`<rect class="jmreg" data-jmreg="${k}" x="${r.rx*512+8}" y="${r.rz*512+8}" width="496" height="496" rx="40" tabindex="0" role="checkbox"><title>${esc(nm.join("、")||"這一格")}：地面 ${r.day} 張、室內・洞穴 ${r.cave} 張</title></rect>`}).join("")}
       ${FLOORS[1].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(t.n)}</text></g>`).join("")}
     </svg></div></section>`:"";
   const dgPart=dgList.length?`<section class="jmsec"><div class="jmsech"><b>地下城</b><span class="muted">同一個地下城進場幾次都合成一張</span>
@@ -2707,7 +2708,7 @@ function buildFormReport(){
           <li><b>拍配方</b>：打開 NPC 的製作或購買選單，點到那個物品再按 F2，材料、數量、費用、時間都要看得到。</li>
           <li><b>拍任務追蹤</b>：畫面右側的任務追蹤（Tracked quest）有任務編號和目前步驟，直接按 F2。</li>
           <li><b>拍技能</b>：打開技能選單，點到那個技能再按 F2，名稱、解鎖等級、說明都要看得到。</li>
-          <li class="pconly"><b>上傳探索地圖（JourneyMap）</b>：不用截圖，用中間的「打包探索地圖」產生壓縮檔，回報種類選「探索地圖」上傳。送出後自動檢查、合併，目前只合併第 1 層（地面和地底高度層）。</li>
+          <li class="pconly"><b>上傳探索地圖（JourneyMap）</b>：不用截圖，用中間的「打包探索地圖」產生壓縮檔，回報種類選「探索地圖」上傳。送出後自動檢查、合併，目前只合併第 1 層（地面和室內・洞穴高度層）。</li>
           <li><b>檔案位置</b>：<code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\screenshots</code><br>按 <kbd>Win</kbd>＋<kbd>R</kbd>，貼上這一行按 Enter，就會直接打開資料夾。檔名就是拍攝時間，最新的排在最後面。</li>
           <li><b>上傳</b>：表單最後一頁按「新增檔案」→「瀏覽」→ 到上面的資料夾選檔。按住 <kbd>Ctrl</kbd> 可以一次選多張（最多 5 張，每張 10 MB 以內，F2 的截圖都在範圍內）。</li>
           <li>不用裁切，也不用另外壓縮，原圖直接上傳。審核通過後網站會自動縮小。</li>
@@ -2730,7 +2731,7 @@ function buildFormReport(){
       <li><b>看結果</b>：工具自動找出第 1 層的地圖和地下城，只留網站還沒有的部分，不用自己挑資料夾。</li>
       <li><b>挑要上傳的</b>：在小地圖上點方格、點地下城的圖選取（或按各段的「全選」）。滑鼠指著會在右下角的預覽視窗先看那一塊的地圖。</li>
       <li><b>上傳</b>：按「下載壓縮檔」，再按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>、上傳壓縮檔後送出。不用截圖，送出後自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
-    <div class="jmscope"><span><b>會收</b>：第 1 層的地面、地底（洞穴、地下室）和地下城（Geldorack Dungeon、Labyrinth of the Fallen、Sanctuary of Xal'Zirith）</span><span><b>不收</b>：還沒開放打包的樓層（第 2 層以後，開放後再加）、破碎的地下世界、限時活動的場地</span></div>
+    <div class="jmscope"><span><b>會收</b>：第 1 層的地面、室內・洞穴（洞穴、地下室、建築內）和地下城（Geldorack Dungeon、Labyrinth of the Fallen、Sanctuary of Xal'Zirith）</span><span><b>不收</b>：還沒開放打包的樓層（第 2 層以後，開放後再加）、破碎的地下世界、限時活動的場地</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden><span id="jmDl"></span></div>
     <div class="muted jmdlnote" id="jmDlNote">要在電腦上用 Chrome 或 Edge 開本站。</div>
@@ -2895,8 +2896,8 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
    $("stage").style.setProperty("--noteh","42px");world.querySelectorAll(".areas").forEach(n=>n.remove());
    if(!fitted)requestAnimationFrame(dgFit);SRCH_ALL=false;return}
   {const ls=$("layerSel"),keys=Object.keys(jmLayersMeta()).filter(k=>{const n=+k.slice(1);return n>=JMP.LMIN&&n<=JMP.LMAX}).sort((a,b)=>+b.slice(1)-+a.slice(1));ls.hidden=!(useTiles()&&keys.length);
-   if(!ls.hidden){ls.innerHTML=[`<option value="day">高度：地面</option>`,...keys.map(k=>`<option value="${k}">地底 ${esc(layerLabel(k))}</option>`)].join("");ls.value=curLayer()?JML:"day"}}
-  if(useTiles()&&curLayer()){const LY=curLayer();$("mapNote").hidden=false;$("mapNote").textContent=`正在看地底的高度層 ${LY.label}（JourneyMap 的洞穴地圖，${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳。可以到「協作區」用「打包探索地圖」上傳你的地底地圖。`}
+   if(!ls.hidden){ls.innerHTML=[`<option value="day">高度：地面</option>`,`<optgroup label="室內・洞穴（有屋頂遮住的地方，依高度）">`,...keys.map(k=>`<option value="${k}">高度 ${esc(layerLabel(k))}</option>`),`</optgroup>`].join("");ls.value=curLayer()?JML:"day"}}
+  if(useTiles()&&curLayer()){const LY=curLayer();$("mapNote").hidden=false;$("mapNote").textContent=`正在看高度 ${LY.label} 的室內・洞穴地圖（JourneyMap 的洞穴地圖，只畫有屋頂遮住的地方：洞穴、地下室、建築和塔的室內；${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳或那個高度沒有室內。可以到「協作區」用「打包探索地圖」上傳。`}
   else if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate} 更新，${m.jmPct?"約佔地圖 "+m.jmPct+"%，":""}${m.jmN?"含 "+m.jmN+" 份玩家上傳，":""}1 格 1 像素，放大會更清楚），其餘為變暗的 wiki 地圖。可以到「協作區」上傳你的 JourneyMap 補上沒探索的地方。`}
   {const cr=$("jmCredit"),C=BASE==="jm"&&m&&m.jm&&!(useTiles()&&curLayer())?jmCredits():null;cr.hidden=!C;   // contributors of the explored map, under the base toggle
    if(C){const pc=n=>{const p=n/C.tot*100;return p>=0.1?p.toFixed(1)+"%":"<0.1%"},top=C.rows.slice(0,5),rest=C.rows.slice(5);

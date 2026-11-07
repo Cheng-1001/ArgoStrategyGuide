@@ -53,6 +53,8 @@
   "Nodachi Staff"
  ],
  "_rebuilt": [
+  "Occult Ring",
+  "Occult Amulet",
   "Bracelet of the Nepenthes",
   "Amulet of the Nepenthes",
   "Frozen Bracelet",
@@ -128,5 +130,7 @@
  "Arc de l'Héraut": "",
  "Bouclier de Illfang": "",
  "Bouclier Putride": "",
- "Arc Nodachi": ""
+ "Arc Nodachi": "",
+ "Occult Ring": "",
+ "Occult Amulet": ""
 }

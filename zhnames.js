@@ -7,6 +7,10 @@
    en: English game name (also matched by name, e.g. recipes and game-only potions); fr: official French name. */
 window.SAO_ZHNAMES={date:"2026-11-07",
 // set names from the tooltips' set line (sets.js English name -> official Chinese); the wolf set is also shown as 下級狼套裝 on one tooltip
+// search-only aliases (2026-11-07, user: 神祕戒指搜尋不到): items whose official Chinese name has not been seen in a screenshot yet.
+// Not shown as titles (official names only); the guess follows the official 神祕X series (神祕兜帽／手環／護身符／長袍／頭骨).
+// Replace with an items entry when a Chinese tooltip of the item is screenshotted.
+search:{"e|2486":["神祕戒指","神秘戒指"],"e|2045":["神祕手套","神秘手套"]},
 sets:{"Iron Set":"鐵套裝","Copper Set":"銅套裝","Weakling Wolf Set":"孱弱之狼套裝","Spider Set":"蜘蛛套裝","Hunter Herald Set":"獵人傳令官套裝","Hunter Set":"獵人套裝",
  "Shark Set":"鯊魚套裝","Elite Treant Set":"菁英樹人套裝","Ice Spirits Set":"冰之精靈套裝","Shadow Neophyte Set":"暗影新手套裝","Standard Skeleton Set":"標準骷髏套裝"},
 // monsters (user 2026-11-07「1也改」): floor-1 codex number -> name in the Chinese codex list (11/7 15:25～15:26); names cut off in the list (#030 #038 #045 #047) left out,
