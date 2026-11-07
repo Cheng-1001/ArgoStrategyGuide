@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="a3e7a396d0">
+<meta name="sao-build" content="b3d7fbb6f0">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -311,9 +311,9 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .legend select.lsel{appearance:auto;padding:2px 6px;max-width:170px}.legend select#dgSel{max-width:240px}
 .stage.dgmode .fpanel,.stage.dgmode #filterBtn,.stage.dgmode #fpFly{display:none!important}
 .dgsplit,.dgsplit>div{display:flex;flex-direction:column;gap:14px;min-width:0}
-@media (min-width:1180px){body.cls-inline[data-view="dungeons"] #pBody>.dgsplit{max-width:none;display:grid;grid-template-columns:minmax(0,880px) minmax(280px,1fr);grid-template-areas:"a m" "b m";grid-template-rows:auto 1fr;gap:14px 28px;align-items:start}body.cls-inline[data-view="dungeons"] .dgsplit>.dga{grid-area:a}body.cls-inline[data-view="dungeons"] .dgsplit>.dgb{grid-area:b}body.cls-inline[data-view="dungeons"] .dgsplit>.dgm{grid-area:m;position:sticky;top:0}body.cls-inline[data-view="dungeons"] .dgm .dgmap{margin-top:0}body.cls-inline[data-view="dungeons"] .dgm .dgov{width:fit-content;max-width:100%}body.cls-inline[data-view="dungeons"] .dgm .dgov img{width:auto;max-width:100%;max-height:calc(100vh - 250px);margin:0 auto}}
+@media (min-width:1180px){body.cls-inline[data-view="dungeons"] #pBody>.dgsplit{max-width:none;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,1fr);grid-template-areas:"a m" "b m";grid-template-rows:auto 1fr;gap:14px 28px;align-items:start}body.cls-inline[data-view="dungeons"] .dgsplit>.dga{grid-area:a}body.cls-inline[data-view="dungeons"] .dgsplit>.dgb{grid-area:b}body.cls-inline[data-view="dungeons"] .dgsplit>.dgm{grid-area:m;position:sticky;top:0}body.cls-inline[data-view="dungeons"] .dgm .dgmap{margin-top:0}body.cls-inline[data-view="dungeons"] .dgm{container-type:inline-size}body.cls-inline[data-view="dungeons"] .dgm .dgov{width:fit-content;max-width:100%}body.cls-inline[data-view="dungeons"] .dgm .dgov img{width:min(100cqw,calc((100vh - 290px) * var(--ar,10)));max-width:none;height:auto}}
 .dgmap{margin:4px 0 10px}.dgmap .dgov{display:block;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#070c11;cursor:zoom-in;width:100%}
-.dgmap .dgov img{display:block;width:100%;height:auto;image-rendering:pixelated}.dgmap figcaption{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:12.5px;margin-top:4px}
+.dgmap .dgov img{display:block;width:min(100%,calc(75vh * var(--ar,10)));height:auto;margin:0 auto;image-rendering:pixelated}.dgmap figcaption{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:12.5px;margin-top:4px}
 .legend .lgt{background:none;border:1px solid rgba(255,255,255,.28);color:inherit;border-radius:999px;padding:1px 8px 1px 6px;cursor:pointer;font-size:11.5px}
 .legend .lgt:hover{border-color:#fff}
 @media (min-width:821px){.legend{left:220px;top:12px;padding:0;background:none}}
@@ -888,7 +888,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=2bb99626"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=082612f0"></script>
+<script src="changelog.js?v=25623ee1"></script>
 <script src="recipes.js?v=5279ff8b"></script>
 <script src="jmmeta.js?v=5b0ffd74"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1294,7 +1294,7 @@ const DG_ITEM={};  // dungeon-window names now match the item keys (renamed to t
 const dgMeta=()=>((window.SAO_JM||{}).dg)||{};
 const dgOfSpot=id=>Object.keys(DG_DIM).find(d=>DG_DIM[d][0]===id&&dgMeta()[d]);
 function dgMapHTML(spotId){const d=dgOfSpot(spotId);if(!d)return"";const e=dgMeta()[d];
-  return`<h3 class="sec">地圖</h3><figure class="dgmap"><button class="dgov" data-dgmap="${d}" title="在地圖分頁打開（可以放大、切換高度）"><img src="tiles/dg/${d}/overview.jpg?v=${encodeURIComponent(e.v||"")}" alt="${esc(dgName(d))} 的地圖" loading="lazy"></button>
+  return`<h3 class="sec">地圖</h3><figure class="dgmap"><button class="dgov" data-dgmap="${d}" title="在地圖分頁打開（可以放大、切換高度）"><img src="tiles/dg/${d}/overview.jpg?v=${encodeURIComponent(e.v||"")}&o=2" onload="this.style.setProperty('--ar',this.naturalWidth/this.naturalHeight)" alt="${esc(dgName(d))} 的地圖" loading="lazy"></button>
     <figcaption><button class="linkbtn" data-dgmap="${d}">在地圖上看（可以放大、切換高度）</button><span class="muted">玩家上傳的 JourneyMap 地圖，${esc(e.date||"")} 更新</span></figcaption></figure>`}
 function dgInfoHTML(sp){const d=sp.dg;if(!d)return"";
   const mon=nm=>{const m=nm&&ALLM.find(x=>x.floor===sp.floor&&(x.name===nm||(x.aka||[]).includes(nm)));return m?`<button class="linkbtn" data-go="m|${m.id}">${esc(nm)}</button>`:esc(nm||"")};

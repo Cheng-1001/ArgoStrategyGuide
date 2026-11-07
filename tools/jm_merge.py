@@ -3,6 +3,7 @@
 Usage:
   python3 -I tools/jm_merge.py <upload.zip | folder> [--report R0005] [--date YYYY-MM-DD] [--min-overlap 20]
   python3 -I tools/jm_merge.py --init-mask        (one-off: derive the explored mask from the current tiles)
+  python3 -I tools/jm_merge.py --overviews        (redraw every dungeon's overview.jpg from its stored tiles)
 
 The upload holds JourneyMap region images "x,z.png" (512 x 512, 1 block = 1 px, region x,z starts at block x*512,
 z*512) in "day" folders (the surface) and, since 2026-11-06, in the height-layer folders next to them: JourneyMap names
@@ -50,6 +51,7 @@ MASK = os.path.join(TILES, "explored.png")
 META = os.path.join(ROOT, "jmmeta.js")
 X0, SIZE, FULL, T, CH, MW = 70, 4980, 5120, 256, 16, 320
 BG = (7, 12, 17)
+OV_THR, OV_PAD, OV_MAX = 40, 12, 1024   # dungeon overview: content threshold, margin, longest side
 NAME = re.compile(r"(?:^|/)(-?\d+),(-?\d+)\.png$")
 LAYER = re.compile(r"-?\d+")    # JourneyMap height-layer folder (16-block slice number)
 LAYER_MIN, LAYER_MAX = -4, 19   # world height -64..319; keep in sync with JMP.LMIN/LMAX in src/index.html
@@ -239,9 +241,7 @@ def merge_dungeon(d, instances, date, report):
                     save_tile(im.crop((c * T, r * T, c * T + T, r * T + T)), os.path.join(ld, f"{c}_{r}.jpg"))
         if k == best:
             bx = (max(0, bounds[0] - tx0 * T - 16), max(0, bounds[1] - tz0 * T - 16), min(full, bounds[2] - tx0 * T + 16), min(full, bounds[3] - tz0 * T + 16))
-            ov = cv.crop(bx)
-            ov.thumbnail((640, 640), Image.LANCZOS)
-            ov.save(os.path.join(base, "overview.jpg"), quality=85, optimize=True)
+            save_overview(cv.crop(bx), os.path.join(base, "overview.jpg"))
         n = len(chunks[k])
         layers[k] = {"label": layer_label(k), "chunks": n, "l3": sorted(f"{x}_{z}" for x, z in l3[k]), "v": f"{date}-{n}"}
     newc = len(new)
@@ -431,9 +431,48 @@ def new_in(rx, rz, im, mask):
     return new
 
 
+def content_box(im, thr=OV_THR, pad=OV_PAD):
+    """Box around what the map really shows. Explored-but-empty chunks are drawn black (or the dark blue of the void),
+    so the chunk bounds leave big dark margins (user 2026-11-07: 地圖縮太小了，可以裁掉不必要的部分).
+    A row/column counts when at least 2 pixels are brighter than thr in any channel."""
+    g = im.convert("RGB").point(lambda v: 255 if v > thr else 0).convert("L").point(lambda v: 255 if v else 0)
+    w, h = g.size
+    px = g.load()
+    cols = [x for x in range(w) if sum(1 for y in range(0, h) if px[x, y]) >= 2]
+    rows = [y for y in range(h) if sum(1 for x in range(0, w) if px[x, y]) >= 2]
+    if not cols or not rows:
+        return (0, 0, w, h)
+    return (max(0, cols[0] - pad), max(0, rows[0] - pad), min(w, cols[-1] + 1 + pad), min(h, rows[-1] + 1 + pad))
+
+
+def save_overview(im, path):
+    im = im.crop(content_box(im))
+    im.thumbnail((OV_MAX, OV_MAX), Image.LANCZOS)
+    im.save(path, quality=88, optimize=True)
+
+
+def redraw_overviews():
+    meta = load_meta().get("dg", {})
+    for d, e in meta.items():
+        base = os.path.join(ROOT, "tiles", "dg", d)
+        k, fr = e.get("best"), e.get("frame") or {}
+        if not k or not os.path.isdir(os.path.join(base, k, "3")):
+            continue
+        tx0, tz0, full = fr["x0"] // T, fr["z0"] // T, fr["full"]
+        cv = Image.new("RGB", (full, full), BG)
+        for xy in map(tile_xy, os.listdir(os.path.join(base, k, "3"))):
+            if xy:
+                cv.paste(Image.open(os.path.join(base, k, "3", f"{xy[0]}_{xy[1]}.jpg")).convert("RGB"), ((xy[0] - tx0) * T, (xy[1] - tz0) * T))
+        b = e["bounds"]
+        save_overview(cv.crop((max(0, b[0] - fr["x0"] - 16), max(0, b[1] - fr["z0"] - 16), min(full, b[2] - fr["x0"] + 16), min(full, b[3] - fr["z0"] + 16))), os.path.join(base, "overview.jpg"))
+        print(d, Image.open(os.path.join(base, "overview.jpg")).size)
+
+
 def main(argv):
     if "--init-mask" in argv:
         return init_mask()
+    if "--overviews" in argv:
+        return redraw_overviews()
     opt = {argv[i]: argv[i + 1] for i in range(len(argv) - 1) if argv[i].startswith("--")}
     args = [a for i, a in enumerate(argv) if not a.startswith("--") and not (i and argv[i - 1] in opt)]
     report, date = opt.get("--report"), opt.get("--date") or datetime.date.today().isoformat()
