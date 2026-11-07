@@ -107,6 +107,8 @@ window.SAO_GAMEICONS = {
  "Galiath's Axe": "icons/game/galiaths_axe_s.png",   // 2026-11-04 22:51:21 [2247] (was a placeholder)
  "Colossus Pavise": "icons/game/colossus_pavise_s.png",   // 2026-11-05 01:00:20 [2588] (was a placeholder)
  "Nodachi Staff": "icons/game/nodachi_staff_s.png",   // 2026-11-05 01:01:14 [2653] (was a placeholder)
+ "Rhitta": "icons/game/rhitta_s.png",   // 2026-11-05 01:01:28 [2672] (user 2026-11-07: game codex icons are fine to show, even for the Seven Deadly Sins collab weapons)
+ "Lostvayne": "icons/game/lostvayne_s.png",   // 2026-11-05 00:56:32 [2427]
  "Dagger of Albal": "icons/game/dagger_of_albal_s.png",     // nerfs_weapons:seconde_dague_albal = auction tile 2026-11-04 22:4x (dark red blade, black guard)
  "Iron Quiver": "icons/game/iron_quiver_s.png",             // nerfs_weapons:carquois_fer (name only; no screenshot of the icon yet)
  "Hunter's Quiver": "icons/game/hunters_quiver_s.png",      // nerfs_weapons:carquois_chasseur (name only; no screenshot of the icon yet)
