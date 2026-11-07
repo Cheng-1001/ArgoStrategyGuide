@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="0b16866b66">
+<meta name="sao-build" content="0d5a88475a">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -203,6 +203,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 @media (min-width:821px){#view-classes.browse{grid-template-columns:minmax(0,1fr)}#view-classes .filters{display:none}#lCls,#lDg{grid-template-columns:minmax(0,1fr);max-width:290px;gap:6px}#view-dungeons.browse{grid-template-columns:minmax(0,1fr)}#view-dungeons .filters{display:none}#lDg .card{padding:9px 12px;gap:4px}body.cls-inline[data-view="dungeons"] #pBody>*{max-width:880px}#lCls .card{padding:7px 11px;gap:3px}#lCls .chead .th{width:34px;height:34px;font-size:17px}#lCls .cname b{font-size:15px}#lCls .cname span{font-size:12px}#lCls .clx{font-size:12px!important;line-height:1.4}#lCls .cmeta .pill{padding:0 7px;font-size:11.5px}body.cls-inline #panel{left:var(--clsl);right:0;top:var(--clst);bottom:0;width:auto!important;max-width:none;border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none;background:var(--bg);z-index:5}body.cls-inline #panel .ptop{display:none}body.cls-inline #pBody{padding-top:14px}body.panel-xwide #panel{width:var(--clsw,min(880px,calc(100vw - 40px)))}body.cls-one .cls2{grid-template-columns:minmax(0,1fr)}}
 @media (min-width:1800px){body.panel-open.panel-xwide:not([data-view="classes"]) .results{padding-right:900px}}
 @media (min-width:1180px) and (max-width:1799px){body.panel-open.panel-xwide .results{padding-right:0}}
+.rsel input.effin{width:150px;height:24px;padding:0 8px;font-size:12.5px}
 .th.dgk{background:var(--slot);display:grid;place-items:center;overflow:hidden}.th.dgk .eslot{box-shadow:none;border-radius:0}.dgkn{font-size:12px}
 .cls2{display:grid;gap:4px 32px}@media (min-width:821px){.cls2{grid-template-columns:340px minmax(0,1fr)}}.clsfold{border:1px solid var(--line);border-radius:8px;margin-top:10px;background:var(--panel-2)}.clsfold>summary{cursor:pointer;padding:9px 12px;font-size:13px;font-weight:700;letter-spacing:.02em}.clsfold>summary .c{font-weight:400;color:var(--muted);font-size:12px;margin-left:4px}.clsfold[open]>summary{border-bottom:1px solid var(--line)}.clsfold>.settbl,.clsfold>div{margin:4px 10px 10px;width:calc(100% - 20px)}.cls2>div:first-child .clsbtns+.clsfold{margin-top:16px}.cls2>div:first-child .settbl th,.cls2>div:first-child .settbl td{padding-top:7px;padding-bottom:7px}.cls2>div:first-child .settbl th{padding-left:10px}.cls2>div:first-child .clsbtns{margin-top:12px}
 .cls2>div{min-width:0}
@@ -793,6 +794,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">職業</span><div class="chips" id="fEqClass"></div></div>
       <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fEqRar"></div></div>
       <div class="fgroup"><span class="flabel">等級</span><div class="lvrange"><input type="number" class="sel" id="fEqMin" min="1" max="99" placeholder="最低" aria-label="最低等級"><span>～</span><input type="number" class="sel" id="fEqMax" min="1" max="99" placeholder="最高" aria-label="最高等級"></div></div>
+      <div class="fgroup torsel"><span class="flabel">效果</span><input type="search" class="sel effin" id="fEqEff" list="dlEqEff" placeholder="例如：爆擊率" aria-label="依效果篩選" autocomplete="off"><datalist id="dlEqEff"></datalist></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fEqSort" aria-label="排序">
         <option value="lv">等級（低→高）</option><option value="lvd">等級（高→低）</option><option value="rar">稀有度（高→低）</option><option value="name">名稱</option></select></div>
       <div class="note">資料取自官網物品圖鑑（saominecraft.com/wiki，2026-10-31），名稱和描述是官方的法文原文。圖示是官方圖片，或官網 3D 模型的截圖。官網圖鑑沒有寫取得方式和合成材料，之後靠玩家回報補上。</div>
@@ -872,7 +874,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=349916ca"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=b81d20ec"></script>
+<script src="changelog.js?v=60ed7859"></script>
 <script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1915,11 +1917,18 @@ const fillEqSub=()=>{const g=$("gEqSub"),ks=EQ_SUBS[eqPart];g.hidden=!ks;eqSubV=
 chipsInto($("fEqPart"),[["all","全部"],["weapon","武器（主手）"],["off","副手"],["armor","防具"],["acc","飾品"]],()=>eqPart,v=>{eqPart=v;fillEqSub()},renderEquip);
 chipsInto($("fEqClass"),[["all","全部"],...Object.entries(CLASS_ZH)],()=>eqClass,v=>eqClass=v,renderEquip);
 chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
-["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
+["fEqMin","fEqMax","fEqSort","fEqEff"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
+// effect filter (user 2026-11-07「裝備分頁增加輸入欄位，篩選效果」): matches the stat names as shown (爆擊率、HP…) and the raw keys;
+// the card then shows the matching stats; the dropdown suggests every stat name that some equipment has
+const eqStats=e=>[...(e.dmg?[["傷害","damage",e.dmg]]:[]),...Object.entries(e.st).filter(([k])=>!/^Required|^Classe requise$|^Arme à deux mains$|^Durability Bar$/.test(k)).map(([k,v])=>[STAT_ZH[k]||k,k,statVal(k,v)])];
+const eqEffHit=(e,t)=>eqStats(e).filter(([zh,k])=>norm(zh).includes(t)||norm(k).includes(t));
+$("fEqEff").addEventListener("input",()=>requestAnimationFrame(actSync));
+{const L=new Set();EQ.forEach(e=>eqStats(e).forEach(([zh])=>L.add(zh)));$("dlEqEff").innerHTML=[...L].sort((a,b)=>a.localeCompare(b,"zh-Hant")).map(x=>`<option value="${esc(x)}">`).join("")}
 const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",quiver:"quiver offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory",acc:"accessory"};
-const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
-function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value;
-  const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s));
+const eqSetN=e=>{const st=[e.gen,FR2ID[e.name]].filter(Boolean).map(n=>SET_BY[norm(n)]).find(Boolean);return st?st.name+" "+(SET_ZH[st.name]||""):""};
+const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
+function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ef=norm($("fEqEff").value.trim());
+  const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&(!ef||eqEffHit(e,ef).length));
   // sub-part counts follow the other filters (class, rarity, level, search), so they match the list
   $("fEqSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>eqSub(e)===c.dataset.v).length});
   let a=base.filter(e=>eqSubV==="all"||eqSub(e)===eqSubV);
@@ -1930,7 +1939,7 @@ function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").val
   $("lEq").innerHTML=a.length?shown.map(e=>{const cl=eqClasses(e);return`<button class="card" data-key="e|${e.oid}" data-go="e|${e.oid}">
     <div class="chead">${eslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${zhE(e)?esc(dnSub(e))+"・":e.gen&&e.gen!==e.name?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":""}${esc(eqCat(e))}</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span>等級 ${e.lv}</span>${cl.length?`<span>· ${cl.map(c=>CLASS_ZH[c]).join("、")}</span>`:""}</div>
-    ${eqKey(e)?`<div class="estat">${esc(eqKey(e))}</div>`:""}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
+    ${(k=>k?`<div class="estat">${esc(k)}</div>`:"")(ef?eqEffHit(e,ef).map(([zh,,v])=>zh+" "+v).join("・"):eqKey(e))}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
   bindGo($("lEq"));markSel()}
 const gstNote=e=>{const c=e.cat0,r=Object.entries(c.st).filter(([k])=>k!=="Classe requise"&&k!=="Arme à deux mains");
   return`<div class="note">🎮 等級和數值取自遊戲裡的物品說明（站長截圖 ${esc(e.gstDate||GST.date)}）。官網圖鑑（2026-10-31）寫的是：等級 ${c.lv}${c.dmg?"、傷害 "+esc(c.dmg):""}${r.length?"、"+r.map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v)))).join("、"):""}。遊戲改版後官網圖鑑還沒更新，以遊戲為準。</div>`};
@@ -3121,7 +3130,7 @@ function placeTopFilters(){Object.entries(TOPF).forEach(([v,ids])=>{const sec=$(
   // every dropdown (sort, area, NPC…) sits next to the list title on desktop (user 2026-11-04)
   document.querySelectorAll(".view.browse").forEach(sec=>{const rh=sec.querySelector(".results>.rhead");if(!rh)return;
     let box=rh.querySelector(":scope>.rsel");if(!box){box=document.createElement("div");box.className="rsel";const ct=rh.querySelector(".count");(ct||rh.firstElementChild).after(box)}
-    [...sec.querySelectorAll(".filters .fgroup, .rsel .fgroup")].filter(g=>g.querySelector("select")&&!g.querySelector(".chips")).forEach(g=>{
+    [...sec.querySelectorAll(".filters .fgroup, .rsel .fgroup")].filter(g=>(g.querySelector("select")||g.classList.contains("torsel"))&&!g.querySelector(".chips")).forEach(g=>{
       if(!g.__home){g.__home=document.createComment("f");g.before(g.__home)}
       if(topMQ.matches)box.appendChild(g);else g.__home.after(g)});box.hidden=!topMQ.matches||!box.children.length})}
 topMQ.addEventListener("change",()=>{placeTopFilters();renderCurrent()});
@@ -3137,6 +3146,7 @@ function actControls(sec){const out=[];sec.querySelectorAll(".filters .fgroup,.t
     if(all&&on&&on!==all)out.push({lab,val:on.textContent.replace(/\s*\d+\s*$/,"").trim(),clr:()=>all.click()})});
   g.querySelectorAll("select").forEach(x=>{if(/Sort$/.test(x.id)||x.selectedIndex<=0)return;out.push({lab,val:x.options[x.selectedIndex].text,clr:()=>{x.selectedIndex=0;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
   g.querySelectorAll("input[type=checkbox]").forEach(x=>{if(!x.checked)return;out.push({lab:"",val:(x.closest("label")||{}).textContent.trim(),clr:()=>{x.checked=false;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
+  g.querySelectorAll("input[type=search]").forEach(x=>{if(!x.value.trim())return;out.push({lab,val:x.value.trim(),clr:()=>{x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})});
   const nums=[...g.querySelectorAll("input[type=number]")];if(nums.some(x=>x.value))out.push({lab,val:nums.map(x=>x.value||"…").join("～"),clr:()=>nums.forEach(x=>{if(x.value){x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})})});
   return out}
 function actSync(){const sec=$("view-"+view);if(!sec||!sec.classList.contains("browse"))return;const rh=sec.querySelector(".results>.rhead");if(!rh)return;
