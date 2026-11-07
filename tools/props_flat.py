@@ -4,7 +4,7 @@ Official items whose item model is flat (item-models/m/<path>.json has "flat":1 
 (item-models/t/<hash>.png), and the 3D keys whose catalogue image is only a UV atlas for a render made by
 tools/model_render.py. usage: python3 -I props_flat.py <work dir> <repo>
 <work dir> holds props_old.png/props_old.js (copies of the current files), im/flat.json {officialId: texture},
-im/t/<texture>, im/rk/<rendered key>.png."""
+im/t/<texture>, im/rk/<rendered key>.png, im/r3d.json + im/rk3/<id>.png (3D renders, 2026-11-07)."""
 import json,sys,io,hashlib
 from PIL import Image
 S=sys.argv[1];R=sys.argv[2]
@@ -13,11 +13,16 @@ s=open(S+'/props_old.js').read();i=s.index('window.SAO_PROPS=')+17
 head=s[:i];rows=json.loads(s[i:s.rindex(';')])
 flat=json.load(open(S+'/im/flat.json'))
 extra={1824:S+'/im/rk/elitecreatures_knight_assortment_key.png',1823:S+'/im/rk/rpg_essentials_1_rpg_essentials_1_model_key_shadow.png',2116:S+'/im/rk/treasure_tier_pack_keys_gold_key.png',2118:S+'/im/rk/treasure_tier_pack_keys_wood_key.png'}
+# 2026-11-07 (user: 還是有去背不完全, e.g. Clé de la cage: the hole of the key was filled with the card's white background):
+# every remaining 3D item is drawn from its official item model with tools/model_render.py (im/r3d.json {officialId: render})
+import os
+if os.path.exists(S+'/im/r3d.json'):
+    extra.update({int(k):(v if os.path.isabs(v) else S+'/'+v) for k,v in json.load(open(S+'/im/r3d.json')).items()})
 OUTLINE=set()   # user 2026-11-05: no outline on the keys
 old=Image.open(S+'/props_old.png').convert('RGBA')
-def fitpx(im):
+def fitpx(im,strip=True):
     im=im.convert('RGBA');w,h=im.size
-    if h>w: im=im.crop((0,0,w,w))   # animated strip: first frame
+    if strip and h>w and h%w==0: im=im.crop((0,0,w,w))   # animated strip: first frame (textures only; renders can be tall)
     bb=im.getbbox()
     if not bb: return None
     im=im.crop(bb);w,h=im.size;s=min((CELL-4)/w,(CELL-4)/h)
@@ -33,7 +38,7 @@ def add(c):
 for r in rows:
     src=extra.get(r[0]) or (S+'/im/t/'+flat[str(r[0])] if str(r[0]) in flat else None)
     c=None
-    if src: c=fitpx(Image.open(src))
+    if src: c=fitpx(Image.open(src),strip=r[0] not in extra)
     if c is not None and r[0] in OUTLINE:
         from PIL import ImageFilter
         a=c.split()[3].point(lambda v:255 if v>40 else 0).filter(ImageFilter.MaxFilter(3))
