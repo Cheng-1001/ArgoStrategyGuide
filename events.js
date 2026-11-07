@@ -24,20 +24,6 @@ window.SAO_EVENTS = {
   fragRate: "一般惡魔 3%、菁英 8%、首領（Svarg、Warlock Imp）必掉、the Archdemon 掉 1～2 個。每個惡魔區只掉自己那一種碎片，三區都要去。",
   key: { n: "Sanctuary of Souls Key", npc: "Halloween Exchanger", where: "地下城告示牌旁邊", mats: [["Soul Shard", 1], ["Ritual Ectoplasm", 1], ["Eternal Shadow", 1]], note: "進場時消耗" },
   loop: ["在三個惡魔區打出三種碎片", "到 Halloween Exchanger 換鑰匙，打通 Sanctuary of Souls", "寶箱有機率給 Spectral Crystal，3 個可以抽一次萬聖節轉蛋", "轉蛋抽到 Dark Gift Pumpkin，拿去 Halloween Forge 換武器"],
-  // banner: the official "傳送門機率" page (saominecraft.com/tw/gacha, settings updated 2026-11-05, read 2026-11-07),
-  // which says it uses the same rates as the game; it already has the 11/6 change (mount scrolls Epic 6%, Echo 3%).
-  // rows: [rarity, rewards (English as on the page, official Chinese name in brackets when the game shows one), normal rate, rate with pity]
-  banner: {
-   cost: "單抽 200 Triggium（遊玩可得，也能在商店買）或 3 Cristal Spectral（遊玩可得）；多連抽一次 5 抽，每抽機率相同。",
-   rows: [
-    ["神話", "6 種萬聖節終極技能卷軸，各 0.25%：Witch's Cauldron、Headless Ride（卷軸：無頭奔襲）、Lights Out（卷軸：熄燈）、Hunter's Moon（卷軸：獵人之月）、Gate of Souls (Lightning)（卷軸：靈魂之門（雷電））、Gate of Souls (Earth)", "1.5%", "2.04%"],
-    ["傳說", "Dark Gift Pumpkin（黑暗贈禮南瓜）4.5%、Echo Will-o'-the-Wisp（回響鬼火）3%、Witch's Grimoire 2%", "9.5%", "9.46%"],
-    ["史詩", "坐騎卷軸 Witch's Broom（卷軸：女巫掃帚）、Pumpkin Knight（卷軸：南瓜騎士）、Mutant Pumpkin（卷軸：突變南瓜）各 6%；稱號 Soul Reaper（稱號：靈魂收割者）、Pumpkin King（稱號：南瓜王）各 4.5%", "27%", "26.83%"],
-    ["普通", "Halloween Gift（萬聖節禮物）", "62%", "61.67%"]
-   ],
-   pity: "保底：連續 20 抽沒有史詩以上，第 20 抽必出史詩以上；80 抽必出傳說以上；90 抽必出神話。「含保底」是官網用和伺服器相同的算法模擬 100 萬抽、只抽這個轉蛋時，各項實際出現的比例。",
-   src: { title: "傳送門機率", url: "https://saominecraft.com/tw/gacha", date: "設定更新 2026-11-05，本站 2026-11-07 查" }
-  },
   forge: {
    npc: "Halloween Blacksmith",
    rows: [

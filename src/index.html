@@ -868,6 +868,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="classes.js"></script>
 <script src="gameskills.js"></script>
 <script src="events.js"></script>
+<script src="gacha.js"></script>
 <script src="gamestats.js"></script>
 <script src="sets.js"></script>
 <script src="zhnames.js"></script>
@@ -1552,6 +1553,8 @@ function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=
     <span class="t"><b>${showNpc?esc(npcN(r.npc)):esc(recZh(r,e||prById[String(r.oid)])||r.en)}</b><span>${showNpc?(npcN(r.npc)!==r.npc?esc(r.npc)+"・":""):recZh(r,e||prById[String(r.oid)])?esc(r.en)+"・":(e?esc(dn(e))+"・":"")+(RAR[rar]?RAR[rar][0]+((r.mats||[]).length?"・":""):"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${isShop(r)?`<span class="shopt">販售</span><br>`:r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}>${showNpc&&n?`<div class="npcw-row">${npcWhere(n)}</div>`:""}</li>`}).join("")}</ul>`}
 // NPCs whose menus are not recipes (owner's screenshots 2026-11-03): recycling = give one item, get Recycling Coins
 const recyTable=(rows,more)=>`<ul class="rows">${rows.map(([it,c,sec])=>`<li><div class="lrow"><span class="t"><b>${esc(it)}</b><span>交出 1 個 → Recycling Coins ×${c}</span></span><span class="v">${sec} 秒<br><span class="muted">免費</span></span></div></li>`).join("")}</ul>${more?`<div class="note">${more}</div>`:""}`;
+// occult merchants restock (owner 2026-11-07): every item back to 5; the Occult Amulet was seen restocking at 19:00 Taiwan time
+const OCC_RESTOCK=`<h3 class="sec">補貨</h3><div class="note">⏰ 神祕商人的商品會刷新，刷新後<b>每件庫存 5 個</b>，賣完就顯示 Stock 0。站長實測神祕護身符在<b>台灣時間 19:00</b>（巴黎時間 12:00）刷新；手環、戒指、手套、遺物也會刷新、一樣是 5 個（站長 2026-11-07）。</div>`;
 const NPC_NOTE={
   "Weapon Recycling":`<h3 class="sec">回收（Weapon Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Weapon Recycling - Starting City」：交出武器換 Recycling Coins，全部普通、免費。</div>${recyTable([["Skeletal Sword",3,30],["Magic Staff of the Ruins",3,30],["Magic Staff of the Revenants",3,30],["Sylvan Pavise",3,30],["Hammer of the Colossus",5,30],["Bandit's Dagger",3,30],["Crossbow of the Bandits",3,30]])}`,
   "Accessory Recycling":`<h3 class="sec">回收（Accessory Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Accessory Recycling - Starting City」：交出飾品換 Recycling Coins，全部普通、免費。</div>${recyTable([["Ring of Pumba",5,30],["Ring of the Reaper",5,30],["Ring of the Fallen",5,30],["Bond of the Sylve",5,30],["Ring of Narax",5,30],["Necklace of Aragorn",5,30],["Flower of a Nepenthes",4,25],["Leg of a Spider",4,25],["Skull of a Wolf",4,25]])}`,
@@ -1560,11 +1563,11 @@ const NPC_NOTE={
   "Vault":`<h3 class="sec">倉庫</h3><div class="note">個人倉庫（My vault），一開始有 1 頁，再買 1 頁要 25000 珂爾。</div>`,
   "Web Archaeologist":`<h3 class="sec">位置</h3><div class="note">在 Arakh'Nol 的 Xal'Zirith 地下城入口旁，和 Xal'Zirith Dungeon Guard 站在一起（站長 2026-11-06 截圖，玩家座標 X 1019 Z 1178 Y 116）。點他開的視窗叫「Aragorn's Lair - Loot Info」，只有 Sell（收購）分頁；收購清單還沒有截圖。</div>`,
   "Skeleton Skull":`<h3 class="sec">位置</h3><div class="note">在高處的小石室裡（站長 2026-11-07 截圖：玩家座標 X 1162 Z 3544 Y 42，羅盤寫「Cyclorium」）。NPC 頭上沒有名牌，點他開的視窗叫「Secret Skeleton Skull」。</div>`,
-  "Occult Merchant - Artifacts":`<h3 class="sec">位置</h3><div class="note">在 Valley of Petals（花瓣谷）的<b>地底神壇</b>：從深色木造大建築旁的豎井往下（站長 2026-11-07 截圖：玩家座標 X 874 Z 4033 Y 4）。NPC 頭上沒有名牌；視窗「Occult Merchant - Artifacts」賣 Occult Skull／Robe／Hood，各 5 024.91 珂爾（LEGENDARY，有庫存數量）。物品說明的取得方式寫「Sold by Secret Occult Artifacts (5000 Cols)」。</div>`,
-  "Occult Merchant - Bracelet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3352 · Z 1647，房間裡 X 3350 · Z 1639）。NPC 頭上沒有名牌；視窗「Occult Merchant - Bracelet」賣 1 件 Occult Bracelet（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
-  "Occult Merchant - Amulet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3307 · Z 1671，房間裡 X 3314 · Z 1668）。NPC 頭上沒有名牌；視窗「Occult Merchant - Amulet」賣 1 件 Occult Amulet（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div><h3 class="sec">補貨</h3><div class="note">⏰ 神祕護身符在<b>台灣時間 19:00</b>（巴黎時間 12:00）刷新，刷新後庫存 <b>5 個</b>，賣完就顯示 Stock 0（站長 2026-11-07 實測）。其他 4 個神祕商人的刷新時間還沒測。</div>`,
-  "Occult Merchant - Ring":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3326 · Z 1736，房間裡 X 3321 · Z 1731）。NPC 頭上沒有名牌；視窗「Occult Merchant - Ring」賣 1 件 Occult Ring（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
-  "Occult Merchant - Gloves":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖，Gloves 的房間是依時間推斷：入口一帶 X 3363 · Z 1683，房間裡 X 3369 · Z 1689）。NPC 頭上沒有名牌；視窗「Occult Merchant - Gloves」賣 1 件 Occult Gloves（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
+  "Occult Merchant - Artifacts":`<h3 class="sec">位置</h3><div class="note">在 Valley of Petals（花瓣谷）的<b>地底神壇</b>：從深色木造大建築旁的豎井往下（站長 2026-11-07 截圖：玩家座標 X 874 Z 4033 Y 4）。NPC 頭上沒有名牌；視窗「Occult Merchant - Artifacts」賣 Occult Skull／Robe／Hood，各 5 024.91 珂爾（LEGENDARY，有庫存數量）。物品說明的取得方式寫「Sold by Secret Occult Artifacts (5000 Cols)」。</div>${OCC_RESTOCK}`,
+  "Occult Merchant - Bracelet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3352 · Z 1647，房間裡 X 3350 · Z 1639）。NPC 頭上沒有名牌；視窗「Occult Merchant - Bracelet」賣 1 件 Occult Bracelet（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>${OCC_RESTOCK}`,
+  "Occult Merchant - Amulet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3307 · Z 1671，房間裡 X 3314 · Z 1668）。NPC 頭上沒有名牌；視窗「Occult Merchant - Amulet」賣 1 件 Occult Amulet（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>${OCC_RESTOCK}`,
+  "Occult Merchant - Ring":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3326 · Z 1736，房間裡 X 3321 · Z 1731）。NPC 頭上沒有名牌；視窗「Occult Merchant - Ring」賣 1 件 Occult Ring（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>${OCC_RESTOCK}`,
+  "Occult Merchant - Gloves":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖，Gloves 的房間是依時間推斷：入口一帶 X 3363 · Z 1683，房間裡 X 3369 · Z 1689）。NPC 頭上沒有名牌；視窗「Occult Merchant - Gloves」賣 1 件 Occult Gloves（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>${OCC_RESTOCK}`,
   "Corrupted Boar Accessories":`<h3 class="sec">位置</h3><div class="note">在 Boar Zone（野豬區）的小屋裡，名牌是「[NPC] Accessory Blacksmith」，點他開的視窗叫「Corrupted Boar Accessories」（站長 2026-11-07 截圖：玩家座標 X 1778 Z 3527～3533 Y 28）。參考互動地圖沒有這個 NPC。</div>`,
   "Auction House":`<h3 class="sec">拍賣場</h3><div class="note">玩家之間買賣物品的拍賣場，起始之城有好幾個 Auction House NPC。</div>`
 };
@@ -1633,7 +1636,7 @@ function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<di
   <h3 class="sec">鑰匙碎片：三個惡魔區</h3>${tb(["惡魔區","惡魔","首領","碎片"],d.zones.map(z=>[esc(z.n),z.mobs.map(esc).join("、"),esc(z.leader),`<b>${esc(z.frag)}</b>`]))}
   <div class="note">${esc(d.fragRate)}</div>
   <h3 class="sec">免費抽轉蛋的流程</h3><ol class="mqs">${d.loop.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
-  <h3 class="sec">萬聖節轉蛋</h3><p>${esc(d.banner.cost)}</p>${tb((d.banner.rows[0].length>3?["稀有度","內容","一般抽取","含保底"]:["稀有度","內容","機率"]).map((h,k)=>k===1?h:`<span style="white-space:nowrap">${h}</span>`),d.banner.rows.map(r=>r.map((c,k)=>k===1?esc(c):`<span style="white-space:nowrap">${esc(c)}</span>`)))}<div class="note">${esc(d.banner.pity)}</div>${d.banner.src?`<div class="note srcn">轉蛋機率取自官網〈<a href="${esc(d.banner.src.url)}" target="_blank" rel="noopener">${esc(d.banner.src.title)}</a>〉（${esc(d.banner.src.date)}）。</div>`:""}${(d.notes||[]).map(x=>`<div class="note">${esc(x)}</div>`).join("")}
+  ${(d.notes||[]).map(x=>`<div class="note">${esc(x)}</div>`).join("")}
   <h3 class="sec">Halloween Forge：用 Dark Gift Pumpkin 換武器</h3><p>找 ${esc(d.forge.npc)}。</p>${tb(["武器","職業","南瓜","需求等級"],d.forge.rows.map(r=>[esc(r[0]),esc(r[1]),r[2],r[3]==null?"":r[3]]))}
   <div class="note">${esc(d.forge.extra)}</div><div class="note">${esc(d.forge.lvNote)}</div>
   <h3 class="sec">即將開放</h3><ul>${d.soon.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
@@ -1772,7 +1775,7 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   <dl class="facts"><dt>${shop?"在哪裡買":"在哪裡做"}</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button><br>${npcWhere(n)}`:esc(npcN(r.npc))}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvSrc==="game"?` <span class="muted" style="font-size:12px">（遊戲物品說明${r.lvRef?`；${esc(r.lvRefSrc)}寫 ${r.lvRef}`:""}）</span>`:r.lvRef?` <span class="muted" style="font-size:12px">（${esc(r.lvRefSrc)}寫 ${r.lvRef}，遊戲截圖還沒有這件，暫用官網圖鑑）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(pN(x))}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
   <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
-  ${setPotHTML(r.en)}${r.oid?"":giHTML(GI_EN[norm(r.en)])}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
+  ${setPotHTML(r.en)}${r.oid?"":giHTML(GI_EN[norm(r.en)])+gachaHTML(r.en)}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(npcN(n.n))}</h2><div class="sub">${npcN(n.n)!==n.n?esc(n.n)+"・":""}${c[0]}${n.u===2?"・在地下室":n.u?"・在地下":""}</div></div></div>
   ${ty&&ty[0]!==g[0]?`<dl class="facts"><dt>類型</dt><dd>${esc(ty[0])}<span class="muted">（參考互動地圖的分類）</span></dd></dl>`:""}
@@ -1856,6 +1859,11 @@ const obtZh=l=>{let m;
   return l};
 let GI_NODESC=0;   // equipment / props panels show the game description at the top (loreHTML), not again under 取得方式
 const giHTML=g=>g?`<h3 class="sec">遊戲寫的取得方式</h3><ul class="glist">${g.obt.map(l=>`<li title="${esc(l)}">${esc(obtZh(l))}</li>`).join("")}${g.note?`<li>${esc(g.note)}</li>`:""}${g.obt.length||g.note?"":"<li>說明視窗沒有寫取得方式</li>"}</ul>${g.desc&&!GI_NODESC?`<p class="lore">${esc(g.desc)}</p>`:""}<div class="note srcn">遊戲名稱、取得方式和英文說明取自遊戲的物品說明視窗（站長 ${g.date||GI.date} 截圖）${g.lvl?`；需求等級 ${g.lvl}`:""}。</div>`:"";
+// gacha as an obtain source, no rates (gacha.js; user 2026-11-07); keys = "p|oid"/"e|oid" or English names
+const GACHA=window.SAO_GACHA||{banners:[]};
+const gachaHTML=(...keys)=>{const K=new Set(keys.filter(Boolean).map(k=>/^[ep]\|/.test(k)?k:norm(k)));
+  const hit=GACHA.banners.filter(b=>b.items.some(x=>(x.id&&K.has(x.id))||K.has(norm(x.en))));if(!hit.length)return"";
+  return`<h3 class="sec">轉蛋</h3><ul class="glist">${hit.map(b=>`<li>可以從商城的「${esc(b.n)}」抽到（${esc(b.note)}）</li>`).join("")}</ul><div class="note srcn">轉蛋內容取自官網〈<a href="${esc(GACHA.src.url)}" target="_blank" rel="noopener">${esc(GACHA.src.title)}</a>〉（${esc(GACHA.src.date)} 查）。</div>`};
 // official Chinese names (zhnames.js, from the owner's screenshots after the official Chinese localisation 2026-11-07; user: 中文標題，英法文放副標)
 const ZHL=(window.SAO_ZHNAMES||{}).items||[],ZH_ID={},ZH_EN={},ZH_FR={};
 ZHL.forEach(r=>{(r.ids||[]).forEach(i=>ZH_ID[i]=r.zh);if(r.en)ZH_EN[norm(r.en)]=r.zh;if(r.fr)ZH_FR[norm(r.fr)]=r.zh});
@@ -1925,7 +1933,7 @@ function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
   ${loreHTML(e)}
   <dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
   ${e.patch?patchNote(e):""}${e.gst?gstNote(e):""}${setPotHTML(e.gen,en)}
-  ${e.extra?((SOURCES[en]||[]).length||(GATHER[en]||[]).length||(USES[en]||[]).length?itemObtainHTML(en):"")+giHTML(GI_EN[norm(e.gen||"")]):en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}
+  ${e.extra?((SOURCES[en]||[]).length||(GATHER[en]||[]).length||(USES[en]||[]).length?itemObtainHTML(en):"")+giHTML(GI_EN[norm(e.gen||"")]):en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}${gachaHTML("e|"+e.oid,e.gen,en)}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   ${e.extra&&ITEMS[en]&&ITEMS[en].note?`<div class="note">${esc(ITEMS[en].note)}</div>`:""}
   <div class="note srcn">${e.extra?(ITEMS[en]&&ITEMS[en].note?"官網物品圖鑑沒有收錄這件裝備。":"官網物品圖鑑沒有收錄這件裝備；名稱和數值取自遊戲截圖或 wiki，掉落取自本站怪物資料。"):`官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}`}</div>`}
@@ -2050,7 +2058,7 @@ function propDetail0(id){const e=prById[id];const en=FR2ID[e.name];
   return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${zhE(e)?esc(dnSub(e))+"・":(potZhE(e)?esc(potZhE(e))+"・":"")+(e.gen&&!e.extra?esc(e.name)+"・":"")}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
   ${loreHTML(e,potGame&&/^potion_/.test(e.cat))}${rows?`<dl class="stats">${rows}</dl>`:""}${setPotHTML(e.gen,en)}
-  ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen)]:null))}
+  ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen)]:null))}${gachaHTML("p|"+e.oid,e.gen,en)}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note srcn">${e.extra?"官網物品圖鑑沒有收錄這個物品，名稱和效果取自遊戲截圖。":`官方圖鑑 #${e.oid}。`}${PR_GROUP[e.cat]==="活動"?(PR_EVYEAR[e.cat]?`活動年份 ${PR_EVYEAR[e.cat]} 取自官網圖鑑的分類名稱。`:"官網圖鑑的這個活動分類沒有寫年份，所以不標年份。"):""}${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
