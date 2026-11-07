@@ -1840,7 +1840,7 @@ const EVT=window.SAO_EVENTS||{dungeons:[]};
 const GST=window.SAO_GAMESTATS||{items:{}};
 EQ.forEach(e=>{const g=GST.items[e.oid];if(!g)return;e.cat0={lv:e.lv,dmg:e.dmg,st:e.st};const st={};
   if(e.st["Classe requise"])st["Classe requise"]=e.st["Classe requise"];if(e.st["Arme à deux mains"])st["Arme à deux mains"]=e.st["Arme à deux mains"];
-  g.st.forEach(([k,v])=>{st[k]=v===""?"✓":v});e.st=st;e.dmg=g.dmg;if(g.lvl)e.lv=g.lvl;e.gst=1;e.gstDate=g.date||GST.date;if(g.r)e.r=g.r});
+  g.st.forEach(([k,v])=>{st[k]=v===""?"✓":v});e.st=st;e.dmg=g.dmg;if(g.lvl)e.lv=g.lvl;e.gst=1;e.gstDate=g.date||GST.date;e.gstAuc=!!g.auc;if(g.r)e.r=g.r});
 // in-game item info (Specifications popup, owner's screenshots; gameinfo.js): English name = title (user 2026-11-04 option 1A),
 // "Obtainable" lines shown on the panel with a Chinese gloss (option 2)
 const GI=window.SAO_GAMEINFO||{items:[]},GI_OID={},GI_SITE={},GI_EN={};
@@ -1904,7 +1904,14 @@ const subLab=k=>k==="acc"?"部位未確認":SLOT_ZH[k]||EQ_CAT[k]||k;
 const eqClasses=e=>String(e.st["Classe requise"]||"").split(/,\s*/).map(c=>c.toLowerCase()).filter(c=>CLASS_ZH[c]);
 const eslot=(e,s0=44,s=SN(s0))=>e.icFrom&&eqById[e.icFrom]?eslot(eqById[e.icFrom],s0):e.gen&&GICON[e.gen]?recicImg(GICON[e.gen],s0):GICON[e.name]?recicImg(GICON[e.name],s0):e.ps?pslot(e,s0):e.itemId&&(GICON[e.itemId]||(ITEMS[e.itemId]||{}).ic>=0)?(GICON[e.itemId]?recicImg(GICON[e.itemId],s0):slot(e.itemId,s0)):e.itemId?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:e.ic<0?`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${EQ_PART[e.cat]==="weapon"?"⚔️":EQ_PART[e.cat]==="acc"?"💍":"🛡️"}</span>`:`<span class="eslot" style="--s:${s}px;background-position:${-(e.ic%16)*s}px ${-Math.floor(e.ic/16)*s}px" aria-hidden="true"></span>`;
 const NOSIGN=new Set(["Max Consume","Max Stack Size","Max Item Damage","Max Durability","Durability Bar","Pickaxe Power","Item Cooldown","Repair Percent"]);
-const statVal=(k,v)=>k==="Inedible"||k==="Durability Bar"?"是":NOSIGN.has(k)?v:k==="Classe requise"?String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]).filter(Boolean).join("、")||"不限":k==="Arme à deux mains"?"是":typeof v==="number"&&!k.startsWith("Required")?(v>0?"+":"")+v:v;
+// catalogue numbers in the game's units (2026-11-07 effect audit, user: 物品效果很多有錯): the catalogue stores raw MMOItems values,
+// the game tooltip shows them as %, /秒 or scaled — Movement Speed 0.0125 = +12.5% (×1000, base speed 0.1), Sneaking Speed 2.5 = +250 (×100);
+// checked against the owner's Chinese tooltips (11/7) for every stat kind.
+const ST_PCT=new Set(["Critical Strike Chance","Critical Strike Power","Skill Critical Strike Chance","Skill Critical Strike Power","Lifesteal","Spell Vampirism","Magic Damage","Physical Damage","Projectile Damage","Skill Damage","Weapon Damage","Damage Reduction","Dodge","Dodge Rating","Block Rating","Block Chance","Block Power","Ability Haste","Fall Damage Reduction","Cooldown Reduction","Dodge Cooldown Reduction"]),
+  ST_PS=new Set(["Health Regeneration","Mana Regeneration","Stamina Regeneration","Attack Speed"]),ST_X={"Movement Speed":1000,"Movement_speed":1000,"Sneaking Speed":100};
+const stNum=(k,v)=>{const x=+(v*(ST_X[k]||1)).toFixed(4);return(k==="Attack Speed"||k==="Guard Durability"?"":x>0?"+":"")+x+(ST_PCT.has(k)||ST_X[k]===1000?"%":ST_PS.has(k)?"/秒":"")};
+const statVal0=(k,v)=>k==="Inedible"||k==="Durability Bar"?"是":NOSIGN.has(k)?v:k==="Classe requise"?String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]).filter(Boolean).join("、")||"不限":k==="Arme à deux mains"?"是":typeof v==="number"&&!k.startsWith("Required")?stNum(k,v):v;
+const statVal=(k,v)=>{const r=statVal0(k,v);return typeof r==="string"?r.replace(/\/s$/,"/秒"):r};
 const eqKey=e=>{const o=[];if(e.dmg)o.push("傷害 "+e.dmg);["Defense","Max Health","Magic Damage","Physical Damage","Skill Damage","Critical Strike Chance"].forEach(k=>{if(e.st[k]!=null&&o.length<3)o.push((STAT_ZH[k]||k)+" "+statVal(k,e.st[k]))});return o.join("・")};
 let eqPart="all",eqClass="all",eqRar="all",eqSubV="all";
 const fillEqSub=()=>{const g=$("gEqSub"),ks=EQ_SUBS[eqPart];g.hidden=!ks;eqSubV="all";if(ks)chipsInto($("fEqSub"),[["all","全部"],...ks.map(k=>[k,`${subLab(k)} <span class="cn">${EQ.filter(e=>EQ_PART[e.cat]===eqPart&&eqSub(e)===k).length}</span>`])],()=>eqSubV,v=>eqSubV=v,renderEquip)};
@@ -1920,6 +1927,7 @@ $("fEqEff").addEventListener("input",()=>requestAnimationFrame(actSync));
 {const L=new Set();EQ.forEach(e=>eqStats(e).forEach(([zh])=>L.add(zh)));$("dlEqEff").innerHTML=[...L].sort((a,b)=>a.localeCompare(b,"zh-Hant")).map(x=>`<option value="${esc(x)}">`).join("")}
 const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",quiver:"quiver offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory",acc:"accessory"};
 const eqSetN=e=>{const st=[e.gen,FR2ID[e.name]].filter(Boolean).map(n=>SET_BY[norm(n)]).find(Boolean);return st?st.name+" "+(SET_ZH[st.name]||""):""};
+window.__eqDump=()=>EQ.map(e=>({oid:e.oid,gen:e.gen||"",name:e.name,zh:zhE(e),lv:e.lv,dmg:e.dmg,st:e.st,r:e.r,extra:!!e.extra,gst:!!e.cat0,patch:!!e.patch}));   // test/audit hook (2026-11-07 effect audit)
 const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ef=norm($("fEqEff").value.trim());
   const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&(!ef||eqEffHit(e,ef).length));
@@ -1936,7 +1944,7 @@ function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").val
     ${(k=>k?`<div class="estat">${esc(k)}</div>`:"")(ef?eqEffHit(e,ef).map(([zh,,v])=>zh+" "+v).join("・"):eqKey(e))}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
   bindGo($("lEq"));markSel()}
 const gstNote=e=>{const c=e.cat0,r=Object.entries(c.st).filter(([k])=>k!=="Classe requise"&&k!=="Arme à deux mains");
-  return`<div class="note">🎮 等級和數值取自遊戲裡的物品說明（站長截圖 ${esc(e.gstDate||GST.date)}）。官網圖鑑（2026-10-31）寫的是：等級 ${c.lv}${c.dmg?"、傷害 "+esc(c.dmg):""}${r.length?"、"+r.map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v)))).join("、"):""}。遊戲改版後官網圖鑑還沒更新，以遊戲為準。</div>`};
+  return`<div class="note">🎮 等級和數值取自遊戲裡的物品說明（站長截圖 ${esc(e.gstDate||GST.date)}${e.gstAuc?"，拍賣場上別人賣的那一件；拍賣場可能有改版前做出來的舊版本，之後有商店或製作視窗的截圖會再核對":""}）。官網圖鑑（2026-10-31）寫的是：等級 ${c.lv}${c.dmg?"、傷害 "+esc(c.dmg):""}${r.length?"、"+r.map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v)))).join("、"):""}。遊戲改版後官網圖鑑還沒更新，以遊戲為準。</div>`};
 const patchNote=e=>{const S=EVT.eqPatch.src;return`<div class="note warn">⚖️ 數值已照官方公告〈<a href="${esc(S.url)}" target="_blank" rel="noopener">${esc(S.title)}</a>〉（${esc(S.date)}）調整，官網圖鑑還沒更新。圖鑑上的舊數值：${Object.entries(e.patch.old).map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v))||"0")).join("、")}。${esc(e.patch.note)}</div>`};
 function equipDetail(id){GI_NODESC=1;try{return equipDetail0(id)}finally{GI_NODESC=0}}
 function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
@@ -2021,7 +2029,7 @@ const effIc=t=>{t=String(t).replace(/_/g," ");if(/,.*\bfor\s+\d+\s*(?:s|sec|min|
 // Chinese reading of the game's effect lines (user 2026-11-05: 效果說明也要中文); the original stays in the tooltip and in small grey text
 const EFF_LAB={"attack speed":"攻擊速度","health/s":"HP 恢復","mana/s":"魔力恢復","stamina/s":"耐力恢復","health":"HP","max health":"HP","attack damage":"攻擊傷害","crit chance":"爆擊率","critical chance":"爆擊率",
   "critical power":"爆擊傷害","crit damage":"爆擊傷害","critical damage":"爆擊傷害","max mana":"最大魔力","mana":"魔力","stamina":"耐力","max stamina":"最大耐力","bonus healing":"額外治療","defense":"防禦","skill damage":"技能傷害",
-  "skill crit chance":"技能爆擊率","skill critical chance":"技能爆擊率","skill critical damage":"技能爆擊傷害","magic damage":"魔法傷害","physical damage":"物理傷害","projectile damage":"投射物傷害","ability haste":"技能加速",
+  "skill crit chance":"技能爆擊率","skill critical chance":"技能爆擊率","skill critical damage":"技能爆擊傷害","magic damage":"魔法傷害","physical damage":"物理傷害","projectile damage":"投射物傷害","ability haste":"冷卻縮減",
   "movement speed":"移動速度","speed":"速度","attack damage":"攻擊傷害","max health":"HP","dodge chance":"閃避率","cooldown reduction":"冷卻縮減","healing received":"受到的治療","damage reduction":"傷害減免","block chance":"格擋率","block power":"格擋威力",
   "knockback resistance":"擊退抗性","mana regeneration":"魔力恢復","stamina regeneration":"耐力恢復","max endurance":"最大耐力","skill critical skills":"技能爆擊","food":"飽食度","weapon damage":"武器傷害","saturation":"飽和度","♥":"HP","❤":"HP"};
 const durZh=t=>{const m=/^(\d+)\s*(s|sec|min|h)$/i.exec(t.trim());if(!m)return t;let n=+m[1],u=m[2].toLowerCase();if(u==="s"||u==="sec"){if(n>=3600&&n%3600===0)return n/3600+" 小時";if(n>=60&&n%60===0)return n/60+" 分鐘";return n+" 秒"}return n+(u==="min"?" 分鐘":" 小時")};
