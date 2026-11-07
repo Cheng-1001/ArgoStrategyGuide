@@ -47,7 +47,8 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "1566":{"date": "2026-11-07", "en": "training bow", "lvl": 1, "dmg": "3", "st": [["Attack Speed", "1.2/s"]]},   // auction tooltip 2026-11-04 19:22:26 + zh tooltip 11-07 15:02:05
  "1727":{"date": "2026-11-07", "en": "training crossbow", "lvl": 1, "dmg": "2", "st": [["Attack Speed", "1/s"], ["Skill Critical Strike Chance", "+0.5%"]]},   // zh tooltip 11-07 15:02:10
  "2480":{"date": "2026-11-07", "en": "ring of the wolf", "lvl": 3, "dmg": "0.25", "st": [["Max Stamina", "+0.5"]]},
- "2478":{"en": "slimy ring", "lvl": 4, "dmg": null, "st": [["Max Health", "+1"], ["Max Mana", "+0.5"], ["Max Stamina", "+0.5"]]},
+ "2479":{"date": "2026-11-07", "en": "sticky ring", "r": "a", "lvl": 5, "dmg": null, "st": [["Defense", "+1"], ["Max Health", "+2"], ["Heal Bonus", "+1"]]},
+"2478":{"en": "slimy ring", "lvl": 4, "dmg": null, "st": [["Max Health", "+1"], ["Max Mana", "+0.5"], ["Max Stamina", "+0.5"]]},
  "2616":{"en": "Royal Halberd", "lvl": 9, "dmg": "15", "st": [["Attack Speed", "1.2/s"], ["Skill Critical Strike Chance", "+1%"], ["Dodge", "+1.75%"], ["Movement Speed", "+25%"]]},
  "1779":{"en": "katana of the herald", "lvl": 9, "dmg": "18", "st": [["Attack Speed", "1.2/s"], ["Lifesteal", "+5%"], ["Dodge", "+5%"], ["Movement Speed", "+15%"]]},
  "2043":{"en": "gloves of the stags", "lvl": 7, "dmg": null, "st": [["Mana Regeneration", "+0.2/s"], ["Heal Bonus", "+0.5"]]},

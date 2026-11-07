@@ -10,7 +10,7 @@ window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "Hunter Necromancer Set", "tiers": [[2, "+0.3 Stamina/s"], [3, "+3% Crit Chance, +3% Crit Damage"], [4, "+4 Attack Damage"]], "members": ["Boots of the Hunter Necromancer"]},
  {"name": "Hunter Set", "tiers": [[2, "+0.1 Stamina/s"], [3, "+0.5% Critical Chance"]], "members": ["Hunter's Boots", "Hunter's Leggings"]},
  {"name": "Bandit Set", "tiers": [[2, "+1 Health, +2% Critical Power"], [3, "+0.5 Attack Damage"], [4, "+1% Critical Chance"]], "members": ["Stolen Cloak", "Stolen Amulet", "Bandit Coin"]},
- {"name": "Little Slime Set", "tiers": [[2, "+2 Health"], [3, "+0.05 Health/s, +0.05 Mana/s, +0.05 Stamina/s"], [4, "+5% Cooldown Reduction"]], "members": ["Gelatinous Bracelet", "Gelatinous Cloak", "Slimy Ring"]},
+ {"name": "Little Slime Set", "tiers": [[2, "+2 Health"], [3, "+0.05 Health/s, +0.05 Mana/s, +0.05 Stamina/s"], [4, "+5% Cooldown Reduction"]], "members": ["Gelatinous Bracelet", "Gelatinous Cloak", "Slimy Ring", "Sticky Ring"]},
  {"name": "Elite Treant Set", "tiers": [[2, "+0.5% Critical Chance"], [3, "+2% Movement Speed"], [4, "+5% Projectile Damage"]], "members": ["Elite Gloves", "Elite Carapace", "Elite Bracelet"]},
  {"name": "Corrupted Boar Set", "tiers": [[2, "+0.25 Attack Damage"], [3, "+2 Health"], [4, "+0.25 Attack Damage"]], "members": ["Gloves of the Boar", "Bracelet of the Boar", "Belt of the Boar"]},
  {"name": "Ice Golem Set", "tiers": [[2, "+5 Health"], [3, "+3% Ability Haste, +0.1 Health/s"], [4, "+1 Defense, +2 Health, +2% Skill Damage"]], "members": ["Frozen Bracelet", "Frozen Ring", "Frozen Gloves", "Frozen Amulet", "Bracelet of Ice"]},

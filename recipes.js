@@ -1702,7 +1702,7 @@ null,
 [
 2479,
 "Sticky Ring",
-null,
+60,
 [
 [
 "Slime Jelly",
@@ -1718,10 +1718,10 @@ null,
 ]
 ],
 "35",
-null,
+"a",
 "acc",
 5,
-"ref"
+"shot"
 ]
 ]
 },
