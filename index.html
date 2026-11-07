@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="39082cda48">
+<meta name="sao-build" content="a8f5ae9f2f">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -200,10 +200,10 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .cwbody{flex:1;overflow:auto;padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
 .cwbody .chips{margin-bottom:2px}.cwbody .grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
 /* classes: 3 columns, wide two-column panel */
-@media (min-width:821px){#lCls{grid-template-columns:minmax(0,1fr);max-width:460px}body.panel-xwide #panel{width:min(880px,calc(100vw - 40px))}}
-@media (min-width:1800px){body.panel-open.panel-xwide .results{padding-right:900px}}
+@media (min-width:821px){#lCls{grid-template-columns:minmax(0,1fr);max-width:320px}body.panel-xwide #panel{width:var(--clsw,min(880px,calc(100vw - 40px)))}body.cls-one .cls2{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:1800px){body.panel-open.panel-xwide:not([data-view="classes"]) .results{padding-right:900px}}
 @media (min-width:1180px) and (max-width:1799px){body.panel-open.panel-xwide .results{padding-right:0}}
-.cls2{display:grid;gap:4px 24px}@media (min-width:821px){.cls2{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}}
+.cls2{display:grid;gap:4px 28px}@media (min-width:821px){.cls2{grid-template-columns:minmax(300px,1fr) minmax(0,1.7fr)}}
 .cls2>div{min-width:0}
 .rwhead{display:flex;gap:8px;align-items:center;padding:6px 8px 6px 14px;border-bottom:1px solid var(--line);cursor:move;user-select:none;touch-action:none}
 .rwhead b{font-family:var(--f-display);font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -870,7 +870,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=349916ca"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=52e2b668"></script>
+<script src="changelog.js?v=084abbef"></script>
 <script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1130,7 +1130,11 @@ function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[
 function goMapThen(f,fn){const ph=matchMedia("(max-width:820px)").matches;if(ph){closeP();const g=fn;fn=()=>{g();requestAnimationFrame(()=>stage.scrollIntoView({block:"start",behavior:"smooth"}))}}if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
 const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:s.type==="d"?(EVT.dungeons.find(d=>d.id===s.id)||{n:"活動"}).n:townById[s.id].n;
 const detailHTML=(t,i)=>t==="c"?classDetail(i):t==="r"?recipeDetail(i):t==="n"?npcDetail(i):t==="q"?questDetail(i):t==="m"?monDetail(i):t==="i"?itemDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):t==="s"?spotDetail(i):t==="d"?evDgDetail(i):townDetail(i);
-function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");
+// class panel (user 2026-11-07「調整一下版面」): on the classes tab the panel fills the space right of the class column; one inner column when that is narrow
+function fitClsPanel(){const b=document.body,L=$("lCls");if(!(b.classList.contains("panel-xwide")&&view==="classes"&&innerWidth>820&&L&&L.offsetParent)){b.style.removeProperty("--clsw");b.classList.remove("cls-one");return}
+  const w=Math.max(560,Math.round(innerWidth-L.getBoundingClientRect().right-26));b.style.setProperty("--clsw",w+"px");b.classList.toggle("cls-one",w<900)}
+addEventListener("resize",()=>fitClsPanel());
+function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");fitClsPanel();
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");document.body.classList.toggle("pdeep",stack.length>1);
   pBody.innerHTML=detailHTML(cur.type,cur.id);
   // phones: source notes fold into one 「ⓘ 資料來源」 line at the bottom of the panel
@@ -3056,7 +3060,7 @@ document.querySelectorAll(".browse .filters").forEach(F=>{const gs=F.querySelect
   const sy=()=>requestAnimationFrame(fbarSync);F.addEventListener("click",sy);F.addEventListener("change",sy);F.addEventListener("input",sy)});
 function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback|about|changelog|dungeons)$/);
   view=mm?mm[2]:"map";if(view==="feedback"){view="report";rSub="feedback"}else if(view==="report")rSub="data";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
-  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(pv!==view&&GVW.length)gvCloseAll();if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about"||view==="changelog"||(pv!==view&&!viewPending&&matchMedia("(max-width:820px)").matches))&&!panel.hidden)closeP();
+  VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;fitClsPanel();if(pv!==view&&GVW.length)gvCloseAll();if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about"||view==="changelog"||(pv!==view&&!viewPending&&matchMedia("(max-width:820px)").matches))&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
   document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>{const v=a.dataset.v==="codex"?lastCodex:a.dataset.v;a.href="#"+hashFor(v,FL);
     if(a.dataset.v===view||(a.dataset.v==="codex"&&inCodex))a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
