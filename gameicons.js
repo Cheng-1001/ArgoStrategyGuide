@@ -5,6 +5,23 @@
 // textures of game-only items (nerfs:item/ia_auto/gantstissuaraignee = Spider Gloves…); matched by name and checked side by
 // side against the icons rebuilt from screenshots (identical shapes), they replace those rebuilds: 16 px texture, ×4.
 window.SAO_GAMEICONS = {
+ // 2026-11-07 (user: 訓練用十字弓、訓練用弓圖示錯誤): the catalogue points both at old/shared models (Arc d'Entraînement ->
+ // goblin_bow; Arbalète d'Entraînement has no model and showed the shared crossbow picture), and the official
+ // arc_entrainement model is an older purple one. The game draws them as 3D models (no 16 px grid), so these are the
+ // auction-house tiles with the grey disk removed (Training Bow 2026-11-04 19:22:31, Training Crossbow 19:23:25),
+ // 96 px, shown smooth (file name *_s.png). Replace with the resource-pack texture when the owner runs equip_icons.py.
+ "Arc d'Entraînement": "icons/game/training_bow_s.png",
+ "Arbalète d'Entraînement": "icons/game/training_crossbow_s.png",
+ // same audit: these were listed in tools/equip_icons.json "_wrong" (site icon ≠ game) but the site kept the wrong picture
+ // until the resource pack is read. Until then: auction-house tile cut-outs (chk/cards.json index in brackets).
+ "Leaf Fragments": "icons/game/leaf_fragments_s.png",            // 2026-11-04 22:45:27 [1781]
+ "Arbalète en Cuivre": "icons/game/copper_crossbow_s.png",       // 22:50:24 [2151]
+ "Arbalète en Fer": "icons/game/iron_crossbow_s.png",            // 19:23:31 [635]
+ "Arc en Fer": "icons/game/iron_bow_s.png",                      // 22:42:40 [1604]
+ "Arc de l'Héraut": "icons/game/bow_of_the_herald_s.png",        // 2026-11-07 02:11:27 [3217]
+ "Bouclier de Illfang": "icons/game/shield_of_illfang_s.png",    // 2026-11-05 00:56:42 [2449]
+ "Bouclier Putride": "icons/game/putrid_shield_s.png",           // 2026-11-05 01:01:02 [2638]
+ "Arc Nodachi": "icons/game/nodachi_bow_s.png",                  // 2026-11-04 19:22:01 [574]
  "Key of Xal'Zirith": "icons/game/key_of_xalzirith.png",   // auction house 2026-11-05 00:52: the game shows a silver key, not the catalogue's dark one
  "Skeleton Bone": "icons/game/skeleton_bone.png",
  "Magic Staff of the Revenants": "icons/game/magic_staff_of_the_revenants.png",

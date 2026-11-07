@@ -17,6 +17,8 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "1290":{"en": "copper amulet", "lvl": 3, "dmg": null, "st": [["Max Health", "+0.5"], ["Max Mana", "+0.5"], ["Max Stamina", "+0.5"]]},
  "2545":{"en": "Forgotten Shield", "lvl": 9, "dmg": null, "st": [["Defense", "+5"], ["Guard Durability", "30"], ["Max Health", "+30"], ["Movement Speed", "-5%"]]},
  "1458":{"en": "necklace of aragorn", "lvl": 8, "dmg": "0.5", "st": [["Fall Damage Reduction", "+15%"], ["Dodge", "+5%"]]},
+ "1566":{"date": "2026-11-07", "en": "training bow", "lvl": 1, "dmg": "3", "st": [["Attack Speed", "1.2/s"]]},   // auction tooltip 2026-11-04 19:22:26 + zh tooltip 11-07 15:02:05
+ "1727":{"date": "2026-11-07", "en": "training crossbow", "lvl": 1, "dmg": "2", "st": [["Attack Speed", "1/s"], ["Skill Critical Strike Chance", "+0.5%"]]},   // zh tooltip 11-07 15:02:10
  "2480":{"date": "2026-11-07", "en": "ring of the wolf", "lvl": 3, "dmg": "0.25", "st": [["Max Stamina", "+0.5"]]},
  "2478":{"en": "slimy ring", "lvl": 4, "dmg": null, "st": [["Max Health", "+1"], ["Max Mana", "+0.5"], ["Max Stamina", "+0.5"]]},
  "2616":{"en": "Royal Halberd", "lvl": 9, "dmg": "15", "st": [["Attack Speed", "1.2/s"], ["Skill Critical Strike Chance", "+1%"], ["Dodge", "+1.75%"], ["Movement Speed", "+25%"]]},

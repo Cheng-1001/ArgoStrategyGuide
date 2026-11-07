@@ -1597,7 +1597,7 @@ const RECIC=window.SAO_RECICONS||{};
 // game icons (tools/recipe_icons.py) win over the official catalogue's: its potion pictures are shared placeholders
 // pixel-art icons are shown at a whole multiple of their 16 px grid (2026-11-07, user: Spider Gloves icon blurry — 64 px images
 // squeezed into 80 % of a 44 px box gave 2.2 screen px per texel, so the pixels came out uneven)
-const recicImg=(src,s)=>{const px=Math.max(16,Math.floor(s*0.8/16)*16);return`<span class="eslot empty" style="--s:${s}px" aria-hidden="true"><img src="${esc(src)}" alt="" style="width:${px}px;height:${px}px;image-rendering:pixelated"></span>`};
+const recicImg=(src,s)=>{const sm=/_s\.png$/.test(src);const px=sm?Math.round(s*0.86):Math.max(16,Math.floor(s*0.8/16)*16);return`<span class="eslot empty" style="--s:${s}px" aria-hidden="true"><img src="${esc(src)}" alt="" style="width:${px}px;height:${px}px${sm?"":";image-rendering:pixelated"}"></span>`};   // *_s.png = smooth screenshot cut-outs of 3D game models (no pixel grid)
 // sprite-sheet icons (equip.png / props.png: 48 px cells, 16 px art ×3) are drawn at exactly 48 px when the box is about that size
 const SN=s=>s>=40&&s<=72?48:s;
 const OID_RECIC={};ALLREC.forEach(r=>{if(r.oid!=null&&RECIC[r.en]&&!OID_RECIC[r.oid])OID_RECIC[r.oid]=RECIC[r.en]});

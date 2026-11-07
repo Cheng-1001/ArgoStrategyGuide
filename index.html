@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="b7f23e494e">
+<meta name="sao-build" content="3a1afda9c9">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -874,7 +874,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=349916ca"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=7354d905"></script>
+<script src="changelog.js?v=47a6c57c"></script>
 <script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -882,11 +882,11 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="gameskills.js?v=bb1e5a5a"></script>
 <script src="events.js?v=ab89224b"></script>
 <script src="gacha.js?v=48cf03e8"></script>
-<script src="gamestats.js?v=553994fb"></script>
+<script src="gamestats.js?v=73da1b53"></script>
 <script src="sets.js?v=fbf69e31"></script>
 <script src="zhnames.js?v=deaf4b38"></script>
 <script src="staticons.js?v=dadb2164"></script>
-<script src="gameicons.js?v=8234245c"></script>
+<script src="gameicons.js?v=8d9223a1"></script>
 <script src="recicons.js?v=9e931339"></script>
 <script>
 (()=>{
@@ -1608,7 +1608,7 @@ const RECIC=window.SAO_RECICONS||{};
 // game icons (tools/recipe_icons.py) win over the official catalogue's: its potion pictures are shared placeholders
 // pixel-art icons are shown at a whole multiple of their 16 px grid (2026-11-07, user: Spider Gloves icon blurry — 64 px images
 // squeezed into 80 % of a 44 px box gave 2.2 screen px per texel, so the pixels came out uneven)
-const recicImg=(src,s)=>{const px=Math.max(16,Math.floor(s*0.8/16)*16);return`<span class="eslot empty" style="--s:${s}px" aria-hidden="true"><img src="${esc(src)}" alt="" style="width:${px}px;height:${px}px;image-rendering:pixelated"></span>`};
+const recicImg=(src,s)=>{const sm=/_s\.png$/.test(src);const px=sm?Math.round(s*0.86):Math.max(16,Math.floor(s*0.8/16)*16);return`<span class="eslot empty" style="--s:${s}px" aria-hidden="true"><img src="${esc(src)}" alt="" style="width:${px}px;height:${px}px${sm?"":";image-rendering:pixelated"}"></span>`};   // *_s.png = smooth screenshot cut-outs of 3D game models (no pixel grid)
 // sprite-sheet icons (equip.png / props.png: 48 px cells, 16 px art ×3) are drawn at exactly 48 px when the box is about that size
 const SN=s=>s>=40&&s<=72?48:s;
 const OID_RECIC={};ALLREC.forEach(r=>{if(r.oid!=null&&RECIC[r.en]&&!OID_RECIC[r.oid])OID_RECIC[r.oid]=RECIC[r.en]});
