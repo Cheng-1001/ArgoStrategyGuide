@@ -23,5 +23,6 @@ window.SAO_GAMEICONS = {
  "Elite Gloves": "icons/game/elite_gloves.png",
  "Elite Carapace": "icons/game/elite_carapace.png",
  "Ring of the Shark": "icons/game/ring_of_the_shark.png",
- "Glacial Essence": "icons/game/glacial_essence.png"
+ "Glacial Essence": "icons/game/glacial_essence.png",
+ "Elite Bracelet": "icons/game/elite_bracelet.png"   // 2026-11-07 auction tile (in14 00:48:07, k≈4.62)
 };

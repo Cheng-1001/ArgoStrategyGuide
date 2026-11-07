@@ -1154,18 +1154,18 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   <dt>圖鑑區域</dt><dd>${m.codexRegion?`${esc(m.codexRegion)} <span class="pill rep">遊戲圖鑑</span><br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`:`${esc(z.n)}<br><span class="muted" style="font-size:12.5px">${esc(nameSub(z))}</span>`}</dd>
   <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(p.spot.n)}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${SPAWN_OF[m.id]?"":p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd>${SPAWN_OF[m.id]?`<dt>重生點</dt><dd>${SPAWN_OF[m.id].map((w,i)=>`${SPAWN_OF[m.id].length>1?`<span class="rnum">${i+1}</span>`:""}<button class="linkbtn mono" data-rep="${m.floor}|${w.x}|${w.z}">X ${w.x} · Z ${w.z}${w.u?"（地下）":""}</button>`).join("<br>")}</dd>`:""}</dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
-  ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
-  ${(()=>{const H=(window.SAO_HINTS||{})[m.floor]||{};const h=H[m.name]||(m.aka||[]).map(a=>H[a]).find(Boolean);return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted"><span class="hfr">${esc(h[1])}</span>${h[2]?"":"<span class=\"hinf\">・依圖鑑順序推斷對應，可能不準</span>"}</span></div>`:""})()}
-  ${(()=>{const C=((window.SAO_CODEX||{})[m.floor]||{})[m.num];return C?`<div class="hint cdx"><span class="hk">遊戲圖鑑說明</span><span class="muted">#${esc(m.num)}${C.reg?"・"+esc(C.reg):""}${C.n!==m.name?"・圖鑑名稱 "+esc(C.n):""}</span><span>${esc(C.desc)}</span></div>`:""})()}
-  ${photoNote(m)}
+  ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
   ${m.dropsLocked&&m.dropsLocked.length?`<div class="note">另有 ${m.dropsLocked.length} 種掉落物在圖鑑上還沒解鎖（${m.dropsLocked.map(d=>pct(d[1])).join("、")}）。</div>`:""}
   ${m.dropSrc?`<div class="note srcn">掉落機率來自玩家回報（${repRef(m.dropSrc)}）。${m.wikiDrops.length?"wiki 原本寫："+m.wikiDrops.map(([i,p])=>esc(i)+" "+pct(p)).join("、")+"。":""}</div>`:""}
   ${m.repDropsText?`<div class="note">玩家回報的掉落物（名稱還沒對應到物品資料）：${m.repDropsText.map(esc).join("、")}</div>`:""}
-  ${repBlock(m)}
   ${kq.length?`<h3 class="sec">相關任務</h3><ul class="rows">${kq.map(qq=>`<li><button class="lrow" data-go="t|${qq.town}"><span class="th sm" style="--ring:var(--accent)" aria-hidden="true">📜</span><span class="t"><b>${esc(qq.npc)}・${esc(townById[qq.town].n)}</b><span>${killText(qq)}（${esc(qq.raw)}）</span></span><span class="v">${qq.xp?qq.xp+" xp":""}</span></button></li>`).join("")}</ul>`:""}
-  <div class="note srcn">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>
-  ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}`}
+  ${(()=>{const H=(window.SAO_HINTS||{})[m.floor]||{};const h=H[m.name]||(m.aka||[]).map(a=>H[a]).find(Boolean);return h?`<div class="hint"><span class="hk">圖鑑出沒提示</span><b>${esc(h[0])}</b><span class="muted"><span class="hfr">${esc(h[1])}</span>${h[2]?"":"<span class=\"hinf\">・依圖鑑順序推斷對應，可能不準</span>"}</span></div>`:""})()}
+  ${(()=>{const C=((window.SAO_CODEX||{})[m.floor]||{})[m.num];return C?`<div class="hint cdx"><span class="hk">遊戲圖鑑說明</span><span class="muted">#${esc(m.num)}${C.reg?"・"+esc(C.reg):""}${C.n!==m.name?"・圖鑑名稱 "+esc(C.n):""}</span><span>${esc(C.desc)}</span></div>`:""})()}
+  ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
+  ${photoNote(m)}
+  ${repBlock(m)}
+  <div class="note srcn">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>`}
 // ---- player reports ----
 const REPO="https://github.com/Cheng-1001/ArgoStrategyGuide";
 const REPS=(window.SAO_REPORTS||[]);
