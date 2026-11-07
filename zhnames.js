@@ -19,7 +19,11 @@ mobsByName:{"Ice Golem": "冰魔像", "Ice Spirit": "冰之精靈", "Ice Bear": 
 places:{"Starting Town": "起始之鎮", "Hanaka": "哈娜卡", "Vallhat": "瓦爾哈特", "Tolbana": "托爾巴納", "Castelbrume": "霧堡", "Candelia": "坎德莉亞", "Virelune": "維勒倫", "Mizunari": "水成", "Wolf Valley": "狼之谷", "Boar Zone": "野豬區", "Arakh'Nol": "阿拉克諾", "Putrid Swamp": "腐臭沼澤", "Lac des Nénuphars": "睡蓮之湖", "Valley of Petals": "花瓣谷", "Giant's Garden": "巨人花園", "Kobold Tower": "狗頭人之塔", "Cursed Ruins": "骷髏詛咒遺跡", "Geldorack Mine": "蓋爾多拉克礦坑", "OG Quarter": "OG 區", "Merchant Guild": "商人公會", "Labyrinth of the Fallen": "墮落者迷宮區"},
 npcs:{"Alchemist": "煉金術士", "Crystallographer": "結晶學家", "The Assistant": "助手", "Starting Merchant": "新手商人", "Starting Town - Tools": "起始之鎮-工具", "Local Miner": "當地礦工", "Copper Accessories": "銅製飾品", "Iron Accessories": "鐵製飾品", "Shark Accessories": "鯊魚飾品", "Elite Treant Accessories": "菁英樹人飾品", "Ice Spirit Accessories": "冰之精靈飾品", "Spider Accessories": "蜘蛛飾品", "Ring of the Leviathan": "隱藏利維坦戒指", "Occult Merchant - Bracelet": "隱藏神祕手環", "Occult Merchant - Artifacts": "隱藏神祕神器", "Hanaka - Loot Buyer": "商店-哈娜卡", "Vallhat - Loot Buyer": "商店-瓦爾哈特", "Mizunari Loot Buyer": "商店-水成", "Cursed Ruins - Loot Buyer": "商店-受詛廢墟", "Cursed Ruins - Loot Buyer (2)": "商店-受詛廢墟（2）", "Accessory Recycling": "飾品回收", "Weapon Recycling": "武器回收", "Auction House": "拍賣場", "Vault": "保險箱", "PvP Purification Alchemist": "淨化煉金術士", "Geldorak Dungeon Guard - Starting Town": "蓋爾多拉克地下城守衛-起始之鎮", "The Master Swordsman": "劍術大師", "Mayor of Hanaka": "哈娜卡鎮長", "The Trader": "貿易商", "Ceyla": "賽菈", "Zebulgarath": "澤布爾加拉斯", "Baldim": "巴爾迪姆", "Lisa": "麗莎", "Elma": "艾爾瑪", "Harrold": "哈羅德", "Bob": "鮑伯", "Velka": "薇爾卡", "Archivist Specter": "幽靈檔案官", "Catherine": "凱瑟琳", "Mephisto": "梅菲斯特", "Emy": "艾蜜", "King Harald": "哈拉爾德國王", "Guard Tomas": "衛兵托馬斯", "Scout Raphael": "斥候拉斐爾", "Archivist Orin": "檔案管理員歐林"},
 items:[
- {"zh": "75珂爾錢袋", "ids": ["p|1691"], "en": "75 Cols Pouch", "fr": "Bourse de 75Cols"},
+ {"zh": "阿爾巴爾項鍊", "ids": ["e|1296"], "en": "Albal's Necklace", "fr": "Collier d'Albal"},
+ {"zh": "狼戒指", "ids": ["e|2480"], "en": "Ring of the Wolf", "fr": "Bague de Loup"},
+ {"zh": "白樺細繩", "ids": ["p|2367"], "en": "Birch String", "fr": "Ficelle de Bouleau"},
+ {"zh": "橡木原木", "ids": ["i|Oak Log", "p|2119"], "en": "Oak Log", "fr": "Buche de Chêne"},
+  {"zh": "75珂爾錢袋", "ids": ["p|1691"], "en": "75 Cols Pouch", "fr": "Bourse de 75Cols"},
  {"zh": "不純黑瑪瑙幣", "ids": ["e|1487"], "fr": "Pièce d'Onyx Impur"},
  {"zh": "不純黑瑪瑙手環", "ids": ["e|1605"], "fr": "Bracelet d’Onyx Impur"},
  {"zh": "乳白靈藥", "en": "Purification Elixir"},
