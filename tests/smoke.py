@@ -192,7 +192,8 @@ with sync_playwright() as p:
     dn = pg.eval_on_selector_all("#lDg .card b", "e=>e.map(x=>x.textContent)")
     check(len(dn) == 5 and dn[0] == "Sanctuary of Souls" and "狗頭人之塔" not in dn and "墮落者迷宮區" in dn, f"dungeons tab lists the event dungeon first, then the 4 floor-1 dungeons, not the boss tower ({dn})")
     pg.click('#lDg [data-go="d|souls"]'); pg.wait_for_timeout(300)
-    check("Sanctuary of Souls Key" in pg.inner_text("#pBody") and pg.locator("#pBody .btbl").count() == 3, "event dungeon panel: key recipe, fragment zones, banner and forge tables")
+    check("Sanctuary of Souls Key" in pg.inner_text("#pBody") and pg.locator("#pBody .btbl").count() == 2 and "一般抽取" not in pg.inner_text("#pBody"),
+          "event dungeon panel: key recipe, fragment zones and forge tables; no gacha rate table (gacha is only a source)")
     dg = pg.evaluate("(()=>({cols:getComputedStyle(document.getElementById('lDg')).gridTemplateColumns.split(' ').length,keys:document.querySelectorAll('#lDg .th.dgk').length,inline:document.body.classList.contains('cls-inline'),close:!!document.getElementById('pClose').offsetParent,kn:[...document.querySelectorAll('#lDg .dgkn')].map(e=>e.textContent)}))()")
     pg.click('#lDg [data-go="s|xal"]'); pg.wait_for_timeout(250)
     check(pg.locator("#pBody .phead .th.dgk").count() == 1, "the dungeon shown on the page uses its key as the header icon")
@@ -200,6 +201,11 @@ with sync_playwright() as p:
           f"dungeons: one column, each floor dungeon shows its own key icon, the dungeon is shown on the page next to the list (no window frame) ({dg})")
     pg.keyboard.press("Escape"); pg.wait_for_timeout(150)
     check(not pg.is_hidden("#panel"), "Esc does not close the dungeon shown on the page")
+    pg.goto(base + "#props"); pg.wait_for_timeout(400); pg.fill("#q", "Bourse de 500Cols"); pg.wait_for_timeout(300)
+    pg.locator("#view-props .card").first.click(); pg.wait_for_timeout(300)
+    gt = pg.inner_text("#pBody")
+    check("可以從商城的「Aincrad 轉蛋」抽到" in gt and "%" not in gt.split("轉蛋")[-1].split("轉蛋內容")[0], "gacha shows as an obtain source on the item, without rates (Pouch of 500 Cols)")
+    pg.fill("#q", ""); pg.wait_for_timeout(200)
     pg.click("#legalBtn"); pg.wait_for_timeout(350)
     t = pg.inner_text("#legal")
     check("about" in pg.url and pg.is_visible("#view-about") and "非官方" in t and "Triggers SAO" in t and "GitHub Issues" in t and "中文玩家社群協力製作" in t,
