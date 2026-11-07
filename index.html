@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="8cb26f8177">
+<meta name="sao-build" content="475f74c088">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -316,6 +316,10 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .stage.dgmode .fpanel,.stage.dgmode #filterBtn,.stage.dgmode #fpFly{display:none!important}
 .dgsplit,.dgsplit>div{display:flex;flex-direction:column;gap:14px;min-width:0}
 @media (min-width:1180px){body.cls-inline[data-view="dungeons"] #pBody>.dgsplit{max-width:none;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,1fr);grid-template-areas:"a m" "b m";grid-template-rows:auto 1fr;gap:14px 28px;align-items:start}body.cls-inline[data-view="dungeons"] .dgsplit>.dga{grid-area:a}body.cls-inline[data-view="dungeons"] .dgsplit>.dgb{grid-area:b}body.cls-inline[data-view="dungeons"] .dgsplit>.dgm{grid-area:m;position:sticky;top:0}body.cls-inline[data-view="dungeons"] .dgm .dgmap{margin-top:0}body.cls-inline[data-view="dungeons"] .dgm{container-type:inline-size}body.cls-inline[data-view="dungeons"] .dgm .dgov{width:fit-content;max-width:100%}body.cls-inline[data-view="dungeons"] .dgm .dgov img{width:min(100cqw,calc((100vh - 290px) * var(--ar,10)));max-width:none;height:auto}}
+.dgtiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px}.dgt{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.dgt>span{font-size:12px;color:var(--muted)}.dgt>b{font-size:17px;line-height:1.3}.dgt small{display:block;font-size:11.5px;font-weight:400;color:var(--muted)}
+.dgcap{font-size:12.5px;margin-top:-6px}.dgboss{margin:0;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}.dgboss b{font-size:16px}
+.lrow.nolink{cursor:default}.dgsub{font-size:12.5px;color:var(--muted);margin-bottom:-8px}.dgli{display:inline-block;width:32px;height:32px}
 .dgmap{margin:4px 0 10px}.dgmap .dgov{display:block;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#070c11;cursor:zoom-in;width:100%}
 .dgmap .dgov img{display:block;width:min(100%,calc(75vh * var(--ar,10)));height:auto;margin:0 auto;image-rendering:pixelated}.dgmap figcaption{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:12.5px;margin-top:4px}
 .legend .lgt{background:none;border:1px solid rgba(255,255,255,.28);color:inherit;border-radius:999px;padding:1px 8px 1px 6px;cursor:pointer;font-size:11.5px}
@@ -892,7 +896,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=2bb99626"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=e0f1dd4d"></script>
+<script src="changelog.js?v=0d9506a7"></script>
 <script src="recipes.js?v=5279ff8b"></script>
 <script src="jmmeta.js?v=5b0ffd74"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -1304,29 +1308,50 @@ const dgOfSpot=id=>Object.keys(DG_DIM).find(d=>DG_DIM[d][0]===id&&dgMeta()[d]);
 function dgMapHTML(spotId){const d=dgOfSpot(spotId);if(!d)return"";const e=dgMeta()[d];
   return`<h3 class="sec">地圖</h3><figure class="dgmap"><button class="dgov" data-dgmap="${d}" title="在地圖分頁打開（可以放大、切換高度）"><img src="tiles/dg/${d}/overview.jpg?v=${encodeURIComponent(e.v||"")}&o=2" onload="this.style.setProperty('--ar',this.naturalWidth/this.naturalHeight)" alt="${esc(dgName(d))} 的地圖" loading="lazy"></button>
     <figcaption><button class="linkbtn" data-dgmap="${d}">在地圖上看（可以放大、切換高度）</button><span class="muted">玩家上傳的 JourneyMap 地圖，${esc(e.date||"")} 更新</span></figcaption></figure>`}
+// dungeon page (user 2026-11-07「整理一下資訊，看起來很雜，使用者很難找資料」): overview tiles → 怎麼進去 (entrance, key, tip)
+// → 首領 → 通關寶箱 (official Chinese names + icons) → 怪物; where the name and coordinates come from goes to the bottom
+const dgMonByName=(f,nm)=>nm&&ALLM.find(x=>x.floor===f&&(x.name===nm||(x.aka||[]).includes(nm)));
+const dgVal=v=>{const m=String(v).match(/^(.*?)（(.*)）$/);return m?`${esc(m[1])}<small>${esc(m[2])}</small>`:esc(v)};
+function dgTilesHTML(d){if(!d||!d.easy)return"";
+  return`<div class="dgtiles">${d.easy.map(([k,v])=>`<div class="dgt"><span>${esc(k)}</span><b>${dgVal(v)}</b></div>`).join("")}</div>
+  <div class="muted dgcap">以上是 Easy 難度；遊戲另有 ${d.modes.filter(x=>x!=="Easy").map(esc).join("／")} 難度。</div>`}
+const monRow=m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(mN(m))}</b><span>${mN(m)!==m.name?esc(m.name)+"・":""}${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`;
+function dgBossHTML(sp,mons){const d=sp.dg;if(!d&&!mons.length)return"";
+  return`<h3 class="sec">首領</h3>${d?`<p class="dgboss"><b>${esc(d.boss)}</b>${d.bossZh?`<span class="muted">${esc(d.bossZh)}</span>`:""}</p>`:""}${mons.length?`<ul class="rows">${mons.map(monRow).join("")}</ul>`:""}`}
+function dgLootHTML(sp){const d=sp.dg;if(!d||!d.loot)return"";
+  return`<h3 class="sec">通關寶箱 <span class="c">Easy・${d.loot.length} 項</span></h3><div class="muted dgcap">打完地下城開寶箱拿到的東西和機率（遊戲 Dungeons 視窗的 Loot）。</div>
+  <ul class="rows dgloot">${d.loot.map(([it,by,p])=>{const r=matRef(ITEMS[it]?it:DG_ITEM[it]||it),mon=dgMonByName(sp.floor,by);
+    const sub=[r.nm!==it?it:"",by?"視窗標示："+(mon?mN(mon):by):""].filter(Boolean).join("・");
+    const inner=`${r.ic(32)||'<span class="dgli" aria-hidden="true"></span>'}<span class="t"><b>${esc(r.nm)}</b>${sub?`<span>${esc(sub)}</span>`:""}</span><span class="v">${pct(p)}</span>`;
+    return`<li>${r.go?`<button class="lrow" data-go="${r.go}">${inner}</button>`:`<div class="lrow nolink">${inner}</div>`}</li>`}).join("")}</ul>
+  <div class="note srcn">地下城資料取自站長的遊戲截圖（${esc(d.date)}，遊戲的 Dungeons 視窗${d.title&&d.title!==sp.n?`，視窗名稱寫「${esc(d.title)}」`:""}）。其他難度的掉落還沒有截圖。</div>`}
+// used by the event dungeon panel too
 function dgInfoHTML(sp){const d=sp.dg;if(!d)return"";
-  const mon=nm=>{const m=nm&&ALLM.find(x=>x.floor===sp.floor&&(x.name===nm||(x.aka||[]).includes(nm)));return m?`<button class="linkbtn" data-go="m|${m.id}">${esc(nm)}</button>`:esc(nm||"")};
-  const item=nm=>{const k=ITEMS[nm]?nm:DG_ITEM[nm];return k&&ITEMS[k]?`<button class="linkbtn" data-go="i|${esc(k)}">${esc(nm)}</button>`:esc(nm)};
-  return`<h3 class="sec">地下城資料 <span class="c">遊戲畫面</span></h3>
-  <dl class="facts">${d.title&&d.title!==sp.n?`<dt>視窗名稱</dt><dd>${esc(d.title)}</dd>`:""}<dt>首領</dt><dd>${esc(d.boss)}<br><span class="muted" style="font-size:12.5px">${esc(d.bossZh)}</span></dd><dt>鑰匙</dt><dd>${esc(d.key)}</dd><dt>難度</dt><dd>${d.modes.map(esc).join("／")}</dd>${d.easy.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}<span class="muted" style="font-size:12px">（Easy）</span></dd>`).join("")}</dl>
-  <h3 class="sec">通關寶箱（Easy） <span class="c">${d.loot.length}</span></h3><div class="muted" style="font-size:12.5px">打完地下城時寶箱開出來的東西和機率（遊戲視窗的 Loot）。</div>
-  <ul class="rows">${d.loot.map(([it,by,p])=>`<li><div class="lrow"><span class="t"><b>${item(it)}</b>${by?`<span>視窗標示：${mon(by)}</span>`:""}</span><span class="v">${pct(p)}</span></div></li>`).join("")}</ul>
-  <div class="note srcn">地下城資料取自站長的遊戲截圖（${esc(d.date)}，遊戲的 Dungeons 視窗）。其他難度的掉落還沒有截圖。</div>`}
-function dgKeyHTML(sp){const {want,hit}=dgKeys(sp);if(!want&&!hit.length)return"";
-  return`<h3 class="sec">進入鑰匙</h3>${hit.length?`<ul class="rows">${hit.map(r=>{const p=prById[String(r.oid)],n=npcByName(r.f,r.npc);
-    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(r.en)}${p?` <span class="muted" style="font-weight:400">${esc(p.name)}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(m)+" ×"+q).join("・"):"只要珂爾"}</span></span><span class="v">${costText(r.cost)}</span></button>${n?`<div class="muted" style="font-size:12.5px;margin:2px 0 0 44px">在 <button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button> 製作（X ${n.x} · Z ${n.z}）</div>`:""}</li>`}).join("")}</ul>`
-    :`<div class="note">需要 ${esc(want)}，本站還沒有它的製作方式。</div>`}`}
+  return`<h3 class="sec">地下城資料 <span class="c">遊戲畫面</span></h3>${dgTilesHTML(d)}<p class="dgboss"><span class="muted">首領</span> <b>${esc(d.boss)}</b>${d.bossZh?`<span class="muted">${esc(d.bossZh)}</span>`:""}</p>${dgLootHTML(sp)}`}
+function dgKeyRows(sp){const {want,hit}=dgKeys(sp);
+  return hit.length?`<ul class="rows">${hit.map(r=>{const p=prById[String(r.oid)],n=npcByName(r.f,r.npc),pz=p&&zhE(p);
+    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(pz||r.en)}${pz?` <span class="muted" style="font-weight:400">${esc(r.en)}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(matRef(m).nm)+" ×"+q).join("・"):"只要珂爾"}</span></span><span class="v">${costText(r.cost)}</span></button>${n?`<div class="muted" style="font-size:12.5px;margin:2px 0 0 44px">在 <button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button> 製作（X ${n.x} · Z ${n.z}）</div>`:""}</li>`}).join("")}</ul>`
+    :want?`<div class="note">需要 ${esc(want)}，本站還沒有它的製作方式。</div>`:`<div class="muted dgcap">還沒有這個地下城的鑰匙資料。</div>`}
+function dgEntryHTML(sp){
+  return`<h3 class="sec">怎麼進去</h3><dl class="facts"><dt>入口</dt><dd><span class="mono">X ${sp.x} · Z ${sp.z}</span>${sp.u?"（在地下）":""}　<button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button></dd>${sp.tp?`<dt>傳送</dt><dd>🌀 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl><div class="dgsub">需要的鑰匙</div>${dgKeyRows(sp)}
+  ${sp.note?`<div class="note">💡 ${esc(sp.note)}</div>`:""}${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${repLink(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}`}
 function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">這個地點已不存在。</div>`;const st=STATUS[sp.src];const Fx=FLOORS[sp.floor];
   const ms=sp.mons.map(n=>Fx.monByName[n]);const rz=[...new Set(ms.filter(Boolean).map(m=>Fx.zones[m.zone].n))];
   const nameRow=typeof sp.csrc==="string"?`<dt>名稱</dt><dd>本站用英文名稱；遊戲圖鑑的區域名是「${esc(sp.csrc)}」</dd>`:sp.csrc?`<dt>名稱</dt><dd>遊戲圖鑑的區域名${/[àâçéèêëîïôûùüÿœ]|^(Zone|Tour|Quartier|Jardin|Vallée|Marécage|Ruines|Mine|Lac)\b/i.test(sp.n)?"（還沒有英文版遊戲畫面，所以用法文）":""}${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`:sp.nsrc==="game"?`<dt>名稱</dt><dd>遊戲畫面上的名稱${sp.game?`<br><span class="muted" style="font-size:12.5px">${esc(sp.game)}</span>`:""}${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`:sp.nsrc==="tp"?`<dt>名稱</dt><dd>遊戲傳送選單的名稱（還沒有英文版遊戲畫面）${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`:sp.nsrc==="wiki"?`<dt>名稱</dt><dd>wiki 圖鑑表的區域名${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`
     :sp.nsrc==="site"?`<dt>名稱</dt><dd>本站命名<br><span class="muted" style="font-size:12.5px">wiki 圖鑑把這裡的怪物歸在「${rz.map(esc).join("、")}」，和附近的地點同名，所以另取名字區分</span></dd>`:"";
-  const dgm=sp.kind==="dungeon"?dgMapHTML(sp.id):"";
+  const head=`<div class="phead">${(k=>k?`<span class="th dgk" style="--ring:var(--boss)" aria-hidden="true">${recIcon(k,30)}</span>`:`<span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span>`)(sp.kind==="dungeon"?dgKeys(sp).hit[0]:null)}<div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(pN(sp))}</h2><div class="sub">${esc(nameSub(sp))}</div></div></div>`;
+  if(sp.kind==="dungeon"){const dgm=dgMapHTML(sp.id),mm=ms.filter(Boolean),boss=mm.filter(m=>m.type==="Boss").concat(mm.filter(m=>m.type==="Mini-Boss")),rest=mm.filter(m=>!boss.includes(m));
+    const nameTxt=nameRow.replace(/<dt>.*?<\/dt>/,"").replace(/<br>/g,"；").replace(/<[^>]+>/g,"");
+    const A=dgTilesHTML(sp.dg)+dgEntryHTML(sp);
+    const B=dgBossHTML(sp,boss)+dgLootHTML(sp)+(rest.length?`<h3 class="sec">其他怪物 <span class="c">${rest.length}</span></h3><ul class="rows">${rest.map(monRow).join("")}</ul>`:"")
+      +`<div class="note srcn">${nameTxt?"名稱："+nameTxt+"。":""}入口座標來源：${st.t}。${sp.rep?`這個地點來自核准的玩家回報（${repLink(sp.rep)}）。`:""}</div>`;
+    return head+(dgm?`<div class="dgsplit"><div class="dga">${A}</div><div class="dgm">${dgm}</div><div class="dgb">${B}</div></div>`:A+B)}
+  const dgm="";
   return`<div class="phead">${(k=>k?`<span class="th dgk" style="--ring:var(--boss)" aria-hidden="true">${recIcon(k,30)}</span>`:`<span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span>`)(sp.kind==="dungeon"?dgKeys(sp).hit[0]:null)}<div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(pN(sp))}</h2><div class="sub">${esc(nameSub(sp))}</div></div></div>${dgm?`<div class="dgsplit"><div class="dga">`:""}
   <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd>${nameRow}<dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd>${sp.tp?`<dt>傳送</dt><dd><span class="pill tpp">🌀 可傳送</span> 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl>
   ${sp.u?`<div class="note">在地下，要從入口走下去。</div>`:""}${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}${sp.rep?`<div class="note srcn">這個地點來自核准的玩家回報（${repLink(sp.rep)}）。</div>`:""}
   ${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${repLink(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}
   <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>${dgm?`</div><div class="dgm">${dgm}</div><div class="dgb">`:""}
-  ${sp.kind==="dungeon"?dgKeyHTML(sp)+dgInfoHTML(sp):""}
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(mN(m))}</b><span>${mN(m)!==m.name?esc(m.name)+"・":""}${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
   ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(i)}</b><span>${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}${dgm?"</div></div>":""}`}
 
