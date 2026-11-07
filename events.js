@@ -42,7 +42,7 @@ window.SAO_EVENTS = {
   // the game's Dungeons window (owner's screenshots 2026-11-05 19:06): same block as the floor dungeons (dgInfoHTML)
   dg: { date: "2026-11-05", boss: "Skeleton Colossus", bossZh: "骷髏巨像", key: "Key to the Sanctuary of Souls（遊戲寫在「Board - Sanctuary of Souls」製作）",
         modes: ["Easy", "Initiate", "Hard", "Integrity"],
-        easy: [["時間限制", "60 分鐘"], ["掉下去", "送回原處（Sent back if you fall）"], ["人數", "1～4 人"], ["建議等級", "13 級以上"]],
+        easy: [["時間限制", "60 分鐘"], ["失敗時", "送回原處（Sent back if you fall）"], ["人數", "1～4 人"], ["建議等級", "13 級以上"]],
         loot: [["Skeletal Sword", "Skeleton Warrior", 0.5], ["Bone Dust", "Skeleton Warrior", 70], ["Skeleton Bone", "Skeleton Warrior", 15], ["Soul of the Ruins", "Skeleton Warrior", 80]] },
   notes: ["11/6 維護（官方公告〈Halloween: fixes, balancing and a new weapon exchange〉）：Skeleton Colossus 生命 10,000 → 5,000、傷害 45 → 35，打擊範圍變大、不再鎖畫面；Cursed Valdor（3,000 → 2,100）和 the Archdemon（1,000）的生命和傷害少 30%，其他萬聖節惡魔也變弱；6 個萬聖節終極技能卷軸冷卻 8 小時 → 1 小時；Halloween Forge 買之前會顯示武器完整數值。",
           "新 NPC Halloween Weapon Merchant（在 Halloween Exchanger 旁邊）：舊的萬聖節武器 1 把＋Dark Gift Pumpkin 2 個（原本要 5 個）換一把自己職業的 Forge 新武器。",

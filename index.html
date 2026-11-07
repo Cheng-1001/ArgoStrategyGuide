@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="ed7b10a7d7">
+<meta name="sao-build" content="b9e670a29f">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -175,7 +175,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .qcard{gap:6px}.qcard .qd{margin:0;font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .qside{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}.qside .qobj{grid-column:1;font-size:13px;overflow-wrap:anywhere}.qside .reward{grid-column:2;grid-row:1/span 2;text-align:right}
 .qmap{flex:none;width:80%;align-self:center;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#0d1218}.qmap svg{display:block;width:100%;height:auto;aspect-ratio:1}.qmap g.hl rect{fill:#e5484d}.qmap g.hl text{fill:#fff}.mqs .linkbtn.on{color:#e5484d;font-weight:700}
-#clCard,.cloldl{display:flex;flex-direction:column;gap:12px}.cloldl{margin-top:12px}.clday{margin:0;gap:4px}.clhd{display:flex;align-items:baseline;gap:8px}.clhd .cln{margin-left:0}.clold>summary{cursor:pointer;padding:4px 2px}.clday .cld{font-family:var(--f-display);font-size:15px}.cll{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}
+#clCard,.cloldl{display:flex;flex-direction:column;gap:12px}.cloldl{margin-top:12px}.clday{margin:0;gap:4px}#view-changelog{scrollbar-gutter:stable}.clwait{margin:6px 0 2px;color:var(--muted)}.clhd{display:flex;align-items:baseline;gap:8px}.clhd .cln{margin-left:0}.clold>summary{cursor:pointer;padding:4px 2px}.clday .cld{font-family:var(--f-display);font-size:15px}.cll{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}
 .clmode{flex:0 0 auto;margin-left:auto;align-self:center}.cln{font-size:12px;color:var(--muted);margin-left:8px}
 .cll.clsum{gap:6px}.cll.clsum b{color:var(--accent)}
 .mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}.note.srcend{margin-top:14px}.gieff{margin:4px 0 0 0;padding:0;list-style:none}.gieff li{margin:3px 0}.effen{color:var(--muted);font-size:11.5px;display:inline-block}.lore.lorefr{font-size:12px;color:var(--muted);margin-top:-4px}.effic{display:inline-block;width:1.4em;text-align:center;margin-right:2px;font-size:.95em}img.effic{width:1.15em;height:1.15em;vertical-align:-.18em;image-rendering:pixelated;object-fit:contain;filter:drop-shadow(.072em .072em 0 rgba(0,0,0,.72))}
@@ -894,13 +894,13 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=14cfc23a"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=ba5394fa"></script>
+<script src="changelog.js?v=dc1a6d93"></script>
 <script src="recipes.js?v=5279ff8b"></script>
 <script src="jmmeta.js?v=5b0ffd74"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=877782cc"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
-<script src="events.js?v=25b1cec9"></script>
+<script src="events.js?v=ab89224b"></script>
 <script src="gacha.js?v=48cf03e8"></script>
 <script src="gamestats.js?v=289d1a40"></script>
 <script src="sets.js?v=f82a42f6"></script>
@@ -1835,9 +1835,10 @@ let CLM=(()=>{try{return localStorage.getItem("sao-cl-mode")==="full"?"full":"su
 function changelogCard(){const C=window.SAO_CHANGELOG||[];if(!C.length)return"";
   const SUM=window.SAO_CHANGELOG_SUM||{},list=(l,c)=>`<ul class="cll${c||""}">${l.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`;
   const sumLine=t=>{const i=t.indexOf("：");return i>0&&i<=8?`<b>${esc(t.slice(0,i))}</b>：${esc(t.slice(i+1))}`:esc(t)};
-  const day=([d,items])=>{const [,m,dd]=d.split("-").map(Number),sm=CLM==="sum"&&SUM[d];
-    return`<article class="bcard clday"><div class="clhd"><b class="cld">${m}/${dd}</b><span class="cln">${items.length} 項</span></div>${sm?`<ul class="cll clsum">${sm.map(t=>`<li>${sumLine(t)}</li>`).join("")}</ul>`:list(items)}</article>`};
-  return`<div id="clCard">${C.slice(0,3).map(day).join("")}${C.length>3?`<details class="clold"><summary>較早的更新（${C.length-3} 天）</summary><div class="cloldl">${C.slice(3).map(day).join("")}</div></details>`:""}</div>`}
+  // the newest day has no summary yet (written the next day, user 2026-11-07): say so instead of listing everything
+  const day=([d,items],k)=>{const [,m,dd]=d.split("-").map(Number),sm=CLM==="sum"&&SUM[d],wait=CLM==="sum"&&!SUM[d]&&k===0;
+    return`<article class="bcard clday"><div class="clhd"><b class="cld">${m}/${dd}</b><span class="cln">${items.length} 項</span></div>${wait?`<p class="clwait">隔日更新摘要，請先看<button class="linkbtn" data-clm="full">詳細內容</button>。</p>`:sm?`<ul class="cll clsum">${sm.map(t=>`<li>${sumLine(t)}</li>`).join("")}</ul>`:list(items)}</article>`};
+  return`<div id="clCard">${C.slice(0,3).map((x,k)=>day(x,k)).join("")}${C.length>3?`<details class="clold"><summary>較早的更新（${C.length-3} 天）</summary><div class="cloldl">${C.slice(3).map(x=>day(x,-1)).join("")}</div></details>`:""}</div>`}
 function renderChangelog(){const W=$("clWrap"),old=W.querySelector(".clold"),oldOpen=!!(old&&old.open),V=$("view-changelog"),y=V.scrollTop;
   W.innerHTML=`<div class="rhead"><h2>更新紀錄</h2><span class="count">網站改了什麼</span><div class="chips clmode" role="group" aria-label="顯示方式"><button class="chip" data-clm="sum" aria-pressed="${CLM==="sum"}" title="每天幾行重點">摘要</button><button class="chip" data-clm="full" aria-pressed="${CLM==="full"}" title="每一項都顯示完整說明">詳細</button></div></div>${changelogCard()}`;
   const o=W.querySelector(".clold");if(o&&oldOpen)o.open=true;
