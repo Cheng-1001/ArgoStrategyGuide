@@ -28,7 +28,16 @@
   "rhitta",
   "lostvayne",
   "nodachi",
-  "dague"
+  "dague",
+  "arbalete",
+  "crossbow",
+  "bow",
+  "arc",
+  "illfang",
+  "putride",
+  "putrid",
+  "leaf",
+  "feuille"
  ],
  "_todo": [
   "Ring of the Nepenthes",
@@ -97,5 +106,27 @@
  "Elite Gloves": "",
  "Elite Carapace": "",
  "Ring of the Shark": "",
- "Glacial Essence": ""
+ "Glacial Essence": "",
+ "_wrong": {
+  "_note": "2026-11-07 icon audit: the site icon does not match the game (auction screenshots), and the screenshot icon could not be rebuilt on a clean 16 px grid (hi-res / 3D texture). Take these from the resource pack. Keys may be the English game name or the official French name (gameicons.js accepts both).",
+  "Leaf Fragments": "site shows the official 3D model edge-on (a stick); the game icon is a flat leaf cluster",
+  "Arbalète d'Entraînement": "Training Crossbow: the official catalogue uses one generic crossbow image for all 16 crossbows; the game icon is brown/different",
+  "Arbalète en Cuivre": "Copper Crossbow: same generic image; game icon is copper-coloured",
+  "Arbalète en Fer": "Iron Crossbow: same generic image; game icon is grey",
+  "Arc en Fer": "Iron Bow: the official catalogue uses one generic bow image for 12 bows; game icon differs",
+  "Arc de l'Héraut": "Bow of the Herald: game icon is a black bow",
+  "Bouclier de Illfang": "Shield of Illfang: site shows a dark rectangle; game icon is a grey shield with an emblem",
+  "Bouclier Putride": "Putrid Shield: site render is wrong; game icon is a long purple shield",
+  "Arc Nodachi": "Nodachi Bow: site shows a tiny dark render; game icon is a blue bow",
+  "_unverified_shared": "also share one official image (not seen in screenshots, probably wrong too): the other 13 crossbows (Arbalète …), the other 10 bows (Arc …), and the 5-item groups Bottes/Casque/Jambière/Plastron d'Améthyste …, Bottes/Casque de la Chasseuse / de la Ruche / de l’Assassin / en Miel …"
+ },
+ "Leaf Fragments": "",
+ "Arbalète d'Entraînement": "",
+ "Arbalète en Cuivre": "",
+ "Arbalète en Fer": "",
+ "Arc en Fer": "",
+ "Arc de l'Héraut": "",
+ "Bouclier de Illfang": "",
+ "Bouclier Putride": "",
+ "Arc Nodachi": ""
 }

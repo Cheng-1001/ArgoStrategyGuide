@@ -11,7 +11,7 @@
    git checkout claude/affectionate-heisenberg-o71cvy
    git pull origin claude/affectionate-heisenberg-o71cvy
 
-2. 先讀 tools/equip_icons.py 開頭的說明和 tools/equip_icons.json。json 裡 "_todo" 是網站上還是佔位圖示的 21 件，先做這些；"_rebuilt" 是雲端從截圖還原的 11 件，資源包有原圖的話也換掉。
+2. 先讀 tools/equip_icons.py 開頭的說明和 tools/equip_icons.json。json 裡 "_todo" 是網站上還是佔位圖示的 21 件，先做這些；"_rebuilt" 是雲端從截圖還原的件數，資源包有原圖的話也換掉。"_wrong" 是 2026-11-07 檢查出「網站圖示和遊戲不一樣、截圖又還原不出來」的 9 件（json 裡已有同名的空白欄位，鍵可以是英文遊戲名或官網法文名），也請一起從資源包找。
 
 3. 列出候選圖（會在目前資料夾產生 equip_icon_candidates.png）：
    python tools/equip_icons.py find "C:\Users\Administrator\AppData\Roaming\.Triggers Client\instances\Sword Art Online\resourcepacks\sao.zip"
