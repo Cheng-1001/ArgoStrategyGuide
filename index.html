@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="5839f7bd29">
+<meta name="sao-build" content="bc09f1c511">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -876,7 +876,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=877782cc"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
-<script src="events.js?v=9477972d"></script>
+<script src="events.js?v=3d0d8825"></script>
 <script src="gamestats.js?v=553994fb"></script>
 <script src="sets.js?v=fbf69e31"></script>
 <script src="zhnames.js?v=b4467c4c"></script>
@@ -1626,7 +1626,7 @@ function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<di
   <h3 class="sec">鑰匙碎片：三個惡魔區</h3>${tb(["惡魔區","惡魔","首領","碎片"],d.zones.map(z=>[esc(z.n),z.mobs.map(esc).join("、"),esc(z.leader),`<b>${esc(z.frag)}</b>`]))}
   <div class="note">${esc(d.fragRate)}</div>
   <h3 class="sec">免費抽轉蛋的流程</h3><ol class="mqs">${d.loop.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
-  <h3 class="sec">萬聖節轉蛋</h3><p>${esc(d.banner.cost)}</p>${tb(["稀有度","內容","機率"],d.banner.rows.map(r=>r.map(esc)))}<div class="note">${esc(d.banner.pity)}</div>${(d.notes||[]).map(x=>`<div class="note">${esc(x)}</div>`).join("")}
+  <h3 class="sec">萬聖節轉蛋</h3><p>${esc(d.banner.cost)}</p>${tb((d.banner.rows[0].length>3?["稀有度","內容","一般抽取","含保底"]:["稀有度","內容","機率"]).map((h,k)=>k===1?h:`<span style="white-space:nowrap">${h}</span>`),d.banner.rows.map(r=>r.map((c,k)=>k===1?esc(c):`<span style="white-space:nowrap">${esc(c)}</span>`)))}<div class="note">${esc(d.banner.pity)}</div>${d.banner.src?`<div class="note srcn">轉蛋機率取自官網〈<a href="${esc(d.banner.src.url)}" target="_blank" rel="noopener">${esc(d.banner.src.title)}</a>〉（${esc(d.banner.src.date)}）。</div>`:""}${(d.notes||[]).map(x=>`<div class="note">${esc(x)}</div>`).join("")}
   <h3 class="sec">Halloween Forge：用 Dark Gift Pumpkin 換武器</h3><p>找 ${esc(d.forge.npc)}。</p>${tb(["武器","職業","南瓜","需求等級"],d.forge.rows.map(r=>[esc(r[0]),esc(r[1]),r[2],r[3]==null?"":r[3]]))}
   <div class="note">${esc(d.forge.extra)}</div><div class="note">${esc(d.forge.lvNote)}</div>
   <h3 class="sec">即將開放</h3><ul>${d.soon.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
