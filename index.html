@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="667aaed6e8">
+<meta name="sao-build" content="1e66d2026f">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -884,7 +884,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="mainq.js?v=89f237c4"></script>
 <script src="equip.js?v=afe010ec"></script>
 <script src="props.js?v=a6c9503f"></script>
-<script src="gameinfo.js?v=349916ca"></script><script src="buyback.js?v=4371e5e3"></script>
+<script src="gameinfo.js?v=44c21006"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=cbbfd938"></script>
 <script src="changelog.js?v=c4a0f14a"></script>
 <script src="recipes.js?v=5279ff8b"></script>
@@ -896,7 +896,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="gacha.js?v=48cf03e8"></script>
 <script src="gamestats.js?v=289d1a40"></script>
 <script src="sets.js?v=f82a42f6"></script>
-<script src="zhnames.js?v=b747514e"></script>
+<script src="zhnames.js?v=686e1ed2"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=cfbe1318"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1596,7 +1596,12 @@ const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
 // NPC 的位置直接寫在配方／裝備資料裡（使用者 2026-11-03：原本要點 3 次才知道在哪裡做）：最近的城鎮或傳送點＋可點的座標
 const nearPlace=(f,x,z)=>{let b=null,d=1e9;FLOORS[f].towns.forEach(t=>{const k=Math.hypot(t.x-x,t.z-z);if(k<d){d=k;b=t.n}});spotsOf(f).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-x,p.z-z);if(k<d){d=k;b=p.n}});return d<=400?b:null};
 const npcWhere=n=>{if(!n)return"";const near=nearPlace(n.floor,n.x,n.z);return`<span class="npcw">📍 ${near?esc(near)+" 附近・":""}${FLOORS[n.floor].map?`<button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">X ${n.x} · Z ${n.z}</button>`:`X ${n.x} · Z ${n.z}`}${n.u===2?"（地下室）":n.u?"（地下）":""}</span>`};
-const matText=mats=>mats.map(([m,q])=>`${ITEMS[m]?slot(m,22):""}<span>${esc(m)} ×${q}</span>`).join("・");
+// a recipe material -> this site's item, or the official item with the same in-game English name (gameinfo / zhnames), or just the name
+// (2026-11-07, user: 藥水配方素材沒有更新: Wheat Flower, Lavender… are official items 1835-1841 but were shown as 「本站還沒有這個物品的資料」)
+const matRef=m=>{const k=ikey(m);if(ITEMS[k])return{go:"i|"+k,ic:s=>slot(k,s),nm:zhI(k)||k};const g=enGo(m);
+  if(g&&/^[ep]\|/.test(g)){const i=g.slice(2),e=g[0]==="e"?eqById[i]:prById[i];if(e)return{go:g,ic:s=>g[0]==="e"?eslot(e,s):pslot(e,s),nm:zhE(e)||e.gen||e.name}}
+  return{go:null,ic:s=>GICON[m]?recicImg(GICON[m],s):"",nm:m}};
+const matText=mats=>mats.map(([m,q])=>{const r=matRef(m);return`${r.ic(22)}<span>${esc(r.nm)} ×${q}</span>`}).join("・");
 const costText=c=>c==="Free"||c==="0"?"免費":c==null?"費用未知":esc(c)+" 珂爾";
 // 查看配方 buttons under 製作方式 in the codex panels (one per NPC when several can make it)
 const recGoBtns=rows=>{const b=rows.map(x=>[x,ALLREC.findIndex(y=>y.npc===x.npc&&y.en===x.en)]).filter(([,ri])=>ri>=0);
@@ -1834,7 +1839,7 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   const e=eX||eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),shop=isShop(r),rar=e?e.r:r.r,isE=!!(eX||eqById[String(r.oid)]);
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} ${shop?"NPC 販售":"配方"}・${RC_CAT[r.cat][0]}</div><h2>${esc(recZh(r,e)||r.en)}</h2>${e||potZh(r.en)||recZh(r,e)?`<div class="sub">${(recZh(r,e)?[r.en,e&&!e.extra&&e.name]:[potZh(r.en),e&&e.name]).filter(Boolean).map(esc).join("・")}</div>`:""}</div></div>
   <dl class="facts"><dt>${shop?"在哪裡買":"在哪裡做"}</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button><br>${npcWhere(n)}`:esc(npcN(r.npc))}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvSrc==="game"?` <span class="muted" style="font-size:12px">（遊戲物品說明${r.lvRef?`；${esc(r.lvRefSrc)}寫 ${r.lvRef}`:""}）</span>`:r.lvRef?` <span class="muted" style="font-size:12px">（${esc(r.lvRefSrc)}寫 ${r.lvRef}，遊戲截圖還沒有這件，暫用官網圖鑑）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(pN(x))}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RQTY[r.npc+"|"+r.en]?`<dt>產量</dt><dd>每次做 ${RQTY[r.npc+"|"+r.en]} 個</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
-  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m0,q])=>{const m=ikey(m0);return ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow">${GICON[m]?recicImg(GICON[m],32):""}<span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`}).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
+  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m0,q])=>{const m=ikey(m0),R=matRef(m0);return R.go?`<li><button class="lrow" data-go="${esc(R.go)}">${R.ic(32)}<span class="t"><b>${esc(R.nm)}</b>${R.nm!==m0?`<span>${esc(m0)}</span>`:""}<span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow">${GICON[m]?recicImg(GICON[m],32):""}<span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`}).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
   ${setPotHTML(r.en)}${r.oid?"":giHTML(GI_EN[norm(r.en)])+gachaHTML(r.en)}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
