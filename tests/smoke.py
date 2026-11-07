@@ -318,7 +318,7 @@ with sync_playwright() as p:
     pg.fill("#q", "Rhitta"); pg.wait_for_timeout(400)
     pg.evaluate("[...document.querySelectorAll('#lEq .card')].find(c=>c.querySelector('b').textContent==='Rhitta').click()"); pg.wait_for_timeout(300)
     pb = pg.inner_text("#pBody")
-    check("戰士" in pb and "冷卻時間" in pb and "22" in pb, "game-only weapons keep their class restriction (Rhitta = 戰士) and translated stats")
+    check("戰士" in pb and "冷卻" in pb and "22" in pb, "game-only weapons keep their class restriction (Rhitta = 戰士) and translated stats")
     pg.fill("#q", ""); pg.wait_for_timeout(200); pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#props"); pg.wait_for_timeout(300)
     check(pg.locator('#fPrGroup .chip[data-v="材料"]').count() == 0 and pg.locator('#fPrGroup .chip[data-v="採集"]').count() == 0, "道具 no longer lists materials / gathered things")
@@ -378,7 +378,7 @@ with sync_playwright() as p:
     pg.click("#pClose"); pg.wait_for_timeout(200)
     pg.locator("#zlist .npcrow", has_text="Shark Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")
-    check("Shark Fang" in t and "Wolf Fangs ×8" in t and "33 Col" in t, "Shark Accessories lists its recipes with cost")
+    check("Shark Fang" in t and "Wolf Fangs ×8" in t and "33 珂爾" in t, "Shark Accessories lists its recipes with cost")
     off = pg.evaluate("""(()=>{const b=document.querySelector('.town.gather[data-s="farm"] .pin').getBoundingClientRect();
       const w=document.getElementById('world').getBoundingClientRect();const k=w.width/1000;
       const x=w.left+(2351-70)/4980*1000*k, y=w.top+(3662-70)/4980*1000*k;return Math.hypot(b.left+b.width/2-x,b.top+b.height/2-y)})()""")
@@ -470,7 +470,7 @@ with sync_playwright() as p:
     pg.goto(base + "#recipes"); pg.wait_for_timeout(500)
     pg.fill("#q", ""); pg.click('#fRcCat .chip[data-v="all"]'); pg.wait_for_timeout(300)   # earlier steps left a category filter on
     pg.locator("#lRc .rcard", has_text="Belt of the Stags").first.click(); pg.wait_for_timeout(300)
-    check("裝備資料" in pg.inner_text("#pBody") and "最大生命" in pg.inner_text("#pBody"), "the recipe panel shows the crafted item's data")
+    check("裝備資料" in pg.inner_text("#pBody") and "HP" in pg.inner_text("#pBody"), "the recipe panel shows the crafted item's data")
     pg.click('#pBody [data-goview^="equip"]'); pg.wait_for_timeout(500)
     hh, gt = pg.evaluate("location.hash"), pg.inner_text(".gvback:last-child .gvbody") if pg.locator(".gvback").count() else ""
     check(hh.endswith("recipes") and "Ceinture des Cerfs" in gt and "Belt of the Stags" in pg.inner_text("#pBody"),

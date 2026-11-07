@@ -70,7 +70,7 @@ with sync_playwright() as p:
     pg.fill("#q", "Shark Amulet"); pg.wait_for_timeout(250)
     card = pg.locator("#lRc .rcard", has_text="Shark Amulet").first
     t = card.inner_text()
-    check("玩家回報" in t and "Shark Shell ×9" in t and "31 Col" in t, "recipe report replaces the same NPC + item (material name mapped, cost)")
+    check("玩家回報" in t and "Shark Shell ×9" in t and "31 珂爾" in t, "recipe report replaces the same NPC + item (material name mapped, cost)")
     card.click(); pg.wait_for_timeout(300)
     check("T101" in pg.inner_text("#pBody") and "20 秒" in pg.inner_text("#pBody"), "recipe panel names the report")
     pg.click("#pClose"); pg.fill("#q", "Iron Sword"); pg.wait_for_timeout(250)

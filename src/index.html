@@ -765,7 +765,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">類型</span><div class="chips" id="fQKind"></div></div>
       <div class="fgroup" id="gQTown"><span class="flabel">村鎮</span><div class="chips" id="fQTown"></div></div>
       <div class="fgroup" id="gQSort"><span class="flabel">排序</span><select class="sel" id="fQSort" aria-label="排序">
-        <option value="town">依村鎮</option><option value="xp">經驗值（高→低）</option><option value="col">Col（高→低）</option></select></div>
+        <option value="town">依村鎮</option><option value="xp">經驗值（高→低）</option><option value="col">珂爾（高→低）</option></select></div>
       <div class="note" id="qNoteMain" hidden>主線依劇情順序排列。圓圈數字是遊戲任務追蹤上的編號（虛線圈是依順序推算的，灰點是編號還沒確認）。說明取自 wiki 主線任務表；步驟順序和座標取自參考互動地圖（DelayedCode），步驟文字是本站改寫。標「約」的是大約位置。按「在地圖上看路線」會在地圖上畫出步驟順序。破碎的地下世界（Fractured Underworld）裡的主線不列在這裡。</div>
       <div class="note" id="qNoteSide">任務需求與座標來自 wiki 支線任務表。標有<span class="inf"> 推斷 </span>的物品是依任務原文的簡寫推斷，原文可在詳細資料裡看到。</div>
     </div>
@@ -868,6 +868,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="events.js"></script>
 <script src="gamestats.js"></script>
 <script src="sets.js"></script>
+<script src="zhnames.js"></script>
 <script src="staticons.js"></script>
 <script src="gameicons.js"></script>
 <script src="recicons.js"></script>
@@ -903,7 +904,7 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
   if(r.type==="recipe"){o.npc=g(/配方・NPC/);o.rcat=g(/配方・分類/);o.rar=g(/配方・稀有度/);o.cost=g(/配方・費用/);
     o.sec=+(g(/配方・製作時間/).match(/\d+/)||[])[0]||null;o.rlv=+(g(/配方・需求等級/).match(/\d+/)||[])[0]||null;delete o.level;
     o.mats=g(/配方・材料/).split(/\n+/).map(l=>l.trim()).filter(Boolean).map(l=>{const m=l.match(/^(.+?)[\s:：x×*]*(\d+)\s*$/);const n=(m?m[1]:l).trim();return[REP_MAT[n]||n,m?+m[2]:1]});
-    o.summary=[o.npc,o.mats.length?"材料 "+o.mats.length+" 種":"",o.cost!==""?(+o.cost?o.cost+" Col":"免費"):"",o.sec?o.sec+" 秒":""].filter(Boolean).join("・")}
+    o.summary=[o.npc,o.mats.length?"材料 "+o.mats.length+" 種":"",o.cost!==""?(+o.cost?o.cost+" 珂爾":"免費"):"",o.sec?o.sec+" 秒":""].filter(Boolean).join("・")}
   if(r.type==="quest"){o.qkind=g(/任務・種類/);o.qno=+(g(/任務・編號/).match(/\d+/)||[])[0]||null;o.step=g(/任務・目前步驟/);o.qnpc=g(/任務・NPC/);o.reward=g(/任務・獎勵/);
     o.summary=[o.qkind+(o.qno?" #"+o.qno:""),o.step].filter(Boolean).join("・")}
   if(r.type==="skill"){o.cls=g(/技能・職業/);o.stype=g(/技能・主動或被動/);o.unlock=+(g(/技能・解鎖等級/).match(/\d+/)||[])[0]||null;o.sdesc=g(/技能・說明原文/);o.scost=g(/技能・冷卻或消耗/);delete o.level;
@@ -1055,7 +1056,7 @@ const BEH_ZH={A:"主動攻擊（看到就打）",N:"中立（被打才反擊）"
 const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["傳說+","r-s",5],splusplus:["傳說++","r-s",6],ss:["SS","r-s",7]};
 const GROUP={material:"材料",food:"食物",ring:"飾品",artifact:"飾品",amulet:"飾品",bracelet:"飾品",shield:"防具",armor_set:"防具",bow:"武器",crossbow:"武器",dagger:"武器",sword:"武器",staff_mage:"武器",staff_shaman:"武器",lumberjack_job:"採集",miner_job:"採集",farmer_job:"採集",tool:"工具",gem_stone:"符文",fortifier:"藥水",unknown:"未收錄"};
 const CAT_ZH={material:"材料",food:"食物",ring:"戒指",artifact:"遺物",amulet:"項鍊",bracelet:"手環",shield:"盾牌",armor_set:"防具套裝",bow:"弓",crossbow:"弩",dagger:"匕首",sword:"近戰武器",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",lumberjack_job:"伐木採集",miner_job:"採礦",farmer_job:"農作",tool:"工具",gem_stone:"符文",fortifier:"強化藥水",unknown:"未收錄"};
-const STAT_ZH={"Cooldown":"冷卻時間","Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"最大生命","Max Mana":"最大魔力","Max Stamina":"最大耐力","Attack Speed":"攻擊速度","Critical Strike Power":"暴擊傷害","Critical Strike Chance":"暴擊率","Skill Critical Strike Power":"技能暴擊傷害","Skill Critical Strike Chance":"技能暴擊率","Movement Speed":"移動速度","Health Regeneration":"生命回復","Mana Regeneration":"魔力回復","Stamina Regeneration":"耐力回復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"治療加成","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"吸血","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋強度","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力","Required Strength":"需求力量","Required Dexterity":"需求敏捷","Required Defense":"需求防禦","Dodge Rating":"閃避率","HEAL_BONUS":"治療加成","HEAL BONUS":"治療加成","Range":"攻擊距離","Entity Interaction Range":"互動距離","Knockback Resistance":"擊退抗性","Faction Damage Dungeon":"地下城傷害","Dodge Cooldown Reduction":"閃避冷卻縮減","Fall Damage Reduction":"摔落傷害減免","Additional Esprit":"額外精神","Additional Defense":"額外防禦","Additional Strength":"額外力量","Additional Vitality":"額外體力","Additional Dexterity":"額外敏捷","Additional Intelligence":"額外智力","Durability Bar":"耐久條","Inedible":"不能吃","Max Consume":"可用次數","Max Item Damage":"最大耐久","Max Stack Size":"堆疊上限","Movement_speed":"移動速度","Pickaxe Power":"採集等級","Random Unsocket":"隨機拆下符文","Repair Percent":"修理比例（%）","Restore Health":"回復生命","Restore Mana":"回復魔力","Restore Saturation":"回復飽和度","Restore Stamina":"回復耐力","Guard Durability":"格擋耐久","Block Chance":"格擋率","Ability Haste":"技能急速","深海漫遊 X":"特殊效果：深海漫遊 X"};
+const STAT_ZH={"Cooldown":"冷卻","Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"HP","Max Mana":"最大魔力","Max Stamina":"最大耐力","Attack Speed":"攻擊速度","Critical Strike Power":"爆擊傷害","Critical Strike Chance":"爆擊率","Skill Critical Strike Power":"技能爆擊傷害","Skill Critical Strike Chance":"技能爆擊率","Movement Speed":"移動速度","Health Regeneration":"HP 恢復","Mana Regeneration":"魔力恢復","Stamina Regeneration":"耐力恢復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"額外治療","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"生命偷取","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋威力","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力","Required Strength":"需求力量","Required Dexterity":"需求敏捷","Required Defense":"需求防禦","Dodge Rating":"閃避率","HEAL_BONUS":"額外治療","HEAL BONUS":"額外治療","Range":"攻擊距離","Entity Interaction Range":"互動距離","Knockback Resistance":"擊退抗性","Faction Damage Dungeon":"地下城傷害","Dodge Cooldown Reduction":"閃避冷卻縮減","Fall Damage Reduction":"墜落傷害減免","Additional Esprit":"額外精神","Additional Defense":"額外防禦","Additional Strength":"額外力量","Additional Vitality":"額外體力","Additional Dexterity":"額外敏捷","Additional Intelligence":"額外智力","Durability Bar":"耐久條","Inedible":"不能吃","Max Consume":"可用次數","Max Item Damage":"最大耐久","Max Stack Size":"堆疊上限","Movement_speed":"移動速度","Pickaxe Power":"採集威力","Random Unsocket":"隨機拆下符文","Repair Percent":"修理比例（%）","Restore Health":"回復生命","Restore Mana":"回復魔力","Restore Saturation":"回復飽和度","Restore Stamina":"回復耐力","Guard Durability":"防禦耐久度","Block Chance":"格擋率","Ability Haste":"技能加速","深海漫遊 X":"特殊效果：深海漫遊 X"};
 // Chinese potion names (user 2026-11-05: Health 生命、Mana 魔力、Stamina 耐力，Quality 翻「優質」); shown as subtitle, the title stays the game name
 const POT_ZH={health:"生命",vie:"生命",mana:"魔力",stamina:"耐力"};
 const potZh=n=>{const m=/^(Quality |Qualité )?(?:(Health|Mana|Stamina) Potion|Potion de (Vie|Mana|Stamina)) ([IVX]+)$/i.exec(String(n||"").trim());return m?(m[1]?"優質":"")+POT_ZH[(m[2]||m[3]).toLowerCase()]+"藥水 "+m[4].toUpperCase():""};
@@ -1093,7 +1094,7 @@ const money=n=>n==null?"":n.toLocaleString("en-US");
 // ---------- search ----------
 const q=$("q");const norm=s=>String(s||"").toLowerCase().normalize("NFD").replace(/\p{M}/gu,"").replace(/[’']/g,"'");
 const Sq=()=>norm(q.value.trim());
-function itemHit(id,s,shallow){if(!s)return true;const it=ITEMS[id];if(norm(id).includes(s)||norm(it.fr).includes(s)||(it.aka||[]).some(a=>norm(a).includes(s)))return true;if(shallow)return false;return!!(CAT_ZH[it.cat]&&CAT_ZH[it.cat].includes(q.value.trim()))}
+function itemHit(id,s,shallow){if(!s)return true;const it=ITEMS[id];if(norm(id).includes(s)||norm(zhI(id)).includes(s)||norm(it.fr).includes(s)||(it.aka||[]).some(a=>norm(a).includes(s)))return true;if(shallow)return false;return!!(CAT_ZH[it.cat]&&CAT_ZH[it.cat].includes(q.value.trim()))}
 const monHit=(m,s)=>{if(!s)return true;const z=FLOORS[m.floor].zones[m.zone];return norm(m.name).includes(s)||(m.aka||[]).some(a=>norm(a).includes(s))||m.num.includes(s)||norm(z.n+" "+z.zh+" "+(z.old||"")).includes(s)||m.drops.some(d=>itemHit(d[0],s,true))};
 const questHit=(qq,s)=>{if(!s)return true;const t=townById[qq.town];return norm([qq.title,qq.bonus,qq.tnote,...sideSteps(qq).map(x=>x[0]),...(qq.reps||[]).map(r=>r.step)].join(" ")).includes(s)||norm(qq.npc).includes(s)||norm(t.n+" "+(t.zh||"")+" "+(t.en||"")).includes(s)||norm(qq.raw).includes(s)||norm(qq.task).includes(s)||qq.need.some(n=>itemHit(n[0],s,true))||(qq.kill&&qq.kill[0].some(k=>norm(k).includes(s)))};
 
@@ -1147,7 +1148,7 @@ function markSel(){const cur=!panel.hidden&&stack[stack.length-1];
 const soonNote=f=>FLOORS[f].status==="soon"?`<div class="note warn">${FLN(f)}預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）。這是 wiki 目前的資料，官方說會調整進度設計，開放後可能不同。</div>`:"";
 
 function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.zones[m.zone];const p=monPos(m);const st=STATUS[p.s];
-  const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp,ww])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(iid)}</b><span>${ww?WIKI_ONLY:""}${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
+  const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp,ww])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(zhI(iid)||iid)}</b><span>${ww?WIKI_ONLY:""}${zhI(iid)?esc(iid)+"・":""}${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
   const kq=KILLQ[m.id]||[];
   return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(m.name)}</h2>${m.aka&&m.aka.length?`<div class="sub">舊名：${m.aka.map(esc).join("、")}${m.renamedBy?`・名稱依${m.renamedBy.how==="codex"?`遊戲圖鑑 #${esc(m.renamedBy.no)}`:"審核員確認"}（回報 ${esc(String(m.renamedBy.report||""))}）更新`:""}</div>`:""}</div></div>
   ${soonNote(m.floor)}
@@ -1209,7 +1210,7 @@ function itemObtainHTML(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id
   ${!use.length&&!it.use&&!it.locked&&!RECIPE_BY_MAT[id]?`<div class="note">目前沒有已知用途。</div>`:""}`}
 function itemDetail(id){const it=ITEMS[id];
   const stl=it.st?Object.entries(it.st).map(([k,v])=>{let val=v;if(k==="Classe requise")val=String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]||c).join("、");else if(k==="Arme à deux mains")val="是";else if(typeof v==="number"&&!["Item Cooldown","Restore Food","Max Durability"].includes(k)&&!k.startsWith("Required"))val=(v>0?"+":"")+v;return`<dt>${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(val)}</dd>`}).join(""):"";
-  return`<div class="phead">${slot(id,64)}<div class="ttl"><h2>${esc(id)}</h2><div class="sub">${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</div>
+  return`<div class="phead">${slot(id,64)}<div class="ttl"><h2>${esc(zhI(id)||id)}</h2><div class="sub">${zhI(id)?esc(id)+"・":""}${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${rarPill(it)}<span class="muted" style="font-size:12px">${esc(CAT_ZH[it.cat]||it.cat)}${it.lv?" · 等級 "+it.lv:""}</span>${itemFloors(id).map(flBadge).join("")}</div></div></div>
   ${it.lore?`<p class="lore">${esc(it.lore)}</p>`:""}
   ${(()=>{const pieces=it.cat==="armor_set"&&it.fr?it.fr.split(/\s*\/\s*/).map((x,i,a)=>i===a.length-1?x.split(/\s+/)[0]:x):null;
@@ -1251,7 +1252,7 @@ function dgInfoHTML(sp){const d=sp.dg;if(!d)return"";
   <div class="note srcn">地下城資料取自站長的遊戲截圖（${esc(d.date)}，遊戲的 Dungeons 視窗）。其他難度的掉落還沒有截圖。</div>`}
 function dgKeyHTML(sp){const {want,hit}=dgKeys(sp);if(!want&&!hit.length)return"";
   return`<h3 class="sec">進入鑰匙</h3>${hit.length?`<ul class="rows">${hit.map(r=>{const p=prById[String(r.oid)],n=npcByName(r.f,r.npc);
-    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(r.en)}${p?` <span class="muted" style="font-weight:400">${esc(p.name)}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(m)+" ×"+q).join("・"):"只要 Col"}</span></span><span class="v">${costText(r.cost)}</span></button>${n?`<div class="muted" style="font-size:12.5px;margin:2px 0 0 44px">在 <button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button> 製作（X ${n.x} · Z ${n.z}）</div>`:""}</li>`}).join("")}</ul>`
+    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(r.en)}${p?` <span class="muted" style="font-weight:400">${esc(p.name)}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(m)+" ×"+q).join("・"):"只要珂爾"}</span></span><span class="v">${costText(r.cost)}</span></button>${n?`<div class="muted" style="font-size:12.5px;margin:2px 0 0 44px">在 <button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button> 製作（X ${n.x} · Z ${n.z}）</div>`:""}</li>`}).join("")}</ul>`
     :`<div class="note">需要 ${esc(want)}，本站還沒有它的製作方式。</div>`}`}
 function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">這個地點已不存在。</div>`;const st=STATUS[sp.src];const Fx=FLOORS[sp.floor];
   const ms=sp.mons.map(n=>Fx.monByName[n]);const rz=[...new Set(ms.filter(Boolean).map(m=>Fx.zones[m.zone].n))];
@@ -1287,7 +1288,7 @@ const rewardGo=b=>{const m=String(b||"").match(/^(?:(\d+)\s*[x×]?\s+)?(.+)$/);c
   const it=Object.keys(ITEMS).find(k=>norm(k)===n||norm(ITEMS[k].fr)===n);if(it)return"i|"+it;
   const e=EQ.find(x=>norm(x.name)===n);if(e)return"e|"+e.oid;const p=PR.find(x=>norm(x.name)===n);return p?"p|"+p.oid:""};
 // one reward format for main and side quests: "100 xp · 120 Col · 🎁 item"; link=true (panels) makes known items clickable
-const rewardText=(qq,link)=>[qq.xp?`<span class="xp">${money(qq.xp)} xp</span>`:"",qq.money?`<span class="col">${money(qq.money)} Col</span>`:"",
+const rewardText=(qq,link)=>[qq.xp?`<span class="xp">${money(qq.xp)} xp</span>`:"",qq.money?`<span class="col">${money(qq.money)} 珂爾</span>`:"",
   qq.bonus?(link&&rewardGo(qq.bonus)?`<span class="rwi">🎁 <button class="linkbtn" data-go="${rewardGo(qq.bonus)}">${esc(qq.bonus)}</button></span>`:`<span class="rwi">🎁 ${esc(qq.bonus)}</span>`):""].filter(Boolean).join(" · ")||'<span class="muted rwnone">獎勵未記錄</span>';
 Object.values(window.SAO_MAINQ||{}).forEach(L=>L.forEach(q=>{if(!q.rw)return;const n=re=>{const m=q.rw.match(re);return m?+m[1].replace(/,/g,""):0};
   q.xp=q.xp||n(/([\d,]+)\s*(?:經驗|xp)/i);q.money=q.money||n(/([\d,]+)\s*Col/i)}));
@@ -1407,16 +1408,16 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").c
   const R_=x=>x.k==="p"?x.e.r:ITEMS[x.id].r,NM=x=>x.k==="p"?x.e.name:x.id,SRC=x=>x.k==="p"?[]:SOURCES[x.id],USE=x=>x.k==="p"?[]:USES[x.id];
   let a=pool.filter(x=>(itemGroup==="all"||matGroup(x)===itemGroup)&&(itemRar==="all"||R_(x)===itemRar)
     &&(!$("fItemQuest").checked||USE(x).length)&&(!$("fItemDrop").checked||SRC(x).length)
-    &&(x.k==="p"?!s||norm(x.e.name+" "+(x.e.gen||"")).includes(s):itemHit(x.id,s)||SOURCES[x.id].some(y=>norm(y.m.name).includes(s))));
+    &&(x.k==="p"?!s||norm(x.e.name+" "+(x.e.gen||"")+" "+zhE(x.e)).includes(s):itemHit(x.id,s)||SOURCES[x.id].some(y=>norm(y.m.name).includes(s))));
   const rv=x=>R_(x)&&RAR[R_(x)]?RAR[R_(x)][2]:0;const nt=x=>x.k==="p"?0:needTotal(x.id,all?0:FL);const by=(x,y)=>NM(x).localeCompare(NM(y));
   if(so==="name")a.sort(by);else if(so==="rar")a.sort((x,y)=>rv(y)-rv(x)||by(x,y));
   else if(so==="src")a.sort((x,y)=>SRC(y).length-SRC(x).length||by(x,y));else a.sort((x,y)=>nt(y)-nt(x)||by(x,y));
   $("cItem").textContent=`${a.length} / ${pool.length} 件`;const shown=a.slice(0,600);
   $("lItem").innerHTML=a.length?shown.map(x=>{if(x.k==="p"){const e=x.e;return`<button class="card" data-key="p|${e.oid}" data-go="p|${e.oid}">
-    <div class="chead">${pslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${esc(PR_CAT[e.cat]||e.cat)}・本站還沒有取得資料</span></div></div>
+    <div class="chead">${pslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${zhE(e)?esc(dnSub(e))+"・":""}${esc(PR_CAT[e.cat]||e.cat)}・本站還沒有取得資料</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span>等級 ${e.lv}</span>`:""}</div></button>`}
     const id=x.id,it=ITEMS[id];const src=SOURCES[id].filter(y=>all||y.m.floor===FL),use=USES[id].filter(u=>all||u.q.floor===FL),gat=GATHER[id].filter(g=>all||g.floor===FL);return`<button class="card" data-key="i|${esc(id)}" data-go="i|${esc(id)}">
-    <div class="chead">${slot(id,44)}<div class="cname"><b>${esc(id)}</b><span>${it.fr?esc(it.fr):"官方圖鑑未收錄"}</span></div></div>
+    <div class="chead">${slot(id,44)}<div class="cname"><b>${esc(zhI(id)||id)}</b><span>${zhI(id)?esc(id)+"・":""}${it.fr?esc(it.fr):"官方圖鑑未收錄"}</span></div></div>
     <div class="cmeta">${rarPill(it)}<span>${esc(matGroup(x))}</span>${src.length?`<span>· ${src.length} 種怪物掉落</span>`:""}${gat.length?`<span>· ${gat.length} 個採集點</span>`:""}${!src.length&&!gat.length&&it.src?`<span>· ${esc(it.src.split("：")[0].split("（")[0])}</span>`:""}${use.length?`<span>· ${use.length} 任務需 ${nt(x)}</span>`:""}${itemFloors(id).length>1||all?itemFloors(id).map(flBadge).join(""):""}</div></button>`}).join("")
     +(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用分類或搜尋縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的素材。</div>`;
   bindGo($("lItem"));markSel()}
@@ -1514,7 +1515,7 @@ const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
 const nearPlace=(f,x,z)=>{let b=null,d=1e9;FLOORS[f].towns.forEach(t=>{const k=Math.hypot(t.x-x,t.z-z);if(k<d){d=k;b=t.n}});spotsOf(f).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-x,p.z-z);if(k<d){d=k;b=p.n}});return d<=400?b:null};
 const npcWhere=n=>{if(!n)return"";const near=nearPlace(n.floor,n.x,n.z);return`<span class="npcw">📍 ${near?esc(near)+" 附近・":""}${FLOORS[n.floor].map?`<button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">X ${n.x} · Z ${n.z}</button>`:`X ${n.x} · Z ${n.z}`}${n.u===2?"（地下室）":n.u?"（地下）":""}</span>`};
 const matText=mats=>mats.map(([m,q])=>`${ITEMS[m]?slot(m,22):""}<span>${esc(m)} ×${q}</span>`).join("・");
-const costText=c=>c==="Free"||c==="0"?"免費":c==null?"費用未知":esc(c)+" Col";
+const costText=c=>c==="Free"||c==="0"?"免費":c==null?"費用未知":esc(c)+" 珂爾";
 // 查看配方 buttons under 製作方式 in the codex panels (one per NPC when several can make it)
 const recGoBtns=rows=>{const b=rows.map(x=>[x,ALLREC.findIndex(y=>y.npc===x.npc&&y.en===x.en)]).filter(([,ri])=>ri>=0);
   return b.length?`<div class="gobtns">${b.map(([x,ri])=>`<button class="btn" data-goview="recipes|r|${ri}">查看配方${b.length>1?"："+esc(x.npc):""}</button>`).join("")}</div>`:""};
@@ -1530,14 +1531,14 @@ const NPC_NOTE={
   "Accessory Recycling":`<h3 class="sec">回收（Accessory Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Accessory Recycling - Starting City」：交出飾品換 Recycling Coins，全部普通、免費。</div>${recyTable([["Ring of Pumba",5,30],["Ring of the Reaper",5,30],["Ring of the Fallen",5,30],["Bond of the Sylve",5,30],["Ring of Narax",5,30],["Necklace of Aragorn",5,30],["Flower of a Nepenthes",4,25],["Leg of a Spider",4,25],["Skull of a Wolf",4,25]])}`,
   "Alchemist":`<h3 class="sec">位置</h3><div class="note">在起始之城建築的<b>二樓</b>，名牌是「[NPC] Alchemist」。一樓那個金色名牌、頭上有綠色任務水晶的「Alchemist」是任務 NPC，不是這一個。旁邊的 Crystallographer 也在二樓。另外 Buy 分頁賣一般藥水 I～III（和收購商同價）。</div>`,
   "Crystallographer":`<h3 class="sec">位置</h3><div class="note">在起始之城建築的<b>二樓</b>，和「[NPC] Alchemist」在同一層。</div>`,
-  "Vault":`<h3 class="sec">倉庫</h3><div class="note">個人倉庫（My vault），一開始有 1 頁，再買 1 頁要 25000 Col。</div>`,
+  "Vault":`<h3 class="sec">倉庫</h3><div class="note">個人倉庫（My vault），一開始有 1 頁，再買 1 頁要 25000 珂爾。</div>`,
   "Web Archaeologist":`<h3 class="sec">位置</h3><div class="note">在 Arakh'Nol 的 Xal'Zirith 地下城入口旁，和 Xal'Zirith Dungeon Guard 站在一起（站長 2026-11-06 截圖，玩家座標 X 1019 Z 1178 Y 116）。點他開的視窗叫「Aragorn's Lair - Loot Info」，只有 Sell（收購）分頁；收購清單還沒有截圖。</div>`,
   "Skeleton Skull":`<h3 class="sec">位置</h3><div class="note">在高處的小石室裡（站長 2026-11-07 截圖：玩家座標 X 1162 Z 3544 Y 42，羅盤寫「Cyclorium」）。NPC 頭上沒有名牌，點他開的視窗叫「Secret Skeleton Skull」。</div>`,
-  "Occult Merchant - Artifacts":`<h3 class="sec">位置</h3><div class="note">在 Valley of Petals（花瓣谷）的<b>地底神壇</b>：從深色木造大建築旁的豎井往下（站長 2026-11-07 截圖：玩家座標 X 874 Z 4033 Y 4）。NPC 頭上沒有名牌；視窗「Occult Merchant - Artifacts」賣 Occult Skull／Robe／Hood，各 5 024.91 Col（LEGENDARY，有庫存數量）。物品說明的取得方式寫「Sold by Secret Occult Artifacts (5000 Cols)」。</div>`,
-  "Occult Merchant - Bracelet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3352 · Z 1647，房間裡 X 3350 · Z 1639）。NPC 頭上沒有名牌；視窗「Occult Merchant - Bracelet」賣 1 件 Occult Bracelet（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
-  "Occult Merchant - Amulet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3307 · Z 1671，房間裡 X 3314 · Z 1668）。NPC 頭上沒有名牌；視窗「Occult Merchant - Amulet」賣 1 件 Occult Amulet（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
-  "Occult Merchant - Ring":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3326 · Z 1736，房間裡 X 3321 · Z 1731）。NPC 頭上沒有名牌；視窗「Occult Merchant - Ring」賣 1 件 Occult Ring（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
-  "Occult Merchant - Gloves":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖，Gloves 的房間是依時間推斷：入口一帶 X 3363 · Z 1683，房間裡 X 3369 · Z 1689）。NPC 頭上沒有名牌；視窗「Occult Merchant - Gloves」賣 1 件 Occult Gloves（LEGENDARY，5 024.91 Col，有庫存數量）。</div>`,
+  "Occult Merchant - Artifacts":`<h3 class="sec">位置</h3><div class="note">在 Valley of Petals（花瓣谷）的<b>地底神壇</b>：從深色木造大建築旁的豎井往下（站長 2026-11-07 截圖：玩家座標 X 874 Z 4033 Y 4）。NPC 頭上沒有名牌；視窗「Occult Merchant - Artifacts」賣 Occult Skull／Robe／Hood，各 5 024.91 珂爾（LEGENDARY，有庫存數量）。物品說明的取得方式寫「Sold by Secret Occult Artifacts (5000 Cols)」。</div>`,
+  "Occult Merchant - Bracelet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3352 · Z 1647，房間裡 X 3350 · Z 1639）。NPC 頭上沒有名牌；視窗「Occult Merchant - Bracelet」賣 1 件 Occult Bracelet（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
+  "Occult Merchant - Amulet":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3307 · Z 1671，房間裡 X 3314 · Z 1668）。NPC 頭上沒有名牌；視窗「Occult Merchant - Amulet」賣 1 件 Occult Amulet（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
+  "Occult Merchant - Ring":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3326 · Z 1736，房間裡 X 3321 · Z 1731）。NPC 頭上沒有名牌；視窗「Occult Merchant - Ring」賣 1 件 Occult Ring（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
+  "Occult Merchant - Gloves":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖，Gloves 的房間是依時間推斷：入口一帶 X 3363 · Z 1683，房間裡 X 3369 · Z 1689）。NPC 頭上沒有名牌；視窗「Occult Merchant - Gloves」賣 1 件 Occult Gloves（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>`,
   "Corrupted Boar Accessories":`<h3 class="sec">位置</h3><div class="note">在 Boar Zone（野豬區）的小屋裡，名牌是「[NPC] Accessory Blacksmith」，點他開的視窗叫「Corrupted Boar Accessories」（站長 2026-11-07 截圖：玩家座標 X 1778 Z 3527～3533 Y 28）。參考互動地圖沒有這個 NPC。</div>`,
   "Auction House":`<h3 class="sec">拍賣場</h3><div class="note">玩家之間買賣物品的拍賣場，起始之城有好幾個 Auction House NPC。</div>`
 };
@@ -1567,15 +1568,16 @@ const recicImg=(src,s)=>`<span class="eslot empty" style="--s:${s}px" aria-hidde
 const OID_RECIC={};ALLREC.forEach(r=>{if(r.oid!=null&&RECIC[r.en]&&!OID_RECIC[r.oid])OID_RECIC[r.oid]=RECIC[r.en]});
 const recIcon=(r,s=44)=>{if(RECIC[r.en])return recicImg(RECIC[r.en],s);if(r.oid==null&&GICON[r.en])return recicImg(GICON[r.en],s);const e=eqById[String(r.oid)];if(e)return eslot(e,s);const p=prById[String(r.oid)];if(p)return pslot(p,s);if(RECIC[r.en])return`<span class="eslot empty" style="--s:${s}px" aria-hidden="true"><img src="${esc(RECIC[r.en])}" alt="" style="width:80%;height:80%;image-rendering:pixelated"></span>`;return`<span class="eslot empty" style="--s:${s}px" aria-hidden="true">${RC_CAT[r.cat][1]}</span>`};
 const recGo=r=>eqById[String(r.oid)]?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid:(npcByName(r.f,r.npc)?"n|"+npcByName(r.f,r.npc).id:"");
-const recHit=(r,s)=>!s||norm([r.en,r.npc,(eqById[String(r.oid)]||prById[String(r.oid)]||{}).name||"",...r.mats.map(m=>m[0])].join(" ")).includes(s);
+const recZh=(r,e)=>(e&&zhE(e))||ZH_EN[norm(r.en)]||(ITEMS[r.en]?zhI(r.en):"");
+const recHit=(r,s)=>!s||norm([r.en,recZh(r,eqById[String(r.oid)]||prById[String(r.oid)]),r.npc,(eqById[String(r.oid)]||prById[String(r.oid)]||{}).name||"",...r.mats.map(m=>m[0])].join(" ")).includes(s);
 function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value;
   let a=ALLREC.filter(r=>(rcCat==="all"||r.cat===rcCat)&&(np==="all"||r.npc===np)&&recHit(r,s));
   a.sort((x,y)=>so==="lv"?(x.lv||0)-(y.lv||0)||x.en.localeCompare(y.en):so==="name"?x.en.localeCompare(y.en):x.npc.localeCompare(y.npc)||(x.lv||0)-(y.lv||0));
   $("cRc").textContent=`${a.length} / ${ALLREC.length} 筆`;
   $("lRc").innerHTML=a.length?a.map(r=>{const e=eqById[String(r.oid)]||prById[String(r.oid)];const go=recGo(r);const rar=e?e.r:r.r;const tag="button";
-    return`<${tag} class="card rcard" data-go="r|${r.i}" data-key="r|${r.i}"><div class="chead">${recIcon(r)}<div class="cname"><b>${esc(r.en)}</b><span>${potZh(r.en)?esc(potZh(r.en))+"・":""}${e&&dn(e)!==r.en?esc(dn(e))+"・":""}${isShop(r)?"販售・":""}${esc(r.npc)}</span></div></div>
+    return`<${tag} class="card rcard" data-go="r|${r.i}" data-key="r|${r.i}"><div class="chead">${recIcon(r)}<div class="cname"><b>${esc(recZh(r,e)||r.en)}</b><span>${recZh(r,e)?esc(r.en)+"・":potZh(r.en)?esc(potZh(r.en))+"・":""}${e&&!recZh(r,e)&&dn(e)!==r.en?esc(dn(e))+"・":""}${isShop(r)?"販售・":""}${esc(r.npc)}</span></div></div>
     <div class="cmeta">${RAR[rar]?`<span class="pill ${RAR[rar][1]}">${RAR[rar][0]}</span>`:""}<span>${RC_CAT[r.cat][0]}</span>${r.lv?`<span>· 等級 ${r.lv}</span>`:""}<span>· ${costText(r.cost)}</span>${r.sec?`<span>· ${r.sec} 秒</span>`:""}${r.src==="shot"?'<span class="pill rep">遊戲截圖</span>':r.src==="rep"?'<span class="pill rep">玩家回報</span>':""}</div>
-    <div class="mats">${r.mats.length?matText(r.mats):'<span class="muted">只要 Col</span>'}</div></${tag}>`}).join(""):`<div class="empty-note">沒有符合條件的配方。</div>`;
+    <div class="mats">${r.mats.length?matText(r.mats):'<span class="muted">只要 珂爾</span>'}</div></${tag}>`}).join(""):`<div class="empty-note">沒有符合條件的配方。</div>`;
   bindGo($("lRc"));markSel()}
 // ================= classes / skills tab =================
 const CLS=window.SAO_CLASSES||[];
@@ -1728,9 +1730,9 @@ function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
 function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找不到這個配方。</div>`;
   const eX=r.oid==null&&EQX_BY[r.en]?eqById[EQX_BY[r.en]]:null;   // game-only equipment (Elite Treant set…): no catalogue id, matched by English name
   const e=eX||eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),shop=isShop(r),rar=e?e.r:r.r,isE=!!(eX||eqById[String(r.oid)]);
-  return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} ${shop?"NPC 販售":"配方"}・${RC_CAT[r.cat][0]}</div><h2>${esc(r.en)}</h2>${e||potZh(r.en)?`<div class="sub">${[potZh(r.en),e&&e.name].filter(Boolean).map(esc).join("・")}</div>`:""}</div></div>
+  return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} ${shop?"NPC 販售":"配方"}・${RC_CAT[r.cat][0]}</div><h2>${esc(recZh(r,e)||r.en)}</h2>${e||potZh(r.en)||recZh(r,e)?`<div class="sub">${(recZh(r,e)?[r.en,e&&!e.extra&&e.name]:[potZh(r.en),e&&e.name]).filter(Boolean).map(esc).join("・")}</div>`:""}</div></div>
   <dl class="facts"><dt>${shop?"在哪裡買":"在哪裡做"}</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(r.npc)}</button><br>${npcWhere(n)}`:esc(r.npc)}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvSrc==="game"?` <span class="muted" style="font-size:12px">（遊戲物品說明${r.lvRef?`；${esc(r.lvRefSrc)}寫 ${r.lvRef}`:""}）</span>`:r.lvRef?` <span class="muted" style="font-size:12px">（${esc(r.lvRefSrc)}寫 ${r.lvRef}，遊戲截圖還沒有這件，暫用官網圖鑑）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(x.n)}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
-  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用 Col 購買，不用材料。</div>':'<div class="muted">只要 Col，不用材料。</div>'}
+  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m,q])=>ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow"><span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
   ${setPotHTML(r.en)}${r.oid?"":giHTML(GI_EN[norm(r.en)])}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
@@ -1803,8 +1805,8 @@ Object.values(GI_OID).forEach(g=>{if(RECIC[g.en])g.oid.forEach(o=>{if(!OID_RECIC
 const obtZh=l=>{let m;
   if(m=l.match(/^Loot: (.+?) \(([\d.]+) ?%\)$/))return`怪物掉落：${m[1]}（${m[2]}%）`;
   if(m=l.match(/^Crafted at: (.+)$/))return`製作：${m[1]}`;
-  if(m=l.match(/^Bought back by (.+) \(([\d.]+) Cols?\)$/))return`可以賣給：${m[1]}（收購價 ${m[2]} Col）`;
-  if(m=l.match(/^Sold by (.+) \(([\d.]+) Cols?\)$/))return`販售：${m[1]}（${m[2]} Col）`;
+  if(m=l.match(/^Bought back by (.+) \(([\d.]+) Cols?\)$/))return`可以賣給：${m[1]}（收購價 ${m[2]} 珂爾）`;
+  if(m=l.match(/^Sold by (.+) \(([\d.]+) Cols?\)$/))return`販售：${m[1]}（${m[2]} 珂爾）`;
   if(m=l.match(/^(.+?) Chest(?: \((.+?)\))? \(([\d.]+) ?%\)$/))return`${m[1].replace(/'s$/,"")} 的寶箱${m[2]==="world boss"?"（世界首領）":m[2]?`（${m[2]}）`:""}（${m[3]}%）`;
   if(m=l.match(/^Mineable: (.+?)(?: \(([\d.]+) ?%\))?$/))return`挖礦：${m[1].replace("Fractured Underworld","破碎的地下世界")}${m[2]?`（${m[2]}%）`:""}`;
   if(m=l.match(/^Woodcutting: (.+)$/))return`伐木：${m[1]}`;
@@ -1816,7 +1818,14 @@ const obtZh=l=>{let m;
   return l};
 let GI_NODESC=0;   // equipment / props panels show the game description at the top (loreHTML), not again under 取得方式
 const giHTML=g=>g?`<h3 class="sec">遊戲寫的取得方式</h3><ul class="glist">${g.obt.map(l=>`<li title="${esc(l)}">${esc(obtZh(l))}</li>`).join("")}${g.note?`<li>${esc(g.note)}</li>`:""}${g.obt.length||g.note?"":"<li>說明視窗沒有寫取得方式</li>"}</ul>${g.desc&&!GI_NODESC?`<p class="lore">${esc(g.desc)}</p>`:""}<div class="note srcn">遊戲名稱、取得方式和英文說明取自遊戲的物品說明視窗（站長 ${g.date||GI.date} 截圖）${g.lvl?`；需求等級 ${g.lvl}`:""}。</div>`:"";
-const dn=e=>e.gen||e.name;
+// official Chinese names (zhnames.js, from the owner's screenshots after the official Chinese localisation 2026-11-07; user: 中文標題，英法文放副標)
+const ZHL=(window.SAO_ZHNAMES||{}).items||[],ZH_ID={},ZH_EN={},ZH_FR={};
+ZHL.forEach(r=>{(r.ids||[]).forEach(i=>ZH_ID[i]=r.zh);if(r.en)ZH_EN[norm(r.en)]=r.zh;if(r.fr)ZH_FR[norm(r.fr)]=r.zh});
+const zhE=e=>ZH_ID[(e.ps?"p|":"e|")+e.oid]||ZH_ID["e|"+e.oid]||ZH_ID["p|"+e.oid]||(e.itemId&&ZH_ID["i|"+e.itemId])||(e.gen&&(ZH_ID["g|"+e.gen]||ZH_ID["i|"+e.gen]||ZH_EN[norm(e.gen)]))||(!e.extra&&ZH_FR[norm(e.name)])||(FR2ID[e.name]&&ZH_ID["i|"+FR2ID[e.name]])||"";
+const zhI=id=>{const it=ITEMS[id]||{};const o=offOf(id);return ZH_ID["i|"+id]||ZH_ID["g|"+id]||(o&&zhE(o.e))||ZH_EN[norm(id)]||(it.fr&&ZH_FR[norm(it.fr)])||""};
+const dn=e=>zhE(e)||e.gen||e.name;
+// subtitle names when the title is the official Chinese name: English (game) then French (official catalogue)
+const dnSub=e=>[...new Set([e.gen||FR2ID[e.name]||"",e.extra?"":e.name])].filter(v=>v&&v!==dn(e)).join("・");
 const loreHTML=(e,hideFr)=>{const g=GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen||"")]:null);
   if(g&&g.desc)return`<p class="lore">${esc(g.desc)}</p>${e.lore&&!hideFr?`<p class="lore lorefr" title="官網物品圖鑑的法文說明">官網法文說明：${esc(e.lore)}</p>`:""}`;
   return e.lore&&!hideFr?`<p class="lore">${esc(e.lore)}</p>`:""};
@@ -1851,7 +1860,7 @@ chipsInto($("fEqClass"),[["all","全部"],...Object.entries(CLASS_ZH)],()=>eqCla
 chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
 ["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
 const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",quiver:"quiver offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory",acc:"accessory"};
-const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
+const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value;
   const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s));
   // sub-part counts follow the other filters (class, rarity, level, search), so they match the list
@@ -1862,7 +1871,7 @@ function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").val
   $("cEq").textContent=`${a.length} / ${EQ.length} 件`;
   const shown=a.slice(0,240);
   $("lEq").innerHTML=a.length?shown.map(e=>{const cl=eqClasses(e);return`<button class="card" data-key="e|${e.oid}" data-go="e|${e.oid}">
-    <div class="chead">${eslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${e.gen&&e.gen!==e.name?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":""}${esc(eqCat(e))}</span></div></div>
+    <div class="chead">${eslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${zhE(e)?esc(dnSub(e))+"・":e.gen&&e.gen!==e.name?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":""}${esc(eqCat(e))}</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span>等級 ${e.lv}</span>${cl.length?`<span>· ${cl.map(c=>CLASS_ZH[c]).join("、")}</span>`:""}</div>
     ${eqKey(e)?`<div class="estat">${esc(eqKey(e))}</div>`:""}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
   bindGo($("lEq"));markSel()}
@@ -1873,7 +1882,7 @@ function equipDetail(id){GI_NODESC=1;try{return equipDetail0(id)}finally{GI_NODE
 function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
   const rows=Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
   const en=e.itemId||FR2ID[e.name];
-  return`<div class="phead">${eslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${e.gen&&e.gen!==e.name?esc(e.name)+"・":""}${esc(eqCat(e))}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
+  return`<div class="phead">${eslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${zhE(e)?esc(dnSub(e))+"・":e.gen&&e.gen!==e.name?esc(e.name)+"・":""}${esc(eqCat(e))}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span class="muted" style="font-size:12px">${icK("min_level")}等級 ${e.lv}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):"・不限職業"}</span></div></div></div>
   ${loreHTML(e)}
   <dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
@@ -1918,7 +1927,7 @@ const fillPrSub=()=>{const g=$("gPrSub");prSubV="all";const labs=[...new Set(PRV
 chipsInto($("fPrGroup"),[["all","全部"],...[...new Set(Object.values(PR_GROUP))].filter(g=>g!=="材料"&&g!=="採集").map(g=>[g,g==="活動"?"活動道具":g])],()=>prGroup,v=>{prGroup=v;fillPrSub()},renderProps);
 chipsInto($("fPrRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,RAR[r][0]])],()=>prRar,v=>prRar=v,renderProps);
 $("fPrSort").onchange=renderProps;
-const prHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+(PR_CAT[e.cat]||"")+" "+e.lore).includes(s);
+const prHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+(PR_CAT[e.cat]||"")+" "+e.lore).includes(s);
 function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
   const base=PRV().filter(e=>(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
   $("fPrSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>PR_SUBLAB(e.cat)===c.dataset.v).length});
@@ -1928,33 +1937,33 @@ function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?R
   if(prGroup!=="all"&&prSubV==="all")a.sort((x,y)=>subRank(x.cat)-subRank(y.cat));   // stable: keeps the chosen order inside each sub-category
   $("cPr").textContent=`${a.length} / ${PRV().length} 件`;const shown=a.slice(0,240);
   $("lPr").innerHTML=a.length?shown.map(e=>`<button class="card" data-key="p|${e.oid}" data-go="p|${e.oid}">
-    <div class="chead">${pslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${potZhE(e)?esc(potZhE(e))+"・":""}${e.gen&&!e.extra?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":""}${esc(PR_CAT[e.cat]||e.cat)}</span></div></div>
+    <div class="chead">${pslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${zhE(e)?esc(dnSub(e))+"・":(potZhE(e)?esc(potZhE(e))+"・":"")+(e.gen&&!e.extra?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":"")}${esc(PR_CAT[e.cat]||e.cat)}</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span>等級 ${e.lv}</span>`:""}${FR2ID[e.name]&&SOURCES[FR2ID[e.name]]?.length?`<span>· ${SOURCES[FR2ID[e.name]].length} 種怪物掉落</span>`:""}</div></button>`).join("")
     +(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用分類或搜尋縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的道具。</div>`;
   bindGo($("lPr"));markSel()}
 // set bonuses and potion effects as the game shows them (sets.js, from the owner's screenshots; user 2026-11-05: 套裝效果、藥水效果也要寫進去)
 // small effect icons (emoji, drawn by the site; not game assets), user 2026-11-05: 效果有沒有圖示
 // order matters: the more specific phrase first. Equipment stats say "Critical Strike Chance", the game tooltip "Critical Chance":
-// both must reach the chance icon, not the damage one with the green arrow (user 2026-11-05: 網站的暴擊率有一個箭頭). key -> game icon (staticons.js, tools/stat_icons.py on the owner's PC); emoji until then
-const EFF_IC=[[/life ?steal|lifesteal|vampir|吸血/i,"🩸","lifesteal"],[/healing|heal bonus|治療/i,"💚","healing"],[/health\/s|health regen|生命回復/i,"❤️","health_regen"],[/mana\/s|mana regen|魔力回復/i,"💧","mana_regen"],
-  [/stamina\/s|stamina regen|耐力回復/i,"⚡","stamina_regen"],[/health|♥|❤|生命/i,"❤️","health"],[/mana|魔力/i,"💧","mana"],[/stamina|endurance|耐力/i,"⚡","stamina"],[/food|saturation|飽食|飽和/i,"🍖","food"],
-  [/fall|摔落/i,"🪂",""],[/damage reduction|減免/i,"🛡️","damage_reduction"],[/block|guard|格擋/i,"🛡️","block"],[/defen[cs]e|防禦/i,"🛡️","defense"],
-  [/skill crit(ical)?( strike)? chance|技能暴擊率/i,"💥","skill_crit_chance"],[/skill crit|技能暴擊/i,"💥","skill_crit_damage"],[/crit(ical)?( strike)? chance|暴擊率/i,"💥","crit_chance"],[/crit|暴擊/i,"💥","crit_damage"],
-  [/ability haste|急速/i,"⏱️","ability_haste"],[/cooldown|冷卻/i,"⏱️","cooldown"],[/attack speed|攻擊速度/i,"⚔️","attack_speed"],[/movement|speed|移動|速度/i,"👟","movement_speed"],[/dodge|閃避/i,"🌀","dodge"],
+// both must reach the chance icon, not the damage one with the green arrow (user 2026-11-05: 網站的爆擊率有一個箭頭). key -> game icon (staticons.js, tools/stat_icons.py on the owner's PC); emoji until then
+const EFF_IC=[[/life ?steal|lifesteal|vampir|吸血|生命偷取/i,"🩸","lifesteal"],[/healing|heal bonus|治療/i,"💚","healing"],[/health\/s|health regen|生命回復|HP ?恢復/i,"❤️","health_regen"],[/mana\/s|mana regen|魔力[回恢]復/i,"💧","mana_regen"],
+  [/stamina\/s|stamina regen|耐力[回恢]復/i,"⚡","stamina_regen"],[/health|♥|❤|生命|\bHP\b/i,"❤️","health"],[/mana|魔力/i,"💧","mana"],[/stamina|endurance|耐力/i,"⚡","stamina"],[/food|saturation|飽食|飽和/i,"🍖","food"],
+  [/fall|摔落|墜落/i,"🪂",""],[/damage reduction|減免/i,"🛡️","damage_reduction"],[/block|guard|格擋/i,"🛡️","block"],[/defen[cs]e|防禦/i,"🛡️","defense"],
+  [/skill crit(ical)?( strike)? chance|技能爆擊率/i,"💥","skill_crit_chance"],[/skill crit|技能爆擊/i,"💥","skill_crit_damage"],[/crit(ical)?( strike)? chance|爆擊率/i,"💥","crit_chance"],[/crit|爆擊/i,"💥","crit_damage"],
+  [/ability haste|急速|技能加速/i,"⏱️","ability_haste"],[/cooldown|冷卻/i,"⏱️","cooldown"],[/attack speed|攻擊速度/i,"⚔️","attack_speed"],[/movement|speed|移動|速度/i,"👟","movement_speed"],[/dodge|閃避/i,"🌀","dodge"],
   [/magic|魔法/i,"✨","magic_damage"],[/projectile|投射/i,"🏹","projectile_damage"],[/physical|物理/i,"⚔️","physical_damage"],[/skill damage|技能傷害/i,"⚔️","skill_damage"],[/damage|attack|傷害|攻擊/i,"⚔️","attack_damage"],
   [/rune|符文/i,"💎",""]];
 const STATIC=window.SAO_STATICONS||{};
 // fetch every stat icon once at start-up, so the first panel opened already has them (user 2026-11-05: 第一次點的時候不會馬上載入)
 const STATIC_PRE=Object.values(STATIC).map(u=>{const im=new Image();im.decoding="async";im.src=u;return im});
 const IC_FB={health_regen:"health",mana_regen:"mana",healing:"health"};   // no game icon of their own: borrow the family's
-// 官網圖鑑把治療加成寫成 Heal Bonus／HEAL BONUS／HEAL_BONUS 三種，底線換成空白才對得到圖示（使用者 2026-11-06：有的有圖示有的沒有）
+// 官網圖鑑把額外治療寫成 Heal Bonus／HEAL BONUS／HEAL_BONUS 三種，底線換成空白才對得到圖示（使用者 2026-11-06：有的有圖示有的沒有）
 const effIc=t=>{t=String(t).replace(/_/g," ");if(/,.*\bfor\s+\d+\s*(?:s|sec|min|h)\b/i.test(t))return"";const m=EFF_IC.find(([r])=>r.test(t));if(!m)return"";const k=STATIC[m[2]]?m[2]:(STATIC[IC_FB[m[2]]]?IC_FB[m[2]]:"");return k?`<img class="effic" src="${esc(STATIC[k])}" alt="" aria-hidden="true">`:`<span class="effic" aria-hidden="true">${m[1]}</span>`};
 // Chinese reading of the game's effect lines (user 2026-11-05: 效果說明也要中文); the original stays in the tooltip and in small grey text
-const EFF_LAB={"attack speed":"攻擊速度","health/s":"生命回復","mana/s":"魔力回復","stamina/s":"耐力回復","health":"生命","max health":"最大生命","attack damage":"攻擊傷害","crit chance":"暴擊率","critical chance":"暴擊率",
-  "critical power":"暴擊傷害","crit damage":"暴擊傷害","critical damage":"暴擊傷害","max mana":"最大魔力","mana":"魔力","stamina":"耐力","max stamina":"最大耐力","bonus healing":"治療加成","defense":"防禦","skill damage":"技能傷害",
-  "skill crit chance":"技能暴擊率","skill critical chance":"技能暴擊率","skill critical damage":"技能暴擊傷害","magic damage":"魔法傷害","physical damage":"物理傷害","projectile damage":"投射物傷害","ability haste":"技能急速",
-  "movement speed":"移動速度","speed":"速度","attack damage":"攻擊傷害","max health":"最大生命","dodge chance":"閃避率","cooldown reduction":"冷卻縮減","healing received":"受到的治療","damage reduction":"傷害減免","block chance":"格擋率","block power":"格擋強度",
-  "knockback resistance":"擊退抗性","mana regeneration":"魔力回復","stamina regeneration":"耐力回復","max endurance":"最大耐力","skill critical skills":"技能暴擊","food":"飽食度","weapon damage":"武器傷害","saturation":"飽和度","♥":"生命","❤":"生命"};
+const EFF_LAB={"attack speed":"攻擊速度","health/s":"HP 恢復","mana/s":"魔力恢復","stamina/s":"耐力恢復","health":"生命","max health":"HP","attack damage":"攻擊傷害","crit chance":"爆擊率","critical chance":"爆擊率",
+  "critical power":"爆擊傷害","crit damage":"爆擊傷害","critical damage":"爆擊傷害","max mana":"最大魔力","mana":"魔力","stamina":"耐力","max stamina":"最大耐力","bonus healing":"額外治療","defense":"防禦","skill damage":"技能傷害",
+  "skill crit chance":"技能爆擊率","skill critical chance":"技能爆擊率","skill critical damage":"技能爆擊傷害","magic damage":"魔法傷害","physical damage":"物理傷害","projectile damage":"投射物傷害","ability haste":"技能加速",
+  "movement speed":"移動速度","speed":"速度","attack damage":"攻擊傷害","max health":"HP","dodge chance":"閃避率","cooldown reduction":"冷卻縮減","healing received":"受到的治療","damage reduction":"傷害減免","block chance":"格擋率","block power":"格擋威力",
+  "knockback resistance":"擊退抗性","mana regeneration":"魔力恢復","stamina regeneration":"耐力恢復","max endurance":"最大耐力","skill critical skills":"技能爆擊","food":"飽食度","weapon damage":"武器傷害","saturation":"飽和度","♥":"生命","❤":"生命"};
 const durZh=t=>{const m=/^(\d+)\s*(s|sec|min|h)$/i.exec(t.trim());if(!m)return t;let n=+m[1],u=m[2].toLowerCase();if(u==="s"||u==="sec"){if(n>=3600&&n%3600===0)return n/3600+" 小時";if(n>=60&&n%60===0)return n/60+" 分鐘";return n+" 秒"}return n+(u==="min"?" 分鐘":" 小時")};
 const labZh=l=>EFF_LAB[l.trim().toLowerCase()]||l;
 const effZh=t=>{let m;t=String(t).trim();
@@ -1963,7 +1972,7 @@ const effZh=t=>{let m;t=String(t).trim();
   if(m=/^Cooldown\s*:\s*(\d+s)$/i.exec(t))return`冷卻 ${durZh(m[1])}`;
   if(m=/^Boosts your (.+?) by ([\d.]+%?(?:\/s)?) for (\d+\s*\w+)$/i.exec(t))return`${durZh(m[3])}內${labZh(m[1])} +${m[2].replace("/s","/秒")}`;
   if(m=/^Regenerates ([\d.]+)\/s of mana and ([\d.]+)\/s of stamina for (\d+\s*\w+)$/i.exec(t))return`${durZh(m[3])}內每秒回復 ${m[1]} 魔力和 ${m[2]} 耐力`;
-  if(m=/^Attack damage \+([\d.]+%) and skill critical strike power \+([\d.]+%) for (\d+\s*\w+)$/i.exec(t))return`${durZh(m[3])}內攻擊傷害 +${m[1]}、技能暴擊傷害 +${m[2]}`;
+  if(m=/^Attack damage \+([\d.]+%) and skill critical strike power \+([\d.]+%) for (\d+\s*\w+)$/i.exec(t))return`${durZh(m[3])}內攻擊傷害 +${m[1]}、技能爆擊傷害 +${m[2]}`;
   if(m=/^Boost les Dégâts armes de ([\d.]+%) - (\d+)sec/i.exec(t))return`${m[2]} 秒內武器傷害 +${m[1]}`;
   if(m=/^(\d+s) cooldown on all (.+)$/i.exec(t))return`所有 ${m[2].replace(/candies/i,"糖果")} 共用 ${durZh(m[1])}冷卻`;
   if(m=/^On consumption, applies (\d+)h of cooldown on all fortifiers$/i.exec(t))return`使用後，所有強化藥都要冷卻 ${m[1]} 小時`;
@@ -1998,7 +2007,7 @@ function propDetail0(id){const e=prById[id];const en=FR2ID[e.name];
   // potions: the catalogue's restore values are wrong (health potions list "Restore Stamina"); when the game's effect lines exist, show those instead
   const potGame=[e.gen,en].some(n=>n&&POT_BY[norm(n)]);   // game effect lines exist → they replace the catalogue numbers (user 2026-11-05: Boar Meat 效果寫了兩次)
   const rows=potGame?"":Object.entries(e.st).map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
-  return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${potZhE(e)?esc(potZhE(e))+"・":""}${e.gen&&!e.extra?esc(e.name)+"・":""}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
+  return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${zhE(e)?esc(dnSub(e))+"・":(potZhE(e)?esc(potZhE(e))+"・":"")+(e.gen&&!e.extra?esc(e.name)+"・":"")}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
   ${loreHTML(e,potGame&&/^potion_/.test(e.cat))}${rows?`<dl class="stats">${rows}</dl>`:""}${setPotHTML(e.gen,en)}
   ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen)]:null))}
@@ -2028,7 +2037,7 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
   <div class="rhead"><h2>首領</h2><span class="count">世界首領・獨特怪物・樓層首領</span></div>
   <article class="bcard">
     <div class="bhead">${bFig(g)}<div class="bttl"><span class="kick">世界首領 World Boss</span><h3>${esc(g.zh)}</h3><div class="sub">${esc(g.name)}</div>${status}</div></div>
-    <dl class="bfacts"><div><dt>需求等級</dt><dd class="mono">${g.level}</dd></div><div><dt>入場費</dt><dd class="mono">${money(g.price)} Col</dd></div><div><dt>人數上限</dt><dd class="mono">${g.maxPlayers} 人</dd></div>${g.queue?`<div><dt>排隊上限</dt><dd class="mono">${g.queue} 人</dd></div>`:""}<div><dt>保底獎勵</dt><dd>${esc(g.guaranteed)}</dd></div></dl>
+    <dl class="bfacts"><div><dt>需求等級</dt><dd class="mono">${g.level}</dd></div><div><dt>入場費</dt><dd class="mono">${money(g.price)} 珂爾</dd></div><div><dt>人數上限</dt><dd class="mono">${g.maxPlayers} 人</dd></div>${g.queue?`<div><dt>排隊上限</dt><dd class="mono">${g.queue} 人</dd></div>`:""}<div><dt>保底獎勵</dt><dd>${esc(g.guaranteed)}</dd></div></dl>
     <p>${esc(g.desc)}</p>
     <div class="bcols">
       <section><h4 class="sec">每週開放時段 <span class="c">${myZone?"以你的時區（"+esc(myZone)+"）顯示":""}</span></h4>

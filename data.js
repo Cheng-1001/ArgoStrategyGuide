@@ -254,10 +254,10 @@ const RAW = {
 
 // How each item is obtained besides monster drops (source text) and what it is used for (paraphrased from its official description).
 const EXTRA = {
-"Flower of a Nepenthes":{note:"名稱和數值取自遊戲的物品說明視窗（站長 2026-11-04 截圖）：飾品，需求等級 5，屬於 Nepenthes Set；說明「The flower of a Nepenthes torn off alive; it pours its magic into the veins of its bearer」。取得：Nephentes 掉落 0.5%；Shop - Mizunari 收購 25 Cols。圖示取自站長的圖鑑截圖。"},
+"Flower of a Nepenthes":{note:"名稱和數值取自遊戲的物品說明視窗（站長 2026-11-04 截圖）：飾品，需求等級 5，屬於 Nepenthes Set；說明「The flower of a Nepenthes torn off alive; it pours its magic into the veins of its bearer」。取得：Nephentes 掉落 0.5%；Shop - Mizunari 收購 25 珂爾。圖示取自站長的圖鑑截圖。"},
 "Elite Gloves":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自遊戲的物品提示（站長 2026-11-04 拍賣場截圖）；稀有度取自製作視窗（COMMON）。圖示取自同一批拍賣場截圖。"},
 "Elite Carapace":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自遊戲的物品提示（站長 2026-11-04 拍賣場截圖）；稀有度取自製作視窗（RARE）。提示沒有寫裝備部位；部位是遺物（站長 2026-11-06 確認）。圖示取自同一批拍賣場截圖。"},
-"Elite Amulet":{note:"官網物品圖鑑沒有收錄，也還沒有這件的物品提示截圖：只有製作視窗（COMMON、15 秒、25 Col）。等級 3 取自參考互動地圖，數值未知。"},
+"Elite Amulet":{note:"官網物品圖鑑沒有收錄，也還沒有這件的物品提示截圖：只有製作視窗（COMMON、15 秒、25 珂爾）。等級 3 取自參考互動地圖，數值未知。"},
 "Elite Bracelet":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自遊戲的物品提示（站長 2026-11-07 拍賣場截圖）；稀有度取自製作視窗（RARE）。"},
 "Shark Fang":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自站長 2026-11-04 的物品提示截圖；稀有度取自製作視窗（RARE）；提示沒有寫裝備部位，部位是遺物（站長 2026-11-06 確認）。"},
 "Ring of the Shark":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自站長 2026-11-05 製作視窗的物品提示截圖；稀有度取自製作視窗（COMMON）。"},
@@ -279,7 +279,7 @@ const EXTRA = {
 "Spider Cloak":{note:"官網物品圖鑑沒有收錄，也還沒有這件的物品提示截圖：只有製作視窗（RARE）。等級 6 取自參考互動地圖，數值未知；部位是遺物（站長 2026-11-06 確認）。"},
 "Iron Quiver":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自站長 2026-11-05 00:04 的背包物品提示截圖，取得方式寫 Island Forge（破碎的地下世界的鍛造台）。在 Island Forge 鍛造：Iron Bar 煉成 Refined Iron Ingot，再用 1 個 Refined Iron Ingot 在 Quench - Cooling 步驟做成（站長 2026-11-04 23:09 截圖）。"},
 "Hunter's Quiver":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自站長 2026-11-05 00:04 的背包物品提示截圖，取得方式寫 Island Forge（破碎的地下世界的鍛造台）。"},
-"Dagger of Albal":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自站長 2026-11-05 的拍賣場物品提示截圖；提示上只有暴擊率和暴擊傷害兩項，沒有攻擊傷害和攻擊速度（截圖原樣）。"},
+"Dagger of Albal":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自站長 2026-11-05 的拍賣場物品提示截圖；提示上只有爆擊率和爆擊傷害兩項，沒有攻擊傷害和攻擊速度（截圖原樣）。"},
 "Dague glacé":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自站長 2026-11-04 的物品提示截圖。遊戲只有法文名稱和法文說明。"},
 "Galiath's Axe":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自站長 2026-11-04 的物品提示截圖。世界首領 Galiath 結束時抽獎的獎品（見世界王頁）。"},
 "Four-Armed Halberd":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自站長 2026-11-04 的物品提示截圖。世界首領 Galiath 結束時抽獎的獎品（見世界王頁）。"},
@@ -295,7 +295,7 @@ const EXTRA = {
 "Nodachi Bow ★★★★":{note:"官網物品圖鑑只有 Arc Nodachi（★1）。這一階取自 Nodachi Altar（Nodachi Blacksmith）升階配方的物品提示（站長 2026-11-05 截圖），用兩把前一階合成、免費。數值照截圖標示：★1～★5 的提示數值完全相同。"},
 "Nodachi ★★★★★":{note:"官網物品圖鑑只有 Nodachi（★1）。這一階取自 Nodachi Altar（Nodachi Blacksmith）升階配方的物品提示（站長 2026-11-05 截圖），用兩把前一階合成、免費。數值照截圖標示：★2～★5 的提示都寫傷害 15、攻速 1.1/s，比 ★1（Nodachi，傷害 20、攻速 1.25/s）低，原因不明。"},
 "Nodachi Bow ★★★★★":{note:"官網物品圖鑑只有 Arc Nodachi（★1）。這一階取自 Nodachi Altar（Nodachi Blacksmith）升階配方的物品提示（站長 2026-11-05 截圖），用兩把前一階合成、免費。數值照截圖標示：★1～★5 的提示數值完全相同。"},
-"Leg of a Spider":{set:{name:"Spider Set（蜘蛛套裝）",tiers:[[2,"+2.5% 移動速度"],[3,"+0.025 攻擊速度"],[4,"+2.5% 閃避"],[5,"+0.25 攻擊傷害、+1% 暴擊率"]]},note:"套裝效果的名稱、數值、說明取自社群截圖（2026-10-30），法文名稱未知；wiki 原本寫成 Leg of Spider。圖示來自遊戲資源包（patte_araignee），與截圖一致。當時拍賣行最低價約 300 Col。"},
+"Leg of a Spider":{set:{name:"Spider Set（蜘蛛套裝）",tiers:[[2,"+2.5% 移動速度"],[3,"+0.025 攻擊速度"],[4,"+2.5% 閃避"],[5,"+0.25 攻擊傷害、+1% 爆擊率"]]},note:"套裝效果的名稱、數值、說明取自社群截圖（2026-10-30），法文名稱未知；wiki 原本寫成 Leg of Spider。圖示來自遊戲資源包（patte_araignee），與截圖一致。當時拍賣行最低價約 300 Col。"},
 "Spider Thread":{note:"圖示來自遊戲資源包（drop_fils_blanc），依外觀推斷對應，官方圖鑑沒有圖示。"},
 "Oak Log":{src:"伐木職業（Bûcheron）採集"},
 "Birch Log":{src:"伐木職業（Bûcheron）採集"},

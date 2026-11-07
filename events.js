@@ -56,8 +56,8 @@ window.SAO_EVENTS = {
         loot: [["Skeletal Sword", "Skeleton Warrior", 0.5], ["Bone Dust", "Skeleton Warrior", 70], ["Skeleton Bone", "Skeleton Warrior", 15], ["Soul of the Ruins", "Skeleton Warrior", 80]] },
   notes: ["活動期間（官方 Discord）：11/4 晚上 6 點巴黎時間（台灣 11/5 01:00）開放 Backrooms 和免費碎片；轉蛋、Echoes of Aincrad 戰鬥夥伴、裝備兌換、新怪物區和地下城在之後幾小時逐步開放；活動 11/15 結束。因伺服器停機兩天延後，補償：兌換碼 OVH2029（2,000 Triggiums）、Heroic Pass 延長 5 天、十月終極技能包延長 2 天。","Title: Pumpkin King（稱號）：戴著時 +15 生命、+3 防禦；使用後在稱號選單解鎖，已經有的不要再用（拍賣場提示，站長 2026-11-05 截圖）。",
           "活動廣場在起始之城的競技場（站長 11-07 截圖，站的位置 X 1800 · Z 4287）：Shard Keeper（右鍵領每日碎片）、Halloween Exchanger（Échangeur d'Halloween）、Halloween Blacksmith、Echoes of Aincrad 和 Sanctuary of Souls 的入口告示牌（右鍵進入地下城）都在這一帶。",
-          "Cursed Jewel（糖果）：30 分鐘內最大生命 +15、防禦 +5、魔法傷害 +5%；所有 Reapkin 糖果共用 60 秒冷卻。",
-          "Reapkin King's Lollipop（糖果）：30 分鐘內攻擊傷害 +8%、魔法傷害 +6%、最大生命 +15、速度 +0.03；所有 Reapkin 糖果共用 60 秒冷卻。道具分頁也查得到。",
+          "Cursed Jewel（糖果）：30 分鐘內 HP +15、防禦 +5、魔法傷害 +5%；所有 Reapkin 糖果共用 60 秒冷卻。",
+          "Reapkin King's Lollipop（糖果）：30 分鐘內攻擊傷害 +8%、魔法傷害 +6%、HP +15、速度 +0.03；所有 Reapkin 糖果共用 60 秒冷卻。道具分頁也查得到。",
           "Eternal Shadow：三種鑰匙碎片之一，說明寫「三個合起來在地下城告示牌鍛造鑰匙」。Spectral Crystal：萬聖節之夜迷失靈魂起舞的水晶（轉蛋貨幣）。"],
   soon: ["現有武器升級成第 2 層版本：公告寫「明天晚上」開放（法國時間 11/5 晚上），要先通關第 2 層才能用，NPC 會一直在，不用急。",
          "舊的萬聖節武器換成新武器：同樣是「明天晚上」開放。"]
@@ -66,7 +66,7 @@ window.SAO_EVENTS = {
   src: { title: "Halloween: the Sanctuary of Souls opens its doors", url: "https://saominecraft.com/news/halloween-le-sanctuaire-des-ames-ouvre-ses-portes", date: "2026-11-04" },
   items: {
    "1484": { en: "Corrupted Mask", set: { "Max Health": -20, "Skill Damage": 3, "Critical Strike Chance": 3, "Critical Strike Power": 3, "Skill Critical Strike Chance": 3, "Skill Critical Strike Power": 3, "Weapon Damage": 3 },
-             note: "公告寫的調整前數值是 5（最大生命 −50 相同），官網圖鑑是 10；調整後的數值以公告為準。" },
+             note: "公告寫的調整前數值是 5（HP −50 相同），官網圖鑑是 10；調整後的數值以公告為準。" },
    "1405": { en: "Necromancer's Mask", set: { "Max Health": 45, "Defense": 10 } },
    "1406": { en: "Lunar Dragon Mask", set: { "Max Health": 45, "Defense": 10, "Critical Strike Chance": 0, "Skill Critical Strike Power": 5 } },
    "1508": { en: "Simple Boots", set: { "Magic Damage": -15, "Physical Damage": -15, "Projectile Damage": -15 } },
