@@ -24,5 +24,7 @@ window.SAO_GAMEICONS = {
  "Elite Carapace": "icons/game/elite_carapace.png",
  "Ring of the Shark": "icons/game/ring_of_the_shark.png",
  "Glacial Essence": "icons/game/glacial_essence.png",
- "Elite Bracelet": "icons/game/elite_bracelet.png"   // 2026-11-07 auction tile (in14 00:48:07, k≈4.62)
+ "Elite Bracelet": "icons/game/elite_bracelet.png",   // 2026-11-07 auction tile (in14 00:48:07, k≈4.62)
+ "Cursed Jewel": "icons/game/cursed_jewel.png",   // auction tile in14 00:49:14, k≈4.64
+ "Copper Ore": "icons/game/copper_ore.png"   // Local Miner detail icon in15 03:46:21, k≈3.76
 };
