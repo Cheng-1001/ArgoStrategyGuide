@@ -9,7 +9,8 @@
    g = the slot the skill belongs to (user 2026-11-07「用圖示對照修改對應的技能」): in the old French skill window (01:51～02:27) every skill of a slot shows that
    slot's icon (all 3 passives the crosshair, Déluge Concentré / Céleste / Barrage Céleste the rain icon of skill 3, …), and the ACTIF bar holds slots 1-5 + ultimate.
    icons = the slot icons of the skills page after the Chinese localisation (11/7 15:35, 2560 px; skills 2 and 5 are 32 px pixel art rebuilt on their grid,
-   the others are cropped as drawn, 93 px -> 64 px). Combo Explosif (weapon skill) has no slot and no icon on that page.
+   the others are cropped as drawn, 93 px -> 64 px). Every skill of a slot gets the slot icon (user 2026-11-07「好幾個沒圖示」). Combo Explosif (weapon skill) has no slot; its own icon is only
+   in 02:27:35 with the right half under the tooltip, so it has none.
    The wiki's skill list for the archer (Tir Précis, Flèche Perforante…) does not appear in the game at all. */
 window.SAO_GAMESKILLS = {
  archer: {date: "2026-11-07", lv: 11,
