@@ -279,7 +279,7 @@ with sync_playwright() as p:
     pg.locator("#lRc .rcard", has_text="Quality Health Potion II").first.click(); pg.wait_for_timeout(300)
     pg.locator("#pBody [data-go^='n|']").first.click(); pg.wait_for_timeout(300)
     pg.locator("#pBody [data-rep]").first.click(); pg.wait_for_timeout(500)
-    check(pg.is_visible("#rwin") and "#recipes" in pg.url and pg.locator("#rwSvg g:not(.refm)").count() == 1 and "Alchemist" in pg.inner_text("#rwTitle"),
+    check(pg.is_visible("#rwin") and "#recipes" in pg.url and pg.locator("#rwSvg g:not(.refm)").count() == 1 and any(k in pg.inner_text("#rwTitle") for k in ("Alchemist", "煉金")),
           "recipe -> Alchemist -> 在地圖上查看 opens the floating map window with one point, the recipes tab stays")
     pg.click("#rwX"); pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#classes"); pg.wait_for_timeout(400)
