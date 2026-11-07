@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="0ed86457a0">
+<meta name="sao-build" content="d7d1455619">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -858,7 +858,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=cce8c307"></script>
+<script src="data.js?v=3a5b6146"></script>
 <script src="data23.js?v=7794cfbd"></script>
 <script src="bosses.js?v=77b7ad43"></script>
 <script src="reports.js?v=fa5827c8"></script>
@@ -870,16 +870,16 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=349916ca"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=52d37a89"></script>
+<script src="changelog.js?v=aabd93c9"></script>
 <script src="recipes.js?v=80f5c818"></script>
 <script src="jmmeta.js?v=58ae530b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=877782cc"></script>
-<script src="gameskills.js?v=020bca3e"></script>
+<script src="gameskills.js?v=b9ec2fce"></script>
 <script src="events.js?v=9477972d"></script>
 <script src="gamestats.js?v=553994fb"></script>
 <script src="sets.js?v=fbf69e31"></script>
-<script src="zhnames.js?v=dca4e1ad"></script>
+<script src="zhnames.js?v=b85207c6"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=2dbd05ca"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1970,15 +1970,15 @@ const IC_FB={health_regen:"health",mana_regen:"mana",healing:"health"};   // no 
 // 官網圖鑑把額外治療寫成 Heal Bonus／HEAL BONUS／HEAL_BONUS 三種，底線換成空白才對得到圖示（使用者 2026-11-06：有的有圖示有的沒有）
 const effIc=t=>{t=String(t).replace(/_/g," ");if(/,.*\bfor\s+\d+\s*(?:s|sec|min|h)\b/i.test(t))return"";const m=EFF_IC.find(([r])=>r.test(t));if(!m)return"";const k=STATIC[m[2]]?m[2]:(STATIC[IC_FB[m[2]]]?IC_FB[m[2]]:"");return k?`<img class="effic" src="${esc(STATIC[k])}" alt="" aria-hidden="true">`:`<span class="effic" aria-hidden="true">${m[1]}</span>`};
 // Chinese reading of the game's effect lines (user 2026-11-05: 效果說明也要中文); the original stays in the tooltip and in small grey text
-const EFF_LAB={"attack speed":"攻擊速度","health/s":"HP 恢復","mana/s":"魔力恢復","stamina/s":"耐力恢復","health":"生命","max health":"HP","attack damage":"攻擊傷害","crit chance":"爆擊率","critical chance":"爆擊率",
+const EFF_LAB={"attack speed":"攻擊速度","health/s":"HP 恢復","mana/s":"魔力恢復","stamina/s":"耐力恢復","health":"HP","max health":"HP","attack damage":"攻擊傷害","crit chance":"爆擊率","critical chance":"爆擊率",
   "critical power":"爆擊傷害","crit damage":"爆擊傷害","critical damage":"爆擊傷害","max mana":"最大魔力","mana":"魔力","stamina":"耐力","max stamina":"最大耐力","bonus healing":"額外治療","defense":"防禦","skill damage":"技能傷害",
   "skill crit chance":"技能爆擊率","skill critical chance":"技能爆擊率","skill critical damage":"技能爆擊傷害","magic damage":"魔法傷害","physical damage":"物理傷害","projectile damage":"投射物傷害","ability haste":"技能加速",
   "movement speed":"移動速度","speed":"速度","attack damage":"攻擊傷害","max health":"HP","dodge chance":"閃避率","cooldown reduction":"冷卻縮減","healing received":"受到的治療","damage reduction":"傷害減免","block chance":"格擋率","block power":"格擋威力",
-  "knockback resistance":"擊退抗性","mana regeneration":"魔力恢復","stamina regeneration":"耐力恢復","max endurance":"最大耐力","skill critical skills":"技能爆擊","food":"飽食度","weapon damage":"武器傷害","saturation":"飽和度","♥":"生命","❤":"生命"};
+  "knockback resistance":"擊退抗性","mana regeneration":"魔力恢復","stamina regeneration":"耐力恢復","max endurance":"最大耐力","skill critical skills":"技能爆擊","food":"飽食度","weapon damage":"武器傷害","saturation":"飽和度","♥":"HP","❤":"HP"};
 const durZh=t=>{const m=/^(\d+)\s*(s|sec|min|h)$/i.exec(t.trim());if(!m)return t;let n=+m[1],u=m[2].toLowerCase();if(u==="s"||u==="sec"){if(n>=3600&&n%3600===0)return n/3600+" 小時";if(n>=60&&n%60===0)return n/60+" 分鐘";return n+" 秒"}return n+(u==="min"?" 分鐘":" 小時")};
 const labZh=l=>EFF_LAB[l.trim().toLowerCase()]||l;
 const effZh=t=>{let m;t=String(t).trim();
-  if(m=/^Restores (\d+) HP, (\d+) mana and (\d+) stamina immediately\.?$/i.exec(t))return`立即回復 ${m[1]} 生命、${m[2]} 魔力、${m[3]} 耐力`;
+  if(m=/^Restores (\d+) HP, (\d+) mana and (\d+) stamina immediately\.?$/i.exec(t))return`立即回復 ${m[1]} HP、${m[2]} 魔力、${m[3]} 耐力`;
   if(m=/^Restor(?:es|e)\s*:?\s*([\d.]+)\s*(.+)$/i.exec(t)||/^Restaure\s*([\d.]+)\s*(.+)$/i.exec(t))return`回復 ${m[1]} ${labZh(m[2])}`;
   if(m=/^Cooldown\s*:\s*(\d+s)$/i.exec(t))return`冷卻 ${durZh(m[1])}`;
   if(m=/^Boosts your (.+?) by ([\d.]+%?(?:\/s)?) for (\d+\s*\w+)$/i.exec(t))return`${durZh(m[3])}內${labZh(m[1])} +${m[2].replace("/s","/秒")}`;
@@ -1995,7 +1995,7 @@ const effZh=t=>{let m;t=String(t).trim();
   if(m=/^Repair\s*:\s*(.+)$/i.exec(t))return`修理 ${m[1]}`;
   // stat phrases: "+0.05 Health/s, +0.05 Mana/s" / "+1 Health +1 Defense" / "-0.6/s Health"
   const parts=t.split(/,\s*|\s+(?=[+-]\d)/).map(x=>x.trim()).filter(Boolean);
-  const out=parts.map(x=>{let k;if(k=/^([+-][\d.]+%?)(\/s)?\s+(.+?)(\/s)?$/.exec(x)){const per=k[2]||k[4];const lab=labZh(k[3]+(k[4]?"/s":""));return per&&!k[4]?`每秒${lab} ${k[1]}`:`${lab} ${k[1]}${per?"/秒":""}`}return null});
+  const out=parts.map(x=>{let k;if(k=/^([+-][\d.]+%?)(\/s)?\s+(.+?)(\/s)?$/.exec(x)){const per=k[2]||k[4];const lab=labZh(k[3]+(k[4]?"/s":""));return per?`${labZh(k[3])}/秒 ${k[1]}`:`${lab} ${k[1]}`}return null});   // official: "+0.1 HP/秒"
   return out.every(Boolean)?out.join("、"):t};
 window.__effZh=t=>effZh(t);window.__effIc=t=>{const h=effIc(t);const m=/stats\/([a-z_]+)\.png/.exec(h);return m?m[1]:(h.replace(/<[^>]+>/g,"")||"-")};
 const effLine=x=>{const z=effZh(x);
@@ -2006,12 +2006,14 @@ const effLine=x=>{const z=effZh(x);
 const icK=(k,emo)=>STATIC[k]?`<img class="effic" src="${esc(STATIC[k])}" alt="" aria-hidden="true">`:emo?`<span class="effic" aria-hidden="true">${emo}</span>`:"";
 const SETS=window.SAO_SETS||{sets:[],potions:[]},SET_BY={},POT_BY={};
 SETS.sets.forEach(st=>st.members.forEach(m=>SET_BY[norm(m)]=st));SETS.potions.forEach(p=>POT_BY[norm(p.name)]=p);
+const SET_ZH=(window.SAO_ZHNAMES||{}).sets||{};
+const zhGo=g=>{if(!g)return"";const [t,i]=[g.slice(0,1),g.slice(2)];return t==="e"&&eqById[i]?zhE(eqById[i]):t==="p"&&prById[i]?zhE(prById[i]):t==="i"?zhI(i):""};
 const enGo=n=>{const k=norm(n);let e=EQ.find(x=>x.gen&&norm(x.gen)===k);if(e)return"e|"+e.oid;e=PR.find(x=>x.gen&&norm(x.gen)===k);if(e)return"p|"+e.oid;
   const it=Object.keys(ITEMS).find(x=>norm(x)===k);if(it)return"i|"+it;const ri=ALLREC.findIndex(r=>norm(r.en)===k);return ri>=0?"r|"+ri:null};
 const setPotHTML=(...names)=>{const ns=names.filter(Boolean).map(norm);const st=ns.map(n=>SET_BY[n]).find(Boolean),po=ns.map(n=>POT_BY[n]).find(Boolean);let h="";
   if(po)h+=`<h3 class="sec">遊戲寫的效果</h3><ul class="gieff">${po.effects.map(x=>`<li>${effLine(x)}</li>`).join("")}</ul>`;
-  if(st)h+=`<h3 class="sec">${icK("set")}套裝效果・${esc(st.name)}</h3><table class="settbl"><tbody>${st.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${effLine(e)}</td></tr>`).join("")}</tbody></table>
-    <div class="muted" style="font-size:12.5px;margin-top:4px">同一套：${st.members.map(m=>{const g=enGo(m);return g&&!ns.includes(norm(m))?`<button class="linkbtn" data-go="${esc(g)}">${esc(m)}</button>`:esc(m)}).join("、")}</div>`;
+  if(st)h+=`<h3 class="sec">${icK("set")}套裝效果・${esc(SET_ZH[st.name]||st.name)}${SET_ZH[st.name]?` <span class="muted" style="font-weight:400;text-transform:none;letter-spacing:0">${esc(st.name)}</span>`:""}</h3><table class="settbl"><tbody>${st.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${effLine(e)}</td></tr>`).join("")}</tbody></table>
+    <div class="muted" style="font-size:12.5px;margin-top:4px">同一套：${st.members.map(m=>{const g=enGo(m);return g&&!ns.includes(norm(m))?`<button class="linkbtn" data-go="${esc(g)}">${esc(zhGo(g)||m)}</button>`:esc(zhGo(g)||m)}).join("、")}</div>`;
   return h?h+`<div class="note srcn">套裝效果和藥水效果取自遊戲裡的物品提示（站長截圖 ${esc(SETS.date||"")}），原文照遊戲。</div>`:""};
 function propDetail(id){GI_NODESC=1;try{return propDetail0(id)}finally{GI_NODESC=0}}
 function propDetail0(id){const e=prById[id];const en=FR2ID[e.name];
