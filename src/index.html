@@ -192,7 +192,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .cwbody{flex:1;overflow:auto;padding:10px 14px 14px;display:flex;flex-direction:column;gap:8px}
 .cwbody .chips{margin-bottom:2px}.cwbody .grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
 /* classes: 3 columns, wide two-column panel */
-@media (min-width:821px){#view-classes.browse{grid-template-columns:minmax(0,1fr)}#view-classes .filters{display:none}#lCls{grid-template-columns:minmax(0,1fr);max-width:270px;gap:8px}#lCls .card{padding:10px 12px}#lCls .clx{display:none}body.panel-xwide #panel{width:var(--clsw,min(880px,calc(100vw - 40px)))}body.cls-one .cls2{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:821px){#view-classes.browse{grid-template-columns:minmax(0,1fr)}#view-classes .filters{display:none}#lCls{grid-template-columns:minmax(0,1fr);max-width:290px;gap:8px}#lCls .card{padding:10px 12px}body.panel-xwide #panel{width:var(--clsw,min(880px,calc(100vw - 40px)))}body.cls-one .cls2{grid-template-columns:minmax(0,1fr)}}
 @media (min-width:1800px){body.panel-open.panel-xwide:not([data-view="classes"]) .results{padding-right:900px}}
 @media (min-width:1180px) and (max-width:1799px){body.panel-open.panel-xwide .results{padding-right:0}}
 .cls2{display:grid;gap:4px 28px}@media (min-width:821px){.cls2{grid-template-columns:300px minmax(0,1fr)}}
@@ -530,6 +530,7 @@ button.jmpb{font-family:inherit;cursor:pointer}button.jmpb:hover,button.jmpb[ari
 .jmpopov ul{margin:0;padding-left:18px}.jmpopov .nw{white-space:nowrap}.jmpopov[hidden]{display:none}
 .jmsoon{position:relative;width:100%;max-width:340px;aspect-ratio:1;margin:2px auto;border-radius:8px;overflow:hidden;background:#070c11;display:flex;align-items:center;justify-content:center}
 .jmsoon img{width:100%;height:100%;object-fit:contain;filter:grayscale(.7) brightness(.55)}.jmsoonx{color:#9aa7b2;font-size:13px}.jmsoonn{font-size:12px}
+.imgzoom{position:fixed;inset:0;z-index:96;background:rgba(4,8,12,.9);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px}.imgzoom img{max-width:min(96vw,1600px);max-height:84vh;width:auto;height:auto;object-fit:contain;border-radius:6px;background:#070c11}.imgzoom span{color:#cfd8df;font-size:13px;text-align:center}.imgzoom .imx{position:absolute;top:12px;right:12px;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(0,0,0,.5);color:#fff;font-size:18px;cursor:pointer}.imgzoom .imnav{position:absolute;top:50%;transform:translateY(-50%);width:44px;height:64px;border:0;border-radius:8px;background:rgba(0,0,0,.45);color:#fff;font-size:34px;cursor:pointer}.imgzoom .imp{left:10px}.imgzoom .imn{right:10px}
 .jmzoom{position:fixed;inset:0;z-index:95;background:rgba(4,8,12,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:16px}
 .jmzoom img{max-width:min(96vw,1400px);max-height:88vh;width:auto;height:auto;min-width:min(90vw,512px);object-fit:contain;image-rendering:pixelated;background:#070c11;border-radius:6px}.jmzoom span{color:#cfd8df;font-size:12.5px}
 .jmk{display:inline-block;width:12px;height:12px;border-radius:3px;border:2px dashed rgba(127,127,127,.7);vertical-align:-2px;margin:0 2px 0 1px}.jmk.on{border:2px solid #e8a23a;background:rgba(232,162,58,.42)}
@@ -1123,7 +1124,7 @@ function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[
   openRouteWin(pts.length>1&&s!=null?`${title}・第 ${s+1} 點（共 ${pts.length} 點）${c(pts[s])}`:`${title}・${pts.map(c).join("、")}`,
     pts.map((p,i)=>[pts.length>1?`${i+1}. ${c(p)}`:c(p),p[0],p[1]]),f,true);if(s!=null&&pts.length>1)RW.sel=s+1}
 function goMapThen(f,fn){const ph=matchMedia("(max-width:820px)").matches;if(ph){closeP();const g=fn;fn=()=>{g();requestAnimationFrame(()=>stage.scrollIntoView({block:"start",behavior:"smooth"}))}}if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
-const nameOf=s=>s.type==="c"?(CLS.find(c=>c.id===s.id)||{name:"職業"}).name:s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:s.type==="d"?(EVT.dungeons.find(d=>d.id===s.id)||{n:"活動"}).n:townById[s.id].n;
+const nameOf=s=>s.type==="c"?(c=>c?cN(c):"職業")(CLS.find(c=>c.id===s.id)):s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:s.type==="d"?(EVT.dungeons.find(d=>d.id===s.id)||{n:"活動"}).n:townById[s.id].n;
 const detailHTML=(t,i)=>t==="c"?classDetail(i):t==="r"?recipeDetail(i):t==="n"?npcDetail(i):t==="q"?questDetail(i):t==="m"?monDetail(i):t==="i"?itemDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):t==="s"?spotDetail(i):t==="d"?evDgDetail(i):townDetail(i);
 // class panel (user 2026-11-07「調整一下版面」): on the classes tab the panel fills the space right of the class column; one inner column when that is narrow
 function fitClsPanel(){const b=document.body,L=$("lCls");if(!(b.classList.contains("panel-xwide")&&view==="classes"&&innerWidth>820&&L&&L.offsetParent)){b.style.removeProperty("--clsw");b.classList.remove("cls-one");return}
@@ -1598,6 +1599,7 @@ function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value
 const CLS=window.SAO_CLASSES||[];
 CLS.forEach(c=>{c.game=(window.SAO_GAMESKILLS||{})[c.id]||null;c.reps=(window.SAO_REPORTS||[]).filter(r=>r.type==="skill"&&norm(r.cls)===norm(c.name)).sort((a,b)=>(a.unlock||99)-(b.unlock||99))});
 const clsWeap=c=>Object.entries(Object.assign({},c.weapons,(n=>n?{catalyst:n}:{})(EQ.filter(e=>e.cat==="catalyst"&&eqClasses(e).includes(c.id)).length))).map(([k,n])=>`${EQ_CAT[k]||k}（${n}）`).join("、");
+const CLS_OFF=new Set(["guerrier","assassin","mage","shaman","archer"]);const cN=c=>CLS_OFF.has(c.id)?c.zh:c.name;const cSub=c=>(CLS_OFF.has(c.id)?c.name:c.zh)+"・"+c.role;
 const clsSoon=c=>!Object.keys(c.weapons).length&&!c.base.length;
 // ---- dungeons tab (preliminary, user 2026-11-02: only the dungeon names for now; floor-boss towers are left out) ----
 function renderDungeons(){const s=Sq();const a=spotsOf(FL).filter(x=>x.kind==="dungeon"&&!/樓層首領/.test(x.zh||"")&&(!s||norm([x.n,x.zh].join(" ")).includes(s)));
@@ -1622,7 +1624,7 @@ function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<di
   <div class="note srcn">資料來源：官方公告〈<a href="${esc(d.src.url)}" target="_blank" rel="noopener">${esc(d.src.title)}</a>〉（${esc(d.src.date)}），文字是本站改寫。</div>`}
 function renderClasses(){const s=Sq();const a=CLS.filter(c=>!s||norm([c.name,c.zh,c.role,...c.subs.map(x=>x[0]),...c.skills.map(x=>x[0]),...(c.game?c.game.list.map(x=>(x.fr||"")+" "+x.zh+" "+(x.en||"")):[])].join(" ")).includes(s));
   $("cCls").textContent=`${a.length} 個職業`;
-  $("lCls").innerHTML=a.map(c=>`<button class="card" data-go="c|${c.id}" data-key="c|${c.id}"><div class="chead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="cname"><b>${esc(c.name)}</b><span>${esc(c.zh)}・${esc(c.role)}</span></div></div>
+  $("lCls").innerHTML=a.map(c=>`<button class="card" data-go="c|${c.id}" data-key="c|${c.id}"><div class="chead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="cname"><b>${esc(cN(c))}</b><span>${esc(cSub(c))}</span></div></div>
     <div class="cmeta">${stars(c.diff)}${clsSoon(c)?'<span class="pill">可能尚未開放</span>':""}${c.game?`<span class="pill rep">遊戲技能 ${c.game.list.length}</span>`:""}${c.reps.length?`<span class="pill rep">技能回報 ${c.reps.length}</span>`:c.skillsSure||c.game?"":'<span class="pill">技能待確認</span>'}</div>
     <div class="muted clx" style="font-size:12.5px">${clsWeap(c)?"武器："+clsWeap(c):"官方圖鑑還沒有這個職業的裝備"}</div>
     <div class="muted clx" style="font-size:12.5px">Lv 30 專精：${c.subs.map(x=>esc(x[0])).join(" / ")}</div></button>`).join("")||`<div class="empty-note">沒有符合的職業。</div>`;
@@ -1631,13 +1633,13 @@ function classDetail(id){const c=CLS.find(x=>x.id===id);if(!c)return`<div class=
   const bar=n=>`<span class="stars">${"★".repeat(n)}<span class="off">${"★".repeat(5-n)}</span></span>`;
   const tbl=(rows,head)=>`<table class="settbl">${head?`<thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`:""}<tbody>${rows}</tbody></table>`;
   const stat=(arr,k)=>(arr.find(x=>x[0]===k)||[])[1];const keys=[...new Set([...c.base.map(x=>x[0]),...c.perLv.map(x=>x[0])])];
-  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="ttl"><div class="num">職業</div><h2>${esc(c.name)}</h2><div class="sub">${esc(c.zh)}・${esc(c.role)}</div></div></div>
+  return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">${c.ic}</span><div class="ttl"><div class="num">職業</div><h2>${esc(cN(c))}</h2><div class="sub">${esc(cSub(c))}</div></div></div>
+  <div class="cls2"><div>
   <p class="lore" style="font-style:normal">${esc(c.about)}</p>
   ${clsSoon(c)?`<div class="note warn">官方物品圖鑑沒有這個職業的裝備，參考互動地圖也沒有它的屬性資料，可能還沒開放。下面只有 wiki 的介紹。</div>`:""}
   <dl class="facts"><dt>難度</dt><dd>${stars(c.diff)}</dd><dt>可用武器</dt><dd>${clsWeap(c)||'<span class="muted">官方圖鑑沒有資料</span>'}</dd><dt>Lv 30 專精</dt><dd>${c.subs.map(x=>`<b>${esc(x[0])}</b>：${esc(x[1])}`).join("<br>")}<br><span class="muted" style="font-size:12px">wiki 註明專精還在準備中。</span></dd></dl>
   <div class="clsbtns">${Object.keys(c.weapons).length&&CLASS_ZH[c.id]?`<button class="btn" data-eqcls="${c.id}">可用的裝備（另開視窗）</button>`:""}
   <a class="btn" style="display:block;text-align:center;text-decoration:none;margin-top:6px" href="https://saominecraft.com/builds?class=${c.id==="martial"?"martial_artist":c.id}" target="_blank" rel="noopener">官網的玩家配裝 ↗</a></div>
-  <div class="cls2"><div>
   <h3 class="sec">能力傾向 <span class="c">wiki 星等</span></h3>${tbl(c.stars.map(([k,n])=>`<tr><th>${esc(k)}</th><td>${n?bar(n):'<span class="muted">—</span>'}</td></tr>`).join(""),null)}
   ${keys.length?`<h3 class="sec">起始屬性和成長 <span class="c">參考互動地圖</span></h3>${tbl(keys.map(k=>`<tr><th>${esc(k)}</th><td class="mono">${esc(stat(c.base,k)??"—")}</td><td class="mono">${stat(c.perLv,k)!=null?"+"+esc(stat(c.perLv,k)):"—"}</td></tr>`).join(""),["屬性","Lv 1","每升 1 級"])}`:""}
   </div><div>
@@ -1765,7 +1767,7 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
     :`<dt>NPC</dt><dd>${esc(qNpcFull(qq.npc))}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?pN(t):"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq,true)}</dd>`;
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">📜</span><div class="ttl"><div class="num">${flBadge(f)} ${Q.main?mqLabel(qq):"支線"}</div><h2>${esc(Q.title)}</h2>${(s=>s?`<div class="sub">${esc(s)}</div>`:"")([Q.main&&Q.title!==qq.t?qq.t:Q.en||"",Z.reg?"任務日誌："+Z.reg:"",!Q.main&&qq.src==="ref"?"目前版本的支線（參考互動地圖）":""].filter(Boolean).join("・"))}</div></div>
   <dl class="facts">${facts}</dl>${Z.d||(Q.main&&qq.d)?`<p class="lore" style="font-style:normal">${esc(Z.d||qq.d)}</p>`:""}${Q.main&&qq.tip?`<div class="note">💡 ${esc(qq.tip)}</div>`:""}
-  <h3 class="sec">步驟</h3><ol class="mqs">${Q.steps.map((x,k)=>`<li>${esc(x[0])}${x[1]!=null&&FLOORS[f].map?`<button class="linkbtn" data-rep="${f}|${x[1]}|${x[2]}">${x[3]?"約 ":""}X ${x[1]} · Z ${x[2]}</button>`:""}${Q.main&&Z.obj&&Z.obj[k]?`<span class="sten">遊戲：${esc(Z.obj[k])}${qq.en&&qq.en[k]?"（"+esc(qq.en[k])+"）":""}</span>`:Q.main&&qq.en&&qq.en[k]?`<span class="sten">遊戲原文：${esc(qq.en[k])}</span>`:""}${Q.main&&qq.img&&qq.img[k]?`<span class="stimg">${qq.img[k].map(([u,c])=>`<a href="${esc(u)}" target="_blank" rel="noopener" title="${esc(c)}（點了看大圖）"><img src="${esc(u)}" alt="${esc(c)}" loading="lazy"></a>`).join("")}</span>`:""}</li>`).join("")}</ol>
+  <h3 class="sec">步驟</h3><ol class="mqs">${Q.steps.map((x,k)=>`<li>${esc(x[0])}${x[1]!=null&&FLOORS[f].map?`<button class="linkbtn" data-rep="${f}|${x[1]}|${x[2]}">${x[3]?"約 ":""}X ${x[1]} · Z ${x[2]}</button>`:""}${Q.main&&Z.obj&&Z.obj[k]?`<span class="sten">遊戲：${esc(Z.obj[k])}${qq.en&&qq.en[k]?"（"+esc(qq.en[k])+"）":""}</span>`:Q.main&&qq.en&&qq.en[k]?`<span class="sten">遊戲原文：${esc(qq.en[k])}</span>`:""}${Q.main&&qq.img&&qq.img[k]?`<span class="stimg">${qq.img[k].map(([u,c])=>`<a href="${esc(u)}" data-imgzoom="${esc(c)}" title="${esc(c)}（點了看大圖）"><img src="${esc(u)}" alt="${esc(c)}" loading="lazy"></a>`).join("")}</span>`:""}</li>`).join("")}</ol>
 
   ${!Q.main&&(qq.need.length||qq.kill)?`<h3 class="sec">需要的物品和目標</h3><div class="reqs">${reqChips(qq)}</div>`:""}
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
@@ -2475,6 +2477,15 @@ async function jmDgPreview(d){const tk=++JMPV;
   P.innerHTML=`<span class="jmpvimg"></span><span>${r.n} 次進場合在一起・${r.lab}（圖最多的那一層）<br><span class="muted">${JMSEL.dgOff.has(d)?"目前：不上傳":"目前：會上傳"}</span></span>`;
   r.cv.title="點了放大";r.cv.dataset.jmzoom="dg:"+d;P.querySelector(".jmpvimg").appendChild(r.cv)}
 // click a preview to see it as large as the window allows (Esc / click closes)
+// quest step pictures open in a viewer on the page, not in a new tab (user 2026-11-07); ←/→ between pictures of the same quest, Esc / ✕ / backdrop closes
+document.addEventListener("click",ev=>{const a=ev.target.closest&&ev.target.closest("a[data-imgzoom]");if(!a)return;ev.preventDefault();ev.stopPropagation();
+  const all=[...a.closest(".mqs,#pBody,.gvbody,body").querySelectorAll("a[data-imgzoom]")];let i=all.indexOf(a);
+  const z=document.createElement("div");z.className="imgzoom";z.setAttribute("role","dialog");z.setAttribute("aria-label","圖片");
+  const show=()=>{const b=all[i];z.innerHTML=`<button class="imx" aria-label="關閉">✕</button>${all.length>1?`<button class="imnav imp" aria-label="上一張">‹</button><button class="imnav imn" aria-label="下一張">›</button>`:""}<img src="${esc(b.getAttribute("href"))}" alt="${esc(b.dataset.imgzoom)}"><span>${esc(b.dataset.imgzoom)}${all.length>1?`（${i+1}／${all.length}）`:""}</span>`};
+  const close=()=>{z.remove();document.removeEventListener("keydown",key,true)};
+  const key=e=>{if(e.key==="Escape"){e.preventDefault();e.stopImmediatePropagation();close()}else if(all.length>1&&(e.key==="ArrowRight"||e.key==="ArrowLeft")){e.preventDefault();i=(i+(e.key==="ArrowRight"?1:all.length-1))%all.length;show()}};
+  z.addEventListener("click",e=>{if(e.target.closest(".imnav")){i=(i+(e.target.closest(".imn")?1:all.length-1))%all.length;show();return}if(e.target.tagName!=="IMG")close()});
+  document.addEventListener("keydown",key,true);show();document.body.appendChild(z)},true);
 document.addEventListener("click",ev=>{const t=ev.target.closest&&ev.target.closest("[data-jmzoom]");if(!t)return;
   const z=document.createElement("div");z.className="jmzoom";z.setAttribute("role","dialog");z.setAttribute("aria-label","放大的地圖");
   document.body.appendChild(z);
