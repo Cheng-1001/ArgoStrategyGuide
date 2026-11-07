@@ -440,11 +440,11 @@ with sync_playwright() as p:
         pg.click("#pClose"); pg.wait_for_timeout(200)
     pg.locator("#zlist .npcrow", has_text="Bandit Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")
-    check("可以製作\n5" in t and "Bandit Coin" in t and "Stolen Cloak" in t and "Small Purse ×24" in t, "Bandit Accessories lists its 5 recipes (4 from screenshots, 1 from the reference map)")
+    check("可以製作\n5" in t and "Bandit Coin" in t and "Stolen Cloak" in t and "小錢袋 ×24" in t, "Bandit Accessories lists its 5 recipes (4 from screenshots, 1 from the reference map)")
     pg.click("#pClose"); pg.wait_for_timeout(200)
     pg.locator("#zlist .npcrow", has_text="Shark Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")
-    check("Shark Fang" in t and "Wolf Fangs ×8" in t and "33 珂爾" in t, "Shark Accessories lists its recipes with cost")
+    check("Shark Fang" in t and "狼牙 ×8" in t and "33 珂爾" in t, "Shark Accessories lists its recipes with cost")
     off = pg.evaluate("""(()=>{const b=document.querySelector('.town.gather[data-s="farm"] .pin').getBoundingClientRect();
       const w=document.getElementById('world').getBoundingClientRect();const k=w.width/1000;
       const x=w.left+(2351-70)/4980*1000*k, y=w.top+(3662-70)/4980*1000*k;return Math.hypot(b.left+b.width/2-x,b.top+b.height/2-y)})()""")
