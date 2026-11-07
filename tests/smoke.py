@@ -326,7 +326,7 @@ with sync_playwright() as p:
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
     vt = pg.evaluate("""(()=>{const F=document.querySelector('#view-monsters .filters');const n=F.firstElementChild;
       return {cls:n.className,cur:n.querySelector('a[aria-current=page]')?.dataset.v,links:n.querySelectorAll('a').length,}})()""")
-    check(vt["cls"] == "vtabs" and vt["cur"] == "monsters" and vt["links"] == 4 and pg.is_hidden("#codexTabs"),
+    check(vt["cls"] == "vtabs" and vt["cur"] == "monsters" and vt["links"] == 5 and pg.is_hidden("#codexTabs"),
           f"desktop: codex sub-tabs sit at the top of the left filter column ({vt})")
     pg.click('#view-monsters .vtabs a[data-v="equip"]'); pg.wait_for_timeout(300)
     check(pg.evaluate("location.hash").endswith("equip") and pg.locator('#view-equip .vtabs a[aria-current="page"][data-v="equip"]').count() == 1,
@@ -354,8 +354,24 @@ with sync_playwright() as p:
     pg.goto(base + "#items"); pg.wait_for_timeout(400)
     tabs = pg.evaluate("[...document.querySelectorAll('#view-items .vtabs a')].map(a=>a.textContent.replace(/\\s*\\d+$/,'').trim())")
     names = pg.evaluate("[...document.querySelectorAll('#lItem .card')].map((c=>{const b=c.querySelector('.cname b').textContent,sp=(c.querySelector('.cname span')||{}).textContent||'';return /[\\u4e00-\\u9fff]/.test(b)?sp.split('・')[0]:b}))")
-    check(tabs == ["怪物", "裝備", "道具", "素材"] and "Allium Flower" in names and "Sylvan Bow" not in names and "Boar Meat" not in names,
+    check(tabs == ["怪物", "裝備", "道具", "素材", "NPC"] and "Allium Flower" in names and "Sylvan Bow" not in names and "Boar Meat" not in names,
           f"codex tabs 怪物／裝備／道具／素材; 素材 holds materials, not equipment or food ({tabs})")
+    # 素材 has a 怪物掉落物 group (user 2026-11-07)
+    pg.click("#fItemGroup .chip[data-v='怪物掉落物']"); pg.wait_for_timeout(200)
+    check(pg.locator("#lItem .card").count() > 20 and "Wolf Fangs" in pg.inner_text("#lItem") or "狼牙" in pg.inner_text("#lItem"), "素材: the 怪物掉落物 group lists monster drops")
+    pg.click("#fItemGroup .chip[data-v='all']"); pg.wait_for_timeout(100)
+    # 圖鑑・NPC: grouped by area, area filter, loot buyers list what they buy back (user 2026-11-07)
+    pg.goto(base + "#npcs"); pg.wait_for_timeout(500)
+    hs = pg.eval_on_selector_all("#lNpc .npcgh", "h=>h.map(x=>x.textContent)")
+    opts = pg.eval_on_selector_all("#fNpcArea option", "o=>o.map(x=>x.value)")
+    check(len(hs) >= 5 and pg.locator("#lNpc .card").count() > 50 and len(opts) >= 6, f"NPC tab: cards grouped by area with an area filter ({hs[:3]}, {len(opts)} options)")
+    pg.select_option("#fNpcArea", opts[1]); pg.wait_for_timeout(200)
+    check(pg.locator("#lNpc .npcgh").count() == 1, "picking an area leaves only that area")
+    pg.select_option("#fNpcArea", "all"); pg.wait_for_timeout(100)
+    pg.locator("#lNpc .card", has_text="Hanaka - Loot Buyer").first.click(); pg.wait_for_timeout(300)
+    bt = pg.inner_text("#pBody")
+    check("回收物品" in bt and "收購價 15 珂爾" in bt and "先祖之根" in bt, "a loot buyer's panel lists what it buys back with the price")
+    pg.click("#pClose"); pg.wait_for_timeout(100)
     # game-only equipment (not in the official catalogue): the Elite Treant set comes from the owner's tooltips + recipe windows (user 2026-11-06)
     pg.goto(base + "#equip"); pg.wait_for_timeout(400); pg.click('#fEqPart .chip[data-v="all"]'); pg.wait_for_timeout(200)
     pg.fill("#q", "Elite"); pg.wait_for_timeout(400)
