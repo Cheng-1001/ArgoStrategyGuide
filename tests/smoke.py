@@ -152,7 +152,10 @@ with sync_playwright() as p:
     pg.click("#aboutBtn"); pg.wait_for_timeout(150)
     check(pg.is_visible("#aboutMenu") and pg.inner_text("#aboutMenu").split() == ["介紹及資訊", "更新紀錄", "網頁導覽"], "關於本站 opens a menu: 介紹及資訊, 更新紀錄, 網頁導覽")
     pg.click("#logBtn"); pg.wait_for_timeout(300)
-    check(pg.is_hidden("#aboutMenu") and pg.url.endswith("#changelog") and pg.is_visible("#changelog") and pg.locator('#aboutBtn[aria-current="page"]').count() == 1, "更新紀錄 in the menu opens the changelog page")
+    check(pg.is_hidden("#aboutMenu") and pg.url.endswith("#changelog") and pg.is_visible("#clCard") and pg.locator('#aboutBtn[aria-current="page"]').count() == 1, "更新紀錄 in the menu opens the changelog page")
+    cl = lambda: pg.evaluate("[document.querySelectorAll('#clCard .clsum li').length, document.querySelector('[data-clm=\"sum\"]').getAttribute('aria-pressed'), document.querySelector('#clWrap .rhead').getBoundingClientRect().top >= 0]")
+    cl1 = cl(); pg.click('[data-clm="full"]'); pg.wait_for_timeout(200); cl2 = cl(); pg.click('[data-clm="sum"]'); pg.wait_for_timeout(200); cl3 = cl()
+    check(cl1[0] > 10 and cl1[1] == "true" and cl1[2] and cl2[0] == 0 and cl2[1] == "false" and cl3 == cl1, f"更新紀錄: 摘要 = hand-written highlights per day, 詳細 shows every entry, heading on screen ({cl1} {cl2} {cl3})")
     pg.click("#aboutBtn"); pg.wait_for_timeout(150); pg.mouse.click(400, 600); pg.wait_for_timeout(150)
     check(pg.is_hidden("#aboutMenu"), "the menu closes when clicking elsewhere")
     check(pg.locator("#tour").count() == 0, "the tour does not start by itself in automated browsers")
@@ -279,7 +282,7 @@ with sync_playwright() as p:
     pg.locator("#lRc .rcard", has_text="Quality Health Potion II").first.click(); pg.wait_for_timeout(300)
     pg.locator("#pBody [data-go^='n|']").first.click(); pg.wait_for_timeout(300)
     pg.locator("#pBody [data-rep]").first.click(); pg.wait_for_timeout(500)
-    check(pg.is_visible("#rwin") and "#recipes" in pg.url and pg.locator("#rwSvg g:not(.refm)").count() == 1 and "Alchemist" in pg.inner_text("#rwTitle"),
+    check(pg.is_visible("#rwin") and "#recipes" in pg.url and pg.locator("#rwSvg g:not(.refm)").count() == 1 and any(k in pg.inner_text("#rwTitle") for k in ("Alchemist", "煉金")),
           "recipe -> Alchemist -> 在地圖上查看 opens the floating map window with one point, the recipes tab stays")
     pg.click("#rwX"); pg.click("#pClose"); pg.wait_for_timeout(150)
     pg.goto(base + "#classes"); pg.wait_for_timeout(400)
@@ -326,7 +329,7 @@ with sync_playwright() as p:
     pg.goto(base + "#monsters"); pg.wait_for_timeout(400)
     vt = pg.evaluate("""(()=>{const F=document.querySelector('#view-monsters .filters');const n=F.firstElementChild;
       return {cls:n.className,cur:n.querySelector('a[aria-current=page]')?.dataset.v,links:n.querySelectorAll('a').length,}})()""")
-    check(vt["cls"] == "vtabs" and vt["cur"] == "monsters" and vt["links"] == 4 and pg.is_hidden("#codexTabs"),
+    check(vt["cls"] == "vtabs" and vt["cur"] == "monsters" and vt["links"] == 5 and pg.is_hidden("#codexTabs"),
           f"desktop: codex sub-tabs sit at the top of the left filter column ({vt})")
     pg.click('#view-monsters .vtabs a[data-v="equip"]'); pg.wait_for_timeout(300)
     check(pg.evaluate("location.hash").endswith("equip") and pg.locator('#view-equip .vtabs a[aria-current="page"][data-v="equip"]').count() == 1,
@@ -354,8 +357,24 @@ with sync_playwright() as p:
     pg.goto(base + "#items"); pg.wait_for_timeout(400)
     tabs = pg.evaluate("[...document.querySelectorAll('#view-items .vtabs a')].map(a=>a.textContent.replace(/\\s*\\d+$/,'').trim())")
     names = pg.evaluate("[...document.querySelectorAll('#lItem .card')].map((c=>{const b=c.querySelector('.cname b').textContent,sp=(c.querySelector('.cname span')||{}).textContent||'';return /[\\u4e00-\\u9fff]/.test(b)?sp.split('・')[0]:b}))")
-    check(tabs == ["怪物", "裝備", "道具", "素材"] and "Allium Flower" in names and "Sylvan Bow" not in names and "Boar Meat" not in names,
+    check(tabs == ["怪物", "裝備", "道具", "素材", "NPC"] and "Allium Flower" in names and "Sylvan Bow" not in names and "Boar Meat" not in names,
           f"codex tabs 怪物／裝備／道具／素材; 素材 holds materials, not equipment or food ({tabs})")
+    # 素材 has a 怪物掉落物 group (user 2026-11-07)
+    pg.click("#fItemGroup .chip[data-v='怪物掉落物']"); pg.wait_for_timeout(200)
+    check(pg.locator("#lItem .card").count() > 20 and "Wolf Fangs" in pg.inner_text("#lItem") or "狼牙" in pg.inner_text("#lItem"), "素材: the 怪物掉落物 group lists monster drops")
+    pg.click("#fItemGroup .chip[data-v='all']"); pg.wait_for_timeout(100)
+    # 圖鑑・NPC: grouped by area, area filter, loot buyers list what they buy back (user 2026-11-07)
+    pg.goto(base + "#npcs"); pg.wait_for_timeout(500)
+    hs = pg.eval_on_selector_all("#lNpc .npcgh", "h=>h.map(x=>x.textContent)")
+    opts = pg.eval_on_selector_all("#fNpcArea option", "o=>o.map(x=>x.value)")
+    check(len(hs) >= 5 and pg.locator("#lNpc .card").count() > 50 and len(opts) >= 6, f"NPC tab: cards grouped by area with an area filter ({hs[:3]}, {len(opts)} options)")
+    pg.select_option("#fNpcArea", opts[1]); pg.wait_for_timeout(200)
+    check(pg.locator("#lNpc .npcgh").count() == 1, "picking an area leaves only that area")
+    pg.select_option("#fNpcArea", "all"); pg.wait_for_timeout(100)
+    pg.locator("#lNpc .card", has_text="Hanaka - Loot Buyer").first.click(); pg.wait_for_timeout(300)
+    bt = pg.inner_text("#pBody")
+    check("回收物品" in bt and "收購價 15 珂爾" in bt and "先祖之根" in bt, "a loot buyer's panel lists what it buys back with the price")
+    pg.click("#pClose"); pg.wait_for_timeout(100)
     # game-only equipment (not in the official catalogue): the Elite Treant set comes from the owner's tooltips + recipe windows (user 2026-11-06)
     pg.goto(base + "#equip"); pg.wait_for_timeout(400); pg.click('#fEqPart .chip[data-v="all"]'); pg.wait_for_timeout(200)
     pg.fill("#q", "Elite"); pg.wait_for_timeout(400)
@@ -424,11 +443,11 @@ with sync_playwright() as p:
         pg.click("#pClose"); pg.wait_for_timeout(200)
     pg.locator("#zlist .npcrow", has_text="Bandit Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")
-    check("可以製作\n5" in t and "Bandit Coin" in t and "Stolen Cloak" in t and "Small Purse ×24" in t, "Bandit Accessories lists its 5 recipes (4 from screenshots, 1 from the reference map)")
+    check("可以製作\n5" in t and "Bandit Coin" in t and "Stolen Cloak" in t and "小錢袋 ×24" in t, "Bandit Accessories lists its 5 recipes (4 from screenshots, 1 from the reference map)")
     pg.click("#pClose"); pg.wait_for_timeout(200)
     pg.locator("#zlist .npcrow", has_text="Shark Accessories").locator(".zn").click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")
-    check("Shark Fang" in t and "Wolf Fangs ×8" in t and "33 珂爾" in t, "Shark Accessories lists its recipes with cost")
+    check("Shark Fang" in t and "狼牙 ×8" in t and "33 珂爾" in t, "Shark Accessories lists its recipes with cost")
     off = pg.evaluate("""(()=>{const b=document.querySelector('.town.gather[data-s="farm"] .pin').getBoundingClientRect();
       const w=document.getElementById('world').getBoundingClientRect();const k=w.width/1000;
       const x=w.left+(2351-70)/4980*1000*k, y=w.top+(3662-70)/4980*1000*k;return Math.hypot(b.left+b.width/2-x,b.top+b.height/2-y)})()""")

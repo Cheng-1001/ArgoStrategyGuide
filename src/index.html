@@ -167,7 +167,9 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .qcard{gap:6px}.qcard .qd{margin:0;font-size:13px;color:var(--muted);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .qside{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center}.qside .qobj{grid-column:1;font-size:13px;overflow-wrap:anywhere}.qside .reward{grid-column:2;grid-row:1/span 2;text-align:right}
 .qmap{flex:none;width:80%;align-self:center;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:#0d1218}.qmap svg{display:block;width:100%;height:auto;aspect-ratio:1}.qmap g.hl rect{fill:#e5484d}.qmap g.hl text{fill:#fff}.mqs .linkbtn.on{color:#e5484d;font-weight:700}
-.clday{margin:10px 0 14px}.clday .cld{font-family:var(--f-display);font-size:15px}.cll{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}.clold summary{cursor:pointer;color:var(--muted);padding:4px 0}
+#clCard,.cloldl{display:flex;flex-direction:column;gap:12px}.cloldl{margin-top:12px}.clday{margin:0;gap:4px}#view-changelog{scrollbar-gutter:stable}.clwait{margin:6px 0 2px;color:var(--muted)}.clhd{display:flex;align-items:baseline;gap:8px}.clhd .cln{margin-left:0}.clold>summary{cursor:pointer;padding:4px 2px}.clday .cld{font-family:var(--f-display);font-size:15px}.cll{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}
+.clmode{flex:0 0 auto;margin-left:auto;align-self:center}.cln{font-size:12px;color:var(--muted);margin-left:8px}
+.cll.clsum{gap:6px}.cll.clsum b{color:var(--accent)}
 .mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}.note.srcend{margin-top:14px}.gieff{margin:4px 0 0 0;padding:0;list-style:none}.gieff li{margin:3px 0}.effen{color:var(--muted);font-size:11.5px;display:inline-block}.lore.lorefr{font-size:12px;color:var(--muted);margin-top:-4px}.effic{display:inline-block;width:1.4em;text-align:center;margin-right:2px;font-size:.95em}img.effic{width:1.15em;height:1.15em;vertical-align:-.18em;image-rendering:pixelated;object-fit:contain;filter:drop-shadow(.072em .072em 0 rgba(0,0,0,.72))}
 @media (max-width:820px){.mgo{display:inline}}
 @media (max-width:820px){.mbonly{display:block}.pconly,.rwhead .muted{display:none!important}.qmap{width:100%}[data-route],[data-imap]{display:none!important}}
@@ -279,6 +281,8 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .zone.shop{z-index:2} .zone.shop .zlabel{padding:0;width:27px;height:27px;border-radius:50%;justify-content:center;font-size:15px;letter-spacing:0;background:rgba(255,248,225,.92);border-color:rgba(120,90,20,.55)}
 .zsec{font-family:var(--f-display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:14px 0 2px}
 .zsec[hidden]{display:none}
+.npcgh{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;margin:14px 0 2px;font-weight:600;font-size:15px}.npcgh:first-child{margin-top:0}.npcgh .c{font-weight:400;font-size:12.5px;color:var(--muted)}
+.bbl .v{white-space:nowrap}
 .zone .more{display:none;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:999px;background:rgba(10,16,22,.82);color:#fff;font-family:var(--f-mono);font-size:11px;align-self:center;pointer-events:none}
 .world.compact .zone .thumbs .mapth:nth-child(n+2){display:none}
 .world.compact .zone .more{display:inline-grid}
@@ -300,8 +304,14 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .world .tiles img.l0{z-index:0}.world .tiles img.mid{z-index:1}.world .tiles img.hi{z-index:2}
 .legend select.lsel{appearance:auto;padding:2px 6px;max-width:170px}.legend select#dgSel{max-width:240px}
 .stage.dgmode .fpanel,.stage.dgmode #filterBtn,.stage.dgmode #fpFly{display:none!important}
+.dgsplit,.dgsplit>div{display:flex;flex-direction:column;gap:14px;min-width:0}
+@media (min-width:1180px){body.cls-inline[data-view="dungeons"] #pBody>.dgsplit{max-width:none;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,1fr);grid-template-areas:"a m" "b m";grid-template-rows:auto 1fr;gap:14px 28px;align-items:start}body.cls-inline[data-view="dungeons"] .dgsplit>.dga{grid-area:a}body.cls-inline[data-view="dungeons"] .dgsplit>.dgb{grid-area:b}body.cls-inline[data-view="dungeons"] .dgsplit>.dgm{grid-area:m;position:sticky;top:0}body.cls-inline[data-view="dungeons"] .dgm .dgmap{margin-top:0}body.cls-inline[data-view="dungeons"] .dgm{container-type:inline-size}body.cls-inline[data-view="dungeons"] .dgm .dgov{width:fit-content;max-width:100%}body.cls-inline[data-view="dungeons"] .dgm .dgov img{width:min(100cqw,calc((100vh - 290px) * var(--ar,10)));max-width:none;height:auto}}
+.dgtiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px}.dgt{background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:8px 10px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.dgt>span{font-size:12px;color:var(--muted)}.dgt>b{font-size:17px;line-height:1.3}.dgt small{display:block;font-size:11.5px;font-weight:400;color:var(--muted)}
+.dgcap{font-size:12.5px;margin-top:-6px}.dgboss{margin:0;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}.dgboss b{font-size:16px}
+.lrow.nolink{cursor:default}.evboss,.evchest{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}.evboss .muted{margin-left:8px}.dgsub{font-size:12.5px;color:var(--muted);margin-bottom:-8px}.dgli{display:inline-block;width:32px;height:32px}
 .dgmap{margin:4px 0 10px}.dgmap .dgov{display:block;padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#070c11;cursor:zoom-in;width:100%}
-.dgmap .dgov img{display:block;width:100%;height:auto;image-rendering:pixelated}.dgmap figcaption{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:12.5px;margin-top:4px}
+.dgmap .dgov img{display:block;width:min(100%,calc(75vh * var(--ar,10)));height:auto;margin:0 auto;image-rendering:pixelated}.dgmap figcaption{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:12.5px;margin-top:4px}
 .legend .lgt{background:none;border:1px solid rgba(255,255,255,.28);color:inherit;border-radius:999px;padding:1px 8px 1px 6px;cursor:pointer;font-size:11.5px}
 .legend .lgt:hover{border-color:#fff}
 @media (min-width:821px){.legend{left:220px;top:12px;padding:0;background:none}}
@@ -693,6 +703,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
     <a href="#equip" data-v="equip">裝備 <span class="n" id="nEquip"></span></a>
     <a href="#props" data-v="props">道具 <span class="n" id="nProp"></span></a>
     <a href="#items" data-v="items">素材 <span class="n" id="nItem"></span></a>
+    <a href="#npcs" data-v="npcs">NPC <span class="n" id="nNpc"></span></a>
   </nav>
 
   <!-- MAP -->
@@ -760,6 +771,15 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="note">怪物掉的材料和採集物（作物、礦物、木材、漁獲），列出掉落率、採集點和任務需求。預設列出全部（含官網的漁獲、礦物等，本站還沒有取得地點的也列）；勾「只看這一層有取得資料的」只留這一層有掉落、採集點或任務的。怪物掉的裝備、食物、藥水在「裝備」「道具」。</div>
     </div>
     <div class="results"><div class="rhead"><h2>素材</h2><span class="count" id="cItem"></span></div><div class="grid" id="lItem"></div></div>
+  </section>
+
+  <section class="view browse" id="view-npcs" hidden>
+    <div class="filters">
+      <div class="fgroup"><span class="flabel">類型</span><div class="chips" id="fNpcGrp"></div></div>
+      <div class="fgroup"><span class="flabel">區域</span><select class="sel" id="fNpcArea" aria-label="區域"></select></div>
+      <div class="note">這一層的 NPC，依所在區域分組（離最近的城鎮、傳送點或地標 400 格以內；更遠的列在「野外」）。點了看位置、可以製作／販售的東西；收購商另外列出<b>會回收的物品和收購價</b>（取自遊戲物品說明裡的「Bought back by…」「由…回收」，只列出看過的，不是完整清單）。</div>
+    </div>
+    <div class="results"><div class="rhead"><h2>NPC</h2><span class="count" id="cNpc"></span></div><div class="grid" id="lNpc"></div></div>
   </section>
 
   <!-- QUESTS -->
@@ -861,7 +881,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="mainq.js"></script>
 <script src="equip.js"></script>
 <script src="props.js"></script>
-<script src="gameinfo.js"></script>
+<script src="gameinfo.js"></script><script src="buyback.js"></script>
 <script src="npcs.js"></script>
 <script src="changelog.js"></script>
 <script src="recipes.js"></script>
@@ -1129,7 +1149,7 @@ function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[
   openRouteWin(pts.length>1&&s!=null?`${title}・第 ${s+1} 點（共 ${pts.length} 點）${c(pts[s])}`:`${title}・${pts.map(c).join("、")}`,
     pts.map((p,i)=>[pts.length>1?`${i+1}. ${c(p)}`:c(p),p[0],p[1]]),f,true);if(s!=null&&pts.length>1)RW.sel=s+1}
 function goMapThen(f,fn){const ph=matchMedia("(max-width:820px)").matches;if(ph){closeP();const g=fn;fn=()=>{g();requestAnimationFrame(()=>stage.scrollIntoView({block:"start",behavior:"smooth"}))}}if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
-const nameOf=s=>s.type==="c"?(c=>c?cN(c):"職業")(CLS.find(c=>c.id===s.id)):s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?(npcById(s.id)||{n:"NPC"}).n:s.type==="q"?(questById(s.id)||{title:"任務"}).title:s.type==="m"?monById[s.id].name:s.type==="i"?s.id:s.type==="e"?eqById[s.id].name:s.type==="p"?prById[s.id].name:s.type==="s"?(spotById(s.id)||{n:"?"}).n:s.type==="d"?(EVT.dungeons.find(d=>d.id===s.id)||{n:"活動"}).n:townById[s.id].n;
+const nameOf=s=>s.type==="c"?(c=>c?cN(c):"職業")(CLS.find(c=>c.id===s.id)):s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?npcN((npcById(s.id)||{n:"NPC"}).n):s.type==="q"?(Q=>Q?((qZ(Q)||{}).zh||Q.title):"任務")(questById(s.id)):s.type==="m"?mN(monById[s.id]):s.type==="i"?(zhI(s.id)||s.id):s.type==="e"?dn(eqById[s.id]):s.type==="p"?dn(prById[s.id]):s.type==="s"?(spotById(s.id)||{n:"?"}).n:s.type==="d"?(EVT.dungeons.find(d=>d.id===s.id)||{n:"活動"}).n:townById[s.id].n;
 const detailHTML=(t,i)=>t==="c"?classDetail(i):t==="r"?recipeDetail(i):t==="n"?npcDetail(i):t==="q"?questDetail(i):t==="m"?monDetail(i):t==="i"?itemDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):t==="s"?spotDetail(i):t==="d"?evDgDetail(i):townDetail(i);
 // class panel (user 2026-11-07「調整一下版面」): on the classes tab the panel fills the space right of the class column; one inner column when that is narrow
 // desktop (user 2026-11-07「右邊沒必要再開一個視窗」): on the classes tab the class panel is part of the page — no frame, title bar or ✕,
@@ -1148,7 +1168,11 @@ function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.
   pBody.innerHTML=detailHTML(cur.type,cur.id);
   // phones: source notes fold into one 「ⓘ 資料來源」 line at the bottom of the panel
   {const sn=[...pBody.querySelectorAll(".note.srcn")];if(sn.length){if(matchMedia("(max-width:820px)").matches){const d=document.createElement("details");d.className="srcfold";d.innerHTML="<summary>ⓘ 資料來源</summary>";sn.forEach(n=>d.appendChild(n));pBody.appendChild(d)}else sn.forEach(n=>{n.classList.add("srcend");pBody.appendChild(n)})}}
-  pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");openP(t,i,"push")}));
+  // inline class / dungeon pages (user 2026-11-07, clicking 骷髏之劍 in a dungeon's loot blanked the page): links open the
+  // centre pop-up and the page stays; a link to another class / dungeon switches the page itself
+  pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");
+    if(document.body.classList.contains("cls-inline")){const n=gvNorm(t,i),c=INL[view];if(c&&c.ok({type:n[0],id:n[1]}))openP(n[0],n[1],"new");else gvOpen(t,i);return}
+    openP(t,i,"push")}));
   pBody.querySelectorAll("[data-goview]").forEach(b=>b.addEventListener("click",()=>{const [v,t,i]=b.dataset.goview.split("|");gvOpen(t,i)}));
   pBody.querySelectorAll("[data-rep]").forEach(b=>b.addEventListener("click",()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);
     // a quest step: the whole route in the floating window, zoomed to this step
@@ -1269,32 +1293,52 @@ const DG_ITEM={};  // dungeon-window names now match the item keys (renamed to t
 const dgMeta=()=>((window.SAO_JM||{}).dg)||{};
 const dgOfSpot=id=>Object.keys(DG_DIM).find(d=>DG_DIM[d][0]===id&&dgMeta()[d]);
 function dgMapHTML(spotId){const d=dgOfSpot(spotId);if(!d)return"";const e=dgMeta()[d];
-  return`<h3 class="sec">地圖</h3><figure class="dgmap"><button class="dgov" data-dgmap="${d}" title="在地圖分頁打開（可以放大、切換高度）"><img src="tiles/dg/${d}/overview.jpg?v=${encodeURIComponent(e.v||"")}" alt="${esc(dgName(d))} 的地圖" loading="lazy"></button>
+  return`<h3 class="sec">地圖</h3><figure class="dgmap"><button class="dgov" data-dgmap="${d}" title="在地圖分頁打開（可以放大、切換高度）"><img src="tiles/dg/${d}/overview.jpg?v=${encodeURIComponent(e.v||"")}&o=2" onload="this.style.setProperty('--ar',this.naturalWidth/this.naturalHeight)" alt="${esc(dgName(d))} 的地圖" loading="lazy"></button>
     <figcaption><button class="linkbtn" data-dgmap="${d}">在地圖上看（可以放大、切換高度）</button><span class="muted">玩家上傳的 JourneyMap 地圖，${esc(e.date||"")} 更新</span></figcaption></figure>`}
-function dgInfoHTML(sp){const d=sp.dg;if(!d)return"";
-  const mon=nm=>{const m=nm&&ALLM.find(x=>x.floor===sp.floor&&(x.name===nm||(x.aka||[]).includes(nm)));return m?`<button class="linkbtn" data-go="m|${m.id}">${esc(nm)}</button>`:esc(nm||"")};
-  const item=nm=>{const k=ITEMS[nm]?nm:DG_ITEM[nm];return k&&ITEMS[k]?`<button class="linkbtn" data-go="i|${esc(k)}">${esc(nm)}</button>`:esc(nm)};
-  return`<h3 class="sec">地下城資料 <span class="c">遊戲畫面</span></h3>
-  <dl class="facts">${d.title&&d.title!==sp.n?`<dt>視窗名稱</dt><dd>${esc(d.title)}</dd>`:""}<dt>首領</dt><dd>${esc(d.boss)}<br><span class="muted" style="font-size:12.5px">${esc(d.bossZh)}</span></dd><dt>鑰匙</dt><dd>${esc(d.key)}</dd><dt>難度</dt><dd>${d.modes.map(esc).join("／")}</dd>${d.easy.map(([k,v])=>`<dt>${esc(k)}</dt><dd>${esc(v)}<span class="muted" style="font-size:12px">（Easy）</span></dd>`).join("")}</dl>
-  <h3 class="sec">通關寶箱（Easy） <span class="c">${d.loot.length}</span></h3><div class="muted" style="font-size:12.5px">打完地下城時寶箱開出來的東西和機率（遊戲視窗的 Loot）。</div>
-  <ul class="rows">${d.loot.map(([it,by,p])=>`<li><div class="lrow"><span class="t"><b>${item(it)}</b>${by?`<span>視窗標示：${mon(by)}</span>`:""}</span><span class="v">${pct(p)}</span></div></li>`).join("")}</ul>
-  <div class="note srcn">地下城資料取自站長的遊戲截圖（${esc(d.date)}，遊戲的 Dungeons 視窗）。其他難度的掉落還沒有截圖。</div>`}
-function dgKeyHTML(sp){const {want,hit}=dgKeys(sp);if(!want&&!hit.length)return"";
-  return`<h3 class="sec">進入鑰匙</h3>${hit.length?`<ul class="rows">${hit.map(r=>{const p=prById[String(r.oid)],n=npcByName(r.f,r.npc);
-    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(r.en)}${p?` <span class="muted" style="font-weight:400">${esc(p.name)}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(m)+" ×"+q).join("・"):"只要珂爾"}</span></span><span class="v">${costText(r.cost)}</span></button>${n?`<div class="muted" style="font-size:12.5px;margin:2px 0 0 44px">在 <button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button> 製作（X ${n.x} · Z ${n.z}）</div>`:""}</li>`}).join("")}</ul>`
-    :`<div class="note">需要 ${esc(want)}，本站還沒有它的製作方式。</div>`}`}
+// dungeon page (user 2026-11-07「整理一下資訊，看起來很雜，使用者很難找資料」): overview tiles → 怎麼進去 (entrance, key, tip)
+// → 首領 → 通關寶箱 (official Chinese names + icons) → 怪物; where the name and coordinates come from goes to the bottom
+const dgMonByName=(f,nm)=>nm&&ALLM.find(x=>x.floor===f&&(x.name===nm||(x.aka||[]).includes(nm)));
+const dgVal=v=>{const m=String(v).match(/^(.*?)（(.*)）$/);return m?`${esc(m[1])}<small>${esc(m[2])}</small>`:esc(v)};
+function dgTilesHTML(d){if(!d||!d.easy)return"";
+  return`<div class="dgtiles">${d.easy.map(([k,v])=>`<div class="dgt"><span>${esc(k)}</span><b>${dgVal(v)}</b></div>`).join("")}</div>
+  <div class="muted dgcap">以上是 Easy 難度；遊戲另有 ${d.modes.filter(x=>x!=="Easy").map(esc).join("／")} 難度。</div>`}
+const monRow=m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(mN(m))}</b><span>${mN(m)!==m.name?esc(m.name)+"・":""}${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`;
+function dgBossHTML(sp,mons){const d=sp.dg;if(!d&&!mons.length)return"";
+  return`<h3 class="sec">首領</h3>${d?`<p class="dgboss"><b>${esc(d.boss)}</b>${d.bossZh?`<span class="muted">${esc(d.bossZh)}</span>`:""}</p>`:""}${mons.length?`<ul class="rows">${mons.map(monRow).join("")}</ul>`:""}`}
+function dgLootHTML(sp,pre){const d=sp.dg;if(!d||!d.loot)return"";
+  return`<h3 class="sec">通關寶箱 <span class="c">Easy・${d.loot.length} 項</span></h3><div class="muted dgcap">打完地下城開寶箱拿到的東西和機率（遊戲 Dungeons 視窗的 Loot）。</div>${pre||""}
+  <ul class="rows dgloot">${d.loot.map(([it,by,p])=>{const r=matRef(ITEMS[it]?it:DG_ITEM[it]||it),mon=dgMonByName(sp.floor,by);
+    const nm=/[\u4e00-\u9fff]/.test(r.nm)?r.nm:it;   // no official Chinese name: the game's English name, not the catalogue's French one
+    const sub=[nm!==it?it:"",by?"視窗標示："+(mon?mN(mon):by):""].filter(Boolean).join("・");
+    const inner=`${r.ic(32)||'<span class="dgli" aria-hidden="true"></span>'}<span class="t"><b>${esc(nm)}</b>${sub?`<span>${esc(sub)}</span>`:""}</span><span class="v">${pct(p)}</span>`;
+    return`<li>${r.go?`<button class="lrow" data-go="${r.go}">${inner}</button>`:`<div class="lrow nolink">${inner}</div>`}</li>`}).join("")}</ul>
+  <div class="note srcn">地下城資料取自站長的遊戲截圖（${esc(d.date)}，遊戲的 Dungeons 視窗${d.title&&d.title!==sp.n?`，視窗名稱寫「${esc(d.title)}」`:""}）。其他難度的掉落還沒有截圖。</div>`}
+function dgKeyRows(sp){const {want,hit}=dgKeys(sp);
+  return hit.length?`<ul class="rows">${hit.map(r=>{const p=prById[String(r.oid)],pz=p&&zhE(p);
+    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(pz||r.en)}${pz?` <span class="muted" style="font-weight:400">${esc(r.en)}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(matRef(m).nm)+" ×"+q).join("・"):"只要珂爾"}</span></span><span class="v">${costText(r.cost)}</span></button></li>`}).join("")}</ul>`
+    :want?`<div class="note">需要 ${esc(want)}，本站還沒有它的製作方式。</div>`:`<div class="muted dgcap">還沒有這個地下城的鑰匙資料。</div>`}
+function dgEntryHTML(sp){
+  return`<h3 class="sec">怎麼進去</h3><dl class="facts"><dt>入口</dt><dd><span class="mono">X ${sp.x} · Z ${sp.z}</span>${sp.u?"（在地下）":""}　<button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button></dd>${sp.tp?`<dt>傳送</dt><dd>🌀 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl><div class="dgsub">需要的鑰匙</div>${dgKeyRows(sp)}
+  ${sp.note?`<div class="note">💡 ${esc(sp.note)}</div>`:""}${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${repLink(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}`}
 function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">這個地點已不存在。</div>`;const st=STATUS[sp.src];const Fx=FLOORS[sp.floor];
   const ms=sp.mons.map(n=>Fx.monByName[n]);const rz=[...new Set(ms.filter(Boolean).map(m=>Fx.zones[m.zone].n))];
   const nameRow=typeof sp.csrc==="string"?`<dt>名稱</dt><dd>本站用英文名稱；遊戲圖鑑的區域名是「${esc(sp.csrc)}」</dd>`:sp.csrc?`<dt>名稱</dt><dd>遊戲圖鑑的區域名${/[àâçéèêëîïôûùüÿœ]|^(Zone|Tour|Quartier|Jardin|Vallée|Marécage|Ruines|Mine|Lac)\b/i.test(sp.n)?"（還沒有英文版遊戲畫面，所以用法文）":""}${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`:sp.nsrc==="game"?`<dt>名稱</dt><dd>遊戲畫面上的名稱${sp.game?`<br><span class="muted" style="font-size:12.5px">${esc(sp.game)}</span>`:""}${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`:sp.nsrc==="tp"?`<dt>名稱</dt><dd>遊戲傳送選單的名稱（還沒有英文版遊戲畫面）${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`:sp.nsrc==="wiki"?`<dt>名稱</dt><dd>wiki 圖鑑表的區域名${sp.old?`<br><span class="muted" style="font-size:12.5px">本站舊稱 ${esc(sp.old)}</span>`:""}</dd>`
     :sp.nsrc==="site"?`<dt>名稱</dt><dd>本站命名<br><span class="muted" style="font-size:12.5px">wiki 圖鑑把這裡的怪物歸在「${rz.map(esc).join("、")}」，和附近的地點同名，所以另取名字區分</span></dd>`:"";
-  return`<div class="phead">${(k=>k?`<span class="th dgk" style="--ring:var(--boss)" aria-hidden="true">${recIcon(k,30)}</span>`:`<span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span>`)(sp.kind==="dungeon"?dgKeys(sp).hit[0]:null)}<div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(pN(sp))}</h2><div class="sub">${esc(nameSub(sp))}</div></div></div>
+  const head=`<div class="phead">${(k=>k?`<span class="th dgk" style="--ring:var(--boss)" aria-hidden="true">${recIcon(k,30)}</span>`:`<span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span>`)(sp.kind==="dungeon"?dgKeys(sp).hit[0]:null)}<div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(pN(sp))}</h2><div class="sub">${esc(nameSub(sp))}</div></div></div>`;
+  if(sp.kind==="dungeon"){const dgm=dgMapHTML(sp.id),mm=ms.filter(Boolean),boss=mm.filter(m=>m.type==="Boss").concat(mm.filter(m=>m.type==="Mini-Boss")),rest=mm.filter(m=>!boss.includes(m));
+    const nameTxt=nameRow.replace(/<dt>.*?<\/dt>/,"").replace(/<br>/g,"；").replace(/<[^>]+>/g,"");
+    const A=dgTilesHTML(sp.dg)+dgEntryHTML(sp);
+    const B=dgBossHTML(sp,boss)+dgLootHTML(sp)+(rest.length?`<h3 class="sec">其他怪物 <span class="c">${rest.length}</span></h3><ul class="rows">${rest.map(monRow).join("")}</ul>`:"")
+      +`<div class="note srcn">${nameTxt?"名稱："+nameTxt+"。":""}入口座標來源：${st.t}。${sp.rep?`這個地點來自核准的玩家回報（${repLink(sp.rep)}）。`:""}</div>`;
+    return head+(dgm?`<div class="dgsplit"><div class="dga">${A}</div><div class="dgm">${dgm}</div><div class="dgb">${B}</div></div>`:A+B)}
+  const dgm="";
+  return`<div class="phead">${(k=>k?`<span class="th dgk" style="--ring:var(--boss)" aria-hidden="true">${recIcon(k,30)}</span>`:`<span class="th" style="--ring:${sp.kind==="boss"?"var(--boss)":"var(--ok)"}" aria-hidden="true">${KIND[sp.kind][1]}</span>`)(sp.kind==="dungeon"?dgKeys(sp).hit[0]:null)}<div class="ttl"><div class="num mono">${flBadge(sp.floor)} X ${sp.x} · Z ${sp.z}</div><h2>${esc(pN(sp))}</h2><div class="sub">${esc(nameSub(sp))}</div></div></div>${dgm?`<div class="dgsplit"><div class="dga">`:""}
   <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd>${nameRow}<dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd>${sp.tp?`<dt>傳送</dt><dd><span class="pill tpp">🌀 可傳送</span> 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl>
   ${sp.u?`<div class="note">在地下，要從入口走下去。</div>`:""}${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}${sp.rep?`<div class="note srcn">這個地點來自核准的玩家回報（${repLink(sp.rep)}）。</div>`:""}
   ${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${repLink(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}
-  <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>
-  ${sp.kind==="dungeon"?dgMapHTML(sp.id)+dgKeyHTML(sp)+dgInfoHTML(sp):""}
+  <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>${dgm?`</div><div class="dgm">${dgm}</div><div class="dgb">`:""}
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(mN(m))}</b><span>${mN(m)!==m.name?esc(m.name)+"・":""}${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
-  ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(i)}</b><span>${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}`}
+  ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(i)}</b><span>${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}${dgm?"</div></div>":""}`}
 
 function townDetail(id){const t=townById[id];const qs=ALLQ.filter(x=>x.town===id);
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">🏘️</span><div class="ttl"><div class="num mono">${flBadge(t.floor)} X ${t.x} · Z ${t.z}</div>${(s=>s?`<h2>${esc(pN(t))}</h2><div class="sub">${esc(s)}</div>`:`<h2>${esc(pN(t))}</h2>`)([pN(t)!==t.n?t.n:"",t.tp&&t.tp!==t.n?t.tp:"",pN(t)!==t.n?"":t.zh||t.en,t.old?"舊稱 "+t.old:""].filter(Boolean).join("・"))}</div></div>
@@ -1422,8 +1466,8 @@ const offOf=id=>{if(!OFF_CACHE){OFF_CACHE={};const eb={},pb={};EQ.forEach(e=>eb[
 // 素材 tab: this site's materials / gathered things (drop rates, quests, where to get them) + the official catalogue's
 // other materials (only with 「顯示全部素材」). Groups follow the official categories.
 const MAT_G={material:"材料",farmer_job:"作物",miner_job:"礦物",lumberjack_job:"木材",fishing_job:"漁獲"};
-const GROUPS=["材料","作物","礦物","木材","漁獲","官網未收錄"];
-const matGroup=x=>{if(x.k==="p")return MAT_G[x.e.cat]||"材料";const o=offOf(x.id);return MAT_G[o?o.e.cat:ITEMS[x.id].cat]||(o?"材料":"官網未收錄")};
+const GROUPS=["怪物掉落物","材料","作物","礦物","木材","漁獲","官網未收錄"];   // 怪物掉落物 = dropped by a monster on any floor (user 2026-11-07: 素材再分怪物掉落物)
+const matGroup=x=>{if(x.k==="p")return MAT_G[x.e.cat]||"材料";if((SOURCES[x.id]||[]).length)return"怪物掉落物";const o=offOf(x.id);return MAT_G[o?o.e.cat:ITEMS[x.id].cat]||(o?"材料":"官網未收錄")};
 chipsInto($("fItemGroup"),[["all","全部"],...GROUPS.map(g=>[g,g])],()=>itemGroup,v=>itemGroup=v,renderItems);
 chipsInto($("fItemRar"),[["all","全部"],["c","普通"],["b","稀有"],["a","史詩"],["s","傳說"],["splus","傳說+"]],()=>itemRar,v=>itemRar=v,renderItems);
 ["fItemQuest","fItemDrop","fItemSort","fItemAll"].forEach(i=>$(i).onchange=renderItems);
@@ -1450,6 +1494,35 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").c
     <div class="cmeta">${rarPill(it)}<span>${esc(matGroup(x))}</span>${src.length?`<span>· ${src.length} 種怪物掉落</span>`:""}${gat.length?`<span>· ${gat.length} 個採集點</span>`:""}${!src.length&&!gat.length&&it.src?`<span>· ${esc(it.src.split("：")[0].split("（")[0])}</span>`:""}${use.length?`<span>· ${use.length} 任務需 ${nt(x)}</span>`:""}${itemFloors(id).length>1||all?itemFloors(id).map(flBadge).join(""):""}</div></button>`}).join("")
     +(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用分類或搜尋縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的素材。</div>`;
   bindGo($("lItem"));markSel()}
+// 圖鑑・NPC (user 2026-11-07: 圖鑑頁新增 NPC，放在素材下面，用區域分，要可以篩選區域，收購商要顯示回收物品)
+const BB=window.SAO_BUYBACK||{items:{},shops:{}};
+const npcRegion=n=>{let b=null,d=1e9;FLOORS[n.floor].towns.forEach(t=>{const k=Math.hypot(t.x-n.x,t.z-n.z);if(k<d){d=k;b=t}});spotsOf(n.floor).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-n.x,p.z-n.z);if(k<d){d=k;b=p}});return d<=400&&b?{k:b.n,label:pN(b)}:{k:"~wild",label:"野外（離城鎮和地標較遠）"}};
+let npcGrpSel="all";
+const NPC_GORDER=Object.keys(NGRP);
+function fillNpcArea(){const sel=$("fNpcArea");if(!sel)return;const cur=sel.value;const R={};NPCS(FL).forEach(n=>{const r=npcRegion(n);R[r.k]=R[r.k]||{label:r.label,n:0};R[r.k].n++});
+  const ks=Object.keys(R).sort((a,b)=>(a==="~wild")-(b==="~wild")||R[b].n-R[a].n||R[a].label.localeCompare(R[b].label));
+  sel.innerHTML=`<option value="all">全部區域</option>`+ks.map(k=>`<option value="${esc(k)}">${esc(R[k].label)}（${R[k].n}）</option>`).join("");sel.value=ks.includes(cur)?cur:"all"}
+chipsInto($("fNpcGrp"),[["all","全部"],...NPC_GORDER.map(g=>[g,NGRP[g][0]])],()=>npcGrpSel,v=>npcGrpSel=v,()=>renderNpcs());
+$("fNpcArea").onchange=()=>renderNpcs();
+const bbGo=en=>{const k=ikey(en);return ITEMS[k]?"i|"+k:enGo(en)};
+const bbName=(en,go)=>{if(!go)return en;const [t,i]=go.split(/\|(.+)/);if(t==="i")return zhI(i)||i;const e=t==="e"?eqById[i]:t==="p"?prById[i]:null;return e?(zhE(e)||e.gen||e.name):en};
+const bbIcon=(en,go)=>{if(GICON[en])return recicImg(GICON[en],32);if(!go)return`<span class="eslot empty" style="--s:32px" aria-hidden="true">📦</span>`;const [t,i]=go.split(/\|(.+)/);
+  return t==="i"?slot(i,32):t==="e"&&eqById[i]?eslot(eqById[i],32):t==="p"&&prById[i]?pslot(prById[i],32):`<span class="eslot empty" style="--s:32px" aria-hidden="true">📦</span>`};
+const buybackHTML=n=>{const L=BB.items[n.n];if(!L||!L.length)return"";
+  return`<h3 class="sec">回收物品 <span class="c">${L.length}</span></h3><ul class="rows bbl">${L.map(([en,p])=>{const go=bbGo(en),nm=bbName(en,go);return`<li>${go?`<button class="lrow" data-go="${esc(go)}">`:`<div class="lrow">`}${bbIcon(en,go)}<span class="t"><b>${esc(nm)}</b>${nm!==en?`<span>${esc(en)}</span>`:""}</span><span class="v">收購價 ${esc(p)} 珂爾</span>${go?"</button>":"</div>"}</li>`}).join("")}</ul>
+  <div class="note srcn">回收物品取自遊戲物品說明的取得方式（「Bought back by ${esc(BB.shops[n.n]||n.n)}」「由…回收」，站長截圖 2026-11-04～11-07）。只列出截圖裡看過的物品，NPC 實際收購的可能更多；用「協作區」回報可以補上。</div>`};
+const npcCardHit=(n,s)=>!s||norm([n.n,npcN(n.n),NGRP[npcGrp(n.c)][0],npcRegion(n).label,...(BB.items[n.n]||[]).flatMap(([en])=>[en,bbName(en,bbGo(en))])].join(" ")).includes(s);
+function renderNpcs(){const s=Sq(),area=$("fNpcArea").value;
+  const all=NPCS(FL).map(n=>({n,r:npcRegion(n),g:npcGrp(n.c)}));
+  const gHas=new Set(all.map(x=>x.g));$("fNpcGrp").querySelectorAll(".chip").forEach(c=>c.hidden=c.dataset.v!=="all"&&!gHas.has(c.dataset.v)&&c.getAttribute("aria-pressed")!=="true");
+  const a=all.filter(x=>(npcGrpSel==="all"||x.g===npcGrpSel)&&(area==="all"||x.r.k===area)&&npcCardHit(x.n,s));
+  $("cNpc").textContent=`${a.length} / ${all.length} 位`;
+  const R={};a.forEach(x=>{(R[x.r.k]=R[x.r.k]||{label:x.r.label,xs:[]}).xs.push(x)});
+  const ks=Object.keys(R).sort((p,q)=>(p==="~wild")-(q==="~wild")||R[q].xs.length-R[p].xs.length||R[p].label.localeCompare(R[q].label));
+  $("lNpc").innerHTML=a.length?ks.map(k=>`<h3 class="npcgh">${esc(R[k].label)}<span class="c">${R[k].xs.length} 位</span></h3>`+R[k].xs.sort((p,q)=>NPC_GORDER.indexOf(p.g)-NPC_GORDER.indexOf(q.g)||npcN(p.n.n).localeCompare(npcN(q.n.n))).map(({n,g})=>{const G=NGRP[g],rc=RECIPES[n.n]?RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)):[],mk=rc.filter(r=>!isShop(r)).length,sl=rc.length-mk,bb=(BB.items[n.n]||[]).length;
+    return`<button class="card" data-key="n|${n.id}" data-go="n|${n.id}"><div class="chead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${G[1]}</span><div class="cname"><b>${esc(npcN(n.n))}</b><span>${npcN(n.n)!==n.n?esc(n.n)+"・":""}${esc(G[0])}${n.u===2?"・地下室":n.u?"・在地下":""}</span></div></div>
+    <div class="cmeta">${mk?`<span>可以製作 ${mk}</span>`:""}${sl?`<span>${mk?"· ":""}販售 ${sl}</span>`:""}${bb?`<span>${mk||sl?"· ":""}回收 ${bb} 種</span>`:""}${n.src==="beta"?`<span class="pill">測試版資料</span>`:""}</div></button>`}).join("")).join(""):`<div class="empty-note">沒有符合條件的 NPC。</div>`;
+  bindGo($("lNpc"));markSel()}
 
 // ================= quests tab =================
 // Clicking a quest opens the side panel (type "q"): steps, rewards and a mini map with the route.
@@ -1544,7 +1617,18 @@ const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
 // NPC 的位置直接寫在配方／裝備資料裡（使用者 2026-11-03：原本要點 3 次才知道在哪裡做）：最近的城鎮或傳送點＋可點的座標
 const nearPlace=(f,x,z)=>{let b=null,d=1e9;FLOORS[f].towns.forEach(t=>{const k=Math.hypot(t.x-x,t.z-z);if(k<d){d=k;b=t.n}});spotsOf(f).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-x,p.z-z);if(k<d){d=k;b=p.n}});return d<=400?b:null};
 const npcWhere=n=>{if(!n)return"";const near=nearPlace(n.floor,n.x,n.z);return`<span class="npcw">📍 ${near?esc(near)+" 附近・":""}${FLOORS[n.floor].map?`<button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">X ${n.x} · Z ${n.z}</button>`:`X ${n.x} · Z ${n.z}`}${n.u===2?"（地下室）":n.u?"（地下）":""}</span>`};
-const matText=mats=>mats.map(([m,q])=>`${ITEMS[m]?slot(m,22):""}<span>${esc(m)} ×${q}</span>`).join("・");
+// a recipe material -> this site's item, or the official item with the same in-game English name (gameinfo / zhnames), or just the name
+// (2026-11-07, user: 藥水配方素材沒有更新: Wheat Flower, Lavender… are official items 1835-1841 but were shown as 「本站還沒有這個物品的資料」)
+let EN2GO=null;   // in-game English name -> item (zhnames.js en, recipe rows with a catalogue id); built on first use (the tables load later in the script)
+const en2go=()=>{if(EN2GO)return EN2GO;EN2GO={};ZHL.forEach(z=>{if(!z.en||!z.ids)return;const id=z.ids.find(x=>/^[epi]\|/.test(x));if(id&&!EN2GO[norm(z.en)])EN2GO[norm(z.en)]=id});
+  ALLREC.forEach(r=>{if(r.oid==null||EN2GO[norm(r.en)])return;if(eqById[String(r.oid)])EN2GO[norm(r.en)]="e|"+r.oid;else if(prById[String(r.oid)])EN2GO[norm(r.en)]="p|"+r.oid});
+  // 「N Cols Pouch」 (game) = 「Bourse de NCols」 (catalogue), e.g. the dungeon chests' 250 / 500 / 1000 Cols Pouch (user 2026-11-07: 沒圖片)
+  Object.entries(prById).forEach(([id,e])=>{const m=/^Bourse de (\d+) ?Cols$/i.exec(e.name||"");if(m&&!EN2GO[norm(m[1]+" Cols Pouch")])EN2GO[norm(m[1]+" Cols Pouch")]="p|"+id});return EN2GO};
+const matRef=m=>{const k=ikey(m);if(ITEMS[k])return{go:"i|"+k,ic:s=>slot(k,s),nm:zhI(k)||k};const g0=en2go()[norm(m)],g=g0&&g0[0]==="i"?null:g0||enGo(m);
+  if(g0&&g0[0]==="i"&&ITEMS[ikey(g0.slice(2))]){const k2=ikey(g0.slice(2));return{go:"i|"+k2,ic:s=>slot(k2,s),nm:zhI(k2)||k2}}
+  if(g&&/^[ep]\|/.test(g)){const i=g.slice(2),e=g[0]==="e"?eqById[i]:prById[i];if(e)return{go:g,ic:s=>g[0]==="e"?eslot(e,s):pslot(e,s),nm:zhE(e)||e.gen||e.name}}
+  return{go:null,ic:s=>GICON[m]?recicImg(GICON[m],s):"",nm:m}};
+const matText=mats=>mats.map(([m,q])=>{const r=matRef(m);return`${r.ic(22)}<span>${esc(r.nm)} ×${q}</span>`}).join("・");
 const costText=c=>c==="Free"||c==="0"?"免費":c==null?"費用未知":esc(c)+" 珂爾";
 // 查看配方 buttons under 製作方式 in the codex panels (one per NPC when several can make it)
 const recGoBtns=rows=>{const b=rows.map(x=>[x,ALLREC.findIndex(y=>y.npc===x.npc&&y.en===x.en)]).filter(([,ri])=>ri>=0);
@@ -1636,9 +1720,10 @@ function renderDungeons(){const s=Sq();const a=spotsOf(FL).filter(x=>x.kind==="d
 function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<div class="note">找不到這個活動。</div>`;
   const tb=(head,rows)=>`<div class="tblwrap"><table class="btbl"><thead><tr>${head.map(h=>`<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
   return`<div class="phead"><span class="th" style="--ring:var(--boss)" aria-hidden="true">🎃</span><div class="ttl"><div class="num">限時活動・地下城</div><h2>${esc(d.n)}</h2><div class="sub">${esc(d.ev)}</div></div></div>
-  <dl class="facts"><dt>人數</dt><dd>${esc(d.players)}</dd><dt>首領</dt><dd>${d.bosses.map(b=>`<b>${esc(b[0])}</b>：${esc(b[1])}`).join("<br>")}</dd><dt>通關寶箱</dt><dd>${d.chest.map(esc).join("<br>")}</dd></dl>
+  ${d.dg?dgTilesHTML(d.dg):`<dl class="facts"><dt>人數</dt><dd>${esc(d.players)}</dd></dl>`}
   <div class="note warn">官方公告沒有寫入口和惡魔區的位置，地圖上還沒有標示。知道位置的話，歡迎用「協作區」回報地點。</div>
-  ${d.dg?dgInfoHTML({dg:d.dg,floor:1,n:d.n}):""}
+  <h3 class="sec">首領</h3><ul class="evboss">${d.bosses.map(b=>`<li><b>${esc(b[0])}</b><span class="muted">${esc(b[1])}</span></li>`).join("")}</ul>
+  ${(chest=>d.dg?dgLootHTML({dg:d.dg,floor:1,n:d.n},chest):`<h3 class="sec">通關寶箱</h3>${chest}`)(`<ul class="evchest">${d.chest.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`)}
   <h3 class="sec">進場鑰匙</h3><p><b>${esc(d.key.n)}</b>：到 ${esc(d.key.npc)}（${esc(d.key.where)}）用 ${d.key.mats.map(m=>esc(m[0])+" ×"+m[1]).join("＋")} 換，${esc(d.key.note)}。</p>
   <h3 class="sec">鑰匙碎片：三個惡魔區</h3>${tb(["惡魔區","惡魔","首領","碎片"],d.zones.map(z=>[esc(z.n),z.mobs.map(esc).join("、"),esc(z.leader),`<b>${esc(z.frag)}</b>`]))}
   <div class="note">${esc(d.fragRate)}</div>
@@ -1732,10 +1817,22 @@ const ABOUT_SRC=[
 ];
 let aboutJump=null;
 // 更新紀錄 (changelog.js): newest 3 days open, older ones folded
+// 更新紀錄 has two modes (user 2026-11-07「更新紀錄做切換按鈕，詳細跟摘要模式」): 摘要 = category counts per day, 詳細 = every entry in full. The choice is remembered per viewer (localStorage sao-cl-mode, default 摘要)
+// 摘要 (user 2026-11-07「摘要分得粗略一點：更新XX個裝備資料、敘述、圖示之類的」, then「只是把詳細做成按鈕而已，多此一舉，也不是摘要」):
+// hand-written lines per day in changelog.js SAO_CHANGELOG_SUM; a day without one shows its entries
+let CLM=(()=>{try{return localStorage.getItem("sao-cl-mode")==="full"?"full":"sum"}catch(e){return"sum"}})();
 function changelogCard(){const C=window.SAO_CHANGELOG||[];if(!C.length)return"";
-  const day=([d,items])=>{const [,m,dd]=d.split("-").map(Number);return`<div class="clday"><b class="cld">${m}/${dd}</b><ul class="cll">${items.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>`};
-  return`<article class="bcard" id="changelog">${C.slice(0,3).map(day).join("")}${C.length>3?`<details class="clold"><summary>較早的更新（${C.length-3} 天）</summary>${C.slice(3).map(day).join("")}</details>`:""}</article>`}
-function renderChangelog(){$("clWrap").innerHTML=`<div class="rhead"><h2>更新紀錄</h2><span class="count">網站改了什麼</span></div>${changelogCard()}`;$("view-changelog").scrollTop=0}
+  const SUM=window.SAO_CHANGELOG_SUM||{},list=(l,c)=>`<ul class="cll${c||""}">${l.map(t=>`<li>${esc(t)}</li>`).join("")}</ul>`;
+  const sumLine=t=>{const i=t.indexOf("：");return i>0&&i<=8?`<b>${esc(t.slice(0,i))}</b>：${esc(t.slice(i+1))}`:esc(t)};
+  // the newest day has no summary yet (written the next day, user 2026-11-07): say so instead of listing everything
+  const day=([d,items],k)=>{const [,m,dd]=d.split("-").map(Number),sm=CLM==="sum"&&SUM[d],wait=CLM==="sum"&&!SUM[d]&&k===0;
+    return`<article class="bcard clday"><div class="clhd"><b class="cld">${m}/${dd}</b><span class="cln">${items.length} 項</span></div>${wait?`<p class="clwait">隔日更新摘要，請先看<button class="linkbtn" data-clm="full">詳細內容</button>。</p>`:sm?`<ul class="cll clsum">${sm.map(t=>`<li>${sumLine(t)}</li>`).join("")}</ul>`:list(items)}</article>`};
+  return`<div id="clCard">${C.slice(0,3).map((x,k)=>day(x,k)).join("")}${C.length>3?`<details class="clold"><summary>較早的更新（${C.length-3} 天）</summary><div class="cloldl">${C.slice(3).map(x=>day(x,-1)).join("")}</div></details>`:""}</div>`}
+function renderChangelog(){const W=$("clWrap"),old=W.querySelector(".clold"),oldOpen=!!(old&&old.open),V=$("view-changelog"),y=V.scrollTop;
+  W.innerHTML=`<div class="rhead"><h2>更新紀錄</h2><span class="count">網站改了什麼</span><div class="chips clmode" role="group" aria-label="顯示方式"><button class="chip" data-clm="sum" aria-pressed="${CLM==="sum"}" title="每天幾行重點">摘要</button><button class="chip" data-clm="full" aria-pressed="${CLM==="full"}" title="每一項都顯示完整說明">詳細</button></div></div>${changelogCard()}`;
+  const o=W.querySelector(".clold");if(o&&oldOpen)o.open=true;
+  W.querySelectorAll("[data-clm]").forEach(b=>b.onclick=()=>{if(CLM===b.dataset.clm)return;CLM=b.dataset.clm;try{localStorage.setItem("sao-cl-mode",CLM)}catch(e){}renderChangelog.keep=1;renderChangelog()});
+  V.scrollTop=renderChangelog.keep?y:0;renderChangelog.keep=0}
 function renderAbout(){const iss=GH_ISSUES;
   $("aWrap").innerHTML=`<div class="rhead"><h2>介紹及資訊</h2><span class="count">本站介紹・官方連結・資料來源・版權聲明</span></div>
   <div class="agrid"><div class="rcol">
@@ -1782,7 +1879,7 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   const e=eX||eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),shop=isShop(r),rar=e?e.r:r.r,isE=!!(eX||eqById[String(r.oid)]);
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} ${shop?"NPC 販售":"配方"}・${RC_CAT[r.cat][0]}</div><h2>${esc(recZh(r,e)||r.en)}</h2>${e||potZh(r.en)||recZh(r,e)?`<div class="sub">${(recZh(r,e)?[r.en,e&&!e.extra&&e.name]:[potZh(r.en),e&&e.name]).filter(Boolean).map(esc).join("・")}</div>`:""}</div></div>
   <dl class="facts"><dt>${shop?"在哪裡買":"在哪裡做"}</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button><br>${npcWhere(n)}`:esc(npcN(r.npc))}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvSrc==="game"?` <span class="muted" style="font-size:12px">（遊戲物品說明${r.lvRef?`；${esc(r.lvRefSrc)}寫 ${r.lvRef}`:""}）</span>`:r.lvRef?` <span class="muted" style="font-size:12px">（${esc(r.lvRefSrc)}寫 ${r.lvRef}，遊戲截圖還沒有這件，暫用官網圖鑑）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(pN(x))}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RQTY[r.npc+"|"+r.en]?`<dt>產量</dt><dd>每次做 ${RQTY[r.npc+"|"+r.en]} 個</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
-  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m0,q])=>{const m=ikey(m0);return ITEMS[m]?`<li><button class="lrow" data-go="i|${esc(m)}">${slot(m,32)}<span class="t"><b>${esc(m)}</b><span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow">${GICON[m]?recicImg(GICON[m],32):""}<span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`}).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
+  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m0,q])=>{const m=ikey(m0),R=matRef(m0);return R.go?`<li><button class="lrow" data-go="${esc(R.go)}">${R.ic(32)}<span class="t"><b>${esc(R.nm)}</b>${R.nm!==m0?`<span>${esc(m0)}</span>`:""}<span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow">${GICON[m]?recicImg(GICON[m],32):""}<span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`}).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
   ${setPotHTML(r.en)}${r.oid?"":giHTML(GI_EN[norm(r.en)])+gachaHTML(r.en)}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
@@ -1791,6 +1888,7 @@ function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
   ${RECIPES[n.n]?`${(()=>{const rs=RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)),mk=rs.filter(r=>!isShop(r)),sl=rs.filter(isShop);return(mk.length?`<h3 class="sec">可以製作 <span class="c">${mk.length}</span></h3>${recipeTable(mk)}`:"")+(sl.length?`<h3 class="sec">販售 <span class="c">${sl.length}</span></h3>${recipeTable(sl)}`:"")})()}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
     :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「協作區」回報就能補上。</div>`:""}
+  ${buybackHTML(n)}
   ${NPC_NOTE[n.n]||""}
   ${n.n==="Nodachi Blacksmith"?`<h3 class="sec">Nodachi Altar（升階）</h3><div class="note">打開製作選單是「Nodachi Altar」：把兩把同種的 Nodachi 武器合成升一階。共 5 種武器（Nodachi、Nodachi Dagger、Nodachi Bow、Nodachi Magic Staff、Nodachi Staff），每種 5 階，製作時間 10 秒、20 秒、30 秒、45 秒、1 分鐘，全部神話級（MYTHIC）、免費。第 1 階的材料是同一把武器 ×2，之後每階是兩把各 1；每一階要哪一階的武器，畫面上沒寫，還在確認（站長 2026-11-03 的截圖）。</div>`:""}
   <div class="note srcn">${n.src==="rep"?`位置和類別來自核准的玩家回報（${repLink(n.rep)}）。`:n.src==="site"?"位置取自站長的遊戲影片（2026-10-30），座標是站在 NPC 旁邊時的位置。":n.src==="site2"?"位置取自站長的遊戲截圖（2026-11-03 起陸續補上），座標是站在 NPC 旁邊時的玩家座標。":n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
@@ -1930,6 +2028,7 @@ $("fEqEff").addEventListener("input",()=>requestAnimationFrame(actSync));
 {const L=new Set();EQ.forEach(e=>eqStats(e).forEach(([zh])=>L.add(zh)));$("dlEqEff").innerHTML=[...L].sort((a,b)=>a.localeCompare(b,"zh-Hant")).map(x=>`<option value="${esc(x)}">`).join("")}
 const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",quiver:"quiver offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory",acc:"accessory"};
 const eqSetN=e=>{const st=[e.gen,FR2ID[e.name]].filter(Boolean).map(n=>SET_BY[norm(n)]).find(Boolean);return st?st.name+" "+(SET_ZH[st.name]||""):""};
+window.__detail=(t,i)=>detailHTML(t,i);window.__iconFor=en=>{const r=matRef(en);if(r.go||GICON[en])return r.ic(48);const e=EQ.find(x=>norm(x.name)===norm(en))||PR.find(x=>norm(x.name)===norm(en));return e?(EQ.includes(e)?eslot(e,48):pslot(e,48)):""};window.__auditIds=()=>({m:ALLM.map(m=>m.id),e:EQ.map(e=>String(e.oid)),p:PR.map(e=>String(e.oid)),i:Object.keys(ITEMS),r:ALLREC.map(r=>String(r.i)),n:FL_KEYS.flatMap(f=>NPCS(f).map(n=>n.id)),q:[...FL_KEYS.flatMap(f=>MQ(f).map((_,i)=>"mq"+f+"_"+i)),...ALLQ.map(q=>q.id)],s:FL_KEYS.flatMap(f=>spotsOf(f).map(s=>s.id)),t:ALLT.map(t=>t.id),c:CLS.map(c=>c.id)});   // site-wide audit hooks (2026-11-07 全站檢查)
 window.__eqDump=()=>EQ.map(e=>({oid:e.oid,gen:e.gen||"",name:e.name,zh:zhE(e),lv:e.lv,dmg:e.dmg,st:e.st,r:e.r,extra:!!e.extra,gst:!!e.cat0,patch:!!e.patch}));   // test/audit hook (2026-11-07 effect audit)
 const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ef=norm($("fEqEff").value.trim());
@@ -3071,8 +3170,8 @@ $("exportBtn").onclick=async()=>{const out={};Object.entries(userPos[FL]).forEac
 $("resetBtn").onclick=()=>{userPos[FL]={};savePos(FL);renderMap();renderZoneList()};
 
 // ================= floor switch + routing =================
-const VIEWS=["map","monsters","items","props","recipes","dungeons","quests","equip","classes","bosses","report","about","changelog"];let view="map";
-const CODEX=["monsters","equip","items","props"];let lastCodex="monsters";
+const VIEWS=["map","monsters","items","npcs","props","recipes","dungeons","quests","equip","classes","bosses","report","about","changelog"];let view="map";
+const CODEX=["monsters","equip","items","props","npcs"];let lastCodex="monsters";
 const hashFor=(v,f)=>(f===1?"":"f"+f+"-")+v;
 function go(v,f){location.hash=hashFor(v,f??FL)}
 document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();go(a.dataset.v==="codex"?lastCodex:a.dataset.v)}));
@@ -3104,7 +3203,7 @@ function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
   const Fx=F();$("floorInfo").innerHTML=`<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PRV().length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
-  $("nItem").textContent=matPool(f,false).length;
+  $("nItem").textContent=matPool(f,false).length;$("nNpc").textContent=NPCS(f).length;fillNpcArea();
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);if(f!==1)DGV=null;fitted=false;renderMap();renderZoneList()}
 // phones: fold bar for every browse tab's filters (hidden on wider screens by CSS)
 function fbarSync(){document.querySelectorAll(".browse .filters").forEach(F=>{const b=F.querySelector(':scope>.fbar [data-t="fopen"]');if(!b)return;
@@ -3118,7 +3217,7 @@ document.querySelectorAll(".browse .filters").forEach(F=>{const gs=F.querySelect
   F.insertBefore(bar,gs.length>1?gs[1]:F.firstChild);
   bar.querySelectorAll(".fbtn").forEach(b=>b.onclick=()=>{const t=b.dataset.t,op=F.classList.toggle(t);if(t==="nopen"){b.textContent=`ⓘ 說明 ${op?"▴":"▾"}`;b.setAttribute("aria-expanded",op)}else fbarSync()});
   const sy=()=>requestAnimationFrame(fbarSync);F.addEventListener("click",sy);F.addEventListener("change",sy);F.addEventListener("input",sy)});
-function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|props|recipes|quests|equip|classes|bosses|report|feedback|about|changelog|dungeons)$/);
+function show(){const h=location.hash.replace("#","");const pv=view;const mm=h.match(/^(?:f(\d{1,3})-)?(map|monsters|items|npcs|props|recipes|quests|equip|classes|bosses|report|feedback|about|changelog|dungeons)$/);
   view=mm?mm[2]:"map";if(view==="feedback"){view="report";rSub="feedback"}else if(view==="report")rSub="data";const want=mm&&mm[1]?+mm[1]:1;setFloor(FLOORS[want]?want:1);
   VIEWS.forEach(v=>$("view-"+v).hidden=v!==view);document.body.dataset.view=view;if(INL[pv]&&view!==pv&&!panel.hidden&&INL[pv].ok(stack[0])&&innerWidth>820)closeP();fitClsPanel();if(pv!==view&&GVW.length)gvCloseAll();if(RW&&RW.view!==view){$("rwin").hidden=true;RW=null}if(CW&&CW.view!==view)closeCW();if((view==="report"||view==="bosses"||view==="about"||view==="changelog"||(pv!==view&&!viewPending&&matchMedia("(max-width:820px)").matches))&&!panel.hidden)closeP();
   if(CODEX.includes(view))lastCodex=view;const inCodex=CODEX.includes(view);$("codexTabs").hidden=!inCodex;
@@ -3144,7 +3243,7 @@ function placeTopFilters(){Object.entries(TOPF).forEach(([v,ids])=>{const sec=$(
       if(topMQ.matches)box.appendChild(g);else g.__home.after(g)});box.hidden=!topMQ.matches||!box.children.length})}
 topMQ.addEventListener("change",()=>{placeTopFilters();renderCurrent()});
 // desktop codex tabs inside each codex view's left column (copies of #codexTabs, kept in sync)
-const CODEX_V=["monsters","equip","items","props"];
+const CODEX_V=["monsters","equip","items","props","npcs"];
 function syncVTabs(){CODEX_V.forEach(v=>{const F=document.querySelector(`#view-${v} .filters`);if(!F)return;let nv=F.querySelector(":scope>.vtabs");
   if(!nv){nv=document.createElement("nav");nv.className="vtabs";nv.setAttribute("aria-label","圖鑑分類");F.insertBefore(nv,F.firstChild)}
   nv.innerHTML='<div class="vth">圖鑑分類</div>'+[...document.querySelectorAll("#codexTabs a")].map(a=>`<a href="${a.getAttribute("href")}" data-v="${a.dataset.v}"${a.dataset.v===view?' aria-current="page"':""}>${a.innerHTML}</a>`).join("")})}
@@ -3168,7 +3267,7 @@ document.addEventListener("click",e=>{if(e.target.closest(".filters,.topf,.rsel"
 document.addEventListener("change",e=>{if(e.target.closest(".filters,.topf,.rsel"))setTimeout(actSync,0)});
 document.addEventListener("input",e=>{if(e.target.closest(".filters,.topf,.rsel"))setTimeout(actSync,0)});
 placeTopFilters();
-function renderCurrent(){requestAnimationFrame(fixCols);requestAnimationFrame(fbarSync);requestAnimationFrame(syncVTabs);requestAnimationFrame(actSync);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="about")renderAbout();else if(view==="changelog")renderChangelog();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="dungeons")renderDungeons();else if(view==="classes")renderClasses();else renderQuests()}
+function renderCurrent(){requestAnimationFrame(fixCols);requestAnimationFrame(fbarSync);requestAnimationFrame(syncVTabs);requestAnimationFrame(actSync);if(view==="map")filterMap();else if(view==="monsters")renderMon();else if(view==="items")renderItems();else if(view==="npcs")renderNpcs();else if(view==="bosses")renderBosses();else if(view==="report")renderReport();else if(view==="about")renderAbout();else if(view==="changelog")renderChangelog();else if(view==="equip")renderEquip();else if(view==="props")renderProps();else if(view==="recipes")renderRecipes();else if(view==="dungeons")renderDungeons();else if(view==="classes")renderClasses();else renderQuests()}
 window.addEventListener("hashchange",show);
 q.addEventListener("input",renderCurrent);
 

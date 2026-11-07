@@ -85,6 +85,33 @@ window.SAO_GAMEICONS = {
  "Training Scepter": "icons/game/training_scepter_s.png",   // model nerfs_weapons:baton_shaman_entrainement, = Starting Merchant 22:39:13
  "Training Quiver": "icons/game/training_quiver_s.png",     // model nerfs_weapons:carquois_entrainement, = 22:39:24
  "Training Dagger (2)": "icons/game/training_short_dagger_s.png",   // model nerfs_weapons:seconde_dague_entrainement, = 22:39:23 (訓練用短劍, assassin off-hand)
+ // 2026-11-07 site-wide check (全站檢查): game-only weapons still on placeholders, official item-model index by name
+ "Ring of the Leviathan": "icons/game/ring_of_the_leviathan.png",   // nerfs:item/ia_auto/anneau_leviathan ×4 = auction tiles 11/4 19:29 and the 11/7 inventory (grey centre gem; the catalogue icon had a blue gem). User 2026-11-07 screenshots
+ // 2026-11-07 icon-vs-screenshot comparison (user「沒檢查到」after 利維坦之戒): every auction-tile name compared with the site icon (scratchpad aud/si.js + aud/sim.py). Pixel grid rebuilt (k≈4.62–4.72) where the site showed a different object:
+ "Corrupted Fragment": "icons/game/corrupted_fragment.png",   // in9 2026-11-05 01:01:25, k≈4.68
+ "Iron Ingot": "icons/game/iron_ingot.png",   // in7 2026-11-04 19:29:16, k≈4.66
+ "Copper Ingot": "icons/game/copper_ingot.png",   // in9 2026-11-04 22:40:34, k≈4.72
+ "Ring of the Fallen": "icons/game/ring_of_the_fallen.png",   // in7 2026-11-04 19:29:35, k≈4.62
+ // cut-outs (no clean 16 px grid: k at the search lower bound, or 3D models):
+ "Magician's Pavise": "icons/game/magicians_pavise_s.png",   // 2026-11-05 00:58:44 [2511] (catalogue colours differ)
+ "Swordsman's Scroll": "icons/game/swordsmans_scroll_s.png",   // 2026-11-05 00:58:44 [2508] (was a placeholder)
+ "Archer's Scroll": "icons/game/archers_scroll_s.png",   // 2026-11-04 19:22:26 [589] (was a placeholder; same picture as the swordsman's)
+ "Aincrad Crystal": "icons/game/aincrad_crystal_s.png",   // 2026-11-07 02:11:59 [3230]
+ "Halberd of the Warden": "icons/game/halberd_of_the_warden_s.png",   // 2026-11-04 22:42:24 [1585]
+ "Sylvan Bow": "icons/game/sylvan_bow_s.png",   // 2026-11-04 19:23:31 [634]
+ "Bandit's Dagger": "icons/game/bandits_dagger_s.png",   // 2026-11-04 22:50:32 [2166]
+ "Sylvan Staff": "icons/game/sylvan_staff_s.png",   // 2026-11-04 22:50:47 [2193]
+ "Skeletal Sword": "icons/game/skeletal_sword_s.png",   // 2026-11-04 22:42:09 [1560]
+ "Crossbow of the Bandits": "icons/game/crossbow_of_the_bandits_s.png",   // 2026-11-04 19:28:01 [757]
+ "Four-Armed Halberd": "icons/game/four_armed_halberd_s.png",   // 2026-11-04 22:46:43 [1901] (was a placeholder)
+ "Galiath's Axe": "icons/game/galiaths_axe_s.png",   // 2026-11-04 22:51:21 [2247] (was a placeholder)
+ "Colossus Pavise": "icons/game/colossus_pavise_s.png",   // 2026-11-05 01:00:20 [2588] (was a placeholder)
+ "Nodachi Staff": "icons/game/nodachi_staff_s.png",   // 2026-11-05 01:01:14 [2653] (was a placeholder)
+ "Rhitta": "icons/game/rhitta_s.png",   // 2026-11-05 01:01:28 [2672] (user 2026-11-07: game codex icons are fine to show, even for the Seven Deadly Sins collab weapons)
+ "Lostvayne": "icons/game/lostvayne_s.png",   // 2026-11-05 00:56:32 [2427]
+ "Dagger of Albal": "icons/game/dagger_of_albal_s.png",     // nerfs_weapons:seconde_dague_albal = auction tile 2026-11-04 22:4x (dark red blade, black guard)
+ "Iron Quiver": "icons/game/iron_quiver_s.png",             // nerfs_weapons:carquois_fer (name only; no screenshot of the icon yet)
+ "Hunter's Quiver": "icons/game/hunters_quiver_s.png",      // nerfs_weapons:carquois_chasseur (name only; no screenshot of the icon yet)
  "Witch's Dragée": "icons/game/witchs_dragee.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
  "Ring of the Nepenthes": "icons/game/ring_of_the_nepenthes.png",   // official item-model texture anneaunephente (2026-11-07)
  "Flower of a Nepenthes": "icons/game/flower_of_a_nepenthes.png",   // official item-model texture fleurnephente (2026-11-07)
