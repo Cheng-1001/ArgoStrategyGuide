@@ -194,6 +194,8 @@ with sync_playwright() as p:
     pg.click('#lDg [data-go="d|souls"]'); pg.wait_for_timeout(300)
     check("Sanctuary of Souls Key" in pg.inner_text("#pBody") and pg.locator("#pBody .btbl").count() == 3, "event dungeon panel: key recipe, fragment zones, banner and forge tables")
     dg = pg.evaluate("(()=>({cols:getComputedStyle(document.getElementById('lDg')).gridTemplateColumns.split(' ').length,keys:document.querySelectorAll('#lDg .th.dgk').length,inline:document.body.classList.contains('cls-inline'),close:!!document.getElementById('pClose').offsetParent,kn:[...document.querySelectorAll('#lDg .dgkn')].map(e=>e.textContent)}))()")
+    pg.click('#lDg [data-go="s|xal"]'); pg.wait_for_timeout(250)
+    check(pg.locator("#pBody .phead .th.dgk").count() == 1, "the dungeon shown on the page uses its key as the header icon")
     check(dg["cols"] == 1 and dg["keys"] == 3 and dg["inline"] and not dg["close"] and "鑰匙：森林鑰匙" in dg["kn"],
           f"dungeons: one column, each floor dungeon shows its own key icon, the dungeon is shown on the page next to the list (no window frame) ({dg})")
     pg.keyboard.press("Escape"); pg.wait_for_timeout(150)
@@ -269,9 +271,11 @@ with sync_playwright() as p:
     pg.goto(base + "#classes"); pg.wait_for_timeout(400)
     check(pg.locator("#lCls .card").count() == 6 and pg.is_hidden("#codexTabs"), "classes tab lists the 6 classes")
     pg.locator("#lCls .card", has_text="Guerrier").click(); pg.wait_for_timeout(300)
-    t = pg.inner_text("#pBody")
+    t = pg.evaluate("document.getElementById('pBody').textContent")
     check("Combinaison Brutale" in t and "Paladin" in t and "起始屬性" in t and "Physical Might" in t and "佔位圖" not in t,
           "Guerrier panel: skills, specialisations, base stats and talents")
+    fold = pg.evaluate("(()=>{const L=document.querySelector('#pBody .cls2>div:first-child');return {n:L.querySelectorAll('details.clsfold').length,open:L.querySelectorAll('details.clsfold[open]').length,t:[...L.querySelectorAll('details.clsfold>summary')].map(s=>s.textContent)}})()")
+    check(fold["n"] == 3 and fold["open"] == 0 and "天賦樹" in fold["t"][2], f"ability stars, base stats and talent tree sit together in the left column, folded ({fold})")
     check(pg.locator("#pBody img").count() == 0, "no class or skill pictures")
     pg.evaluate("document.querySelector('#lCls [data-go=\"c|archer\"]').click()"); pg.wait_for_timeout(300)
     t = pg.inner_text("#pBody")
