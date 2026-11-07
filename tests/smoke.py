@@ -112,6 +112,11 @@ with sync_playwright() as p:
     check(c24 == "封印的真相" and pg.inner_text("#pBody h2") == "水晶之下" and "Beneath the Crystal" in pg.inner_text("#pBody .sub")
           and "門開了。梅菲斯特在托爾巴納的水晶下等候" in t34 and "遊戲：前往水晶下方（Go down beneath the crystal）" in t34 and "💡 水晶下面是浮空島" in t34,
           "main quests use the official Chinese title and quest-log text (English as subtitle; objectives with the English line; our tip below)")
+    pg.locator("#pBody .stimg a").first.click(); pg.wait_for_timeout(300)
+    iz = pg.evaluate("(()=>{const z=document.querySelector('.imgzoom');return {open:!!z,img:z&&z.querySelector('img').complete,pages:pg_count=0}})()".replace("pg_count=0","1"))
+    check(iz["open"] and len(pg.context.pages) == 1, "quest step picture opens in a viewer on the page, not a new tab")
+    pg.keyboard.press("Escape"); pg.wait_for_timeout(200)
+    check(pg.locator(".imgzoom").count() == 0 and pg.is_visible("#panel"), "Esc closes the picture viewer and keeps the quest panel")
     pg.fill("#q", "梅菲斯特"); pg.wait_for_timeout(300)
     check(pg.locator("#lQ .qcard", has_text="梅菲斯特").count() >= 3, "searching a Chinese quest NPC name finds the main quests")
     pg.fill("#q", ""); pg.wait_for_timeout(200)
@@ -273,6 +278,9 @@ with sync_playwright() as p:
           and rows[:2] == ["迴避射擊", "疾風戰刃"] and rows[-2:] == ["箭矢齊射", "爆裂連擊"] and "目前沒有裝備" in pb and "升級 2 個：集中箭雨、天空彈幕" in pb and "Tir Évasif" in pb,
           f"Archer skills: one row per base skill (equipped ones in slot order, then 箭矢齊射, then the weapon skill), upgrades folded, every skill has an icon ({rows})")
     pg.evaluate("document.querySelector('#lCls [data-go=\"c|guerrier\"]').click()"); pg.wait_for_timeout(300)
+    top = pg.evaluate("(()=>{const b=document.getElementById('pBody'),c=b.querySelector('.cls2');return {first:[...b.children].indexOf(c),lore:!!c.querySelector('.lore'),facts:!!c.querySelector('.facts'),btn:!!c.querySelector('.clsbtns'),title:b.querySelector('h2').textContent,clx:[...document.querySelectorAll('#lCls .clx')].filter(e=>e.offsetParent).length}})()")
+    check(top["first"] == 1 and top["lore"] and top["facts"] and top["btn"] and top["title"] == "戰士" and top["clx"] == 12,
+          f"class panel: intro, difficulty/weapons/specs and buttons sit in the left column (no empty top-right); official Chinese title; list cards keep weapons and specs ({top})")
     cols = pg.evaluate("getComputedStyle(document.getElementById('lCls')).gridTemplateColumns.split(' ').length")
     pw = pg.locator("#panel").bounding_box()["width"]
     two = pg.evaluate("getComputedStyle(document.querySelector('#pBody .cls2')).gridTemplateColumns.split(' ').length")
@@ -286,7 +294,7 @@ with sync_playwright() as p:
     n = pg.locator("#cwBody .card").count()
     check(pg.is_visible("#cwin") and n > 50 and "#equip" not in pg.url, f"equipment window opens over the classes tab ({n} items)")
     pg.locator("#cwBody .card").first.click(); pg.wait_for_timeout(300)
-    check("官方圖鑑 #" in pg.inner_text("#cwBody") and "Guerrier" in pg.inner_text("#pCrumb"), "item detail opens inside the window; the class panel stays")
+    check("官方圖鑑 #" in pg.inner_text("#cwBody") and "戰士" in pg.inner_text("#pCrumb"), "item detail opens inside the window; the class panel stays")
     pg.click("#cwBack"); pg.wait_for_timeout(200)
     check(pg.locator("#cwBody .card").count() == n, "back to the equipment list")
     pg.click("#cwX"); pg.wait_for_timeout(150)
