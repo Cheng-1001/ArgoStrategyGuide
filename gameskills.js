@@ -4,11 +4,12 @@
    dz = Chinese for each DATA line (same order). t = what the tooltip says about the skill: "passive" (LORE says Passif),
    "scroll" (description: learned only by reading a scroll), "weapon" (red line: Compétence d'arme — ne s'équipe pas), "" = the tooltip does not say.
    slot / max / en: from the English Skills page (2026-11-07 03:48): 1-5 = "Skill 1"-"Skill 5", 9 = "Ultimate skill", 10 = "Passive"; max = the level cap shown
-   ("Lvl 1 / 18"). Evasive Shot is only on the English page (no French tooltip screenshot), so fr is null.
+   ("Lvl 1 / 18"). zh of the 7 equipped skills = official Chinese name (skills screen after the localisation, 2026-11-07 15:35); the others are this site's translation.
+   Evasive Shot is only on the English page (no French tooltip screenshot), so fr is null.
    The wiki's skill list for the archer (Tir Précis, Flèche Perforante…) does not appear in the game at all. */
 window.SAO_GAMESKILLS = {
  archer: {date: "2026-11-07", lv: 11, list: [
-  {fr: null, en: "Evasive Shot", zh: "閃避射擊", t: "", slot: 1, max: 18,
+  {fr: null, en: "Evasive Shot", zh: "迴避射擊", t: "", slot: 1, max: 18,
    d: "向後跳，再朝正前方射出 3 支箭，傷害遞增（說明這樣寫，但技能頁的數值是 125／100／125）。",
    lore: "Leap backward, then fire 3 arrows straight ahead of you, with increasing damage. Damage type: Skill · Projectile",
    data: ["Total damage, 1st arrow 125", "Total damage, 2nd arrow 100", "Total damage, 3rd arrow 125", "Cooldown in seconds 8", "Stamina required 7"],
@@ -33,7 +34,7 @@ window.SAO_GAMESKILLS = {
    lore: "Tirez plusieurs flèches vers le ciel qui retombent en ligne devant vous, transperçant tous les ennemis sur leur passage.",
    data: ["Nature des dégâts : Compétence · Projectile", "175 Dégâts totaux en pourcentage", "8 Portée en blocs", "13 Temps de recharge en secondes", "10 Stamina nécessaire"],
    dz: ["傷害類型：技能・投射物", "總傷害 175%", "範圍 8 格", "冷卻 13 秒", "耐力 10"]},
-  {fr: "Déluge Céleste", en: "Piercing Skyfall", slot: 3, max: 18, zh: "天降箭雨", t: "",
+  {fr: "Déluge Céleste", en: "Piercing Skyfall", slot: 3, max: 18, zh: "穿刺天降", t: "",
    d: "向天空射出多支箭，落成一直線，貫穿路徑上所有敵人。",
    lore: "Tirez plusieurs flèches vers le ciel qui retombent en ligne, transperçant tous les ennemis sur leur passage.",
    data: ["Nature des dégâts : Compétence · Projectile", "125 Dégâts totaux en pourcentage", "12 Temps de recharge en secondes", "8 Stamina nécessaire"],
@@ -48,7 +49,7 @@ window.SAO_GAMESKILLS = {
    lore: "Décochez 13 flèches en rafale, en visant librement. Chaque flèche transperce les ennemis sur son passage.",
    data: ["Nature des dégâts : Compétence · Projectile", "35 Dégâts par flèche", "17 Temps de recharge en secondes", "11 Stamina nécessaire"],
    dz: ["傷害類型：技能・投射物", "每支箭傷害 35", "冷卻 17 秒", "耐力 11"]},
-  {fr: "Flèches Rapides", en: "Rapid Arrows", slot: 4, max: 18, zh: "快速箭矢", t: "",
+  {fr: "Flèches Rapides", en: "Rapid Arrows", slot: 4, max: 18, zh: "疾速箭矢", t: "",
    d: "自由瞄準、連續射出 10 支箭：前 7 支傷害較低，最後 3 支是全額傷害。",
    lore: "Décochez 10 flèches en rafale, en visant librement. Les 7 premières font moins de dégâts, les 3 dernières infligent le plein potentiel.",
    data: ["Nature des dégâts : Compétence · Projectile", "50 Dégâts des 7 premières flèches", "100 Dégâts des 3 dernières flèches", "15 Temps de recharge en secondes", "10 Stamina nécessaire"],
@@ -63,7 +64,7 @@ window.SAO_GAMESKILLS = {
    lore: "Entrez en Mode Chasseur, gagnant esquive, vitesse de déplacement et vitesse d''attaque pendant une durée limitée. Vos coups de combo ont une chance de faire exploser leur cible, infligeant des dégâts aux ennemis proches.",
    data: ["25 Esquive bonus en pourcentage", "25 Vitesse de déplacement bonus en pourcentage", "0.2 Vitesse d''attaque bonus", "25 Chance d''explosion par coup en pourcentage", "10 Dégâts de l''explosion en pourcentage", "1 Rayon de l''explosion en blocs", "15 Durée en secondes", "120 Temps de recharge en secondes", "15 Stamina nécessaire"],
    dz: ["閃避 +25%", "移動速度 +25%", "攻擊速度 +0.2", "每次命中爆炸機率 25%", "爆炸傷害 10%", "爆炸半徑 1 格", "持續 15 秒", "冷卻 120 秒", "耐力 15"]},
-  {fr: "Flèche Dévastatrice", en: "Shot of Destruction", slot: 9, max: 18, zh: "毀滅之箭", t: "",
+  {fr: "Flèche Dévastatrice", en: "Shot of Destruction", slot: 9, max: 18, zh: "毀滅射擊", t: "",
    d: "把能量集中在箭頭，射出一支貫穿並摧毀路徑上一切的強力箭。",
    lore: "Concentrez-vous sur la pointe de votre flèche, accumulant une énergie destructrice, puis décochez une unique flèche surpuissante qui transperce et détruit tout sur son passage.",
    data: ["Nature des dégâts : Compétence · Projectile", "500 Dégâts totaux en pourcentage", "100 Dégâts bruts ajoutés au tir", "120 Temps de recharge en secondes", "15 Stamina nécessaire"],
@@ -73,7 +74,7 @@ window.SAO_GAMESKILLS = {
    lore: "Compétence du paquet de Khan (Rain of Arrows). Ne s'apprend qu'en lisant un parchemin.",
    data: ["100% de vos dégâts", "16 Temps de recharge en secondes", "12 Stamina nécessaire"],
    dz: ["你的傷害的 100%", "冷卻 16 秒", "耐力 12"]},
-  {fr: "Aeroglaive", slot: 2, max: 1, zh: "空氣長槍", t: "",
+  {fr: "Aeroglaive", slot: 2, max: 1, zh: "疾風戰刃", t: "",
    d: "蓄力後擲出一支空氣長槍，貫穿路徑上的一切。蓄力時弓箭手不能移動，但最後一擊威力很大。",
    lore: "Charge puis lance un lance aérien qui transperce tout sur son passage. Pendant la charge, l'archer est immobilisé mais le tir final est dévastateur.",
    data: ["55% de vos dégâts | (+66.7%/lvl)", "2s temps de charge", "20s temps de recharge", "15 stamina"],

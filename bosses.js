@@ -17,7 +17,7 @@ window.SAO_BOSSES = {
       { day: 0, time: "19:00", zone: "Europe/Paris", minutes: 60 },
       { day: 0, time: "23:00", zone: "America/Los_Angeles", minutes: 60 }
     ],
-    guaranteed: "250 Cols（每位玩家）",
+    guaranteed: "250 珂爾（每位玩家）",
     rolls: 1,
     // the game's queue sign (owner's screenshot 2026-11-05 20:51, auction-house tooltip): odds changed and 3 new rewards since the
     // official page was fetched (2026-10-30); the site shows the game's list and keeps the official one in roulette0
