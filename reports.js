@@ -119,11 +119,13 @@ window.SAO_REPORTS = [
   "id": "R0007",
   "type": "jmap",
   "floor": 1,
-  "name": "IICHENGII",
+  "name": "探索地圖",
   "date": "2026-11-07",
   "img": null,
   "imgs": [],
-  "raw": {},
+  "raw": {
+   "探索地圖・貢獻者名稱": "IICHENGII"
+  },
   "source": "form",
   "review": "自動核准：探索地圖由程式比對網站地圖檢查"
  }
