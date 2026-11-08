@@ -242,7 +242,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .th.sm{width:28px;height:28px;font-size:14px;border-width:2px;box-shadow:none} .th.sm .beh{width:8px;height:8px;border-width:1.5px}
 .note{font-size:12.5px;color:var(--muted);background:var(--panel-2);border-radius:6px;padding:8px 10px}
 .note.warn{border-left:3px solid var(--warn)}
-.linkbtn{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}.maplinks{display:flex;flex-wrap:wrap;gap:6px 18px}
 
 /* ---------- map ---------- */
 .stage{position:relative;overflow:hidden;background:var(--stage);touch-action:none;cursor:grab;min-height:0}
@@ -1349,14 +1349,14 @@ function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">�
   <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd>${nameRow}<dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd>${sp.tp?`<dt>傳送</dt><dd><span class="pill tpp">🌀 可傳送</span> 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl>
   ${sp.u?`<div class="note">在地下，要從入口走下去。</div>`:""}${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}${sp.rep?`<div class="note srcn">這個地點來自核准的玩家回報（${repLink(sp.rep)}）。</div>`:""}
   ${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${repLink(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}
-  <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>${dgm?`</div><div class="dgm">${dgm}</div><div class="dgb">`:""}
+  <div class="maplinks"><button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>${(sp.tp||sp.kind==="poi")?underBtn(sp.floor,sp.x,sp.z,pN(sp)):""}</div>${dgm?`</div><div class="dgm">${dgm}</div><div class="dgb">`:""}
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(mN(m))}</b><span>${mN(m)!==m.name?esc(m.name)+"・":""}${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
   ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(zhI(i)||i)}</b><span>${zhI(i)&&zhI(i)!==i?esc(i)+"・":""}${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}${dgm?"</div></div>":""}`}
 
 function townDetail(id){const t=townById[id];const qs=ALLQ.filter(x=>x.town===id);
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">🏘️</span><div class="ttl"><div class="num mono">${flBadge(t.floor)} X ${t.x} · Z ${t.z}</div>${(s=>s?`<h2>${esc(pN(t))}</h2><div class="sub">${esc(s)}</div>`:`<h2>${esc(pN(t))}</h2>`)([pN(t)!==t.n?t.n:"",t.tp&&t.tp!==t.n?t.tp:"",pN(t)!==t.n?"":t.zh||t.en,t.old?"舊稱 "+t.old:""].filter(Boolean).join("・"))}</div></div>
   ${soonNote(t.floor)}${t.tp?`<div class="note">🌀 <b>可以直接傳送</b>：在遊戲的傳送選單選「${esc(t.tp)}」。</div>`:t.floor===1?`<div class="note">這個村鎮不在遊戲的傳送選單裡，要自己走過去。</div>`:""}${t.note?`<div class="note">${esc(t.note)}</div>`:""}
-  <button class="linkbtn" data-town="${id}">在地圖上查看</button>
+  <div class="maplinks"><button class="linkbtn" data-town="${id}">在地圖上查看</button>${underBtn(t.floor,t.x,t.z,pN(t))}</div>
   <h3 class="sec">支線任務 <span class="c">${qs.length}</span></h3>
   <div style="display:flex;flex-direction:column;gap:10px">${qs.map(qq=>`<div style="border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px">
     <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><b style="font-family:var(--f-display);font-size:15px">${qq.title?esc(qT(qq))+"・":""}${esc(qNpc(qq.npc))}</b><span class="mono muted" style="font-size:11.5px">X ${qq.x} · Z ${qq.z}</span></div>
@@ -2989,12 +2989,27 @@ const fromPx=(px,pz)=>[px/1000*MP().size+MP().x0,pz/1000*MP().size+MP().z0];
 const fitSc=()=>{const r=stage.getBoundingClientRect();return Math.min(r.width,r.height)/1000};
 // ---------- tiled base map (JourneyMap at 1 block = 1 px): 256 px tiles, levels 0..3 = 640..5120 px ----------
 const tilesEl=$("tiles");const TL=new Map();let tileRaf=0,tileGC=0;
-const useTiles=()=>{const m=MP();return!!(m&&m.tiles&&(m.dg||BASE==="jm"))};
+const useTiles=()=>{const m=MP();return!!(m&&m.tiles&&(m.dg||BASE==="jm"||curLayer()))};
 // height layers of the explored map (tools/jm_merge.py, jmmeta.js "1".layers): own tile sets tiles/f1jm_<key>, dark
 // where nobody has uploaded; only the level-3 tiles listed in "l3" exist, levels 0-2 are complete
-let JML="day";try{JML=localStorage.getItem("sao-map-layer")||"day"}catch(e){}
+// 「地下」 is no longer a menu on the map: a teleport point / landmark panel offers 「查看地下」 when the combined underground
+// map (tiles/f1jm_under, tools/jm_merge.py build_under) has something near it, and the map then shows 地下 around that place
+// with 「← 回到地面」 (user 2026-11-08「移除地下顯示，做成點傳送點跟地標時在右側視窗多一個查看地下的選項」)
+let JML="day",UNDER_AT=null;
 const jmLayersMeta=()=>FL===1?((((window.SAO_JM||{})["1"]||{}).layers)||{}):{};
 const curLayer=()=>{const L=jmLayersMeta()[JML];return JML!=="day"&&L?L:null};
+let UNDER_C=null;   // content.png: 1 px per 16-block cell counted from X / Z 70, 1 = real underground picture there
+function underLoad(){const L=jmLayersMeta().under;if(!L||UNDER_C)return;UNDER_C="loading";const im=new Image();
+  im.onload=()=>{try{const c=document.createElement("canvas");c.width=im.width;c.height=im.height;const g=c.getContext("2d");g.drawImage(im,0,0);
+    const d=g.getImageData(0,0,c.width,c.height).data,a=new Uint8Array(c.width*c.height);for(let i=0;i<a.length;i++)a[i]=d[i*4]>127?1:0;UNDER_C={w:c.width,h:c.height,a}}catch(e){UNDER_C={err:1}}
+    document.querySelectorAll("[data-under]").forEach(b=>{if(!underNear(+b.dataset.ux,+b.dataset.uz))b.remove()})};
+  im.onerror=()=>{UNDER_C={err:1}};im.src=`tiles/f1jm_under/content.png?v=${encodeURIComponent(L.v||"")}`}
+const UNDER_R=160,UNDER_MIN=3;   // blocks around the place, cells with underground picture needed
+function underNear(x,z){const C=UNDER_C;if(!C||C==="loading"||C.err)return true;const r=Math.ceil(UNDER_R/16),cx=Math.floor((x-70)/16),cz=Math.floor((z-70)/16);let n=0;
+  for(let j=cz-r;j<=cz+r;j++)for(let i=cx-r;i<=cx+r;i++){if(i<0||j<0||i>=C.w||j>=C.h||(i-cx)**2+(j-cz)**2>r*r)continue;if(C.a[j*C.w+i]&&++n>=UNDER_MIN)return true}return false}
+function underBtn(f,x,z,name){if(f!==1||FL!==1||!jmLayersMeta().under)return"";underLoad();if(!underNear(x,z))return"";
+  return`<button class="linkbtn" data-under="${esc(name)}" data-ux="${x}" data-uz="${z}" title="在地圖分頁顯示這附近的地下（玩家上傳的 JourneyMap 洞穴地圖：洞穴、地下室、建築的室內）">查看地下</button>`}
+window.__underNear=(x,z)=>underNear(x,z);underLoad();
 const layerLabel=k=>{const L=jmLayersMeta()[k];return L&&L.label||(k==="day"?"地面":k)};
 function updateTiles(){tileRaf=0;const m=MP();if(!useTiles()){if(TL.size){tilesEl.innerHTML="";TL.clear()}tilesEl.hidden=true;return}
   tilesEl.hidden=false;const r=stage.getBoundingClientRect();if(!r.width)return;
@@ -3040,9 +3055,9 @@ const typeKey=m=>m.type==="Boss"?"boss":m.type==="Mini-Boss"?"mini":"mob";
 let BASE="wiki";try{BASE=localStorage.getItem("sao-map-base")||"wiki"}catch(e){}
 
 $("baseBtn").addEventListener("click",ev=>{ev.stopPropagation();BASE=BASE==="jm"?"wiki":"jm";try{localStorage.setItem("sao-map-base",BASE)}catch(e){};renderMap()});
-$("layerSel").addEventListener("change",ev=>{if(DGV){DJL[DGV]=ev.target.value;renderMap();return}JML=ev.target.value;try{localStorage.setItem("sao-map-layer",JML)}catch(e){};renderMap()});
+$("layerSel").addEventListener("change",ev=>{if(DGV){DJL[DGV]=ev.target.value;renderMap()}});
 $("dgSel").addEventListener("change",ev=>{DGV=ev.target.value||null;fitted=false;renderMap();if(!DGV)requestAnimationFrame(fit)});
-$("dgBack").addEventListener("click",()=>{DGV=null;fitted=false;renderMap();requestAnimationFrame(fit)});["pointerdown","wheel"].forEach(t=>$("dgBack").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
+$("dgBack").addEventListener("click",()=>{if(DGV){DGV=null;fitted=false;renderMap();requestAnimationFrame(fit);return}JML="day";UNDER_AT=null;renderMap()});["pointerdown","wheel"].forEach(t=>$("dgBack").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
 ["pointerdown","wheel"].forEach(t=>$("dgSel").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
 // dungeon mode: zoom to the part of the frame that has data
 function dgFit(){const m=MP();if(!m||!m.dg)return;fit();const r=stage.getBoundingClientRect(),b=m.e.bounds||[m.x0,m.z0,m.x0+m.size,m.z0+m.size];
@@ -3051,8 +3066,11 @@ function dgFit(){const m=MP();if(!m||!m.dg)return;fit();const r=stage.getBoundin
 window.__dgMode=()=>DGV;
 // the dungeon panel's map: open it on the map tab
 document.addEventListener("click",ev=>{const b=ev.target.closest&&ev.target.closest("[data-dgmap]");if(!b)return;ev.stopPropagation();
-  DGV=b.dataset.dgmap;fitted=false;if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===1)renderMap();else{go("map",1);renderMap();requestAnimationFrame(()=>requestAnimationFrame(dgFit))}},true);   // go() does not redraw the markers when the map was already drawn
+  DGV=b.dataset.dgmap;JML="day";UNDER_AT=null;fitted=false;if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===1)renderMap();else{go("map",1);renderMap();requestAnimationFrame(()=>requestAnimationFrame(dgFit))}},true);   // go() does not redraw the markers when the map was already drawn
 ["pointerdown","wheel"].forEach(t=>$("layerSel").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
+document.addEventListener("click",ev=>{const b=ev.target.closest&&ev.target.closest("[data-under]");if(!b)return;ev.stopPropagation();
+  const x=+b.dataset.ux,z=+b.dataset.uz;DGV=null;JML="under";UNDER_AT={n:b.dataset.under,x,z};if(typeof gvCloseAll==="function")gvCloseAll();
+  goMapThen(1,()=>{renderMap();requestAnimationFrame(()=>centerOn(x,z,6))})},true);
 // ---- map filter panel ----
 function mapCounts(){const sp=spotsOf(FL),tw=F().towns,np=NPCS(FL);const c={tp:tw.filter(t=>t.tp).length+sp.filter(x=>x.tp).length,land:tw.filter(t=>!t.tp).length+sp.filter(x=>x.kind==="poi"&&!x.tp).length,npc:np.length};
   ["gather","dungeon","wboss"].forEach(k=>c[k]=sp.filter(x=>x.kind===k).length);c.area=sp.filter(x=>x.kind==="mob").length;c.boss=SPAWNS(FL).filter(w=>bossCat(w.m)==="boss").length;c.mini=SPAWNS(FL).length-c.boss;
@@ -3105,7 +3123,7 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
   if(!m){filterMap();return}
   const want=BASE==="jm"&&m.jm&&!m.tiles?m.jm:m.img;$("baseBtn").hidden=!m.jm;mapImg.style.visibility=useTiles()?"hidden":"";if(TL.size&&tilesEl.dataset.f!==String(FL)){tilesEl.innerHTML="";TL.clear()}tilesEl.dataset.f=String(FL);schedTiles();$("baseBtn").textContent=BASE==="jm"&&m.jm?"底圖：探索地圖":"底圖：wiki 地圖";
   // dungeon maps are opened from the dungeon page (「在地圖上看」); the map tab itself has no dungeon list (user 2026-11-08「不用放地下城」)
-  $("dgSel").hidden=true;{const b=$("dgBack");b.hidden=!m.dg;if(m.dg)b.textContent=`← 回到第 ${FL} 層（目前：${dgName(m.dg)}）`}
+  $("dgSel").hidden=true;{const b=$("dgBack"),u=!m.dg&&!!curLayer();b.hidden=!m.dg&&!u;if(m.dg)b.textContent=`← 回到第 ${FL} 層（目前：${dgName(m.dg)}）`;else if(u){b.textContent=`← 回到地面（目前：${UNDER_AT?UNDER_AT.n+" 附近的":""}地下）`;$("baseBtn").hidden=true}}
   $("stage").classList.toggle("dgmode",!!m.dg);
   if(m.dg){const ls=$("layerSel"),ks=Object.keys(m.e.layers).sort((a,b)=>(a==="day"?99:+a.slice(1))>(b==="day"?99:+b.slice(1))?-1:1);ls.hidden=ks.length<2;
    ls.innerHTML=ks.map(k=>`<option value="${k}">高度：${esc(m.e.layers[k].label||k)}</option>`).join("");ls.value=dgKey();
@@ -3116,9 +3134,8 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
    if(!fitted)requestAnimationFrame(dgFit);SRCH_ALL=false;return}
   // one 「地下」 option instead of every height (user 2026-11-08「直接整合成地下」): tiles/f1jm_under = all heights combined by
   // tools/jm_merge.py (build_under); the per-height sets stay for the packing tool and quest maps
-  {const ls=$("layerSel"),LM=jmLayersMeta();if(LM.under&&JML!=="day"&&JML!=="under")JML="under";ls.hidden=!(useTiles()&&LM.under);
-   if(!ls.hidden){ls.innerHTML=`<option value="day">地圖：地面</option><option value="under">地圖：地下</option>`;ls.value=curLayer()?JML:"day"}}
-  if(useTiles()&&curLayer()){const LY=curLayer();$("mapNote").hidden=false;$("mapNote").textContent=`${JML==="under"?`正在看地下的地圖（玩家上傳的 JourneyMap 洞穴地圖，所有高度合成一張：洞穴、地下室、建築和塔的室內；同一個位置有好幾層時顯示最深的那一層；${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳或那裡沒有地下。`:`正在看高度 ${LY.label} 的室內・洞穴地圖（JourneyMap 的洞穴地圖，只畫有屋頂遮住的地方：洞穴、地下室、建築和塔的室內；${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳或那個高度沒有室內。`}可以到「協作區」用「打包探索地圖」上傳。`}
+  $("layerSel").hidden=true;
+  if(useTiles()&&curLayer()){const LY=curLayer();$("mapNote").hidden=false;$("mapNote").textContent=`${JML==="under"?`正在看${UNDER_AT?" "+UNDER_AT.n+" 附近的":""}地下（玩家上傳的 JourneyMap 洞穴地圖，所有高度合成一張：洞穴、地下室、建築的室內；和地面一樣的地面高度室內不算；${LY.date} 更新）。彩色是有地下資料的地方，黑色是還沒有人上傳或那裡沒有地下。按左上角「回到地面」切回去。`:`正在看高度 ${LY.label} 的室內・洞穴地圖（JourneyMap 的洞穴地圖，只畫有屋頂遮住的地方：洞穴、地下室、建築和塔的室內；${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳或那個高度沒有室內。`}可以到「協作區」用「打包探索地圖」上傳。`}
   else if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate} 更新，${m.jmPct?"約佔地圖 "+m.jmPct+"%，":""}${m.jmN?"含 "+m.jmN+" 份玩家上傳，":""}1 格 1 像素，放大會更清楚），其餘為變暗的 wiki 地圖。可以到「協作區」上傳你的 JourneyMap 補上沒探索的地方。`}
   {const cr=$("jmCredit"),C=BASE==="jm"&&m&&m.jm&&!(useTiles()&&curLayer())?jmCredits():null;cr.hidden=!C;   // contributors of the explored map, under the base toggle
    if(C){const pc=n=>{const p=n/C.tot*100;return p>=0.1?p.toFixed(1)+"%":"<0.1%"},top=C.rows.slice(0,5),rest=C.rows.slice(5);

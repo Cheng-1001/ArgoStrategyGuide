@@ -257,6 +257,7 @@ def merge_dungeon(d, instances, date, report):
 UNDER = "under"
 GROUND_R = 3      # blocks (16 m each) a detected ground level spreads to
 SURF_CORR = 0.45
+CONTENT_MIN = 0.1
 DARK = 24        # JourneyMap paints explored solid rock pure black and the site's empty background is (7,12,17): neither is data,
                  # otherwise a black lower layer covers the room above it (the mill ink room at Y 24 vanished under Y 0-15)   # a 16x16 cave block whose grey pattern correlates this much with the surface map is at ground level there
 
@@ -322,6 +323,11 @@ def build_under(date=None):
         tx, ty = map(int, nm[:-4].split("_"))
         save_tile(cv.crop((tx * T, ty * T, tx * T + T, ty * T + T)), os.path.join(tiles, "3", nm))
     pyramid(cv, tiles)
+    # content.png: 1 px per 16x16 block of the canvas (block = (world - X0) // 16, not world chunks), 255 where at least
+    # CONTENT_MIN of the block is real underground picture. The site shows 「查看地下」 on a teleport point / landmark panel
+    # only when such blocks are near it (user 2026-11-08: no 地下 menu on the map, an option on the panel instead)
+    lum = blocks(np.asarray(cv.convert("L"), np.uint8))
+    Image.fromarray(((lum > DARK).mean(axis=2) >= CONTENT_MIN).astype(np.uint8) * 255).save(os.path.join(tiles, "content.png"), optimize=True)
     chunks = sum(1 for cz in range(C0, C1 + 1) for cx in range(C0, C1 + 1) if mask.getpixel((cx, cz)))
     meta = load_meta()
     f1 = meta.setdefault("1", {})
