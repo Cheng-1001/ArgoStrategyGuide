@@ -302,7 +302,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .world .tiles{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;overflow:hidden}
 .world .tiles img{position:absolute;display:block;max-width:none;user-select:none;image-rendering:auto}
 .world .tiles img.l0{z-index:0}.world .tiles img.mid{z-index:1}.world .tiles img.hi{z-index:2}
-.legend select.lsel{appearance:auto;padding:2px 6px;max-width:170px}.legend select#dgSel{max-width:240px}
+.legend select.lsel{appearance:auto;padding:2px 6px;max-width:170px}.legend select.lsel option,.legend select.lsel optgroup{background:var(--bg);color:var(--fg);font-weight:400}.legend select.lsel optgroup{font-weight:700}.legend select#dgSel{max-width:240px}
 .stage.dgmode .fpanel,.stage.dgmode #filterBtn,.stage.dgmode #fpFly{display:none!important}
 .dgsplit,.dgsplit>div{display:flex;flex-direction:column;gap:14px;min-width:0}
 @media (min-width:1180px){body.cls-inline[data-view="dungeons"] #pBody>.dgsplit{max-width:none;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,1fr);grid-template-areas:"a m" "b m";grid-template-rows:auto 1fr;gap:14px 28px;align-items:start}body.cls-inline[data-view="dungeons"] .dgsplit>.dga{grid-area:a}body.cls-inline[data-view="dungeons"] .dgsplit>.dgb{grid-area:b}body.cls-inline[data-view="dungeons"] .dgsplit>.dgm{grid-area:m;position:sticky;top:0}body.cls-inline[data-view="dungeons"] .dgm .dgmap{margin-top:0}body.cls-inline[data-view="dungeons"] .dgm{container-type:inline-size}body.cls-inline[data-view="dungeons"] .dgm .dgov{width:fit-content;max-width:100%}body.cls-inline[data-view="dungeons"] .dgm .dgov img{width:min(100cqw,calc((100vh - 290px) * var(--ar,10)));max-width:none;height:auto}}
@@ -717,7 +717,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="legend" role="group" aria-label="地圖顯示項目">
         <button class="lgb ghost" id="filterBtn" aria-expanded="false" aria-controls="fpanel">篩選 ▾</button>
         <button class="lgb" id="baseBtn" hidden title="切換底圖：wiki 地圖或 JourneyMap 探索地圖"></button>
-        <select class="lgb lsel" id="dgSel" hidden title="切換第 1 層和地下城的地圖（玩家上傳的 JourneyMap）" aria-label="地圖"></select>
+        <select class="lgb lsel" id="dgSel" hidden title="切換第 1 層和地下城的地圖（玩家上傳的 JourneyMap）" aria-label="地圖"></select><button class="lgb" id="dgBack" hidden title="回到第 1 層的地圖">← 回到第 1 層</button>
         <select class="lgb lsel" id="layerSel" hidden title="探索地圖的高度：地面，或玩家上傳的室內・洞穴地圖（JourneyMap 洞穴地圖，依高度分層）" aria-label="探索地圖的高度"></select>
       </div>
       <div class="fpanel" id="fpanel" hidden role="dialog" aria-label="地圖篩選">
@@ -3010,6 +3010,7 @@ let BASE="wiki";try{BASE=localStorage.getItem("sao-map-base")||"wiki"}catch(e){}
 $("baseBtn").addEventListener("click",ev=>{ev.stopPropagation();BASE=BASE==="jm"?"wiki":"jm";try{localStorage.setItem("sao-map-base",BASE)}catch(e){};renderMap()});
 $("layerSel").addEventListener("change",ev=>{if(DGV){DJL[DGV]=ev.target.value;renderMap();return}JML=ev.target.value;try{localStorage.setItem("sao-map-layer",JML)}catch(e){};renderMap()});
 $("dgSel").addEventListener("change",ev=>{DGV=ev.target.value||null;fitted=false;renderMap();if(!DGV)requestAnimationFrame(fit)});
+$("dgBack").addEventListener("click",()=>{DGV=null;fitted=false;renderMap();requestAnimationFrame(fit)});["pointerdown","wheel"].forEach(t=>$("dgBack").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
 ["pointerdown","wheel"].forEach(t=>$("dgSel").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
 // dungeon mode: zoom to the part of the frame that has data
 function dgFit(){const m=MP();if(!m||!m.dg)return;fit();const r=stage.getBoundingClientRect(),b=m.e.bounds||[m.x0,m.z0,m.x0+m.size,m.z0+m.size];
@@ -3018,7 +3019,7 @@ function dgFit(){const m=MP();if(!m||!m.dg)return;fit();const r=stage.getBoundin
 window.__dgMode=()=>DGV;
 // the dungeon panel's map: open it on the map tab
 document.addEventListener("click",ev=>{const b=ev.target.closest&&ev.target.closest("[data-dgmap]");if(!b)return;ev.stopPropagation();
-  DGV=b.dataset.dgmap;fitted=false;if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===1)renderMap();else go("map",1)},true);
+  DGV=b.dataset.dgmap;fitted=false;if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===1)renderMap();else{go("map",1);renderMap();requestAnimationFrame(()=>requestAnimationFrame(dgFit))}},true);   // go() does not redraw the markers when the map was already drawn
 ["pointerdown","wheel"].forEach(t=>$("layerSel").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
 // ---- map filter panel ----
 function mapCounts(){const sp=spotsOf(FL),tw=F().towns,np=NPCS(FL);const c={tp:tw.filter(t=>t.tp).length+sp.filter(x=>x.tp).length,land:tw.filter(t=>!t.tp).length+sp.filter(x=>x.kind==="poi"&&!x.tp).length,npc:np.length};
@@ -3071,18 +3072,18 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
   $("mapNote").hidden=!(m&&m.note);if(m&&m.note)$("mapNote").textContent=m.note;
   if(!m){filterMap();return}
   const want=BASE==="jm"&&m.jm&&!m.tiles?m.jm:m.img;$("baseBtn").hidden=!m.jm;mapImg.style.visibility=useTiles()?"hidden":"";if(TL.size&&tilesEl.dataset.f!==String(FL)){tilesEl.innerHTML="";TL.clear()}tilesEl.dataset.f=String(FL);schedTiles();$("baseBtn").textContent=BASE==="jm"&&m.jm?"底圖：探索地圖":"底圖：wiki 地圖";
-  {const ds=$("dgSel"),dl=FL===1?Object.keys(dgMeta()).filter(d=>dgMeta()[d].frame):[];ds.hidden=!dl.length;   // 第 1 層 / dungeon switch
-   if(dl.length){ds.innerHTML=`<option value="">地圖：第 ${FL} 層</option>`+dl.map(d=>`<option value="${d}">地下城：${esc(dgName(d))}</option>`).join("");ds.value=m.dg||""}}
+  // dungeon maps are opened from the dungeon page (「在地圖上看」); the map tab itself has no dungeon list (user 2026-11-08「不用放地下城」)
+  $("dgSel").hidden=true;{const b=$("dgBack");b.hidden=!m.dg;if(m.dg)b.textContent=`← 回到第 ${FL} 層（目前：${dgName(m.dg)}）`}
   $("stage").classList.toggle("dgmode",!!m.dg);
   if(m.dg){const ls=$("layerSel"),ks=Object.keys(m.e.layers).sort((a,b)=>(a==="day"?99:+a.slice(1))>(b==="day"?99:+b.slice(1))?-1:1);ls.hidden=ks.length<2;
    ls.innerHTML=ks.map(k=>`<option value="${k}">高度：${esc(m.e.layers[k].label||k)}</option>`).join("");ls.value=dgKey();
    $("baseBtn").hidden=true;$("jmCredit").hidden=true;mapImg.style.visibility="hidden";
    [mapImg,$("tiles")].forEach(e=>{e.style.maskImage="";e.style.webkitMaskImage=""});
-   $("mapNote").hidden=false;$("mapNote").textContent=`正在看 ${dgName(m.dg)} 的地圖（玩家上傳的 JourneyMap，${m.e.date} 更新，${m.e.layers[dgKey()].label}）。黑色是還沒有人上傳的地方。地下城的座標和第 1 層不同；左上角的選單可以切回第 1 層。`;
+   $("mapNote").hidden=false;$("mapNote").textContent=`正在看 ${dgName(m.dg)} 的地圖（玩家上傳的 JourneyMap，${m.e.date} 更新，${m.e.layers[dgKey()].label}）。黑色是還沒有人上傳的地方。地下城的座標和第 1 層不同；按左上角「回到第 1 層」切回去。`;
    $("stage").style.setProperty("--noteh","42px");world.querySelectorAll(".areas").forEach(n=>n.remove());
    if(!fitted)requestAnimationFrame(dgFit);SRCH_ALL=false;return}
   {const ls=$("layerSel"),keys=Object.keys(jmLayersMeta()).filter(k=>{const n=+k.slice(1);return n>=JMP.LMIN&&n<=JMP.LMAX}).sort((a,b)=>+b.slice(1)-+a.slice(1));ls.hidden=!(useTiles()&&keys.length);
-   if(!ls.hidden){ls.innerHTML=[`<option value="day">高度：地面</option>`,`<optgroup label="室內・洞穴（有屋頂遮住的地方，依高度）">`,...keys.map(k=>`<option value="${k}">高度 ${esc(layerLabel(k))}</option>`),`</optgroup>`].join("");ls.value=curLayer()?JML:"day"}}
+   if(!ls.hidden){ls.innerHTML=[`<option value="day">高度：地面</option>`,`<optgroup label="室內・洞穴（依高度，括號是已探索區塊數）">`,...keys.map(k=>`<option value="${k}">${esc(layerLabel(k))}（${(jmLayersMeta()[k].chunks||0).toLocaleString()}）</option>`),`</optgroup>`].join("");ls.value=curLayer()?JML:"day"}}
   if(useTiles()&&curLayer()){const LY=curLayer();$("mapNote").hidden=false;$("mapNote").textContent=`正在看高度 ${LY.label} 的室內・洞穴地圖（JourneyMap 的洞穴地圖，只畫有屋頂遮住的地方：洞穴、地下室、建築和塔的室內；${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳或那個高度沒有室內。可以到「協作區」用「打包探索地圖」上傳。`}
   else if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate} 更新，${m.jmPct?"約佔地圖 "+m.jmPct+"%，":""}${m.jmN?"含 "+m.jmN+" 份玩家上傳，":""}1 格 1 像素，放大會更清楚），其餘為變暗的 wiki 地圖。可以到「協作區」上傳你的 JourneyMap 補上沒探索的地方。`}
   {const cr=$("jmCredit"),C=BASE==="jm"&&m&&m.jm&&!(useTiles()&&curLayer())?jmCredits():null;cr.hidden=!C;   // contributors of the explored map, under the base toggle
