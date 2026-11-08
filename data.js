@@ -52,7 +52,7 @@ const ZONE_ORDER = ["boar","wolf","mizunari","putrid","vallhat","hanaka","arakhn
 // Names follow the in-game codex (via the wiki display names, rev 2797 on 2026-10-31); renamed monsters keep old names in aka.
 const M = [
 ["001","Corrupted Boar","Monster","N","boar",1,[["Boar Meat",50],["Boar Hide",90],["Corrupted Crystal",75]],"wiki 怪物頁：出沒在起始之城外的森林。","🐗"],
-["002","Pumba","Boss","N","boar",2,[["Boar Meat",100],["Boar Hide",100],["Corrupted Crystal",100],["Pumba's Ring",3]],"小首領級，會在起始之城外的野豬區定時重生（wiki 怪物頁）。","🐗"],
+["002","Pumba","Boss","N","boar",2,[["Boar Meat",100],["Boar Hide",100],["Corrupted Crystal",100],["Ring of Pumba",3]],"小首領級，會在起始之城外的野豬區定時重生（wiki 怪物頁）。","🐗"],
 ["003","White Dire Wolf","Monster","N","wolf",1,[["Wolf Fur",85],["Wolf Fangs",70]],"","🐺"],
 ["004","Black Dire Wolf","Monster","N","wolf",1,[["Wolf Fur",70],["Wolf Fangs",85]],"","🐺"],
 ["006","Albal","Boss","N","wolf",2,[["Wolf Fur",100],["Wolf Fangs",100],["Fangs of Albal",35],["Skull of a Wolf",3]],"","🐺"],
@@ -129,7 +129,7 @@ const RAW = {
 "Boar Meat":["Viande de Sanglier","c",1,"food","Cette belle viande de sanglier, bien juteuse, peut vous donner encore plus envie de manger !",null,{"Restore Food":5,"Item Cooldown":1},0],
 "Boar Hide":["Peau de Sanglier","c",1,"material","Utilisable pour de la tannerie basique.",null,null,1],
 "Corrupted Crystal":["Cristal Corrompu","c",1,"material","Des traces de corruptions émanent de cet objet",null,null,2],
-"Pumba's Ring":["Anneau de Pumba","s",3,"ring","Taillé dans un métal épais et marqué par une rayure rouge, cet anneau est inspiré du célèbre sanglier massif",null,{"Defense":1,"Max Health":5},3],
+"Ring of Pumba":["Anneau de Pumba","s",3,"ring","Taillé dans un métal épais et marqué par une rayure rouge, cet anneau est inspiré du célèbre sanglier massif",null,{"Defense":1,"Max Health":5},3],
 "Wolf Fur":["Fourrure de Loup","c",1,"material","Chaud et souple, ce pelage protège efficacement du froid. Parfait pour créer des armures légères.",null,null,4],
 "Wolf Fangs":["Crocs de Loup","c",1,"material","Une dent longue et acérée, prisée de certains artisans.",null,null,5],
 "Fangs of Albal":["Crocs de Albal","b",1,"material","Un croc massif imprégné de sa rage sauvage. Son essence est utilisée pour concocter des potions de force redoutable.",null,null,6],
@@ -180,7 +180,7 @@ const RAW = {
 "Soul of the Warden":["Âme du Warden","b",1,"material","Une âme est contenue dans cet objet. Il peut être obtenu en tuant son possesseur ou en le fabriquant au forgeron.",null,null,48],
 "Soul of the Herald":["Âme de l’Herald","b",1,"material","Une âme est contenue dans cet objet. Il peut être obtenu en tuant son possesseur ou en le fabriquant au forgeron.",null,null,49],
 "Soul of the Reaper":["Âme du Reaper","b",1,"material","Une âme est contenue dans cet objet. Il peut être obtenu en tuant son possesseur ou en le fabriquant au forgeron.",null,null,50],
-"Ring of the Fallen":["Anneau de la Faucheuse","s",9,"ring","Anneau qui appartenait à la faucheuse. A son départ il est tombé par terre, encore imprégné de sa grande magie",null,{"Max Mana":20,"Max Stamina":10},51],
+"Ring of the Fallen":["Anneau Déchu","s",9,"ring","Les monstres Déchu recevait cette anneau témoin de leur puissance",null,{"Skill Damage":8},51],
 "Forgotten Shield":["Bouclier Oublié","a",9,"shield","Érodé par le temps et la poussière, ce bouclier était perdu à travers le temps dans les dimensions.",null,{"Defense":9,"Max Health":35,"Classe requise":"guerrier","Movement Speed":-0.003,"Health Regeneration":0.25},52],
 "Halberd of the Warden":["Hallebard du Fallen","s",9,"sword","Forgé pour les chasseurs des puissants monstres du palier 1. Elle offre une bonne précision","25",{"Attack Speed":0.9,"Classe requise":"guerrier","Movement Speed":-0.0025,"Arme à deux mains":1,"Cooldown Reduction":3,"Skill Critical Strike Power":2,"Skill Critical Strike Chance":4},53],
 "Frost Dust":["Poussière de Givre","c",1,"material","Une fine poudre glaciale récoltée sur des créatures de glace.",null,null,54],

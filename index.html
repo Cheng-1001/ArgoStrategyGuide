@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="9f762703d5">
+<meta name="sao-build" content="976a050c8b">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -882,7 +882,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=376c1a61"></script>
+<script src="data.js?v=5a9333ae"></script>
 <script src="data23.js?v=cfc1cce9"></script>
 <script src="bosses.js?v=77b7ad43"></script>
 <script src="reports.js?v=091d538a"></script>
@@ -892,9 +892,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="mainq.js?v=89f237c4"></script>
 <script src="equip.js?v=afe010ec"></script>
 <script src="props.js?v=a6c9503f"></script>
-<script src="gameinfo.js?v=1501b3a8"></script><script src="buyback.js?v=4371e5e3"></script>
+<script src="gameinfo.js?v=265d1660"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=8d9510d4"></script>
+<script src="changelog.js?v=3556875f"></script>
 <script src="recipes.js?v=15f5c1b1"></script>
 <script src="jmmeta.js?v=5b0ffd74"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -904,7 +904,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="gacha.js?v=48cf03e8"></script>
 <script src="gamestats.js?v=6133665a"></script>
 <script src="sets.js?v=0c0efd52"></script>
-<script src="zhnames.js?v=208c4f6d"></script>
+<script src="zhnames.js?v=fb8028b1"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=5f21ae39"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1007,7 +1007,7 @@ const ITEMS={...S1.ITEMS};
 Object.entries(window.SAO23_ITEMS).forEach(([id,r])=>{ITEMS[id]={id,fr:r[0],r:r[1],lv:r[2],cat:r[3],lore:r[4],dmg:r[5],st:r[6],ic:r[7],...(S23.extra[id]||{})}});
 Object.entries(S23.unknown).forEach(([id,x])=>{ITEMS[id]={id,fr:null,r:null,lv:null,cat:"unknown",lore:null,dmg:null,st:null,ic:-1,...x}});
 // 2026-11-04 (user option 1A): items renamed to the English name the game shows; old wiki names still resolve and are searchable
-const ITEM_OLD={"Shark Shell": "Shark Carapace", "Small Pouch": "Small Purse", "Leaf Fragment": "Leaf Fragments", "Skeleton Mage Staff": "Magic Staff of the Ruins", "Narax's Ring": "Ring of Narax", "Bandit Crossbow": "Crossbow of the Bandits", "Reaper's Ring": "Ring of the Fallen", "Warden's Soul": "Soul of the Warden", "Herald's Soul": "Soul of the Herald", "Reaper's Soul": "Soul of the Reaper", "Swordsmans Scroll": "Swordsman's Scroll", "Archers Scroll": "Archer's Scroll", "Souls of the Ruins": "Soul of the Ruins", "Albal's Fangs": "Fangs of Albal", "Nymbréa's Heart": "Heart of Nymbrea", "Sylvan Sprout": "Sylve Sprout", "Glacial Hardhide": "Hard Glacial Hide", "Gorbel Essence": "Essence of Gorbel", "Allium": "Allium Flower", "Bear Soul Fragment": "Fragment of the Bear's Soul", "Spectral Mane Piece": "Piece of Spectral Mane", "Colossus Hammer": "Hammer of the Colossus", "Royal Halberd": "Halberd of the Warden", "Bone Sword": "Skeletal Sword", "Bandit Dagger": "Bandit's Dagger", "Sylvan Shield": "Sylvan Pavise", "Sylvan Mage Staff": "Sylvan Staff", "Skeleton Shaman Staff": "Magic Staff of the Revenants"};
+const ITEM_OLD={"Pumba's Ring": "Ring of Pumba", "Shark Shell": "Shark Carapace", "Small Pouch": "Small Purse", "Leaf Fragment": "Leaf Fragments", "Skeleton Mage Staff": "Magic Staff of the Ruins", "Narax's Ring": "Ring of Narax", "Bandit Crossbow": "Crossbow of the Bandits", "Reaper's Ring": "Ring of the Fallen", "Warden's Soul": "Soul of the Warden", "Herald's Soul": "Soul of the Herald", "Reaper's Soul": "Soul of the Reaper", "Swordsmans Scroll": "Swordsman's Scroll", "Archers Scroll": "Archer's Scroll", "Souls of the Ruins": "Soul of the Ruins", "Albal's Fangs": "Fangs of Albal", "Nymbréa's Heart": "Heart of Nymbrea", "Sylvan Sprout": "Sylve Sprout", "Glacial Hardhide": "Hard Glacial Hide", "Gorbel Essence": "Essence of Gorbel", "Allium": "Allium Flower", "Bear Soul Fragment": "Fragment of the Bear's Soul", "Spectral Mane Piece": "Piece of Spectral Mane", "Colossus Hammer": "Hammer of the Colossus", "Royal Halberd": "Halberd of the Warden", "Bone Sword": "Skeletal Sword", "Bandit Dagger": "Bandit's Dagger", "Sylvan Shield": "Sylvan Pavise", "Sylvan Mage Staff": "Sylvan Staff", "Skeleton Shaman Staff": "Magic Staff of the Revenants"};
 const ikey=n=>ITEMS[n]?n:(ITEM_OLD[n]&&ITEMS[ITEM_OLD[n]]?ITEM_OLD[n]:n);
 Object.entries(ITEM_OLD).forEach(([o,n])=>{if(ITEMS[n])(ITEMS[n].aka=ITEMS[n].aka||[]).push(o)});
 (window.SAO_REPORTS||[]).forEach(r=>{(r.drops||[]).forEach(d=>{d[0]=ikey(d[0])});(r.mats||[]).forEach(m=>{m[0]=ikey(m[0])})});
@@ -1654,12 +1654,15 @@ function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=
   return`<li><${tag} class="lrow"${go?` data-go="${go}"`:""}>${showNpc?`<span class="th sm" style="--ring:var(--ref)" aria-hidden="true">${NGRP[npcGrp(n?n.c:"accessoriesBlacksmith")][1]}</span>`:recIcon(r,34)}
     <span class="t"><b>${showNpc?esc(npcN(r.npc)):esc(recZh(r,e||prById[String(r.oid)])||recEnD(r))}</b><span>${showNpc?(npcN(r.npc)!==npcEn(r.npc)?esc(npcEn(r.npc))+"・":""):recZh(r,e||prById[String(r.oid)])?esc(recEnD(r))+"・":(e?esc(dn(e))+"・":"")+(RAR[rar]?RAR[rar][0]+((r.mats||[]).length?"・":""):"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${isShop(r)?`<span class="shopt">販售</span><br>`:r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}>${showNpc&&n?`<div class="npcw-row">${npcWhere(n)}</div>`:""}</li>`}).join("")}</ul>`}
 // NPCs whose menus are not recipes (owner's screenshots 2026-11-03): recycling = give one item, get Recycling Coins
-const recyTable=(rows,more)=>`<ul class="rows">${rows.map(([it,c,sec])=>`<li><div class="lrow"><span class="t"><b>${esc(it)}</b><span>交出 1 個 → Recycling Coins ×${c}</span></span><span class="v">${sec} 秒<br><span class="muted">免費</span></span></div></li>`).join("")}</ul>${more?`<div class="note">${more}</div>`:""}`;
+// recycling lists (user 2026-11-08 screenshot of 飾品回收): official Chinese name + icon + link like the other lists; English name underneath
+const recyTable=(rows,more)=>`<ul class="rows">${rows.map(([it,c,sec])=>{const r=matRef(it),nm=/[\u4e00-\u9fff]/.test(r.nm)?r.nm:it;
+  const inner=`${r.ic(32)||'<span class="dgli" aria-hidden="true"></span>'}<span class="t"><b>${esc(nm)}</b><span>${nm!==it?esc(it)+"・":""}交出 1 個 → Recycling Coins ×${c}</span></span><span class="v">${sec} 秒<br><span class="muted">免費</span></span>`;
+  return`<li>${r.go?`<button class="lrow" data-go="${r.go}">${inner}</button>`:`<div class="lrow nolink">${inner}</div>`}</li>`}).join("")}</ul>${more?`<div class="note">${more}</div>`:""}`;
 // occult merchants restock (owner 2026-11-07): every item back to 5; the Occult Amulet was seen restocking at 19:00 Taiwan time
 const OCC_RESTOCK=`<h3 class="sec">補貨</h3><div class="note">⏰ 神祕商人的商品會刷新，刷新後<b>每件庫存 5 個</b>，賣完就顯示 Stock 0。站長實測神祕護身符在<b>台灣時間 19:00</b>（巴黎時間 12:00）刷新；手環、戒指、手套、遺物也會刷新、一樣是 5 個（站長 2026-11-07）。</div>`;
 const NPC_NOTE={
-  "Weapon Recycling":`<h3 class="sec">回收（Weapon Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Weapon Recycling - Starting City」：交出武器換 Recycling Coins，全部普通、免費。</div>${recyTable([["Skeletal Sword",3,30],["Magic Staff of the Ruins",3,30],["Magic Staff of the Revenants",3,30],["Sylvan Pavise",3,30],["Hammer of the Colossus",5,30],["Bandit's Dagger",3,30],["Crossbow of the Bandits",3,30]])}`,
-  "Accessory Recycling":`<h3 class="sec">回收（Accessory Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Accessory Recycling - Starting City」：交出飾品換 Recycling Coins，全部普通、免費。</div>${recyTable([["Ring of Pumba",5,30],["Ring of the Reaper",5,30],["Ring of the Fallen",5,30],["Bond of the Sylve",5,30],["Ring of Narax",5,30],["Necklace of Aragorn",5,30],["Flower of a Nepenthes",4,25],["Leg of a Spider",4,25],["Skull of a Wolf",4,25]])}`,
+  get "Weapon Recycling"(){return `<h3 class="sec">回收（Weapon Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Weapon Recycling - Starting City」：交出武器換 Recycling Coins，全部普通、免費。</div>${recyTable([["Skeletal Sword",3,30],["Magic Staff of the Ruins",3,30],["Magic Staff of the Revenants",3,30],["Sylvan Pavise",3,30],["Hammer of the Colossus",5,30],["Bandit's Dagger",3,30],["Crossbow of the Bandits",3,30]])}`},
+  get "Accessory Recycling"(){return `<h3 class="sec">回收（Accessory Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Accessory Recycling - Starting City」：交出飾品換 Recycling Coins，全部普通、免費。</div>${recyTable([["Ring of Pumba",5,30],["Ring of the Reaper",5,30],["Ring of the Fallen",5,30],["Bond of the Sylve",5,30],["Ring of Narax",5,30],["Necklace of Aragorn",5,30],["Flower of a Nepenthes",4,25],["Leg of a Spider",4,25],["Skull of a Wolf",4,25]])}`},
   "Alchemist":`<h3 class="sec">位置</h3><div class="note">在起始之城建築的<b>二樓</b>，名牌是「[NPC] Alchemist」。一樓那個金色名牌、頭上有綠色任務水晶的「Alchemist」是任務 NPC，不是這一個。旁邊的 Crystallographer 也在二樓。另外 Buy 分頁賣一般藥水 I～III（和收購商同價）。</div>`,
   "Crystallographer":`<h3 class="sec">位置</h3><div class="note">在起始之城建築的<b>二樓</b>，和「[NPC] Alchemist」在同一層。</div>`,
   "Vault":`<h3 class="sec">倉庫</h3><div class="note">個人倉庫（My vault），一開始有 1 頁，再買 1 頁要 25000 珂爾。</div>`,
