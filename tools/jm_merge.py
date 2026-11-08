@@ -41,7 +41,7 @@ What it does
      cannot conflict with the Google script that appends reports.
 Prints one JSON line; exit code 0 = merged, 2 = rejected (reason in the JSON), 1 = error.
 """
-import datetime, io, json, os, re, statistics, sys, zipfile
+import datetime, io, json, os, re, shutil, statistics, sys, zipfile
 from PIL import Image, ImageChops, ImageEnhance, ImageStat
 
 Image.MAX_IMAGE_PIXELS = None
@@ -252,6 +252,50 @@ def merge_dungeon(d, instances, date, report):
     e["log"].append({"report": report, "date": date, "regions": regions, "newChunks": newc})
     save_meta(allmeta)
     return {"newChunks": newc, "regions": regions, "check": round(statistics.median(diffs_all), 1) if diffs_all else None, "skipped": skipped}
+
+
+UNDER = "under"
+
+
+def build_under(date=None):
+    """「地下」(user 2026-11-08「直接整合成地下」): all height layers combined into tiles/f1jm_under, so the site offers only
+    地面 / 地下. Layers are pasted from the highest to the lowest, each where it has data (colour differs from the dark base),
+    so where several layers overlap the deepest one wins (a basement over the house above it). The per-height tile sets stay
+    (the packing tool compares against them, quest maps are cut from them)."""
+    keys = sorted((n[5:] for n in os.listdir(os.path.join(ROOT, "tiles")) if re.fullmatch(r"f1jm_c-?\d+", n)),
+                  key=lambda k: int(k[1:]), reverse=True)
+    if not keys:
+        return None
+    cv = Image.new("RGB", (FULL, FULL), BG)
+    bg = Image.new("RGB", (FULL, FULL), BG)
+    mask = Image.new("L", (MW, MW), 0)
+    names = set()
+    for key in keys:
+        tiles = layer_dir(key)
+        names |= {n for n in os.listdir(os.path.join(tiles, "3")) if n.endswith(".jpg")}
+        lc = load_canvas(tiles)
+        has = ImageChops.difference(lc, bg).convert("L").point(lambda v: 255 if v > 8 else 0)
+        cv.paste(lc, (0, 0), has)
+        mp = os.path.join(tiles, "explored.png")
+        if os.path.exists(mp):
+            mask = ImageChops.lighter(mask, Image.open(mp).convert("L"))
+    tiles = layer_dir(UNDER)
+    if os.path.isdir(tiles):
+        shutil.rmtree(tiles)
+    os.makedirs(os.path.join(tiles, "3"))
+    mask.save(os.path.join(tiles, "explored.png"), optimize=True)
+    for n in names:
+        tx, ty = map(int, n[:-4].split("_"))
+        save_tile(cv.crop((tx * T, ty * T, tx * T + T, ty * T + T)), os.path.join(tiles, "3", n))
+    pyramid(cv, tiles)
+    chunks = sum(1 for cz in range(C0, C1 + 1) for cx in range(C0, C1 + 1) if mask.getpixel((cx, cz)))
+    meta = load_meta()
+    f1 = meta.setdefault("1", {})
+    date = date or f1.get("date")
+    f1.setdefault("layers", {})[UNDER] = {"label": "地下", "date": date, "chunks": chunks, "l3": sorted(n[:-4] for n in names),
+                                          "v": f"{date}-{chunks}", "of": keys}
+    save_meta(meta)
+    return chunks
 
 
 def dark_base():
@@ -473,6 +517,8 @@ def main(argv):
         return init_mask()
     if "--overviews" in argv:
         return redraw_overviews()
+    if "--under" in argv:
+        return print("地下", build_under(), "chunks")
     opt = {argv[i]: argv[i + 1] for i in range(len(argv) - 1) if argv[i].startswith("--")}
     args = [a for i, a in enumerate(argv) if not a.startswith("--") and not (i and argv[i - 1] in opt)]
     report, date = opt.get("--report"), opt.get("--date") or datetime.date.today().isoformat()
@@ -571,6 +617,8 @@ def main(argv):
         res["skipped"] = len(skipped)
         res["skippedWhy"] = [f"{n}：{w}" for n, w in skipped[:5]]
     write_meta(report, dict(res, chunks=explored), layers)
+    if layers:
+        build_under(date)
     record(report, res)
     out(0, **res)
 

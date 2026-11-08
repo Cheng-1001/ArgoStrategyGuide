@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="eee16208ec">
+<meta name="sao-build" content="1c388bbba6">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -894,9 +894,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=265d1660"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=4172ed19"></script>
-<script src="changelog.js?v=9d929627"></script>
+<script src="changelog.js?v=ced98392"></script>
 <script src="recipes.js?v=9163d1ce"></script>
-<script src="jmmeta.js?v=63c550cf"></script>
+<script src="jmmeta.js?v=9f29b8ff"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=877782cc"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
@@ -945,7 +945,7 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
     o.summary=[o.qkind+(o.qno?" #"+o.qno:""),o.step].filter(Boolean).join("・")}
   if(r.type==="skill"){o.cls=g(/技能・職業/);o.stype=g(/技能・主動或被動/);o.unlock=+(g(/技能・解鎖等級/).match(/\d+/)||[])[0]||null;o.sdesc=g(/技能・說明原文/);o.scost=g(/技能・冷卻或消耗/);delete o.level;
     o.summary=[o.cls,o.stype,o.unlock?"Lv "+o.unlock+" 解鎖":""].filter(Boolean).join("・")}
-  o.by=g(/遊戲內暱稱/).slice(0,32);
+  o.by=(g(/遊戲內暱稱/)||g(/探索地圖・貢獻者名稱/)).slice(0,32);   // the old page-2 question (form not upgraded yet) counts too: R0007 answered only that one
   if(r.type==="idea"){o.idea=g(/建議・內容/);o.ipage=g(/建議・相關頁面/);o.reply=String(r.review||"").replace(/^審核[:：][^｜|]*[｜|]?/,"").trim();o.summary=o.idea}
   if(r.type==="jmap"){const res=((window.SAO_JM||{}).results||{})[r.id];o.merge=res;
     o.summary=!res?"合併中（核准後約 3～5 分鐘）":res.ok?`已合併：${res.layers&&!res.newChunks?"地面沒有新區塊":`新增 ${res.newChunks} 個區塊，地圖探索約 ${res.pct}%`}${res.layers?(()=>{const L=Object.entries(res.layers),tot=L.reduce((a,[,n])=>a+n,0),lab=k=>(((((window.SAO_JM||{})["1"]||{}).layers)||{})[k]||{}).label||k;
@@ -3093,9 +3093,11 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
    $("mapNote").hidden=false;$("mapNote").textContent=`正在看 ${dgName(m.dg)} 的地圖（玩家上傳的 JourneyMap，${m.e.date} 更新，${m.e.layers[dgKey()].label}）。黑色是還沒有人上傳的地方。地下城的座標和第 1 層不同；按左上角「回到第 1 層」切回去。`;
    $("stage").style.setProperty("--noteh","42px");world.querySelectorAll(".areas").forEach(n=>n.remove());
    if(!fitted)requestAnimationFrame(dgFit);SRCH_ALL=false;return}
-  {const ls=$("layerSel"),keys=Object.keys(jmLayersMeta()).filter(k=>{const n=+k.slice(1);return n>=JMP.LMIN&&n<=JMP.LMAX}).sort((a,b)=>+b.slice(1)-+a.slice(1));ls.hidden=!(useTiles()&&keys.length);
-   if(!ls.hidden){ls.innerHTML=[`<option value="day">高度：地面</option>`,`<optgroup label="室內・洞穴（依高度，括號是已探索區塊數）">`,...keys.map(k=>`<option value="${k}">${esc(layerLabel(k))}（${(jmLayersMeta()[k].chunks||0).toLocaleString()}）</option>`),`</optgroup>`].join("");ls.value=curLayer()?JML:"day"}}
-  if(useTiles()&&curLayer()){const LY=curLayer();$("mapNote").hidden=false;$("mapNote").textContent=`正在看高度 ${LY.label} 的室內・洞穴地圖（JourneyMap 的洞穴地圖，只畫有屋頂遮住的地方：洞穴、地下室、建築和塔的室內；${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳或那個高度沒有室內。可以到「協作區」用「打包探索地圖」上傳。`}
+  // one 「地下」 option instead of every height (user 2026-11-08「直接整合成地下」): tiles/f1jm_under = all heights combined by
+  // tools/jm_merge.py (build_under); the per-height sets stay for the packing tool and quest maps
+  {const ls=$("layerSel"),LM=jmLayersMeta();if(LM.under&&JML!=="day"&&JML!=="under")JML="under";ls.hidden=!(useTiles()&&LM.under);
+   if(!ls.hidden){ls.innerHTML=`<option value="day">地圖：地面</option><option value="under">地圖：地下</option>`;ls.value=curLayer()?JML:"day"}}
+  if(useTiles()&&curLayer()){const LY=curLayer();$("mapNote").hidden=false;$("mapNote").textContent=`${JML==="under"?`正在看地下的地圖（玩家上傳的 JourneyMap 洞穴地圖，所有高度合成一張：洞穴、地下室、建築和塔的室內；同一個位置有好幾層時顯示最深的那一層；${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳或那裡沒有地下。`:`正在看高度 ${LY.label} 的室內・洞穴地圖（JourneyMap 的洞穴地圖，只畫有屋頂遮住的地方：洞穴、地下室、建築和塔的室內；${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳或那個高度沒有室內。`}可以到「協作區」用「打包探索地圖」上傳。`}
   else if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate} 更新，${m.jmPct?"約佔地圖 "+m.jmPct+"%，":""}${m.jmN?"含 "+m.jmN+" 份玩家上傳，":""}1 格 1 像素，放大會更清楚），其餘為變暗的 wiki 地圖。可以到「協作區」上傳你的 JourneyMap 補上沒探索的地方。`}
   {const cr=$("jmCredit"),C=BASE==="jm"&&m&&m.jm&&!(useTiles()&&curLayer())?jmCredits():null;cr.hidden=!C;   // contributors of the explored map, under the base toggle
    if(C){const pc=n=>{const p=n/C.tot*100;return p>=0.1?p.toFixed(1)+"%":"<0.1%"},top=C.rows.slice(0,5),rest=C.rows.slice(5);

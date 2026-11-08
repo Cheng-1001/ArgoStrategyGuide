@@ -369,13 +369,13 @@ try:
         pg.add_init_script("localStorage.setItem('sao-map-base','jm');localStorage.setItem('sao-tour-v1','1')")
         pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/index.html#f1-map"); pg.wait_for_timeout(800)
         opts = pg.eval_on_selector_all("#layerSel option", "o=>o.map(x=>x.textContent)")
-        check(pg.is_visible("#layerSel") and opts[0] == "高度：地面" and any(o.startswith("Y 16～31（") for o in opts) and len(opts) == 4, f"the explored map has a height menu, layers labelled with their explored-chunk count ({opts})")
-        pg.select_option("#layerSel", "c1"); pg.wait_for_timeout(300)
+        check(pg.is_visible("#layerSel") and opts == ["地圖：地面", "地圖：地下"], f"the explored map offers 地面 / 地下 (all heights combined) ({opts})")
+        pg.select_option("#layerSel", "under"); pg.wait_for_timeout(300)
         pg.evaluate("__centerOn(5*512+275,9*512+90,10)"); pg.wait_for_timeout(1200)
         srcs = pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")
-        check(srcs and all("tiles/f1jm_c1/" in x for x in srcs) and any("/3/" in x for x in srcs) and not bad,
-              f"layer tiles come from tiles/f1jm_c1, level 3 only where it exists ({len(srcs)} tiles, failed: {bad[:3]})")
-        check("Y 16～31" in pg.inner_text("#mapNote") and pg.is_hidden("#jmCredit"), "the note names the layer; the surface contributor box is hidden")
+        check(srcs and all("tiles/f1jm_under/" in x for x in srcs) and any("/3/" in x for x in srcs) and not bad,
+              f"地下 tiles come from tiles/f1jm_under, level 3 only where it exists ({len(srcs)} tiles, failed: {bad[:3]})")
+        check("地下" in pg.inner_text("#mapNote") and pg.is_hidden("#jmCredit"), "the note says 地下; the surface contributor box is hidden")
         pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "layer_view.png"))
         # dungeon map: no dungeon list on the map tab (user 2026-11-08「不用放地下城」); opened from the dungeon page, left with 「回到第 1 層」
         check(pg.is_hidden("#dgSel") and pg.is_hidden("#dgBack"), "the map tab has no dungeon switch")
@@ -400,7 +400,7 @@ try:
         check(pg.evaluate("window.__dgMode()") is None and pg.locator("#world .town").count() > 5 and pg.is_hidden("#dgBack"), "「回到第 1 層」goes back to floor 1 with its markers")
         pg.select_option("#layerSel", "day"); pg.wait_for_timeout(500)
         check(all("tiles/f1jm/" in x for x in pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")), "back to the surface tiles")
-        pg.select_option("#layerSel", "c1"); pg.set_viewport_size({"width": 390, "height": 844}); pg.wait_for_timeout(500)
+        pg.select_option("#layerSel", "under"); pg.set_viewport_size({"width": 390, "height": 844}); pg.wait_for_timeout(500)
         check(pg.is_visible("#layerSel") and pg.evaluate("document.documentElement.scrollWidth") <= 390, "the height menu fits on a phone")
         pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "layer_phone.png"))
         check(not errs, "no page errors in the viewer" + ("" if not errs else ": " + errs[0]))
