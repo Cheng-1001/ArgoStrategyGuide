@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="f563160824">
+<meta name="sao-build" content="75e54a94de">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -64,7 +64,7 @@ button,input,select{font:inherit;color:inherit}
 .rsel .flabel{margin:0;letter-spacing:0;text-transform:none;font-family:inherit;font-weight:400;font-size:12.5px;color:var(--muted)}
 .rsel select.sel{width:auto;min-width:120px;max-width:230px;text-overflow:ellipsis;height:24px;padding:0 6px;line-height:22px;font-size:12.5px;border-radius:6px}
 /* title row: title, count, labels and the dropdown text share one baseline; fixed height, so the gap to the box below is the same on every tab */
-@media (min-width:821px){.results>.rhead{align-items:baseline;min-height:26px;row-gap:6px;margin-bottom:4px}.results>.rhead .actf .af{height:24px}}
+@media (min-width:821px){.results>.rhead{align-items:baseline;min-height:26px;row-gap:6px;margin-bottom:4px}.results>.rhead .actf .af{height:24px}.results>.rhead{flex-shrink:0}}
 .topf .fgroup{display:flex;flex-direction:row;align-items:center;gap:12px}
 .topf .fgroup[hidden]{display:none}
 .topf .flabel{flex:none;width:48px;margin:0}
@@ -75,7 +75,7 @@ button,input,select{font:inherit;color:inherit}
 .actf .af b{font-weight:400;color:var(--muted)}
 .actf .af span{font-size:13px;line-height:1;padding:2px 5px;border-radius:999px}
 .actf .af:hover span{background:var(--accent);color:var(--accent-ink)}
-.actf .afx{border:0;background:none;color:var(--accent);font-size:12px;cursor:pointer;text-decoration:underline;padding:2px 4px}
+.actf .afgl{font-size:12px;font-weight:700;color:var(--fg);margin-left:4px}.actf .afgl:first-child{margin-left:0}.actf .afw{display:inline-flex;align-items:stretch}.actf .afw .af{border-top-left-radius:0;border-bottom-left-radius:0;padding-left:6px}.actf .afm{border:1px solid var(--accent);border-right:0;border-radius:999px 0 0 999px;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:700;padding:0 7px 0 9px;cursor:pointer;height:24px}.actf .afm:hover{filter:brightness(1.08)}.actf .afx{border:0;background:none;color:var(--accent);font-size:12px;cursor:pointer;text-decoration:underline;padding:2px 4px}
 /* ---------- header ---------- */
 header.top{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;background:var(--panel);border-bottom:1px solid var(--line);
   padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));position:relative;z-index:20}
@@ -289,7 +289,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .zone.shop{z-index:2} .zone.shop .zlabel{padding:0;width:27px;height:27px;border-radius:50%;justify-content:center;font-size:15px;letter-spacing:0;background:rgba(255,248,225,.92);border-color:rgba(120,90,20,.55)}
 .zsec{font-family:var(--f-display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:14px 0 2px}
 .zsec[hidden]{display:none}
-.effwrap{position:relative;display:inline-block}input.effin{-webkit-appearance:none;appearance:none;padding:6px 24px 6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--panel-2) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2710%27 height=%276%27%3E%3Cpath d=%27M1 1l4 4 4-4%27 fill=%27none%27 stroke=%27%238a96a3%27 stroke-width=%271.6%27/%3E%3C/svg%3E") no-repeat right 8px center;width:100%;cursor:pointer;outline:none}input.effin:focus{border-color:var(--accent)}input.effin::placeholder{color:inherit;opacity:1}input.effin:focus::placeholder{color:transparent}input.effin::-webkit-search-decoration,input.effin::-webkit-search-cancel-button{-webkit-appearance:none;display:none}.effpop{position:absolute;left:0;top:calc(100% + 4px);z-index:30;width:270px;max-height:360px;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:4px;display:flex;flex-direction:column}.effpop[hidden]{display:none}.effhd{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:4px 4px 8px;margin:-4px -4px 4px;border-bottom:1px solid var(--line);position:sticky;top:-4px;background:var(--panel);z-index:1}.effhd .effmode{display:flex;gap:6px;flex-wrap:wrap}.effhd .chip{font-size:12px;padding:3px 9px}.effhd .effo.clr{width:100%}.effck{width:12px;flex:none;color:var(--accent,#e08a1e);font-weight:700}.effo em{flex:1;font-style:normal}.effo{display:flex;justify-content:space-between;gap:8px;text-align:left;background:none;border:0;border-radius:6px;padding:5px 8px;font:inherit;font-size:13px;color:inherit;cursor:pointer}.effo span{color:var(--muted,#7a8691);font-variant-numeric:tabular-nums}.effo:hover,.effo:focus-visible{background:var(--hover,rgba(127,127,127,.14))}.effo.on{font-weight:700;color:var(--accent,#e08a1e)}.effo.clr{color:var(--muted,#7a8691)}.effnone{padding:6px 8px;font-size:12.5px}.npcgh{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;margin:14px 0 2px;font-weight:600;font-size:15px}#lItem .npcgh{align-items:center}#lItem .npcgh img{width:28px;height:28px;object-fit:contain;flex:none}#lItem .npcgh>span:first-child{width:28px;height:28px;flex:none;overflow:hidden;display:inline-flex;align-items:center;justify-content:center}.npcgh:first-child{margin-top:0}.npcgh .c{font-weight:400;font-size:12.5px;color:var(--muted)}
+.effwrap{position:relative;display:inline-block}input.effin{-webkit-appearance:none;appearance:none;padding:6px 24px 6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--panel-2) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2710%27 height=%276%27%3E%3Cpath d=%27M1 1l4 4 4-4%27 fill=%27none%27 stroke=%27%238a96a3%27 stroke-width=%271.6%27/%3E%3C/svg%3E") no-repeat right 8px center;width:100%;cursor:pointer;outline:none}input.effin:focus{border-color:var(--accent)}input.effin::placeholder{color:inherit;opacity:1}input.effin:focus::placeholder{color:transparent}input.effin::-webkit-search-decoration,input.effin::-webkit-search-cancel-button{-webkit-appearance:none;display:none}.effpop{position:absolute;left:0;top:calc(100% + 4px);z-index:30;width:270px;max-height:360px;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:4px;display:flex;flex-direction:column}.effpop[hidden]{display:none}.effhd{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:4px 4px 8px;margin:-4px -4px 4px;border-bottom:1px solid var(--line);position:sticky;top:-4px;background:var(--panel);z-index:1}.effhd .effmode{display:flex;gap:6px;flex-wrap:wrap}.effhd .chip{font-size:12px;padding:3px 9px}.effhd .effo.clr{width:100%}.effml{font-size:12px;color:var(--muted)}.effml:last-child{flex-basis:100%}.effmt{font-style:normal;font-size:11px;font-weight:700;margin-left:6px;padding:0 5px;border-radius:4px;background:var(--accent);color:var(--accent-ink)}.effck{width:12px;flex:none;color:var(--accent,#e08a1e);font-weight:700}.effo em{flex:1;font-style:normal}.effo{display:flex;justify-content:space-between;gap:8px;text-align:left;background:none;border:0;border-radius:6px;padding:5px 8px;font:inherit;font-size:13px;color:inherit;cursor:pointer}.effo span{color:var(--muted,#7a8691);font-variant-numeric:tabular-nums}.effo:hover,.effo:focus-visible{background:var(--hover,rgba(127,127,127,.14))}.effo.on{font-weight:700;color:var(--accent,#e08a1e)}.effo.clr{color:var(--muted,#7a8691)}.effnone{padding:6px 8px;font-size:12.5px}.npcgh{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;margin:14px 0 2px;font-weight:600;font-size:15px}#lItem .npcgh{align-items:center}#lItem .npcgh img{width:28px;height:28px;object-fit:contain;flex:none}#lItem .npcgh>span:first-child{width:28px;height:28px;flex:none;overflow:hidden;display:inline-flex;align-items:center;justify-content:center}.npcgh:first-child{margin-top:0}.npcgh .c{font-weight:400;font-size:12.5px;color:var(--muted)}
 .bbl .v{white-space:nowrap}
 .zone .more{display:none;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:999px;background:rgba(10,16,22,.82);color:#fff;font-family:var(--f-mono);font-size:11px;align-self:center;pointer-events:none}
 .world.compact .zone .thumbs .mapth:nth-child(n+2){display:none}
@@ -896,7 +896,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=265d1660"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=4172ed19"></script>
-<script src="changelog.js?v=0e1499c9"></script>
+<script src="changelog.js?v=724bc6ed"></script>
 <script src="recipes.js?v=9163d1ce"></script>
 <script src="jmmeta.js?v=7238858b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -2081,7 +2081,10 @@ const setStats=st=>{if(st._ss)return st._ss;const out=[];st.tiers.forEach(([n,t]
     const k=/^([+-][\d.]+%?)(\/s|\/秒)?\s*(.+?)(\/s|\/秒)?$/.exec(x.trim());if(!k)return;const per=k[2]||k[4];out.push([setLab(k[3]+(per||"")),k[3],`${k[1]}${per?"/秒":""}（套裝 ${n} 件）`])}));
   return st._ss=out};
 const eqAllStats=e=>{const st=eqSetOf(e);return st?[...eqStats(e),...setStats(st)]:eqStats(e)};
-let EFF_SEL=[],EFF_MODE="and";   // picked effects; and = 且 (every one), or = 或 (any one)
+// picked effects, each 且 (must have) or 或 (at least one of the 或 ones) — both at once (user 2026-11-09「為什麼且跟或只能選一種，
+// 不是說都要嗎」); EFF_MODE is what a new pick gets
+let EFF_SEL=[],EFF_M={},EFF_MODE="and";
+const effMode=z=>EFF_M[z]==="or"?"or":"and";
 let EFF_NAMES=null;   // an exact effect name (picked from the list) matches only that effect: 傷害 is not 爆擊傷害
 const eqEffHit=(e,t)=>{if(!EFF_NAMES){EFF_NAMES=new Set();EQ.forEach(x=>eqAllStats(x).forEach(([zh])=>EFF_NAMES.add(norm(zh))))}const ex=EFF_NAMES.has(t);
   return eqAllStats(e).filter(([zh,k])=>ex?norm(zh)===t:norm(zh).includes(t)||norm(k).includes(t))};
@@ -2091,22 +2094,25 @@ const eqEffHit=(e,t)=>{if(!EFF_NAMES){EFF_NAMES=new Set();EQ.forEach(x=>eqAllSta
  const inp=$("fEqEff"),pop=$("effPop");
  // clicking empties the box for typing (user 2026-11-08「點的時候要把欄位空出來」); several effects can be picked, with 且／或
  // (「要可以複數選擇」「要有and或or可以選」): the list stays open while picking, the box shows the picks when it closes
- const show=()=>{inp.value=EFF_SEL.join("、")};
+ const show=()=>{const A=EFF_SEL.filter(z=>effMode(z)==="and"),O=EFF_SEL.filter(z=>effMode(z)==="or");   // 且 and 或 shown apart (「且跟或各別顯示」)
+   inp.value=!O.length?A.join("、"):[A.length?"且："+A.join("、"):"",O.length?"或："+O.join("、"):""].filter(Boolean).join("｜")};
  const apply=()=>{renderEquip();requestAnimationFrame(actSync)};
- const draw=()=>{const q=norm(inp.value.trim()),on=new Set(EFF_SEL),L=allEff().filter(([z])=>!q||norm(z).includes(q)).sort((a,b)=>on.has(b[0])-on.has(a[0]));   // picked ones first
-   pop.innerHTML=`<div class="effhd"><span class="effmode" role="group" aria-label="選了好幾個效果時">${[["and","且：全部都要有"],["or","或：有其中一個"]].map(([k,l])=>`<button type="button" class="chip" data-effm="${k}" aria-pressed="${EFF_MODE===k}">${l}</button>`).join("")}</span>${EFF_SEL.length?`<button type="button" class="effo clr" data-eff="">✕ 清除（已選 ${EFF_SEL.length} 個）</button>`:""}</div>`
-     +(L.length?L.map(([z,n])=>`<button type="button" class="effo${on.has(z)?" on":""}" role="option" aria-selected="${on.has(z)}" data-eff="${esc(z)}"><b class="effck" aria-hidden="true">${on.has(z)?"✓":""}</b><em>${esc(z)}</em><span>${n}</span></button>`).join(""):`<span class="muted effnone">沒有這個效果</span>`)};
+ const draw=()=>{const q=norm(inp.value.trim()),on=new Set(EFF_SEL),L=allEff().filter(([z])=>!q||norm(z).includes(q)).sort((a,b)=>(k=>k(b[0])-k(a[0]))(z=>on.has(z)?(effMode(z)==="and"?2:1):0));   // picked ones first: 且, then 或
+   pop.innerHTML=`<div class="effhd"><span class="effml">新選的效果算</span><span class="effmode" role="group" aria-label="新選的效果算且還是或">${[["and","且：一定要有"],["or","或：有其中一個就好"]].map(([k,l])=>`<button type="button" class="chip" data-effm="${k}" aria-pressed="${EFF_MODE===k}">${l}</button>`).join("")}</span><span class="effml">選好後可以在上方的條件切換每一個的且／或</span>${EFF_SEL.length?`<button type="button" class="effo clr" data-eff="">✕ 清除（已選 ${EFF_SEL.length} 個）</button>`:""}</div>`
+     +(L.length?L.map(([z,n])=>`<button type="button" class="effo${on.has(z)?" on":""}" role="option" aria-selected="${on.has(z)}" data-eff="${esc(z)}"><b class="effck" aria-hidden="true">${on.has(z)?"✓":""}</b><em>${esc(z)}${on.has(z)?`<i class="effmt">${effMode(z)==="or"?"或":"且"}</i>`:""}</em><span>${n}</span></button>`).join(""):`<span class="muted effnone">沒有這個效果</span>`)};
  const open=()=>{if(!pop.hidden)return;inp.value="";draw();pop.hidden=false;inp.setAttribute("aria-expanded","true")},
    close=()=>{if(pop.hidden)return;pop.hidden=true;inp.setAttribute("aria-expanded","false");show();requestAnimationFrame(actSync)};
  inp.addEventListener("focus",open);inp.addEventListener("click",open);
  inp.addEventListener("input",()=>{if(!pop.hidden){draw();return}if(!inp.value.trim()&&EFF_SEL.length){EFF_SEL=[];apply()}});   // ✕ on the 已篩選 chip empties the box
  inp.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&!pop.hidden){ev.preventDefault();ev.stopPropagation();close();inp.blur()}});   // preventDefault: a search box clears itself on Escape
  pop.addEventListener("mousedown",ev=>ev.preventDefault());
- pop.addEventListener("click",ev=>{const m=ev.target.closest("[data-effm]");if(m){EFF_MODE=m.dataset.effm;draw();if(EFF_SEL.length>1)apply();return}
+ pop.addEventListener("click",ev=>{const m=ev.target.closest("[data-effm]");if(m){EFF_MODE=m.dataset.effm;draw();return}
    const b=ev.target.closest("[data-eff]");if(!b)return;const z=b.dataset.eff;
-   if(!z)EFF_SEL=[];else EFF_SEL=EFF_SEL.includes(z)?EFF_SEL.filter(x=>x!==z):[...EFF_SEL,z];
+   if(!z){EFF_SEL=[];EFF_M={}}else if(EFF_SEL.includes(z)){EFF_SEL=EFF_SEL.filter(x=>x!==z);delete EFF_M[z]}else{EFF_SEL=[...EFF_SEL,z];EFF_M[z]=EFF_MODE}
    inp.value="";draw();apply();inp.focus()});
- window.__effPick=(L,mode)=>{EFF_SEL=L.slice();if(mode)EFF_MODE=mode;if(pop.hidden)show();apply()};
+ // L: names (mode = 且／或 for all of them) or [name, mode] pairs
+ window.__effPick=(L,mode)=>{const M={};EFF_SEL=L.map(x=>{const [z,m]=Array.isArray(x)?x:[x,mode||EFF_M[x]||EFF_MODE];M[z]=m;return z});EFF_M=M;if(pop.hidden)show();apply()};
+ window.__effToggle=z=>{EFF_M[z]=effMode(z)==="or"?"and":"or";if(pop.hidden)show();apply()};
  document.addEventListener("pointerdown",ev=>{if(!pop.hidden&&!ev.target.closest(".effwrap"))close()},true)}
 const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",quiver:"quiver offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory",acc:"accessory"};
 const eqSetN=e=>{const st=[e.gen,FR2ID[e.name]].filter(Boolean).map(n=>SET_BY[norm(n)]).find(Boolean);return st?st.name+" "+(SET_ZH[st.name]||""):""};
@@ -2161,7 +2167,8 @@ window.__nameAudit=()=>{const recEn={};ALLREC.forEach(r=>{if(r.oid!=null)(recEn[
   return EQ.map(e=>row("e",e)).concat(PR.map(e=>row("p",e)))};   // name audit hook (2026-11-08)
 window.__eqDump=()=>EQ.map(e=>({oid:e.oid,gen:e.gen||"",name:e.name,zh:zhE(e),lv:e.lv,dmg:e.dmg,st:e.st,r:e.r,extra:!!e.extra,gst:!!e.cat0,patch:!!e.patch}));   // test/audit hook (2026-11-07 effect audit)
 const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
-function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ES=EFF_SEL.map(norm),effOk=e=>!ES.length||(EFF_MODE==="and"?ES.every(t=>eqEffHit(e,t).length):ES.some(t=>eqEffHit(e,t).length));
+function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ES=EFF_SEL.map(norm),EREQ=EFF_SEL.filter(z=>effMode(z)==="and").map(norm),EOPT=EFF_SEL.filter(z=>effMode(z)==="or").map(norm),
+    effOk=e=>EREQ.every(t=>eqEffHit(e,t).length)&&(!EOPT.length||EOPT.some(t=>eqEffHit(e,t).length));   // every 且, and at least one 或
   const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&effOk(e));
   // sub-part counts follow the other filters (class, rarity, level, search), so they match the list
   $("fEqSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>eqSub(e)===c.dataset.v).length});
@@ -3435,17 +3442,20 @@ function actControls(sec){const out=[];sec.querySelectorAll(".filters .fgroup,.t
   g.querySelectorAll("input[type=search]").forEach(x=>{if(!x.value.trim())return;
     // picked effects: one chip each (user 2026-11-09「應該要分開」), 且／或 in the label when there are several
     // 且／或 is its own chip that switches the mode (「且跟或也要分開」)
-    if(x.id==="fEqEff"&&EFF_SEL.length){EFF_SEL.forEach(z=>out.push({lab,val:z,clr:()=>window.__effPick(EFF_SEL.filter(y=>y!==z))}));
-      if(EFF_SEL.length>1)out.push({lab:"條件",val:EFF_MODE==="and"?"且：全部都要有":"或：有其中一個",tog:1,clr:()=>window.__effPick(EFF_SEL,EFF_MODE==="and"?"or":"and")});return}
+    // 且 and 或 as two groups (「且跟或各別顯示」); ⇄ moves an effect to the other group
+    if(x.id==="fEqEff"&&EFF_SEL.length){[["and","且（一定要有）"],["or","或（有其中一個就好）"]].forEach(([m,g])=>EFF_SEL.filter(z=>effMode(z)===m).forEach(z=>out.push({lab,val:z,grp:g,
+      pre:{t:"⇄",title:`移到「${m==="and"?"或":"且"}」`,fn:()=>window.__effToggle(z)},clr:()=>window.__effPick(EFF_SEL.filter(y=>y!==z))})));return}
     out.push({lab,val:x.value.trim(),clr:()=>{x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})});
   const nums=[...g.querySelectorAll("input[type=number]")];if(nums.some(x=>x.value))out.push({lab,val:nums.map(x=>x.value||"…").join("～"),clr:()=>nums.forEach(x=>{if(x.value){x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})})});
   return out}
 function actSync(){const sec=$("view-"+view);if(!sec||!sec.classList.contains("browse"))return;const rh=sec.querySelector(".results>.rhead");if(!rh)return;
   let box=rh.querySelector(".actf");if(!box){box=document.createElement("div");box.className="actf";rh.appendChild(box)}
   const cs=actControls(sec);box.hidden=!cs.length;
-  box.innerHTML=cs.map((c,i)=>`<button type="button" class="af${c.tog?" tog":""}" data-i="${i}" title="${c.tog?"切換":"取消這個條件"}">${c.lab?`<b>${esc(c.lab)}</b>`:""}${esc(c.val)}<span aria-hidden="true">${c.tog?"⇄":"✕"}</span></button>`).join("")+(cs.filter(c=>!c.tog).length>1?'<button type="button" class="afx">全部清除</button>':"");
+  // c.pre: a small switch in front of the chip (效果's 且／或)
+  box.innerHTML=cs.map((c,i)=>`${c.grp&&(!i||cs[i-1].grp!==c.grp)?`<span class="afgl">${esc(c.grp)}</span>`:""}${c.pre?`<span class="afw"><button type="button" class="afm" data-p="${i}" title="${esc(c.pre.title||"")}" aria-label="${esc(c.val)}：${esc(c.pre.title||"")}">${esc(c.pre.t)}</button>`:""}<button type="button" class="af" data-i="${i}" title="取消這個條件">${c.lab?`<b>${esc(c.lab)}</b>`:""}${esc(c.val)}<span aria-hidden="true">✕</span></button>${c.pre?"</span>":""}`).join("")+(cs.length>1?'<button type="button" class="afx">全部清除</button>':"");
   box.querySelectorAll(".af").forEach(b=>b.onclick=()=>{cs[+b.dataset.i].clr();setTimeout(actSync,0)});
-  const x=box.querySelector(".afx");if(x)x.onclick=()=>{cs.slice().reverse().filter(c=>!c.tog).forEach(c=>c.clr());setTimeout(actSync,0)}}
+  box.querySelectorAll(".afm").forEach(b=>b.onclick=()=>{cs[+b.dataset.p].pre.fn();setTimeout(actSync,0)});
+  const x=box.querySelector(".afx");if(x)x.onclick=()=>{cs.slice().reverse().forEach(c=>c.clr());setTimeout(actSync,0)}}
 document.addEventListener("click",e=>{if(e.target.closest(".filters,.topf,.rsel"))setTimeout(actSync,0)});
 document.addEventListener("change",e=>{if(e.target.closest(".filters,.topf,.rsel"))setTimeout(actSync,0)});
 document.addEventListener("input",e=>{if(e.target.closest(".filters,.topf,.rsel"))setTimeout(actSync,0)});
