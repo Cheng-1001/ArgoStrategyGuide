@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="75e54a94de">
+<meta name="sao-build" content="fd1a0d8c99">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -896,7 +896,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=265d1660"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=4172ed19"></script>
-<script src="changelog.js?v=724bc6ed"></script>
+<script src="changelog.js?v=dd844fec"></script>
 <script src="recipes.js?v=9163d1ce"></script>
 <script src="jmmeta.js?v=7238858b"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -2673,6 +2673,8 @@ function jmRegNames(rx,rz){const F1=FLOORS[1],x0=rx*512,z0=rz*512,ins=p=>p.x>=x0
 // split the chosen regions into zips of at most BUDGET bytes and MAXN files (tools/jm_merge.py refuses more); each part
 // of a world gets surface regions of that world that overlap the site's map until they cover ANCHOR explored chunks, so
 // the server can verify every part on its own (also when only height layers are packed)
+const jmFullSel=()=>{const sel=JMG.filter(g=>g.state==="f1").map(g=>({g,news:[...(g.inFrame||[]),...Object.values(g.layers).flatMap(L=>L.inFrame||[])]})).filter(s=>s.news.length);
+  JMG.filter(g=>g.state==="dg").forEach(g=>{const news=Object.values(g.layers).flatMap(L=>L.inFrame||[]);if(news.length)sel.push({g,news,anc:g.anc})});return sel};
 function jmPlan(sel){const parts=[],cap=Math.max(1,JMP.MAXN-Math.min(40,JMP.MAXN>>2));   // room for the anchors
   for(const {g,news,anc} of sel){const src=anc||g,byOv=(src.inFrame||[]).filter(it=>it.ov&&it.ov.size).sort((a,b)=>b.ov.size-a.ov.size);let batch=[],bb=0;
     const close=()=>{if(!batch.length)return;const items=batch.map(it=>({g,it}));let ov=anc?0:batch.reduce((s,it)=>s+(it.ov&&it.dir.toLowerCase()==="day"?it.ov.size:0),0),anchors=0;
@@ -2859,6 +2861,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   const help=`<span class="jmanch jmhelpa"><button type="button" class="pill r-b jmpb" id="jmHelpBtn" aria-expanded="false" aria-controls="jmHelp">ⓘ 說明</button><div class="jmpopov" id="jmHelp" hidden><ul>
         <li>選取示意：<span class="nw"><span class="jmk on"></span>橘框＝要上傳</span>、<span class="nw"><span class="jmk"></span>虛線＝不上傳</span>。</li>
         <li>滑鼠在方格或地下城上停留，預覽視窗就會顯示該區塊的地圖。</li>
+        <li>「全地圖打包」不用選，第 1 層的地面、室內・洞穴和地下城地圖全部打包（網站已經有的也一起）；只放地圖圖片，不含路標（waypoint）。</li>
         <li>點預覽視窗裡的圖可以放大，按 Esc 或點右上 ✕ 關閉。</li>
         <li>室內・洞穴（洞穴、地下室、建築內）的地圖會跟著方格一起打包，不用另外選。</li></ul></div></span>`;
   const mapPart=f1.length&&regs.size?`<section class="jmsec"><div class="jmsech"><b>地圖</b><span class="muted">地面 ${nDay} 張・室內・洞穴 ${nCave} 張</span>
@@ -2889,7 +2892,12 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   // one line in every state, even in the narrowest column (346px at a 1101px window): no blank second line and no jump
   // when picking (使用者 2026-11-06：多留白了／全選後高度會變). The anchors and each part's size go in the button's tooltip.
   const dlBtn=parts.length?parts.map((p,i)=>`<button class="repbtn" data-jmpart="${i}" title="${mb(p.bytes)}${p.anchors?`，另含 ${p.anchors} 張用來確認位置的地面圖`:""}">⬇ 下載壓縮檔${parts.length>1?` ${i+1}／${parts.length}`:""}</button>`).join(""):`<button class="repbtn" disabled title="先在下面點選要上傳的地方">⬇ 下載壓縮檔</button>`;
-  $("jmDl").innerHTML=dlBtn;
+  // 全地圖打包 (user 2026-11-09「地圖打包多做一個全地圖打包，不要放入waypoint」): every floor 1 map image the player has —
+  // surface, every height, every recognised dungeon — whether the site has it or not, no picking needed. Only x,z.png map
+  // tiles are ever read (jmGroups), so waypoints and the rest of the JourneyMap folder never go in.
+  const full=jmPlan(jmFullSel()),fTot=full.reduce((t,p)=>t+p.bytes,0),fN=full.reduce((t,p)=>t+p.items.length,0);
+  const fullBtn=f1.length&&full.length?full.map((p,i)=>`<button class="repbtn ghost" data-jmfull="${i}" title="全地圖：第 1 層的地面、室內・洞穴和地下城地圖全部打包，網站已經有的也一起（${full.length>1?`第 ${i+1} 份 ${mb(p.bytes)}，共 ${full.length} 份、${fN} 張、${mb(fTot)}，每份都要各送一次表單`:`${fN} 張、${mb(fTot)}`}）；不含路標（waypoint）">⬇ 全地圖打包${full.length>1?` ${i+1}／${full.length}`:""}</button>`).join(""):"";
+  $("jmDl").innerHTML=dlBtn+fullBtn;window.__jmFull=full.map(p=>({n:p.items.length,bytes:p.bytes,names:p.items.map(({g,it})=>g.key+"/"+it.dir+"/"+it.f.name)}));
   const tot=mb(parts.reduce((t,p)=>t+p.bytes,0));
   $("jmDlNote").innerHTML=!f1.length?`沒有找到第 1 層的地圖，原因看下面「掃描到的資料夾」。`
     :!regs.size&&!dgNew.length?`你探索過的地方網站都已經有了，不用上傳，謝謝！`
@@ -2929,10 +2937,10 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   O.querySelectorAll("[data-jmdg]").forEach(b=>{const on=!JMSEL.dgOff.has(b.dataset.jmdg)&&!b.getAttribute("aria-disabled");b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});
   O.querySelectorAll("[data-jmreg]").forEach(e=>{const on=!JMSEL.off.has(e.dataset.jmreg);e.classList.toggle("off",!on);e.setAttribute("aria-checked",on)});
   // the download button sits beside the folder picker, outside #jmOut
-  $("jmDl").querySelectorAll("[data-jmpart]").forEach(b=>b.onclick=async()=>{const i=+b.dataset.jmpart,p=parts[i];b.disabled=true;const t0=b.textContent;b.textContent="打包中…";
+  $("jmDl").querySelectorAll("[data-jmpart],[data-jmfull]").forEach(b=>b.onclick=async()=>{const fu=b.dataset.jmfull!=null,L=fu?full:parts,i=+(fu?b.dataset.jmfull:b.dataset.jmpart),p=L[i];b.disabled=true;const t0=b.textContent;b.textContent="打包中…";
     try{const blob=await jmZip(p.items.map(({g,it})=>({name:g.key+"/"+it.dir+"/"+it.f.name,file:it.f})));
       const d=new Date(),stamp=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
-      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`探索地圖-第1層-${stamp}${parts.length>1?"-"+(i+1):""}.zip`;document.body.appendChild(a);a.click();a.remove();
+      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`探索地圖-第1層-${fu?"全地圖-":""}${stamp}${L.length>1?"-"+(i+1):""}.zip`;document.body.appendChild(a);a.click();a.remove();
       setTimeout(()=>URL.revokeObjectURL(a.href),60000);window.__jmBlob=blob}
     finally{b.disabled=false;b.textContent=t0}})}
 let fbCache=null;

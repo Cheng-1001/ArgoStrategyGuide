@@ -91,6 +91,9 @@ try:
     put("Triggers_other~b/03b352fd-5d0c-4000-8000-000000000002_xalzirith/0", "0,0.png", cave)
     put("Triggers_f1~a/overworld/-398", "%d,%d.png" % top[0], cave)
     open(os.path.join(mp, "Triggers_f1~a", "overworld", "day", "notes.txt"), "w").write("x")
+    os.makedirs(os.path.join(mp, "Triggers_f1~a", "waypoints"), exist_ok=True)                      # waypoints never go in a zip
+    open(os.path.join(mp, "Triggers_f1~a", "waypoints", "Home_1.json"), "w").write('{"name":"Home","x":1,"z":2}')
+    put("Triggers_f1~a/waypoints", "%d,%d.png" % top[0], noise)
 
     class H(http.server.SimpleHTTPRequestHandler):
         def log_message(self, *a):
@@ -112,6 +115,21 @@ try:
         check(not J0["parts"] and not pg.locator("[data-jmpart]").count() and pg.is_disabled("#jmDl .repbtn") and "還沒選" in pg.inner_text("#jmDlNote")
               and "第 1 層 0／" in pg.inner_text("#jmRegSum") and "地下城 0／1" in pg.inner_text("#jmRegSum"),
               "nothing is picked to start with; the download button is beside the folder button, greyed")
+        # 全地圖打包 (user 2026-11-09): everything of floor 1 without picking, waypoints left out
+        F = pg.evaluate("window.__jmFull") or []
+        fn = [x for p_ in F for x in p_["names"]]
+        exp_day = {f"mp/Triggers_f1~a/overworld/day/{rx},{rz}.png" for rx, rz in top} | {"mp/Triggers_f1~a/overworld/day/%d,%d.png" % new}
+        check(pg.locator("#jmDl [data-jmfull]").count() == len(F) >= 1 and exp_day <= set(fn)
+              and "mp/Triggers_f1~a/overworld/1/5,9.png" in fn and any("_geldorack/" in x for x in fn)
+              and not any("waypoint" in x.lower() or "Triggers_other" in x or "/night/" in x or "/-398/" in x or "40,40" in x for x in fn),
+              f"全地圖打包 offers every floor 1 image (surface, heights, dungeons) and no waypoints ({len(fn)} files, {len(F)} parts; missing {sorted(exp_day - set(fn))[:3]}, {[x for x in fn if 'day' not in x]})")
+        pg.locator("#jmDl [data-jmfull]").first.evaluate("e=>e.scrollIntoView({block:'center'})")
+        with pg.expect_download() as dl:
+            pg.click("#jmDl [data-jmfull]")
+        zf = os.path.join(tmp, "full.zip"); dl.value.save_as(zf)
+        zn = zipfile.ZipFile(zf).namelist()
+        check("全地圖" in dl.value.suggested_filename and set(zn) == set(F[0]["names"]) and not any(".json" in x for x in zn),
+              f"the 全地圖 zip holds exactly those images ({len(zn)}, {dl.value.suggested_filename})")
         pk = pg.evaluate("(()=>{const a=document.querySelector('#jmPick').getBoundingClientRect(),b=document.querySelector('#jmDl .repbtn').getBoundingClientRect();return [Math.abs(a.top-b.top)<4,b.left>a.right]})()")
         check(pg.locator(".jmtools #jmPick").count() == 1 and pg.locator(".jmtools #jmDl").count() == 1 and not pg.locator("#jmOut .repbtn").count() and pk == [True, True],
               f"the download button is to the right of the folder button, apart from the selection ({pk})")
