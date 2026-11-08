@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="86f7015e1c">
+<meta name="sao-build" content="6f6947530b">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -904,7 +904,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="gacha.js?v=48cf03e8"></script>
 <script src="gamestats.js?v=148e7b9e"></script>
 <script src="sets.js?v=fcb047a5"></script>
-<script src="zhnames.js?v=1ed0ea0d"></script>
+<script src="zhnames.js?v=2e6fb82c"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=5f21ae39"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1321,6 +1321,11 @@ function dgTilesHTML(d){if(!d||!d.easy)return"";
 const monRow=m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(mN(m))}</b><span>${mN(m)!==m.name?esc(m.name)+"・":""}${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`;
 function dgBossHTML(sp,mons){const d=sp.dg;if(!d&&!mons.length)return"";
   return`<h3 class="sec">首領</h3>${d?`<p class="dgboss"><b>${esc(d.boss)}</b>${d.bossZh?`<span class="muted">${esc(d.bossZh)}</span>`:""}</p>`:""}${mons.length?`<ul class="rows">${mons.map(monRow).join("")}</ul>`:""}`}
+// dungeon chests that give an item (reverse of dgLootHTML; 2026-11-08: 森林連結 only had the Geldorack chest as a source)
+let DG_SRC=null;
+function dgSrcHTML(go){if(!go)return"";if(!DG_SRC){DG_SRC={};FL_KEYS.forEach(f=>spotsOf(f).forEach(sp=>((sp.dg&&sp.dg.loot)||[]).forEach(([it,,p])=>{const r=matRef(ITEMS[it]?it:DG_ITEM[it]||it);if(r.go)(DG_SRC[r.go]=DG_SRC[r.go]||[]).push([sp,p])})))}
+  const L=DG_SRC[go];if(!L||!L.length)return"";
+  return`<h3 class="sec">地下城寶箱</h3><ul class="rows">${L.map(([sp,p])=>`<li><button class="lrow" data-go="s|${esc(sp.id)}"><span class="t"><b>${esc(pN(sp))}</b><span>打完地下城開的寶箱（Easy）</span></span><span class="v">${p}%</span></button></li>`).join("")}</ul>`}
 function dgLootHTML(sp,pre){const d=sp.dg;if(!d||!d.loot)return"";
   return`<h3 class="sec">通關寶箱 <span class="c">Easy・${d.loot.length} 項</span></h3><div class="muted dgcap">打完地下城開寶箱拿到的東西和機率（遊戲 Dungeons 視窗的 Loot）。</div>${pre||""}
   <ul class="rows dgloot">${d.loot.map(([it,by,p])=>{const r=matRef(ITEMS[it]?it:DG_ITEM[it]||it),mon=dgMonByName(sp.floor,by);
@@ -2128,10 +2133,10 @@ function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
   ${loreHTML(e)}
   <dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
   ${e.patch?patchNote(e):""}${e.gst?gstNote(e):""}${e.gstLv?`<div class="note">🎮 等級（和稀有度）取自遊戲裡的物品說明（站長截圖 ${esc(e.gstLv)}）${e.lv0!=null?`，官網圖鑑寫等級 ${e.lv0}`:""}；數值還沒有遊戲截圖，暫用官網圖鑑。</div>`:""}${setPotHTML(e.gen,en)}
-  ${e.extra?((SOURCES[en]||[]).length||(GATHER[en]||[]).length||(USES[en]||[]).length?itemObtainHTML(en):"")+giHTML(GI_EN[norm(e.gen||"")]):en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}${gachaHTML("e|"+e.oid,e.gen,en)}
+  ${e.extra?((SOURCES[en]||[]).length||(GATHER[en]||[]).length||(USES[en]||[]).length?itemObtainHTML(en):"")+giHTML(GI_EN[norm(e.gen||"")]):en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}${GI_OID[e.oid]?"":dgSrcHTML("e|"+e.oid)}${gachaHTML("e|"+e.oid,e.gen,en)}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   ${e.extra&&ITEMS[en]&&ITEMS[en].note?`<div class="note">${esc(ITEMS[en].note)}</div>`:""}
-  <div class="note srcn">${e.extra?(ITEMS[en]&&ITEMS[en].note?"官網物品圖鑑沒有收錄這件裝備。":"官網物品圖鑑沒有收錄這件裝備；名稱和數值取自遊戲截圖或 wiki，掉落取自本站怪物資料。"):`官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}`}</div>`}
+  <div class="note srcn">${e.extra?(ITEMS[en]&&ITEMS[en].note?"官網物品圖鑑沒有收錄這件裝備。":"官網物品圖鑑沒有收錄這件裝備；名稱和數值取自遊戲截圖或 wiki，掉落取自本站怪物資料。"):`官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]||dgSrcHTML("e|"+e.oid)?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}`}</div>`}
 
 // ================= props tab (official catalogue, non-equipment) =================
 const PR=(window.SAO_PROPS||[]).filter(r=>r[2]!=="catalyst").map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
@@ -2140,6 +2145,8 @@ const prById=Object.fromEntries(PR.map(e=>[String(e.oid),e]));PR.forEach(e=>{if(
 // owner's recipe / shop screenshots (src shot), e.g. Amulette Sylvestre = Amulet of the Sylve, Cagoule de Bandit = Bandit Hood
 {const shotEn={};ALLREC.forEach(r=>{if(r.src==="shot"&&r.oid!=null&&!shotEn[String(r.oid)])shotEn[String(r.oid)]=recEnD(r)});
  EQ.concat(PR).forEach(e=>{if(!e.gen&&shotEn[String(e.oid)])e.gen=shotEn[String(e.oid)]})}
+// English game name from zhnames.js (game log / tooltip English) for items that only have the French catalogue name (2026-11-08: 森林連結 = Bond of the Sylve)
+ZHL.forEach(z=>{if(z.en)(z.ids||[]).forEach(id=>{const m=id.match(/^([ep])\|(.+)$/);if(!m)return;const e=(m[1]==="e"?eqById:prById)[m[2]];if(e&&!e.gen)e.gen=z.en})});
 // rarity seen in the game's shop / crafting windows (recipes.js rows from screenshots) wins over the official catalogue (2026-11-07 merchant
 // audit: Forest Key, Spider Bracelet are COMMON and Gloves of the Stags RARE in the game; the catalogue says otherwise). A tooltip rarity
 // in gamestats.js (r) is kept.
@@ -2261,7 +2268,7 @@ function propDetail0(id){const e=prById[id];const en=FR2ID[e.name];
   return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${zhE(e)?esc(dnSub(e))+"・":(potZhE(e)?esc(potZhE(e))+"・":"")+(e.gen&&!e.extra?esc(e.name)+"・":"")}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
   ${loreHTML(e,potGame&&/^potion_/.test(e.cat))}${rows?`<dl class="stats">${rows}</dl>`:""}${setPotHTML(e.gen,en)}
-  ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen)]:null))}${gachaHTML("p|"+e.oid,e.gen,en)}
+  ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen)]:null))}${GI_OID[e.oid]?"":dgSrcHTML("p|"+e.oid)}${gachaHTML("p|"+e.oid,e.gen,en)}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note srcn">${e.extra?"官網物品圖鑑沒有收錄這個物品，名稱和效果取自遊戲截圖。":`官方圖鑑 #${e.oid}。`}${PR_GROUP[e.cat]==="活動"?(PR_EVYEAR[e.cat]?`活動年份 ${PR_EVYEAR[e.cat]} 取自官網圖鑑的分類名稱。`:"官網圖鑑的這個活動分類沒有寫年份，所以不標年份。"):""}${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
