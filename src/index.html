@@ -526,7 +526,7 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .jmlays{font-size:12.5px}.jmlays .muted{font-size:11.5px;margin-left:4px}
 .hint.mph .mphr{display:flex;gap:10px;align-items:center;margin-top:6px}.hint.mph .mphr img{width:56px;height:56px;object-fit:contain;flex:none;background:radial-gradient(circle,#f3efe6 0,#e3dccd 70%);border-radius:50%}
 .hint.mph .mphn{width:56px;height:56px;flex:none;display:flex;align-items:center;justify-content:center;font-size:26px;background:var(--panel-2);border-radius:50%}
-.jmtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#jmDl{display:contents}.jmtools .repbtn{align-self:auto}.jmtools .repbtn:disabled{opacity:.45;cursor:not-allowed}
+.jmmode{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;margin-bottom:8px}.jmmode>b{font-size:14px}.jmmode .jmmo{display:flex;flex-direction:column;gap:3px;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2);color:var(--fg);font:inherit;cursor:pointer}.jmmode .jmmo:hover,.jmmode .jmmo:focus-visible{border-color:var(--accent)}.jmmode .jmmo b{font-size:14px;color:var(--accent)}.jmmode .jmmo span{font-size:12.5px;color:var(--muted);line-height:1.5}.jmmode .jmsw{font-size:12.5px}.jmrows{display:flex;flex-direction:column;gap:6px}.jmtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#jmDl{display:contents}.jmtools .repbtn{align-self:auto}.jmtools .repbtn:disabled{opacity:.45;cursor:not-allowed}
 .jmdlnote{font-size:12.5px;line-height:1.55;min-height:1.55em}.jmdlnote .warn{color:var(--warn)}
 .jmout{border-top:1px solid var(--line);padding-top:8px}.jmout:empty{display:none}
 .jmselbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:13px}.jmselbar select{font:inherit;font-weight:600;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
@@ -2567,7 +2567,7 @@ function jmCredits(){const j=(window.SAO_JM||{})["1"]||{},log=j.log||[],tot=j.ch
 // 2026-11-06 (使用者選 A＋選擇範圍): the height-layer folders (cave slices "0", "1", "-1"…) of floor 1 worlds are packed
 // too, all of them (no height choice); the player may take squares out on a small map. A layer-only pack still
 // carries a few surface regions as anchors, because the server recognises floor 1 only by its surface colours.
-const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576,MAXN:1500,LMIN:-4,LMAX:19,DWELL:350};   // DWELL: ms the pointer rests on a square before its preview shows   // MAXN = MAX_REGIONS in tools/jm_merge.py
+const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576,MAXN:1500,LMIN:-4,LMAX:19,DWELL:350,QUICK:40};   // QUICK: surface images decoded to recognise floor 1 in 全地圖打包   // DWELL: ms the pointer rests on a square before its preview shows   // MAXN = MAX_REGIONS in tools/jm_merge.py
 window.__JMP=JMP;   // exposed for tests/jm_pack_test.py
 const JMV=()=>{const j=(window.SAO_JM||{})["1"]||{};return encodeURIComponent(String(j.date||"")+"-"+String(j.pct||"")+"-"+String(j.chunks||""))};
 let JMREF=null;
@@ -2692,6 +2692,55 @@ async function jmZip(entries){const enc=new TextEncoder(),body=[],cen=[];let off
 const JM_ST={f1:["第 1 層","ok"],other:["不是第 1 層","no"],few:["和網站地圖重疊太少，無法確認","no"],out:["不在第 1 層的範圍","no"],noday:["沒有地面地圖，無法確認","no"],dg:["地下城","ok"],dgno:["旁邊沒有第 1 層地圖，無法確認","no"],dgunk:["網站還不認得的副本","no"]};
 const mb=b=>(b/1048576).toFixed(1)+" MB";
 let JMG=[];
+// choose first, read after (user 2026-11-09「在選完資料夾的時候先選全圖還是更新打包地圖，不要每次都全讀」): 更新打包 compares
+// every image with the site (slow, lets you pick squares); 全地圖打包 decodes only a sample of surface images that overlap
+// the site's explored area to recognise floor 1 and takes everything else by its coordinates (fast, no picking)
+let JMFILES=null;
+function jmChoose(files){JMFILES=files;const n=jmGroups(files).reduce((s,g)=>s+g.files.length+Object.values(g.layers).reduce((t,L)=>t+L.items.length,0),0);
+  $("jmDl").innerHTML=`<button class="repbtn" disabled>⬇ 下載壓縮檔</button>`;$("jmDlNote").textContent=n?"先選要怎麼打包。":"找不到地圖檔案。";{const h=$("jmHow");if(h)h.open=false}
+  $("jmOut").innerHTML=!n?`<div class="note warn">選的資料夾裡找不到 JourneyMap 的地圖（<code>day</code> 或高度層資料夾裡 <code>3,7.png</code> 這種檔案）。請確認選的是 <code>journeymap\\data\\mp</code>。</div>`
+    :`<div class="jmmode"><b>找到 ${n} 張地圖，要怎麼打包？</b>
+      <button type="button" class="jmmo" data-jmmode="new"><b>更新打包</b><span>只打包網站地圖還沒有的地方，可以在地圖上挑。每一張都要和網站比對，比較久。</span></button>
+      <button type="button" class="jmmo" data-jmmode="full"><b>全地圖打包</b><span>第 1 層的地面、室內・洞穴和地下城地圖全部打包，網站已經有的也一起，不用挑。只抽幾張確認是第 1 層，比較快。不含路標（waypoint）。</span></button></div>`;
+  $("jmOut").querySelectorAll("[data-jmmode]").forEach(b=>b.onclick=()=>b.dataset.jmmode==="full"?jmRunFull(JMFILES):jmRun(JMFILES))}
+const jmSwitch=m=>`<button type="button" class="linkbtn jmsw" data-jmsw="${m}">${m==="full"?"改用全地圖打包":"改用更新打包（只打包網站還沒有的）"}</button>`;
+document.addEventListener("click",ev=>{const b=ev.target.closest&&ev.target.closest("[data-jmsw]");if(!b||!JMFILES)return;b.dataset.jmsw==="full"?jmRunFull(JMFILES):jmRun(JMFILES)});
+// 全地圖: a world is floor 1 when a sample of its surface images (the ones covering most of the site's explored chunks,
+// at most QUICK of them) matches the site's map the same way 更新打包 checks it; everything else goes in by coordinates
+async function jmQuick(g,ref,cv){const x=cv.getContext("2d",{willReadFrequently:true});x.clearRect(0,0,1280,1280);x.imageSmoothingQuality="high";
+  const {X0,SIZE}=JMP;g.news=[];if(!g.files.length){g.inFrame=[];g.state="noday";return g}
+  g.inFrame=g.files.filter(jmInFrame);if(!g.inFrame.length){g.state="out";return g}
+  const exp=it=>{let n=0;for(let cz=it.rz*32;cz<it.rz*32+32;cz+=2)for(let cx=it.rx*32;cx<it.rx*32+32;cx+=2)if(ref.mask(cx,cz))n++;return n};
+  const pick=g.inFrame.map(it=>[it,exp(it)]).filter(a=>a[1]).sort((a,b)=>b[1]-a[1]).slice(0,JMP.QUICK).map(a=>a[0]),used=[];
+  for(const it of pick){try{const bm=await createImageBitmap(it.f);if(bm.width===512&&bm.height===512){x.drawImage(bm,(it.rx*512-X0)/4,(it.rz*512-X0)/4,128,128);used.push(it)}bm.close&&bm.close()}catch(e){}}
+  const d=x.getImageData(0,0,1280,1280).data,R=ref.px,chunks=new Map(),lim=Math.ceil(SIZE/4);
+  for(const it of used){const px0=Math.max(0,Math.floor((it.rx*512-X0)/4)),pz0=Math.max(0,Math.floor((it.rz*512-X0)/4));
+    const px1=Math.min(lim,Math.ceil((it.rx*512+512-X0)/4)),pz1=Math.min(lim,Math.ceil((it.rz*512+512-X0)/4));it.ov=new Set();
+    for(let py=pz0;py<pz1;py++)for(let px=px0;px<px1;px++){const i=(py*1280+px)*4;if(d[i+3]<250)continue;const cx=(X0+px*4+2)>>4,cz=(X0+py*4+2)>>4;if(!ref.mask(cx,cz))continue;
+      const k=cz*1000+cx;let c=chunks.get(k);if(!c){c={s:0,n:0};chunks.set(k,c)}c.s+=(Math.abs(d[i]-R[i])+Math.abs(d[i+1]-R[i+1])+Math.abs(d[i+2]-R[i+2]))/3;c.n++;it.ov.add(k)}}
+  const diffs=[];for(const c of chunks.values())if(c.n>=6)diffs.push(c.s/c.n);diffs.sort((a,b)=>a-b);
+  g.overlap=diffs.length;g.med=diffs.length?diffs[diffs.length>>1]:null;g.state=g.overlap<JMP.MIN?"few":g.med>JMP.MED?"other":"f1";return g}
+async function jmRunFull(files){const O=$("jmOut");window.__jm=null;window.__jmFull=null;JMG=[];jmPopClose();
+  $("jmDl").innerHTML=`<button class="repbtn" disabled>⬇ 全地圖打包</button>`;$("jmDlNote").textContent="正在讀取…";
+  const groups=jmGroups(files);O.innerHTML=`<div class="muted">找到 ${groups.length} 個世界資料夾，正在確認哪個是第 1 層…</div>`;
+  let ref;try{ref=await jmRef()}catch(e){O.innerHTML=`<div class="note warn">讀不到網站的地圖資料，請重新整理頁面再試一次。</div>`;return}
+  const cv=document.createElement("canvas");cv.width=cv.height=1280;const worlds=groups.filter(g=>!g.dg);
+  for(let i=0;i<worlds.length;i++){O.firstElementChild.textContent=`正在確認第 ${i+1}／${worlds.length} 個資料夾…`;await jmQuick(worlds[i],ref,cv)}
+  const f1=groups.filter(g=>g.state==="f1");
+  for(const g of f1)for(const L of Object.values(g.layers))L.inFrame=L.items.filter(jmInFrame);
+  for(const g of groups.filter(g=>g.dg)){g.inFrame=[];g.news=[];g.anc=f1.find(w=>w.parent===g.parent)||null;g.state=g.dg.startsWith("?")?"dgunk":g.anc?"dg":"dgno";
+    if(g.state==="dg")for(const L of Object.values(g.layers))L.inFrame=L.items.slice()}
+  JMG=groups;const full=jmPlan(jmFullSel()),tot=full.reduce((t,p)=>t+p.bytes,0),n=full.reduce((t,p)=>t+p.items.length,0);
+  window.__jmFull=full.map(p=>({n:p.items.length,bytes:p.bytes,names:p.items.map(({g,it})=>g.key+"/"+it.dir+"/"+it.f.name)}));
+  $("jmDl").innerHTML=full.length?full.map((p,i)=>`<button class="repbtn" data-jmfull="${i}" title="${mb(p.bytes)}">⬇ 全地圖打包${full.length>1?` ${i+1}／${full.length}`:""}</button>`).join(""):`<button class="repbtn" disabled>⬇ 全地圖打包</button>`;
+  $("jmDlNote").innerHTML=!f1.length?`沒有找到第 1 層的地圖，原因看下面的資料夾清單。`:full.length>1?`<b class="warn">分成 ${full.length} 份（共 ${mb(tot)}），每份都要各送一次表單。</b>`:`共 ${n} 張（${mb(tot)}），下載後到左邊回報表單上傳。`;
+  const cnt=g=>g.dg?Object.values(g.layers).reduce((s,L)=>s+L.items.length,0):g.files.length;
+  const row=g=>{const [t,c]=JM_ST[g.state];
+    const nm=g.dg?(g.dg.startsWith("?")?g.dg.slice(1):dgName(g.dg)):(g.label.length>22?g.label.slice(0,22)+"…":g.label),nl=g.state==="f1"?Object.values(g.layers).reduce((s,L)=>s+L.inFrame.length,0):0;
+    return`<div class="jmrow"><span class="t"><b title="${esc(g.key)}">${esc(nm)}</b><span>${g.dg?"":`${g.files.length} 張地面地圖`}${g.dg?cnt(g)+" 張地圖":""}${nl?`・室內・洞穴 ${nl} 張`:""}</span></span><span class="pill ${c}">${t}</span></div>`};
+  const ok=groups.filter(g=>g.state==="f1"||g.state==="dg").sort((a,b)=>(a.state==="f1"?0:1)-(b.state==="f1"?0:1)||b.latest-a.latest),no=groups.filter(g=>!ok.includes(g)).sort((a,b)=>b.latest-a.latest);
+  O.innerHTML=`<div class="jmmode"><b>全地圖打包</b>${jmSwitch("new")}</div><div class="jmrows">${ok.map(row).join("")}</div>${no.length?`<details class="jmfold"><summary>其他資料夾（不收）${no.length}</summary><div class="jmrows">${no.map(row).join("")}</div></details>`:""}`;
+  jmDlBind(full,true)}
 async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];{const h=$("jmHow");if(h)h.open=false}
   $("jmDl").innerHTML=`<button class="repbtn" disabled>⬇ 下載壓縮檔</button>`;$("jmDlNote").textContent="正在讀取…";   // the results need the room; the steps stay one click away
   const groups=jmGroups(files);
@@ -2709,7 +2758,7 @@ async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];{const h=
   for(let i=0;i<dgOk.length;i++){O.firstElementChild.textContent=`正在整理地下城地圖：${dgName(dgOk[i].dg)}（${i+1}／${dgOk.length}）…`;await jmLayers(dgOk[i])}
   for(let i=0;i<f1.length;i++){const n=Object.values(f1[i].layers).reduce((s,L)=>s+L.items.length,0);if(!n)continue;
     O.firstElementChild.textContent=`正在整理室內・洞穴（高度層）地圖：第 ${i+1}／${f1.length} 個世界，${n} 張…`;await jmLayers(f1[i])}
-  jmPopClose();for(const k in JMDGC)delete JMDGC[k];JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();JMSEL.fresh=true;JMSEL.floor=1;O.innerHTML=`<div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
+  jmPopClose();for(const k in JMDGC)delete JMDGC[k];JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();JMSEL.fresh=true;JMSEL.floor=1;O.innerHTML=`<div class="jmmode jmmode1"><b>更新打包</b>${jmSwitch("full")}</div><div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
 // preview of one square: the player's own JourneyMap image of it (surface first, else the first underground one)
 const JMURL=new Map();const jmUrl=f=>{if(!JMURL.has(f))JMURL.set(f,URL.createObjectURL(f));return JMURL.get(f)};
 // crop a region image to where it has data (a small cave room fills the preview instead of a black square)
@@ -2850,7 +2899,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   const help=`<span class="jmanch jmhelpa"><button type="button" class="pill r-b jmpb" id="jmHelpBtn" aria-expanded="false" aria-controls="jmHelp">ⓘ 說明</button><div class="jmpopov" id="jmHelp" hidden><ul>
         <li>選取示意：<span class="nw"><span class="jmk on"></span>橘框＝要上傳</span>、<span class="nw"><span class="jmk"></span>虛線＝不上傳</span>。</li>
         <li>滑鼠在方格或地下城上停留，預覽視窗就會顯示該區塊的地圖。</li>
-        <li>「全地圖打包」不用選，第 1 層的地面、室內・洞穴和地下城地圖全部打包（網站已經有的也一起）；只放地圖圖片，不含路標（waypoint）。</li>
+        <li>要全部打包（網站已經有的也一起）就點上方「改用全地圖打包」；只放地圖圖片，不含路標（waypoint）。</li>
         <li>點預覽視窗裡的圖可以放大，按 Esc 或點右上 ✕ 關閉。</li>
         <li>室內・洞穴（洞穴、地下室、建築內）的地圖會跟著方格一起打包，不用另外選。</li></ul></div></span>`;
   const mapPart=f1.length&&regs.size?`<section class="jmsec"><div class="jmsech"><b>地圖</b><span class="muted">地面 ${nDay} 張・室內・洞穴 ${nCave} 張</span>
@@ -2881,12 +2930,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   // one line in every state, even in the narrowest column (346px at a 1101px window): no blank second line and no jump
   // when picking (使用者 2026-11-06：多留白了／全選後高度會變). The anchors and each part's size go in the button's tooltip.
   const dlBtn=parts.length?parts.map((p,i)=>`<button class="repbtn" data-jmpart="${i}" title="${mb(p.bytes)}${p.anchors?`，另含 ${p.anchors} 張用來確認位置的地面圖`:""}">⬇ 下載壓縮檔${parts.length>1?` ${i+1}／${parts.length}`:""}</button>`).join(""):`<button class="repbtn" disabled title="先在下面點選要上傳的地方">⬇ 下載壓縮檔</button>`;
-  // 全地圖打包 (user 2026-11-09「地圖打包多做一個全地圖打包，不要放入waypoint」): every floor 1 map image the player has —
-  // surface, every height, every recognised dungeon — whether the site has it or not, no picking needed. Only x,z.png map
-  // tiles are ever read (jmGroups), so waypoints and the rest of the JourneyMap folder never go in.
-  const full=jmPlan(jmFullSel()),fTot=full.reduce((t,p)=>t+p.bytes,0),fN=full.reduce((t,p)=>t+p.items.length,0);
-  const fullBtn=f1.length&&full.length?full.map((p,i)=>`<button class="repbtn ghost" data-jmfull="${i}" title="全地圖：第 1 層的地面、室內・洞穴和地下城地圖全部打包，網站已經有的也一起（${full.length>1?`第 ${i+1} 份 ${mb(p.bytes)}，共 ${full.length} 份、${fN} 張、${mb(fTot)}，每份都要各送一次表單`:`${fN} 張、${mb(fTot)}`}）；不含路標（waypoint）">⬇ 全地圖打包${full.length>1?` ${i+1}／${full.length}`:""}</button>`).join(""):"";
-  $("jmDl").innerHTML=dlBtn+fullBtn;window.__jmFull=full.map(p=>({n:p.items.length,bytes:p.bytes,names:p.items.map(({g,it})=>g.key+"/"+it.dir+"/"+it.f.name)}));
+  $("jmDl").innerHTML=dlBtn;
   const tot=mb(parts.reduce((t,p)=>t+p.bytes,0));
   $("jmDlNote").innerHTML=!f1.length?`沒有找到第 1 層的地圖，原因看下面「掃描到的資料夾」。`
     :!regs.size&&!dgNew.length?`你探索過的地方網站都已經有了，不用上傳，謝謝！`
@@ -2926,7 +2970,10 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   O.querySelectorAll("[data-jmdg]").forEach(b=>{const on=!JMSEL.dgOff.has(b.dataset.jmdg)&&!b.getAttribute("aria-disabled");b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});
   O.querySelectorAll("[data-jmreg]").forEach(e=>{const on=!JMSEL.off.has(e.dataset.jmreg);e.classList.toggle("off",!on);e.setAttribute("aria-checked",on)});
   // the download button sits beside the folder picker, outside #jmOut
-  $("jmDl").querySelectorAll("[data-jmpart],[data-jmfull]").forEach(b=>b.onclick=async()=>{const fu=b.dataset.jmfull!=null,L=fu?full:parts,i=+(fu?b.dataset.jmfull:b.dataset.jmpart),p=L[i];b.disabled=true;const t0=b.textContent;b.textContent="打包中…";
+  jmDlBind(parts,false)}
+// the download buttons of either mode (parts from jmPlan)
+function jmDlBind(L,fu){
+  $("jmDl").querySelectorAll(fu?"[data-jmfull]":"[data-jmpart]").forEach(b=>b.onclick=async()=>{const i=+(fu?b.dataset.jmfull:b.dataset.jmpart),p=L[i];b.disabled=true;const t0=b.textContent;b.textContent="打包中…";
     try{const blob=await jmZip(p.items.map(({g,it})=>({name:g.key+"/"+it.dir+"/"+it.f.name,file:it.f})));
       const d=new Date(),stamp=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
       const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`探索地圖-第1層-${fu?"全地圖-":""}${stamp}${L.length>1?"-"+(i+1):""}.zip`;document.body.appendChild(a);a.click();a.remove();
@@ -2982,9 +3029,9 @@ function buildFormReport(){
     <details class="jmhow" id="jmHow" open><summary>怎麼用（4 步）</summary>
     <ol class="steps">
       <li><b>選資料夾</b>：按下面的按鈕，在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。瀏覽器問「要將 N 個檔案上傳到這個網站嗎？」也按「上傳」，這只是讓網頁讀取。</li>
-      <li><b>看結果</b>：工具自動找出第 1 層的地圖和地下城，只留網站還沒有的部分，不用自己挑資料夾。</li>
-      <li><b>挑要上傳的</b>：在小地圖上點方格、點地下城的圖選取（或按各段的「全選」）。滑鼠指著會在右下角的預覽視窗先看那一塊的地圖。</li>
-      <li><b>上傳</b>：按「下載壓縮檔」，再按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>、上傳壓縮檔後送出。不用截圖，送出後自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
+      <li><b>選打包方式</b>：「更新打包」只打包網站還沒有的地方（每張都比對，比較久）；「全地圖打包」第 1 層的地圖全部打包、不用挑（比較快）。工具自動找出第 1 層的地圖和地下城，不用自己挑資料夾。</li>
+      <li><b>挑要上傳的</b>（更新打包）：在小地圖上點方格、點地下城的圖選取（或按各段的「全選」）。滑鼠指著會在右下角的預覽視窗先看那一塊的地圖。全地圖打包跳過這一步。</li>
+      <li><b>上傳</b>：按「下載壓縮檔」（或「全地圖打包」），再按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>、上傳壓縮檔後送出。不用截圖，送出後自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
     <div class="jmscope"><span><b>會收</b>：第 1 層的地面、室內・洞穴（洞穴、地下室、建築內）和地下城（Geldorack Dungeon、Labyrinth of the Fallen、Sanctuary of Xal'Zirith）</span><span><b>不收</b>：還沒開放打包的樓層（第 2 層以後，開放後再加）、破碎的地下世界、限時活動的場地</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden><span id="jmDl"></span></div>
@@ -2995,7 +3042,7 @@ function buildFormReport(){
   <article class="bcard" id="qCard"><h4 class="sec">處理中的回報 <span class="c" id="qC"></span></h4><div id="qL" class="muted">讀取中…</div>
     <div class="muted" style="font-size:12.5px">為了不公開還沒審核的內容，這裡只列回報編號、種類、樓層和送出時間，請用送出時間找你的回報。核准後名稱和內容會出現在下面的「已收錄」；退回的回報保留 14 天。</div></article>
   <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article></div></div></div>`;
-  $("jmDir").onchange=e=>{const fs=[...(e.target.files||[])];e.target.value="";if(fs.length)jmRun(fs)};
+  $("jmDir").onchange=e=>{const fs=[...(e.target.files||[])];e.target.value="";if(fs.length)jmChoose(fs)};
   rBuilt=true}
 function renderReport(){
   if(FORM_PREFILL){if(!rBuilt)buildFormReport();$("formGo").href=formUrl(FL);showCollab()}

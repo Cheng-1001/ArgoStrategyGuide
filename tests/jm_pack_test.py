@@ -110,13 +110,18 @@ try:
         pg.goto(base + "#report"); pg.wait_for_timeout(600)
         check(pg.is_visible("#jmPick") and "journeymap\\data" in pg.inner_text("#jmPack"), "the packer is on the data page, with the folder path")
         pg.set_input_files("#jmDir", mp)
-        pg.wait_for_function("window.__jm", timeout=60000)
-        J0 = pg.evaluate("window.__jm")
-        check(not J0["parts"] and not pg.locator("[data-jmpart]").count() and pg.is_disabled("#jmDl .repbtn") and "還沒選" in pg.inner_text("#jmDlNote")
-              and "第 1 層 0／" in pg.inner_text("#jmRegSum") and "地下城 0／1" in pg.inner_text("#jmRegSum"),
-              "nothing is picked to start with; the download button is beside the folder button, greyed")
+        # choose first (user 2026-11-09「先選全圖還是更新打包地圖，不要每次都全讀」)
+        pg.wait_for_selector("#jmOut [data-jmmode]")
+        check(pg.locator("#jmOut [data-jmmode]").count() == 2 and pg.evaluate("window.__jm") is None and pg.is_disabled("#jmDl .repbtn"),
+              "after picking the folder it asks 更新打包 or 全地圖打包 before reading the maps")
+        if os.environ.get("SHOT_DIR"): pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "jm_choose.png"))
+        pg.click("#jmOut [data-jmmode='full']")
+        pg.wait_for_function("window.__jmFull", timeout=60000)
+        if os.environ.get("SHOT_DIR"): pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "jm_full.png"))
         # 全地圖打包 (user 2026-11-09): everything of floor 1 without picking, waypoints left out
         F = pg.evaluate("window.__jmFull") or []
+        check(pg.locator("#jmOut .jmmode").count() == 1 and "全地圖打包" in pg.inner_text("#jmOut .jmmode") and pg.locator("#jmHead").count() == 0,
+              "全地圖打包 shows no square picking, only the folders and the download")
         fn = [x for p_ in F for x in p_["names"]]
         exp_day = {f"mp/Triggers_f1~a/overworld/day/{rx},{rz}.png" for rx, rz in top} | {"mp/Triggers_f1~a/overworld/day/%d,%d.png" % new}
         check(pg.locator("#jmDl [data-jmfull]").count() == len(F) >= 1 and exp_day <= set(fn)
@@ -130,6 +135,12 @@ try:
         zn = zipfile.ZipFile(zf).namelist()
         check("全地圖" in dl.value.suggested_filename and set(zn) == set(F[0]["names"]) and not any(".json" in x for x in zn),
               f"the 全地圖 zip holds exactly those images ({len(zn)}, {dl.value.suggested_filename})")
+        pg.click("#jmOut [data-jmsw='new']")
+        pg.wait_for_function("window.__jm", timeout=60000)
+        J0 = pg.evaluate("window.__jm")
+        check(not J0["parts"] and not pg.locator("[data-jmpart]").count() and pg.is_disabled("#jmDl .repbtn") and "還沒選" in pg.inner_text("#jmDlNote")
+              and "第 1 層 0／" in pg.inner_text("#jmRegSum") and "地下城 0／1" in pg.inner_text("#jmRegSum"),
+              "nothing is picked to start with; the download button is beside the folder button, greyed")
         pk = pg.evaluate("(()=>{const a=document.querySelector('#jmPick').getBoundingClientRect(),b=document.querySelector('#jmDl .repbtn').getBoundingClientRect();return [Math.abs(a.top-b.top)<4,b.left>a.right]})()")
         check(pg.locator(".jmtools #jmPick").count() == 1 and pg.locator(".jmtools #jmDl").count() == 1 and not pg.locator("#jmOut .repbtn").count() and pk == [True, True],
               f"the download button is to the right of the folder button, apart from the selection ({pk})")
@@ -346,6 +357,7 @@ try:
         # a big upload is split; every part repeats overlapping regions so the server can still verify it
         pg.evaluate("__JMP.BUDGET=1.2*1048576; __JMP.ANCHOR=40"); pg.evaluate("window.__jm=null")
         pg.set_input_files("#jmDir", mp)
+        pg.wait_for_selector("#jmOut [data-jmmode]"); pg.click("#jmOut [data-jmmode='new']")
         pg.wait_for_function("window.__jm", timeout=60000)
         pg.click("#jmRegAll"); pg.click("#jmDgAll"); pg.wait_for_timeout(150)
         parts = pg.evaluate("window.__jm.parts")
