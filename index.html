@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="86f7015e1c">
+<meta name="sao-build" content="cc4a0ae905">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -882,7 +882,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=058fcc87"></script>
+<script src="data.js?v=866f9a75"></script>
 <script src="data23.js?v=cfc1cce9"></script>
 <script src="bosses.js?v=77b7ad43"></script>
 <script src="reports.js?v=091d538a"></script>
@@ -894,7 +894,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=265d1660"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=4172ed19"></script>
-<script src="changelog.js?v=9f6cc5f6"></script>
+<script src="changelog.js?v=fe6b83f3"></script>
 <script src="recipes.js?v=9163d1ce"></script>
 <script src="jmmeta.js?v=5b0ffd74"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -904,7 +904,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="gacha.js?v=48cf03e8"></script>
 <script src="gamestats.js?v=148e7b9e"></script>
 <script src="sets.js?v=fcb047a5"></script>
-<script src="zhnames.js?v=1ed0ea0d"></script>
+<script src="zhnames.js?v=2bfa7da8"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=5f21ae39"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1133,7 +1133,7 @@ const photoNote=m=>{const p=photoOf(m);if(!p||!p.rows)return"";const S=MPH.src||
   <div class="note srcn">🖼️ 圖片和數值取自官網新聞〈${esc(S.title||"")}〉（${esc(S.date||"")}）的怪物表，官網的名稱：${p.rows.map(r=>"「"+esc(r.fr)+"」").join("、")}。</div>`};
 const thHTML=(m,extra="")=>`<span class="th ${cls(m.type)} ${extra}" aria-hidden="true">${face(m)}<i class="beh beh-${m.beh}"></i></span>`;
 const GICON=window.SAO_GAMEICONS||{};   // icons cut from the owner's screenshots (gameicons.js)
-const slot=(id,s=36)=>{const it=ITEMS[id];const n=it?it.ic:-1;if(GICON[id])return recicImg(GICON[id],s);   // game icon (gameicons.js) wins over the sprite sheets (2026-11-07 icon audit)
+const slot=(id,s=36)=>{const it=ITEMS[id];const n=it&&it.ic!=null?it.ic:-1;if(GICON[id])return recicImg(GICON[id],s);   // game icon (gameicons.js) wins over the sprite sheets (2026-11-07 icon audit)
 if(n<0&&typeof redirI==="function"){const r=redirI(id);if(r&&r[0]==="e"){const e=EQ.find(x=>String(x.oid)===r[1]);if(e&&!e.itemId)return eslot(e,s)}}
   if(n<0)return`<span class="slot empty" style="--s:${s}px" aria-hidden="true">${it&&it.vanilla?"MC":"?"}</span>`;
   return`<span class="slot" style="--s:${s}px;background-size:${8*s}px auto;background-position:${-(n%8)*s}px ${-Math.floor(n/8)*s}px" aria-hidden="true"></span>`};
@@ -1217,7 +1217,7 @@ function markSel(){const cur=!panel.hidden&&stack[stack.length-1];
 const soonNote=f=>FLOORS[f].status==="soon"?`<div class="note warn">${FLN(f)}預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）。這是 wiki 目前的資料，官方說會調整進度設計，開放後可能不同。</div>`:"";
 
 function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.zones[m.zone];const p=monPos(m);const st=STATUS[p.s];
-  const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp,ww])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(zhI(iid)||iid)}</b><span>${ww?WIKI_ONLY:""}${zhI(iid)?esc(iid)+"・":""}${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
+  const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp,ww])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(zhI(iid)||iid)}</b><span>${ww?WIKI_ONLY:""}${zhI(iid)&&zhI(iid)!==iid?esc(iid)+"・":""}${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
   const kq=KILLQ[m.id]||[];
   return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(mN(m))}</h2>${mN(m)!==m.name?`<div class="sub">${esc(m.name)}</div>`:""}${m.aka&&m.aka.length?`<div class="sub">舊名：${m.aka.map(esc).join("、")}${m.renamedBy?`・名稱依${m.renamedBy.how==="codex"?`遊戲圖鑑 #${esc(m.renamedBy.no)}`:"審核員確認"}（回報 ${esc(String(m.renamedBy.report||""))}）更新`:""}</div>`:""}</div></div>
   ${soonNote(m.floor)}
@@ -1279,7 +1279,7 @@ function itemObtainHTML(id){const it=ITEMS[id];const src=SOURCES[id],use=USES[id
   ${!use.length&&!it.use&&!it.locked&&!RECIPE_BY_MAT[id]?`<div class="note">目前沒有已知用途。</div>`:""}`}
 function itemDetail(id){const it=ITEMS[id];
   const stl=it.st?Object.entries(it.st).map(([k,v])=>{let val=v;if(k==="Classe requise")val=String(v).split(/,\s*/).map(c=>CLASS_ZH[c.toLowerCase()]||c).join("、");else if(k==="Arme à deux mains")val="是";else if(typeof v==="number"&&!["Item Cooldown","Restore Food","Max Durability"].includes(k)&&!k.startsWith("Required"))val=(v>0?"+":"")+v;return`<dt>${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(val)}</dd>`}).join(""):"";
-  return`<div class="phead">${slot(id,64)}<div class="ttl"><h2>${esc(zhI(id)||id)}</h2><div class="sub">${zhI(id)?esc(id)+"・":""}${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</div>
+  return`<div class="phead">${slot(id,64)}<div class="ttl"><h2>${esc(zhI(id)||id)}</h2><div class="sub">${zhI(id)&&zhI(id)!==id?esc(id)+"・":""}${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${rarPill(it)}<span class="muted" style="font-size:12px">${esc(CAT_ZH[it.cat]||it.cat)}${it.lv?" · 等級 "+it.lv:""}</span>${itemFloors(id).map(flBadge).join("")}</div></div></div>
   ${it.lore?`<p class="lore">${esc(it.lore)}</p>`:""}
   ${(()=>{const pieces=it.cat==="armor_set"&&it.fr?it.fr.split(/\s*\/\s*/).map((x,i,a)=>i===a.length-1?x.split(/\s+/)[0]:x):null;
@@ -1321,6 +1321,11 @@ function dgTilesHTML(d){if(!d||!d.easy)return"";
 const monRow=m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(mN(m))}</b><span>${mN(m)!==m.name?esc(m.name)+"・":""}${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`;
 function dgBossHTML(sp,mons){const d=sp.dg;if(!d&&!mons.length)return"";
   return`<h3 class="sec">首領</h3>${d?`<p class="dgboss"><b>${esc(d.boss)}</b>${d.bossZh?`<span class="muted">${esc(d.bossZh)}</span>`:""}</p>`:""}${mons.length?`<ul class="rows">${mons.map(monRow).join("")}</ul>`:""}`}
+// dungeon chests that give an item (reverse of dgLootHTML; 2026-11-08: 森林連結 only had the Geldorack chest as a source)
+let DG_SRC=null;
+function dgSrcHTML(go){if(!go)return"";if(!DG_SRC){DG_SRC={};FL_KEYS.forEach(f=>spotsOf(f).forEach(sp=>((sp.dg&&sp.dg.loot)||[]).forEach(([it,,p])=>{const r=matRef(ITEMS[it]?it:DG_ITEM[it]||it);if(r.go)(DG_SRC[r.go]=DG_SRC[r.go]||[]).push([sp,p])})))}
+  const L=DG_SRC[go];if(!L||!L.length)return"";
+  return`<h3 class="sec">地下城寶箱</h3><ul class="rows">${L.map(([sp,p])=>`<li><button class="lrow" data-go="s|${esc(sp.id)}"><span class="t"><b>${esc(pN(sp))}</b><span>打完地下城開的寶箱（Easy）</span></span><span class="v">${p}%</span></button></li>`).join("")}</ul>`}
 function dgLootHTML(sp,pre){const d=sp.dg;if(!d||!d.loot)return"";
   return`<h3 class="sec">通關寶箱 <span class="c">Easy・${d.loot.length} 項</span></h3><div class="muted dgcap">打完地下城開寶箱拿到的東西和機率（遊戲 Dungeons 視窗的 Loot）。</div>${pre||""}
   <ul class="rows dgloot">${d.loot.map(([it,by,p])=>{const r=matRef(ITEMS[it]?it:DG_ITEM[it]||it),mon=dgMonByName(sp.floor,by);
@@ -1354,7 +1359,7 @@ function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">�
   ${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${repLink(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}
   <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>${dgm?`</div><div class="dgm">${dgm}</div><div class="dgb">`:""}
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(mN(m))}</b><span>${mN(m)!==m.name?esc(m.name)+"・":""}${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
-  ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(i)}</b><span>${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}${dgm?"</div></div>":""}`}
+  ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(zhI(i)||i)}</b><span>${zhI(i)&&zhI(i)!==i?esc(i)+"・":""}${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}${dgm?"</div></div>":""}`}
 
 function townDetail(id){const t=townById[id];const qs=ALLQ.filter(x=>x.town===id);
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">🏘️</span><div class="ttl"><div class="num mono">${flBadge(t.floor)} X ${t.x} · Z ${t.z}</div>${(s=>s?`<h2>${esc(pN(t))}</h2><div class="sub">${esc(s)}</div>`:`<h2>${esc(pN(t))}</h2>`)([pN(t)!==t.n?t.n:"",t.tp&&t.tp!==t.n?t.tp:"",pN(t)!==t.n?"":t.zh||t.en,t.old?"舊稱 "+t.old:""].filter(Boolean).join("・"))}</div></div>
@@ -1506,7 +1511,7 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").c
     <div class="chead">${pslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${zhE(e)?esc(dnSub(e))+"・":""}${esc(PR_CAT[e.cat]||e.cat)}・本站還沒有取得資料</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span>等級 ${e.lv}</span>`:""}</div></button>`}
     const id=x.id,it=ITEMS[id];const src=SOURCES[id].filter(y=>all||y.m.floor===FL),use=USES[id].filter(u=>all||u.q.floor===FL),gat=GATHER[id].filter(g=>all||g.floor===FL);return`<button class="card" data-key="i|${esc(id)}" data-go="i|${esc(id)}">
-    <div class="chead">${slot(id,44)}<div class="cname"><b>${esc(zhI(id)||id)}</b><span>${zhI(id)?esc(id)+"・":""}${it.fr?esc(it.fr):"官方圖鑑未收錄"}</span></div></div>
+    <div class="chead">${slot(id,44)}<div class="cname"><b>${esc(zhI(id)||id)}</b><span>${zhI(id)&&zhI(id)!==id?esc(id)+"・":""}${it.fr?esc(it.fr):"官方圖鑑未收錄"}</span></div></div>
     <div class="cmeta">${rarPill(it)}<span>${esc(matGroup(x))}</span>${src.length?`<span>· ${src.length} 種怪物掉落</span>`:""}${gat.length?`<span>· ${gat.length} 個採集點</span>`:""}${!src.length&&!gat.length&&it.src?`<span>· ${esc(it.src.split("：")[0].split("（")[0])}</span>`:""}${use.length?`<span>· ${use.length} 任務需 ${nt(x)}</span>`:""}${itemFloors(id).length>1||all?itemFloors(id).map(flBadge).join(""):""}</div></button>`}).join("")
     +(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用分類或搜尋縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的素材。</div>`;
   bindGo($("lItem"));markSel()}
@@ -2128,10 +2133,10 @@ function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
   ${loreHTML(e)}
   <dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
   ${e.patch?patchNote(e):""}${e.gst?gstNote(e):""}${e.gstLv?`<div class="note">🎮 等級（和稀有度）取自遊戲裡的物品說明（站長截圖 ${esc(e.gstLv)}）${e.lv0!=null?`，官網圖鑑寫等級 ${e.lv0}`:""}；數值還沒有遊戲截圖，暫用官網圖鑑。</div>`:""}${setPotHTML(e.gen,en)}
-  ${e.extra?((SOURCES[en]||[]).length||(GATHER[en]||[]).length||(USES[en]||[]).length?itemObtainHTML(en):"")+giHTML(GI_EN[norm(e.gen||"")]):en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}${gachaHTML("e|"+e.oid,e.gen,en)}
+  ${e.extra?((SOURCES[en]||[]).length||(GATHER[en]||[]).length||(USES[en]||[]).length?itemObtainHTML(en):"")+giHTML(GI_EN[norm(e.gen||"")]):en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}${GI_OID[e.oid]?"":dgSrcHTML("e|"+e.oid)}${gachaHTML("e|"+e.oid,e.gen,en)}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   ${e.extra&&ITEMS[en]&&ITEMS[en].note?`<div class="note">${esc(ITEMS[en].note)}</div>`:""}
-  <div class="note srcn">${e.extra?(ITEMS[en]&&ITEMS[en].note?"官網物品圖鑑沒有收錄這件裝備。":"官網物品圖鑑沒有收錄這件裝備；名稱和數值取自遊戲截圖或 wiki，掉落取自本站怪物資料。"):`官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}`}</div>`}
+  <div class="note srcn">${e.extra?(ITEMS[en]&&ITEMS[en].note?"官網物品圖鑑沒有收錄這件裝備。":"官網物品圖鑑沒有收錄這件裝備；名稱和數值取自遊戲截圖或 wiki，掉落取自本站怪物資料。"):`官方圖鑑 #${e.oid}。${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]||dgSrcHTML("e|"+e.oid)?"":"取得方式和合成材料還沒有資料，歡迎用「協作區」補充。"}`}</div>`}
 
 // ================= props tab (official catalogue, non-equipment) =================
 const PR=(window.SAO_PROPS||[]).filter(r=>r[2]!=="catalyst").map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
@@ -2140,6 +2145,8 @@ const prById=Object.fromEntries(PR.map(e=>[String(e.oid),e]));PR.forEach(e=>{if(
 // owner's recipe / shop screenshots (src shot), e.g. Amulette Sylvestre = Amulet of the Sylve, Cagoule de Bandit = Bandit Hood
 {const shotEn={};ALLREC.forEach(r=>{if(r.src==="shot"&&r.oid!=null&&!shotEn[String(r.oid)])shotEn[String(r.oid)]=recEnD(r)});
  EQ.concat(PR).forEach(e=>{if(!e.gen&&shotEn[String(e.oid)])e.gen=shotEn[String(e.oid)]})}
+// English game name from zhnames.js (game log / tooltip English) for items that only have the French catalogue name (2026-11-08: 森林連結 = Bond of the Sylve)
+ZHL.forEach(z=>{if(z.en)(z.ids||[]).forEach(id=>{const m=id.match(/^([ep])\|(.+)$/);if(!m)return;const e=(m[1]==="e"?eqById:prById)[m[2]];if(e&&!e.gen)e.gen=z.en})});
 // rarity seen in the game's shop / crafting windows (recipes.js rows from screenshots) wins over the official catalogue (2026-11-07 merchant
 // audit: Forest Key, Spider Bracelet are COMMON and Gloves of the Stags RARE in the game; the catalogue says otherwise). A tooltip rarity
 // in gamestats.js (r) is kept.
@@ -2261,7 +2268,7 @@ function propDetail0(id){const e=prById[id];const en=FR2ID[e.name];
   return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${zhE(e)?esc(dnSub(e))+"・":(potZhE(e)?esc(potZhE(e))+"・":"")+(e.gen&&!e.extra?esc(e.name)+"・":"")}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
   ${loreHTML(e,potGame&&/^potion_/.test(e.cat))}${rows?`<dl class="stats">${rows}</dl>`:""}${setPotHTML(e.gen,en)}
-  ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen)]:null))}${gachaHTML("p|"+e.oid,e.gen,en)}
+  ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen)]:null))}${GI_OID[e.oid]?"":dgSrcHTML("p|"+e.oid)}${gachaHTML("p|"+e.oid,e.gen,en)}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   <div class="note srcn">${e.extra?"官網物品圖鑑沒有收錄這個物品，名稱和效果取自遊戲截圖。":`官方圖鑑 #${e.oid}。`}${PR_GROUP[e.cat]==="活動"?(PR_EVYEAR[e.cat]?`活動年份 ${PR_EVYEAR[e.cat]} 取自官網圖鑑的分類名稱。`:"官網圖鑑的這個活動分類沒有寫年份，所以不標年份。"):""}${RECIPE_BY_EQ[e.oid]||GI_OID[e.oid]?"":"取得方式還沒有資料，歡迎用「協作區」補充。"}</div>`}
 
