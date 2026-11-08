@@ -41,7 +41,7 @@ What it does
      cannot conflict with the Google script that appends reports.
 Prints one JSON line; exit code 0 = merged, 2 = rejected (reason in the JSON), 1 = error.
 """
-import datetime, io, json, os, re, statistics, sys, zipfile
+import datetime, io, json, os, re, shutil, statistics, sys, zipfile
 from PIL import Image, ImageChops, ImageEnhance, ImageStat
 
 Image.MAX_IMAGE_PIXELS = None
@@ -252,6 +252,90 @@ def merge_dungeon(d, instances, date, report):
     e["log"].append({"report": report, "date": date, "regions": regions, "newChunks": newc})
     save_meta(allmeta)
     return {"newChunks": newc, "regions": regions, "check": round(statistics.median(diffs_all), 1) if diffs_all else None, "skipped": skipped}
+
+
+UNDER = "under"
+GROUND_R = 3      # blocks (16 m each) a detected ground level spreads to
+SURF_CORR = 0.45
+CONTENT_MIN = 0.1
+DARK = 24        # JourneyMap paints explored solid rock pure black and the site's empty background is (7,12,17): neither is data,
+                 # otherwise a black lower layer covers the room above it (the mill ink room at Y 24 vanished under Y 0-15)   # a 16x16 cave block whose grey pattern correlates this much with the surface map is at ground level there
+
+
+def build_under(date=None):
+    """「地下」(user 2026-11-08「直接整合成地下」): all height layers combined into tiles/f1jm_under, so the site offers only
+    地面 / 地下. Ground height differs across the island (Starting Town is at Y 17, mountains much higher), and JourneyMap's
+    cave layer at ground level shows the houses there, which look like the surface (user 2026-11-08「該區域地面跟地下長一樣
+    為什麼還要算地下」). So per 16x16 block the layer whose picture correlates best with the surface map (>= SURF_CORR) is taken
+    as ground level there and only the layers below it count; blocks where no layer looks like the surface (caves inside a
+    mountain) keep all layers. Layers are pasted from high to low, so where several remain the deepest wins. The per-height
+    tile sets stay (the packing tool compares against them, quest maps are cut from them)."""
+    import numpy as np
+    keys = sorted((n[5:] for n in os.listdir(os.path.join(ROOT, "tiles")) if re.fullmatch(r"f1jm_c-?\d+", n)),
+                  key=lambda k: int(k[1:]), reverse=True)
+    if not keys:
+        return None
+    n = FULL // CH
+    def blocks(a):
+        return a.reshape(n, CH, n, CH).transpose(0, 2, 1, 3).reshape(n, n, CH * CH)
+    sb = blocks(np.asarray(load_canvas(TILES).convert("L"), np.float32))
+    sb = sb - sb.mean(axis=2, keepdims=True)
+    # pass 1: per block, the LOWEST layer that looks like the surface = ground level. Mountain tops, towers and roofs above
+    # it look like the surface too (Tolbana: Y 192-207 houses, Y 240-303 peaks), so taking the highest match kept the houses
+    ground = np.full((n, n), -999, np.int32)
+    for key in keys:                                     # high to low
+        gb = blocks(np.asarray(load_canvas(layer_dir(key)).convert("L"), np.float32))
+        data = (gb > DARK).mean(axis=2) > 0.3
+        cb = gb - gb.mean(axis=2, keepdims=True)
+        corr = (cb * sb).sum(axis=2) / (np.sqrt((cb * cb).sum(axis=2) * (sb * sb).sum(axis=2)) + 1e-6)
+        ground[data & (corr >= SURF_CORR)] = int(key[1:])   # later (lower) layers overwrite: the lowest match wins
+    # blocks where the match failed (house interiors that do not look like their roof) take the lowest ground level found
+    # within GROUND_R blocks, so a whole town gets one ground level instead of a checkerboard (the highest would let a
+    # nearby peak lift the level above the houses again)
+    NONE = 9999
+    pad = np.pad(np.where(ground == -999, NONE, ground), GROUND_R, constant_values=NONE)
+    near = np.full_like(ground, NONE)
+    for dz in range(2 * GROUND_R + 1):
+        for dx in range(2 * GROUND_R + 1):
+            near = np.minimum(near, pad[dz:dz + n, dx:dx + n])
+    ground = np.where(ground == -999, np.where(near == NONE, -999, near), ground)
+    # pass 2: composite the layers below ground level (all layers where no ground level was found)
+    cv = Image.new("RGB", (FULL, FULL), BG)
+    mask = Image.new("L", (MW, MW), 0)
+    names = set()
+    for key in keys:
+        tiles = layer_dir(key)
+        names |= {nm for nm in os.listdir(os.path.join(tiles, "3")) if nm.endswith(".jpg")}
+        lc = load_canvas(tiles)
+        has = lc.convert("L").point(lambda v: 255 if v > DARK else 0)
+        below = (ground == -999) | (int(key[1:]) < ground)
+        keep = Image.fromarray(np.kron(below, np.ones((CH, CH), bool)).astype(np.uint8) * 255)
+        cv.paste(lc, (0, 0), ImageChops.multiply(has, keep))
+        mp = os.path.join(tiles, "explored.png")
+        if os.path.exists(mp):
+            mask = ImageChops.lighter(mask, Image.open(mp).convert("L"))
+    tiles = layer_dir(UNDER)
+    if os.path.isdir(tiles):
+        shutil.rmtree(tiles)
+    os.makedirs(os.path.join(tiles, "3"))
+    mask.save(os.path.join(tiles, "explored.png"), optimize=True)
+    for nm in names:
+        tx, ty = map(int, nm[:-4].split("_"))
+        save_tile(cv.crop((tx * T, ty * T, tx * T + T, ty * T + T)), os.path.join(tiles, "3", nm))
+    pyramid(cv, tiles)
+    # content.png: 1 px per 16x16 block of the canvas (block = (world - X0) // 16, not world chunks), 255 where at least
+    # CONTENT_MIN of the block is real underground picture. The site shows 「查看地下」 on a teleport point / landmark panel
+    # only when such blocks are near it (user 2026-11-08: no 地下 menu on the map, an option on the panel instead)
+    lum = blocks(np.asarray(cv.convert("L"), np.uint8))
+    Image.fromarray(((lum > DARK).mean(axis=2) >= CONTENT_MIN).astype(np.uint8) * 255).save(os.path.join(tiles, "content.png"), optimize=True)
+    chunks = sum(1 for cz in range(C0, C1 + 1) for cx in range(C0, C1 + 1) if mask.getpixel((cx, cz)))
+    meta = load_meta()
+    f1 = meta.setdefault("1", {})
+    date = date or f1.get("date")
+    f1.setdefault("layers", {})[UNDER] = {"label": "地下", "date": date, "chunks": chunks, "l3": sorted(nm[:-4] for nm in names),
+                                          "v": f"{date}-{chunks}-g", "of": keys}
+    save_meta(meta)
+    return chunks
 
 
 def dark_base():
@@ -473,6 +557,8 @@ def main(argv):
         return init_mask()
     if "--overviews" in argv:
         return redraw_overviews()
+    if "--under" in argv:
+        return print("地下", build_under(), "chunks")
     opt = {argv[i]: argv[i + 1] for i in range(len(argv) - 1) if argv[i].startswith("--")}
     args = [a for i, a in enumerate(argv) if not a.startswith("--") and not (i and argv[i - 1] in opt)]
     report, date = opt.get("--report"), opt.get("--date") or datetime.date.today().isoformat()
@@ -571,6 +657,8 @@ def main(argv):
         res["skipped"] = len(skipped)
         res["skippedWhy"] = [f"{n}：{w}" for n, w in skipped[:5]]
     write_meta(report, dict(res, chunks=explored), layers)
+    if layers:
+        build_under(date)
     record(report, res)
     out(0, **res)
 

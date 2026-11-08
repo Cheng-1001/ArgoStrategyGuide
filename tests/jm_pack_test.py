@@ -91,6 +91,9 @@ try:
     put("Triggers_other~b/03b352fd-5d0c-4000-8000-000000000002_xalzirith/0", "0,0.png", cave)
     put("Triggers_f1~a/overworld/-398", "%d,%d.png" % top[0], cave)
     open(os.path.join(mp, "Triggers_f1~a", "overworld", "day", "notes.txt"), "w").write("x")
+    os.makedirs(os.path.join(mp, "Triggers_f1~a", "waypoints"), exist_ok=True)                      # waypoints never go in a zip
+    open(os.path.join(mp, "Triggers_f1~a", "waypoints", "Home_1.json"), "w").write('{"name":"Home","x":1,"z":2}')
+    put("Triggers_f1~a/waypoints", "%d,%d.png" % top[0], noise)
 
     class H(http.server.SimpleHTTPRequestHandler):
         def log_message(self, *a):
@@ -107,6 +110,32 @@ try:
         pg.goto(base + "#report"); pg.wait_for_timeout(600)
         check(pg.is_visible("#jmPick") and "journeymap\\data" in pg.inner_text("#jmPack"), "the packer is on the data page, with the folder path")
         pg.set_input_files("#jmDir", mp)
+        # choose first (user 2026-11-09「先選全圖還是更新打包地圖，不要每次都全讀」)
+        pg.wait_for_selector("#jmOut [data-jmmode]")
+        check(pg.locator("#jmOut [data-jmmode]").count() == 2 and pg.evaluate("window.__jm") is None and pg.is_disabled("#jmDl .repbtn"),
+              "after picking the folder it asks 更新打包 or 全地圖打包 before reading the maps")
+        if os.environ.get("SHOT_DIR"): pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "jm_choose.png"))
+        pg.click("#jmOut [data-jmmode='full']")
+        pg.wait_for_function("window.__jmFull", timeout=60000)
+        if os.environ.get("SHOT_DIR"): pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "jm_full.png"))
+        # 全地圖打包 (user 2026-11-09): everything of floor 1 without picking, waypoints left out
+        F = pg.evaluate("window.__jmFull") or []
+        check(pg.locator("#jmOut .jmmode").count() == 1 and "全地圖打包" in pg.inner_text("#jmOut .jmmode") and pg.locator("#jmHead").count() == 0,
+              "全地圖打包 shows no square picking, only the folders and the download")
+        fn = [x for p_ in F for x in p_["names"]]
+        exp_day = {f"mp/Triggers_f1~a/overworld/day/{rx},{rz}.png" for rx, rz in top} | {"mp/Triggers_f1~a/overworld/day/%d,%d.png" % new}
+        check(pg.locator("#jmDl [data-jmfull]").count() == len(F) >= 1 and exp_day <= set(fn)
+              and "mp/Triggers_f1~a/overworld/1/5,9.png" in fn and any("_geldorack/" in x for x in fn)
+              and not any("waypoint" in x.lower() or "Triggers_other" in x or "/night/" in x or "/-398/" in x or "40,40" in x for x in fn),
+              f"全地圖打包 offers every floor 1 image (surface, heights, dungeons) and no waypoints ({len(fn)} files, {len(F)} parts; missing {sorted(exp_day - set(fn))[:3]}, {[x for x in fn if 'day' not in x]})")
+        pg.locator("#jmDl [data-jmfull]").first.evaluate("e=>e.scrollIntoView({block:'center'})")
+        with pg.expect_download() as dl:
+            pg.click("#jmDl [data-jmfull]")
+        zf = os.path.join(tmp, "full.zip"); dl.value.save_as(zf)
+        zn = zipfile.ZipFile(zf).namelist()
+        check("全地圖" in dl.value.suggested_filename and set(zn) == set(F[0]["names"]) and not any(".json" in x for x in zn),
+              f"the 全地圖 zip holds exactly those images ({len(zn)}, {dl.value.suggested_filename})")
+        pg.click("#jmOut [data-jmsw='new']")
         pg.wait_for_function("window.__jm", timeout=60000)
         J0 = pg.evaluate("window.__jm")
         check(not J0["parts"] and not pg.locator("[data-jmpart]").count() and pg.is_disabled("#jmDl .repbtn") and "還沒選" in pg.inner_text("#jmDlNote")
@@ -328,6 +357,7 @@ try:
         # a big upload is split; every part repeats overlapping regions so the server can still verify it
         pg.evaluate("__JMP.BUDGET=1.2*1048576; __JMP.ANCHOR=40"); pg.evaluate("window.__jm=null")
         pg.set_input_files("#jmDir", mp)
+        pg.wait_for_selector("#jmOut [data-jmmode]"); pg.click("#jmOut [data-jmmode='new']")
         pg.wait_for_function("window.__jm", timeout=60000)
         pg.click("#jmRegAll"); pg.click("#jmDgAll"); pg.wait_for_timeout(150)
         parts = pg.evaluate("window.__jm.parts")
@@ -368,42 +398,48 @@ try:
         pg.on("pageerror", lambda e: errs.append(str(e)))
         pg.add_init_script("localStorage.setItem('sao-map-base','jm');localStorage.setItem('sao-tour-v1','1')")
         pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/index.html#f1-map"); pg.wait_for_timeout(800)
-        opts = pg.eval_on_selector_all("#layerSel option", "o=>o.map(x=>x.textContent)")
-        check(pg.is_visible("#layerSel") and opts[0] == "高度：地面" and "高度 Y 16～31" in opts and len(opts) == 4, f"the explored map has a height menu ({opts})")
-        pg.select_option("#layerSel", "c1"); pg.wait_for_timeout(300)
-        pg.evaluate("__centerOn(5*512+275,9*512+90,10)"); pg.wait_for_timeout(1200)
-        srcs = pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")
-        check(srcs and all("tiles/f1jm_c1/" in x for x in srcs) and any("/3/" in x for x in srcs) and not bad,
-              f"layer tiles come from tiles/f1jm_c1, level 3 only where it exists ({len(srcs)} tiles, failed: {bad[:3]})")
-        check("Y 16～31" in pg.inner_text("#mapNote") and pg.is_hidden("#jmCredit"), "the note names the layer; the surface contributor box is hidden")
+        # no 地下 menu on the map (user 2026-11-08「移除地下顯示」): a place panel's 「查看地下」 opens it around that place
+        check(pg.is_hidden("#layerSel") and pg.is_hidden("#dgBack"), "the map has no height menu")
+        x, z = 5 * 512 + 275, 9 * 512 + 90
+        check(pg.evaluate(f"window.__underNear({x},{z})") and not pg.evaluate("window.__underNear(300,300)"),
+              "「查看地下」 is offered only near underground data (content.png)")
+        # 「查看地下／室內」 shows only the surroundings, under the button, from level-3 tiles (user 2026-11-08「只顯示周邊就好」)
+        pg.evaluate(f"""(()=>{{const w=document.createElement('div');w.className='maplinks';w.innerHTML='<button id="tUnder" data-under="測試地點" data-ux="{x}" data-uz="{z}">u</button>';document.body.appendChild(w)}})()""")
+        bad.clear(); pg.click("#tUnder"); pg.wait_for_timeout(1500)
+        nat = pg.evaluate("(()=>{const i=document.querySelector('.maplinks + .underfig img');return i?i.naturalWidth:0})()")
+        check(nat == 1280 and not bad and pg.is_hidden("#dgBack"), f"「查看地下」 draws a 320×320-block picture of the surroundings, the map stays as it was ({nat}, {bad[:2]})")
+        check(pg.evaluate("[...performance.getEntriesByType('resource')].filter(e=>e.name.includes('f1jm_under/')).every(e=>e.name.includes('f1jm_under/3/')||e.name.includes('content.png'))"),
+              "it reads only level-3 underground tiles (no blurry low levels)")
+        pg.click("#tUnder"); pg.wait_for_timeout(200)
+        check(pg.locator(".underfig").count() == 0, "clicking again hides it")
         pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "layer_view.png"))
-        # dungeon map: the 地圖 switch and the dungeon panel
-        dopts = pg.eval_on_selector_all("#dgSel option", "o=>o.map(x=>x.textContent)")
-        check(pg.is_visible("#dgSel") and "地下城：Geldorack Dungeon" in dopts, f"the map has a 第 1 層／地下城 switch ({dopts})")
-        bad.clear(); pg.select_option("#dgSel", "geldorack"); pg.wait_for_timeout(1500)
+        # dungeon map: no dungeon list on the map tab (user 2026-11-08「不用放地下城」); opened from the dungeon page, left with 「回到第 1 層」
+        check(pg.is_hidden("#dgSel") and pg.is_hidden("#dgBack"), "the map tab has no dungeon switch")
+        pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/index.html#f1-dungeons"); pg.wait_for_timeout(800)
+        pg.click("#lDg [data-go='s|geldorakd']"); pg.wait_for_timeout(600)
+        ov = pg.locator("#pBody .dgmap img")
+        check(ov.count() == 1 and pg.evaluate("document.querySelector('#pBody .dgmap img').naturalWidth") > 0, "the dungeon panel shows the dungeon's map")
+        bad.clear(); pg.click("#pBody .dgmap figcaption [data-dgmap]"); pg.wait_for_timeout(1500)
+        check(pg.evaluate("window.__dgMode()") == "geldorack" and pg.is_visible("#view-map") and pg.is_visible("#dgBack"), f"its button opens the dungeon map on the map tab, with a back button ({pg.evaluate('window.__dgMode()')}, {pg.url})")
         srcs = pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")
-        check(srcs and all("tiles/dg/geldorack/c-1/" in x for x in srcs) and any("/3/-" in x for x in srcs) and not bad and pg.is_hidden("#fpanel")
+        check(srcs and all("tiles/dg/geldorack/" in x for x in srcs) and not bad and pg.is_hidden("#fpanel")
               and not pg.locator("#world .town").count() and "Geldorack Dungeon" in pg.inner_text("#mapNote"),
               f"dungeon mode shows only the dungeon's tiles (absolute level-3 names), no floor markers ({len(srcs)}, failed {bad[:2]})")
         pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "dg_view.png"))
         pg.select_option("#layerSel", "c-2"); pg.wait_for_timeout(800)
         check(all("tiles/dg/geldorack/c-2/" in x for x in pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")), "the height menu switches the dungeon's heights")
-        pg.select_option("#dgSel", ""); pg.wait_for_timeout(500)
-        check(pg.evaluate("window.__dgMode()") is None and pg.locator("#world .town").count() > 5, "back to floor 1 with its markers")
-        pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/index.html#f1-dungeons"); pg.wait_for_timeout(800)
-        pg.click("#lDg [data-go='s|geldorakd']"); pg.wait_for_timeout(600)
-        ov = pg.locator("#pBody .dgmap img")
-        check(ov.count() == 1 and pg.evaluate("document.querySelector('#pBody .dgmap img').naturalWidth") > 0, "the dungeon panel shows the dungeon's map")
-        pg.click("#pBody .dgmap figcaption [data-dgmap]"); pg.wait_for_timeout(1200)
-        check(pg.evaluate("window.__dgMode()") == "geldorack" and pg.is_visible("#view-map") and pg.locator("#tiles img[src*='tiles/dg/geldorack/']").count() > 0, f"its button opens the dungeon map on the map tab ({pg.evaluate('window.__dgMode()')}, {pg.url})")
         pg.set_viewport_size({"width": 390, "height": 844}); pg.wait_for_timeout(400)
         check(pg.evaluate("document.documentElement.scrollWidth") <= 390, "dungeon mode fits on a phone")
         pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "dg_phone.png"))
-        pg.set_viewport_size({"width": 1280, "height": 900}); pg.select_option("#dgSel", ""); pg.wait_for_timeout(400)
-        pg.select_option("#layerSel", "day"); pg.wait_for_timeout(500)
-        check(all("tiles/f1jm/" in x for x in pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")), "back to the surface tiles")
-        pg.select_option("#layerSel", "c1"); pg.set_viewport_size({"width": 390, "height": 844}); pg.wait_for_timeout(500)
-        check(pg.is_visible("#layerSel") and pg.evaluate("document.documentElement.scrollWidth") <= 390, "the height menu fits on a phone")
+        pg.set_viewport_size({"width": 1280, "height": 900}); pg.wait_for_timeout(300)
+        pg.click("#dgBack"); pg.wait_for_timeout(500)
+        check(pg.evaluate("window.__dgMode()") is None and pg.locator("#world .town").count() > 5 and pg.is_hidden("#dgBack"), "「回到第 1 層」goes back to floor 1 with its markers")
+        check(all("tiles/f1jm/" in x for x in pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.getAttribute('src'))")), "the floor map shows the surface tiles")
+        # blurry map while zooming (user 2026-11-08「模糊是全地圖」): all of level 1 stays loaded, level 2 sits under level 3
+        pg.evaluate(f"__centerOn({x},{z},10)"); pg.wait_for_timeout(1200)
+        cls = pg.eval_on_selector_all("#tiles img", "i=>i.map(x=>x.className+' '+x.getAttribute('src').split('/').slice(-2)[0])")
+        n1 = sum(1 for c in cls if c.startswith("l1 1")); n2 = sum(1 for c in cls if c.startswith("mid 2")); n3 = sum(1 for c in cls if c.startswith("hi 3"))
+        check(n1 == 25 and n2 > 0 and n3 > 0, f"zoomed in: whole level 1 ({n1}), level 2 under level 3 ({n2}, {n3})")
         pg.screenshot(path=os.path.join(os.environ.get("SHOT_DIR", tmp), "layer_phone.png"))
         check(not errs, "no page errors in the viewer" + ("" if not errs else ": " + errs[0]))
         b.close()

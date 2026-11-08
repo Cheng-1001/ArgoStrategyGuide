@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="913ad4d4ad">
+<meta name="sao-build" content="0f8808a055">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -64,7 +64,7 @@ button,input,select{font:inherit;color:inherit}
 .rsel .flabel{margin:0;letter-spacing:0;text-transform:none;font-family:inherit;font-weight:400;font-size:12.5px;color:var(--muted)}
 .rsel select.sel{width:auto;min-width:120px;max-width:230px;text-overflow:ellipsis;height:24px;padding:0 6px;line-height:22px;font-size:12.5px;border-radius:6px}
 /* title row: title, count, labels and the dropdown text share one baseline; fixed height, so the gap to the box below is the same on every tab */
-@media (min-width:821px){.results>.rhead{align-items:baseline;min-height:26px;row-gap:6px;margin-bottom:4px}.results>.rhead .actf .af{height:24px}}
+@media (min-width:821px){.results>.rhead{align-items:baseline;min-height:26px;row-gap:6px;margin-bottom:4px}.results>.rhead .actf .af{height:24px}.results>.rhead{flex-shrink:0}}
 .topf .fgroup{display:flex;flex-direction:row;align-items:center;gap:12px}
 .topf .fgroup[hidden]{display:none}
 .topf .flabel{flex:none;width:48px;margin:0}
@@ -75,7 +75,7 @@ button,input,select{font:inherit;color:inherit}
 .actf .af b{font-weight:400;color:var(--muted)}
 .actf .af span{font-size:13px;line-height:1;padding:2px 5px;border-radius:999px}
 .actf .af:hover span{background:var(--accent);color:var(--accent-ink)}
-.actf .afx{border:0;background:none;color:var(--accent);font-size:12px;cursor:pointer;text-decoration:underline;padding:2px 4px}
+.actf .afgl{font-size:12px;font-weight:700;color:var(--fg);margin-left:4px}.actf .afgl:first-child{margin-left:0}.actf .afw{display:inline-flex;align-items:stretch}.actf .afw .af{border-top-left-radius:0;border-bottom-left-radius:0;padding-left:6px}.actf .afm{border:1px solid var(--accent);border-right:0;border-radius:999px 0 0 999px;background:var(--accent);color:var(--accent-ink);font-size:12px;font-weight:700;padding:0 7px 0 9px;cursor:pointer;height:24px}.actf .afm:hover{filter:brightness(1.08)}.actf .afx{border:0;background:none;color:var(--accent);font-size:12px;cursor:pointer;text-decoration:underline;padding:2px 4px}
 /* ---------- header ---------- */
 header.top{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;background:var(--panel);border-bottom:1px solid var(--line);
   padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));position:relative;z-index:20}
@@ -168,7 +168,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .mqn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:600 13px var(--f-mono)}
 .rcard .mats{display:flex;gap:4px 6px;align-items:center;flex-wrap:wrap;font-size:12.5px}
 .spawnl{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;margin-top:4px}
-.recipes .mats{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}.recipes .mats .slot{vertical-align:middle}.mats.mblk{display:flex;margin-top:3px}.recipes .v{text-align:right;line-height:1.3}
+.recipes .mats{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}.recipes .mats .slot{vertical-align:middle}.mats.mblk{display:flex;margin-top:3px}.lyrfold{margin-top:4px}.lyrfold summary{cursor:pointer;color:var(--accent,#e8a23a);font-size:12.5px}.lyrtbl{border-collapse:collapse;font-size:12.5px;margin-top:4px}.lyrtbl th{font-weight:400;text-align:left;padding:1px 12px 1px 0;color:var(--muted,#8b98a5)}.lyrtbl td{text-align:right;font-variant-numeric:tabular-nums}.recipes .v{text-align:right;line-height:1.3}
 .mqn.est{background:none;color:var(--accent);border:2px dashed var(--accent)}.mqn.nonum{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
 .mqt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.mqt b{font-family:var(--f-display);font-size:15px;font-weight:600;overflow-wrap:anywhere}.mqt span{font-size:12px;color:var(--muted)}
 .mq p{margin:0;font-size:13px;color:var(--muted)}
@@ -205,7 +205,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 @media (min-width:821px){#view-classes.browse{grid-template-columns:minmax(0,1fr)}#view-classes .filters{display:none}#lCls,#lDg{grid-template-columns:minmax(0,1fr);max-width:290px;gap:6px}#view-dungeons.browse{grid-template-columns:minmax(0,1fr)}#view-dungeons .filters{display:none}#lDg .card{padding:9px 12px;gap:4px}body.cls-inline[data-view="dungeons"] #pBody>*{max-width:880px}#lCls .card{padding:7px 11px;gap:3px}#lCls .chead .th{width:34px;height:34px;font-size:17px}#lCls .cname b{font-size:15px}#lCls .cname span{font-size:12px}#lCls .clx{font-size:12px!important;line-height:1.4}#lCls .cmeta .pill{padding:0 7px;font-size:11.5px}body.cls-inline #panel{left:var(--clsl);right:0;top:var(--clst);bottom:0;width:auto!important;max-width:none;border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none;background:var(--bg);z-index:5}body.cls-inline #panel .ptop{display:none}body.cls-inline #pBody{padding-top:14px}body.panel-xwide #panel{width:var(--clsw,min(880px,calc(100vw - 40px)))}body.cls-one .cls2{grid-template-columns:minmax(0,1fr)}}
 @media (min-width:1800px){body.panel-open.panel-xwide:not([data-view="classes"]) .results{padding-right:900px}}
 @media (min-width:1180px) and (max-width:1799px){body.panel-open.panel-xwide .results{padding-right:0}}
-.rsel input.effin{width:150px;height:24px;padding:0 8px;font-size:12.5px}
+.rsel input.effin{width:150px;height:24px;padding:0 22px 0 6px;line-height:22px;font-size:12.5px;border-radius:6px}
 .th.dgk{background:var(--slot);display:grid;place-items:center;overflow:hidden}.th.dgk .eslot{box-shadow:none;border-radius:0}.dgkn{font-size:12px}
 .cls2{display:grid;gap:4px 32px}@media (min-width:821px){.cls2{grid-template-columns:340px minmax(0,1fr)}}.clsfold{border:1px solid var(--line);border-radius:8px;margin-top:10px;background:var(--panel-2)}.clsfold>summary{cursor:pointer;padding:9px 12px;font-size:13px;font-weight:700;letter-spacing:.02em}.clsfold>summary .c{font-weight:400;color:var(--muted);font-size:12px;margin-left:4px}.clsfold[open]>summary{border-bottom:1px solid var(--line)}.clsfold>.settbl,.clsfold>div{margin:4px 10px 10px;width:calc(100% - 20px)}.cls2>div:first-child .clsbtns+.clsfold{margin-top:16px}.cls2>div:first-child .settbl th,.cls2>div:first-child .settbl td{padding-top:7px;padding-bottom:7px}.cls2>div:first-child .settbl th{padding-left:10px}.cls2>div:first-child .clsbtns{margin-top:12px}
 .cls2>div{min-width:0}
@@ -239,7 +239,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .eslot{--s:44px;flex:none;width:var(--s);height:var(--s);border-radius:6px;background-color:var(--slot);background-image:url(equip.png);background-repeat:no-repeat;background-size:calc(var(--s)*16) auto;box-shadow:inset 0 0 0 1px var(--slot-edge);image-rendering:pixelated;display:inline-grid;place-items:center;color:var(--slot-ink);font-size:calc(var(--s)*.45)}
 .eslot.empty{background-image:none}
 .eslot.pslot{background-image:url(props.png)}
-.lvrange{display:flex;gap:6px;align-items:center}.lvrange input{width:84px}
+.lvrange{display:flex;gap:6px;align-items:center}.lvrange input{width:84px;padding:6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--panel-2);outline:none}.lvrange input:focus{border-color:var(--accent)}
 .estat{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
 .th{--ring:var(--minion);flex:none;width:38px;height:38px;border-radius:50%;border:3px solid var(--ring);background:radial-gradient(circle at 35% 30%,#ffffff,#dfe6ec);
   display:grid;place-items:center;font-size:20px;line-height:1;padding:0;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.35)}
@@ -250,7 +250,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .th.sm{width:28px;height:28px;font-size:14px;border-width:2px;box-shadow:none} .th.sm .beh{width:8px;height:8px;border-width:1.5px}
 .note{font-size:12.5px;color:var(--muted);background:var(--panel-2);border-radius:6px;padding:8px 10px}
 .note.warn{border-left:3px solid var(--warn)}
-.linkbtn{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-align:left}.maplinks{display:flex;flex-wrap:wrap;gap:6px 18px}.underfig{margin:0;display:flex;flex-direction:column;gap:6px}.underfig img{display:block;width:100%;max-width:480px;aspect-ratio:1;border-radius:8px;background:#070c11;cursor:zoom-in}.underfig figcaption{font-size:12.5px;line-height:1.5}.underph{width:100%;max-width:480px;aspect-ratio:1;border-radius:8px;background:#070c11;color:#9fb0bf;display:flex;align-items:center;justify-content:center;font-size:13px}
 
 /* ---------- map ---------- */
 .stage{position:relative;overflow:hidden;background:var(--stage);touch-action:none;cursor:grab;min-height:0}
@@ -289,7 +289,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .zone.shop{z-index:2} .zone.shop .zlabel{padding:0;width:27px;height:27px;border-radius:50%;justify-content:center;font-size:15px;letter-spacing:0;background:rgba(255,248,225,.92);border-color:rgba(120,90,20,.55)}
 .zsec{font-family:var(--f-display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:14px 0 2px}
 .zsec[hidden]{display:none}
-.npcgh{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;margin:14px 0 2px;font-weight:600;font-size:15px}.npcgh:first-child{margin-top:0}.npcgh .c{font-weight:400;font-size:12.5px;color:var(--muted)}
+.effwrap{position:relative;display:inline-block}input.effin{-webkit-appearance:none;appearance:none;padding:6px 24px 6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--panel-2) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2710%27 height=%276%27%3E%3Cpath d=%27M1 1l4 4 4-4%27 fill=%27none%27 stroke=%27%238a96a3%27 stroke-width=%271.6%27/%3E%3C/svg%3E") no-repeat right 8px center;width:100%;cursor:pointer;outline:none}input.effin:focus{border-color:var(--accent)}input.effin::placeholder{color:inherit;opacity:1}input.effin:focus::placeholder{color:transparent}input.effin::-webkit-search-decoration,input.effin::-webkit-search-cancel-button{-webkit-appearance:none;display:none}.effpop{position:absolute;left:0;top:calc(100% + 4px);z-index:30;width:270px;max-height:360px;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:4px;display:flex;flex-direction:column}.effpop[hidden]{display:none}.effhd{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:4px 4px 8px;margin:-4px -4px 4px;border-bottom:1px solid var(--line);position:sticky;top:-4px;background:var(--panel);z-index:1}.effhd .effmode{display:flex;gap:6px;flex-wrap:wrap}.effhd .chip{font-size:12px;padding:3px 9px}.effhd .effo.clr{width:100%}.effml{font-size:12px;color:var(--muted)}.effml:last-child{flex-basis:100%}.effmt{font-style:normal;font-size:11px;font-weight:700;margin-left:6px;padding:0 5px;border-radius:4px;background:var(--accent);color:var(--accent-ink)}.effck{width:12px;flex:none;color:var(--accent,#e08a1e);font-weight:700}.effo em{flex:1;font-style:normal}.effo{display:flex;justify-content:space-between;gap:8px;text-align:left;background:none;border:0;border-radius:6px;padding:5px 8px;font:inherit;font-size:13px;color:inherit;cursor:pointer}.effo span{color:var(--muted,#7a8691);font-variant-numeric:tabular-nums}.effo:hover,.effo:focus-visible{background:var(--hover,rgba(127,127,127,.14))}.effo.on{font-weight:700;color:var(--accent,#e08a1e)}.effo.clr{color:var(--muted,#7a8691)}.effnone{padding:6px 8px;font-size:12.5px}.npcgh{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;margin:14px 0 2px;font-weight:600;font-size:15px}#lItem .npcgh{align-items:center}#lItem .npcgh img{width:28px;height:28px;object-fit:contain;flex:none}#lItem .npcgh>span:first-child{width:28px;height:28px;flex:none;overflow:hidden;display:inline-flex;align-items:center;justify-content:center}.npcgh:first-child{margin-top:0}.npcgh .c{font-weight:400;font-size:12.5px;color:var(--muted)}
 .bbl .v{white-space:nowrap}
 .zone .more{display:none;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:999px;background:rgba(10,16,22,.82);color:#fff;font-family:var(--f-mono);font-size:11px;align-self:center;pointer-events:none}
 .world.compact .zone .thumbs .mapth:nth-child(n+2){display:none}
@@ -309,8 +309,9 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .legend span,.legend .lgt{display:inline-flex;gap:5px;align-items:center}
 .world .tiles{position:absolute;left:0;top:0;width:1000px;height:1000px;pointer-events:none;overflow:hidden}
 .world .tiles img{position:absolute;display:block;max-width:none;user-select:none;image-rendering:auto}
-.world .tiles img.l0{z-index:0}.world .tiles img.mid{z-index:1}.world .tiles img.hi{z-index:2}
-.legend select.lsel{appearance:auto;padding:2px 6px;max-width:170px}.legend select#dgSel{max-width:240px}
+.world .tiles img.l0{z-index:0}.world .tiles img.l1{z-index:1}
+.world .tiles img.mid{z-index:2}.world .tiles img.hi{z-index:3}
+.legend select.lsel{appearance:auto;padding:2px 6px;max-width:170px}.legend select.lsel option,.legend select.lsel optgroup{background:var(--bg);color:var(--fg);font-weight:400}.legend select.lsel optgroup{font-weight:700}.legend select#dgSel{max-width:240px}
 .stage.dgmode .fpanel,.stage.dgmode #filterBtn,.stage.dgmode #fpFly{display:none!important}
 .dgsplit,.dgsplit>div{display:flex;flex-direction:column;gap:14px;min-width:0}
 @media (min-width:1180px){body.cls-inline[data-view="dungeons"] #pBody>.dgsplit{max-width:none;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,1fr);grid-template-areas:"a m" "b m";grid-template-rows:auto 1fr;gap:14px 28px;align-items:start}body.cls-inline[data-view="dungeons"] .dgsplit>.dga{grid-area:a}body.cls-inline[data-view="dungeons"] .dgsplit>.dgb{grid-area:b}body.cls-inline[data-view="dungeons"] .dgsplit>.dgm{grid-area:m;position:sticky;top:0}body.cls-inline[data-view="dungeons"] .dgm .dgmap{margin-top:0}body.cls-inline[data-view="dungeons"] .dgm{container-type:inline-size}body.cls-inline[data-view="dungeons"] .dgm .dgov{width:fit-content;max-width:100%}body.cls-inline[data-view="dungeons"] .dgm .dgov img{width:min(100cqw,calc((100vh - 290px) * var(--ar,10)));max-width:none;height:auto}}
@@ -533,7 +534,7 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .jmlays{font-size:12.5px}.jmlays .muted{font-size:11.5px;margin-left:4px}
 .hint.mph .mphr{display:flex;gap:10px;align-items:center;margin-top:6px}.hint.mph .mphr img{width:56px;height:56px;object-fit:contain;flex:none;background:radial-gradient(circle,#f3efe6 0,#e3dccd 70%);border-radius:50%}
 .hint.mph .mphn{width:56px;height:56px;flex:none;display:flex;align-items:center;justify-content:center;font-size:26px;background:var(--panel-2);border-radius:50%}
-.jmtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#jmDl{display:contents}.jmtools .repbtn{align-self:auto}.jmtools .repbtn:disabled{opacity:.45;cursor:not-allowed}
+.jmmode{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;margin-bottom:8px}.jmmode>b{font-size:14px}.jmmode .jmmo{display:flex;flex-direction:column;gap:3px;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2);color:var(--fg);font:inherit;cursor:pointer}.jmmode .jmmo:hover,.jmmode .jmmo:focus-visible{border-color:var(--accent)}.jmmode .jmmo b{font-size:14px;color:var(--accent)}.jmmode .jmmo span{font-size:12.5px;color:var(--muted);line-height:1.5}.jmmode .jmsw{font-size:12.5px}.jmrows{display:flex;flex-direction:column;gap:6px}.jmtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#jmDl{display:contents}.jmtools .repbtn{align-self:auto}.jmtools .repbtn:disabled{opacity:.45;cursor:not-allowed}
 .jmdlnote{font-size:12.5px;line-height:1.55;min-height:1.55em}.jmdlnote .warn{color:var(--warn)}
 .jmout{border-top:1px solid var(--line);padding-top:8px}.jmout:empty{display:none}
 .jmselbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;font-size:13px}.jmselbar select{font:inherit;font-weight:600;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
@@ -630,7 +631,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   .filters{gap:8px 12px;padding:10px 16px}
   .fgroup{flex-direction:row;align-items:center;flex-wrap:nowrap;gap:6px 10px;flex-basis:100%}
   .fgroup>.flabel{flex:none;min-width:2.6em}
-  .fgroup>.chips,.fgroup>.sel,.fgroup>.lvrange{flex:1 1 0;min-width:0}
+  .fgroup>.chips,.fgroup>.sel,.fgroup>.lvrange,.fgroup>.effwrap{flex:1 1 0;min-width:0}
   .fgroup:has(>.check){flex-wrap:wrap}.fgroup>.check{flex:none}
   .fbar{display:flex;flex-wrap:wrap;gap:8px;flex-basis:100%}
   .fbtn{border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:8px;padding:4px 10px;font:inherit;font-size:12.5px;cursor:pointer}
@@ -728,7 +729,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="legend" role="group" aria-label="地圖顯示項目">
         <button class="lgb ghost" id="filterBtn" aria-expanded="false" aria-controls="fpanel">篩選 ▾</button>
         <button class="lgb" id="baseBtn" hidden title="切換底圖：wiki 地圖或 JourneyMap 探索地圖"></button>
-        <select class="lgb lsel" id="dgSel" hidden title="切換第 1 層和地下城的地圖（玩家上傳的 JourneyMap）" aria-label="地圖"></select>
+        <select class="lgb lsel" id="dgSel" hidden title="切換第 1 層和地下城的地圖（玩家上傳的 JourneyMap）" aria-label="地圖"></select><button class="lgb" id="dgBack" hidden title="回到第 1 層的地圖">← 回到第 1 層</button>
         <select class="lgb lsel" id="layerSel" hidden title="探索地圖的高度：地面，或玩家上傳的室內・洞穴地圖（JourneyMap 洞穴地圖，依高度分層）" aria-label="探索地圖的高度"></select>
       </div>
       <div class="fpanel" id="fpanel" hidden role="dialog" aria-label="地圖篩選">
@@ -814,9 +815,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">職業</span><div class="chips" id="fEqClass"></div></div>
       <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fEqRar"></div></div>
       <div class="fgroup"><span class="flabel">等級</span><div class="lvrange"><input type="number" class="sel" id="fEqMin" min="1" max="99" placeholder="最低" aria-label="最低等級"><span>～</span><input type="number" class="sel" id="fEqMax" min="1" max="99" placeholder="最高" aria-label="最高等級"></div></div>
-      <div class="fgroup torsel"><span class="flabel">效果</span><input type="search" class="sel effin" id="fEqEff" list="dlEqEff" placeholder="例如：爆擊率" aria-label="依效果篩選" autocomplete="off"><datalist id="dlEqEff"></datalist></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fEqSort" aria-label="排序">
         <option value="lv">等級（低→高）</option><option value="lvd">等級（高→低）</option><option value="rar">稀有度（高→低）</option><option value="name">名稱</option></select></div>
+      <div class="fgroup torsel"><span class="flabel">效果</span><span class="effwrap"><input type="search" class="sel effin" id="fEqEff" placeholder="全部" aria-label="依效果篩選" autocomplete="off" aria-controls="effPop" aria-expanded="false"><span class="effpop" id="effPop" role="listbox" hidden></span></span></div>
       <div class="note">資料取自官網物品圖鑑（saominecraft.com/wiki，2026-10-31），名稱和描述是官方的法文原文。圖示是官方圖片，或官網 3D 模型的截圖。官網圖鑑沒有寫取得方式和合成材料，之後靠玩家回報補上。</div>
     </div>
     <div class="results"><div class="rhead"><h2>裝備</h2><span class="count" id="cEq"></span></div><div class="grid" id="lEq"></div></div>
@@ -840,6 +841,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <section class="view browse" id="view-recipes" hidden>
     <div class="filters">
       <div class="fgroup"><span class="flabel">分類</span><div class="chips" id="fRcCat"></div></div>
+      <div class="fgroup" id="gRcSub" hidden><span class="flabel">細分</span><div class="chips" id="fRcSub"></div></div>
       <div class="fgroup"><span class="flabel">在哪裡做</span><select class="sel" id="fRcNpc" aria-label="NPC"></select></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fRcSort" aria-label="排序">
         <option value="npc">依 NPC</option><option value="lv">等級（低→高）</option><option value="name">名稱</option></select></div>
@@ -894,9 +896,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=265d1660"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=4172ed19"></script>
-<script src="changelog.js?v=d3441374"></script>
+<script src="changelog.js?v=f06077fc"></script>
 <script src="recipes.js?v=9163d1ce"></script>
-<script src="jmmeta.js?v=5b0ffd74"></script>
+<script src="jmmeta.js?v=7238858b"></script>
 <script src="formcfg.js?v=54663be2"></script>
 <script src="classes.js?v=877782cc"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
@@ -945,10 +947,11 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
     o.summary=[o.qkind+(o.qno?" #"+o.qno:""),o.step].filter(Boolean).join("・")}
   if(r.type==="skill"){o.cls=g(/技能・職業/);o.stype=g(/技能・主動或被動/);o.unlock=+(g(/技能・解鎖等級/).match(/\d+/)||[])[0]||null;o.sdesc=g(/技能・說明原文/);o.scost=g(/技能・冷卻或消耗/);delete o.level;
     o.summary=[o.cls,o.stype,o.unlock?"Lv "+o.unlock+" 解鎖":""].filter(Boolean).join("・")}
-  o.by=g(/遊戲內暱稱/).slice(0,32);
+  o.by=(g(/遊戲內暱稱/)||g(/探索地圖・貢獻者名稱/)).slice(0,32);   // the old page-2 question (form not upgraded yet) counts too: R0007 answered only that one
   if(r.type==="idea"){o.idea=g(/建議・內容/);o.ipage=g(/建議・相關頁面/);o.reply=String(r.review||"").replace(/^審核[:：][^｜|]*[｜|]?/,"").trim();o.summary=o.idea}
   if(r.type==="jmap"){const res=((window.SAO_JM||{}).results||{})[r.id];o.merge=res;
-    o.summary=!res?"合併中（核准後約 3～5 分鐘）":res.ok?`已合併：${res.layers&&!res.newChunks?"地面沒有新區塊":`新增 ${res.newChunks} 個區塊，地圖探索約 ${res.pct}%`}${res.layers?"；室內・洞穴 "+Object.entries(res.layers).map(([k,n])=>`${(((((window.SAO_JM||{})["1"]||{}).layers)||{})[k]||{}).label||k} 新增 ${n} 個區塊`).join("、"):""}`:`沒有合併：${res.reason}`}
+    o.summary=!res?"合併中（核准後約 3～5 分鐘）":res.ok?`已合併：${res.layers&&!res.newChunks?"地面沒有新區塊":`新增 ${res.newChunks} 個區塊，地圖探索約 ${res.pct}%`}${res.layers?(()=>{const L=Object.entries(res.layers),tot=L.reduce((a,[,n])=>a+n,0),lab=k=>(((((window.SAO_JM||{})["1"]||{}).layers)||{})[k]||{}).label||k;
+      o.layerRows=L.map(([k,n])=>[lab(k),n]);return`；室內・洞穴 ${L.length} 層，共新增 ${tot} 個區塊`})():""}`:`沒有合併：${res.reason}`}
   if(r.type==="place"){o.ug=/地下/.test(g(/地點・在地下嗎/));o.tpName=g(/地點・傳送選單名稱/);o.npcCat=g(/地點・NPC 類別/)}
   if(!o.summary){const t=[];if(o.level!=null)t.push("等級 "+o.level);if(o.codexNo)t.push("圖鑑 "+o.codexNo);if(o.drops)t.push("掉落物 "+o.drops.length+" 種");if(o.how)t.push(o.how+(o.from?"："+o.from:""));if(o.kind&&r.type==="place")t.push(o.kind);o.summary=t.join("・")}
   return o}
@@ -1222,8 +1225,9 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(mN(m))}</h2>${mN(m)!==m.name?`<div class="sub">${esc(m.name)}</div>`:""}${m.aka&&m.aka.length?`<div class="sub">舊名：${m.aka.map(esc).join("、")}${m.renamedBy?`・名稱依${m.renamedBy.how==="codex"?`遊戲圖鑑 #${esc(m.renamedBy.no)}`:"審核員確認"}（回報 ${esc(String(m.renamedBy.report||""))}）更新`:""}</div>`:""}</div></div>
   ${soonNote(m.floor)}
   <dl class="facts"><dt>等級</dt><dd>${lvOf(m)!=null?`<b class="mono">${lvOf(m)}</b> <span class="pill rep">${repsOf(m).some(x=>x.level!=null)?"玩家回報":"遊戲截圖"}</span>`:`<span class="muted">未回報</span>`}</dd><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
-  <dt>圖鑑區域</dt><dd>${m.codexRegion?`${esc(m.codexRegion)} <span class="pill rep">遊戲圖鑑</span><br><span class="muted" style="font-size:12.5px">${esc(z.zh)}</span>`:`${esc(pN(z))}<br><span class="muted" style="font-size:12.5px">${esc(nameSub(z))}</span>`}</dd>
-  <dt>地圖位置</dt><dd>${p.spot?`<button class="linkbtn" data-go="s|${p.spot.id}">${esc(pN(p.spot))}</button><br>`:""}<span class="pill ${st.c}">${st.t}</span>${SPAWN_OF[m.id]?"":p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}</dd>${SPAWN_OF[m.id]?`<dt>重生點</dt><dd>${SPAWN_OF[m.id].map((w,i)=>`${SPAWN_OF[m.id].length>1?`<span class="rnum">${i+1}</span>`:""}<button class="linkbtn mono" data-rep="${m.floor}|${w.x}|${w.z}">X ${w.x} · Z ${w.z}${w.u?"（地下）":""}</button>`).join("<br>")}</dd>`:""}</dl>
+  <dt>位置</dt><dd>${(()=>{const sp=p.spot,nm=sp?pN(sp):pN(z),sub=sp?nameSub(sp):(m.codexRegion?z.zh:nameSub(z));   // 圖鑑區域 and 地圖位置 were the same place twice (user 2026-11-08)
+    const cr=m.codexRegion&&![nm,sp&&sp.n,z.n,sub].some(x=>x&&norm(x)===norm(m.codexRegion))?`<br><span class="muted" style="font-size:12.5px">遊戲圖鑑寫「${esc(m.codexRegion)}」</span>`:"";
+    return`${sp?`<button class="linkbtn" data-go="s|${sp.id}">${esc(nm)}</button>`:esc(nm)}${sub?`<br><span class="muted" style="font-size:12.5px">${esc(sub)}</span>`:""}${cr}<br><span class="pill ${st.c}">${st.t}</span>${SPAWN_OF[m.id]?"":p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}`})()}</dd>${SPAWN_OF[m.id]?`<dt>重生點</dt><dd>${SPAWN_OF[m.id].map((w,i)=>`${SPAWN_OF[m.id].length>1?`<span class="rnum">${i+1}</span>`:""}<button class="linkbtn mono" data-rep="${m.floor}|${w.x}|${w.z}">X ${w.x} · Z ${w.z}${w.u?"（地下）":""}</button>`).join("<br>")}</dd>`:""}</dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
   ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
@@ -1357,14 +1361,14 @@ function spotDetail(id){const sp=spotById(id);if(!sp)return`<div class="note">�
   <dl class="facts"><dt>類型</dt><dd>${KIND[sp.kind][0]}</dd>${nameRow}<dt>座標來源</dt><dd><span class="pill ${st.c}">${st.t}</span></dd>${sp.tp?`<dt>傳送</dt><dd><span class="pill tpp">🌀 可傳送</span> 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl>
   ${sp.u?`<div class="note">在地下，要從入口走下去。</div>`:""}${sp.note?`<div class="note${sp.src==="est"?" warn":""}">${esc(sp.note)}</div>`:""}${sp.rep?`<div class="note srcn">這個地點來自核准的玩家回報（${repLink(sp.rep)}）。</div>`:""}
   ${(sp.reps||[]).length?`<div class="note">玩家回報的座標：${sp.reps.map(r=>`X ${r.x} · Z ${r.z}（${repLink(r.id)}${r.ug?"・地下":""}）`).join("、")}</div>`:""}
-  <button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>${dgm?`</div><div class="dgm">${dgm}</div><div class="dgb">`:""}
+  <div class="maplinks"><button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button>${(sp.tp||sp.kind==="poi")?underBtn(sp.floor,sp.x,sp.z,pN(sp)):""}</div>${dgm?`</div><div class="dgm">${dgm}</div><div class="dgb">`:""}
   ${ms.length?`<h3 class="sec">怪物 <span class="c">${ms.length}</span></h3><ul class="rows">${ms.map(m=>`<li><button class="lrow" data-go="m|${m.id}">${thHTML(m,"sm")}<span class="t"><b>${esc(mN(m))}</b><span>${mN(m)!==m.name?esc(m.name)+"・":""}${TYPE_ZH[m.type]}・${m.drops.length} 種掉落物</span></span><span class="v">${m.diff?"★"+m.diff:""}</span></button></li>`).join("")}</ul>`:""}
   ${sp.items.length?`<h3 class="sec">可取得</h3><ul class="rows">${sp.items.map(i=>`<li><button class="lrow" data-go="i|${esc(i)}">${slot(i)}<span class="t"><b>${esc(zhI(i)||i)}</b><span>${zhI(i)&&zhI(i)!==i?esc(i)+"・":""}${esc(ITEMS[i].fr||"官方圖鑑未收錄")}</span></span><span class="v">${USES[i].length?USES[i].length+" 任務":""}</span></button></li>`).join("")}</ul>`:""}${dgm?"</div></div>":""}`}
 
 function townDetail(id){const t=townById[id];const qs=ALLQ.filter(x=>x.town===id);
   return`<div class="phead"><span class="th" style="--ring:var(--accent)" aria-hidden="true">🏘️</span><div class="ttl"><div class="num mono">${flBadge(t.floor)} X ${t.x} · Z ${t.z}</div>${(s=>s?`<h2>${esc(pN(t))}</h2><div class="sub">${esc(s)}</div>`:`<h2>${esc(pN(t))}</h2>`)([pN(t)!==t.n?t.n:"",t.tp&&t.tp!==t.n?t.tp:"",pN(t)!==t.n?"":t.zh||t.en,t.old?"舊稱 "+t.old:""].filter(Boolean).join("・"))}</div></div>
   ${soonNote(t.floor)}${t.tp?`<div class="note">🌀 <b>可以直接傳送</b>：在遊戲的傳送選單選「${esc(t.tp)}」。</div>`:t.floor===1?`<div class="note">這個村鎮不在遊戲的傳送選單裡，要自己走過去。</div>`:""}${t.note?`<div class="note">${esc(t.note)}</div>`:""}
-  <button class="linkbtn" data-town="${id}">在地圖上查看</button>
+  <div class="maplinks"><button class="linkbtn" data-town="${id}">在地圖上查看</button>${underBtn(t.floor,t.x,t.z,pN(t))}</div>
   <h3 class="sec">支線任務 <span class="c">${qs.length}</span></h3>
   <div style="display:flex;flex-direction:column;gap:10px">${qs.map(qq=>`<div style="border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:6px">
     <div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><b style="font-family:var(--f-display);font-size:15px">${qq.title?esc(qT(qq))+"・":""}${esc(qNpc(qq.npc))}</b><span class="mono muted" style="font-size:11.5px">X ${qq.x} · Z ${qq.z}</span></div>
@@ -1506,13 +1510,19 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").c
   const rv=x=>R_(x)&&RAR[R_(x)]?RAR[R_(x)][2]:0;const nt=x=>x.k==="p"?0:needTotal(x.id,all?0:FL);const by=(x,y)=>NM(x).localeCompare(NM(y));
   if(so==="name")a.sort(by);else if(so==="rar")a.sort((x,y)=>rv(y)-rv(x)||by(x,y));
   else if(so==="src")a.sort((x,y)=>SRC(y).length-SRC(x).length||by(x,y));else a.sort((x,y)=>nt(y)-nt(x)||by(x,y));
-  $("cItem").textContent=`${a.length} / ${pool.length} 件`;const shown=a.slice(0,600);
-  $("lItem").innerHTML=a.length?shown.map(x=>{if(x.k==="p"){const e=x.e;return`<button class="card" data-key="p|${e.oid}" data-go="p|${e.oid}">
+  // 怪物掉落物: grouped under the monster that drops it, in codex order (user 2026-11-08「怪物掉落要依掉落的怪物排序」); an item dropped
+  // by several monsters sits under the first one, highest drop rate first inside a group
+  const MI=new Map(ALLM.map((m,i)=>[m,i])),mk=m=>[m.floor,m.num&&/^\d+$/.test(m.num)?+m.num:999,MI.get(m)];
+  const firstMon=x=>{const L=SRC(x).filter(y=>all||y.m.floor===FL);return L.length?L.slice().sort((p,q)=>{const a1=mk(p.m),b1=mk(q.m);return a1[0]-b1[0]||a1[1]-b1[1]||a1[2]-b1[2]})[0]:null};
+  const byMon=itemGroup==="怪物掉落物";
+  if(byMon){a.forEach(x=>x._fm=firstMon(x));a.sort((x,y)=>{if(!x._fm||!y._fm)return(!x._fm)-(!y._fm);const p=mk(x._fm.m),q=mk(y._fm.m);return p[0]-q[0]||p[1]-q[1]||p[2]-q[2]||(y._fm.p||0)-(x._fm.p||0)||by(x,y)})}
+  $("cItem").textContent=`${a.length} / ${pool.length} 件`;const shown=a.slice(0,600);let lastM=null;
+  $("lItem").innerHTML=a.length?shown.map(x=>{const hd=byMon&&x._fm&&x._fm.m!==lastM?(lastM=x._fm.m,`<div class="npcgh">${face(lastM)}${esc(mN(lastM))}${lastM.num?` <span class="muted">#${esc(lastM.num)}</span>`:""}</div>`):"";return hd+(()=>{if(x.k==="p"){const e=x.e;return`<button class="card" data-key="p|${e.oid}" data-go="p|${e.oid}">
     <div class="chead">${pslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${zhE(e)?esc(dnSub(e))+"・":""}${esc(PR_CAT[e.cat]||e.cat)}・本站還沒有取得資料</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span>等級 ${e.lv}</span>`:""}</div></button>`}
     const id=x.id,it=ITEMS[id];const src=SOURCES[id].filter(y=>all||y.m.floor===FL),use=USES[id].filter(u=>all||u.q.floor===FL),gat=GATHER[id].filter(g=>all||g.floor===FL);return`<button class="card" data-key="i|${esc(id)}" data-go="i|${esc(id)}">
     <div class="chead">${slot(id,44)}<div class="cname"><b>${esc(zhI(id)||id)}</b><span>${zhI(id)&&zhI(id)!==id?esc(id)+"・":""}${it.fr?esc(it.fr):"官方圖鑑未收錄"}</span></div></div>
-    <div class="cmeta">${rarPill(it)}<span>${esc(matGroup(x))}</span>${src.length?`<span>· ${src.length} 種怪物掉落</span>`:""}${gat.length?`<span>· ${gat.length} 個採集點</span>`:""}${!src.length&&!gat.length&&it.src?`<span>· ${esc(it.src.split("：")[0].split("（")[0])}</span>`:""}${use.length?`<span>· ${use.length} 任務需 ${nt(x)}</span>`:""}${itemFloors(id).length>1||all?itemFloors(id).map(flBadge).join(""):""}</div></button>`}).join("")
+    <div class="cmeta">${rarPill(it)}<span>${esc(matGroup(x))}</span>${src.length?`<span>· ${src.length} 種怪物掉落</span>`:""}${gat.length?`<span>· ${gat.length} 個採集點</span>`:""}${!src.length&&!gat.length&&it.src?`<span>· ${esc(it.src.split("：")[0].split("（")[0])}</span>`:""}${use.length?`<span>· ${use.length} 任務需 ${nt(x)}</span>`:""}${itemFloors(id).length>1||all?itemFloors(id).map(flBadge).join(""):""}</div></button>`})()}).join("")
     +(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用分類或搜尋縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的素材。</div>`;
   bindGo($("lItem"));markSel()}
 // 圖鑑・NPC (user 2026-11-07: 圖鑑頁新增 NPC，放在素材下面，用區域分，要可以篩選區域，收購商要顯示回收物品)
@@ -1703,8 +1713,19 @@ const ALLREC=Object.entries(RECIPES).flatMap(([npc,r])=>r.items.map(it=>recRow(n
    if(g){if(r.lv!==g){if(r.lv)r.lvRef=r.lv,r.lvRefSrc=r.src==="ref"?"參考互動地圖":"配方資料";r.lv=g}r.lvSrc="game"}
    else if(o&&r.src==="ref"&&r.lv&&r.lv!==o){r.lvRef=r.lv;r.lvRefSrc="參考互動地圖";r.lv=o;r.lvSrc="catalog"}})}
 let rcCat="all";
-chipsInto($("fRcCat"),[["all",`全部 <b>${ALLREC.length}</b>`],...Object.entries(RC_CAT).map(([k,[l,ic]])=>[k,`${ic} ${l} <b>${ALLREC.filter(r=>r.cat===k).length}</b>`])],()=>rcCat,v=>rcCat=v,renderRecipes);
-$("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(ALLREC.map(r=>r.npc))].sort().map(n=>`<option value="${esc(n)}">${esc(npcN(n))}${npcN(n)!==npcEn(n)?`（${esc(npcEn(n))}）`:""}</option>`).join("");
+// the recipe tab lists only real recipes (with materials); rows bought with Col only stay on NPC / item panels as 販售 (user 2026-11-08)
+const RCV=ALLREC.filter(r=>(r.mats||[]).length);
+// weapons / armour / accessories split like the equipment tab's 細分 (user 2026-11-08「配方分類還是沒分，飾品全部都放飾品」):
+// the part comes from the crafted item's equipment entry (catalogue id, or the game-only entry by English name)
+let rcSubV="all";
+const rcEq=r=>eqById[String(r.oid)]||eqById[EQX_BY[r.en]]||null;
+const rcSub=r=>{const e=rcEq(r);return e?eqSub(e):"?"};
+const fillRcSub=()=>{const g=$("gRcSub"),L=RCV.filter(r=>r.cat===rcCat),ks=[...new Set(L.map(rcSub))];rcSubV="all";
+  g.hidden=!["weapon","armor","acc"].includes(rcCat)||ks.length<2;if(g.hidden)return;
+  const ord=[...(EQ_SUBS.weapon||[]),...(EQ_SUBS.off||[]),...(EQ_SUBS.armor||[]),...(EQ_SUBS.acc||[]),"?"];ks.sort((a,b)=>ord.indexOf(a)-ord.indexOf(b));
+  chipsInto($("fRcSub"),[["all","全部"],...ks.map(k=>[k,`${k==="?"?"其他":subLab(k)} <span class="cn">${L.filter(r=>rcSub(r)===k).length}</span>`])],()=>rcSubV,v=>rcSubV=v,renderRecipes)};
+chipsInto($("fRcCat"),[["all",`全部 <b>${RCV.length}</b>`],...Object.entries(RC_CAT).filter(([k])=>RCV.some(r=>r.cat===k)).map(([k,[l,ic]])=>[k,`${ic} ${l} <b>${RCV.filter(r=>r.cat===k).length}</b>`])],()=>rcCat,v=>{rcCat=v;fillRcSub()},renderRecipes);
+$("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(RCV.map(r=>r.npc))].sort().map(n=>`<option value="${esc(n)}">${esc(npcN(n))}${npcN(n)!==npcEn(n)?`（${esc(npcEn(n))}）`:""}</option>`).join("");
 $("fRcNpc").onchange=renderRecipes;$("fRcSort").onchange=renderRecipes;
 const RECIC=window.SAO_RECICONS||{};
 // game icons (tools/recipe_icons.py) win over the official catalogue's: its potion pictures are shared placeholders
@@ -1719,9 +1740,9 @@ const recGo=r=>eqById[String(r.oid)]?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid
 const recZh=(r,e)=>(e&&zhE(e))||ZH_EN[norm(r.en)]||(ITEMS[r.en]?zhI(r.en):"");
 const recHit=(r,s)=>!s||norm([r.en,recZh(r,eqById[String(r.oid)]||prById[String(r.oid)]),r.npc,(eqById[String(r.oid)]||prById[String(r.oid)]||{}).name||"",...r.mats.map(m=>m[0])].join(" ")).includes(s);
 function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value;
-  let a=ALLREC.filter(r=>(rcCat==="all"||r.cat===rcCat)&&(np==="all"||r.npc===np)&&recHit(r,s));
+  let a=RCV.filter(r=>(rcCat==="all"||r.cat===rcCat)&&(rcSubV==="all"||$("gRcSub").hidden||rcSub(r)===rcSubV)&&(np==="all"||r.npc===np)&&recHit(r,s));
   a.sort((x,y)=>so==="lv"?(x.lv||0)-(y.lv||0)||x.en.localeCompare(y.en):so==="name"?x.en.localeCompare(y.en):x.npc.localeCompare(y.npc)||(x.lv||0)-(y.lv||0));
-  $("cRc").textContent=`${a.length} / ${ALLREC.length} 筆`;
+  $("cRc").textContent=`${a.length} / ${RCV.length} 筆`;
   $("lRc").innerHTML=a.length?a.map(r=>{const e=eqById[String(r.oid)]||prById[String(r.oid)];const go=recGo(r);const rar=e?e.r:r.r;const tag="button";
     return`<${tag} class="card rcard" data-go="r|${r.i}" data-key="r|${r.i}"><div class="chead">${recIcon(r)}<div class="cname"><b>${esc(recZh(r,e)||recEnD(r))}</b><span>${recZh(r,e)?esc(recEnD(r))+"・":potZh(r.en)?esc(potZh(r.en))+"・":""}${e&&!recZh(r,e)&&dn(e)!==r.en?esc(dn(e))+"・":""}${isShop(r)?"販售・":""}${esc(npcN(r.npc))}</span></div></div>
     <div class="cmeta">${RAR[rar]?`<span class="pill ${RAR[rar][1]}">${RAR[rar][0]}</span>`:""}<span>${RC_CAT[r.cat][0]}</span>${r.lv?`<span>· 等級 ${r.lv}</span>`:""}<span>· ${costText(r.cost)}</span>${r.sec?`<span>· ${r.sec} 秒</span>`:""}${r.src==="shot"?'<span class="pill rep">遊戲截圖</span>':r.src==="rep"?'<span class="pill rep">玩家回報</span>':""}</div>
@@ -2047,13 +2068,52 @@ const fillEqSub=()=>{const g=$("gEqSub"),ks=EQ_SUBS[eqPart];g.hidden=!ks;eqSubV=
 chipsInto($("fEqPart"),[["all","全部"],["weapon","武器（主手）"],["off","副手"],["armor","防具"],["acc","飾品"]],()=>eqPart,v=>{eqPart=v;fillEqSub()},renderEquip);
 chipsInto($("fEqClass"),[["all","全部"],...Object.entries(CLASS_ZH)],()=>eqClass,v=>eqClass=v,renderEquip);
 chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
-["fEqMin","fEqMax","fEqSort","fEqEff"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
+["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
 // effect filter (user 2026-11-07「裝備分頁增加輸入欄位，篩選效果」): matches the stat names as shown (爆擊率、HP…) and the raw keys;
 // the card then shows the matching stats; the dropdown suggests every stat name that some equipment has
 const eqStats=e=>[...(e.dmg?[["傷害","damage",e.dmg]]:[]),...Object.entries(e.st).filter(([k])=>!/^Required|^Classe requise$|^Arme à deux mains$|^Durability Bar$/.test(k)).map(([k,v])=>[STAT_ZH[k]||k,k,statVal(k,v)])];
-const eqEffHit=(e,t)=>eqStats(e).filter(([zh,k])=>norm(zh).includes(t)||norm(k).includes(t));
-$("fEqEff").addEventListener("input",()=>requestAnimationFrame(actSync));
-{const L=new Set();EQ.forEach(e=>eqStats(e).forEach(([zh])=>L.add(zh)));$("dlEqEff").innerHTML=[...L].sort((a,b)=>a.localeCompare(b,"zh-Hant")).map(x=>`<option value="${esc(x)}">`).join("")}
+// set bonuses count too (user 2026-11-08「圖鑑裝備的效果篩選沒有讀套裝效果」): each tier line is split into stats named like the
+// item stats (the game's set text says 治療加成 / HP/秒 where item tooltips say 額外治療 / HP 恢復)
+const SET_LAB={"治療加成":"額外治療","hp/秒":"HP 恢復","魔力/秒":"魔力恢復","耐力/秒":"耐力恢復"};
+const setLab=l=>{l=l.trim();const lc=l.toLowerCase(),tc=l.replace(/\b\w/g,c=>c.toUpperCase());const z=EFF_LAB[lc]||STAT_ZH[l]||STAT_ZH[tc]||l;return SET_LAB[z.toLowerCase()]||z};
+const eqSetOf=e=>[e.gen,FR2ID[e.name],e.name].filter(Boolean).map(n=>SET_BY[norm(n)]).find(Boolean)||null;
+const setStats=st=>{if(st._ss)return st._ss;const out=[];st.tiers.forEach(([n,t])=>String(t).split(/,\s*|、|\s+(?=[+-]\d)/).forEach(x=>{
+    const k=/^([+-][\d.]+%?)(\/s|\/秒)?\s*(.+?)(\/s|\/秒)?$/.exec(x.trim());if(!k)return;const per=k[2]||k[4];out.push([setLab(k[3]+(per||"")),k[3],`${k[1]}${per?"/秒":""}（套裝 ${n} 件）`])}));
+  return st._ss=out};
+const eqAllStats=e=>{const st=eqSetOf(e);return st?[...eqStats(e),...setStats(st)]:eqStats(e)};
+// picked effects, each 且 (must have) or 或 (at least one of the 或 ones) — both at once (user 2026-11-09「為什麼且跟或只能選一種，
+// 不是說都要嗎」); EFF_MODE is what a new pick gets
+let EFF_SEL=[],EFF_M={},EFF_MODE="and";
+const effMode=z=>EFF_M[z]==="or"?"or":"and";
+let EFF_NAMES=null;   // an exact effect name (picked from the list) matches only that effect: 傷害 is not 爆擊傷害
+const eqEffHit=(e,t)=>{if(!EFF_NAMES){EFF_NAMES=new Set();EQ.forEach(x=>eqAllStats(x).forEach(([zh])=>EFF_NAMES.add(norm(zh))))}const ex=EFF_NAMES.has(t);
+  return eqAllStats(e).filter(([zh,k])=>ex?norm(zh)===t:norm(zh).includes(t)||norm(k).includes(t))};
+// effect list under the 效果 box (user 2026-11-08「圖鑑裝備要可以篩效果」: typing a name you have to know was not enough):
+// clicking the box lists every effect with how many items have it, most common first; typing narrows the list
+{let ALL=null;const allEff=()=>{if(ALL)return ALL;const C=new Map();EQ.forEach(e=>new Set(eqAllStats(e).map(([zh])=>zh)).forEach(z=>C.set(z,(C.get(z)||0)+1)));return ALL=[...C].sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],"zh-Hant"))};   // built on first open (sets.js is read further down)
+ const inp=$("fEqEff"),pop=$("effPop");
+ // clicking empties the box for typing (user 2026-11-08「點的時候要把欄位空出來」); several effects can be picked, with 且／或
+ // (「要可以複數選擇」「要有and或or可以選」): the list stays open while picking, the box shows the picks when it closes
+ const show=()=>{const A=EFF_SEL.filter(z=>effMode(z)==="and"),O=EFF_SEL.filter(z=>effMode(z)==="or");   // 且 and 或 shown apart (「且跟或各別顯示」)
+   inp.value=!O.length?A.join("、"):[A.length?"且："+A.join("、"):"",O.length?"或："+O.join("、"):""].filter(Boolean).join("｜")};
+ const apply=()=>{renderEquip();requestAnimationFrame(actSync)};
+ const draw=()=>{const q=norm(inp.value.trim()),on=new Set(EFF_SEL),L=allEff().filter(([z])=>!q||norm(z).includes(q)).sort((a,b)=>(k=>k(b[0])-k(a[0]))(z=>on.has(z)?(effMode(z)==="and"?2:1):0));   // picked ones first: 且, then 或
+   pop.innerHTML=`<div class="effhd"><span class="effml">新選的效果算</span><span class="effmode" role="group" aria-label="新選的效果算且還是或">${[["and","且：一定要有"],["or","或：有其中一個就好"]].map(([k,l])=>`<button type="button" class="chip" data-effm="${k}" aria-pressed="${EFF_MODE===k}">${l}</button>`).join("")}</span><span class="effml">選好後可以在上方的條件切換每一個的且／或</span>${EFF_SEL.length?`<button type="button" class="effo clr" data-eff="">✕ 清除（已選 ${EFF_SEL.length} 個）</button>`:""}</div>`
+     +(L.length?L.map(([z,n])=>`<button type="button" class="effo${on.has(z)?" on":""}" role="option" aria-selected="${on.has(z)}" data-eff="${esc(z)}"><b class="effck" aria-hidden="true">${on.has(z)?"✓":""}</b><em>${esc(z)}${on.has(z)?`<i class="effmt">${effMode(z)==="or"?"或":"且"}</i>`:""}</em><span>${n}</span></button>`).join(""):`<span class="muted effnone">沒有這個效果</span>`)};
+ const open=()=>{if(!pop.hidden)return;inp.value="";draw();pop.hidden=false;inp.setAttribute("aria-expanded","true")},
+   close=()=>{if(pop.hidden)return;pop.hidden=true;inp.setAttribute("aria-expanded","false");show();requestAnimationFrame(actSync)};
+ inp.addEventListener("focus",open);inp.addEventListener("click",open);
+ inp.addEventListener("input",()=>{if(!pop.hidden){draw();return}if(!inp.value.trim()&&EFF_SEL.length){EFF_SEL=[];apply()}});   // ✕ on the 已篩選 chip empties the box
+ inp.addEventListener("keydown",ev=>{if(ev.key==="Escape"&&!pop.hidden){ev.preventDefault();ev.stopPropagation();close();inp.blur()}});   // preventDefault: a search box clears itself on Escape
+ pop.addEventListener("mousedown",ev=>ev.preventDefault());
+ pop.addEventListener("click",ev=>{const m=ev.target.closest("[data-effm]");if(m){EFF_MODE=m.dataset.effm;draw();return}
+   const b=ev.target.closest("[data-eff]");if(!b)return;const z=b.dataset.eff;
+   if(!z){EFF_SEL=[];EFF_M={}}else if(EFF_SEL.includes(z)){EFF_SEL=EFF_SEL.filter(x=>x!==z);delete EFF_M[z]}else{EFF_SEL=[...EFF_SEL,z];EFF_M[z]=EFF_MODE}
+   inp.value="";draw();apply();inp.focus()});
+ // L: names (mode = 且／或 for all of them) or [name, mode] pairs
+ window.__effPick=(L,mode)=>{const M={};EFF_SEL=L.map(x=>{const [z,m]=Array.isArray(x)?x:[x,mode||EFF_M[x]||EFF_MODE];M[z]=m;return z});EFF_M=M;if(pop.hidden)show();apply()};
+ window.__effToggle=z=>{EFF_M[z]=effMode(z)==="or"?"and":"or";if(pop.hidden)show();apply()};
+ document.addEventListener("pointerdown",ev=>{if(!pop.hidden&&!ev.target.closest(".effwrap"))close()},true)}
 const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",quiver:"quiver offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory",acc:"accessory"};
 const eqSetN=e=>{const st=[e.gen,FR2ID[e.name]].filter(Boolean).map(n=>SET_BY[norm(n)]).find(Boolean);return st?st.name+" "+(SET_ZH[st.name]||""):""};
 window.__detail=(t,i)=>detailHTML(t,i);window.__iconFor=en=>{const r=matRef(en);if(r.go||GICON[en])return r.ic(48);const e=EQ.find(x=>norm(x.name)===norm(en))||PR.find(x=>norm(x.name)===norm(en));return e?(EQ.includes(e)?eslot(e,48):pslot(e,48)):""};window.__auditIds=()=>({m:ALLM.map(m=>m.id),e:EQ.map(e=>String(e.oid)),p:PR.map(e=>String(e.oid)),i:Object.keys(ITEMS),r:ALLREC.map(r=>String(r.i)),n:FL_KEYS.flatMap(f=>NPCS(f).map(n=>n.id)),q:[...FL_KEYS.flatMap(f=>MQ(f).map((_,i)=>"mq"+f+"_"+i)),...ALLQ.map(q=>q.id)],s:FL_KEYS.flatMap(f=>spotsOf(f).map(s=>s.id)),t:ALLT.map(t=>t.id),c:CLS.map(c=>c.id)});   // site-wide audit hooks (2026-11-07 全站檢查)
@@ -2107,8 +2167,9 @@ window.__nameAudit=()=>{const recEn={};ALLREC.forEach(r=>{if(r.oid!=null)(recEn[
   return EQ.map(e=>row("e",e)).concat(PR.map(e=>row("p",e)))};   // name audit hook (2026-11-08)
 window.__eqDump=()=>EQ.map(e=>({oid:e.oid,gen:e.gen||"",name:e.name,zh:zhE(e),lv:e.lv,dmg:e.dmg,st:e.st,r:e.r,extra:!!e.extra,gst:!!e.cat0,patch:!!e.patch}));   // test/audit hook (2026-11-07 effect audit)
 const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
-function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ef=norm($("fEqEff").value.trim());
-  const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&(!ef||eqEffHit(e,ef).length));
+function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ES=EFF_SEL.map(norm),EREQ=EFF_SEL.filter(z=>effMode(z)==="and").map(norm),EOPT=EFF_SEL.filter(z=>effMode(z)==="or").map(norm),
+    effOk=e=>EREQ.every(t=>eqEffHit(e,t).length)&&(!EOPT.length||EOPT.some(t=>eqEffHit(e,t).length));   // every 且, and at least one 或
+  const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&effOk(e));
   // sub-part counts follow the other filters (class, rarity, level, search), so they match the list
   $("fEqSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>eqSub(e)===c.dataset.v).length});
   let a=base.filter(e=>eqSubV==="all"||eqSub(e)===eqSubV);
@@ -2119,7 +2180,7 @@ function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").val
   $("lEq").innerHTML=a.length?shown.map(e=>{const cl=eqClasses(e);return`<button class="card" data-key="e|${e.oid}" data-go="e|${e.oid}">
     <div class="chead">${eslot(e)}<div class="cname"><b>${esc(dn(e))}</b><span>${zhE(e)?esc(dnSub(e))+"・":e.gen&&e.gen!==e.name?esc(e.name)+"・":FR2ID[e.name]?esc(FR2ID[e.name])+"・":""}${esc(eqCat(e))}</span></div></div>
     <div class="cmeta">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span>等級 ${e.lv}</span>${cl.length?`<span>· ${cl.map(c=>CLASS_ZH[c]).join("、")}</span>`:""}</div>
-    ${(k=>k?`<div class="estat">${esc(k)}</div>`:"")(ef?eqEffHit(e,ef).map(([zh,,v])=>zh+" "+v).join("・"):eqKey(e))}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
+    ${(k=>k?`<div class="estat">${esc(k)}</div>`:"")(ES.length?ES.flatMap(t=>eqEffHit(e,t)).map(([zh,,v])=>zh+" "+v).join("・"):eqKey(e))}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
   bindGo($("lEq"));markSel()}
 const gstNote=e=>{const c=e.cat0,r=Object.entries(c.st).filter(([k])=>k!=="Classe requise"&&k!=="Arme à deux mains");
   return`<div class="note">🎮 等級和數值取自遊戲裡的物品說明（站長截圖 ${esc(e.gstDate||GST.date)}${e.gstAuc?"，拍賣場上別人賣的那一件；拍賣場可能有改版前做出來的舊版本，之後有商店或製作視窗的截圖會再核對":""}）。官網圖鑑（2026-10-31）寫的是：等級 ${c.lv}${c.dmg?"、傷害 "+esc(c.dmg):""}${r.length?"、"+r.map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v)))).join("、"):""}。遊戲改版後官網圖鑑還沒更新，以遊戲為準。</div>`};
@@ -2517,7 +2578,7 @@ function jmCredits(){const j=(window.SAO_JM||{})["1"]||{},log=j.log||[],tot=j.ch
 // 2026-11-06 (使用者選 A＋選擇範圍): the height-layer folders (cave slices "0", "1", "-1"…) of floor 1 worlds are packed
 // too, all of them (no height choice); the player may take squares out on a small map. A layer-only pack still
 // carries a few surface regions as anchors, because the server recognises floor 1 only by its surface colours.
-const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576,MAXN:1500,LMIN:-4,LMAX:19,DWELL:350};   // DWELL: ms the pointer rests on a square before its preview shows   // MAXN = MAX_REGIONS in tools/jm_merge.py
+const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576,MAXN:1500,LMIN:-4,LMAX:19,DWELL:350,QUICK:40};   // QUICK: surface images decoded to recognise floor 1 in 全地圖打包   // DWELL: ms the pointer rests on a square before its preview shows   // MAXN = MAX_REGIONS in tools/jm_merge.py
 window.__JMP=JMP;   // exposed for tests/jm_pack_test.py
 const JMV=()=>{const j=(window.SAO_JM||{})["1"]||{};return encodeURIComponent(String(j.date||"")+"-"+String(j.pct||"")+"-"+String(j.chunks||""))};
 let JMREF=null;
@@ -2612,6 +2673,8 @@ function jmRegNames(rx,rz){const F1=FLOORS[1],x0=rx*512,z0=rz*512,ins=p=>p.x>=x0
 // split the chosen regions into zips of at most BUDGET bytes and MAXN files (tools/jm_merge.py refuses more); each part
 // of a world gets surface regions of that world that overlap the site's map until they cover ANCHOR explored chunks, so
 // the server can verify every part on its own (also when only height layers are packed)
+const jmFullSel=()=>{const sel=JMG.filter(g=>g.state==="f1").map(g=>({g,news:[...(g.inFrame||[]),...Object.values(g.layers).flatMap(L=>L.inFrame||[])]})).filter(s=>s.news.length);
+  JMG.filter(g=>g.state==="dg").forEach(g=>{const news=Object.values(g.layers).flatMap(L=>L.inFrame||[]);if(news.length)sel.push({g,news,anc:g.anc})});return sel};
 function jmPlan(sel){const parts=[],cap=Math.max(1,JMP.MAXN-Math.min(40,JMP.MAXN>>2));   // room for the anchors
   for(const {g,news,anc} of sel){const src=anc||g,byOv=(src.inFrame||[]).filter(it=>it.ov&&it.ov.size).sort((a,b)=>b.ov.size-a.ov.size);let batch=[],bb=0;
     const close=()=>{if(!batch.length)return;const items=batch.map(it=>({g,it}));let ov=anc?0:batch.reduce((s,it)=>s+(it.ov&&it.dir.toLowerCase()==="day"?it.ov.size:0),0),anchors=0;
@@ -2640,6 +2703,55 @@ async function jmZip(entries){const enc=new TextEncoder(),body=[],cen=[];let off
 const JM_ST={f1:["第 1 層","ok"],other:["不是第 1 層","no"],few:["和網站地圖重疊太少，無法確認","no"],out:["不在第 1 層的範圍","no"],noday:["沒有地面地圖，無法確認","no"],dg:["地下城","ok"],dgno:["旁邊沒有第 1 層地圖，無法確認","no"],dgunk:["網站還不認得的副本","no"]};
 const mb=b=>(b/1048576).toFixed(1)+" MB";
 let JMG=[];
+// choose first, read after (user 2026-11-09「在選完資料夾的時候先選全圖還是更新打包地圖，不要每次都全讀」): 更新打包 compares
+// every image with the site (slow, lets you pick squares); 全地圖打包 decodes only a sample of surface images that overlap
+// the site's explored area to recognise floor 1 and takes everything else by its coordinates (fast, no picking)
+let JMFILES=null;
+function jmChoose(files){JMFILES=files;const n=jmGroups(files).reduce((s,g)=>s+g.files.length+Object.values(g.layers).reduce((t,L)=>t+L.items.length,0),0);
+  $("jmDl").innerHTML=`<button class="repbtn" disabled>⬇ 下載壓縮檔</button>`;$("jmDlNote").textContent=n?"先選要怎麼打包。":"找不到地圖檔案。";{const h=$("jmHow");if(h)h.open=false}
+  $("jmOut").innerHTML=!n?`<div class="note warn">選的資料夾裡找不到 JourneyMap 的地圖（<code>day</code> 或高度層資料夾裡 <code>3,7.png</code> 這種檔案）。請確認選的是 <code>journeymap\\data\\mp</code>。</div>`
+    :`<div class="jmmode"><b>找到 ${n} 張地圖，要怎麼打包？</b>
+      <button type="button" class="jmmo" data-jmmode="new"><b>更新打包</b><span>只打包網站地圖還沒有的地方，可以在地圖上挑。每一張都要和網站比對，比較久。</span></button>
+      <button type="button" class="jmmo" data-jmmode="full"><b>全地圖打包</b><span>第 1 層的地面、室內・洞穴和地下城地圖全部打包，網站已經有的也一起，不用挑。只抽幾張確認是第 1 層，比較快。不含路標（waypoint）。</span></button></div>`;
+  $("jmOut").querySelectorAll("[data-jmmode]").forEach(b=>b.onclick=()=>b.dataset.jmmode==="full"?jmRunFull(JMFILES):jmRun(JMFILES))}
+const jmSwitch=m=>`<button type="button" class="linkbtn jmsw" data-jmsw="${m}">${m==="full"?"改用全地圖打包":"改用更新打包（只打包網站還沒有的）"}</button>`;
+document.addEventListener("click",ev=>{const b=ev.target.closest&&ev.target.closest("[data-jmsw]");if(!b||!JMFILES)return;b.dataset.jmsw==="full"?jmRunFull(JMFILES):jmRun(JMFILES)});
+// 全地圖: a world is floor 1 when a sample of its surface images (the ones covering most of the site's explored chunks,
+// at most QUICK of them) matches the site's map the same way 更新打包 checks it; everything else goes in by coordinates
+async function jmQuick(g,ref,cv){const x=cv.getContext("2d",{willReadFrequently:true});x.clearRect(0,0,1280,1280);x.imageSmoothingQuality="high";
+  const {X0,SIZE}=JMP;g.news=[];if(!g.files.length){g.inFrame=[];g.state="noday";return g}
+  g.inFrame=g.files.filter(jmInFrame);if(!g.inFrame.length){g.state="out";return g}
+  const exp=it=>{let n=0;for(let cz=it.rz*32;cz<it.rz*32+32;cz+=2)for(let cx=it.rx*32;cx<it.rx*32+32;cx+=2)if(ref.mask(cx,cz))n++;return n};
+  const pick=g.inFrame.map(it=>[it,exp(it)]).filter(a=>a[1]).sort((a,b)=>b[1]-a[1]).slice(0,JMP.QUICK).map(a=>a[0]),used=[];
+  for(const it of pick){try{const bm=await createImageBitmap(it.f);if(bm.width===512&&bm.height===512){x.drawImage(bm,(it.rx*512-X0)/4,(it.rz*512-X0)/4,128,128);used.push(it)}bm.close&&bm.close()}catch(e){}}
+  const d=x.getImageData(0,0,1280,1280).data,R=ref.px,chunks=new Map(),lim=Math.ceil(SIZE/4);
+  for(const it of used){const px0=Math.max(0,Math.floor((it.rx*512-X0)/4)),pz0=Math.max(0,Math.floor((it.rz*512-X0)/4));
+    const px1=Math.min(lim,Math.ceil((it.rx*512+512-X0)/4)),pz1=Math.min(lim,Math.ceil((it.rz*512+512-X0)/4));it.ov=new Set();
+    for(let py=pz0;py<pz1;py++)for(let px=px0;px<px1;px++){const i=(py*1280+px)*4;if(d[i+3]<250)continue;const cx=(X0+px*4+2)>>4,cz=(X0+py*4+2)>>4;if(!ref.mask(cx,cz))continue;
+      const k=cz*1000+cx;let c=chunks.get(k);if(!c){c={s:0,n:0};chunks.set(k,c)}c.s+=(Math.abs(d[i]-R[i])+Math.abs(d[i+1]-R[i+1])+Math.abs(d[i+2]-R[i+2]))/3;c.n++;it.ov.add(k)}}
+  const diffs=[];for(const c of chunks.values())if(c.n>=6)diffs.push(c.s/c.n);diffs.sort((a,b)=>a-b);
+  g.overlap=diffs.length;g.med=diffs.length?diffs[diffs.length>>1]:null;g.state=g.overlap<JMP.MIN?"few":g.med>JMP.MED?"other":"f1";return g}
+async function jmRunFull(files){const O=$("jmOut");window.__jm=null;window.__jmFull=null;JMG=[];jmPopClose();
+  $("jmDl").innerHTML=`<button class="repbtn" disabled>⬇ 全地圖打包</button>`;$("jmDlNote").textContent="正在讀取…";
+  const groups=jmGroups(files);O.innerHTML=`<div class="muted">找到 ${groups.length} 個世界資料夾，正在確認哪個是第 1 層…</div>`;
+  let ref;try{ref=await jmRef()}catch(e){O.innerHTML=`<div class="note warn">讀不到網站的地圖資料，請重新整理頁面再試一次。</div>`;return}
+  const cv=document.createElement("canvas");cv.width=cv.height=1280;const worlds=groups.filter(g=>!g.dg);
+  for(let i=0;i<worlds.length;i++){O.firstElementChild.textContent=`正在確認第 ${i+1}／${worlds.length} 個資料夾…`;await jmQuick(worlds[i],ref,cv)}
+  const f1=groups.filter(g=>g.state==="f1");
+  for(const g of f1)for(const L of Object.values(g.layers))L.inFrame=L.items.filter(jmInFrame);
+  for(const g of groups.filter(g=>g.dg)){g.inFrame=[];g.news=[];g.anc=f1.find(w=>w.parent===g.parent)||null;g.state=g.dg.startsWith("?")?"dgunk":g.anc?"dg":"dgno";
+    if(g.state==="dg")for(const L of Object.values(g.layers))L.inFrame=L.items.slice()}
+  JMG=groups;const full=jmPlan(jmFullSel()),tot=full.reduce((t,p)=>t+p.bytes,0),n=full.reduce((t,p)=>t+p.items.length,0);
+  window.__jmFull=full.map(p=>({n:p.items.length,bytes:p.bytes,names:p.items.map(({g,it})=>g.key+"/"+it.dir+"/"+it.f.name)}));
+  $("jmDl").innerHTML=full.length?full.map((p,i)=>`<button class="repbtn" data-jmfull="${i}" title="${mb(p.bytes)}">⬇ 全地圖打包${full.length>1?` ${i+1}／${full.length}`:""}</button>`).join(""):`<button class="repbtn" disabled>⬇ 全地圖打包</button>`;
+  $("jmDlNote").innerHTML=!f1.length?`沒有找到第 1 層的地圖，原因看下面的資料夾清單。`:full.length>1?`<b class="warn">分成 ${full.length} 份（共 ${mb(tot)}），每份都要各送一次表單。</b>`:`共 ${n} 張（${mb(tot)}），下載後到左邊回報表單上傳。`;
+  const cnt=g=>g.dg?Object.values(g.layers).reduce((s,L)=>s+L.items.length,0):g.files.length;
+  const row=g=>{const [t,c]=JM_ST[g.state];
+    const nm=g.dg?(g.dg.startsWith("?")?g.dg.slice(1):dgName(g.dg)):(g.label.length>22?g.label.slice(0,22)+"…":g.label),nl=g.state==="f1"?Object.values(g.layers).reduce((s,L)=>s+L.inFrame.length,0):0;
+    return`<div class="jmrow"><span class="t"><b title="${esc(g.key)}">${esc(nm)}</b><span>${g.dg?"":`${g.files.length} 張地面地圖`}${g.dg?cnt(g)+" 張地圖":""}${nl?`・室內・洞穴 ${nl} 張`:""}</span></span><span class="pill ${c}">${t}</span></div>`};
+  const ok=groups.filter(g=>g.state==="f1"||g.state==="dg").sort((a,b)=>(a.state==="f1"?0:1)-(b.state==="f1"?0:1)||b.latest-a.latest),no=groups.filter(g=>!ok.includes(g)).sort((a,b)=>b.latest-a.latest);
+  O.innerHTML=`<div class="jmmode"><b>全地圖打包</b>${jmSwitch("new")}</div><div class="jmrows">${ok.map(row).join("")}</div>${no.length?`<details class="jmfold"><summary>其他資料夾（不收）${no.length}</summary><div class="jmrows">${no.map(row).join("")}</div></details>`:""}`;
+  jmDlBind(full,true)}
 async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];{const h=$("jmHow");if(h)h.open=false}
   $("jmDl").innerHTML=`<button class="repbtn" disabled>⬇ 下載壓縮檔</button>`;$("jmDlNote").textContent="正在讀取…";   // the results need the room; the steps stay one click away
   const groups=jmGroups(files);
@@ -2657,7 +2769,7 @@ async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];{const h=
   for(let i=0;i<dgOk.length;i++){O.firstElementChild.textContent=`正在整理地下城地圖：${dgName(dgOk[i].dg)}（${i+1}／${dgOk.length}）…`;await jmLayers(dgOk[i])}
   for(let i=0;i<f1.length;i++){const n=Object.values(f1[i].layers).reduce((s,L)=>s+L.items.length,0);if(!n)continue;
     O.firstElementChild.textContent=`正在整理室內・洞穴（高度層）地圖：第 ${i+1}／${f1.length} 個世界，${n} 張…`;await jmLayers(f1[i])}
-  jmPopClose();for(const k in JMDGC)delete JMDGC[k];JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();JMSEL.fresh=true;JMSEL.floor=1;O.innerHTML=`<div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
+  jmPopClose();for(const k in JMDGC)delete JMDGC[k];JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();JMSEL.fresh=true;JMSEL.floor=1;O.innerHTML=`<div class="jmmode jmmode1"><b>更新打包</b>${jmSwitch("full")}</div><div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
 // preview of one square: the player's own JourneyMap image of it (surface first, else the first underground one)
 const JMURL=new Map();const jmUrl=f=>{if(!JMURL.has(f))JMURL.set(f,URL.createObjectURL(f));return JMURL.get(f)};
 // crop a region image to where it has data (a small cave room fills the preview instead of a black square)
@@ -2798,6 +2910,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   const help=`<span class="jmanch jmhelpa"><button type="button" class="pill r-b jmpb" id="jmHelpBtn" aria-expanded="false" aria-controls="jmHelp">ⓘ 說明</button><div class="jmpopov" id="jmHelp" hidden><ul>
         <li>選取示意：<span class="nw"><span class="jmk on"></span>橘框＝要上傳</span>、<span class="nw"><span class="jmk"></span>虛線＝不上傳</span>。</li>
         <li>滑鼠在方格或地下城上停留，預覽視窗就會顯示該區塊的地圖。</li>
+        <li>要全部打包（網站已經有的也一起）就點上方「改用全地圖打包」；只放地圖圖片，不含路標（waypoint）。</li>
         <li>點預覽視窗裡的圖可以放大，按 Esc 或點右上 ✕ 關閉。</li>
         <li>室內・洞穴（洞穴、地下室、建築內）的地圖會跟著方格一起打包，不用另外選。</li></ul></div></span>`;
   const mapPart=f1.length&&regs.size?`<section class="jmsec"><div class="jmsech"><b>地圖</b><span class="muted">地面 ${nDay} 張・室內・洞穴 ${nCave} 張</span>
@@ -2868,10 +2981,13 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   O.querySelectorAll("[data-jmdg]").forEach(b=>{const on=!JMSEL.dgOff.has(b.dataset.jmdg)&&!b.getAttribute("aria-disabled");b.classList.toggle("on",on);b.setAttribute("aria-pressed",on)});
   O.querySelectorAll("[data-jmreg]").forEach(e=>{const on=!JMSEL.off.has(e.dataset.jmreg);e.classList.toggle("off",!on);e.setAttribute("aria-checked",on)});
   // the download button sits beside the folder picker, outside #jmOut
-  $("jmDl").querySelectorAll("[data-jmpart]").forEach(b=>b.onclick=async()=>{const i=+b.dataset.jmpart,p=parts[i];b.disabled=true;const t0=b.textContent;b.textContent="打包中…";
+  jmDlBind(parts,false)}
+// the download buttons of either mode (parts from jmPlan)
+function jmDlBind(L,fu){
+  $("jmDl").querySelectorAll(fu?"[data-jmfull]":"[data-jmpart]").forEach(b=>b.onclick=async()=>{const i=+(fu?b.dataset.jmfull:b.dataset.jmpart),p=L[i];b.disabled=true;const t0=b.textContent;b.textContent="打包中…";
     try{const blob=await jmZip(p.items.map(({g,it})=>({name:g.key+"/"+it.dir+"/"+it.f.name,file:it.f})));
       const d=new Date(),stamp=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
-      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`探索地圖-第1層-${stamp}${parts.length>1?"-"+(i+1):""}.zip`;document.body.appendChild(a);a.click();a.remove();
+      const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`探索地圖-第1層-${fu?"全地圖-":""}${stamp}${L.length>1?"-"+(i+1):""}.zip`;document.body.appendChild(a);a.click();a.remove();
       setTimeout(()=>URL.revokeObjectURL(a.href),60000);window.__jmBlob=blob}
     finally{b.disabled=false;b.textContent=t0}})}
 let fbCache=null;
@@ -2924,9 +3040,9 @@ function buildFormReport(){
     <details class="jmhow" id="jmHow" open><summary>怎麼用（4 步）</summary>
     <ol class="steps">
       <li><b>選資料夾</b>：按下面的按鈕，在選擇視窗上方的路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」（或「選擇資料夾」）。瀏覽器問「要將 N 個檔案上傳到這個網站嗎？」也按「上傳」，這只是讓網頁讀取。</li>
-      <li><b>看結果</b>：工具自動找出第 1 層的地圖和地下城，只留網站還沒有的部分，不用自己挑資料夾。</li>
-      <li><b>挑要上傳的</b>：在小地圖上點方格、點地下城的圖選取（或按各段的「全選」）。滑鼠指著會在右下角的預覽視窗先看那一塊的地圖。</li>
-      <li><b>上傳</b>：按「下載壓縮檔」，再按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>、上傳壓縮檔後送出。不用截圖，送出後自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
+      <li><b>選打包方式</b>：「更新打包」只打包網站還沒有的地方（每張都比對，比較久）；「全地圖打包」第 1 層的地圖全部打包、不用挑（比較快）。工具自動找出第 1 層的地圖和地下城，不用自己挑資料夾。</li>
+      <li><b>挑要上傳的</b>（更新打包）：在小地圖上點方格、點地下城的圖選取（或按各段的「全選」）。滑鼠指著會在右下角的預覽視窗先看那一塊的地圖。全地圖打包跳過這一步。</li>
+      <li><b>上傳</b>：按「下載壓縮檔」（或「全地圖打包」），再按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>、上傳壓縮檔後送出。不用截圖，送出後自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
     <div class="jmscope"><span><b>會收</b>：第 1 層的地面、室內・洞穴（洞穴、地下室、建築內）和地下城（Geldorack Dungeon、Labyrinth of the Fallen、Sanctuary of Xal'Zirith）</span><span><b>不收</b>：還沒開放打包的樓層（第 2 層以後，開放後再加）、破碎的地下世界、限時活動的場地</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden><span id="jmDl"></span></div>
@@ -2937,7 +3053,7 @@ function buildFormReport(){
   <article class="bcard" id="qCard"><h4 class="sec">處理中的回報 <span class="c" id="qC"></span></h4><div id="qL" class="muted">讀取中…</div>
     <div class="muted" style="font-size:12.5px">為了不公開還沒審核的內容，這裡只列回報編號、種類、樓層和送出時間，請用送出時間找你的回報。核准後名稱和內容會出現在下面的「已收錄」；退回的回報保留 14 天。</div></article>
   <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article></div></div></div>`;
-  $("jmDir").onchange=e=>{const fs=[...(e.target.files||[])];e.target.value="";if(fs.length)jmRun(fs)};
+  $("jmDir").onchange=e=>{const fs=[...(e.target.files||[])];e.target.value="";if(fs.length)jmChoose(fs)};
   rBuilt=true}
 function renderReport(){
   if(FORM_PREFILL){if(!rBuilt)buildFormReport();$("formGo").href=formUrl(FL);showCollab()}
@@ -2946,7 +3062,7 @@ function renderReport(){
   $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?(monById[r.monId]||FLOORS[r.floor]?.M.find(x=>x.name===r.name||(x.aka||[]).includes(r.name))):null;
       const go=[m?`<button class="linkbtn" data-go="m|${m.id}">看怪物資料</button>`:"",r.type==="recipe"&&ALLREC.findIndex(x=>x.rep===r.id)>=0?`<button class="linkbtn" data-go="r|${ALLREC.findIndex(x=>x.rep===r.id)}">看配方</button>`:"",r.type==="skill"&&CLS.some(c=>c.reps.includes(r))?`<button class="linkbtn" data-go="c|${CLS.find(c=>c.reps.includes(r)).id}">看職業</button>`:"",r.type==="quest"&&r.qref&&r.qref!=="main"?`<button class="linkbtn" data-go="q|${r.qref}">看任務</button>`:"",r.type==="quest"&&r.qref==="main"?`<button class="linkbtn" data-go="q|mq${r.floor}_${MQ(r.floor).findIndex(x=>(x.reps||[]).includes(r))}">看任務</button>`:"",r.x!=null&&FLOORS[r.floor]?.map?`<button class="linkbtn" data-rep="${r.floor}|${r.x}|${r.z}">在地圖上看</button>`:""].filter(Boolean);
       // the report number and date head each entry; the links stay under the text
-      return`<li class="replist" data-rid="${esc(r.id||"")}"><div class="rhd">${repRef(r,1)}・${esc(r.date)}</div><div class="rbody">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${r.floor?flBadge(r.floor):r.type==="item"?'<span class="fl">通用</span>':""} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}</span>${go.length?`<span class="rgo">${go.join(" ・")}</span>`:""}</span></div></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
+      return`<li class="replist" data-rid="${esc(r.id||"")}"><div class="rhd">${repRef(r,1)}・${esc(r.date)}</div><div class="rbody">${r.img?`<a href="${esc(r.img)}" target="_blank" rel="noopener"><img src="${esc(r.img)}" alt="" loading="lazy"></a>`:""}<span class="t"><b>${r.floor?flBadge(r.floor):r.type==="item"?'<span class="fl">通用</span>':""} ${RT_ZH[r.type]||""}・${esc(r.name)}${r.level!=null?` <span class="pill rep">Lv ${r.level}</span>`:""}</b><span>${esc(r.summary||"")}${r.x!=null?` ・X ${r.x} · Z ${r.z}`:""}${r.layerRows?`<details class="lyrfold"><summary>各高度的新增區塊</summary><table class="lyrtbl"><tbody>${r.layerRows.map(([l,n])=>`<tr><th>${esc(l)}</th><td>${n}</td></tr>`).join("")}</tbody></table></details>`:""}</span>${go.length?`<span class="rgo">${go.join(" ・")}</span>`:""}</span></div></li>`}).join("")}</ul>`:`<div class="note">還沒有收錄任何回報。</div>`;
   bindGo($("doneL"));$("doneL").querySelectorAll("[data-rep]").forEach(b=>b.onclick=()=>{const [f,x,z]=b.dataset.rep.split("|").map(Number);showPoints(f,[[x,z]],b.closest("li")?.querySelector("b")?.textContent||"回報位置",()=>repPin(x,z))});
   if(FORM_PREFILL){renderQueue();return}
   loadPending().then(list=>{const L=$("pendL"),C=$("pendC");if(!L)return;
@@ -2970,9 +3086,25 @@ const tilesEl=$("tiles");const TL=new Map();let tileRaf=0,tileGC=0;
 const useTiles=()=>{const m=MP();return!!(m&&m.tiles&&(m.dg||BASE==="jm"))};
 // height layers of the explored map (tools/jm_merge.py, jmmeta.js "1".layers): own tile sets tiles/f1jm_<key>, dark
 // where nobody has uploaded; only the level-3 tiles listed in "l3" exist, levels 0-2 are complete
-let JML="day";try{JML=localStorage.getItem("sao-map-layer")||"day"}catch(e){}
+// 「地下」 is no longer a menu on the map: a teleport point / landmark panel offers 「查看地下／室內」 when the combined
+// underground map (tiles/f1jm_under, tools/jm_merge.py build_under) has something near it, and shows only the surroundings
+// there, drawn from level-3 tiles (user 2026-11-08「移除地下顯示，做成點傳送點跟地標時在右側視窗多一個查看地下的選項」→
+// 「地下/室內，只顯示周邊就好；讀取很慢會模糊」: switching the whole map loaded blurry low levels first)
+let JML="day";
 const jmLayersMeta=()=>FL===1?((((window.SAO_JM||{})["1"]||{}).layers)||{}):{};
 const curLayer=()=>{const L=jmLayersMeta()[JML];return JML!=="day"&&L?L:null};
+let UNDER_C=null;   // content.png: 1 px per 16-block cell counted from X / Z 70, 1 = real underground picture there
+function underLoad(){const L=jmLayersMeta().under;if(!L||UNDER_C)return;UNDER_C="loading";const im=new Image();
+  im.onload=()=>{try{const c=document.createElement("canvas");c.width=im.width;c.height=im.height;const g=c.getContext("2d");g.drawImage(im,0,0);
+    const d=g.getImageData(0,0,c.width,c.height).data,a=new Uint8Array(c.width*c.height);for(let i=0;i<a.length;i++)a[i]=d[i*4]>127?1:0;UNDER_C={w:c.width,h:c.height,a}}catch(e){UNDER_C={err:1}}
+    document.querySelectorAll("[data-under]").forEach(b=>{if(!underNear(+b.dataset.ux,+b.dataset.uz))b.remove()})};
+  im.onerror=()=>{UNDER_C={err:1}};im.src=`tiles/f1jm_under/content.png?v=${encodeURIComponent(L.v||"")}`}
+const UNDER_R=160,UNDER_MIN=3;   // blocks around the place, cells with underground picture needed
+function underNear(x,z){const C=UNDER_C;if(!C||C==="loading"||C.err)return true;const r=Math.ceil(UNDER_R/16),cx=Math.floor((x-70)/16),cz=Math.floor((z-70)/16);let n=0;
+  for(let j=cz-r;j<=cz+r;j++)for(let i=cx-r;i<=cx+r;i++){if(i<0||j<0||i>=C.w||j>=C.h||(i-cx)**2+(j-cz)**2>r*r)continue;if(C.a[j*C.w+i]&&++n>=UNDER_MIN)return true}return false}
+function underBtn(f,x,z,name){if(f!==1||FL!==1||!jmLayersMeta().under)return"";underLoad();if(!underNear(x,z))return"";
+  return`<button class="linkbtn" data-under="${esc(name)}" data-ux="${x}" data-uz="${z}" aria-expanded="false" title="顯示這附近的地下和室內（玩家上傳的 JourneyMap 洞穴地圖：洞穴、地下室、建築的室內）">查看地下／室內</button>`}
+window.__underNear=(x,z)=>underNear(x,z);underLoad();
 const layerLabel=k=>{const L=jmLayersMeta()[k];return L&&L.label||(k==="day"?"地面":k)};
 function updateTiles(){tileRaf=0;const m=MP();if(!useTiles()){if(TL.size){tilesEl.innerHTML="";TL.clear()}tilesEl.hidden=true;return}
   tilesEl.hidden=false;const r=stage.getBoundingClientRect();if(!r.width)return;
@@ -2980,15 +3112,22 @@ function updateTiles(){tileRaf=0;const m=MP();if(!useTiles()){if(TL.size){tilesE
   let LY=curLayer(),base=LY?`tiles/f1jm_${JML}`:m.tiles,ver=LY?encodeURIComponent(LY.v||""):JMV(),l3=LY?new Set(LY.l3||[]):null,ox=0,oz=0;
   if(m.dg){const k=dgKey(),L=m.e.layers[k];base=`${m.tiles}/${k}`;ver=encodeURIComponent(L.v||"");l3=new Set(L.l3||[]);ox=m.x0/256;oz=m.z0/256}   // dungeon level-3 tiles are named by absolute world tile index
   if(tilesEl.dataset.base!==base){tilesEl.innerHTML="";TL.clear();tilesEl.dataset.base=base}
-  const want=new Set();const add=(lv,c,rr,cls)=>{const nm=lv===3?(c+ox)+"_"+(rr+oz):c+"_"+rr;if(lv===3&&l3&&!l3.has(nm))return;const S=sizes[lv],k=lv+"/"+nm;want.add(k);if(TL.has(k))return;
-    const u=256*(m.tileFull/S)*(1000/m.size);const im=new Image();im.className=cls;im.alt="";im.decoding="async";im.draggable=false;
+  const want=new Set();const add=(lv,c,rr,cls,low)=>{const nm=lv===3?(c+ox)+"_"+(rr+oz):c+"_"+rr;if(lv===3&&l3&&!l3.has(nm))return;const S=sizes[lv],k=lv+"/"+nm;want.add(k);if(TL.has(k))return;
+    const u=256*(m.tileFull/S)*(1000/m.size);const im=new Image();im.className=cls;im.alt="";im.decoding="async";im.draggable=false;if(low)im.fetchPriority="low";
     im.style.cssText=`left:${c*u}px;top:${rr*u}px;width:${u+0.6}px;height:${u+0.6}px`;im.src=`${base}/${k}.jpg?v=${ver}`;im.onerror=()=>im.remove();tilesEl.appendChild(im);TL.set(k,im)};
+  // blurry map while zooming (user 2026-11-08「讀取很慢會模糊」「模糊是全地圖」): only level 0 (the whole floor in 640 px, ~8 blocks
+  // per pixel) used to sit under the sharp tiles while they loaded. Now the whole of level 1 (~0.4 MB, 4 blocks per pixel) is
+  // always loaded, level 2 sits under level 3, tiles load from the middle of the screen outwards, and one ring of tiles
+  // around the screen is fetched at low priority so dragging does not uncover blurry ground
   const n0=Math.ceil(sizes[0]/256);for(let rr=0;rr<n0;rr++)for(let c=0;c<n0;c++)add(0,c,rr,"l0");
-  const view=(lv,cls)=>{const S=sizes[lv],u=256*(m.tileFull/S)*(1000/m.size),n=Math.ceil(S/256);
-    const wx0=-tx/sc,wy0=-ty/sc,wx1=(r.width-tx)/sc,wy1=(r.height-ty)/sc;
-    for(let rr=Math.max(0,Math.floor(wy0/u));rr<=Math.min(n-1,Math.floor(wy1/u));rr++)for(let c=Math.max(0,Math.floor(wx0/u));c<=Math.min(n-1,Math.floor(wx1/u));c++)add(lv,c,rr,cls)};
-  if(L>0){if(L===3&&l3)view(2,"mid");view(L,"hi")}   // a layer has level-3 tiles only where there is data: level 2 underneath
-  clearTimeout(tileGC);tileGC=setTimeout(()=>{TL.forEach((im,k)=>{if(!want.has(k)&&!k.startsWith("0/")){im.remove();TL.delete(k)}})},700)}
+  if(L>0){const n1=Math.ceil(sizes[1]/256);for(let rr=0;rr<n1;rr++)for(let c=0;c<n1;c++)add(1,c,rr,"l1")}
+  const view=(lv,cls,ring)=>{const S=sizes[lv],u=256*(m.tileFull/S)*(1000/m.size),n=Math.ceil(S/256);
+    const wx0=-tx/sc,wy0=-ty/sc,wx1=(r.width-tx)/sc,wy1=(r.height-ty)/sc,mx=(wx0+wx1)/2/u,my=(wy0+wy1)/2/u,g=ring?1:0,L0=[];
+    const c0=Math.floor(wx0/u),c1=Math.floor(wx1/u),r0=Math.floor(wy0/u),r1=Math.floor(wy1/u);
+    for(let rr=Math.max(0,r0-g);rr<=Math.min(n-1,r1+g);rr++)for(let c=Math.max(0,c0-g);c<=Math.min(n-1,c1+g);c++)L0.push([c,rr,c<c0||c>c1||rr<r0||rr>r1]);
+    L0.sort((a,b)=>a[2]-b[2]||Math.hypot(a[0]+.5-mx,a[1]+.5-my)-Math.hypot(b[0]+.5-mx,b[1]+.5-my)).forEach(([c,rr,out])=>add(lv,c,rr,cls,out))};
+  if(L===3)view(2,"mid");if(L>1)view(L,"hi",true)
+  clearTimeout(tileGC);tileGC=setTimeout(()=>{TL.forEach((im,k)=>{if(!want.has(k)&&!/^[01]\//.test(k)){im.remove();TL.delete(k)}})},700)}
 const schedTiles=()=>{if(!tileRaf)tileRaf=requestAnimationFrame(updateTiles)};
 window.addEventListener("resize",schedTiles);
 function apply(){schedTiles();declutterSoon();world.style.transform=`translate(${tx}px,${ty}px) scale(${sc})`;const zr=fitSc()/sc;const k=Math.max(.8,Math.min(1,fitSc()/.75)),screen=k*Math.max(.92,Math.min(1.08,1.08*Math.pow(zr,.12)));world.style.setProperty("--inv",screen/sc);world.style.setProperty("--tk",Math.max(.62,Math.min(1,.62*Math.pow(1/zr,.23))).toFixed(3));world.style.setProperty("--areaw",Math.max(.7,Math.min(2,2*Math.pow(zr,.5))).toFixed(2));world.classList.toggle("compact",sc<fitSc()*1.9)}
@@ -3018,8 +3157,9 @@ const typeKey=m=>m.type==="Boss"?"boss":m.type==="Mini-Boss"?"mini":"mob";
 let BASE="wiki";try{BASE=localStorage.getItem("sao-map-base")||"wiki"}catch(e){}
 
 $("baseBtn").addEventListener("click",ev=>{ev.stopPropagation();BASE=BASE==="jm"?"wiki":"jm";try{localStorage.setItem("sao-map-base",BASE)}catch(e){};renderMap()});
-$("layerSel").addEventListener("change",ev=>{if(DGV){DJL[DGV]=ev.target.value;renderMap();return}JML=ev.target.value;try{localStorage.setItem("sao-map-layer",JML)}catch(e){};renderMap()});
+$("layerSel").addEventListener("change",ev=>{if(DGV){DJL[DGV]=ev.target.value;renderMap()}});
 $("dgSel").addEventListener("change",ev=>{DGV=ev.target.value||null;fitted=false;renderMap();if(!DGV)requestAnimationFrame(fit)});
+$("dgBack").addEventListener("click",()=>{DGV=null;fitted=false;renderMap();requestAnimationFrame(fit)});["pointerdown","wheel"].forEach(t=>$("dgBack").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
 ["pointerdown","wheel"].forEach(t=>$("dgSel").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
 // dungeon mode: zoom to the part of the frame that has data
 function dgFit(){const m=MP();if(!m||!m.dg)return;fit();const r=stage.getBoundingClientRect(),b=m.e.bounds||[m.x0,m.z0,m.x0+m.size,m.z0+m.size];
@@ -3028,8 +3168,25 @@ function dgFit(){const m=MP();if(!m||!m.dg)return;fit();const r=stage.getBoundin
 window.__dgMode=()=>DGV;
 // the dungeon panel's map: open it on the map tab
 document.addEventListener("click",ev=>{const b=ev.target.closest&&ev.target.closest("[data-dgmap]");if(!b)return;ev.stopPropagation();
-  DGV=b.dataset.dgmap;fitted=false;if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===1)renderMap();else go("map",1)},true);
+  DGV=b.dataset.dgmap;fitted=false;if(matchMedia("(max-width:820px)").matches)closeP();if(view==="map"&&FL===1)renderMap();else{go("map",1);renderMap();requestAnimationFrame(()=>requestAnimationFrame(dgFit))}},true);   // go() does not redraw the markers when the map was already drawn
 ["pointerdown","wheel"].forEach(t=>$("layerSel").addEventListener(t,ev=>ev.stopPropagation(),{passive:true}));
+// 「查看地下／室內」: a picture of the surroundings under the button (toggles); click it to enlarge
+document.addEventListener("click",ev=>{const b=ev.target.closest&&ev.target.closest("[data-under]");if(!b)return;ev.stopPropagation();
+  const box=b.closest(".maplinks")||b,nx=box.nextElementSibling;
+  if(nx&&nx.classList.contains("underfig")){nx.remove();b.textContent="查看地下／室內";b.setAttribute("aria-expanded","false");return}
+  const LY=jmLayersMeta().under,x=+b.dataset.ux,z=+b.dataset.uz,n=b.dataset.under,f=document.createElement("figure");f.className="underfig";
+  f.innerHTML=`<div class="underph">讀取中…</div><figcaption class="muted">${esc(n)} 周圍 ${2*UNDER_R}×${2*UNDER_R} 格的地下／室內（玩家上傳的 JourneyMap 洞穴地圖，所有高度合成一張；${esc(LY&&LY.date||"")} 更新）。橘點是 ${esc(n)}，黑色是沒有資料或沒有地下。點圖放大。</figcaption>`;
+  box.after(f);b.textContent="收起地下／室內";b.setAttribute("aria-expanded","true");
+  underCrop(x,z).then(u=>{if(!f.isConnected)return;f.querySelector(".underph").outerHTML=`<a href="${u}" data-imgzoom="${esc(n)} 周圍的地下／室內"><img src="${u}" alt="${esc(n)} 周圍的地下／室內地圖"></a>`})
+    .catch(()=>{const ph=f.querySelector(".underph");if(ph)ph.textContent="讀取失敗，請稍後再試。"})},true);
+// level-3 tiles only (1 px = 1 block) around (x, z), scaled up by K with nearest-neighbour so blocks stay sharp
+async function underCrop(x,z){const LY=jmLayersMeta().under,R=UNDER_R,S=2*R,K=4,T=256;const v=encodeURIComponent(LY.v||""),l3=new Set(LY.l3||[]);
+  const px0=x-70-R,pz0=z-70-R,c=document.createElement("canvas");c.width=c.height=S*K;const g=c.getContext("2d");g.fillStyle="#070c11";g.fillRect(0,0,c.width,c.height);g.imageSmoothingEnabled=false;
+  const jobs=[];for(let ty=Math.floor(pz0/T);ty<=Math.floor((pz0+S-1)/T);ty++)for(let tx=Math.floor(px0/T);tx<=Math.floor((px0+S-1)/T);tx++){const nm=tx+"_"+ty;if(!l3.has(nm))continue;
+    jobs.push(jmLoadImg(`tiles/f1jm_under/3/${nm}.jpg?v=${v}`).then(im=>g.drawImage(im,(tx*T-px0)*K,(ty*T-pz0)*K,T*K,T*K)).catch(()=>{}))}
+  await Promise.all(jobs);g.beginPath();g.arc(R*K,R*K,7,0,7);g.fillStyle="#f29a1f";g.fill();g.lineWidth=3;g.strokeStyle="#fff";g.stroke();
+  return await new Promise((ok,no)=>c.toBlob(bl=>bl?ok(URL.createObjectURL(bl)):no(new Error("blob")),"image/jpeg",0.9))}
+window.__underCrop=underCrop;
 // ---- map filter panel ----
 function mapCounts(){const sp=spotsOf(FL),tw=F().towns,np=NPCS(FL);const c={tp:tw.filter(t=>t.tp).length+sp.filter(x=>x.tp).length,land:tw.filter(t=>!t.tp).length+sp.filter(x=>x.kind==="poi"&&!x.tp).length,npc:np.length};
   ["gather","dungeon","wboss"].forEach(k=>c[k]=sp.filter(x=>x.kind===k).length);c.area=sp.filter(x=>x.kind==="mob").length;c.boss=SPAWNS(FL).filter(w=>bossCat(w.m)==="boss").length;c.mini=SPAWNS(FL).length-c.boss;
@@ -3081,19 +3238,20 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
   $("mapNote").hidden=!(m&&m.note);if(m&&m.note)$("mapNote").textContent=m.note;
   if(!m){filterMap();return}
   const want=BASE==="jm"&&m.jm&&!m.tiles?m.jm:m.img;$("baseBtn").hidden=!m.jm;mapImg.style.visibility=useTiles()?"hidden":"";if(TL.size&&tilesEl.dataset.f!==String(FL)){tilesEl.innerHTML="";TL.clear()}tilesEl.dataset.f=String(FL);schedTiles();$("baseBtn").textContent=BASE==="jm"&&m.jm?"底圖：探索地圖":"底圖：wiki 地圖";
-  {const ds=$("dgSel"),dl=FL===1?Object.keys(dgMeta()).filter(d=>dgMeta()[d].frame):[];ds.hidden=!dl.length;   // 第 1 層 / dungeon switch
-   if(dl.length){ds.innerHTML=`<option value="">地圖：第 ${FL} 層</option>`+dl.map(d=>`<option value="${d}">地下城：${esc(dgName(d))}</option>`).join("");ds.value=m.dg||""}}
+  // dungeon maps are opened from the dungeon page (「在地圖上看」); the map tab itself has no dungeon list (user 2026-11-08「不用放地下城」)
+  $("dgSel").hidden=true;{const b=$("dgBack");b.hidden=!m.dg;if(m.dg)b.textContent=`← 回到第 ${FL} 層（目前：${dgName(m.dg)}）`}
   $("stage").classList.toggle("dgmode",!!m.dg);
   if(m.dg){const ls=$("layerSel"),ks=Object.keys(m.e.layers).sort((a,b)=>(a==="day"?99:+a.slice(1))>(b==="day"?99:+b.slice(1))?-1:1);ls.hidden=ks.length<2;
    ls.innerHTML=ks.map(k=>`<option value="${k}">高度：${esc(m.e.layers[k].label||k)}</option>`).join("");ls.value=dgKey();
    $("baseBtn").hidden=true;$("jmCredit").hidden=true;mapImg.style.visibility="hidden";
    [mapImg,$("tiles")].forEach(e=>{e.style.maskImage="";e.style.webkitMaskImage=""});
-   $("mapNote").hidden=false;$("mapNote").textContent=`正在看 ${dgName(m.dg)} 的地圖（玩家上傳的 JourneyMap，${m.e.date} 更新，${m.e.layers[dgKey()].label}）。黑色是還沒有人上傳的地方。地下城的座標和第 1 層不同；左上角的選單可以切回第 1 層。`;
+   $("mapNote").hidden=false;$("mapNote").textContent=`正在看 ${dgName(m.dg)} 的地圖（玩家上傳的 JourneyMap，${m.e.date} 更新，${m.e.layers[dgKey()].label}）。黑色是還沒有人上傳的地方。地下城的座標和第 1 層不同；按左上角「回到第 1 層」切回去。`;
    $("stage").style.setProperty("--noteh","42px");world.querySelectorAll(".areas").forEach(n=>n.remove());
    if(!fitted)requestAnimationFrame(dgFit);SRCH_ALL=false;return}
-  {const ls=$("layerSel"),keys=Object.keys(jmLayersMeta()).filter(k=>{const n=+k.slice(1);return n>=JMP.LMIN&&n<=JMP.LMAX}).sort((a,b)=>+b.slice(1)-+a.slice(1));ls.hidden=!(useTiles()&&keys.length);
-   if(!ls.hidden){ls.innerHTML=[`<option value="day">高度：地面</option>`,`<optgroup label="室內・洞穴（有屋頂遮住的地方，依高度）">`,...keys.map(k=>`<option value="${k}">高度 ${esc(layerLabel(k))}</option>`),`</optgroup>`].join("");ls.value=curLayer()?JML:"day"}}
-  if(useTiles()&&curLayer()){const LY=curLayer();$("mapNote").hidden=false;$("mapNote").textContent=`正在看高度 ${LY.label} 的室內・洞穴地圖（JourneyMap 的洞穴地圖，只畫有屋頂遮住的地方：洞穴、地下室、建築和塔的室內；${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳或那個高度沒有室內。可以到「協作區」用「打包探索地圖」上傳。`}
+  // one 「地下」 option instead of every height (user 2026-11-08「直接整合成地下」): tiles/f1jm_under = all heights combined by
+  // tools/jm_merge.py (build_under); the per-height sets stay for the packing tool and quest maps
+  $("layerSel").hidden=true;
+  if(useTiles()&&curLayer()){const LY=curLayer();$("mapNote").hidden=false;$("mapNote").textContent=`${JML==="under"?`正在看地下（玩家上傳的 JourneyMap 洞穴地圖，所有高度合成一張：洞穴、地下室、建築的室內；和地面一樣的地面高度室內不算；${LY.date} 更新）。彩色是有地下資料的地方，黑色是還沒有人上傳或那裡沒有地下。按左上角「回到地面」切回去。`:`正在看高度 ${LY.label} 的室內・洞穴地圖（JourneyMap 的洞穴地圖，只畫有屋頂遮住的地方：洞穴、地下室、建築和塔的室內；${LY.date} 更新）。彩色是玩家上傳過的地方，黑色是還沒有人上傳或那個高度沒有室內。`}可以到「協作區」用「打包探索地圖」上傳。`}
   else if(BASE==="jm"&&m.jm){$("mapNote").hidden=false;$("mapNote").textContent=`彩色是 JourneyMap 記錄到的探索區域（${m.jmDate} 更新，${m.jmPct?"約佔地圖 "+m.jmPct+"%，":""}${m.jmN?"含 "+m.jmN+" 份玩家上傳，":""}1 格 1 像素，放大會更清楚），其餘為變暗的 wiki 地圖。可以到「協作區」上傳你的 JourneyMap 補上沒探索的地方。`}
   {const cr=$("jmCredit"),C=BASE==="jm"&&m&&m.jm&&!(useTiles()&&curLayer())?jmCredits():null;cr.hidden=!C;   // contributors of the explored map, under the base toggle
    if(C){const pc=n=>{const p=n/C.tot*100;return p>=0.1?p.toFixed(1)+"%":"<0.1%"},top=C.rows.slice(0,5),rest=C.rows.slice(5);
@@ -3284,7 +3442,7 @@ function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.
   $("flNo").textContent=f+"F";$("flNm").textContent=`第 ${f} 層`;   // no floor name: the game has no confirmed floor names (user 2026-11-02 chose A)
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
   const Fx=F();$("floorInfo").innerHTML=`<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
-  $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PRV().length;$("nRec").textContent=ALLREC.length;if(ROUTE)clearRoute();
+  $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PRV().length;$("nRec").textContent=RCV.length;if(ROUTE)clearRoute();
   $("nItem").textContent=matPool(f,false).length;$("nNpc").textContent=NPCS(f).length;fillNpcArea();
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);if(f!==1)DGV=null;fitted=false;renderMap();renderZoneList()}
 // phones: fold bar for every browse tab's filters (hidden on wider screens by CSS)
@@ -3336,14 +3494,22 @@ function actControls(sec){const out=[];sec.querySelectorAll(".filters .fgroup,.t
     if(all&&on&&on!==all)out.push({lab,val:on.textContent.replace(/\s*\d+\s*$/,"").trim(),clr:()=>all.click()})});
   g.querySelectorAll("select").forEach(x=>{if(/Sort$/.test(x.id)||x.selectedIndex<=0)return;out.push({lab,val:x.options[x.selectedIndex].text,clr:()=>{x.selectedIndex=0;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
   g.querySelectorAll("input[type=checkbox]").forEach(x=>{if(!x.checked)return;out.push({lab:"",val:(x.closest("label")||{}).textContent.trim(),clr:()=>{x.checked=false;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
-  g.querySelectorAll("input[type=search]").forEach(x=>{if(!x.value.trim())return;out.push({lab,val:x.value.trim(),clr:()=>{x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})});
+  g.querySelectorAll("input[type=search]").forEach(x=>{if(!x.value.trim())return;
+    // picked effects: one chip each (user 2026-11-09「應該要分開」), 且／或 in the label when there are several
+    // 且／或 is its own chip that switches the mode (「且跟或也要分開」)
+    // 且 and 或 as two groups (「且跟或各別顯示」); ⇄ moves an effect to the other group
+    if(x.id==="fEqEff"&&EFF_SEL.length){[["and","且（一定要有）"],["or","或（有其中一個就好）"]].forEach(([m,g])=>EFF_SEL.filter(z=>effMode(z)===m).forEach(z=>out.push({lab,val:z,grp:g,
+      pre:{t:"⇄",title:`移到「${m==="and"?"或":"且"}」`,fn:()=>window.__effToggle(z)},clr:()=>window.__effPick(EFF_SEL.filter(y=>y!==z))})));return}
+    out.push({lab,val:x.value.trim(),clr:()=>{x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})});
   const nums=[...g.querySelectorAll("input[type=number]")];if(nums.some(x=>x.value))out.push({lab,val:nums.map(x=>x.value||"…").join("～"),clr:()=>nums.forEach(x=>{if(x.value){x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})})});
   return out}
 function actSync(){const sec=$("view-"+view);if(!sec||!sec.classList.contains("browse"))return;const rh=sec.querySelector(".results>.rhead");if(!rh)return;
   let box=rh.querySelector(".actf");if(!box){box=document.createElement("div");box.className="actf";rh.appendChild(box)}
   const cs=actControls(sec);box.hidden=!cs.length;
-  box.innerHTML=cs.map((c,i)=>`<button type="button" class="af" data-i="${i}" title="取消這個條件">${c.lab?`<b>${esc(c.lab)}</b>`:""}${esc(c.val)}<span aria-hidden="true">✕</span></button>`).join("")+(cs.length>1?'<button type="button" class="afx">全部清除</button>':"");
+  // c.pre: a small switch in front of the chip (效果's 且／或)
+  box.innerHTML=cs.map((c,i)=>`${c.grp&&(!i||cs[i-1].grp!==c.grp)?`<span class="afgl">${esc(c.grp)}</span>`:""}${c.pre?`<span class="afw"><button type="button" class="afm" data-p="${i}" title="${esc(c.pre.title||"")}" aria-label="${esc(c.val)}：${esc(c.pre.title||"")}">${esc(c.pre.t)}</button>`:""}<button type="button" class="af" data-i="${i}" title="取消這個條件">${c.lab?`<b>${esc(c.lab)}</b>`:""}${esc(c.val)}<span aria-hidden="true">✕</span></button>${c.pre?"</span>":""}`).join("")+(cs.length>1?'<button type="button" class="afx">全部清除</button>':"");
   box.querySelectorAll(".af").forEach(b=>b.onclick=()=>{cs[+b.dataset.i].clr();setTimeout(actSync,0)});
+  box.querySelectorAll(".afm").forEach(b=>b.onclick=()=>{cs[+b.dataset.p].pre.fn();setTimeout(actSync,0)});
   const x=box.querySelector(".afx");if(x)x.onclick=()=>{cs.slice().reverse().forEach(c=>c.clr());setTimeout(actSync,0)}}
 document.addEventListener("click",e=>{if(e.target.closest(".filters,.topf,.rsel"))setTimeout(actSync,0)});
 document.addEventListener("change",e=>{if(e.target.closest(".filters,.topf,.rsel"))setTimeout(actSync,0)});
