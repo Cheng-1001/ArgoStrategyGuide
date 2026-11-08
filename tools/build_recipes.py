@@ -65,6 +65,17 @@ SHOTS = {
         ('Glacial Essence', 'a', 60, [['Frost Dust', 32]], '40', 'acc'),
         ('Glacial Amulet', 'b', 30, [['Glacial Magic Shard', 12], ['Birch String', 1]], '33', 'acc'),
     ],
+    # 2026-11-08 站長截圖：隱藏野狼手套（狼之谷冰窖 X 2493 Y 70 Z 3702）、隱藏雄鹿腰帶（雪原土洞 X 3653 Y 132 Z 1328），都只有一個配方
+    'Secret Accessory Blacksmith': [
+        ('Gloves of the Wolves', 'a', 60, [['Wolf Fur', 32], ['Wolf Fangs', 16]], '40', 'acc'),
+    ],
+    'Secret Deer Belt Merchant': [
+        ('Belt of the Stags', 'a', 60, [['Mountain Stag Hide', 20]], '40', 'acc'),
+    ],
+    # 2026-11-07 站長截圖（中文介面工坊，NPC 中文名「隱藏黏液戒指」）：黏液之戒 EPIC 1m 35
+    'Secret Sticky Ring Merchant': [
+        ('Sticky Ring', 'a', 60, [['Slime Jelly', 12], ['Essence of Gorbel', 3], ['Slime Core', 8]], '35', 'acc'),
+    ],
     'Slime Accessories': [
         ('Slimy Ring', 'c', 15, [['Slime Jelly', 8]], '25', 'acc'),
         ('Gelatinous Bracelet', 'b', 30, [['Slime Jelly', 12], ['Slime Core', 4]], '28', 'acc'),
@@ -228,7 +239,7 @@ SHOTS = {
     ],
 }
 # the screenshot showed the NPC's whole list: drop reference-map rows the game no longer has
-FULL = {'Occult Merchant - Amulet', 'Occult Merchant - Bracelet', 'Occult Merchant - Ring', 'Occult Merchant - Gloves', 'Occult Merchant - Artifacts', 'Wolf Accessories', 'Corrupted Boar Accessories', "Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
+FULL = {'Secret Accessory Blacksmith', 'Secret Deer Belt Merchant', 'Secret Sticky Ring Merchant', 'Occult Merchant - Amulet', 'Occult Merchant - Bracelet', 'Occult Merchant - Ring', 'Occult Merchant - Gloves', 'Occult Merchant - Artifacts', 'Wolf Accessories', 'Corrupted Boar Accessories', "Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
 SAME = {"Katana Training": "Training Katana", "Beginner Leggings": "Beginner's Leggings", "Bandit's Gloves": "Gloves of the Bandit", "Bracelet of the Sylvan": "Bracelet of the Sylve", "Amulet of the Sylvan": "Amulet of the Sylve"}          # reference-map name -> in-game name
 # material names used in game / by the reference map -> this site's ITEMS ids
 MAT = {"Sylve Shoot": "Sylve Sprout", "Sylvan Sprout": "Sylve Sprout", "Essence Slime": "Slime Essence", "Tear Slime": "Slime Tear"}   # reference-map name -> in-game name. 2026-11-07 merchant audit: the other

@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="b9e670a29f">
+<meta name="sao-build" content="86f7015e1c">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -168,7 +168,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .mqn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:600 13px var(--f-mono)}
 .rcard .mats{display:flex;gap:4px 6px;align-items:center;flex-wrap:wrap;font-size:12.5px}
 .spawnl{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;margin-top:4px}
-.recipes .mats{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}.recipes .mats .slot{vertical-align:middle}.recipes .v{text-align:right;line-height:1.3}
+.recipes .mats{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}.recipes .mats .slot{vertical-align:middle}.mats.mblk{display:flex;margin-top:3px}.recipes .v{text-align:right;line-height:1.3}
 .mqn.est{background:none;color:var(--accent);border:2px dashed var(--accent)}.mqn.nonum{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
 .mqt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.mqt b{font-family:var(--f-display);font-size:15px;font-weight:600;overflow-wrap:anywhere}.mqt span{font-size:12px;color:var(--muted)}
 .mq p{margin:0;font-size:13px;color:var(--muted)}
@@ -882,7 +882,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=376c1a61"></script>
+<script src="data.js?v=058fcc87"></script>
 <script src="data23.js?v=cfc1cce9"></script>
 <script src="bosses.js?v=77b7ad43"></script>
 <script src="reports.js?v=091d538a"></script>
@@ -892,19 +892,19 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="mainq.js?v=89f237c4"></script>
 <script src="equip.js?v=afe010ec"></script>
 <script src="props.js?v=a6c9503f"></script>
-<script src="gameinfo.js?v=14cfc23a"></script><script src="buyback.js?v=4371e5e3"></script>
-<script src="npcs.js?v=cbbfd938"></script>
-<script src="changelog.js?v=dc1a6d93"></script>
-<script src="recipes.js?v=5279ff8b"></script>
+<script src="gameinfo.js?v=265d1660"></script><script src="buyback.js?v=4371e5e3"></script>
+<script src="npcs.js?v=4172ed19"></script>
+<script src="changelog.js?v=9f6cc5f6"></script>
+<script src="recipes.js?v=9163d1ce"></script>
 <script src="jmmeta.js?v=5b0ffd74"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
 <script src="classes.js?v=877782cc"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
-<script src="events.js?v=ab89224b"></script>
+<script src="events.js?v=000795eb"></script>
 <script src="gacha.js?v=48cf03e8"></script>
-<script src="gamestats.js?v=289d1a40"></script>
-<script src="sets.js?v=f82a42f6"></script>
-<script src="zhnames.js?v=686e1ed2"></script>
+<script src="gamestats.js?v=148e7b9e"></script>
+<script src="sets.js?v=fcb047a5"></script>
+<script src="zhnames.js?v=1ed0ea0d"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=5f21ae39"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1007,7 +1007,7 @@ const ITEMS={...S1.ITEMS};
 Object.entries(window.SAO23_ITEMS).forEach(([id,r])=>{ITEMS[id]={id,fr:r[0],r:r[1],lv:r[2],cat:r[3],lore:r[4],dmg:r[5],st:r[6],ic:r[7],...(S23.extra[id]||{})}});
 Object.entries(S23.unknown).forEach(([id,x])=>{ITEMS[id]={id,fr:null,r:null,lv:null,cat:"unknown",lore:null,dmg:null,st:null,ic:-1,...x}});
 // 2026-11-04 (user option 1A): items renamed to the English name the game shows; old wiki names still resolve and are searchable
-const ITEM_OLD={"Shark Shell": "Shark Carapace", "Small Pouch": "Small Purse", "Leaf Fragment": "Leaf Fragments", "Skeleton Mage Staff": "Magic Staff of the Ruins", "Narax's Ring": "Ring of Narax", "Bandit Crossbow": "Crossbow of the Bandits", "Reaper's Ring": "Ring of the Fallen", "Warden's Soul": "Soul of the Warden", "Herald's Soul": "Soul of the Herald", "Reaper's Soul": "Soul of the Reaper", "Swordsmans Scroll": "Swordsman's Scroll", "Archers Scroll": "Archer's Scroll", "Souls of the Ruins": "Soul of the Ruins", "Albal's Fangs": "Fangs of Albal", "Nymbréa's Heart": "Heart of Nymbrea", "Sylvan Sprout": "Sylve Sprout", "Glacial Hardhide": "Hard Glacial Hide", "Gorbel Essence": "Essence of Gorbel", "Allium": "Allium Flower", "Bear Soul Fragment": "Fragment of the Bear's Soul", "Spectral Mane Piece": "Piece of Spectral Mane", "Colossus Hammer": "Hammer of the Colossus", "Royal Halberd": "Halberd of the Warden", "Bone Sword": "Skeletal Sword", "Bandit Dagger": "Bandit's Dagger", "Sylvan Shield": "Sylvan Pavise", "Sylvan Mage Staff": "Sylvan Staff", "Skeleton Shaman Staff": "Magic Staff of the Revenants"};
+const ITEM_OLD={"Pumba's Ring": "Ring of Pumba", "Shark Shell": "Shark Carapace", "Small Pouch": "Small Purse", "Leaf Fragment": "Leaf Fragments", "Skeleton Mage Staff": "Magic Staff of the Ruins", "Narax's Ring": "Ring of Narax", "Bandit Crossbow": "Crossbow of the Bandits", "Reaper's Ring": "Ring of the Fallen", "Warden's Soul": "Soul of the Warden", "Herald's Soul": "Soul of the Herald", "Reaper's Soul": "Soul of the Reaper", "Swordsmans Scroll": "Swordsman's Scroll", "Archers Scroll": "Archer's Scroll", "Souls of the Ruins": "Soul of the Ruins", "Albal's Fangs": "Fangs of Albal", "Nymbréa's Heart": "Heart of Nymbrea", "Sylvan Sprout": "Sylve Sprout", "Glacial Hardhide": "Hard Glacial Hide", "Gorbel Essence": "Essence of Gorbel", "Allium": "Allium Flower", "Bear Soul Fragment": "Fragment of the Bear's Soul", "Spectral Mane Piece": "Piece of Spectral Mane", "Colossus Hammer": "Hammer of the Colossus", "Royal Halberd": "Halberd of the Warden", "Bone Sword": "Skeletal Sword", "Bandit Dagger": "Bandit's Dagger", "Sylvan Shield": "Sylvan Pavise", "Sylvan Mage Staff": "Sylvan Staff", "Skeleton Shaman Staff": "Magic Staff of the Revenants"};
 const ikey=n=>ITEMS[n]?n:(ITEM_OLD[n]&&ITEMS[ITEM_OLD[n]]?ITEM_OLD[n]:n);
 Object.entries(ITEM_OLD).forEach(([o,n])=>{if(ITEMS[n])(ITEMS[n].aka=ITEMS[n].aka||[]).push(o)});
 (window.SAO_REPORTS||[]).forEach(r=>{(r.drops||[]).forEach(d=>{d[0]=ikey(d[0])});(r.mats||[]).forEach(m=>{m[0]=ikey(m[0])})});
@@ -1074,7 +1074,7 @@ let SRCH_ALL=false;const catOn=k=>SRCH_ALL||!FILT[k];
 const spotCat=sp=>sp.kind==="poi"?(sp.tp?"tp":"land"):sp.kind==="mob"?"area":sp.kind;
 const spotVisible=sp=>catOn(spotCat(sp))||(sp.tp&&catOn("tp"))||(sp.kind==="mob"&&catOn("mobs"));
 const townCat=t=>t.tp?"tp":"land";
-const npcHit=(n,s)=>!!s&&norm(n.n+" "+npcN(n.n)+" "+(NPCCAT[n.c]?NPCCAT[n.c][0]:"")+" "+NGRP[npcGrp(n.c)][0]+" "+n.c.replace(/([A-Z])/g," $1")).includes(s);
+const npcHit=(n,s)=>!!s&&norm(n.n+" "+npcN(n.n)+" "+npcEn(n.n)+" "+(NPCCAT[n.c]?NPCCAT[n.c][0]:"")+" "+NGRP[npcGrp(n.c)][0]+" "+n.c.replace(/([A-Z])/g," $1")).includes(s);
 // 搜尋時，名字（或類別）符合的 NPC 就算篩選關著也顯示（使用者 2026-11-03）
 const npcVisible=n=>(catOn("npc")&&!FILT["npc:"+npcGrp(n.c)])||npcHit(n,Sq());
 // subtitle under a place title: confirmed French in-game names (codex csrc, teleport tp, zone fr) that differ from the title, then Chinese (user 2026-11-04)
@@ -1082,7 +1082,11 @@ const npcVisible=n=>(catOn("npc")&&!FILT["npc:"+npcGrp(n.c)])||npcHit(n,Sq());
 const ZHO=window.SAO_ZHNAMES||{},ZMOB=ZHO.mobs||{},ZMOBN=ZHO.mobsByName||{},ZPL=ZHO.places||{},ZNPC=ZHO.npcs||{};
 const mN=m=>(m.floor===1&&m.num&&ZMOB[m.num])||ZMOBN[m.name]||m.name;
 const pN=o=>(o&&ZPL[o.n])||(o&&o.n)||"";
-const npcN=s=>ZNPC[s]||s;
+// NPC display names (2026-11-08, user「NPC 再檢查一次，名子有問題」): the npcs.js key stays (recipes, buy-back lists and notes join on it);
+// npcEn = the game's name where a screenshot shows one (zhnames.js npcEn), and never the site's own "(2)"
+const ZNPCEN=ZHO.npcEn||{};
+const npcEn=s=>ZNPCEN[s]||String(s).replace(/\s*\(2\)/,"");
+const npcN=s=>ZNPC[s]||npcEn(s);
 // official Chinese quest titles + journal text (zhnames.js quests, keyed by the site's English title; user 2026-11-07)
 const ZQ=ZHO.quests||{};
 const qZ=qq=>{const k=qq.t||qq.title||"";if(ZQ[k])return ZQ[k];const m=k.match(/^(.*?)（續）$/);return m&&ZQ[m[1]]?{zh:ZQ[m[1]].zh+"（續）",cont:1}:null};
@@ -1161,7 +1165,8 @@ function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[
     pts.map((p,i)=>[pts.length>1?`${i+1}. ${c(p)}`:c(p),p[0],p[1]]),f,true);if(s!=null&&pts.length>1)RW.sel=s+1}
 function goMapThen(f,fn){const ph=matchMedia("(max-width:820px)").matches;if(ph){closeP();const g=fn;fn=()=>{g();requestAnimationFrame(()=>stage.scrollIntoView({block:"start",behavior:"smooth"}))}}if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
 const nameOf=s=>s.type==="c"?(c=>c?cN(c):"職業")(CLS.find(c=>c.id===s.id)):s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?npcN((npcById(s.id)||{n:"NPC"}).n):s.type==="q"?(Q=>Q?((qZ(Q)||{}).zh||Q.title):"任務")(questById(s.id)):s.type==="m"?mN(monById[s.id]):s.type==="i"?(zhI(s.id)||s.id):s.type==="e"?dn(eqById[s.id]):s.type==="p"?dn(prById[s.id]):s.type==="s"?(spotById(s.id)||{n:"?"}).n:s.type==="d"?(EVT.dungeons.find(d=>d.id===s.id)||{n:"活動"}).n:townById[s.id].n;
-const detailHTML=(t,i)=>t==="c"?classDetail(i):t==="r"?recipeDetail(i):t==="n"?npcDetail(i):t==="q"?questDetail(i):t==="m"?monDetail(i):t==="i"?itemDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):t==="s"?spotDetail(i):t==="d"?evDgDetail(i):townDetail(i);
+const detailHTML=(t,i)=>zhHTML(detailHTML0(t,i));
+const detailHTML0=(t,i)=>t==="c"?classDetail(i):t==="r"?recipeDetail(i):t==="n"?npcDetail(i):t==="q"?questDetail(i):t==="m"?monDetail(i):t==="i"?itemDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):t==="s"?spotDetail(i):t==="d"?evDgDetail(i):townDetail(i);
 // class panel (user 2026-11-07「調整一下版面」): on the classes tab the panel fills the space right of the class column; one inner column when that is narrow
 // desktop (user 2026-11-07「右邊沒必要再開一個視窗」): on the classes tab the class panel is part of the page — no frame, title bar or ✕,
 // it fills everything right of the class column (cls-inline); another panel opened from it is a normal panel again
@@ -1326,7 +1331,7 @@ function dgLootHTML(sp,pre){const d=sp.dg;if(!d||!d.loot)return"";
   <div class="note srcn">地下城資料取自站長的遊戲截圖（${esc(d.date)}，遊戲的 Dungeons 視窗${d.title&&d.title!==sp.n?`，視窗名稱寫「${esc(d.title)}」`:""}）。其他難度的掉落還沒有截圖。</div>`}
 function dgKeyRows(sp){const {want,hit}=dgKeys(sp);
   return hit.length?`<ul class="rows">${hit.map(r=>{const p=prById[String(r.oid)],pz=p&&zhE(p);
-    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(pz||r.en)}${pz?` <span class="muted" style="font-weight:400">${esc(r.en)}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(matRef(m).nm)+" ×"+q).join("・"):"只要珂爾"}</span></span><span class="v">${costText(r.cost)}</span></button></li>`}).join("")}</ul>`
+    return`<li><button class="lrow" data-go="r|${r.i}">${recIcon(r,32)}<span class="t"><b>${esc(pz||r.en)}${pz?` <span class="muted" style="font-weight:400">${esc(recEnD(r))}</span>`:""}</b><span>${r.mats.length?r.mats.map(([m,q])=>esc(matRef(m).nm)+" ×"+q).join("・"):"只要珂爾"}</span></span><span class="v">${costText(r.cost)}</span></button></li>`}).join("")}</ul>`
     :want?`<div class="note">需要 ${esc(want)}，本站還沒有它的製作方式。</div>`:`<div class="muted dgcap">還沒有這個地下城的鑰匙資料。</div>`}
 function dgEntryHTML(sp){
   return`<h3 class="sec">怎麼進去</h3><dl class="facts"><dt>入口</dt><dd><span class="mono">X ${sp.x} · Z ${sp.z}</span>${sp.u?"（在地下）":""}　<button class="linkbtn" data-spot="${sp.id}">在地圖上查看</button></dd>${sp.tp?`<dt>傳送</dt><dd>🌀 遊戲傳送選單：${esc(sp.tp)}</dd>`:""}</dl><div class="dgsub">需要的鑰匙</div>${dgKeyRows(sp)}
@@ -1522,7 +1527,7 @@ const bbIcon=(en,go)=>{if(GICON[en])return recicImg(GICON[en],32);if(!go)return`
 const buybackHTML=n=>{const L=BB.items[n.n];if(!L||!L.length)return"";
   return`<h3 class="sec">回收物品 <span class="c">${L.length}</span></h3><ul class="rows bbl">${L.map(([en,p])=>{const go=bbGo(en),nm=bbName(en,go);return`<li>${go?`<button class="lrow" data-go="${esc(go)}">`:`<div class="lrow">`}${bbIcon(en,go)}<span class="t"><b>${esc(nm)}</b>${nm!==en?`<span>${esc(en)}</span>`:""}</span><span class="v">收購價 ${esc(p)} 珂爾</span>${go?"</button>":"</div>"}</li>`}).join("")}</ul>
   <div class="note srcn">回收物品取自遊戲物品說明的取得方式（「Bought back by ${esc(BB.shops[n.n]||n.n)}」「由…回收」，站長截圖 2026-11-04～11-07）。只列出截圖裡看過的物品，NPC 實際收購的可能更多；用「協作區」回報可以補上。</div>`};
-const npcCardHit=(n,s)=>!s||norm([n.n,npcN(n.n),NGRP[npcGrp(n.c)][0],npcRegion(n).label,...(BB.items[n.n]||[]).flatMap(([en])=>[en,bbName(en,bbGo(en))])].join(" ")).includes(s);
+const npcCardHit=(n,s)=>!s||norm([n.n,npcN(n.n),npcEn(n.n),NGRP[npcGrp(n.c)][0],npcRegion(n).label,...(BB.items[n.n]||[]).flatMap(([en])=>[en,bbName(en,bbGo(en))])].join(" ")).includes(s);
 function renderNpcs(){const s=Sq(),area=$("fNpcArea").value;
   const all=NPCS(FL).map(n=>({n,r:npcRegion(n),g:npcGrp(n.c)}));
   const gHas=new Set(all.map(x=>x.g));$("fNpcGrp").querySelectorAll(".chip").forEach(c=>c.hidden=c.dataset.v!=="all"&&!gHas.has(c.dataset.v)&&c.getAttribute("aria-pressed")!=="true");
@@ -1531,7 +1536,7 @@ function renderNpcs(){const s=Sq(),area=$("fNpcArea").value;
   const R={};a.forEach(x=>{(R[x.r.k]=R[x.r.k]||{label:x.r.label,xs:[]}).xs.push(x)});
   const ks=Object.keys(R).sort((p,q)=>(p==="~wild")-(q==="~wild")||R[q].xs.length-R[p].xs.length||R[p].label.localeCompare(R[q].label));
   $("lNpc").innerHTML=a.length?ks.map(k=>`<h3 class="npcgh">${esc(R[k].label)}<span class="c">${R[k].xs.length} 位</span></h3>`+R[k].xs.sort((p,q)=>NPC_GORDER.indexOf(p.g)-NPC_GORDER.indexOf(q.g)||npcN(p.n.n).localeCompare(npcN(q.n.n))).map(({n,g})=>{const G=NGRP[g],rc=RECIPES[n.n]?RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)):[],mk=rc.filter(r=>!isShop(r)).length,sl=rc.length-mk,bb=(BB.items[n.n]||[]).length;
-    return`<button class="card" data-key="n|${n.id}" data-go="n|${n.id}"><div class="chead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${G[1]}</span><div class="cname"><b>${esc(npcN(n.n))}</b><span>${npcN(n.n)!==n.n?esc(n.n)+"・":""}${esc(G[0])}${n.u===2?"・地下室":n.u?"・在地下":""}</span></div></div>
+    return`<button class="card" data-key="n|${n.id}" data-go="n|${n.id}"><div class="chead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${G[1]}</span><div class="cname"><b>${esc(npcN(n.n))}</b><span>${npcN(n.n)!==npcEn(n.n)?esc(npcEn(n.n))+"・":""}${esc(G[0])}${n.u===2?"・地下室":n.u?"・在地下":""}</span></div></div>
     <div class="cmeta">${mk?`<span>可以製作 ${mk}</span>`:""}${sl?`<span>${mk?"· ":""}販售 ${sl}</span>`:""}${bb?`<span>${mk||sl?"· ":""}回收 ${bb} 種</span>`:""}${n.src==="beta"?`<span class="pill">測試版資料</span>`:""}</div></button>`}).join("")).join(""):`<div class="empty-note">沒有符合條件的 NPC。</div>`;
   bindGo($("lNpc"));markSel()}
 
@@ -1570,7 +1575,7 @@ function clusterPts(pts,X,Z,d){const C=[];pts.forEach(p=>{const px=X(p[1]),pz=Z(
 const numLab=ns=>{const a=ns.map(Number);if(ns.length>=3&&a.every((v,i)=>Number.isInteger(v)&&(!i||v===a[i-1]+1)))return a[0]+"–"+a[a.length-1];return ns.join("・")};
 // 路線圖上畫附近的傳送點和地標當參考（使用者 2026-11-03）：只畫在畫面範圍內的，名稱在點下方，不能點
 function refMarks(f,X,Z,bx,by,bw,bh,u){const Fx=FLOORS[f];const L=[];
-  (Fx.towns||[]).forEach(t=>L.push([t.n,t.x,t.z,!!t.tp]));spotsOf(f).forEach(p=>{if(p.tp||p.kind==="poi")L.push([p.n,p.x,p.z,!!p.tp])});
+  (Fx.towns||[]).forEach(t=>L.push([pN(t),t.x,t.z,!!t.tp]));spotsOf(f).forEach(p=>{if(p.tp||p.kind==="poi")L.push([pN(p),p.x,p.z,!!p.tp])});
   return L.filter(([,x,z])=>x!=null&&X(x)>=bx&&X(x)<=bx+bw&&Z(z)>=by&&Z(z)<=by+bh).map(([n,x,z,tp])=>{const cx=X(x),cz=Z(z),r=u*0.42;
     return`<g class="refm" aria-hidden="true">${tp?`<circle cx="${cx}" cy="${cz}" r="${r}" fill="#e8a23a" stroke="#fff" stroke-width="${r*0.35}"/>`:`<rect x="${cx-r*0.8}" y="${cz-r*0.8}" width="${r*1.6}" height="${r*1.6}" transform="rotate(45 ${cx} ${cz})" fill="#e8a23a" stroke="#fff" stroke-width="${r*0.3}"/>`}<text x="${cx}" y="${cz+r+u*0.95}" font-size="${u*0.95}" text-anchor="middle" font-weight="700" fill="#fff" stroke="rgba(0,0,0,.75)" stroke-width="${u*0.22}" paint-order="stroke">${esc(n)}</text></g>`}).join("")}
 function routeMini(steps,f,noLine){const m=FLOORS[f].map;if(!m)return"";const pts=steps.map((x,k)=>[x[4]??(k+1),x[1],x[2]]).filter(p=>p[1]!=null);if(!pts.length)return"";
@@ -1626,7 +1631,7 @@ const RECIPE_BY_EQ={},RECIPE_BY_MAT={};Object.entries(RECIPES).forEach(([npc,r])
   if(it[0]!=null)(RECIPE_BY_EQ[it[0]]=RECIPE_BY_EQ[it[0]]||[]).push(row);it[3].forEach(([m])=>(RECIPE_BY_MAT[m]=RECIPE_BY_MAT[m]||[]).push(row))}));
 const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
 // NPC 的位置直接寫在配方／裝備資料裡（使用者 2026-11-03：原本要點 3 次才知道在哪裡做）：最近的城鎮或傳送點＋可點的座標
-const nearPlace=(f,x,z)=>{let b=null,d=1e9;FLOORS[f].towns.forEach(t=>{const k=Math.hypot(t.x-x,t.z-z);if(k<d){d=k;b=t.n}});spotsOf(f).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-x,p.z-z);if(k<d){d=k;b=p.n}});return d<=400?b:null};
+const nearPlace=(f,x,z)=>{let b=null,d=1e9;FLOORS[f].towns.forEach(t=>{const k=Math.hypot(t.x-x,t.z-z);if(k<d){d=k;b=pN(t)}});spotsOf(f).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-x,p.z-z);if(k<d){d=k;b=pN(p)}});return d<=400?b:null};
 const npcWhere=n=>{if(!n)return"";const near=nearPlace(n.floor,n.x,n.z);return`<span class="npcw">📍 ${near?esc(near)+" 附近・":""}${FLOORS[n.floor].map?`<button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">X ${n.x} · Z ${n.z}</button>`:`X ${n.x} · Z ${n.z}`}${n.u===2?"（地下室）":n.u?"（地下）":""}</span>`};
 // a recipe material -> this site's item, or the official item with the same in-game English name (gameinfo / zhnames), or just the name
 // (2026-11-07, user: 藥水配方素材沒有更新: Wheat Flower, Lavender… are official items 1835-1841 but were shown as 「本站還沒有這個物品的資料」)
@@ -1648,14 +1653,17 @@ function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=
   const ri=r.i!=null?r.i:ALLREC.findIndex(x=>x.npc===r.npc&&x.en===r.en);
   const go=showNpc?(n?"n|"+n.id:""):(e?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid:ri>=0?"r|"+ri:"");const rar=e?e.r:r.r;const tag=go?"button":"div";
   return`<li><${tag} class="lrow"${go?` data-go="${go}"`:""}>${showNpc?`<span class="th sm" style="--ring:var(--ref)" aria-hidden="true">${NGRP[npcGrp(n?n.c:"accessoriesBlacksmith")][1]}</span>`:recIcon(r,34)}
-    <span class="t"><b>${showNpc?esc(npcN(r.npc)):esc(recZh(r,e||prById[String(r.oid)])||r.en)}</b><span>${showNpc?(npcN(r.npc)!==r.npc?esc(r.npc)+"・":""):recZh(r,e||prById[String(r.oid)])?esc(r.en)+"・":(e?esc(dn(e))+"・":"")+(RAR[rar]?RAR[rar][0]+((r.mats||[]).length?"・":""):"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${isShop(r)?`<span class="shopt">販售</span><br>`:r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}>${showNpc&&n?`<div class="npcw-row">${npcWhere(n)}</div>`:""}</li>`}).join("")}</ul>`}
+    <span class="t"><b>${showNpc?esc(npcN(r.npc)):esc(recZh(r,e||prById[String(r.oid)])||recEnD(r))}</b><span>${(showNpc?[npcN(r.npc)!==npcEn(r.npc)?esc(npcEn(r.npc)):""]:recZh(r,e||prById[String(r.oid)])?[esc(recEnD(r))]:[e?esc(dn(e)):"",RAR[rar]?RAR[rar][0]:""]).filter(Boolean).join("・")}${(r.mats||[]).length?`<span class="mats mblk">${matText(r.mats)}</span>`:""}</span></span><span class="v">${isShop(r)?`<span class="shopt">販售</span><br>`:r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}>${showNpc&&n?`<div class="npcw-row">${npcWhere(n)}</div>`:""}</li>`}).join("")}</ul>`}
 // NPCs whose menus are not recipes (owner's screenshots 2026-11-03): recycling = give one item, get Recycling Coins
-const recyTable=(rows,more)=>`<ul class="rows">${rows.map(([it,c,sec])=>`<li><div class="lrow"><span class="t"><b>${esc(it)}</b><span>交出 1 個 → Recycling Coins ×${c}</span></span><span class="v">${sec} 秒<br><span class="muted">免費</span></span></div></li>`).join("")}</ul>${more?`<div class="note">${more}</div>`:""}`;
+// recycling lists (user 2026-11-08 screenshot of 飾品回收): official Chinese name + icon + link like the other lists; English name underneath
+const recyTable=(rows,more)=>`<ul class="rows">${rows.map(([it,c,sec])=>{const r=matRef(it),nm=/[\u4e00-\u9fff]/.test(r.nm)?r.nm:it;
+  const inner=`${r.ic(32)||'<span class="dgli" aria-hidden="true"></span>'}<span class="t"><b>${esc(nm)}</b><span>${nm!==it?esc(it)+"・":""}交出 1 個 → 回收幣 ×${c}</span></span><span class="v">${sec} 秒<br><span class="muted">免費</span></span>`;
+  return`<li>${r.go?`<button class="lrow" data-go="${r.go}">${inner}</button>`:`<div class="lrow nolink">${inner}</div>`}</li>`}).join("")}</ul>${more?`<div class="note">${more}</div>`:""}`;
 // occult merchants restock (owner 2026-11-07): every item back to 5; the Occult Amulet was seen restocking at 19:00 Taiwan time
 const OCC_RESTOCK=`<h3 class="sec">補貨</h3><div class="note">⏰ 神祕商人的商品會刷新，刷新後<b>每件庫存 5 個</b>，賣完就顯示 Stock 0。站長實測神祕護身符在<b>台灣時間 19:00</b>（巴黎時間 12:00）刷新；手環、戒指、手套、遺物也會刷新、一樣是 5 個（站長 2026-11-07）。</div>`;
 const NPC_NOTE={
-  "Weapon Recycling":`<h3 class="sec">回收（Weapon Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Weapon Recycling - Starting City」：交出武器換 Recycling Coins，全部普通、免費。</div>${recyTable([["Skeletal Sword",3,30],["Magic Staff of the Ruins",3,30],["Magic Staff of the Revenants",3,30],["Sylvan Pavise",3,30],["Hammer of the Colossus",5,30],["Bandit's Dagger",3,30],["Crossbow of the Bandits",3,30]])}`,
-  "Accessory Recycling":`<h3 class="sec">回收（Accessory Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Accessory Recycling - Starting City」：交出飾品換 Recycling Coins，全部普通、免費。</div>${recyTable([["Ring of Pumba",5,30],["Ring of the Reaper",5,30],["Ring of the Fallen",5,30],["Bond of the Sylve",5,30],["Ring of Narax",5,30],["Necklace of Aragorn",5,30],["Flower of a Nepenthes",4,25],["Leg of a Spider",4,25],["Skull of a Wolf",4,25]])}`,
+  get "Weapon Recycling"(){return `<h3 class="sec">武器回收（Weapon Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Weapon Recycling - Starting City」：交出武器換回收幣（Recycling Coins），全部普通、免費。</div>${recyTable([["Skeletal Sword",3,30],["Magic Staff of the Ruins",3,30],["Magic Staff of the Revenants",3,30],["Sylvan Pavise",3,30],["Hammer of the Colossus",5,30],["Bandit's Dagger",3,30],["Crossbow of the Bandits",3,30]])}`},
+  get "Accessory Recycling"(){return `<h3 class="sec">飾品回收（Accessory Recycling）</h3><div class="muted" style="font-size:12.5px">遊戲視窗「F1 - Accessory Recycling - Starting City」：交出飾品換回收幣（Recycling Coins），全部普通、免費。</div>${recyTable([["Ring of Pumba",5,30],["Ring of the Reaper",5,30],["Ring of the Fallen",5,30],["Bond of the Sylve",5,30],["Ring of Narax",5,30],["Necklace of Aragorn",5,30],["Flower of a Nepenthes",4,25],["Leg of a Spider",4,25],["Skull of a Wolf",4,25]])}`},
   "Alchemist":`<h3 class="sec">位置</h3><div class="note">在起始之城建築的<b>二樓</b>，名牌是「[NPC] Alchemist」。一樓那個金色名牌、頭上有綠色任務水晶的「Alchemist」是任務 NPC，不是這一個。旁邊的 Crystallographer 也在二樓。另外 Buy 分頁賣一般藥水 I～III（和收購商同價）。</div>`,
   "Crystallographer":`<h3 class="sec">位置</h3><div class="note">在起始之城建築的<b>二樓</b>，和「[NPC] Alchemist」在同一層。</div>`,
   "Vault":`<h3 class="sec">倉庫</h3><div class="note">個人倉庫（My vault），一開始有 1 頁，再買 1 頁要 25000 珂爾。</div>`,
@@ -1667,6 +1675,9 @@ const NPC_NOTE={
   "Occult Merchant - Ring":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖：入口一帶 X 3326 · Z 1736，房間裡 X 3321 · Z 1731）。NPC 頭上沒有名牌；視窗「Occult Merchant - Ring」賣 1 件 Occult Ring（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>${OCC_RESTOCK}`,
   "Occult Merchant - Gloves":`<h3 class="sec">位置</h3><div class="note">在 Tolbana 民宅<b>畫後面的隱藏地下室</b>（站長 2026-11-07 確認）。入口是牆上的一幅畫（旁邊有深色格子板、開花的盆栽和書架），直接走進畫裡就是地下室（站長截圖，Gloves 的房間是依時間推斷：入口一帶 X 3363 · Z 1683，房間裡 X 3369 · Z 1689）。NPC 頭上沒有名牌；視窗「Occult Merchant - Gloves」賣 1 件 Occult Gloves（LEGENDARY，5 024.91 珂爾，有庫存數量）。</div>${OCC_RESTOCK}`,
   "Corrupted Boar Accessories":`<h3 class="sec">位置</h3><div class="note">在 Boar Zone（野豬區）的小屋裡，名牌是「[NPC] Accessory Blacksmith」，點他開的視窗叫「Corrupted Boar Accessories」（站長 2026-11-07 截圖：玩家座標 X 1778 Z 3527～3533 Y 28）。參考互動地圖沒有這個 NPC。</div>`,
+  "Secret Accessory Blacksmith":`<h3 class="sec">位置</h3><div class="note">在狼之谷（Vallée des Loups）的<b>隱藏冰室</b>：高石柱頂上的樹葉堆中間有一個方形豎井（站長 2026-11-08 截圖：井口 X 2492 · Z 3700，Y 85），往下跳到底（Y 70）就是藍冰牆的小房間，NPC 站在裡面（X 2493 · Z 3702）。頭上沒有名牌，點他開的工坊在遊戲裡叫「隱藏野狼手套」，只做群狼手套。</div>`,
+  "Secret Deer Belt Merchant":`<h3 class="sec">位置</h3><div class="note">在雪原的<b>泥土洞穴</b>裡（站長 2026-11-08 截圖）：洞口旁有石階、透得到日光（玩家座標 X 3663 · Z 1317，Y 125），往裡走到小房間，NPC 在 X 3653 · Z 1328（Y 132）。頭上沒有名牌，點他開的工坊在遊戲裡叫「隱藏雄鹿腰帶」，只做雄鹿腰帶。</div>`,
+  "Cursed Ruins - Loot Buyer":`<h3 class="sec">位置</h3><div class="note">在詛咒遺跡裡長滿青苔的<b>小石室</b>（站長 2026-11-08 截圖：玩家座標 X 2857 · Z 4489，Y 25），名牌是「[NPC] 戰利品收購商」。南邊的廢棄城堡高處（X 2834 · Z 4704，Y 113）還有另一位，賣的東西一樣。</div>`,
   "Auction House":`<h3 class="sec">拍賣場</h3><div class="note">玩家之間買賣物品的拍賣場，起始之城有好幾個 Auction House NPC。</div>`
 };
 // loot buyers and the Starting Town merchants sell these for Col from their Buy tab: no crafting
@@ -1676,6 +1687,7 @@ const SHOP_CATS=new Set(["lootBuyers","toolMerchants"]);
 const isShop=r=>{const n=npcByName(r.f,r.npc);return!!n&&SHOP_CATS.has(n.c)||r.src==="shot"&&!(r.mats||[]).length&&r.sec==null&&!!r.cost&&r.cost!=="Free"};
 const howTitle=rs=>{const sh=rs.filter(x=>isShop(x)).length;return!sh?"製作方式":sh===rs.length?"NPC 販售":"製作或購買"};
 const RC_CAT={weapon:["武器","⚔️"],armor:["防具","🛡️"],acc:["飾品","💍"],potion:["藥水","🧪"],key:["鑰匙","🗝️"],other:["其他","📦"]};
+const recEnD=r=>r.en.replace(/ \(2\)$/,"");   // display name: the "(2)" only tells two same-named rows apart inside the site
 const ALLREC=Object.entries(RECIPES).flatMap(([npc,r])=>r.items.map(it=>recRow(npc,r.floor,it)));ALLREC.forEach((r,i)=>r.i=i);
 // recipe level: game screen > official catalogue > reference map (user 2026-11-04 rule 遊戲畫面 → wiki → 參考互動地圖; 2026-11-05 asked
 // why the catalogue ranked above the game). Game = the item's Specifications popup (gamestats.js); the catalogue (2026-10-31) is often
@@ -1687,7 +1699,7 @@ const ALLREC=Object.entries(RECIPES).flatMap(([npc,r])=>r.items.map(it=>recRow(n
    else if(o&&r.src==="ref"&&r.lv&&r.lv!==o){r.lvRef=r.lv;r.lvRefSrc="參考互動地圖";r.lv=o;r.lvSrc="catalog"}})}
 let rcCat="all";
 chipsInto($("fRcCat"),[["all",`全部 <b>${ALLREC.length}</b>`],...Object.entries(RC_CAT).map(([k,[l,ic]])=>[k,`${ic} ${l} <b>${ALLREC.filter(r=>r.cat===k).length}</b>`])],()=>rcCat,v=>rcCat=v,renderRecipes);
-$("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(ALLREC.map(r=>r.npc))].sort().map(n=>`<option value="${esc(n)}">${esc(npcN(n))}${npcN(n)!==n?`（${esc(n)}）`:""}</option>`).join("");
+$("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(ALLREC.map(r=>r.npc))].sort().map(n=>`<option value="${esc(n)}">${esc(npcN(n))}${npcN(n)!==npcEn(n)?`（${esc(npcEn(n))}）`:""}</option>`).join("");
 $("fRcNpc").onchange=renderRecipes;$("fRcSort").onchange=renderRecipes;
 const RECIC=window.SAO_RECICONS||{};
 // game icons (tools/recipe_icons.py) win over the official catalogue's: its potion pictures are shared placeholders
@@ -1706,7 +1718,7 @@ function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value
   a.sort((x,y)=>so==="lv"?(x.lv||0)-(y.lv||0)||x.en.localeCompare(y.en):so==="name"?x.en.localeCompare(y.en):x.npc.localeCompare(y.npc)||(x.lv||0)-(y.lv||0));
   $("cRc").textContent=`${a.length} / ${ALLREC.length} 筆`;
   $("lRc").innerHTML=a.length?a.map(r=>{const e=eqById[String(r.oid)]||prById[String(r.oid)];const go=recGo(r);const rar=e?e.r:r.r;const tag="button";
-    return`<${tag} class="card rcard" data-go="r|${r.i}" data-key="r|${r.i}"><div class="chead">${recIcon(r)}<div class="cname"><b>${esc(recZh(r,e)||r.en)}</b><span>${recZh(r,e)?esc(r.en)+"・":potZh(r.en)?esc(potZh(r.en))+"・":""}${e&&!recZh(r,e)&&dn(e)!==r.en?esc(dn(e))+"・":""}${isShop(r)?"販售・":""}${esc(npcN(r.npc))}</span></div></div>
+    return`<${tag} class="card rcard" data-go="r|${r.i}" data-key="r|${r.i}"><div class="chead">${recIcon(r)}<div class="cname"><b>${esc(recZh(r,e)||recEnD(r))}</b><span>${recZh(r,e)?esc(recEnD(r))+"・":potZh(r.en)?esc(potZh(r.en))+"・":""}${e&&!recZh(r,e)&&dn(e)!==r.en?esc(dn(e))+"・":""}${isShop(r)?"販售・":""}${esc(npcN(r.npc))}</span></div></div>
     <div class="cmeta">${RAR[rar]?`<span class="pill ${RAR[rar][1]}">${RAR[rar][0]}</span>`:""}<span>${RC_CAT[r.cat][0]}</span>${r.lv?`<span>· 等級 ${r.lv}</span>`:""}<span>· ${costText(r.cost)}</span>${r.sec?`<span>· ${r.sec} 秒</span>`:""}${r.src==="shot"?'<span class="pill rep">遊戲截圖</span>':r.src==="rep"?'<span class="pill rep">玩家回報</span>':""}</div>
     <div class="mats">${r.mats.length?matText(r.mats):'<span class="muted">只要 珂爾</span>'}</div></${tag}>`}).join(""):`<div class="empty-note">沒有符合條件的配方。</div>`;
   bindGo($("lRc"));markSel()}
@@ -1740,7 +1752,7 @@ function evDgDetail(id){const d=EVT.dungeons.find(x=>x.id===id);if(!d)return`<di
   <div class="note">${esc(d.fragRate)}</div>
   <h3 class="sec">免費抽轉蛋的流程</h3><ol class="mqs">${d.loop.map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
   ${(d.notes||[]).map(x=>`<div class="note">${esc(x)}</div>`).join("")}
-  <h3 class="sec">Halloween Forge：用 Dark Gift Pumpkin 換武器</h3><p>找 ${esc(d.forge.npc)}。</p>${tb(["武器","職業","南瓜","需求等級"],d.forge.rows.map(r=>[esc(r[0]),esc(r[1]),r[2],r[3]==null?"":r[3]]))}
+  <h3 class="sec">Halloween Forge：用黑暗贈禮南瓜換武器</h3><p>找 ${esc(d.forge.npc)}。</p>${tb(["武器","職業","南瓜","需求等級"],d.forge.rows.map(r=>[esc(r[0]),esc(r[1]),r[2],r[3]==null?"":r[3]]))}
   <div class="note">${esc(d.forge.extra)}</div><div class="note">${esc(d.forge.lvNote)}</div>
   <h3 class="sec">即將開放</h3><ul>${d.soon.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
   <div class="note srcn">資料來源：官方公告〈<a href="${esc(d.src.url)}" target="_blank" rel="noopener">${esc(d.src.title)}</a>〉（${esc(d.src.date)}），文字是本站改寫。</div>`}
@@ -1888,13 +1900,13 @@ function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
 function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找不到這個配方。</div>`;
   const eX=r.oid==null&&EQX_BY[r.en]?eqById[EQX_BY[r.en]]:null;   // game-only equipment (Elite Treant set…): no catalogue id, matched by English name
   const e=eX||eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),shop=isShop(r),rar=e?e.r:r.r,isE=!!(eX||eqById[String(r.oid)]);
-  return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} ${shop?"NPC 販售":"配方"}・${RC_CAT[r.cat][0]}</div><h2>${esc(recZh(r,e)||r.en)}</h2>${e||potZh(r.en)||recZh(r,e)?`<div class="sub">${(recZh(r,e)?[r.en,e&&!e.extra&&e.name]:[potZh(r.en),e&&e.name]).filter(Boolean).map(esc).join("・")}</div>`:""}</div></div>
+  return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} ${shop?"NPC 販售":"配方"}・${RC_CAT[r.cat][0]}</div><h2>${esc(recZh(r,e)||recEnD(r))}</h2>${e||potZh(r.en)||recZh(r,e)?`<div class="sub">${(recZh(r,e)?[r.en,e&&!e.extra&&e.name]:[potZh(r.en),e&&e.name]).filter(Boolean).map(esc).join("・")}</div>`:""}</div></div>
   <dl class="facts"><dt>${shop?"在哪裡買":"在哪裡做"}</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button><br>${npcWhere(n)}`:esc(npcN(r.npc))}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvSrc==="game"?` <span class="muted" style="font-size:12px">（遊戲物品說明${r.lvRef?`；${esc(r.lvRefSrc)}寫 ${r.lvRef}`:""}）</span>`:r.lvRef?` <span class="muted" style="font-size:12px">（${esc(r.lvRefSrc)}寫 ${r.lvRef}，遊戲截圖還沒有這件，暫用官網圖鑑）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(pN(x))}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RQTY[r.npc+"|"+r.en]?`<dt>產量</dt><dd>每次做 ${RQTY[r.npc+"|"+r.en]} 個</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
   <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m0,q])=>{const m=ikey(m0),R=matRef(m0);return R.go?`<li><button class="lrow" data-go="${esc(R.go)}">${R.ic(32)}<span class="t"><b>${esc(R.nm)}</b>${R.nm!==m0?`<span>${esc(m0)}</span>`:""}<span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow">${GICON[m]?recicImg(GICON[m],32):""}<span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`}).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
   ${setPotHTML(r.en)}${r.oid?"":giHTML(GI_EN[norm(r.en)])+gachaHTML(r.en)}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
-  return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(npcN(n.n))}</h2><div class="sub">${npcN(n.n)!==n.n?esc(n.n)+"・":""}${c[0]}${n.u===2?"・在地下室":n.u?"・在地下":""}</div></div></div>
+  return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(npcN(n.n))}</h2><div class="sub">${npcN(n.n)!==npcEn(n.n)?esc(npcEn(n.n))+"・":""}${c[0]}${n.u===2?"・在地下室":n.u?"・在地下":""}</div></div></div>
   ${ty&&ty[0]!==g[0]?`<dl class="facts"><dt>類型</dt><dd>${esc(ty[0])}<span class="muted">（參考互動地圖的分類）</span></dd></dl>`:""}
   <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
   ${RECIPES[n.n]?`${(()=>{const rs=RECIPES[n.n].items.map(it=>recRow(n.n,n.floor,it)),mk=rs.filter(r=>!isShop(r)),sl=rs.filter(isShop);return(mk.length?`<h3 class="sec">可以製作 <span class="c">${mk.length}</span></h3>${recipeTable(mk)}`:"")+(sl.length?`<h3 class="sec">販售 <span class="c">${sl.length}</span></h3>${recipeTable(sl)}`:"")})()}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RECIPES[n.n].items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
@@ -2040,6 +2052,54 @@ $("fEqEff").addEventListener("input",()=>requestAnimationFrame(actSync));
 const EQ_CAT_EN={sword:"sword weapon",dagger:"dagger weapon",bow:"bow weapon",crossbow:"crossbow weapon",staff_mage:"staff weapon",staff_shaman:"staff weapon",shield:"shield offhand",catalyst:"catalyst offhand",quiver:"quiver offhand",armor:"armor",amulet:"amulet necklace accessory",ring:"ring accessory",bracelet:"bracelet accessory",gloves:"gloves glove accessory",artifact:"relic artifact accessory",acc:"accessory"};
 const eqSetN=e=>{const st=[e.gen,FR2ID[e.name]].filter(Boolean).map(n=>SET_BY[norm(n)]).find(Boolean);return st?st.name+" "+(SET_ZH[st.name]||""):""};
 window.__detail=(t,i)=>detailHTML(t,i);window.__iconFor=en=>{const r=matRef(en);if(r.go||GICON[en])return r.ic(48);const e=EQ.find(x=>norm(x.name)===norm(en))||PR.find(x=>norm(x.name)===norm(en));return e?(EQ.includes(e)?eslot(e,48):pslot(e,48)):""};window.__auditIds=()=>({m:ALLM.map(m=>m.id),e:EQ.map(e=>String(e.oid)),p:PR.map(e=>String(e.oid)),i:Object.keys(ITEMS),r:ALLREC.map(r=>String(r.i)),n:FL_KEYS.flatMap(f=>NPCS(f).map(n=>n.id)),q:[...FL_KEYS.flatMap(f=>MQ(f).map((_,i)=>"mq"+f+"_"+i)),...ALLQ.map(q=>q.id)],s:FL_KEYS.flatMap(f=>spotsOf(f).map(s=>s.id)),t:ALLT.map(t=>t.id),c:CLS.map(c=>c.id)});   // site-wide audit hooks (2026-11-07 全站檢查)
+// untranslated-name audit (2026-11-08, user: 網站一直有沒翻的，難道我要一個一個檢查): every name a floor-1 player meets in game that has no
+// official Chinese yet, with a hint of where in the game its Chinese name can be screenshotted. Used by tests/zh_gap.js.
+// official Chinese inside Chinese sentences (2026-11-08, user: 網站一直有沒翻的): hand-written notes, quest steps and labels such as
+// 「前往 Virelune」「Vallhat 附近」 keep data keyed by English; at display time, text nodes that contain Chinese get every English
+// name that has an official Chinese name swapped for it. Pure-English text (subtitles, game originals, codex hints), 「原文：」 text,
+// the game's own wording and English quoted in （）「」() are left alone; longer English names without a Chinese name (Tolbana Mountains,
+// Fire Skeleton Archer…) are protected so their parts are not half-translated.
+let ZT=null;
+function zhTextRe(){if(ZT)return ZT;const m=new Map();const keep=s=>{if(s&&!m.has(s)&&!/[一-鿿]/.test(s))m.set(s,null)};
+  Object.entries(ZHO.terms||{}).forEach(([e,z])=>m.set(e,z));Object.entries(ZPL).forEach(([e,z])=>{if(!m.has("Shop - "+e))m.set("Shop - "+e,"商店-"+z)});
+  window.__zhDict().forEach(([e,z])=>{if(e.length>2&&!m.has(e))m.set(e,z)});   // first one wins: places come before NPCs (Candelia = 坎德莉亞, not the shop)
+  ALLT.forEach(o=>{if(pN(o)===o.n)keep(o.n)});FL_KEYS.forEach(f=>{spotsOf(f).forEach(o=>{if(pN(o)===o.n)keep(o.n)});NPCS(f).forEach(n=>{if(!ZNPC[n.n])keep(npcEn(n.n))})});
+  ALLM.forEach(o=>{if(mN(o)===o.name)keep(o.name)});Object.keys(ITEMS).forEach(k=>{if(!zhI(k))keep(k)});EQ.concat(PR).forEach(e=>{if(e.gen&&!zhE(e))keep(e.gen)});
+  SETS.sets.forEach(s=>{if(!SET_ZH[s.name])keep(s.name)});
+  const ks=[...m.keys()].sort((a,b)=>b.length-a.length).map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
+  ZT={re:new RegExp("(?<![A-Za-z'’])(?:"+ks.join("|")+")(?![A-Za-z])","g"),m};return ZT}
+// decided per 「・」 segment: subtitles such as 「Wolf Fur・Fourrure de Loup・材料」 keep their English, 「Virelune 湖・鯊魚」 is converted
+function zhText(s){if(!/[一-鿿]/.test(s)||s.includes("原文："))return s;const {re,m}=zhTextRe();const H=/[一-鿿]/;
+  return s.split(/(・)/).map(part=>!H.test(part)||/^\s*本站名稱/.test(part)?part:
+    part.split(/(（[^（）]*）|「[^「」]*」|\([^()]*\))/).map(seg=>/^[（「(]/.test(seg)&&!H.test(seg)?seg:seg.replace(re,x=>m.get(x)||x).replace(/F1 - (?=[一-鿿])/g,"第1層-")).join("")).join("")}
+function zhHTML(h){const T=document.createElement("template");T.innerHTML=h;
+  const w=document.createTreeWalker(T.content,NodeFilter.SHOW_TEXT);const L=[];while(w.nextNode())L.push(w.currentNode);
+  L.forEach(n=>{if(n.parentElement&&n.parentElement.closest(".sten,.effen,.hfr,.lore,code"))return;const v=zhText(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v});
+  return T.innerHTML}
+window.__zhText=s=>zhText(s);window.__detail0=(t,i)=>detailHTML0(t,i);window.__zhDict=()=>{const d=[];const add=(en,zh)=>{if(en&&zh&&en!==zh&&!/[\u4e00-\u9fff]/.test(en))d.push([en,zh])};
+  Object.entries(ZPL).forEach(([e,z])=>add(e,z));Object.entries(ZNPC).forEach(([e,z])=>{add(e,z);add(npcEn(e),z)});
+  ALLM.forEach(m=>add(m.name,mN(m)));ZHL.forEach(z=>add(z.en,z.zh));Object.entries(ZQ).forEach(([e,z])=>add(e,z.zh));return d};   // English -> official Chinese, for tests/zh_gap.js text scan
+window.__zhGap=()=>{const gst=(window.SAO_GAMESTATS||{}).items||{},recBy={},matIn={};
+  ALLREC.forEach(r=>{if(r.oid!=null)(recBy[String(r.oid)]=recBy[String(r.oid)]||[]).push(r);r.mats.forEach(m=>(matIn[ikey(m[0])]=matIn[ikey(m[0])]||[]).push(r))});
+  const gi=e=>GI_OID[e.oid]||(e.gen&&GI_EN[norm(e.gen)]);
+  const where=(rs,g)=>rs&&rs.length?(isShop(rs[0])?"商店 ":"工坊 ")+npcN(rs[0].npc)+"："+recEnD(rs[0]):g&&(g.obt||[])[0]?String(g.obt[0]):"";
+  const out=[];
+  EQ.concat(PR).forEach(e=>{const k=String(e.oid),rs=recBy[k],g=gi(e);const game=!!(g||gst[k]||rs||e.extra);if(!game||zhE(e))return;
+    out.push({k:EQ.includes(e)?"裝備":"道具",en:e.gen||"",fr:e.name,where:where(rs,g)})});
+  Object.keys(ITEMS).forEach(id=>{if(offOf(id)||zhI(id))return;const s=(SOURCES[id]||[]).length+(GATHER[id]||[]).length,m=matIn[id];if(!s&&!m&&!GI_SITE[id])return;
+    const src=(SOURCES[id]||[])[0];out.push({k:"素材",en:id,fr:ITEMS[id].fr||"",where:src&&src.m?"掉落："+mN(src.m):m?"配方材料："+npcN(m[0].npc):""})});
+  FL_KEYS.forEach(f=>{if(f!==1)return;
+    NPCS(f).forEach(n=>{if(!ZNPC[n.n]&&!/[\u4e00-\u9fff]/.test(n.n))out.push({k:"NPC",en:npcEn(n.n),fr:"",where:"X "+n.x+" Z "+n.z})});
+    ALLT.filter(t=>t.floor===f||!t.floor).forEach(t=>{if(pN(t)===t.n)out.push({k:"城鎮",en:t.n,fr:t.tp||"",where:""})});
+    spotsOf(f).forEach(s=>{if(pN(s)===s.n)out.push({k:"地點",en:s.n,fr:s.tp||s.csrc||"",where:s.x!=null?"X "+s.x+" Z "+s.z:""})});
+    FLOORS[f].M.forEach(m=>{if(mN(m)===m.name)out.push({k:"怪物",en:m.name,fr:"",where:m.num?"圖鑑 #"+m.num:""})})
+    MQ(f).concat(ALLQ.filter(q=>q.floor===f||q.f===f)).forEach(q=>{if(!qZ(q)&&(q.t||q.title||!ZNPC[q.npc]))out.push({k:"任務",en:q.t||q.title||"支線（只有 NPC 名稱）："+q.npc,fr:"",where:q.t||q.title?qNpc(q.npc||""):"截 NPC 名牌或任務日誌"})})});
+  SETS.sets.forEach(s=>{if(!SET_ZH[s.name]&&!/[一-鿿]/.test(s.name))out.push({k:"套裝",en:s.name,fr:"",where:"成員："+s.members.join("、")})});
+  return out};
+window.__nameAudit=()=>{const recEn={};ALLREC.forEach(r=>{if(r.oid!=null)(recEn[String(r.oid)]=recEn[String(r.oid)]||new Set()).add(r.en)});
+  const zhEn={};ZHL.forEach(z=>(z.ids||[]).forEach(id=>{if(z.en)zhEn[id]=z.en}));
+  const row=(t,e)=>({t,oid:String(e.oid),fr:e.name,gen:e.gen||"",title:dn(e),zh:zhE(e)||"",rec:[...(recEn[String(e.oid)]||[])],zhen:zhEn[t+"|"+e.oid]||"",cat:e.cat||""});
+  return EQ.map(e=>row("e",e)).concat(PR.map(e=>row("p",e)))};   // name audit hook (2026-11-08)
 window.__eqDump=()=>EQ.map(e=>({oid:e.oid,gen:e.gen||"",name:e.name,zh:zhE(e),lv:e.lv,dmg:e.dmg,st:e.st,r:e.r,extra:!!e.extra,gst:!!e.cat0,patch:!!e.patch}));   // test/audit hook (2026-11-07 effect audit)
 const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ef=norm($("fEqEff").value.trim());
@@ -2076,6 +2136,10 @@ function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
 // ================= props tab (official catalogue, non-equipment) =================
 const PR=(window.SAO_PROPS||[]).filter(r=>r[2]!=="catalyst").map(r=>({oid:r[0],name:r[1],cat:r[2],r:r[3],lv:r[4]||0,lore:r[5],st:r[6]||{},ic:r[7]}));
 const prById=Object.fromEntries(PR.map(e=>[String(e.oid),e]));PR.forEach(e=>{if(GI_OID[e.oid])e.gen=GI_OID[e.oid].en});
+// (2026-11-08 name check, user「物品也要檢查」) an item without a game English name from its description takes the one in the
+// owner's recipe / shop screenshots (src shot), e.g. Amulette Sylvestre = Amulet of the Sylve, Cagoule de Bandit = Bandit Hood
+{const shotEn={};ALLREC.forEach(r=>{if(r.src==="shot"&&r.oid!=null&&!shotEn[String(r.oid)])shotEn[String(r.oid)]=recEnD(r)});
+ EQ.concat(PR).forEach(e=>{if(!e.gen&&shotEn[String(e.oid)])e.gen=shotEn[String(e.oid)]})}
 // rarity seen in the game's shop / crafting windows (recipes.js rows from screenshots) wins over the official catalogue (2026-11-07 merchant
 // audit: Forest Key, Spider Bracelet are COMMON and Gloves of the Stags RARE in the game; the catalogue says otherwise). A tooltip rarity
 // in gamestats.js (r) is kept.
@@ -2186,7 +2250,7 @@ const enGo=n=>{const k=norm(n);let e=EQ.find(x=>x.gen&&norm(x.gen)===k);if(e)ret
   const it=Object.keys(ITEMS).find(x=>norm(x)===k);if(it)return"i|"+it;const ri=ALLREC.findIndex(r=>norm(r.en)===k);return ri>=0?"r|"+ri:null};
 const setPotHTML=(...names)=>{const ns=names.filter(Boolean).map(norm);const st=ns.map(n=>SET_BY[n]).find(Boolean),po=ns.map(n=>POT_BY[n]).find(Boolean);let h="";
   if(po)h+=`<h3 class="sec">遊戲寫的效果</h3><ul class="gieff">${po.effects.map(x=>`<li>${effLine(x)}</li>`).join("")}</ul>`;
-  if(st)h+=`<h3 class="sec">${icK("set")}套裝效果・${esc(SET_ZH[st.name]||st.name)}${SET_ZH[st.name]?` <span class="muted" style="font-weight:400;text-transform:none;letter-spacing:0">${esc(st.name)}</span>`:""}</h3><table class="settbl"><tbody>${st.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${effLine(e)}</td></tr>`).join("")}</tbody></table>
+  if(st)h+=`<h3 class="sec">${icK("set")}套裝效果・${esc(SET_ZH[st.name]||st.name)}${SET_ZH[st.name]?` <span class="muted" style="font-weight:400;text-transform:none;letter-spacing:0">${esc(st.name)}</span>`:""}</h3><table class="settbl"><tbody>${st.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${st.zh?esc(e):effLine(e)}</td></tr>`).join("")}</tbody></table>
     <div class="muted" style="font-size:12.5px;margin-top:4px">同一套：${st.members.map(m=>{const g=enGo(m);return g&&!ns.includes(norm(m))?`<button class="linkbtn" data-go="${esc(g)}">${esc(zhGo(g)||m)}</button>`:esc(zhGo(g)||m)}).join("、")}</div>`;
   return h?h+`<div class="note srcn">套裝效果和藥水效果取自遊戲裡的物品提示（站長截圖 ${esc(SETS.date||"")}），原文照遊戲。</div>`:""};
 function propDetail(id){GI_NODESC=1;try{return propDetail0(id)}finally{GI_NODESC=0}}
@@ -2535,9 +2599,9 @@ const jmInBox=it=>!JMSEL.off.has(it.rx+","+it.rz);
 // place names of a square: towns / teleport points / dungeons inside it, else the nearest town ("… 附近")
 function jmRegNames(rx,rz){const F1=FLOORS[1],x0=rx*512,z0=rz*512,ins=p=>p.x>=x0&&p.x<x0+512&&p.z>=z0&&p.z<z0+512;
   const pl=[...F1.towns,...F1.spots.filter(p=>p.tp||p.kind==="dungeon")].filter(p=>p.x!=null);
-  const n=pl.filter(ins).map(p=>p.n);if(n.length)return n;
+  const n=pl.filter(ins).map(p=>pN(p));if(n.length)return n;
   const cx=x0+256,cz=z0+256,t=F1.towns.filter(p=>p.x!=null).sort((a,b)=>Math.hypot(a.x-cx,a.z-cz)-Math.hypot(b.x-cx,b.z-cz))[0];
-  return t?[t.n+" 附近"]:[]}
+  return t?[pN(t)+" 附近"]:[]}
 // split the chosen regions into zips of at most BUDGET bytes and MAXN files (tools/jm_merge.py refuses more); each part
 // of a world gets surface regions of that world that overlap the site's map until they cover ANCHOR explored chunks, so
 // the server can verify every part on its own (also when only height layers are packed)
@@ -2737,7 +2801,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
       <g clip-path="url(#jmClip)">${[0,1,2].flatMap(r=>[0,1,2].map(c=>`<image href="tiles/f1jm/0/${c}_${r}.jpg?v=${v}" x="${70+c*2048}" y="${70+r*2048}" width="2048" height="2048" preserveAspectRatio="none"/>`)).join("")}</g>
       ${[...regs.values()].map(r=>{const nm=jmRegNames(r.rx,r.rz),k=r.rx+","+r.rz;
         return`<rect class="jmreg" data-jmreg="${k}" x="${r.rx*512+8}" y="${r.rz*512+8}" width="496" height="496" rx="40" tabindex="0" role="checkbox"><title>${esc(nm.join("、")||"這一格")}：地面 ${r.day} 張、室內・洞穴 ${r.cave} 張</title></rect>`}).join("")}
-      ${FLOORS[1].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(t.n)}</text></g>`).join("")}
+      ${FLOORS[1].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(pN(t))}</text></g>`).join("")}
     </svg></div></section>`:"";
   const dgPart=dgList.length?`<section class="jmsec"><div class="jmsech"><b>地下城</b><span class="muted">同一個地下城進場幾次都合成一張</span>
       ${dgNew.length?`<span class="jmact"><button class="linkbtn" id="jmDgAll">全選</button><button class="linkbtn" id="jmDgNone">清除</button></span>`:""}</div>
@@ -3117,7 +3181,7 @@ function renderZoneList0(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(
     row.querySelector(".zn").onclick=()=>{centerOn(ws[0].x,ws[0].z,2.6);openP("m",m.id,"new")};row.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>repPin(+b.dataset.x,+b.dataset.z));zl.appendChild(row)})});
   const np=NPCS(FL).filter(npcVisible);
   if(np.length){sec("🧑 NPC",np.length);Object.keys(NGRP).forEach(c=>{np.filter(n=>npcGrp(n.c)===c).forEach(n=>{const row=document.createElement("div");row.className="zrow npcrow";row.dataset.tp=n.n+" "+NGRP[c][0]+" "+(NPCCAT[n.c]||[""])[0];
-    row.innerHTML=`<div class="zhead"><button class="zn">${NGRP[c][1]} ${esc(npcN(n.n))}</button><span class="zzh">${npcN(n.n)!==n.n?esc(n.n)+"・":""}${NGRP[c][0]}${n.u===2?"・地下室":n.u?"・地下":""}${n.src==="beta"?"・測試版資料":""}</span>${coord(n.x,n.z)}</div>`;
+    row.innerHTML=`<div class="zhead"><button class="zn">${NGRP[c][1]} ${esc(npcN(n.n))}</button><span class="zzh">${npcN(n.n)!==npcEn(n.n)?esc(npcEn(n.n))+"・":""}${NGRP[c][0]}${n.u===2?"・地下室":n.u?"・地下":""}${n.src==="beta"?"・測試版資料":""}</span>${coord(n.x,n.z)}</div>`;
     row.querySelector(".zn").onclick=()=>{centerOn(n.x,n.z,2.8);openP("n",n.id,"new")};zl.appendChild(row)})})}
   const uz=unknownZones(FL).filter(z=>!userPos[FL][z]);
   if(uz.length){sec("位置未知",uz.length);
