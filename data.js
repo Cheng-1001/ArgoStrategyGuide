@@ -200,6 +200,10 @@ const RAW = {
 "Pickaxe":["Pioche（任務未指定種類）","c",1,"tool","Une pioche rudimentaire, fragile mais suffisante pour débuter.",null,{"Max Durability":768},67],
 "Wheat":["Blé","c",1,"farmer_job","Une céréale simple poussant dans les champs abandonnés",null,null,187],
 "Allium Flower":["Fleur d’Allium","c",1,"farmer_job","Belle fleur violette très utilisée par beaucoup d’alchimiste pour des potions",null,null,186],
+// seeds: picked up when harvesting (owner's game log 2026-11-08: 你獲得了 小麥種子 ×11、紫紅球花種子 ×15); not in the official catalogue.
+// Wheat Seeds is the vanilla Minecraft item (zh_tw 小麥種子); the allium seed is a server item whose English name has not been seen, so its key is the Chinese name
+"Wheat Seeds":[null,"c",1,"farmer_job",null,null,null,null],
+"紫紅球花種子":[null,"c",1,"farmer_job",null,null,null,null],
 // named in quests / bestiary but absent from the official catalogue
 "Curved Bow":[null,null,null,"unknown",null,null,null,-1],
 "Unknown Logs":[null,null,null,"unknown",null,null,null,-1],
@@ -303,6 +307,8 @@ const EXTRA = {
 "Iron Ore":{src:"採礦職業（Mineur）採集"},
 "Wheat":{src:"農夫職業（Agriculteur）種植",vanilla:true,icsrc:"https://zh.minecraft.wiki/w/小麦"},
 "Allium Flower":{src:"農夫職業（Agriculteur）種植",use:["煉金師常用的藥水材料"],vanilla:true,icsrc:"https://zh.minecraft.wiki/w/绒球葱"},
+"Wheat Seeds":{src:"收成小麥時拾取（站長的遊戲紀錄，2026-11-08）；Minecraft 原版物品"},
+"紫紅球花種子":{src:"收成紫紅球花時拾取（站長的遊戲紀錄，2026-11-08）；英文名稱還沒看過"},
 "Violet Broken Fragments":{src:"墮落者迷宮（雙子騎士迷宮）的寶箱"},
 "Ika Armour Set":{src:"以 Ika 甲殼鍛造（依官方描述，配方未公開）",note:"官方圖鑑有兩個版本，數值以較新的「Tunique / Jambières / Bottes d’Ika」為準；舊版另有 Plastron d'Ika。"},
 "Pickaxe":{src:"工具；圖示與數值以新手鎬 Pioche Fêlée 代表",note:"任務原文只寫「3 pioches」，沒有指定哪一種。"},
@@ -386,7 +392,7 @@ const SPOTS = [
  {id:"guild",tp:"Guilde Marchand",kind:"poi",n:"Merchant Guild",zh:"商人公會",x:4772,z:2422,src:"ref",note:"商人公會總部，在東北邊的山上。座標取自參考互動地圖。"},
  {id:"mine",kind:"gather",gt:"ore",n:"Aincrad Mine",zh:"Aincrad 礦坑（東礦坑）",x:2396,z:3527,items:["Iron Ore","Copper Ingot"],note:"礦坑。參考互動地圖稱為 East Mines（X 2399 · Z 3510），可採 Coal Ore、Copper、Iron。"},
  {id:"westmine",kind:"gather",gt:"ore",n:"West Mines",zh:"西礦坑",x:986,z:3491,src:"ref",items:["Iron Ore","Copper Ingot"],note:"可採 Coal Ore、Copper、Iron（參考互動地圖）。"},
- {id:"farm",kind:"gather",gt:"crop",n:"Farm",zh:"農田",x:2351,z:3662,src:"ref",items:["Allium Flower","Wheat"],note:"可採 Allium、Wheat（參考互動地圖）。主線 The Essentials 也要你在城鎮東北的田裡採這兩種。"},
+ {id:"farm",kind:"gather",gt:"crop",n:"Farm",zh:"農田",x:2351,z:3662,src:"ref",items:["Allium Flower","Wheat","紫紅球花種子","Wheat Seeds"],note:"可採 Allium、Wheat（參考互動地圖）；收成時也會拿到兩種種子（站長的遊戲紀錄）。主線 The Essentials 也要你在城鎮東北的田裡採這兩種。"},
  {id:"wood",kind:"gather",gt:"wood",n:"Birch & Oak Wood",zh:"樺木・橡木林",x:2641,z:4333,items:["Oak Log","Birch Log"],note:"伐木點。"},
  {id:"harold",kind:"poi",n:"Harold's Quest (Hidden Well)",zh:"Harrold 的任務・隱藏的井",x:4309,z:3697,src:"est",note:"提供的座標是「4309, 36971」，第二個數字超出地圖範圍（最大約 4980），這裡暫時標在 Z 3697。主線「The Chamber Beneath the Fields」：Harrold 說東邊道路上有一口井，夜裡看得到光。"},
  {id:"og",tp:"Quartier OG",kind:"poi",n:"OG Quarter",csrc:"Quartier OG",old:"Quartier OG",zh:"OG 區",x:2312,z:3272},
