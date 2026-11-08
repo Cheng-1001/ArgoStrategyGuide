@@ -1627,7 +1627,7 @@ null,
 [
 2044,
 "Gloves of the Wolves",
-null,
+60,
 [
 [
 "Wolf Fur",
@@ -1639,10 +1639,10 @@ null,
 ]
 ],
 "40",
-null,
+"a",
 "acc",
 5,
-"ref"
+"shot"
 ]
 ]
 },
@@ -1652,7 +1652,7 @@ null,
 [
 1460,
 "Belt of the Stags",
-null,
+60,
 [
 [
 "Mountain Stag Hide",
@@ -1660,10 +1660,10 @@ null,
 ]
 ],
 "40",
-null,
+"a",
 "acc",
 7,
-"ref"
+"shot"
 ]
 ]
 },

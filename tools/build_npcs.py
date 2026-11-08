@@ -35,6 +35,14 @@ SITE=[dict(c='beggar',n='臭乞丐',x=3336,z=1760,u=False,src='site'),
       dict(c='other',n='Labyrinth Archaeologist',x=2389,z=2412,u=False,src='site2'),
       dict(c='other',n='Web Archaeologist',x=1019,z=1178,u=False,src='site2')]   # Arakh'Nol, next to the Xal'Zirith guard; owner's screenshot 2026-11-06 01:58 (minimap x 1019 z 1178 y 116); its window is "Aragorn's Lair - Loot Info" (sell tab)   # Geldorak Mine entrance, owner's screenshot 2026-11-03 22:10   # Tolbana, owner's gameplay video 2026-10-30 (player position next to the NPC)
 res+=SITE
+# reference-map rows that are the same NPC as another one (owner's screenshots 2026-11-08 13:44 / 13:51: at X 1790 Z 4181 the only tags are
+# [NPC] 新手商人 and [NPC] 工具商人 — the Starting Merchant also buys back loot; at X 1021 Z 1178 only [NPC] 蛛網考古學家 (Web Archaeologist,
+# sell-only window "Aragorn's Lair - Loot Info") and the Xal'Zirith guard)
+DROP={'Boar and Wolf loot buyer',"Aragorn's Lair - Loot Buyer"}
+res=[r for r in res if r['n'] not in DROP]
+# underground hideouts the owner reached (2026-11-08): Secret Wolf Gloves = ice room at the bottom of a shaft in Wolf Valley (Y 70)
+for r in res:
+    if r['n'] in ('Secret Accessory Blacksmith',): r['u']=True
 # owner 2026-11-07: every Occult Merchant (Amulet / Artifacts / Bracelet / Gloves / Ring) is in a basement -> u = 2 ("地下室")
 for r in res:
     if r['n'].startswith('Occult Merchant'): r['u']=2

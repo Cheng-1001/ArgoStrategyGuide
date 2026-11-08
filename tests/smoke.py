@@ -195,7 +195,7 @@ with sync_playwright() as p:
     dn = pg.eval_on_selector_all("#lDg .card b", "e=>e.map(x=>x.textContent)")
     check(len(dn) == 5 and dn[0] == "Sanctuary of Souls" and "狗頭人之塔" not in dn and "墮落者迷宮區" in dn, f"dungeons tab lists the event dungeon first, then the 4 floor-1 dungeons, not the boss tower ({dn})")
     pg.click('#lDg [data-go="d|souls"]'); pg.wait_for_timeout(300)
-    check("Sanctuary of Souls Key" in pg.inner_text("#pBody") and pg.locator("#pBody .btbl").count() == 2 and "一般抽取" not in pg.inner_text("#pBody"),
+    check("靈魂聖所鑰匙" in pg.inner_text("#pBody") and pg.locator("#pBody .btbl").count() == 2 and "一般抽取" not in pg.inner_text("#pBody"),
           "event dungeon panel: key recipe, fragment zones and forge tables; no gacha rate table (gacha is only a source)")
     dg = pg.evaluate("(()=>({cols:getComputedStyle(document.getElementById('lDg')).gridTemplateColumns.split(' ').length,keys:document.querySelectorAll('#lDg .th.dgk').length,inline:document.body.classList.contains('cls-inline'),close:!!document.getElementById('pClose').offsetParent,kn:[...document.querySelectorAll('#lDg .dgkn')].map(e=>e.textContent)}))()")
     pg.click('#lDg [data-go="s|xal"]'); pg.wait_for_timeout(250)
@@ -425,7 +425,7 @@ with sync_playwright() as p:
           "NPCs on the map; the filter hides them on the map and in the list")
     pg.click('#fpCats .fchip[data-k="npc"]'); pg.wait_for_timeout(200)
     pg.click('#fpNpc .fchip[data-k="npc:loot"]'); pg.wait_for_timeout(300)
-    check(pg.locator(".zone.npc").count() == n - 18, "NPC function filter: 收購商 hides the 18 buyers (16 loot + 2 weapon buyers) only")
+    check(pg.locator(".zone.npc").count() == n - 16, "NPC function filter: 收購商 hides the 16 buyers (14 loot + 2 weapon buyers; 2026-11-08 two reference-map duplicates dropped) only")
     pg.click("#fpAll"); pg.wait_for_timeout(200)
     pg.click('#fpCats .fchip[data-k="area"]'); pg.click('#fpCats .fchip[data-k="mobs"]'); pg.wait_for_timeout(300)
     check(pg.locator('.zone[data-s="slimes"]').count() == 0 and pg.locator('.town.tp[data-s="wolf"]').count() == 1,

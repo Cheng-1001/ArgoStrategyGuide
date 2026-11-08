@@ -1,8 +1,10 @@
 /* Equipment set bonuses and potion effects as shown in the game's item tooltips (owner's screenshots; not published).
    sets: {name, tiers:[[pieces, effect text as in game]], members:[English item names whose tooltip shows the set]}
    potions: {name, effects:[lines as in game]}. User 2026-11-05: 套裝效果、藥水效果也要寫進去.
+   "zh": 1 = the set was only seen on a Chinese tooltip (English set name unknown): name and tiers are the game's Chinese text, shown as is.
    2026-11-07 checked against the Chinese tooltips: Standard Skeleton Set [4] is +2% Damage Reduction (was -2%); the rest match. */
 window.SAO_SETS = {date:"2026-11-07", sets:[
+ {"name": "森靈套裝", "zh": 1, "tiers": [[2, "+1 HP"], [3, "+0.5 治療加成"], [4, "+0.1 HP/秒、+0.1 魔力/秒、+0.1 耐力/秒"]], "members": ["Amulet of the Sylve"]},
  {"name": "Misty Fangs Set", "tiers": [[2, "+1% Lifesteal"], [3, "+5% Crit Chance, +2.5% Crit Damage"], [4, "+5 Attack Damage, +5% Attack Speed"]], "members": ["Misty Ring"]},
  {"name": "Shark Set", "tiers": [[2, "+5% Ability Haste"], [3, "+3 Health"], [4, "+3% Physical Damage"]], "members": ["Ring of the Shark", "Shark Amulet", "Shark Fang", "Bracelet of the Shark", "Ring of the Leviathan"]},
  {"name": "Standard Skeleton Set", "tiers": [[2, "+5% Ability Haste"], [3, "+0.05 Health/s"], [4, "+2% Damage Reduction"]], "members": ["Skeleton Skull", "Ring of Narax", "Skeletal Ring", "Bony Gloves", "Skeletal Amulet"]},
@@ -10,7 +12,7 @@ window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "Hunter Necromancer Set", "tiers": [[2, "+0.3 Stamina/s"], [3, "+3% Crit Chance, +3% Crit Damage"], [4, "+4 Attack Damage"]], "members": ["Boots of the Hunter Necromancer"]},
  {"name": "Hunter Set", "tiers": [[2, "+0.1 Stamina/s"], [3, "+0.5% Critical Chance"]], "members": ["Hunter's Boots", "Hunter's Leggings"]},
  {"name": "Bandit Set", "tiers": [[2, "+1 Health, +2% Critical Power"], [3, "+0.5 Attack Damage"], [4, "+1% Critical Chance"]], "members": ["Stolen Cloak", "Stolen Amulet", "Bandit Coin"]},
- {"name": "Little Slime Set", "tiers": [[2, "+2 Health"], [3, "+0.05 Health/s, +0.05 Mana/s, +0.05 Stamina/s"], [4, "+5% Cooldown Reduction"]], "members": ["Gelatinous Bracelet", "Gelatinous Cloak", "Slimy Ring", "Sticky Ring"]},
+ {"name": "Little Slime Set", "tiers": [[2, "+2 Health"], [3, "+0.05 Health/s, +0.05 Mana/s, +0.05 Stamina/s"], [4, "+5% Cooldown Reduction"]], "members": ["Gelatinous Bracelet", "Gelatinous Cloak", "Slimy Ring", "Sticky Ring", "Gelatinous Amulet"]},
  {"name": "Elite Treant Set", "tiers": [[2, "+0.5% Critical Chance"], [3, "+2% Movement Speed"], [4, "+5% Projectile Damage"]], "members": ["Elite Gloves", "Elite Carapace", "Elite Bracelet"]},
  {"name": "Corrupted Boar Set", "tiers": [[2, "+0.25 Attack Damage"], [3, "+2 Health"], [4, "+0.25 Attack Damage"]], "members": ["Gloves of the Boar", "Bracelet of the Boar", "Belt of the Boar"]},
  {"name": "Ice Golem Set", "tiers": [[2, "+5 Health"], [3, "+3% Ability Haste, +0.1 Health/s"], [4, "+1 Defense, +2 Health, +2% Skill Damage"]], "members": ["Frozen Bracelet", "Frozen Ring", "Frozen Gloves", "Frozen Amulet", "Bracelet of Ice"]},

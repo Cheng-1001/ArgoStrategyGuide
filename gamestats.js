@@ -92,5 +92,8 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "1379":{"date": "2026-11-07", "en": "boots of the revenant", "lvl": 5, "dmg": null, "st": [["Movement Speed", "+50%"]]},
  "1597":{"date": "2026-11-07", "en": "occult bracelet", "lvl": 10, "dmg": null, "st": [["Defense", "+2"], ["Max Health", "+10"]]},
  "1298":{"date": "2026-11-07", "en": "occult amulet", "lvl": 10, "dmg": null, "st": [["Critical Strike Chance", "+2%"], ["Skill Critical Strike Chance", "+2%"], ["Max Health", "+5"]]},
+ "1592":{"date": "2026-11-08", "en": "gelatinous bracelet", "lvl": 4, "dmg": null, "st": [["Max Health", "+1"], ["Health Regeneration", "+0.05/s"], ["Mana Regeneration", "+0.05/s"], ["Stamina Regeneration", "+0.05/s"]]},   // 膠質手環 史萊姆飾品工坊 2026-11-08_03.33.53.png
+ "1291":{"date": "2026-11-08", "en": "gelatinous amulet", "lvl": 4, "dmg": null, "st": [["Heal Bonus", "+0.5"]]},   // 凝膠護符 史萊姆飾品工坊 2026-11-08_03.33.57.png
+ "1288":{"date": "2026-11-08", "en": "amulet of the sylve", "lvl": 3, "dmg": null, "st": [["Heal Bonus", "+0.5"]], "auc": 1},   // 森靈護符 拍賣場 (owner's screenshot 2026-11-08, sent in chat)
  "1296":{"date": "2026-11-07", "en": "albal's necklace", "lvl": 3, "dmg": null, "st": [["Critical Strike Power", "+1%"], ["Max Health", "+1"], ["Movement Speed", "+5%"]]}
 }};
