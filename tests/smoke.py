@@ -610,8 +610,9 @@ with sync_playwright() as p:
           "report tab shows the F2 screenshot and JourneyMap folder paths with their backslashes")
 
     pg.goto(base + "#f2-report"); pg.wait_for_timeout(400)
-    href = pg.get_attribute("#formGo", "href") or ""
-    check("docs.google.com/forms" in href and href.endswith("=2"), "report tab links to the Google Form with floor 2")
+    # paused while waiting for the game team's reply (2026-11-09): form, suggestion and folder buttons greyed out
+    pz = pg.evaluate("(()=>({href:document.getElementById('formGo').getAttribute('href'),off:document.getElementById('formGo').classList.contains('off'),dir:document.getElementById('jmDir').disabled,pick:document.getElementById('jmPick').classList.contains('off'),note:document.querySelectorAll('.pausenote').length}))()")
+    check(pz["href"] is None and pz["off"] and pz["dir"] and pz["pick"] and pz["note"] >= 2, f"collab area paused: report form and folder button greyed out with a note ({pz})")
     b.close()
 srv.shutdown()
 print("\n" + ("ALL PASSED" if not fails else f"{len(fails)} FAILED"))

@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="0f8808a055">
+<meta name="sao-build" content="5c24ae7da9">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -492,7 +492,7 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .note.ok{border-left:3px solid var(--ok)}
 .steps.big{font-size:14.5px;gap:8px}
 .steps code{font-size:12px;background:var(--panel-2);padding:1px 5px;border-radius:4px}
-.repbtn.big{font-size:17px;padding:12px 22px;align-self:flex-start}
+.repbtn.off{opacity:.45;filter:grayscale(1);cursor:not-allowed;pointer-events:none}.pausenote{font-size:13px}.repbtn.big{font-size:17px;padding:12px 22px;align-self:flex-start}
 .rbtns{display:flex;gap:8px;flex-wrap:wrap}
 .steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px;font-size:13.5px}
 .replist{display:block;padding:10px 12px;margin:0 0 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2)}.replist:last-child{margin-bottom:0}.replist .rhd{font-family:var(--f-display);font-size:14px;font-weight:700;color:var(--fg);margin-bottom:6px}.replist .rhd a{color:inherit}.replist .rbody{display:flex;gap:10px;align-items:flex-start}
@@ -896,7 +896,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=265d1660"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=4172ed19"></script>
-<script src="changelog.js?v=f06077fc"></script>
+<script src="changelog.js?v=c834b0c4"></script>
 <script src="recipes.js?v=9163d1ce"></script>
 <script src="jmmeta.js?v=7238858b"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -2531,7 +2531,7 @@ function feedbackHTML(){return`<div class="rgrid" id="rFeed"><div class="rcol">
     <ul class="uses" style="margin-top:0"><li><b>網站問題</b>：顯示錯誤、按鈕或連結沒反應、手機版跑版、搜尋找不到、地圖點位明顯不對。</li>
       <li><b>功能建議</b>：想要的新功能、版面或操作上的改善。</li><li><b>其他意見</b>：任何想讓攻略更好用的想法。</li></ul>
     <div class="note">有遊戲截圖的資料（怪物、物品、配方、任務、技能、地點、探索地圖）請到「📝 攻略資料維護」用表單回報，審核後會自動更新到網站，比較快。</div>
-    <div class="fbbtns"><a class="repbtn" id="ideaGo" target="_blank" rel="noopener">💡 提出建議 ↗</a><a class="repbtn ghost" href="${GH_ISSUES}/new?template=5-bug.yml" target="_blank" rel="noopener">🐞 回報網站問題 ↗</a></div>
+    ${COLLAB_PAUSE?`<div class="note warn pausenote">${PAUSE_MSG}網站問題仍可用 GitHub 回報。</div>`:""}<div class="fbbtns"><a class="repbtn" id="ideaGo" target="_blank" rel="noopener">💡 提出建議 ↗</a><a class="repbtn ghost" href="${GH_ISSUES}/new?template=5-bug.yml" target="_blank" rel="noopener">🐞 回報網站問題 ↗</a></div>
     <h4 class="sec">提出建議（用 Google 帳號）</h4>
     <ol class="steps"><li>按「💡 提出建議」，用 Google 帳號登入（你的帳號不會公開）。</li>
       <li>「名稱」填一句話的標題，「回報種類」選 <b>建議</b>，下一頁寫建議內容，按「提交」。不用截圖。</li>
@@ -2994,10 +2994,14 @@ let fbCache=null;
 async function loadFeedback(){if(fbCache)return fbCache;
   try{const r=await fetch(GH_ISSUES.replace("github.com","api.github.com/repos")+"?state=open&per_page=100");if(!r.ok)throw 0;
     fbCache=(await r.json()).filter(x=>!x.pull_request&&/^\[(問題|建議)\]/.test(x.title))}catch(e){fbCache="err"}return fbCache}
+// paused while waiting for the game team's reply (user 2026-11-09: a letter to Triggers SAO asks whether the site's data and
+// icon sources are acceptable; until they answer, the report form, the suggestion button and the map packer are greyed out)
+const COLLAB_PAUSE=!window.__COLLAB_OPEN,PAUSE_MSG="暫停收件：我們已去信遊戲官方，詢問本站資料和圖示的使用方式是否可以，收到回覆前暫停接受回報和探索地圖上傳。";
+function pauseBtn(el){if(!COLLAB_PAUSE||!el)return;el.removeAttribute("href");el.classList.add("off");el.setAttribute("aria-disabled","true");el.tabIndex=-1;el.title=PAUSE_MSG}
 function showCollab(){const w=$("rWrap");if(!w.querySelector(".csub"))return;
   w.querySelectorAll(".csub a").forEach(a=>{a.href="#"+hashFor(a.dataset.sub==="data"?"report":"feedback",FL);if(a.dataset.sub===rSub)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
   $("rData").hidden=rSub!=="data";$("rFeedW").hidden=rSub!=="feedback";
-  if(FORM_PREFILL)$("ideaGo").href=FORM_PLAIN;
+  if(FORM_PREFILL&&!COLLAB_PAUSE)$("ideaGo").href=FORM_PLAIN;pauseBtn($("ideaGo"));
   const ideas=REPS.filter(r=>r.type==="idea").sort((a,b)=>String(b.date).localeCompare(String(a.date)));$("ideaC").textContent=ideas.length+" 則";
   $("ideaL").innerHTML=ideas.length?`<ul class="rows">${ideas.map(r=>`<li class="lrowx"><span class="t"><b>💡 ${esc(r.name)}</b><span style="white-space:pre-wrap">${esc(r.idea||"")}</span><span>${esc(r.date||"")}${r.ipage?"・"+esc(r.ipage):""}・${esc(r.id||"")}${r.by?`・<span class="repby">${esc(r.by)}</span> 提出`:""}</span>${r.reply?`<span class="ideareply">回覆：${esc(r.reply)}</span>`:""}</span></li>`).join("")}</ul>`:`<div class="muted">還沒有公開的建議。按左邊「💡 提出建議」用 Google 帳號送出，審核後會出現在這裡。</div>`;
   if(rSub==="feedback")loadFeedback().then(list=>{const L=$("fbL");if(!L)return;
@@ -3010,7 +3014,7 @@ function buildFormReport(){
   <div id="rData">
   <div class="cgrid3"><div class="rcol rc-form">
   <article class="bcard rform">
-    <a class="repbtn big" id="formGo" target="_blank" rel="noopener">填寫回報表單 ↗</a>
+    <a class="repbtn big" id="formGo" target="_blank" rel="noopener">填寫回報表單 ↗</a>${COLLAB_PAUSE?`<div class="note warn pausenote">${PAUSE_MSG}</div>`:""}
     <ol class="steps big">
       <li><b>先準備截圖</b>：用遊戲內建的截圖，在遊戲裡按 <kbd>F2</kbd> 就好。怪物要拍到名字上方的等級和小地圖座標；或打開圖鑑（Codex）截整頁。
         <details class="rhow"><summary>怎麼用 F2 截圖、檔案在哪裡</summary><ul>
@@ -3053,10 +3057,11 @@ function buildFormReport(){
   <article class="bcard" id="qCard"><h4 class="sec">處理中的回報 <span class="c" id="qC"></span></h4><div id="qL" class="muted">讀取中…</div>
     <div class="muted" style="font-size:12.5px">為了不公開還沒審核的內容，這裡只列回報編號、種類、樓層和送出時間，請用送出時間找你的回報。核准後名稱和內容會出現在下面的「已收錄」；退回的回報保留 14 天。</div></article>
   <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article></div></div></div>`;
+  if(COLLAB_PAUSE){$("jmDir").disabled=true;pauseBtn($("jmPick"));$("jmPick").removeAttribute("for");$("jmDl").innerHTML=`<button class="repbtn" disabled>⬇ 下載壓縮檔</button>`;$("jmDlNote").textContent="暫停中，見上方說明。";$("jmPick").closest(".jmtools").insertAdjacentHTML("beforebegin",`<div class="note warn pausenote">${PAUSE_MSG}</div>`)}
   $("jmDir").onchange=e=>{const fs=[...(e.target.files||[])];e.target.value="";if(fs.length)jmChoose(fs)};
   rBuilt=true}
 function renderReport(){
-  if(FORM_PREFILL){if(!rBuilt)buildFormReport();$("formGo").href=formUrl(FL);showCollab()}
+  if(FORM_PREFILL){if(!rBuilt)buildFormReport();if(!COLLAB_PAUSE)$("formGo").href=formUrl(FL);pauseBtn($("formGo"));showCollab()}
   else{if(!rBuilt)buildReport();if(rFloorShown!==FL){$("rf_floor").value=FL;rFloorShown=FL;if(RF[rType].list==="monster")rDrawFields()}}
   const done=REPS.filter(r=>r.type!=="idea").sort((a,b)=>String(b.date).localeCompare(String(a.date))||String(repKey(b)).localeCompare(String(repKey(a))));$("doneC").textContent=done.length+" 則";
   $("doneL").innerHTML=done.length?`<ul class="rows">${done.map(r=>{const m=r.type==="monster"?(monById[r.monId]||FLOORS[r.floor]?.M.find(x=>x.name===r.name||(x.aka||[]).includes(r.name))):null;
