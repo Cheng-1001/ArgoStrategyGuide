@@ -197,7 +197,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 @media (min-width:821px){#view-classes.browse{grid-template-columns:minmax(0,1fr)}#view-classes .filters{display:none}#lCls,#lDg{grid-template-columns:minmax(0,1fr);max-width:290px;gap:6px}#view-dungeons.browse{grid-template-columns:minmax(0,1fr)}#view-dungeons .filters{display:none}#lDg .card{padding:9px 12px;gap:4px}body.cls-inline[data-view="dungeons"] #pBody>*{max-width:880px}#lCls .card{padding:7px 11px;gap:3px}#lCls .chead .th{width:34px;height:34px;font-size:17px}#lCls .cname b{font-size:15px}#lCls .cname span{font-size:12px}#lCls .clx{font-size:12px!important;line-height:1.4}#lCls .cmeta .pill{padding:0 7px;font-size:11.5px}body.cls-inline #panel{left:var(--clsl);right:0;top:var(--clst);bottom:0;width:auto!important;max-width:none;border:0;border-left:1px solid var(--line);border-radius:0;box-shadow:none;background:var(--bg);z-index:5}body.cls-inline #panel .ptop{display:none}body.cls-inline #pBody{padding-top:14px}body.panel-xwide #panel{width:var(--clsw,min(880px,calc(100vw - 40px)))}body.cls-one .cls2{grid-template-columns:minmax(0,1fr)}}
 @media (min-width:1800px){body.panel-open.panel-xwide:not([data-view="classes"]) .results{padding-right:900px}}
 @media (min-width:1180px) and (max-width:1799px){body.panel-open.panel-xwide .results{padding-right:0}}
-.rsel input.effin{width:150px;height:24px;padding:0 8px;font-size:12.5px}
+.rsel input.effin{width:150px;height:24px;padding:0 22px 0 6px;line-height:22px;font-size:12.5px;border-radius:6px}
 .th.dgk{background:var(--slot);display:grid;place-items:center;overflow:hidden}.th.dgk .eslot{box-shadow:none;border-radius:0}.dgkn{font-size:12px}
 .cls2{display:grid;gap:4px 32px}@media (min-width:821px){.cls2{grid-template-columns:340px minmax(0,1fr)}}.clsfold{border:1px solid var(--line);border-radius:8px;margin-top:10px;background:var(--panel-2)}.clsfold>summary{cursor:pointer;padding:9px 12px;font-size:13px;font-weight:700;letter-spacing:.02em}.clsfold>summary .c{font-weight:400;color:var(--muted);font-size:12px;margin-left:4px}.clsfold[open]>summary{border-bottom:1px solid var(--line)}.clsfold>.settbl,.clsfold>div{margin:4px 10px 10px;width:calc(100% - 20px)}.cls2>div:first-child .clsbtns+.clsfold{margin-top:16px}.cls2>div:first-child .settbl th,.cls2>div:first-child .settbl td{padding-top:7px;padding-bottom:7px}.cls2>div:first-child .settbl th{padding-left:10px}.cls2>div:first-child .clsbtns{margin-top:12px}
 .cls2>div{min-width:0}
@@ -231,7 +231,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .eslot{--s:44px;flex:none;width:var(--s);height:var(--s);border-radius:6px;background-color:var(--slot);background-image:url(equip.png);background-repeat:no-repeat;background-size:calc(var(--s)*16) auto;box-shadow:inset 0 0 0 1px var(--slot-edge);image-rendering:pixelated;display:inline-grid;place-items:center;color:var(--slot-ink);font-size:calc(var(--s)*.45)}
 .eslot.empty{background-image:none}
 .eslot.pslot{background-image:url(props.png)}
-.lvrange{display:flex;gap:6px;align-items:center}.lvrange input{width:84px}
+.lvrange{display:flex;gap:6px;align-items:center}.lvrange input{width:84px;padding:6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--panel-2);outline:none}.lvrange input:focus{border-color:var(--accent)}
 .estat{font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
 .th{--ring:var(--minion);flex:none;width:38px;height:38px;border-radius:50%;border:3px solid var(--ring);background:radial-gradient(circle at 35% 30%,#ffffff,#dfe6ec);
   display:grid;place-items:center;font-size:20px;line-height:1;padding:0;position:relative;box-shadow:0 2px 6px rgba(0,0,0,.35)}
@@ -281,7 +281,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .zone.shop{z-index:2} .zone.shop .zlabel{padding:0;width:27px;height:27px;border-radius:50%;justify-content:center;font-size:15px;letter-spacing:0;background:rgba(255,248,225,.92);border-color:rgba(120,90,20,.55)}
 .zsec{font-family:var(--f-display);font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:14px 0 2px}
 .zsec[hidden]{display:none}
-.effwrap{position:relative;display:inline-block}.effpop{position:absolute;left:0;top:calc(100% + 4px);z-index:30;width:240px;max-height:320px;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:4px;display:flex;flex-direction:column}.effpop[hidden]{display:none}.effo{display:flex;justify-content:space-between;gap:8px;text-align:left;background:none;border:0;border-radius:6px;padding:5px 8px;font:inherit;font-size:13px;color:inherit;cursor:pointer}.effo span{color:var(--muted,#7a8691);font-variant-numeric:tabular-nums}.effo:hover,.effo:focus-visible{background:var(--hover,rgba(127,127,127,.14))}.effo.on{font-weight:700;color:var(--accent,#e08a1e)}.effo.clr{color:var(--muted,#7a8691)}.effnone{padding:6px 8px;font-size:12.5px}.npcgh{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;margin:14px 0 2px;font-weight:600;font-size:15px}#lItem .npcgh{align-items:center}#lItem .npcgh img{width:28px;height:28px;object-fit:contain;flex:none}#lItem .npcgh>span:first-child{width:28px;height:28px;flex:none;overflow:hidden;display:inline-flex;align-items:center;justify-content:center}.npcgh:first-child{margin-top:0}.npcgh .c{font-weight:400;font-size:12.5px;color:var(--muted)}
+.effwrap{position:relative;display:inline-block}input.effin{-webkit-appearance:none;appearance:none;padding:6px 24px 6px 8px;border-radius:7px;border:1px solid var(--line);background:var(--panel-2) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2710%27 height=%276%27%3E%3Cpath d=%27M1 1l4 4 4-4%27 fill=%27none%27 stroke=%27%238a96a3%27 stroke-width=%271.6%27/%3E%3C/svg%3E") no-repeat right 8px center;width:100%;cursor:pointer;outline:none}input.effin:focus{border-color:var(--accent)}input.effin::placeholder{color:inherit;opacity:1}input.effin::-webkit-search-decoration,input.effin::-webkit-search-cancel-button{-webkit-appearance:none;display:none}.effpop{position:absolute;left:0;top:calc(100% + 4px);z-index:30;width:240px;max-height:320px;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.18);padding:4px;display:flex;flex-direction:column}.effpop[hidden]{display:none}.effo{display:flex;justify-content:space-between;gap:8px;text-align:left;background:none;border:0;border-radius:6px;padding:5px 8px;font:inherit;font-size:13px;color:inherit;cursor:pointer}.effo span{color:var(--muted,#7a8691);font-variant-numeric:tabular-nums}.effo:hover,.effo:focus-visible{background:var(--hover,rgba(127,127,127,.14))}.effo.on{font-weight:700;color:var(--accent,#e08a1e)}.effo.clr{color:var(--muted,#7a8691)}.effnone{padding:6px 8px;font-size:12.5px}.npcgh{grid-column:1/-1;display:flex;align-items:baseline;gap:8px;margin:14px 0 2px;font-weight:600;font-size:15px}#lItem .npcgh{align-items:center}#lItem .npcgh img{width:28px;height:28px;object-fit:contain;flex:none}#lItem .npcgh>span:first-child{width:28px;height:28px;flex:none;overflow:hidden;display:inline-flex;align-items:center;justify-content:center}.npcgh:first-child{margin-top:0}.npcgh .c{font-weight:400;font-size:12.5px;color:var(--muted)}
 .bbl .v{white-space:nowrap}
 .zone .more{display:none;place-items:center;min-width:26px;height:22px;padding:0 6px;border-radius:999px;background:rgba(10,16,22,.82);color:#fff;font-family:var(--f-mono);font-size:11px;align-self:center;pointer-events:none}
 .world.compact .zone .thumbs .mapth:nth-child(n+2){display:none}
@@ -622,7 +622,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   .filters{gap:8px 12px;padding:10px 16px}
   .fgroup{flex-direction:row;align-items:center;flex-wrap:nowrap;gap:6px 10px;flex-basis:100%}
   .fgroup>.flabel{flex:none;min-width:2.6em}
-  .fgroup>.chips,.fgroup>.sel,.fgroup>.lvrange{flex:1 1 0;min-width:0}
+  .fgroup>.chips,.fgroup>.sel,.fgroup>.lvrange,.fgroup>.effwrap{flex:1 1 0;min-width:0}
   .fgroup:has(>.check){flex-wrap:wrap}.fgroup>.check{flex:none}
   .fbar{display:flex;flex-wrap:wrap;gap:8px;flex-basis:100%}
   .fbtn{border:1px solid var(--line);background:var(--panel);color:var(--muted);border-radius:8px;padding:4px 10px;font:inherit;font-size:12.5px;cursor:pointer}
@@ -803,9 +803,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">職業</span><div class="chips" id="fEqClass"></div></div>
       <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fEqRar"></div></div>
       <div class="fgroup"><span class="flabel">等級</span><div class="lvrange"><input type="number" class="sel" id="fEqMin" min="1" max="99" placeholder="最低" aria-label="最低等級"><span>～</span><input type="number" class="sel" id="fEqMax" min="1" max="99" placeholder="最高" aria-label="最高等級"></div></div>
-      <div class="fgroup torsel"><span class="flabel">效果</span><span class="effwrap"><input type="search" class="sel effin" id="fEqEff" placeholder="點一下選效果，或輸入" aria-label="依效果篩選" autocomplete="off" aria-controls="effPop" aria-expanded="false"><span class="effpop" id="effPop" role="listbox" hidden></span></span></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fEqSort" aria-label="排序">
         <option value="lv">等級（低→高）</option><option value="lvd">等級（高→低）</option><option value="rar">稀有度（高→低）</option><option value="name">名稱</option></select></div>
+      <div class="fgroup torsel"><span class="flabel">效果</span><span class="effwrap"><input type="search" class="sel effin" id="fEqEff" placeholder="全部" aria-label="依效果篩選" autocomplete="off" aria-controls="effPop" aria-expanded="false"><span class="effpop" id="effPop" role="listbox" hidden></span></span></div>
       <div class="note">資料取自官網物品圖鑑（saominecraft.com/wiki，2026-10-31），名稱和描述是官方的法文原文。圖示是官方圖片，或官網 3D 模型的截圖。官網圖鑑沒有寫取得方式和合成材料，之後靠玩家回報補上。</div>
     </div>
     <div class="results"><div class="rhead"><h2>裝備</h2><span class="count" id="cEq"></span></div><div class="grid" id="lEq"></div></div>
@@ -829,6 +829,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <section class="view browse" id="view-recipes" hidden>
     <div class="filters">
       <div class="fgroup"><span class="flabel">分類</span><div class="chips" id="fRcCat"></div></div>
+      <div class="fgroup" id="gRcSub" hidden><span class="flabel">細分</span><div class="chips" id="fRcSub"></div></div>
       <div class="fgroup"><span class="flabel">在哪裡做</span><select class="sel" id="fRcNpc" aria-label="NPC"></select></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fRcSort" aria-label="排序">
         <option value="npc">依 NPC</option><option value="lv">等級（低→高）</option><option value="name">名稱</option></select></div>
@@ -1702,7 +1703,16 @@ const ALLREC=Object.entries(RECIPES).flatMap(([npc,r])=>r.items.map(it=>recRow(n
 let rcCat="all";
 // the recipe tab lists only real recipes (with materials); rows bought with Col only stay on NPC / item panels as 販售 (user 2026-11-08)
 const RCV=ALLREC.filter(r=>(r.mats||[]).length);
-chipsInto($("fRcCat"),[["all",`全部 <b>${RCV.length}</b>`],...Object.entries(RC_CAT).filter(([k])=>RCV.some(r=>r.cat===k)).map(([k,[l,ic]])=>[k,`${ic} ${l} <b>${RCV.filter(r=>r.cat===k).length}</b>`])],()=>rcCat,v=>rcCat=v,renderRecipes);
+// weapons / armour / accessories split like the equipment tab's 細分 (user 2026-11-08「配方分類還是沒分，飾品全部都放飾品」):
+// the part comes from the crafted item's equipment entry (catalogue id, or the game-only entry by English name)
+let rcSubV="all";
+const rcEq=r=>eqById[String(r.oid)]||eqById[EQX_BY[r.en]]||null;
+const rcSub=r=>{const e=rcEq(r);return e?eqSub(e):"?"};
+const fillRcSub=()=>{const g=$("gRcSub"),L=RCV.filter(r=>r.cat===rcCat),ks=[...new Set(L.map(rcSub))];rcSubV="all";
+  g.hidden=!["weapon","armor","acc"].includes(rcCat)||ks.length<2;if(g.hidden)return;
+  const ord=[...(EQ_SUBS.weapon||[]),...(EQ_SUBS.off||[]),...(EQ_SUBS.armor||[]),...(EQ_SUBS.acc||[]),"?"];ks.sort((a,b)=>ord.indexOf(a)-ord.indexOf(b));
+  chipsInto($("fRcSub"),[["all","全部"],...ks.map(k=>[k,`${k==="?"?"其他":subLab(k)} <span class="cn">${L.filter(r=>rcSub(r)===k).length}</span>`])],()=>rcSubV,v=>rcSubV=v,renderRecipes)};
+chipsInto($("fRcCat"),[["all",`全部 <b>${RCV.length}</b>`],...Object.entries(RC_CAT).filter(([k])=>RCV.some(r=>r.cat===k)).map(([k,[l,ic]])=>[k,`${ic} ${l} <b>${RCV.filter(r=>r.cat===k).length}</b>`])],()=>rcCat,v=>{rcCat=v;fillRcSub()},renderRecipes);
 $("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(RCV.map(r=>r.npc))].sort().map(n=>`<option value="${esc(n)}">${esc(npcN(n))}${npcN(n)!==npcEn(n)?`（${esc(npcEn(n))}）`:""}</option>`).join("");
 $("fRcNpc").onchange=renderRecipes;$("fRcSort").onchange=renderRecipes;
 const RECIC=window.SAO_RECICONS||{};
@@ -1718,7 +1728,7 @@ const recGo=r=>eqById[String(r.oid)]?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid
 const recZh=(r,e)=>(e&&zhE(e))||ZH_EN[norm(r.en)]||(ITEMS[r.en]?zhI(r.en):"");
 const recHit=(r,s)=>!s||norm([r.en,recZh(r,eqById[String(r.oid)]||prById[String(r.oid)]),r.npc,(eqById[String(r.oid)]||prById[String(r.oid)]||{}).name||"",...r.mats.map(m=>m[0])].join(" ")).includes(s);
 function renderRecipes(){const s=Sq(),np=$("fRcNpc").value,so=$("fRcSort").value;
-  let a=RCV.filter(r=>(rcCat==="all"||r.cat===rcCat)&&(np==="all"||r.npc===np)&&recHit(r,s));
+  let a=RCV.filter(r=>(rcCat==="all"||r.cat===rcCat)&&(rcSubV==="all"||$("gRcSub").hidden||rcSub(r)===rcSubV)&&(np==="all"||r.npc===np)&&recHit(r,s));
   a.sort((x,y)=>so==="lv"?(x.lv||0)-(y.lv||0)||x.en.localeCompare(y.en):so==="name"?x.en.localeCompare(y.en):x.npc.localeCompare(y.npc)||(x.lv||0)-(y.lv||0));
   $("cRc").textContent=`${a.length} / ${RCV.length} 筆`;
   $("lRc").innerHTML=a.length?a.map(r=>{const e=eqById[String(r.oid)]||prById[String(r.oid)];const go=recGo(r);const rar=e?e.r:r.r;const tag="button";

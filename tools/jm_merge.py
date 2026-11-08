@@ -255,27 +255,61 @@ def merge_dungeon(d, instances, date, report):
 
 
 UNDER = "under"
+GROUND_R = 3      # blocks (16 m each) a detected ground level spreads to
+SURF_CORR = 0.45
+DARK = 24        # JourneyMap paints explored solid rock pure black and the site's empty background is (7,12,17): neither is data,
+                 # otherwise a black lower layer covers the room above it (the mill ink room at Y 24 vanished under Y 0-15)   # a 16x16 cave block whose grey pattern correlates this much with the surface map is at ground level there
 
 
 def build_under(date=None):
     """「地下」(user 2026-11-08「直接整合成地下」): all height layers combined into tiles/f1jm_under, so the site offers only
-    地面 / 地下. Layers are pasted from the highest to the lowest, each where it has data (colour differs from the dark base),
-    so where several layers overlap the deepest one wins (a basement over the house above it). The per-height tile sets stay
-    (the packing tool compares against them, quest maps are cut from them)."""
+    地面 / 地下. Ground height differs across the island (Starting Town is at Y 17, mountains much higher), and JourneyMap's
+    cave layer at ground level shows the houses there, which look like the surface (user 2026-11-08「該區域地面跟地下長一樣
+    為什麼還要算地下」). So per 16x16 block the layer whose picture correlates best with the surface map (>= SURF_CORR) is taken
+    as ground level there and only the layers below it count; blocks where no layer looks like the surface (caves inside a
+    mountain) keep all layers. Layers are pasted from high to low, so where several remain the deepest wins. The per-height
+    tile sets stay (the packing tool compares against them, quest maps are cut from them)."""
+    import numpy as np
     keys = sorted((n[5:] for n in os.listdir(os.path.join(ROOT, "tiles")) if re.fullmatch(r"f1jm_c-?\d+", n)),
                   key=lambda k: int(k[1:]), reverse=True)
     if not keys:
         return None
+    n = FULL // CH
+    def blocks(a):
+        return a.reshape(n, CH, n, CH).transpose(0, 2, 1, 3).reshape(n, n, CH * CH)
+    sb = blocks(np.asarray(load_canvas(TILES).convert("L"), np.float32))
+    sb = sb - sb.mean(axis=2, keepdims=True)
+    # pass 1: per block, the LOWEST layer that looks like the surface = ground level. Mountain tops, towers and roofs above
+    # it look like the surface too (Tolbana: Y 192-207 houses, Y 240-303 peaks), so taking the highest match kept the houses
+    ground = np.full((n, n), -999, np.int32)
+    for key in keys:                                     # high to low
+        gb = blocks(np.asarray(load_canvas(layer_dir(key)).convert("L"), np.float32))
+        data = (gb > DARK).mean(axis=2) > 0.3
+        cb = gb - gb.mean(axis=2, keepdims=True)
+        corr = (cb * sb).sum(axis=2) / (np.sqrt((cb * cb).sum(axis=2) * (sb * sb).sum(axis=2)) + 1e-6)
+        ground[data & (corr >= SURF_CORR)] = int(key[1:])   # later (lower) layers overwrite: the lowest match wins
+    # blocks where the match failed (house interiors that do not look like their roof) take the lowest ground level found
+    # within GROUND_R blocks, so a whole town gets one ground level instead of a checkerboard (the highest would let a
+    # nearby peak lift the level above the houses again)
+    NONE = 9999
+    pad = np.pad(np.where(ground == -999, NONE, ground), GROUND_R, constant_values=NONE)
+    near = np.full_like(ground, NONE)
+    for dz in range(2 * GROUND_R + 1):
+        for dx in range(2 * GROUND_R + 1):
+            near = np.minimum(near, pad[dz:dz + n, dx:dx + n])
+    ground = np.where(ground == -999, np.where(near == NONE, -999, near), ground)
+    # pass 2: composite the layers below ground level (all layers where no ground level was found)
     cv = Image.new("RGB", (FULL, FULL), BG)
-    bg = Image.new("RGB", (FULL, FULL), BG)
     mask = Image.new("L", (MW, MW), 0)
     names = set()
     for key in keys:
         tiles = layer_dir(key)
-        names |= {n for n in os.listdir(os.path.join(tiles, "3")) if n.endswith(".jpg")}
+        names |= {nm for nm in os.listdir(os.path.join(tiles, "3")) if nm.endswith(".jpg")}
         lc = load_canvas(tiles)
-        has = ImageChops.difference(lc, bg).convert("L").point(lambda v: 255 if v > 8 else 0)
-        cv.paste(lc, (0, 0), has)
+        has = lc.convert("L").point(lambda v: 255 if v > DARK else 0)
+        below = (ground == -999) | (int(key[1:]) < ground)
+        keep = Image.fromarray(np.kron(below, np.ones((CH, CH), bool)).astype(np.uint8) * 255)
+        cv.paste(lc, (0, 0), ImageChops.multiply(has, keep))
         mp = os.path.join(tiles, "explored.png")
         if os.path.exists(mp):
             mask = ImageChops.lighter(mask, Image.open(mp).convert("L"))
@@ -284,16 +318,16 @@ def build_under(date=None):
         shutil.rmtree(tiles)
     os.makedirs(os.path.join(tiles, "3"))
     mask.save(os.path.join(tiles, "explored.png"), optimize=True)
-    for n in names:
-        tx, ty = map(int, n[:-4].split("_"))
-        save_tile(cv.crop((tx * T, ty * T, tx * T + T, ty * T + T)), os.path.join(tiles, "3", n))
+    for nm in names:
+        tx, ty = map(int, nm[:-4].split("_"))
+        save_tile(cv.crop((tx * T, ty * T, tx * T + T, ty * T + T)), os.path.join(tiles, "3", nm))
     pyramid(cv, tiles)
     chunks = sum(1 for cz in range(C0, C1 + 1) for cx in range(C0, C1 + 1) if mask.getpixel((cx, cz)))
     meta = load_meta()
     f1 = meta.setdefault("1", {})
     date = date or f1.get("date")
-    f1.setdefault("layers", {})[UNDER] = {"label": "地下", "date": date, "chunks": chunks, "l3": sorted(n[:-4] for n in names),
-                                          "v": f"{date}-{chunks}", "of": keys}
+    f1.setdefault("layers", {})[UNDER] = {"label": "地下", "date": date, "chunks": chunks, "l3": sorted(nm[:-4] for nm in names),
+                                          "v": f"{date}-{chunks}-g", "of": keys}
     save_meta(meta)
     return chunks
 
