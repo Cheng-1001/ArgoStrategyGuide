@@ -2080,7 +2080,7 @@ const eqEffHit=(e,t)=>{if(!EFF_NAMES){EFF_NAMES=new Set();EQ.forEach(x=>eqAllSta
  const inp=$("fEqEff"),pop=$("effPop");
  // clicking empties the box for typing (user 2026-11-08「點的時候要把欄位空出來」); several effects can be picked, with 且／或
  // (「要可以複數選擇」「要有and或or可以選」): the list stays open while picking, the box shows the picks when it closes
- const show=()=>{inp.value=EFF_SEL.length?EFF_SEL.join("、")+(EFF_SEL.length>1?(EFF_MODE==="and"?"（且）":"（或）"):""):""};
+ const show=()=>{inp.value=EFF_SEL.join("、")};
  const apply=()=>{renderEquip();requestAnimationFrame(actSync)};
  const draw=()=>{const q=norm(inp.value.trim()),on=new Set(EFF_SEL),L=allEff().filter(([z])=>!q||norm(z).includes(q)).sort((a,b)=>on.has(b[0])-on.has(a[0]));   // picked ones first
    pop.innerHTML=`<div class="effhd"><span class="effmode" role="group" aria-label="選了好幾個效果時">${[["and","且：全部都要有"],["or","或：有其中一個"]].map(([k,l])=>`<button type="button" class="chip" data-effm="${k}" aria-pressed="${EFF_MODE===k}">${l}</button>`).join("")}</span>${EFF_SEL.length?`<button type="button" class="effo clr" data-eff="">✕ 清除（已選 ${EFF_SEL.length} 個）</button>`:""}</div>`
@@ -3421,15 +3421,20 @@ function actControls(sec){const out=[];sec.querySelectorAll(".filters .fgroup,.t
     if(all&&on&&on!==all)out.push({lab,val:on.textContent.replace(/\s*\d+\s*$/,"").trim(),clr:()=>all.click()})});
   g.querySelectorAll("select").forEach(x=>{if(/Sort$/.test(x.id)||x.selectedIndex<=0)return;out.push({lab,val:x.options[x.selectedIndex].text,clr:()=>{x.selectedIndex=0;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
   g.querySelectorAll("input[type=checkbox]").forEach(x=>{if(!x.checked)return;out.push({lab:"",val:(x.closest("label")||{}).textContent.trim(),clr:()=>{x.checked=false;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
-  g.querySelectorAll("input[type=search]").forEach(x=>{if(!x.value.trim())return;out.push({lab,val:x.value.trim(),clr:()=>{x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})});
+  g.querySelectorAll("input[type=search]").forEach(x=>{if(!x.value.trim())return;
+    // picked effects: one chip each (user 2026-11-09「應該要分開」), 且／或 in the label when there are several
+    // 且／或 is its own chip that switches the mode (「且跟或也要分開」)
+    if(x.id==="fEqEff"&&EFF_SEL.length){EFF_SEL.forEach(z=>out.push({lab,val:z,clr:()=>window.__effPick(EFF_SEL.filter(y=>y!==z))}));
+      if(EFF_SEL.length>1)out.push({lab:"條件",val:EFF_MODE==="and"?"且：全部都要有":"或：有其中一個",tog:1,clr:()=>window.__effPick(EFF_SEL,EFF_MODE==="and"?"or":"and")});return}
+    out.push({lab,val:x.value.trim(),clr:()=>{x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})});
   const nums=[...g.querySelectorAll("input[type=number]")];if(nums.some(x=>x.value))out.push({lab,val:nums.map(x=>x.value||"…").join("～"),clr:()=>nums.forEach(x=>{if(x.value){x.value="";x.dispatchEvent(new Event("input",{bubbles:true}))}})})});
   return out}
 function actSync(){const sec=$("view-"+view);if(!sec||!sec.classList.contains("browse"))return;const rh=sec.querySelector(".results>.rhead");if(!rh)return;
   let box=rh.querySelector(".actf");if(!box){box=document.createElement("div");box.className="actf";rh.appendChild(box)}
   const cs=actControls(sec);box.hidden=!cs.length;
-  box.innerHTML=cs.map((c,i)=>`<button type="button" class="af" data-i="${i}" title="取消這個條件">${c.lab?`<b>${esc(c.lab)}</b>`:""}${esc(c.val)}<span aria-hidden="true">✕</span></button>`).join("")+(cs.length>1?'<button type="button" class="afx">全部清除</button>':"");
+  box.innerHTML=cs.map((c,i)=>`<button type="button" class="af${c.tog?" tog":""}" data-i="${i}" title="${c.tog?"切換":"取消這個條件"}">${c.lab?`<b>${esc(c.lab)}</b>`:""}${esc(c.val)}<span aria-hidden="true">${c.tog?"⇄":"✕"}</span></button>`).join("")+(cs.filter(c=>!c.tog).length>1?'<button type="button" class="afx">全部清除</button>':"");
   box.querySelectorAll(".af").forEach(b=>b.onclick=()=>{cs[+b.dataset.i].clr();setTimeout(actSync,0)});
-  const x=box.querySelector(".afx");if(x)x.onclick=()=>{cs.slice().reverse().forEach(c=>c.clr());setTimeout(actSync,0)}}
+  const x=box.querySelector(".afx");if(x)x.onclick=()=>{cs.slice().reverse().filter(c=>!c.tog).forEach(c=>c.clr());setTimeout(actSync,0)}}
 document.addEventListener("click",e=>{if(e.target.closest(".filters,.topf,.rsel"))setTimeout(actSync,0)});
 document.addEventListener("change",e=>{if(e.target.closest(".filters,.topf,.rsel"))setTimeout(actSync,0)});
 document.addEventListener("input",e=>{if(e.target.closest(".filters,.topf,.rsel"))setTimeout(actSync,0)});
