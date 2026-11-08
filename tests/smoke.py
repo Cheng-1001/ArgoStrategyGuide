@@ -139,7 +139,7 @@ with sync_playwright() as p:
           "side quests from the quest log show the official Chinese title and NPC (English title kept)")
     pg.locator(".qside", has_text="Daiki").first.click(); pg.wait_for_timeout(400)
     t = pg.inner_text("#pBody")
-    check("收集 Boar Hide ×5" in t and "掉落" in t and pg.locator("#pBody .qmap svg").count() == 1,
+    check("收集 野豬皮 ×5" in t and "掉落" in t and pg.locator("#pBody .qmap svg").count() == 1,
           "side quest panel spells out what to collect, where it drops, and shows the route")
 
     pg.goto(base + "#equip"); pg.wait_for_timeout(500)
@@ -395,8 +395,8 @@ with sync_playwright() as p:
     pg.evaluate("[...document.querySelectorAll('#lMon .card')].find(c=>c.querySelector('b').textContent==='菁英樹人').click()"); pg.wait_for_timeout(300)
     pg.evaluate("[...document.querySelectorAll('#pBody [data-go=\"i|Sylvan Bow\"]')][0].click()"); pg.wait_for_timeout(300)
     pb = pg.inner_text("#pBody")
-    check(pg.inner_text("#pBody h2") == "森林之弓" and "Sylvan Bow・Arc Sylvestre" in pg.inner_text("#pBody .phead .sub") and "取得方式" in pb and "Elite Treant" in pb, "a dropped weapon opens its equipment panel (official Chinese name, English and French below) with drop rate and map")
-    check("遊戲寫的取得方式" in pb and "怪物掉落：Elite Treant（0.5%）" in pb, "equipment panel shows the in-game Obtainable lines with a Chinese gloss")
+    check(pg.inner_text("#pBody h2") == "森林之弓" and "Sylvan Bow・Arc Sylvestre" in pg.inner_text("#pBody .phead .sub") and "取得方式" in pb and "菁英樹人" in pb, "a dropped weapon opens its equipment panel (official Chinese name, English and French below) with drop rate and map")
+    check("遊戲寫的取得方式" in pb and "怪物掉落：菁英樹人（0.5%）" in pb, "equipment panel shows the in-game Obtainable lines with a Chinese gloss")
     pg.fill("#q", "Narax's Ring"); pg.wait_for_timeout(400)
     check(pg.locator("#lMon .card, #lEq .card, #lIt .card").count() >= 1 or "Ring of Narax" in pg.inner_text("body"), "old wiki item names still find the renamed item")
     pg.fill("#q", ""); pg.wait_for_timeout(200)
@@ -473,7 +473,7 @@ with sync_playwright() as p:
     check(pg.is_hidden("#srchHint") and pg.locator(".zone.dim").count() == 0 and pg.input_value("#q") == "", "清除搜尋 clears the search and the dimming")
     pg.eval_on_selector('.bsp[title*="Nazgul"]', 'e=>e.click()'); pg.wait_for_timeout(300)
     t = pg.inner_text("#pBody")
-    check("8 遊戲截圖" in t and "Behind the Great Door" in t and "兩個階段" in t, "Cursed Nazgul Protector: LV 8 from a screenshot and its two phases")
+    check("8 遊戲截圖" in t and "大門之後" in t and "兩個階段" in t, "Cursed Nazgul Protector: LV 8 from a screenshot and its two phases")
     pg.click("#pClose"); pg.wait_for_timeout(150)
     check(pg.evaluate("document.querySelector('#fpCats .fchip[data-k=npc]').nextElementSibling.id") == "fpNpcWrap",
           "NPC sub-categories sit right under the NPC chip")

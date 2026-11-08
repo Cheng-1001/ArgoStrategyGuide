@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="b89a5d71f3">
+<meta name="sao-build" content="5def9593ae">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -168,7 +168,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .mqn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:600 13px var(--f-mono)}
 .rcard .mats{display:flex;gap:4px 6px;align-items:center;flex-wrap:wrap;font-size:12.5px}
 .spawnl{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;margin-top:4px}
-.recipes .mats{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}.recipes .mats .slot{vertical-align:middle}.recipes .v{text-align:right;line-height:1.3}
+.recipes .mats{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}.recipes .mats .slot{vertical-align:middle}.mats.mblk{display:flex;margin-top:3px}.recipes .v{text-align:right;line-height:1.3}
 .mqn.est{background:none;color:var(--accent);border:2px dashed var(--accent)}.mqn.nonum{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
 .mqt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.mqt b{font-family:var(--f-display);font-size:15px;font-weight:600;overflow-wrap:anywhere}.mqt span{font-size:12px;color:var(--muted)}
 .mq p{margin:0;font-size:13px;color:var(--muted)}
@@ -894,7 +894,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=265d1660"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=4172ed19"></script>
-<script src="changelog.js?v=be474b7c"></script>
+<script src="changelog.js?v=227dc0d7"></script>
 <script src="recipes.js?v=9163d1ce"></script>
 <script src="jmmeta.js?v=5b0ffd74"></script>
 <script src="formcfg.js?v=97ab18f0"></script>
@@ -903,8 +903,8 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="events.js?v=000795eb"></script>
 <script src="gacha.js?v=48cf03e8"></script>
 <script src="gamestats.js?v=148e7b9e"></script>
-<script src="sets.js?v=41d804d5"></script>
-<script src="zhnames.js?v=ec1014f3"></script>
+<script src="sets.js?v=fcb047a5"></script>
+<script src="zhnames.js?v=42ff2fef"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=5f21ae39"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1165,7 +1165,8 @@ function showPoints(f,pts,title,onMap,sel){if(view==="map"||!FLOORS[f]||!FLOORS[
     pts.map((p,i)=>[pts.length>1?`${i+1}. ${c(p)}`:c(p),p[0],p[1]]),f,true);if(s!=null&&pts.length>1)RW.sel=s+1}
 function goMapThen(f,fn){const ph=matchMedia("(max-width:820px)").matches;if(ph){closeP();const g=fn;fn=()=>{g();requestAnimationFrame(()=>stage.scrollIntoView({block:"start",behavior:"smooth"}))}}if(view==="map"&&FL===f){fn();return}pending=fn;go("map",f)}
 const nameOf=s=>s.type==="c"?(c=>c?cN(c):"職業")(CLS.find(c=>c.id===s.id)):s.type==="r"?(ALLREC[+s.id]||{en:"配方"}).en:s.type==="n"?npcN((npcById(s.id)||{n:"NPC"}).n):s.type==="q"?(Q=>Q?((qZ(Q)||{}).zh||Q.title):"任務")(questById(s.id)):s.type==="m"?mN(monById[s.id]):s.type==="i"?(zhI(s.id)||s.id):s.type==="e"?dn(eqById[s.id]):s.type==="p"?dn(prById[s.id]):s.type==="s"?(spotById(s.id)||{n:"?"}).n:s.type==="d"?(EVT.dungeons.find(d=>d.id===s.id)||{n:"活動"}).n:townById[s.id].n;
-const detailHTML=(t,i)=>t==="c"?classDetail(i):t==="r"?recipeDetail(i):t==="n"?npcDetail(i):t==="q"?questDetail(i):t==="m"?monDetail(i):t==="i"?itemDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):t==="s"?spotDetail(i):t==="d"?evDgDetail(i):townDetail(i);
+const detailHTML=(t,i)=>zhHTML(detailHTML0(t,i));
+const detailHTML0=(t,i)=>t==="c"?classDetail(i):t==="r"?recipeDetail(i):t==="n"?npcDetail(i):t==="q"?questDetail(i):t==="m"?monDetail(i):t==="i"?itemDetail(i):t==="e"?equipDetail(i):t==="p"?propDetail(i):t==="s"?spotDetail(i):t==="d"?evDgDetail(i):townDetail(i);
 // class panel (user 2026-11-07「調整一下版面」): on the classes tab the panel fills the space right of the class column; one inner column when that is narrow
 // desktop (user 2026-11-07「右邊沒必要再開一個視窗」): on the classes tab the class panel is part of the page — no frame, title bar or ✕,
 // it fills everything right of the class column (cls-inline); another panel opened from it is a normal panel again
@@ -1574,7 +1575,7 @@ function clusterPts(pts,X,Z,d){const C=[];pts.forEach(p=>{const px=X(p[1]),pz=Z(
 const numLab=ns=>{const a=ns.map(Number);if(ns.length>=3&&a.every((v,i)=>Number.isInteger(v)&&(!i||v===a[i-1]+1)))return a[0]+"–"+a[a.length-1];return ns.join("・")};
 // 路線圖上畫附近的傳送點和地標當參考（使用者 2026-11-03）：只畫在畫面範圍內的，名稱在點下方，不能點
 function refMarks(f,X,Z,bx,by,bw,bh,u){const Fx=FLOORS[f];const L=[];
-  (Fx.towns||[]).forEach(t=>L.push([t.n,t.x,t.z,!!t.tp]));spotsOf(f).forEach(p=>{if(p.tp||p.kind==="poi")L.push([p.n,p.x,p.z,!!p.tp])});
+  (Fx.towns||[]).forEach(t=>L.push([pN(t),t.x,t.z,!!t.tp]));spotsOf(f).forEach(p=>{if(p.tp||p.kind==="poi")L.push([pN(p),p.x,p.z,!!p.tp])});
   return L.filter(([,x,z])=>x!=null&&X(x)>=bx&&X(x)<=bx+bw&&Z(z)>=by&&Z(z)<=by+bh).map(([n,x,z,tp])=>{const cx=X(x),cz=Z(z),r=u*0.42;
     return`<g class="refm" aria-hidden="true">${tp?`<circle cx="${cx}" cy="${cz}" r="${r}" fill="#e8a23a" stroke="#fff" stroke-width="${r*0.35}"/>`:`<rect x="${cx-r*0.8}" y="${cz-r*0.8}" width="${r*1.6}" height="${r*1.6}" transform="rotate(45 ${cx} ${cz})" fill="#e8a23a" stroke="#fff" stroke-width="${r*0.3}"/>`}<text x="${cx}" y="${cz+r+u*0.95}" font-size="${u*0.95}" text-anchor="middle" font-weight="700" fill="#fff" stroke="rgba(0,0,0,.75)" stroke-width="${u*0.22}" paint-order="stroke">${esc(n)}</text></g>`}).join("")}
 function routeMini(steps,f,noLine){const m=FLOORS[f].map;if(!m)return"";const pts=steps.map((x,k)=>[x[4]??(k+1),x[1],x[2]]).filter(p=>p[1]!=null);if(!pts.length)return"";
@@ -1630,7 +1631,7 @@ const RECIPE_BY_EQ={},RECIPE_BY_MAT={};Object.entries(RECIPES).forEach(([npc,r])
   if(it[0]!=null)(RECIPE_BY_EQ[it[0]]=RECIPE_BY_EQ[it[0]]||[]).push(row);it[3].forEach(([m])=>(RECIPE_BY_MAT[m]=RECIPE_BY_MAT[m]||[]).push(row))}));
 const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
 // NPC 的位置直接寫在配方／裝備資料裡（使用者 2026-11-03：原本要點 3 次才知道在哪裡做）：最近的城鎮或傳送點＋可點的座標
-const nearPlace=(f,x,z)=>{let b=null,d=1e9;FLOORS[f].towns.forEach(t=>{const k=Math.hypot(t.x-x,t.z-z);if(k<d){d=k;b=t.n}});spotsOf(f).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-x,p.z-z);if(k<d){d=k;b=p.n}});return d<=400?b:null};
+const nearPlace=(f,x,z)=>{let b=null,d=1e9;FLOORS[f].towns.forEach(t=>{const k=Math.hypot(t.x-x,t.z-z);if(k<d){d=k;b=pN(t)}});spotsOf(f).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-x,p.z-z);if(k<d){d=k;b=pN(p)}});return d<=400?b:null};
 const npcWhere=n=>{if(!n)return"";const near=nearPlace(n.floor,n.x,n.z);return`<span class="npcw">📍 ${near?esc(near)+" 附近・":""}${FLOORS[n.floor].map?`<button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">X ${n.x} · Z ${n.z}</button>`:`X ${n.x} · Z ${n.z}`}${n.u===2?"（地下室）":n.u?"（地下）":""}</span>`};
 // a recipe material -> this site's item, or the official item with the same in-game English name (gameinfo / zhnames), or just the name
 // (2026-11-07, user: 藥水配方素材沒有更新: Wheat Flower, Lavender… are official items 1835-1841 but were shown as 「本站還沒有這個物品的資料」)
@@ -1652,7 +1653,7 @@ function recipeTable(rows,showNpc){return`<ul class="rows recipes">${rows.map(r=
   const ri=r.i!=null?r.i:ALLREC.findIndex(x=>x.npc===r.npc&&x.en===r.en);
   const go=showNpc?(n?"n|"+n.id:""):(e?"e|"+r.oid:prById[String(r.oid)]?"p|"+r.oid:ri>=0?"r|"+ri:"");const rar=e?e.r:r.r;const tag=go?"button":"div";
   return`<li><${tag} class="lrow"${go?` data-go="${go}"`:""}>${showNpc?`<span class="th sm" style="--ring:var(--ref)" aria-hidden="true">${NGRP[npcGrp(n?n.c:"accessoriesBlacksmith")][1]}</span>`:recIcon(r,34)}
-    <span class="t"><b>${showNpc?esc(npcN(r.npc)):esc(recZh(r,e||prById[String(r.oid)])||recEnD(r))}</b><span>${showNpc?(npcN(r.npc)!==npcEn(r.npc)?esc(npcEn(r.npc))+"・":""):recZh(r,e||prById[String(r.oid)])?esc(recEnD(r))+"・":(e?esc(dn(e))+"・":"")+(RAR[rar]?RAR[rar][0]+((r.mats||[]).length?"・":""):"")}<span class="mats">${matText(r.mats)}</span></span></span><span class="v">${isShop(r)?`<span class="shopt">販售</span><br>`:r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}>${showNpc&&n?`<div class="npcw-row">${npcWhere(n)}</div>`:""}</li>`}).join("")}</ul>`}
+    <span class="t"><b>${showNpc?esc(npcN(r.npc)):esc(recZh(r,e||prById[String(r.oid)])||recEnD(r))}</b><span>${(showNpc?[npcN(r.npc)!==npcEn(r.npc)?esc(npcEn(r.npc)):""]:recZh(r,e||prById[String(r.oid)])?[esc(recEnD(r))]:[e?esc(dn(e)):"",RAR[rar]?RAR[rar][0]:""]).filter(Boolean).join("・")}${(r.mats||[]).length?`<span class="mats mblk">${matText(r.mats)}</span>`:""}</span></span><span class="v">${isShop(r)?`<span class="shopt">販售</span><br>`:r.sec?r.sec+" 秒<br>":""}<span class="muted">${costText(r.cost)}</span></span></${tag}>${showNpc&&n?`<div class="npcw-row">${npcWhere(n)}</div>`:""}</li>`}).join("")}</ul>`}
 // NPCs whose menus are not recipes (owner's screenshots 2026-11-03): recycling = give one item, get Recycling Coins
 // recycling lists (user 2026-11-08 screenshot of 飾品回收): official Chinese name + icon + link like the other lists; English name underneath
 const recyTable=(rows,more)=>`<ul class="rows">${rows.map(([it,c,sec])=>{const r=matRef(it),nm=/[\u4e00-\u9fff]/.test(r.nm)?r.nm:it;
@@ -2053,6 +2054,31 @@ const eqSetN=e=>{const st=[e.gen,FR2ID[e.name]].filter(Boolean).map(n=>SET_BY[no
 window.__detail=(t,i)=>detailHTML(t,i);window.__iconFor=en=>{const r=matRef(en);if(r.go||GICON[en])return r.ic(48);const e=EQ.find(x=>norm(x.name)===norm(en))||PR.find(x=>norm(x.name)===norm(en));return e?(EQ.includes(e)?eslot(e,48):pslot(e,48)):""};window.__auditIds=()=>({m:ALLM.map(m=>m.id),e:EQ.map(e=>String(e.oid)),p:PR.map(e=>String(e.oid)),i:Object.keys(ITEMS),r:ALLREC.map(r=>String(r.i)),n:FL_KEYS.flatMap(f=>NPCS(f).map(n=>n.id)),q:[...FL_KEYS.flatMap(f=>MQ(f).map((_,i)=>"mq"+f+"_"+i)),...ALLQ.map(q=>q.id)],s:FL_KEYS.flatMap(f=>spotsOf(f).map(s=>s.id)),t:ALLT.map(t=>t.id),c:CLS.map(c=>c.id)});   // site-wide audit hooks (2026-11-07 全站檢查)
 // untranslated-name audit (2026-11-08, user: 網站一直有沒翻的，難道我要一個一個檢查): every name a floor-1 player meets in game that has no
 // official Chinese yet, with a hint of where in the game its Chinese name can be screenshotted. Used by tests/zh_gap.js.
+// official Chinese inside Chinese sentences (2026-11-08, user: 網站一直有沒翻的): hand-written notes, quest steps and labels such as
+// 「前往 Virelune」「Vallhat 附近」 keep data keyed by English; at display time, text nodes that contain Chinese get every English
+// name that has an official Chinese name swapped for it. Pure-English text (subtitles, game originals, codex hints), 「原文：」 text,
+// the game's own wording and English quoted in （）「」() are left alone; longer English names without a Chinese name (Tolbana Mountains,
+// Fire Skeleton Archer…) are protected so their parts are not half-translated.
+let ZT=null;
+function zhTextRe(){if(ZT)return ZT;const m=new Map();const keep=s=>{if(s&&!m.has(s)&&!/[一-鿿]/.test(s))m.set(s,null)};
+  Object.entries(ZHO.terms||{}).forEach(([e,z])=>m.set(e,z));Object.entries(ZPL).forEach(([e,z])=>{if(!m.has("Shop - "+e))m.set("Shop - "+e,"商店-"+z)});
+  window.__zhDict().forEach(([e,z])=>{if(e.length>2&&!m.has(e))m.set(e,z)});   // first one wins: places come before NPCs (Candelia = 坎德莉亞, not the shop)
+  ALLT.forEach(o=>{if(pN(o)===o.n)keep(o.n)});FL_KEYS.forEach(f=>{spotsOf(f).forEach(o=>{if(pN(o)===o.n)keep(o.n)});NPCS(f).forEach(n=>{if(!ZNPC[n.n])keep(npcEn(n.n))})});
+  ALLM.forEach(o=>{if(mN(o)===o.name)keep(o.name)});Object.keys(ITEMS).forEach(k=>{if(!zhI(k))keep(k)});EQ.concat(PR).forEach(e=>{if(e.gen&&!zhE(e))keep(e.gen)});
+  SETS.sets.forEach(s=>{if(!SET_ZH[s.name])keep(s.name)});
+  const ks=[...m.keys()].sort((a,b)=>b.length-a.length).map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
+  ZT={re:new RegExp("(?<![A-Za-z'’])(?:"+ks.join("|")+")(?![A-Za-z])","g"),m};return ZT}
+// decided per 「・」 segment: subtitles such as 「Wolf Fur・Fourrure de Loup・材料」 keep their English, 「Virelune 湖・鯊魚」 is converted
+function zhText(s){if(!/[一-鿿]/.test(s)||s.includes("原文："))return s;const {re,m}=zhTextRe();const H=/[一-鿿]/;
+  return s.split(/(・)/).map(part=>!H.test(part)||/^\s*本站名稱/.test(part)?part:
+    part.split(/(（[^（）]*）|「[^「」]*」|\([^()]*\))/).map(seg=>/^[（「(]/.test(seg)&&!H.test(seg)?seg:seg.replace(re,x=>m.get(x)||x).replace(/F1 - (?=[一-鿿])/g,"第1層-")).join("")).join("")}
+function zhHTML(h){const T=document.createElement("template");T.innerHTML=h;
+  const w=document.createTreeWalker(T.content,NodeFilter.SHOW_TEXT);const L=[];while(w.nextNode())L.push(w.currentNode);
+  L.forEach(n=>{if(n.parentElement&&n.parentElement.closest(".sten,.effen,.hfr,.lore,code"))return;const v=zhText(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v});
+  return T.innerHTML}
+window.__zhText=s=>zhText(s);window.__detail0=(t,i)=>detailHTML0(t,i);window.__zhDict=()=>{const d=[];const add=(en,zh)=>{if(en&&zh&&en!==zh&&!/[\u4e00-\u9fff]/.test(en))d.push([en,zh])};
+  Object.entries(ZPL).forEach(([e,z])=>add(e,z));Object.entries(ZNPC).forEach(([e,z])=>{add(e,z);add(npcEn(e),z)});
+  ALLM.forEach(m=>add(m.name,mN(m)));ZHL.forEach(z=>add(z.en,z.zh));Object.entries(ZQ).forEach(([e,z])=>add(e,z.zh));return d};   // English -> official Chinese, for tests/zh_gap.js text scan
 window.__zhGap=()=>{const gst=(window.SAO_GAMESTATS||{}).items||{},recBy={},matIn={};
   ALLREC.forEach(r=>{if(r.oid!=null)(recBy[String(r.oid)]=recBy[String(r.oid)]||[]).push(r);r.mats.forEach(m=>(matIn[ikey(m[0])]=matIn[ikey(m[0])]||[]).push(r))});
   const gi=e=>GI_OID[e.oid]||(e.gen&&GI_EN[norm(e.gen)]);
@@ -2066,7 +2092,8 @@ window.__zhGap=()=>{const gst=(window.SAO_GAMESTATS||{}).items||{},recBy={},matI
     NPCS(f).forEach(n=>{if(!ZNPC[n.n]&&!/[\u4e00-\u9fff]/.test(n.n))out.push({k:"NPC",en:npcEn(n.n),fr:"",where:"X "+n.x+" Z "+n.z})});
     ALLT.filter(t=>t.floor===f||!t.floor).forEach(t=>{if(pN(t)===t.n)out.push({k:"城鎮",en:t.n,fr:t.tp||"",where:""})});
     spotsOf(f).forEach(s=>{if(pN(s)===s.n)out.push({k:"地點",en:s.n,fr:s.tp||s.csrc||"",where:s.x!=null?"X "+s.x+" Z "+s.z:""})});
-    FLOORS[f].M.forEach(m=>{if(mN(m)===m.name)out.push({k:"怪物",en:m.name,fr:"",where:m.num?"圖鑑 #"+m.num:""})})});
+    FLOORS[f].M.forEach(m=>{if(mN(m)===m.name)out.push({k:"怪物",en:m.name,fr:"",where:m.num?"圖鑑 #"+m.num:""})})
+    MQ(f).concat(ALLQ.filter(q=>q.floor===f||q.f===f)).forEach(q=>{if(!qZ(q)&&(q.t||q.title||!ZNPC[q.npc]))out.push({k:"任務",en:q.t||q.title||"支線（只有 NPC 名稱）："+q.npc,fr:"",where:q.t||q.title?qNpc(q.npc||""):"截 NPC 名牌或任務日誌"})})});
   SETS.sets.forEach(s=>{if(!SET_ZH[s.name]&&!/[一-鿿]/.test(s.name))out.push({k:"套裝",en:s.name,fr:"",where:"成員："+s.members.join("、")})});
   return out};
 window.__nameAudit=()=>{const recEn={};ALLREC.forEach(r=>{if(r.oid!=null)(recEn[String(r.oid)]=recEn[String(r.oid)]||new Set()).add(r.en)});
@@ -2572,9 +2599,9 @@ const jmInBox=it=>!JMSEL.off.has(it.rx+","+it.rz);
 // place names of a square: towns / teleport points / dungeons inside it, else the nearest town ("… 附近")
 function jmRegNames(rx,rz){const F1=FLOORS[1],x0=rx*512,z0=rz*512,ins=p=>p.x>=x0&&p.x<x0+512&&p.z>=z0&&p.z<z0+512;
   const pl=[...F1.towns,...F1.spots.filter(p=>p.tp||p.kind==="dungeon")].filter(p=>p.x!=null);
-  const n=pl.filter(ins).map(p=>p.n);if(n.length)return n;
+  const n=pl.filter(ins).map(p=>pN(p));if(n.length)return n;
   const cx=x0+256,cz=z0+256,t=F1.towns.filter(p=>p.x!=null).sort((a,b)=>Math.hypot(a.x-cx,a.z-cz)-Math.hypot(b.x-cx,b.z-cz))[0];
-  return t?[t.n+" 附近"]:[]}
+  return t?[pN(t)+" 附近"]:[]}
 // split the chosen regions into zips of at most BUDGET bytes and MAXN files (tools/jm_merge.py refuses more); each part
 // of a world gets surface regions of that world that overlap the site's map until they cover ANCHOR explored chunks, so
 // the server can verify every part on its own (also when only height layers are packed)
@@ -2774,7 +2801,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
       <g clip-path="url(#jmClip)">${[0,1,2].flatMap(r=>[0,1,2].map(c=>`<image href="tiles/f1jm/0/${c}_${r}.jpg?v=${v}" x="${70+c*2048}" y="${70+r*2048}" width="2048" height="2048" preserveAspectRatio="none"/>`)).join("")}</g>
       ${[...regs.values()].map(r=>{const nm=jmRegNames(r.rx,r.rz),k=r.rx+","+r.rz;
         return`<rect class="jmreg" data-jmreg="${k}" x="${r.rx*512+8}" y="${r.rz*512+8}" width="496" height="496" rx="40" tabindex="0" role="checkbox"><title>${esc(nm.join("、")||"這一格")}：地面 ${r.day} 張、室內・洞穴 ${r.cave} 張</title></rect>`}).join("")}
-      ${FLOORS[1].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(t.n)}</text></g>`).join("")}
+      ${FLOORS[1].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(pN(t))}</text></g>`).join("")}
     </svg></div></section>`:"";
   const dgPart=dgList.length?`<section class="jmsec"><div class="jmsech"><b>地下城</b><span class="muted">同一個地下城進場幾次都合成一張</span>
       ${dgNew.length?`<span class="jmact"><button class="linkbtn" id="jmDgAll">全選</button><button class="linkbtn" id="jmDgNone">清除</button></span>`:""}</div>
