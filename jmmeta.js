@@ -47,7 +47,8 @@ window.SAO_JM = {
     "report": "R0007",
     "date": "2026-11-07",
     "regions": 63,
-    "newChunks": 2234
+    "newChunks": 2234,
+    "by": "IICHENGII"
    }
   ],
   "chunks": 39134,
