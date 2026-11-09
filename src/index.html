@@ -386,7 +386,9 @@ aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:
   padding-block:5px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .floorinfo b{font-family:var(--f-display);color:var(--fg);font-size:13.5px}
 .floorinfo .soon{color:var(--warn)}
-@media (max-width:820px){.floorinfo:not(:has(.soon)){display:none}.floorinfo>:not(.soon){display:none}}
+@media (max-width:820px){.floorinfo:not(:has(.soon,.pausebar)){display:none}.floorinfo>:not(.soon,.pausebar){display:none}}
+.floorinfo .pausebar{flex:1 1 100%;font-size:15.5px;line-height:1.55;color:var(--fg);background:color-mix(in srgb,#d32f2f 15%,transparent);border:1px solid color-mix(in srgb,#d32f2f 45%,transparent);border-left:5px solid #d32f2f;border-radius:5px;padding:9px 14px;margin:3px 0;text-wrap:balance}.floorinfo .pausebar b{color:#d32f2f;font-weight:700}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .floorinfo .pausebar b{color:#ff7b7b}}:root[data-theme="dark"] .floorinfo .pausebar b{color:#ff7b7b}
+@media (max-width:820px){.floorinfo .pausebar{font-size:12.5px;padding:5px 10px;border-left-width:4px;cursor:pointer}.floorinfo .pausebar>span{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}.floorinfo .pausebar.open>span{display:block;-webkit-line-clamp:unset}}   /* phones: 2 lines, tap to read all; site-wide pause notice (user 2026-11-09: the collab-only note was not visible enough) */
 .floorinfo .legal{font-size:12px;color:var(--muted);text-decoration:underline;text-underline-offset:3px;background:none;border:0;padding:0;cursor:pointer;font-family:inherit}
 .floorinfo .legal:hover{color:var(--accent)}
 .fl{display:inline-grid;place-items:center;font-family:var(--f-mono);font-size:10.5px;font-weight:600;padding:0 5px;border-radius:4px;border:1px solid var(--line);color:var(--muted);line-height:16px;vertical-align:1px}
@@ -2985,7 +2987,7 @@ async function loadFeedback(){if(fbCache)return fbCache;
     fbCache=(await r.json()).filter(x=>!x.pull_request&&/^\[(問題|建議)\]/.test(x.title))}catch(e){fbCache="err"}return fbCache}
 // paused while waiting for the game team's reply (user 2026-11-09: a letter to Triggers SAO asks whether the site's data and
 // icon sources are acceptable; until they answer, the report form, the suggestion button and the map packer are greyed out)
-const COLLAB_PAUSE=!window.__COLLAB_OPEN,PAUSE_MSG="暫停收件：我們已去信遊戲官方，詢問本站資料和圖示的使用方式是否可以，收到回覆前暫停接受回報和探索地圖上傳。";
+const COLLAB_PAUSE=!window.__COLLAB_OPEN,SITE_PAUSE_MSG="本站暫停更新中：已去信遊戲官方，詢問是否允許本站資料和圖示的使用方式，收到回覆前，也暫停接受回報和探索地圖上傳。（最後資料更新於 2026-11-09，第2、3層改動均未納入）",PAUSE_MSG="暫停收件：我們已去信遊戲官方，詢問本站資料和圖示的使用方式是否可以，收到回覆前暫停接受回報和探索地圖上傳。";
 function pauseBtn(el){if(!COLLAB_PAUSE||!el)return;el.removeAttribute("href");el.classList.add("off");el.setAttribute("aria-disabled","true");el.tabIndex=-1;el.title=PAUSE_MSG}
 function showCollab(){const w=$("rWrap");if(!w.querySelector(".csub"))return;
   w.querySelectorAll(".csub a").forEach(a=>{a.href="#"+hashFor(a.dataset.sub==="data"?"report":"feedback",FL);if(a.dataset.sub===rSub)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
@@ -3435,7 +3437,7 @@ $("flForm").onsubmit=e=>{e.preventDefault();pickFloor(parseInt($("flJump").value
 function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.ready=1;
   $("flNo").textContent=f+"F";$("flNm").textContent=`第 ${f} 層`;   // no floor name: the game has no confirmed floor names (user 2026-11-02 chose A)
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
-  const Fx=F();$("floorInfo").innerHTML=`<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
+  const Fx=F();$("floorInfo").innerHTML=`${COLLAB_PAUSE?`<div class="pausebar" id="pauseBar" role="status" tabindex="0" onclick="this.classList.toggle('open')"><span>${SITE_PAUSE_MSG.replace(/^([^：]+：)/,"<b>$1</b>")}</span></div>`:""}<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PRV().length;$("nRec").textContent=RCV.length;if(ROUTE)clearRoute();
   $("nItem").textContent=matPool(f,false).length;$("nNpc").textContent=NPCS(f).length;fillNpcArea();
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);if(f!==1)DGV=null;fitted=false;renderMap();renderZoneList()}
