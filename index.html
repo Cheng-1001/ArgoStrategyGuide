@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="4689f1f329">
+<meta name="sao-build" content="f88390e7a3">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -898,7 +898,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=265d1660"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=4172ed19"></script>
-<script src="changelog.js?v=a830626a"></script>
+<script src="changelog.js?v=58fe86bb"></script>
 <script src="recipes.js?v=9163d1ce"></script>
 <script src="jmmeta.js?v=7238858b"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -2998,7 +2998,7 @@ async function loadFeedback(){if(fbCache)return fbCache;
     fbCache=(await r.json()).filter(x=>!x.pull_request&&/^\[(問題|建議)\]/.test(x.title))}catch(e){fbCache="err"}return fbCache}
 // paused while waiting for the game team's reply (user 2026-11-09: a letter to Triggers SAO asks whether the site's data and
 // icon sources are acceptable; until they answer, the report form, the suggestion button and the map packer are greyed out)
-const COLLAB_PAUSE=!window.__COLLAB_OPEN,SITE_PAUSE_MSG="本站暫停更新中：已去信遊戲官方，詢問是否允許本站資料和圖示的使用方式，收到回覆前，也暫停接受回報和探索地圖上傳。（最後資料更新於 2026-11-09，第2、3層改動均未納入）",PAUSE_MSG="暫停收件：我們已去信遊戲官方，詢問本站資料和圖示的使用方式是否可以，收到回覆前暫停接受回報和探索地圖上傳。";
+const COLLAB_PAUSE=!!window.__COLLAB_PAUSE,SITE_PAUSE_MSG="本站暫停更新中：已去信遊戲官方，詢問是否允許本站資料和圖示的使用方式，收到回覆前，也暫停接受回報和探索地圖上傳。（最後資料更新於 2026-11-09，第2、3層改動均未納入）",PAUSE_MSG="暫停收件：我們已去信遊戲官方，詢問本站資料和圖示的使用方式是否可以，收到回覆前暫停接受回報和探索地圖上傳。";
 function pauseBtn(el){if(!COLLAB_PAUSE||!el)return;el.removeAttribute("href");el.classList.add("off");el.setAttribute("aria-disabled","true");el.tabIndex=-1;el.title=PAUSE_MSG}
 function showCollab(){const w=$("rWrap");if(!w.querySelector(".csub"))return;
   w.querySelectorAll(".csub a").forEach(a=>{a.href="#"+hashFor(a.dataset.sub==="data"?"report":"feedback",FL);if(a.dataset.sub===rSub)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});

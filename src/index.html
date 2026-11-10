@@ -2987,7 +2987,7 @@ async function loadFeedback(){if(fbCache)return fbCache;
     fbCache=(await r.json()).filter(x=>!x.pull_request&&/^\[(問題|建議)\]/.test(x.title))}catch(e){fbCache="err"}return fbCache}
 // paused while waiting for the game team's reply (user 2026-11-09: a letter to Triggers SAO asks whether the site's data and
 // icon sources are acceptable; until they answer, the report form, the suggestion button and the map packer are greyed out)
-const COLLAB_PAUSE=!window.__COLLAB_OPEN,SITE_PAUSE_MSG="本站暫停更新中：已去信遊戲官方，詢問是否允許本站資料和圖示的使用方式，收到回覆前，也暫停接受回報和探索地圖上傳。（最後資料更新於 2026-11-09，第2、3層改動均未納入）",PAUSE_MSG="暫停收件：我們已去信遊戲官方，詢問本站資料和圖示的使用方式是否可以，收到回覆前暫停接受回報和探索地圖上傳。";
+const COLLAB_PAUSE=!!window.__COLLAB_PAUSE,SITE_PAUSE_MSG="本站暫停更新中：已去信遊戲官方，詢問是否允許本站資料和圖示的使用方式，收到回覆前，也暫停接受回報和探索地圖上傳。（最後資料更新於 2026-11-09，第2、3層改動均未納入）",PAUSE_MSG="暫停收件：我們已去信遊戲官方，詢問本站資料和圖示的使用方式是否可以，收到回覆前暫停接受回報和探索地圖上傳。";
 function pauseBtn(el){if(!COLLAB_PAUSE||!el)return;el.removeAttribute("href");el.classList.add("off");el.setAttribute("aria-disabled","true");el.tabIndex=-1;el.title=PAUSE_MSG}
 function showCollab(){const w=$("rWrap");if(!w.querySelector(".csub"))return;
   w.querySelectorAll(".csub a").forEach(a=>{a.href="#"+hashFor(a.dataset.sub==="data"?"report":"feedback",FL);if(a.dataset.sub===rSub)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});

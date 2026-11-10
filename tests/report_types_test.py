@@ -55,7 +55,6 @@ with sync_playwright() as p:
     pg.on("pageerror", lambda e: errs.append(str(e)))
     pg.route("**/reports.js*", lambda r: r.fulfill(status=200, content_type="application/javascript; charset=utf-8", body=body))
     pg.add_init_script("localStorage.setItem('sao-map-filter-v5','{}')")
-    pg.add_init_script("window.__COLLAB_OPEN=1")   # the form buttons are greyed out on the site while waiting for the game team (2026-11-09)
     pg.route("**/formcfg.js*", lambda r: r.fulfill(status=200, content_type="application/javascript; charset=utf-8",
              body='window.SAO_FORM={"prefill":"https://docs.google.com/forms/d/e/X/viewform?usp=pp_url&entry.11={floor}&entry.22={floor}"};'))
     pend = {"updated": "2026-11-02 10:00", "list": [
