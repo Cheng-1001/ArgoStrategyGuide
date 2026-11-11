@@ -64,6 +64,47 @@ MAX_REGIONS, MAX_BYTES = 1500, 4 * 1024 * 1024   # keep MAX_REGIONS in sync with
 MIN_OVERLAP = 20   # explored chunks a folder must cover (with matching colours) before it is accepted as floor 1
 C0, C1 = X0 // CH, (X0 + SIZE - 1) // CH          # chunk range inside the frame (inclusive)
 
+# Floors 2 and 3 (2026-11-11): the owner's JourneyMap showed each floor in its own server folder (floor 2
+# Triggers_ba411067…/overworld, floor 3 Triggers_95a78a58…/overworld), in real Minecraft X / Z. Frames: floor 2 = the wiki map
+# (SIFT on 2,030 points: 1 px = 1.0114 block, X/Z -1062…1062; the site's floor-2 map frame), floor 3 = the reference map's
+# "map-local" frame (centre 597,771, radius 850; SIFT against the owner's map: within 2 blocks). A floor's mask is in chunks
+# from its own origin (MX0, MZ0); floor 1 keeps world chunks (origin 0, 320 x 320) so its existing explored.png stays valid.
+# Floors 2 / 3 take the surface ("day") only: no height layers, dungeons or preview jpg (yet).
+FLOOR_CFG = {1: dict(x0=70, z0=70, size=4980, full=5120, base="floor1.jpg", prev="floor1_jm.jpg", mx0=0, mz0=0, mw=320),
+             2: dict(x0=-1062, z0=-1062, size=2124, full=2304, base="floor2.jpg", prev=None),
+             3: dict(x0=-253, z0=-79, size=1700, full=1792, base="floor3.jpg", prev=None)}
+FLOOR = 1
+Z0, CX0, CX1, CZ0, CZ1, MX0, MZ0 = X0, C0, C1, C0, C1, 0, 0
+
+
+def use_floor(f):
+    """point the module's frame constants at floor f (floor 1 = the values above)"""
+    global FLOOR, X0, Z0, SIZE, FULL, TILES, MASK, MW, CX0, CX1, CZ0, CZ1, MX0, MZ0, C0, C1
+    c = FLOOR_CFG[f]
+    FLOOR, X0, Z0, SIZE, FULL = f, c["x0"], c["z0"], c["size"], c["full"]
+    TILES = os.path.join(ROOT, "tiles", f"f{f}jm")
+    MASK = os.path.join(TILES, "explored.png")
+    CX0, CX1, CZ0, CZ1 = X0 // CH, (X0 + SIZE - 1) // CH, Z0 // CH, (Z0 + SIZE - 1) // CH
+    MX0, MZ0 = c.get("mx0", CX0), c.get("mz0", CZ0)
+    MW = c.get("mw", max(CX1 - MX0, CZ1 - MZ0) + 1)
+    C0, C1 = CX0, CX1   # floor-1-only code (height layers, 「地下」) still reads these
+
+
+def mget(mask, cx, cz):
+    return mask.getpixel((cx - MX0, cz - MZ0))
+
+
+def mset(mask, cx, cz):
+    mask.putpixel((cx - MX0, cz - MZ0), 255)
+
+
+def in_frame(rx, rz):
+    return rx * 512 < X0 + SIZE and rz * 512 < Z0 + SIZE and rx * 512 + 512 > X0 and rz * 512 + 512 > Z0
+
+
+def in_chunks(cx, cz):
+    return CX0 <= cx <= CX1 and CZ0 <= cz <= CZ1
+
 
 def out(code, **kw):
     print(json.dumps(kw, ensure_ascii=False))
@@ -87,7 +128,7 @@ def layer_dir(key):
 
 def pyramid(cv, tiles):
     """levels 0-2 of a tile set from its full-resolution canvas"""
-    for L, size in enumerate((640, 1280, 2560)):
+    for L, size in enumerate((FULL // 8, FULL // 4, FULL // 2)):
         os.makedirs(os.path.join(tiles, str(L)), exist_ok=True)
         im = cv.resize((size, size), Image.LANCZOS)
         for r in range(size // T + (size % T > 0)):
@@ -339,13 +380,13 @@ def build_under(date=None):
 
 
 def dark_base():
-    base = Image.open(os.path.join(ROOT, "floor1.jpg")).convert("RGB").resize((SIZE, SIZE), Image.LANCZOS)
+    base = Image.open(os.path.join(ROOT, FLOOR_CFG[FLOOR]["base"])).convert("RGB").resize((SIZE, SIZE), Image.LANCZOS)
     return ImageEnhance.Brightness(ImageEnhance.Color(base).enhance(0.35)).enhance(0.45)
 
 
 def chunk_box(cx, cz):
     """canvas pixel box of world chunk (cx, cz), clipped to the frame"""
-    x0, z0 = cx * CH - X0, cz * CH - X0
+    x0, z0 = cx * CH - X0, cz * CH - Z0
     return (max(0, x0), max(0, z0), min(SIZE, x0 + CH), min(SIZE, z0 + CH))
 
 
@@ -356,8 +397,8 @@ def mean_diff(a, b):
 def init_mask():
     cv, base = load_canvas(), dark_base()
     diffs = {}
-    for cz in range(C0, C1 + 1):
-        for cx in range(C0, C1 + 1):
+    for cz in range(CZ0, CZ1 + 1):
+        for cx in range(CX0, CX1 + 1):
             bx = chunk_box(cx, cz)
             if bx[2] - bx[0] < 4 or bx[3] - bx[1] < 4:
                 continue
@@ -365,7 +406,7 @@ def init_mask():
     mask = Image.new("L", (MW, MW), 0)
     for (cx, cz), d in diffs.items():
         if d > 9:                                    # JPEG noise on the darkened wiki map stays below 4 (bimodal histogram)
-            mask.putpixel((cx, cz), 255)
+            mset(mask, cx, cz)
     mask.save(MASK, optimize=True)
     n = sum(1 for v in mask.get_flattened_data() if v) if hasattr(mask, "get_flattened_data") else sum(1 for v in mask.getdata() if v)
     hist = [sum(1 for d in diffs.values() if lo <= d < lo + 4) for lo in range(0, 40, 4)]
@@ -488,17 +529,17 @@ def check_group(inside, cv, mask):
         for lz in range(0, 512, CH):
             for lx in range(0, 512, CH):
                 cx, cz = (rx * 512 + lx) // CH, (rz * 512 + lz) // CH
-                if not (C0 <= cx <= C1 and C0 <= cz <= C1):
+                if not in_chunks(cx, cz):
                     continue
                 a = alpha.crop((lx, lz, lx + CH, lz + CH))
                 if a.getextrema()[1] == 0:
                     continue
-                if mask.getpixel((cx, cz)) and ImageStat.Stat(a).mean[0] > 200:
+                if mget(mask, cx, cz) and ImageStat.Stat(a).mean[0] > 200:
                     bx = chunk_box(cx, cz)
-                    cut = im.crop((lx + bx[0] - (cx * CH - X0), lz + bx[1] - (cz * CH - X0),
-                                   lx + bx[2] - (cx * CH - X0), lz + bx[3] - (cz * CH - X0))).convert("RGB")
+                    cut = im.crop((lx + bx[0] - (cx * CH - X0), lz + bx[1] - (cz * CH - Z0),
+                                   lx + bx[2] - (cx * CH - X0), lz + bx[3] - (cz * CH - Z0))).convert("RGB")
                     diffs.append(mean_diff(cut, cv.crop(bx)))
-                elif not mask.getpixel((cx, cz)):
+                elif not mget(mask, cx, cz):
                     new.add((cx, cz))
     return diffs, new
 
@@ -509,7 +550,7 @@ def new_in(rx, rz, im, mask):
     for lz in range(0, 512, CH):
         for lx in range(0, 512, CH):
             cx, cz = (rx * 512 + lx) // CH, (rz * 512 + lz) // CH
-            if C0 <= cx <= C1 and C0 <= cz <= C1 and not mask.getpixel((cx, cz)) \
+            if in_chunks(cx, cz) and not mget(mask, cx, cz) \
                     and alpha.crop((lx, lz, lx + CH, lz + CH)).getextrema()[1] > 0:
                 new.add((cx, cz))
     return new
@@ -570,8 +611,23 @@ def main(argv):
     except (ValueError, zipfile.BadZipFile) as e:
         record(report, {"ok": False, "reason": str(e) if not isinstance(e, zipfile.BadZipFile) else "檔案不是正常的 zip 壓縮檔"})
         out(2, ok=False, reason=str(e))
-    cv = load_canvas()
-    mask = Image.open(MASK).convert("L")
+    # --seed N (owner only, never in the Actions workflow): start floor N's explored map from this upload; every world in
+    # the frame is taken without the colour check (there is nothing to compare with yet)
+    seed = int(opt["--seed"]) if "--seed" in opt else None
+    floors = [f for f in FLOOR_CFG if os.path.exists(os.path.join(ROOT, "tiles", f"f{f}jm", "explored.png"))]
+    state = {}
+
+    def st(f):
+        use_floor(f)
+        if f not in state:
+            if f == seed and not os.path.exists(MASK):
+                cv = Image.new("RGB", (FULL, FULL), BG)
+                cv.paste(dark_base(), (0, 0))
+                state[f] = (cv, Image.new("L", (MW, MW), 0))
+            else:
+                state[f] = (load_canvas(), Image.open(MASK).convert("L"))
+        return state[f]
+
     accepted, skipped, dgs = [], [], []
     for g in groups:
         d = dungeon_of(g.get("path", ""))
@@ -581,65 +637,94 @@ def main(argv):
         if d:
             dgs.append(dict(g, dg=d))
             continue
-        inside = [(rx, rz, im) for rx, rz, im in g["layers"].get("day", [])
-                  if rx * 512 < X0 + SIZE and rz * 512 < X0 + SIZE and rx * 512 + 512 > X0 and rz * 512 + 512 > X0]
         if not g["layers"].get("day"):
             skipped.append((g["name"], "沒有地面（day）地圖，無法確認是第 1 層（只打包高度層時也要附上幾張地面圖）"))
             continue
-        if not inside:
-            skipped.append((g["name"], "地圖圖片都在第 1 層的範圍外"))
+        if seed:
+            st(seed)
+            inside = [(rx, rz, im) for rx, rz, im in g["layers"]["day"] if in_frame(rx, rz)]
+            if inside:
+                accepted.append(dict(g, inside=inside, overlap=0, floor=seed))
+            else:
+                skipped.append((g["name"], f"地圖圖片都在第 {seed} 層的範圍外"))
             continue
-        diffs, new = check_group(inside, cv, mask)
-        med = statistics.median(diffs) if diffs else None
-        if len(diffs) >= 20 and med > 32:
-            skipped.append((g["name"], f"和目前地圖重疊的 {len(diffs)} 個區塊顏色對不上（差異 {med:.0f}），可能是別的樓層或別的世界"))
-        elif len(diffs) < min_overlap:
-            skipped.append((g["name"], f"和網站現有的地圖只重疊 {len(diffs)} 個區塊（至少要 {min_overlap} 個），無法確認是第 1 層"))
+        tried, ok = [], None
+        for f in floors:            # the floor whose explored map the colours match (frames of floors 1-3 overlap)
+            cv, mask = st(f)
+            inside = [(rx, rz, im) for rx, rz, im in g["layers"]["day"] if in_frame(rx, rz)]
+            if not inside:
+                tried.append((0, -1, f"地圖圖片都在第 {f} 層的範圍外"))
+                continue
+            diffs, new = check_group(inside, cv, mask)
+            med = statistics.median(diffs) if diffs else None
+            if len(diffs) >= 20 and med > 32:
+                tried.append((2, len(diffs), f"和目前地圖重疊的 {len(diffs)} 個區塊顏色對不上（差異 {med:.0f}），可能是別的樓層或別的世界"))
+            elif len(diffs) < min_overlap:
+                tried.append((1, len(diffs), f"和網站現有的地圖只重疊 {len(diffs)} 個區塊（至少要 {min_overlap} 個），無法確認是第 {f} 層"))
+            else:
+                ok = dict(g, inside=inside, overlap=len(diffs), floor=f)
+                break
+        if ok:
+            accepted.append(ok)
         else:
-            accepted.append(dict(g, inside=inside, overlap=len(diffs)))
+            skipped.append((g["name"], max(tried)[2] if tried else "網站還沒有可以比對的樓層地圖"))
     if not accepted:
         if len(skipped) == 1:
             reason = skipped[0][1]
         else:
-            reason = f"{len(skipped)} 個資料夾都不是第 1 層的地圖：" + "；".join(f"{n}：{r}" for n, r in skipped[:3]) + ("…" if len(skipped) > 3 else "")
+            reason = f"{len(skipped)} 個資料夾都不是" + ("第 1 層" if floors == [1] else "網站認得的樓層") + "的地圖：" + "；".join(f"{n}：{r}" for n, r in skipped[:3]) + ("…" if len(skipped) > 3 else "")
         if all("範圍外" in r for _, r in skipped):
             reason += "（可能選錯世界資料夾）"
         record(report, {"ok": False, "reason": reason})
         out(2, ok=False, reason=reason, skipped=[n for n, _ in skipped])
-    new_chunks, touched = set(), set()
-    for g in sorted(accepted, key=lambda g: g["date"]):          # oldest first: the newest data ends up on top
-        for rx, rz, im in g["inside"]:
-            new_chunks |= new_in(rx, rz, im, mask)
-            ox, oz = rx * 512 - X0, rz * 512 - X0
-            cv.paste(im.convert("RGB"), (ox, oz), im.getchannel("A"))
-            for ty in range(max(0, oz) // T, min(SIZE - 1, oz + 511) // T + 1):
-                for tx in range(max(0, ox) // T, min(SIZE - 1, ox + 511) // T + 1):
-                    touched.add((tx, ty))
-    # anything outside the frame that the paste wrote must stay background
-    cv.paste(Image.new("RGB", (FULL - SIZE, FULL), BG), (SIZE, 0))
-    cv.paste(Image.new("RGB", (FULL, FULL - SIZE), BG), (0, SIZE))
-    for cx, cz in new_chunks:
-        mask.putpixel((cx, cz), 255)
-    # surface regions are always written (newer terrain wins), as before; anchors of a layer-only pack paste the same picture
-    mask.save(MASK, optimize=True)
-    for tx, ty in touched:
-        save_tile(cv.crop((tx * T, ty * T, tx * T + T, ty * T + T)), os.path.join(TILES, "3", f"{tx}_{ty}.jpg"))
-    pyramid(cv, TILES)
-    cv.crop((0, 0, SIZE, SIZE)).resize((3000, 3000), Image.LANCZOS).save(os.path.join(ROOT, "floor1_jm.jpg"), quality=85, optimize=True)
-    explored = sum(1 for cz in range(C0, C1 + 1) for cx in range(C0, C1 + 1) if mask.getpixel((cx, cz)))
-    pct = round(100 * explored / (C1 - C0 + 1) ** 2, 1)
-    layers = {}
-    for key in sorted({k for g in accepted for k in g["layers"] if k != "day"}, key=lambda k: int(k[1:])):
-        nc, nr = merge_layer(key, accepted)
-        if nr:
-            layers[key] = {"newChunks": nc, "regions": nr}
-    res = {"ok": True, "regions": sum(len(g["inside"]) for g in accepted), "newChunks": len(new_chunks),
-           "overlap": sum(g["overlap"] for g in accepted), "pct": pct, "date": date,
+    per, layers = {}, {}
+    for f in sorted({g["floor"] for g in accepted}):
+        cv, mask = st(f)
+        acc = [g for g in accepted if g["floor"] == f]
+        os.makedirs(os.path.join(TILES, "3"), exist_ok=True)
+        new_chunks, touched = set(), set()
+        if f == seed and not os.path.exists(MASK):       # a new floor: write every tile of the frame
+            touched = {(tx, ty) for ty in range((SIZE - 1) // T + 1) for tx in range((SIZE - 1) // T + 1)}
+        for g in sorted(acc, key=lambda g: g["date"]):          # oldest first: the newest data ends up on top
+            for rx, rz, im in g["inside"]:
+                new_chunks |= new_in(rx, rz, im, mask)
+                ox, oz = rx * 512 - X0, rz * 512 - Z0
+                cv.paste(im.convert("RGB"), (ox, oz), im.getchannel("A"))
+                for ty in range(max(0, oz) // T, min(SIZE - 1, oz + 511) // T + 1):
+                    for tx in range(max(0, ox) // T, min(SIZE - 1, ox + 511) // T + 1):
+                        touched.add((tx, ty))
+        # anything outside the frame that the paste wrote must stay background
+        cv.paste(Image.new("RGB", (FULL - SIZE, FULL), BG), (SIZE, 0))
+        cv.paste(Image.new("RGB", (FULL, FULL - SIZE), BG), (0, SIZE))
+        for cx, cz in new_chunks:
+            mset(mask, cx, cz)
+        # surface regions are always written (newer terrain wins), as before; anchors of a layer-only pack paste the same picture
+        mask.save(MASK, optimize=True)
+        for tx, ty in touched:
+            save_tile(cv.crop((tx * T, ty * T, tx * T + T, ty * T + T)), os.path.join(TILES, "3", f"{tx}_{ty}.jpg"))
+        pyramid(cv, TILES)
+        if FLOOR_CFG[f]["prev"]:
+            cv.crop((0, 0, SIZE, SIZE)).resize((3000, 3000), Image.LANCZOS).save(os.path.join(ROOT, FLOOR_CFG[f]["prev"]), quality=85, optimize=True)
+        explored = sum(1 for cz in range(CZ0, CZ1 + 1) for cx in range(CX0, CX1 + 1) if mget(mask, cx, cz))
+        pct = round(100 * explored / ((CX1 - CX0 + 1) * (CZ1 - CZ0 + 1)), 1)
+        per[f] = {"regions": sum(len(g["inside"]) for g in acc), "newChunks": len(new_chunks),
+                  "overlap": sum(g["overlap"] for g in acc), "pct": pct, "chunks": explored, "folders": len(acc)}
+        if f == 1:     # height layers: floor 1 only
+            for key in sorted({k for g in acc for k in g["layers"] if k != "day"}, key=lambda k: int(k[1:])):
+                nc, nr = merge_layer(key, acc)
+                if nr:
+                    layers[key] = {"newChunks": nc, "regions": nr}
+    use_floor(1)
+    fl = sorted(per)
+    res = {"ok": True, "regions": sum(v["regions"] for v in per.values()), "newChunks": sum(v["newChunks"] for v in per.values()),
+           "overlap": sum(v["overlap"] for v in per.values()), "pct": per[fl[0]]["pct"], "date": date,
            "folders": len(accepted), "skipped": len(skipped)}
+    if fl != [1]:
+        res["floors"] = {str(f): {"newChunks": v["newChunks"], "pct": v["pct"]} for f, v in per.items()}
     if layers:
         res["layers"] = {k: v["newChunks"] for k, v in layers.items()}
     # dungeons: only those whose server folder also holds an accepted floor 1 overworld
-    ok_parents = {parent_of(g.get("path", "")) for g in accepted}
+    ok_parents = {parent_of(g.get("path", "")) for g in accepted if g["floor"] == 1}
     dres = {}
     for d in sorted({g["dg"] for g in dgs}):
         inst = [g for g in dgs if g["dg"] == d and parent_of(g.get("path", "")) in ok_parents]
@@ -656,7 +741,8 @@ def main(argv):
     if skipped:
         res["skipped"] = len(skipped)
         res["skippedWhy"] = [f"{n}：{w}" for n, w in skipped[:5]]
-    write_meta(report, dict(res, chunks=explored), layers)
+    for f, v in per.items():
+        write_meta(report, dict(res, regions=v["regions"], newChunks=v["newChunks"], pct=v["pct"], chunks=v["chunks"]), layers if f == 1 else None, f)
     if layers:
         build_under(date)
     record(report, res)
@@ -677,11 +763,11 @@ def save_meta(meta):
         "window.SAO_JM = " + json.dumps(meta, ensure_ascii=False, indent=1) + ";\n")
 
 
-def write_meta(report, res, layers=None):
+def write_meta(report, res, layers=None, floor=1):
     """per merge: date, explored share, total explored chunks ("chunks") and a log entry with the chunks it added.
     The site lists contributors by these numbers (the first log entry is the owner's map, its newChunks = the rest)."""
     meta = load_meta()
-    f1 = meta.setdefault("1", {"date": res["date"], "pct": res["pct"], "log": []})
+    f1 = meta.setdefault(str(floor), {"date": res["date"], "pct": res["pct"], "log": []})
     f1["date"], f1["pct"] = res["date"], res["pct"]
     f1["chunks"] = res.get("chunks", f1.get("chunks"))
     if f1["log"] and f1["log"][0].get("report") is None and "newChunks" not in f1["log"][0] and f1.get("chunks"):
