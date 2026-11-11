@@ -1,0 +1,8543 @@
+{
+ "made": "2026-11-12 01:34",
+ "root": "C:\\Users\\Administrator\\AppData\\Roaming\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data\\mp",
+ "hints": [
+  "mp 底下共 65 個伺服器資料夾；JourneyMap 每次連到不同的伺服器分流（UUID）就開一個新資料夾，「Triggers」（沒有 UUID）是最早的主資料夾。",
+  "有 11/9 之後更新圖片的伺服器資料夾 11 個：Triggers、Triggers_7395b65d~6fdc~40a0~a304~beeacd77f5ba、Triggers_7ee58910~88e8~476c~aa5f~1770b8d6ce33、Triggers_81292594~c29c~44ee~ac49~70770bd157f4、Triggers_815bd3d6~f22f~4114~a601~dfcf0a106221、Triggers_88e3f6ea~01c9~465c~af58~f31264fb2d99、Triggers_95a78a58~76fa~4903~92aa~8a87c523440c、Triggers_b2318f76~d95b~4beb~9af7~081589309cfe、Triggers_b7cfe0ee~a8b0~4d44~a89a~9b6985e9039c、Triggers_b871ff65~c830~4c05~baa9~82df4481e673、Triggers_ba411067~7be9~4787~a9dc~da5c74995cb4",
+  "資料夾本身修改時間在 11/9 之後的 10 個：Triggers_7395b65d~6fdc~40a0~a304~beeacd77f5ba、Triggers_7ee58910~88e8~476c~aa5f~1770b8d6ce33、Triggers_81292594~c29c~44ee~ac49~70770bd157f4、Triggers_815bd3d6~f22f~4114~a601~dfcf0a106221、Triggers_88e3f6ea~01c9~465c~af58~f31264fb2d99、Triggers_95a78a58~76fa~4903~92aa~8a87c523440c、Triggers_b2318f76~d95b~4beb~9af7~081589309cfe、Triggers_b7cfe0ee~a8b0~4d44~a89a~9b6985e9039c、Triggers_b871ff65~c830~4c05~baa9~82df4481e673、Triggers_ba411067~7be9~4787~a9dc~da5c74995cb4",
+  "layers 的 day／night／topo／biome 是地表圖，數字資料夾（例如 -2、5）是洞穴模式的第幾層（chunk Y 分段）；cache 是 JourneyMap 的暫存。",
+  "x,z 是區域座標（一張圖 512×512 格），換成方塊座標要乘以 512。",
+  "after_11_9 = 該圖層 11/9 00:00（台灣時間）之後修改的圖片數；oldest = 最舊一張的修改時間。"
+ ],
+ "servers": [
+  {
+   "server": "Triggers",
+   "mtime": "2026-10-28 03:24",
+   "worlds": [
+    {
+     "world": "overworld",
+     "mtime": "2026-11-10 03:33",
+     "layers": {
+      "-2": {
+       "n": 0
+      },
+      "-5": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-01 11:29",
+       "oldest": "2026-11-01 11:29",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-6": {
+       "n": 0
+      },
+      "-7": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-01 11:35",
+       "oldest": "2026-11-01 11:35",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-9": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-01 11:30",
+       "oldest": "2026-11-01 11:30",
+       "other": [
+        "cache/"
+       ]
+      },
+      "10": {
+       "n": 0
+      },
+      "4": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-10 19:31",
+       "oldest": "2026-11-01 11:24",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-01 11:25",
+       "oldest": "2026-11-01 11:25",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 6,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -2,
+       "zmax": 0,
+       "newest": "2026-11-11 21:12",
+       "oldest": "2026-11-01 11:24",
+       "after_11_9": 3
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.-2.mca",
+        "r.-1.-21.mca",
+        "r.-1.-24.mca",
+        "r.-1.0.mca",
+        "r.-10.-20.mca",
+        "r.-10.-22.mca",
+        "r.-2.-2.mca",
+        "r.-3.-24.mca",
+        "r.-4.-20.mca",
+        "r.-4.-22.mca",
+        "r.-6.-10.mca",
+        "r.-6.-12.mca",
+        "r.-6.-20.mca",
+        "r.-6.-22.mca",
+        "r.-7.-10.mca",
+        "r.-7.-12.mca",
+        "r.-7.-20.mca",
+        "r.-7.-22.mca",
+        "r.-8.-20.mca",
+        "r.-8.-6.mca",
+        "r.-9.-20.mca",
+        "r.-9.-22.mca",
+        "r.0.-1.mca",
+        "r.0.-2.mca",
+        "r.0.0.mca",
+        "r.11.-20.mca",
+        "r.11.-22.mca",
+        "r.12.-22.mca",
+        "r.15.-22.mca",
+        "r.16.-19.mca",
+        "r.2.-24.mca",
+        "r.20.-22.mca",
+        "r.23.-18.mca",
+        "r.23.-21.mca",
+        "r.26.-19.mca",
+        "r.29.-15.mca",
+        "r.29.-18.mca",
+        "r.32.-15.mca",
+        "r.35.72.mca",
+        "r.35.74.mca",
+        "r.35.75.mca",
+        "r.35.77.mca",
+        "r.36.-10.mca",
+        "r.36.-8.mca",
+        "r.36.72.mca",
+        "r.36.74.mca",
+        "r.36.75.mca",
+        "r.36.76.mca",
+        "r.36.77.mca",
+        "r.36.78.mca",
+        "r.36.79.mca",
+        "r.37.75.mca",
+        "r.37.80.mca",
+        "r.38.74.mca",
+        "r.39.-4.mca",
+        "r.39.75.mca",
+        "r.39.76.mca",
+        "r.41.3.mca",
+        "r.41.5.mca",
+        "r.41.75.mca",
+        "r.41.77.mca",
+        "r.42.77.mca",
+        "r.43.78.mca",
+        "r.44.17.mca",
+        "r.44.19.mca",
+        "r.44.77.mca",
+        "r.44.9.mca",
+        "r.45.78.mca",
+        "r.45.79.mca",
+        "r.46.80.mca",
+        "r.47.26.mca",
+        "r.47.30.mca",
+        "r.47.33.mca",
+        "r.47.78.mca",
+        "r.48.78.mca",
+        "r.48.80.mca",
+        "r.49.80.mca",
+        "r.5.-21.mca",
+        "r.5.-24.mca",
+        "r.50.39.mca",
+        "r.50.78.mca",
+        "r.51.78.mca",
+        "r.51.81.mca",
+        "r.52.81.mca",
+        "r.53.44.mca",
+        "r.53.46.mca",
+        "r.53.80.mca",
+        "r.54.50.mca",
+        "r.54.80.mca",
+        "r.54.82.mca",
+        "r.56.81.mca",
+        "r.56.83.mca",
+        "r.57.56.mca",
+        "r.57.58.mca",
+        "r.57.81.mca",
+        "r.57.84.mca",
+        "r.59.62.mca",
+        "r.59.83.mca",
+        "r.59.85.mca",
+        "r.60.83.mca",
+        "r.61.85.mca",
+        "r.62.66.mca",
+        "r.62.68.mca",
+        "r.62.71.mca",
+        "r.62.83.mca",
+        "r.62.84.mca",
+        "r.63.75.mca",
+        "r.63.78.mca",
+        "r.63.80.mca",
+        "r.63.81.mca",
+        "r.63.83.mca",
+        "r.63.84.mca",
+        "r.63.86.mca",
+        "r.64.77.mca",
+        "r.64.82.mca",
+        "r.64.83.mca",
+        "r.64.85.mca",
+        "r.64.86.mca",
+        "r.65.84.mca",
+        "r.65.86.mca",
+        "r.66.86.mca",
+        "r.8.-24.mca"
+       ]
+      },
+      "day": {
+       "n": 6,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -2,
+       "zmax": 0,
+       "newest": "2026-11-11 21:12",
+       "oldest": "2026-11-01 11:24",
+       "after_11_9": 3
+      },
+      "night": {
+       "n": 6,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -2,
+       "zmax": 0,
+       "newest": "2026-11-11 21:12",
+       "oldest": "2026-11-01 11:24",
+       "after_11_9": 3
+      },
+      "topo": {
+       "n": 6,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -2,
+       "zmax": 0,
+       "newest": "2026-11-11 21:12",
+       "oldest": "2026-11-01 11:24",
+       "after_11_9": 3,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-11 21:12"
+  },
+  {
+   "server": "Triggers_0170a4a1~198e~42df~94a3~e71d8c30bbca",
+   "mtime": "2026-10-29 03:25",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-29 03:25",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:47",
+       "oldest": "2026-10-29 03:26"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:47",
+       "oldest": "2026-10-29 03:26"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:47",
+       "oldest": "2026-10-29 03:26"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:47",
+       "oldest": "2026-10-29 03:26",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 03:47"
+  },
+  {
+   "server": "Triggers_1446d240~07af~47c4~8e86~361461132bf8",
+   "mtime": "2026-10-28 21:53",
+   "worlds": [
+    {
+     "world": "gigas_cedar",
+     "mtime": "2026-10-28 21:55",
+     "layers": {
+      "-2": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-10-28 21:59",
+       "oldest": "2026-10-28 21:59",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 21:59",
+       "oldest": "2026-10-28 21:54"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 21:59",
+       "oldest": "2026-10-28 21:54"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 21:59",
+       "oldest": "2026-10-28 21:54"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 21:59",
+       "oldest": "2026-10-28 21:54",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-28 21:59"
+  },
+  {
+   "server": "Triggers_184044f7~4218~4562~b82f~a0c35f47f413",
+   "mtime": "2026-10-29 01:27",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-29 01:28",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:28",
+       "oldest": "2026-10-29 01:28"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:28",
+       "oldest": "2026-10-29 01:28"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:28",
+       "oldest": "2026-10-29 01:28"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:28",
+       "oldest": "2026-10-29 01:28",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 01:28"
+  },
+  {
+   "server": "Triggers_20b56b15~2911~48b9~a61c~134cca2e3e0c",
+   "mtime": "2026-10-31 02:56",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-31 02:56",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 02:59",
+       "oldest": "2026-10-31 02:57"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 02:59",
+       "oldest": "2026-10-31 02:57"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 02:59",
+       "oldest": "2026-10-31 02:57"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 02:59",
+       "oldest": "2026-10-31 02:57",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-31 02:59"
+  },
+  {
+   "server": "Triggers_272ffb3e~82cf~4662~b83a~e0a600d8e6b2",
+   "mtime": "2026-10-28 22:21",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-28 22:21",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:21",
+       "oldest": "2026-10-28 22:21"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:21",
+       "oldest": "2026-10-28 22:21"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:21",
+       "oldest": "2026-10-28 22:21"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:21",
+       "oldest": "2026-10-28 22:21",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-28 22:21"
+  },
+  {
+   "server": "Triggers_2f0f1b86~d152~4351~889b~0225a9692c23",
+   "mtime": "2026-10-31 11:37",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-31 11:37",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 11:37",
+       "oldest": "2026-10-31 11:37"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 11:37",
+       "oldest": "2026-10-31 11:37"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 11:37",
+       "oldest": "2026-10-31 11:37"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 11:37",
+       "oldest": "2026-10-31 11:37",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-31 11:37"
+  },
+  {
+   "server": "Triggers_34823e8d~e3f7~43df~9919~ce8888015622",
+   "mtime": "2026-10-30 03:37",
+   "worlds": [
+    {
+     "world": "rulid",
+     "mtime": "2026-10-30 03:37",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:38",
+       "oldest": "2026-10-30 03:38"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:39",
+       "oldest": "2026-10-30 03:38"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:39",
+       "oldest": "2026-10-30 03:38"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:39",
+       "oldest": "2026-10-30 03:38",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-30 03:39"
+  },
+  {
+   "server": "Triggers_374c1520~f269~45a8~96de~8040a49311c5",
+   "mtime": "2026-10-29 02:08",
+   "worlds": [
+    {
+     "world": "rulid",
+     "mtime": "2026-10-29 02:11",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:05",
+       "oldest": "2026-10-29 03:04"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:05",
+       "oldest": "2026-10-29 03:04"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:05",
+       "oldest": "2026-10-29 03:04"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:05",
+       "oldest": "2026-10-29 03:04",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 03:05"
+  },
+  {
+   "server": "Triggers_3a94063b~edba~437c~9956~6c591bd9af13",
+   "mtime": "2026-10-28 22:58",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-28 23:02",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 23:00",
+       "oldest": "2026-10-28 22:59"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 23:01",
+       "oldest": "2026-10-28 23:00"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 23:01",
+       "oldest": "2026-10-28 23:00"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 23:01",
+       "oldest": "2026-10-28 23:00",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-28 23:01"
+  },
+  {
+   "server": "Triggers_3be15ef4~5707~4add~930f~9236b93c75a6",
+   "mtime": "2026-10-28 03:31",
+   "worlds": [
+    {
+     "world": "tuto_arrivee",
+     "mtime": "2026-10-28 03:32",
+     "layers": {
+      "12": {
+       "n": 8,
+       "xmin": 1,
+       "xmax": 4,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 21:54",
+       "oldest": "2026-10-28 03:42",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 12,
+       "xmin": -1,
+       "xmax": 4,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 21:53",
+       "oldest": "2026-10-28 03:32"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca",
+        "r.1.-1.mca",
+        "r.1.0.mca",
+        "r.2.-1.mca",
+        "r.2.0.mca",
+        "r.3.-1.mca",
+        "r.3.0.mca",
+        "r.4.-1.mca",
+        "r.4.0.mca"
+       ]
+      },
+      "day": {
+       "n": 12,
+       "xmin": -1,
+       "xmax": 4,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 21:53",
+       "oldest": "2026-10-28 03:32"
+      },
+      "night": {
+       "n": 12,
+       "xmin": -1,
+       "xmax": 4,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 21:53",
+       "oldest": "2026-10-28 03:32"
+      },
+      "topo": {
+       "n": 12,
+       "xmin": -1,
+       "xmax": 4,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 21:52",
+       "oldest": "2026-10-28 03:32",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-04 21:54"
+  },
+  {
+   "server": "Triggers_412fbf2e~3c73~4070~825c~54a1f7c0a88a",
+   "mtime": "2026-11-08 17:43",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-08 17:43",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 17:44",
+       "oldest": "2026-11-08 17:44"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 17:44",
+       "oldest": "2026-11-08 17:44"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 17:44",
+       "oldest": "2026-11-08 17:44"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 17:44",
+       "oldest": "2026-11-08 17:44",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-08 17:44"
+  },
+  {
+   "server": "Triggers_44fb4446~9835~4c53~8570~957d104dbfaa",
+   "mtime": "2026-10-31 12:06",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-31 12:06",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 12:07",
+       "oldest": "2026-10-31 12:07"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 12:07",
+       "oldest": "2026-10-31 12:07"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 12:07",
+       "oldest": "2026-10-31 12:07"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 12:07",
+       "oldest": "2026-10-31 12:07",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-31 12:07"
+  },
+  {
+   "server": "Triggers_48abac39~5ce6~46cf~ada0~c94ae9fa159c",
+   "mtime": "2026-11-04 22:57",
+   "worlds": [
+    {
+     "world": "ice_cave",
+     "mtime": "2026-11-04 23:00",
+     "layers": {
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 23:02",
+       "oldest": "2026-11-04 23:01",
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-04 23:02",
+       "oldest": "2026-11-04 22:59",
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-04 23:02",
+       "oldest": "2026-11-04 22:59",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 23:03",
+       "oldest": "2026-11-04 22:58",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 23:03",
+       "oldest": "2026-11-04 23:00"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 23:01",
+       "oldest": "2026-11-04 23:01"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 23:01",
+       "oldest": "2026-11-04 23:01"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 23:03",
+       "oldest": "2026-11-04 23:01",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-04 23:03"
+  },
+  {
+   "server": "Triggers_4c852820~91a3~420b~8be3~7ffe34802f74",
+   "mtime": "2026-11-08 16:14",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-08 16:14",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:15",
+       "oldest": "2026-11-08 16:15"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:15",
+       "oldest": "2026-11-08 16:15"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:15",
+       "oldest": "2026-11-08 16:15"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:15",
+       "oldest": "2026-11-08 16:15",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-08 16:15"
+  },
+  {
+   "server": "Triggers_5481782a~c10a~4fc8~8207~77460a5e0fae",
+   "mtime": "2026-10-30 01:33",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-30 01:00",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 01:13",
+       "oldest": "2026-10-30 01:01"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 01:13",
+       "oldest": "2026-10-30 01:01"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 01:13",
+       "oldest": "2026-10-30 01:01"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 01:13",
+       "oldest": "2026-10-30 01:01",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "overworld",
+     "mtime": "2026-10-30 01:33",
+     "layers": {
+      "biome": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-30 01:45",
+       "oldest": "2026-10-30 01:45"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.0.-1.mca"
+       ]
+      },
+      "day": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-30 01:45",
+       "oldest": "2026-10-30 01:45"
+      },
+      "night": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-30 01:45",
+       "oldest": "2026-10-30 01:45"
+      },
+      "topo": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-30 01:45",
+       "oldest": "2026-10-30 01:45",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-30 01:45"
+  },
+  {
+   "server": "Triggers_648f0453~3b07~4d28~887c~9746a5ec47a9",
+   "mtime": "2026-10-30 03:30",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-30 03:30",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:33",
+       "oldest": "2026-10-30 03:31"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:33",
+       "oldest": "2026-10-30 03:31"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:33",
+       "oldest": "2026-10-30 03:31"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:33",
+       "oldest": "2026-10-30 03:31",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-30 03:33"
+  },
+  {
+   "server": "Triggers_6ed14c59~80e1~42c4~9332~b7d109a3c313",
+   "mtime": "2026-10-29 00:40",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-29 00:40",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 00:40",
+       "oldest": "2026-10-29 00:40"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 00:40",
+       "oldest": "2026-10-29 00:40"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 00:40",
+       "oldest": "2026-10-29 00:40"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 00:40",
+       "oldest": "2026-10-29 00:40",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 00:40"
+  },
+  {
+   "server": "Triggers_7395b65d~6fdc~40a0~a304~beeacd77f5ba",
+   "mtime": "2026-11-09 19:39",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-09 19:46",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:45",
+       "oldest": "2026-11-09 19:40",
+       "after_11_9": 4
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:46",
+       "oldest": "2026-11-09 19:40",
+       "after_11_9": 4
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:46",
+       "oldest": "2026-11-09 19:40",
+       "after_11_9": 4
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:45",
+       "oldest": "2026-11-09 19:40",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：biome、day、night、topo"
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-09 19:46"
+  },
+  {
+   "server": "Triggers_7d7e1465~9c63~487b~a7a7~238417b8cc19",
+   "mtime": "2026-11-08 16:04",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-08 16:09",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:09",
+       "oldest": "2026-11-08 16:05"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:09",
+       "oldest": "2026-11-08 16:05"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:09",
+       "oldest": "2026-11-08 16:05"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:09",
+       "oldest": "2026-11-08 16:05",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-08 16:09"
+  },
+  {
+   "server": "Triggers_7ee58910~88e8~476c~aa5f~1770b8d6ce33",
+   "mtime": "2026-11-09 21:54",
+   "worlds": [
+    {
+     "world": "pre_breches",
+     "mtime": "2026-11-09 21:54",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 22:02",
+       "oldest": "2026-11-09 21:56",
+       "after_11_9": 4
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 22:02",
+       "oldest": "2026-11-09 21:56",
+       "after_11_9": 4
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 22:02",
+       "oldest": "2026-11-09 21:56",
+       "after_11_9": 4
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 22:02",
+       "oldest": "2026-11-09 21:56",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：biome、day、night、topo"
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-09 22:02"
+  },
+  {
+   "server": "Triggers_81292594~c29c~44ee~ac49~70770bd157f4",
+   "mtime": "2026-11-10 20:50",
+   "worlds": [
+    {
+     "world": "repaire_velindra",
+     "mtime": "2026-11-10 20:50",
+     "layers": {
+      "4": {
+       "n": 1,
+       "xmin": 1,
+       "xmax": 1,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-10 20:54",
+       "oldest": "2026-11-10 20:54",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 1,
+       "xmin": 1,
+       "xmax": 1,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-10 20:54",
+       "oldest": "2026-11-10 20:54",
+       "after_11_9": 1
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.1.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 1,
+       "xmin": 1,
+       "xmax": 1,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-10 20:54",
+       "oldest": "2026-11-10 20:54",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：4、biome、topo"
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-10 20:54"
+  },
+  {
+   "server": "Triggers_815bd3d6~f22f~4114~a601~dfcf0a106221",
+   "mtime": "2026-11-09 21:15",
+   "worlds": [
+    {
+     "world": "03b352fd-5d0c-4000-8000-000000000001_xalzirith",
+     "mtime": "2026-11-07 19:24",
+     "layers": {
+      "3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-07 19:26",
+       "oldest": "2026-11-07 19:26",
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-07 19:25",
+       "oldest": "2026-11-07 19:24",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-07 19:28",
+       "oldest": "2026-11-07 19:24",
+       "other": [
+        "cache/"
+       ]
+      },
+      "6": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-07 19:27",
+       "oldest": "2026-11-07 19:23",
+       "other": [
+        "cache/"
+       ]
+      },
+      "7": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-07 19:23",
+       "oldest": "2026-11-07 19:23",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-07 19:28",
+       "oldest": "2026-11-07 19:26"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-07 19:28",
+       "oldest": "2026-11-07 19:26",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "03b352fd-5d0c-4000-8000-000000000002_xalzirith",
+     "mtime": "2026-11-06 02:31",
+     "layers": {
+      "0": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-06 02:32",
+       "oldest": "2026-11-06 02:32",
+       "other": [
+        "cache/"
+       ]
+      },
+      "1": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-06 02:32",
+       "oldest": "2026-11-06 02:28",
+       "other": [
+        "cache/"
+       ]
+      },
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-06 02:31",
+       "oldest": "2026-11-06 02:28",
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-06 02:44",
+       "oldest": "2026-11-06 02:41",
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-06 02:45",
+       "oldest": "2026-11-06 02:41",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-06 02:49",
+       "oldest": "2026-11-06 02:35",
+       "other": [
+        "cache/"
+       ]
+      },
+      "6": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-06 02:47",
+       "oldest": "2026-11-06 02:34",
+       "other": [
+        "cache/"
+       ]
+      },
+      "7": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-06 02:18",
+       "oldest": "2026-11-06 02:18",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-06 02:49",
+       "oldest": "2026-11-06 02:37"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-06 02:49",
+       "oldest": "2026-11-06 02:44",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "a57676b0-5d0c-4000-8000-000000000001_geldorack",
+     "mtime": "2026-10-31 17:01",
+     "layers": {
+      "-1": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 17:01",
+       "oldest": "2026-10-31 17:01",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 17:14",
+       "oldest": "2026-10-31 17:01",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 17:16",
+       "oldest": "2026-10-31 17:14",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 17:17",
+       "oldest": "2026-10-31 17:06"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 17:17",
+       "oldest": "2026-10-31 17:06",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "a57676b0-5d0c-4000-8000-000000000002_geldorack",
+     "mtime": "2026-10-30 21:51",
+     "layers": {
+      "-1": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 21:49",
+       "oldest": "2026-10-30 21:49",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 18:05",
+       "oldest": "2026-10-30 21:49",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 18:07",
+       "oldest": "2026-10-30 21:53",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 18:05",
+       "oldest": "2026-10-30 21:53"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 3,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 21:52",
+       "oldest": "2026-10-30 21:52"
+      },
+      "night": {
+       "n": 3,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 21:52",
+       "oldest": "2026-10-30 21:52"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 18:05",
+       "oldest": "2026-10-30 21:53",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "a57676b0-5d0c-4000-8000-000000000003_geldorack",
+     "mtime": "2026-11-04 02:36",
+     "layers": {
+      "-1": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 02:37",
+       "oldest": "2026-11-04 02:37",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 02:41",
+       "oldest": "2026-11-04 02:37",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 02:43",
+       "oldest": "2026-11-04 02:41",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 02:43",
+       "oldest": "2026-11-04 02:39"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 02:43",
+       "oldest": "2026-11-04 02:39",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "backrooms",
+     "mtime": "2026-11-05 19:57",
+     "layers": {
+      "5": {
+       "n": 14,
+       "xmin": -5,
+       "xmax": 271,
+       "zmin": -1,
+       "zmax": 9,
+       "newest": "2026-11-05 19:58",
+       "oldest": "2026-11-05 19:31",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 14,
+       "xmin": -5,
+       "xmax": 271,
+       "zmin": -1,
+       "zmax": 9,
+       "newest": "2026-11-05 19:58",
+       "oldest": "2026-11-05 19:31"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-4.-1.mca",
+        "r.-4.0.mca",
+        "r.-5.-1.mca",
+        "r.-5.0.mca",
+        "r.150.7.mca",
+        "r.150.8.mca",
+        "r.150.9.mca",
+        "r.151.7.mca",
+        "r.151.8.mca",
+        "r.151.9.mca",
+        "r.270.8.mca",
+        "r.270.9.mca",
+        "r.271.8.mca",
+        "r.271.9.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": 150,
+       "xmax": 151,
+       "zmin": 7,
+       "zmax": 8,
+       "newest": "2026-11-05 19:58",
+       "oldest": "2026-11-05 19:58"
+      },
+      "night": {
+       "n": 4,
+       "xmin": 150,
+       "xmax": 151,
+       "zmin": 7,
+       "zmax": 8,
+       "newest": "2026-11-05 19:58",
+       "oldest": "2026-11-05 19:58"
+      },
+      "topo": {
+       "n": 14,
+       "xmin": -5,
+       "xmax": 271,
+       "zmin": -1,
+       "zmax": 9,
+       "newest": "2026-11-05 19:58",
+       "oldest": "2026-11-05 19:31",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "bce0f5e9-5d0c-4000-8000-000000000002_kobold",
+     "mtime": "2026-11-09 21:15",
+     "layers": {
+      "-1": {
+       "n": 10,
+       "xmin": 0,
+       "xmax": 3,
+       "zmin": 0,
+       "zmax": 3,
+       "newest": "2026-11-09 21:28",
+       "oldest": "2026-11-09 21:16",
+       "after_11_9": 10,
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 10,
+       "xmin": 0,
+       "xmax": 3,
+       "zmin": 0,
+       "zmax": 3,
+       "newest": "2026-11-09 21:28",
+       "oldest": "2026-11-09 21:16",
+       "after_11_9": 10
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.0.0.mca",
+        "r.0.1.mca",
+        "r.0.2.mca",
+        "r.1.1.mca",
+        "r.1.2.mca",
+        "r.1.3.mca",
+        "r.2.1.mca",
+        "r.2.2.mca",
+        "r.3.1.mca",
+        "r.3.2.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 10,
+       "xmin": 0,
+       "xmax": 3,
+       "zmin": 0,
+       "zmax": 3,
+       "newest": "2026-11-09 21:28",
+       "oldest": "2026-11-09 21:16",
+       "after_11_9": 10,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：-1、biome、topo"
+    },
+    {
+     "world": "ca72d386-5d0c-4000-8000-000000000001_labyrinthe",
+     "mtime": "2026-11-08 19:08",
+     "layers": {
+      "-2": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-09 20:59",
+       "oldest": "2026-11-09 20:59",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "-3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 20:59",
+       "oldest": "2026-11-09 20:56",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "0": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-08 18:59",
+       "oldest": "2026-11-08 18:59",
+       "other": [
+        "cache/"
+       ]
+      },
+      "1": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 19:08",
+       "oldest": "2026-11-08 19:00",
+       "other": [
+        "cache/"
+       ]
+      },
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 19:08",
+       "oldest": "2026-11-08 19:00",
+       "other": [
+        "cache/"
+       ]
+      },
+      "6": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 19:11",
+       "oldest": "2026-11-08 19:10",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 20:59",
+       "oldest": "2026-11-08 18:43",
+       "after_11_9": 3
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 20:54",
+       "oldest": "2026-11-08 19:11",
+       "after_11_9": 2
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 20:54",
+       "oldest": "2026-11-08 19:11",
+       "after_11_9": 2
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 20:57",
+       "oldest": "2026-11-08 19:06",
+       "after_11_9": 3,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：-2、-3"
+    },
+    {
+     "world": "ca72d386-5d0c-4000-8000-000000000002_labyrinthe",
+     "mtime": "2026-11-09 03:22",
+     "layers": {
+      "-1": {
+       "n": 0
+      },
+      "-3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:24",
+       "oldest": "2026-11-09 03:15",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "1": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:18",
+       "oldest": "2026-11-09 03:16",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "10": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:22",
+       "oldest": "2026-11-09 03:22",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:18",
+       "oldest": "2026-11-09 03:16",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 1,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-09 03:22",
+       "oldest": "2026-11-09 03:22",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "6": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:21",
+       "oldest": "2026-11-09 03:19",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "9": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:24",
+       "oldest": "2026-11-09 03:16",
+       "after_11_9": 4
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:21",
+       "oldest": "2026-11-09 03:20",
+       "after_11_9": 4
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:21",
+       "oldest": "2026-11-09 03:20",
+       "after_11_9": 4
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:24",
+       "oldest": "2026-11-09 03:19",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：-3、1、10、2、3、6、biome、day、night、topo"
+    },
+    {
+     "world": "ca72d386-5d0c-4000-8000-000000000003_labyrinthe",
+     "mtime": "2026-11-09 01:01",
+     "layers": {
+      "-3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 01:07",
+       "oldest": "2026-11-09 01:06",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 01:07",
+       "oldest": "2026-11-09 01:06",
+       "after_11_9": 4
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 01:07",
+       "oldest": "2026-11-09 01:06",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：-3、biome、topo"
+    },
+    {
+     "world": "ca72d386-5d0c-4000-8000-000000000008_labyrinthe",
+     "mtime": "2026-11-08 22:48",
+     "layers": {
+      "-2": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-08 22:33",
+       "oldest": "2026-11-08 22:33",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 22:33",
+       "oldest": "2026-11-08 22:30",
+       "other": [
+        "cache/"
+       ]
+      },
+      "1": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 22:44",
+       "oldest": "2026-11-08 22:40",
+       "other": [
+        "cache/"
+       ]
+      },
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 22:44",
+       "oldest": "2026-11-08 22:42",
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-08 22:49",
+       "oldest": "2026-11-08 22:49",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-08 23:00",
+       "oldest": "2026-11-08 23:00",
+       "other": [
+        "cache/"
+       ]
+      },
+      "6": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 23:04",
+       "oldest": "2026-11-08 22:45",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 23:00",
+       "oldest": "2026-11-08 22:35"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 22:46",
+       "oldest": "2026-11-08 22:46"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 22:46",
+       "oldest": "2026-11-08 22:46"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 23:00",
+       "oldest": "2026-11-08 22:45",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "ca72d386-5d0c-4000-8000-000000000009_labyrinthe",
+     "mtime": "2026-11-09 04:02",
+     "layers": {
+      "-1": {
+       "n": 0
+      },
+      "-3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 04:04",
+       "oldest": "2026-11-09 03:55",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "1": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:59",
+       "oldest": "2026-11-09 03:57",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "10": {
+       "n": 3,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 04:03",
+       "oldest": "2026-11-09 04:02",
+       "after_11_9": 3,
+       "other": [
+        "cache/"
+       ]
+      },
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 03:59",
+       "oldest": "2026-11-09 03:58",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 0
+      },
+      "6": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 04:02",
+       "oldest": "2026-11-09 04:00",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "9": {
+       "n": 1,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-09 03:51",
+       "oldest": "2026-11-09 03:51",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 04:03",
+       "oldest": "2026-11-09 03:29",
+       "after_11_9": 4
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 04:01",
+       "oldest": "2026-11-09 03:58",
+       "after_11_9": 4
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 04:01",
+       "oldest": "2026-11-09 03:58",
+       "after_11_9": 4
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 04:04",
+       "oldest": "2026-11-09 04:00",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：-3、1、10、2、6、9、biome、day、night、topo"
+    },
+    {
+     "world": "overworld",
+     "mtime": "2026-11-08 21:43",
+     "layers": {
+      "-1": {
+       "n": 6,
+       "xmin": 2,
+       "xmax": 5,
+       "zmin": 3,
+       "zmax": 9,
+       "newest": "2026-11-08 18:21",
+       "oldest": "2026-10-31 19:24",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-102": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-104": {
+       "n": 0
+      },
+      "-105": {
+       "n": 0
+      },
+      "-107": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-11": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:54",
+       "oldest": "2026-11-05 22:54",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-110": {
+       "n": 0
+      },
+      "-113": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-117": {
+       "n": 0
+      },
+      "-12": {
+       "n": 0
+      },
+      "-121": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-128": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-130": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-131": {
+       "n": 0
+      },
+      "-136": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-139": {
+       "n": 0
+      },
+      "-143": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-148": {
+       "n": 0
+      },
+      "-152": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-157": {
+       "n": 0
+      },
+      "-161": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-166": {
+       "n": 0
+      },
+      "-171": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-176": {
+       "n": 0
+      },
+      "-18": {
+       "n": 0
+      },
+      "-181": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-186": {
+       "n": 0
+      },
+      "-191": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-2": {
+       "n": 5,
+       "xmin": 2,
+       "xmax": 6,
+       "zmin": 3,
+       "zmax": 8,
+       "newest": "2026-11-08 18:16",
+       "oldest": "2026-10-30 22:19",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-20": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:54",
+       "oldest": "2026-11-05 22:54",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-201": {
+       "n": 0
+      },
+      "-205": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-208": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-210": {
+       "n": 0
+      },
+      "-216": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-220": {
+       "n": 0
+      },
+      "-224": {
+       "n": 0
+      },
+      "-229": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-23": {
+       "n": 0
+      },
+      "-233": {
+       "n": 0
+      },
+      "-238": {
+       "n": 0
+      },
+      "-243": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-248": {
+       "n": 0
+      },
+      "-252": {
+       "n": 0
+      },
+      "-259": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-266": {
+       "n": 0
+      },
+      "-273": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-275": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:56",
+       "oldest": "2026-11-05 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-277": {
+       "n": 0
+      },
+      "-279": {
+       "n": 0
+      },
+      "-281": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:56",
+       "oldest": "2026-11-05 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-285": {
+       "n": 0
+      },
+      "-289": {
+       "n": 0
+      },
+      "-29": {
+       "n": 0
+      },
+      "-293": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:56",
+       "oldest": "2026-11-05 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-298": {
+       "n": 0
+      },
+      "-3": {
+       "n": 7,
+       "xmin": 0,
+       "xmax": 6,
+       "zmin": 0,
+       "zmax": 8,
+       "newest": "2026-11-08 18:15",
+       "oldest": "2026-10-30 22:19",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-303": {
+       "n": 0
+      },
+      "-308": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:56",
+       "oldest": "2026-11-05 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-31": {
+       "n": 0
+      },
+      "-313": {
+       "n": 0
+      },
+      "-318": {
+       "n": 0
+      },
+      "-323": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:56",
+       "oldest": "2026-11-05 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-328": {
+       "n": 0
+      },
+      "-337": {
+       "n": 0
+      },
+      "-34": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:54",
+       "oldest": "2026-11-05 22:54",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-343": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:56",
+       "oldest": "2026-11-05 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-347": {
+       "n": 0
+      },
+      "-353": {
+       "n": 0
+      },
+      "-357": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:56",
+       "oldest": "2026-11-05 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-359": {
+       "n": 0
+      },
+      "-361": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:56",
+       "oldest": "2026-11-05 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-365": {
+       "n": 0
+      },
+      "-369": {
+       "n": 0
+      },
+      "-37": {
+       "n": 0
+      },
+      "-374": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:56",
+       "oldest": "2026-11-05 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-378": {
+       "n": 0
+      },
+      "-383": {
+       "n": 0
+      },
+      "-389": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:56",
+       "oldest": "2026-11-05 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-39": {
+       "n": 0
+      },
+      "-398": {
+       "n": 0
+      },
+      "-4": {
+       "n": 4,
+       "xmin": 0,
+       "xmax": 3,
+       "zmin": 0,
+       "zmax": 4,
+       "newest": "2026-11-05 20:11",
+       "oldest": "2026-11-05 02:19",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-42": {
+       "n": 0
+      },
+      "-44": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:54",
+       "oldest": "2026-11-05 22:54",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-47": {
+       "n": 0
+      },
+      "-49": {
+       "n": 0
+      },
+      "-54": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:54",
+       "oldest": "2026-11-05 22:54",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-57": {
+       "n": 0
+      },
+      "-59": {
+       "n": 0
+      },
+      "-6": {
+       "n": 0
+      },
+      "-62": {
+       "n": 0
+      },
+      "-64": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-68": {
+       "n": 0
+      },
+      "-71": {
+       "n": 0
+      },
+      "-74": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-77": {
+       "n": 0
+      },
+      "-79": {
+       "n": 0
+      },
+      "-82": {
+       "n": 0
+      },
+      "-84": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-89": {
+       "n": 0
+      },
+      "-94": {
+       "n": 2,
+       "xmin": 6,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:55",
+       "oldest": "2026-11-05 22:55",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-99": {
+       "n": 0
+      },
+      "0": {
+       "n": 16,
+       "xmin": -1,
+       "xmax": 6,
+       "zmin": -1,
+       "zmax": 9,
+       "newest": "2026-11-09 00:58",
+       "oldest": "2026-10-29 03:53",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "1": {
+       "n": 30,
+       "xmin": 0,
+       "xmax": 7,
+       "zmin": 2,
+       "zmax": 9,
+       "newest": "2026-11-08 18:29",
+       "oldest": "2026-10-31 19:23",
+       "other": [
+        "cache/"
+       ]
+      },
+      "10": {
+       "n": 11,
+       "xmin": 0,
+       "xmax": 8,
+       "zmin": 2,
+       "zmax": 7,
+       "newest": "2026-11-08 03:24",
+       "oldest": "2026-10-29 23:30",
+       "other": [
+        "cache/"
+       ]
+      },
+      "11": {
+       "n": 5,
+       "xmin": 1,
+       "xmax": 8,
+       "zmin": 2,
+       "zmax": 7,
+       "newest": "2026-11-05 23:02",
+       "oldest": "2026-10-29 23:34",
+       "other": [
+        "cache/"
+       ]
+      },
+      "12": {
+       "n": 7,
+       "xmin": 1,
+       "xmax": 8,
+       "zmin": 2,
+       "zmax": 7,
+       "newest": "2026-11-09 21:11",
+       "oldest": "2026-10-29 23:34",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "13": {
+       "n": 4,
+       "xmin": 6,
+       "xmax": 7,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:51",
+       "oldest": "2026-11-05 02:40",
+       "other": [
+        "cache/"
+       ]
+      },
+      "14": {
+       "n": 6,
+       "xmin": 1,
+       "xmax": 7,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 22:51",
+       "oldest": "2026-11-05 01:41",
+       "other": [
+        "cache/"
+       ]
+      },
+      "15": {
+       "n": 7,
+       "xmin": 3,
+       "xmax": 7,
+       "zmin": 2,
+       "zmax": 8,
+       "newest": "2026-11-08 03:25",
+       "oldest": "2026-11-03 20:47",
+       "other": [
+        "cache/"
+       ]
+      },
+      "16": {
+       "n": 4,
+       "xmin": 5,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 02:27",
+       "oldest": "2026-11-03 20:48",
+       "other": [
+        "cache/"
+       ]
+      },
+      "17": {
+       "n": 4,
+       "xmin": 5,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 02:27",
+       "oldest": "2026-11-03 20:48",
+       "other": [
+        "cache/"
+       ]
+      },
+      "18": {
+       "n": 4,
+       "xmin": 5,
+       "xmax": 6,
+       "zmin": 2,
+       "zmax": 3,
+       "newest": "2026-11-05 02:31",
+       "oldest": "2026-11-03 20:49",
+       "other": [
+        "cache/"
+       ]
+      },
+      "2": {
+       "n": 26,
+       "xmin": 0,
+       "xmax": 8,
+       "zmin": 3,
+       "zmax": 8,
+       "newest": "2026-11-08 18:12",
+       "oldest": "2026-10-28 23:04",
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 15,
+       "xmin": 0,
+       "xmax": 8,
+       "zmin": 1,
+       "zmax": 8,
+       "newest": "2026-11-07 02:07",
+       "oldest": "2026-10-29 02:21",
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 13,
+       "xmin": 0,
+       "xmax": 8,
+       "zmin": 1,
+       "zmax": 7,
+       "newest": "2026-11-08 18:40",
+       "oldest": "2026-10-29 02:30",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 22,
+       "xmin": 0,
+       "xmax": 9,
+       "zmin": -1,
+       "zmax": 9,
+       "newest": "2026-11-08 19:13",
+       "oldest": "2026-10-29 22:03",
+       "other": [
+        "cache/"
+       ]
+      },
+      "6": {
+       "n": 19,
+       "xmin": 0,
+       "xmax": 8,
+       "zmin": 2,
+       "zmax": 9,
+       "newest": "2026-11-08 04:05",
+       "oldest": "2026-10-29 22:02",
+       "other": [
+        "cache/"
+       ]
+      },
+      "7": {
+       "n": 14,
+       "xmin": 0,
+       "xmax": 8,
+       "zmin": 2,
+       "zmax": 9,
+       "newest": "2026-11-08 04:14",
+       "oldest": "2026-10-29 22:01",
+       "other": [
+        "cache/"
+       ]
+      },
+      "8": {
+       "n": 12,
+       "xmin": 1,
+       "xmax": 8,
+       "zmin": 1,
+       "zmax": 9,
+       "newest": "2026-11-08 03:30",
+       "oldest": "2026-10-29 22:01",
+       "other": [
+        "cache/"
+       ]
+      },
+      "9": {
+       "n": 15,
+       "xmin": 0,
+       "xmax": 8,
+       "zmin": -1,
+       "zmax": 7,
+       "newest": "2026-11-08 03:24",
+       "oldest": "2026-10-29 00:01",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 81,
+       "xmin": -2,
+       "xmax": 10,
+       "zmin": -2,
+       "zmax": 14,
+       "newest": "2026-11-08 19:23",
+       "oldest": "2026-10-28 03:31"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.-2.mca",
+        "r.-1.0.mca",
+        "r.-1.1.mca",
+        "r.-1.10.mca",
+        "r.-1.11.mca",
+        "r.-1.2.mca",
+        "r.-1.3.mca",
+        "r.-1.4.mca",
+        "r.-1.5.mca",
+        "r.-1.6.mca",
+        "r.-1.7.mca",
+        "r.-1.9.mca",
+        "r.-10.-2.mca",
+        "r.-10.0.mca",
+        "r.-10.12.mca",
+        "r.-11.-5.mca",
+        "r.-11.4.mca",
+        "r.-11.9.mca",
+        "r.-12.10.mca",
+        "r.-13.10.mca",
+        "r.-15.10.mca",
+        "r.-16.13.mca",
+        "r.-17.13.mca",
+        "r.-2.-1.mca",
+        "r.-2.-2.mca",
+        "r.-2.-3.mca",
+        "r.-2.-4.mca",
+        "r.-2.-5.mca",
+        "r.-2.0.mca",
+        "r.-2.1.mca",
+        "r.-2.10.mca",
+        "r.-2.11.mca",
+        "r.-2.12.mca",
+        "r.-2.2.mca",
+        "r.-2.3.mca",
+        "r.-2.4.mca",
+        "r.-2.5.mca",
+        "r.-2.6.mca",
+        "r.-2.7.mca",
+        "r.-2.9.mca",
+        "r.-21.13.mca",
+        "r.-21.3.mca",
+        "r.-24.13.mca",
+        "r.-27.-9.mca",
+        "r.-27.13.mca",
+        "r.-28.13.mca",
+        "r.-29.-12.mca",
+        "r.-3.-1.mca",
+        "r.-3.-2.mca",
+        "r.-3.-6.mca",
+        "r.-3.-7.mca",
+        "r.-3.-8.mca",
+        "r.-3.0.mca",
+        "r.-3.1.mca",
+        "r.-3.10.mca",
+        "r.-3.2.mca",
+        "r.-3.3.mca",
+        "r.-3.4.mca",
+        "r.-3.5.mca",
+        "r.-3.6.mca",
+        "r.-3.9.mca",
+        "r.-30.3.mca",
+        "r.-35.-22.mca",
+        "r.-36.-17.mca",
+        "r.-4.-1.mca",
+        "r.-4.-2.mca",
+        "r.-4.-4.mca",
+        "r.-4.0.mca",
+        "r.-4.1.mca",
+        "r.-4.2.mca",
+        "r.-4.3.mca",
+        "r.-4.5.mca",
+        "r.-4.6.mca",
+        "r.-4.8.mca",
+        "r.-4.9.mca",
+        "r.-5.-1.mca",
+        "r.-5.-2.mca",
+        "r.-5.-3.mca",
+        "r.-5.-4.mca",
+        "r.-5.0.mca",
+        "r.-5.1.mca",
+        "r.-5.2.mca",
+        "r.-5.4.mca",
+        "r.-5.5.mca",
+        "r.-5.6.mca",
+        "r.-5.8.mca",
+        "r.-6.-1.mca",
+        "r.-6.-4.mca",
+        "r.-6.1.mca",
+        "r.-6.2.mca",
+        "r.-6.3.mca",
+        "r.-6.4.mca",
+        "r.-6.8.mca",
+        "r.-6.9.mca",
+        "r.-63.-33.mca",
+        "r.-7.-1.mca",
+        "r.-7.1.mca",
+        "r.-7.10.mca",
+        "r.-7.12.mca",
+        "r.-7.2.mca",
+        "r.-7.3.mca",
+        "r.-7.6.mca",
+        "r.-7.9.mca",
+        "r.-8.-3.mca",
+        "r.-8.1.mca",
+        "r.-8.8.mca",
+        "r.-8.9.mca",
+        "r.-9.-2.mca",
+        "r.-9.-4.mca",
+        "r.-9.1.mca",
+        "r.0.-1.mca",
+        "r.0.-7.mca",
+        "r.0.-8.mca",
+        "r.0.-9.mca",
+        "r.0.0.mca",
+        "r.0.1.mca",
+        "r.0.10.mca",
+        "r.0.2.mca",
+        "r.0.3.mca",
+        "r.0.4.mca",
+        "r.0.5.mca",
+        "r.0.6.mca",
+        "r.0.7.mca",
+        "r.0.8.mca",
+        "r.0.9.mca",
+        "r.1.-1.mca",
+        "r.1.-2.mca",
+        "r.1.-3.mca",
+        "r.1.-5.mca",
+        "r.1.-6.mca",
+        "r.1.0.mca",
+        "r.1.1.mca",
+        "r.1.10.mca",
+        "r.1.13.mca",
+        "r.1.2.mca",
+        "r.1.3.mca",
+        "r.1.4.mca",
+        "r.1.5.mca",
+        "r.1.6.mca",
+        "r.1.7.mca",
+        "r.1.8.mca",
+        "r.1.9.mca",
+        "r.10.10.mca",
+        "r.10.13.mca",
+        "r.10.14.mca",
+        "r.10.2.mca",
+        "r.10.3.mca",
+        "r.10.5.mca",
+        "r.10.6.mca",
+        "r.10.7.mca",
+        "r.11.10.mca",
+        "r.11.5.mca",
+        "r.11.7.mca",
+        "r.11.9.mca",
+        "r.12.4.mca",
+        "r.12.5.mca",
+        "r.12.6.mca",
+        "r.12.7.mca",
+        "r.12.9.mca",
+        "r.13.5.mca",
+        "r.13.9.mca",
+        "r.14.4.mca",
+        "r.14.5.mca",
+        "r.15.4.mca",
+        "r.15.5.mca",
+        "r.16.3.mca",
+        "r.16.4.mca",
+        "r.2.-2.mca",
+        "r.2.0.mca",
+        "r.2.1.mca",
+        "r.2.10.mca",
+        "r.2.11.mca",
+        "r.2.12.mca",
+        "r.2.13.mca",
+        "r.2.2.mca",
+        "r.2.3.mca",
+        "r.2.4.mca",
+        "r.2.5.mca",
+        "r.2.6.mca",
+        "r.2.7.mca",
+        "r.2.8.mca",
+        "r.2.9.mca",
+        "r.3.0.mca",
+        "r.3.1.mca",
+        "r.3.10.mca",
+        "r.3.11.mca",
+        "r.3.12.mca",
+        "r.3.13.mca",
+        "r.3.2.mca",
+        "r.3.3.mca",
+        "r.3.4.mca",
+        "r.3.5.mca",
+        "r.3.6.mca",
+        "r.3.7.mca",
+        "r.3.8.mca",
+        "r.3.9.mca",
+        "r.4.0.mca",
+        "r.4.1.mca",
+        "r.4.10.mca",
+        "r.4.11.mca",
+        "r.4.12.mca",
+        "r.4.13.mca",
+        "r.4.15.mca",
+        "r.4.2.mca",
+        "r.4.3.mca",
+        "r.4.4.mca",
+        "r.4.5.mca",
+        "r.4.6.mca",
+        "r.4.7.mca",
+        "r.4.8.mca",
+        "r.4.9.mca",
+        "r.46.8.mca",
+        "r.5.-5.mca",
+        "r.5.0.mca",
+        "r.5.1.mca",
+        "r.5.10.mca",
+        "r.5.11.mca",
+        "r.5.12.mca",
+        "r.5.2.mca",
+        "r.5.3.mca",
+        "r.5.4.mca",
+        "r.5.5.mca",
+        "r.5.6.mca",
+        "r.5.7.mca",
+        "r.5.8.mca",
+        "r.5.9.mca",
+        "r.6.0.mca",
+        "r.6.1.mca",
+        "r.6.2.mca",
+        "r.6.3.mca",
+        "r.6.4.mca",
+        "r.6.5.mca",
+        "r.6.6.mca",
+        "r.6.7.mca",
+        "r.6.8.mca",
+        "r.6.9.mca",
+        "r.7.1.mca",
+        "r.7.10.mca",
+        "r.7.2.mca",
+        "r.7.3.mca",
+        "r.7.4.mca",
+        "r.7.5.mca",
+        "r.7.6.mca",
+        "r.7.7.mca",
+        "r.7.8.mca",
+        "r.7.9.mca",
+        "r.8.0.mca",
+        "r.8.1.mca",
+        "r.8.10.mca",
+        "r.8.2.mca",
+        "r.8.3.mca",
+        "r.8.4.mca",
+        "r.8.5.mca",
+        "r.8.6.mca",
+        "r.8.7.mca",
+        "r.8.72.mca",
+        "r.8.8.mca",
+        "r.8.83.mca",
+        "r.8.837.mca",
+        "r.9.10.mca",
+        "r.9.2.mca",
+        "r.9.3.mca",
+        "r.9.4.mca",
+        "r.9.5.mca",
+        "r.9.6.mca",
+        "r.9.7.mca"
+       ]
+      },
+      "day": {
+       "n": 81,
+       "xmin": -2,
+       "xmax": 10,
+       "zmin": -2,
+       "zmax": 14,
+       "newest": "2026-11-09 21:43",
+       "oldest": "2026-10-28 03:31",
+       "after_11_9": 5
+      },
+      "night": {
+       "n": 81,
+       "xmin": -2,
+       "xmax": 10,
+       "zmin": -2,
+       "zmax": 14,
+       "newest": "2026-11-09 21:43",
+       "oldest": "2026-10-28 03:31",
+       "after_11_9": 5
+      },
+      "topo": {
+       "n": 81,
+       "xmin": -2,
+       "xmax": 10,
+       "zmin": -2,
+       "zmax": 14,
+       "newest": "2026-11-09 21:42",
+       "oldest": "2026-10-28 03:31",
+       "after_11_9": 3,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [
+      "day.zip"
+     ]
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-09 21:43"
+  },
+  {
+   "server": "Triggers_82125999~70f3~4a9e~ace3~14db5f7ed347",
+   "mtime": "2026-11-08 16:50",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-08 16:50",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:51",
+       "oldest": "2026-11-08 16:51"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:51",
+       "oldest": "2026-11-08 16:51"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:51",
+       "oldest": "2026-11-08 16:51"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:51",
+       "oldest": "2026-11-08 16:51",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-08 16:51"
+  },
+  {
+   "server": "Triggers_82731088~6c4f~41a2~a66f~52c5a23cdf40",
+   "mtime": "2026-10-30 17:12",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-30 17:12",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 17:18",
+       "oldest": "2026-10-30 17:13"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 17:18",
+       "oldest": "2026-10-30 17:13"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 17:18",
+       "oldest": "2026-10-30 17:13"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 17:18",
+       "oldest": "2026-10-30 17:13",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-30 17:18"
+  },
+  {
+   "server": "Triggers_8469f887~09de~442c~add2~40f45f27814e",
+   "mtime": "2026-11-04 22:05",
+   "worlds": [
+    {
+     "world": "ice_cave",
+     "mtime": "2026-11-04 22:04",
+     "layers": {
+      "4": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-04 22:05",
+       "oldest": "2026-11-04 22:05",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:04",
+       "oldest": "2026-11-04 22:04",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:05",
+       "oldest": "2026-11-04 22:04"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:05",
+       "oldest": "2026-11-04 22:04",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "overworld",
+     "mtime": "2026-11-04 22:05",
+     "layers": {
+      "biome": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 3,
+       "zmin": -1,
+       "zmax": 8,
+       "newest": "2026-11-04 22:18",
+       "oldest": "2026-11-04 22:06"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.0.-1.mca",
+        "r.3.8.mca"
+       ]
+      },
+      "day": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 3,
+       "zmin": -1,
+       "zmax": 8,
+       "newest": "2026-11-04 22:18",
+       "oldest": "2026-11-04 22:06"
+      },
+      "night": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 3,
+       "zmin": -1,
+       "zmax": 8,
+       "newest": "2026-11-04 22:18",
+       "oldest": "2026-11-04 22:06"
+      },
+      "topo": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 3,
+       "zmin": -1,
+       "zmax": 8,
+       "newest": "2026-11-04 22:18",
+       "oldest": "2026-11-04 22:06",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-04 22:18"
+  },
+  {
+   "server": "Triggers_866b9d73~6248~4e2c~84bf~14fbbc64e1a7",
+   "mtime": "2026-10-28 22:36",
+   "worlds": [
+    {
+     "world": "island_fishing",
+     "mtime": "2026-10-28 22:36",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:48",
+       "oldest": "2026-10-28 22:37"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:48",
+       "oldest": "2026-10-28 22:37"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:48",
+       "oldest": "2026-10-28 22:37"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:48",
+       "oldest": "2026-10-28 22:37",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-28 22:48"
+  },
+  {
+   "server": "Triggers_88e3f6ea~01c9~465c~af58~f31264fb2d99",
+   "mtime": "2026-11-09 19:46",
+   "worlds": [
+    {
+     "world": "ice_cave",
+     "mtime": "2026-11-09 19:51",
+     "layers": {
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:53",
+       "oldest": "2026-11-09 19:51",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-09 19:55",
+       "oldest": "2026-11-09 19:55",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-09 19:55",
+       "oldest": "2026-11-09 19:48",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:47",
+       "oldest": "2026-11-09 19:47",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:51",
+       "oldest": "2026-11-09 19:50",
+       "after_11_9": 4
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:52",
+       "oldest": "2026-11-09 19:51",
+       "after_11_9": 4
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:52",
+       "oldest": "2026-11-09 19:51",
+       "after_11_9": 4
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:55",
+       "oldest": "2026-11-09 19:51",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：2、3、4、5、biome、day、night、topo"
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-09 19:55"
+  },
+  {
+   "server": "Triggers_8a353281~6cad~4fc2~9855~bef1950c678b",
+   "mtime": "2026-11-04 19:53",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-04 19:53",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 19:54",
+       "oldest": "2026-11-04 19:54"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 19:54",
+       "oldest": "2026-11-04 19:54"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 19:54",
+       "oldest": "2026-11-04 19:54"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 19:54",
+       "oldest": "2026-11-04 19:54",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-04 19:54"
+  },
+  {
+   "server": "Triggers_8bf6daf6~3351~41c2~b571~1845b85db19e",
+   "mtime": "2026-11-08 16:20",
+   "worlds": [
+    {
+     "world": "rulid",
+     "mtime": "2026-11-08 16:20",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:30",
+       "oldest": "2026-11-08 16:21"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:30",
+       "oldest": "2026-11-08 16:21"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:30",
+       "oldest": "2026-11-08 16:21"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:30",
+       "oldest": "2026-11-08 16:21",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-08 16:30"
+  },
+  {
+   "server": "Triggers_95a78a58~76fa~4903~92aa~8a87c523440c",
+   "mtime": "2026-11-12 00:44",
+   "worlds": [
+    {
+     "world": "overworld",
+     "mtime": "2026-11-12 01:34",
+     "layers": {
+      "0": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "2": {
+       "n": 1,
+       "xmin": 1,
+       "xmax": 1,
+       "zmin": 1,
+       "zmax": 1,
+       "newest": "2026-11-12 01:17",
+       "oldest": "2026-11-12 01:17",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 1,
+       "xmin": 1,
+       "xmax": 1,
+       "zmin": 1,
+       "zmax": 1,
+       "newest": "2026-11-12 01:18",
+       "oldest": "2026-11-12 01:18",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 1,
+       "xmin": 1,
+       "xmax": 1,
+       "zmin": 1,
+       "zmax": 1,
+       "newest": "2026-11-12 01:13",
+       "oldest": "2026-11-12 01:13",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "6": {
+       "n": 3,
+       "xmin": 1,
+       "xmax": 2,
+       "zmin": 0,
+       "zmax": 1,
+       "newest": "2026-11-12 01:30",
+       "oldest": "2026-11-12 01:03",
+       "after_11_9": 3,
+       "other": [
+        "cache/"
+       ]
+      },
+      "7": {
+       "n": 4,
+       "xmin": 1,
+       "xmax": 2,
+       "zmin": 0,
+       "zmax": 1,
+       "newest": "2026-11-12 01:29",
+       "oldest": "2026-11-12 00:51",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 8,
+       "xmin": 0,
+       "xmax": 2,
+       "zmin": -1,
+       "zmax": 2,
+       "newest": "2026-11-12 01:30",
+       "oldest": "2026-11-12 00:45",
+       "after_11_9": 8
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.0.-1.mca",
+        "r.0.0.mca",
+        "r.0.1.mca",
+        "r.1.0.mca",
+        "r.1.1.mca",
+        "r.1.2.mca",
+        "r.2.0.mca",
+        "r.2.1.mca",
+        "r.2.2.mca"
+       ]
+      },
+      "day": {
+       "n": 8,
+       "xmin": 0,
+       "xmax": 2,
+       "zmin": -1,
+       "zmax": 2,
+       "newest": "2026-11-12 01:31",
+       "oldest": "2026-11-12 00:45",
+       "after_11_9": 8
+      },
+      "night": {
+       "n": 8,
+       "xmin": 0,
+       "xmax": 2,
+       "zmin": -1,
+       "zmax": 2,
+       "newest": "2026-11-12 01:31",
+       "oldest": "2026-11-12 00:45",
+       "after_11_9": 8
+      },
+      "topo": {
+       "n": 8,
+       "xmin": 0,
+       "xmax": 2,
+       "zmin": -1,
+       "zmax": 2,
+       "newest": "2026-11-12 01:31",
+       "oldest": "2026-11-12 00:45",
+       "after_11_9": 8,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：2、3、4、6、7、biome、day、night、topo"
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-12 01:31"
+  },
+  {
+   "server": "Triggers_9bc3978a~5e7e~4a58~9965~bf06107fd16b",
+   "mtime": "2026-11-04 21:59",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-04 22:03",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:00",
+       "oldest": "2026-11-04 22:00"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:00",
+       "oldest": "2026-11-04 22:00"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:00",
+       "oldest": "2026-11-04 22:00"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:00",
+       "oldest": "2026-11-04 22:00",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-04 22:00"
+  },
+  {
+   "server": "Triggers_a8c61362~6ef2~44cb~9e4a~ca895fb8fe02",
+   "mtime": "2026-10-30 03:10",
+   "worlds": [
+    {
+     "world": "gigas_cedar",
+     "mtime": "2026-10-30 03:13",
+     "layers": {
+      "-2": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-10-30 03:22",
+       "oldest": "2026-10-30 03:22",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-3": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-10-30 03:14",
+       "oldest": "2026-10-30 03:14",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:22",
+       "oldest": "2026-10-30 03:11"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:22",
+       "oldest": "2026-10-30 03:11"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:22",
+       "oldest": "2026-10-30 03:11"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:22",
+       "oldest": "2026-10-30 03:11",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-30 03:22"
+  },
+  {
+   "server": "Triggers_aa51c40b~e934~462e~ac94~b13f6d1524ca",
+   "mtime": "2026-10-31 00:25",
+   "worlds": [
+    {
+     "world": "ice_cave",
+     "mtime": "2026-10-31 00:30",
+     "layers": {
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:37",
+       "oldest": "2026-10-31 00:30",
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-31 00:35",
+       "oldest": "2026-10-31 00:33",
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-31 00:40",
+       "oldest": "2026-10-31 00:27",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:41",
+       "oldest": "2026-10-31 00:26",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:41",
+       "oldest": "2026-10-31 00:30"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.-6.-3.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:37",
+       "oldest": "2026-10-31 00:30"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:37",
+       "oldest": "2026-10-31 00:30"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:41",
+       "oldest": "2026-10-31 00:30",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-31 00:41"
+  },
+  {
+   "server": "Triggers_abcf3134~0327~457f~9fba~efa68a92ddf2",
+   "mtime": "2026-11-08 16:02",
+   "worlds": [
+    {
+     "world": "gigas_cedar",
+     "mtime": "2026-11-08 16:02",
+     "layers": {
+      "-2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:03",
+       "oldest": "2026-11-08 16:03",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:04",
+       "oldest": "2026-11-08 16:03"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:04",
+       "oldest": "2026-11-08 16:03"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:04",
+       "oldest": "2026-11-08 16:03"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:04",
+       "oldest": "2026-11-08 16:03",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-08 16:04"
+  },
+  {
+   "server": "Triggers_aee5cb8c~4cfd~4cef~a59d~7219dc576c4e",
+   "mtime": "2026-10-29 01:49",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-29 01:49",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:49",
+       "oldest": "2026-10-29 01:49"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:49",
+       "oldest": "2026-10-29 01:49"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:49",
+       "oldest": "2026-10-29 01:49"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:49",
+       "oldest": "2026-10-29 01:49",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 01:49"
+  },
+  {
+   "server": "Triggers_b2318f76~d95b~4beb~9af7~081589309cfe",
+   "mtime": "2026-11-09 22:58",
+   "worlds": [
+    {
+     "world": "chambre_ambre",
+     "mtime": "2026-11-09 22:59",
+     "layers": {
+      "-1": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 23:07",
+       "oldest": "2026-11-09 23:04",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "0": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-09 23:00",
+       "oldest": "2026-11-09 23:00",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 23:05",
+       "oldest": "2026-11-09 23:04",
+       "after_11_9": 2
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 23:05",
+       "oldest": "2026-11-09 23:04",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：-1、0、biome、topo"
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-09 23:07"
+  },
+  {
+   "server": "Triggers_b4954dc5~07e0~4e66~91bc~c7fbeb16458b",
+   "mtime": "2026-11-04 22:53",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-04 22:57",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:54",
+       "oldest": "2026-11-04 22:54"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:54",
+       "oldest": "2026-11-04 22:54"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:54",
+       "oldest": "2026-11-04 22:54"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 22:54",
+       "oldest": "2026-11-04 22:54",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-04 22:54"
+  },
+  {
+   "server": "Triggers_b7425872~3c7f~424f~b8a6~c5a229ee3cca",
+   "mtime": "2026-10-30 03:22",
+   "worlds": [
+    {
+     "world": "ice_cave",
+     "mtime": "2026-10-30 03:26",
+     "layers": {
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:28",
+       "oldest": "2026-10-30 03:26",
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-30 03:29",
+       "oldest": "2026-10-30 03:29",
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-30 03:29",
+       "oldest": "2026-10-30 03:24",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:30",
+       "oldest": "2026-10-30 03:23",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:30",
+       "oldest": "2026-10-30 03:26"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:26",
+       "oldest": "2026-10-30 03:26"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:26",
+       "oldest": "2026-10-30 03:26"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:30",
+       "oldest": "2026-10-30 03:26",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-30 03:30"
+  },
+  {
+   "server": "Triggers_b7cfe0ee~a8b0~4d44~a89a~9b6985e9039c",
+   "mtime": "2026-11-10 21:50",
+   "worlds": [
+    {
+     "world": "gorge_rugiboeuf",
+     "mtime": "2026-11-10 21:50",
+     "layers": {
+      "biome": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": 0,
+       "zmax": 1,
+       "newest": "2026-11-10 21:51",
+       "oldest": "2026-11-10 21:51",
+       "after_11_9": 2
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.0.mca",
+        "r.-1.1.mca"
+       ]
+      },
+      "day": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": 0,
+       "zmax": 1,
+       "newest": "2026-11-10 21:52",
+       "oldest": "2026-11-10 21:51",
+       "after_11_9": 2
+      },
+      "night": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": 0,
+       "zmax": 1,
+       "newest": "2026-11-10 21:52",
+       "oldest": "2026-11-10 21:51",
+       "after_11_9": 2
+      },
+      "topo": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": 0,
+       "zmax": 1,
+       "newest": "2026-11-10 21:52",
+       "oldest": "2026-11-10 21:51",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：biome、day、night、topo"
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-10 21:52"
+  },
+  {
+   "server": "Triggers_b871ff65~c830~4c05~baa9~82df4481e673",
+   "mtime": "2026-11-09 19:56",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-09 19:55",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:56",
+       "oldest": "2026-11-09 19:56",
+       "after_11_9": 4
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:56",
+       "oldest": "2026-11-09 19:56",
+       "after_11_9": 4
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:56",
+       "oldest": "2026-11-09 19:56",
+       "after_11_9": 4
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-09 19:56",
+       "oldest": "2026-11-09 19:56",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：biome、day、night、topo"
+    },
+    {
+     "world": "overworld",
+     "mtime": "2026-11-09 19:56",
+     "layers": {
+      "biome": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-09 19:57",
+       "oldest": "2026-11-09 19:57",
+       "after_11_9": 1
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.0.-1.mca"
+       ]
+      },
+      "day": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-09 20:42",
+       "oldest": "2026-11-09 20:42",
+       "after_11_9": 1
+      },
+      "night": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-09 20:42",
+       "oldest": "2026-11-09 20:42",
+       "after_11_9": 1
+      },
+      "topo": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-09 20:42",
+       "oldest": "2026-11-09 20:42",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：biome、day、night、topo"
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-09 20:42"
+  },
+  {
+   "server": "Triggers_ba411067~7be9~4787~a9dc~da5c74995cb4",
+   "mtime": "2026-11-11 21:55",
+   "worlds": [
+    {
+     "world": "46ca09ee-5d0c-4000-8000-000000000001_djtaurus",
+     "mtime": "2026-11-11 22:10",
+     "layers": {
+      "1": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-11 22:01",
+       "oldest": "2026-11-11 22:01",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "10": {
+       "n": 3,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": -2,
+       "zmax": -1,
+       "newest": "2026-11-11 22:26",
+       "oldest": "2026-11-11 22:15",
+       "after_11_9": 3,
+       "other": [
+        "cache/"
+       ]
+      },
+      "11": {
+       "n": 4,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 22:09",
+       "oldest": "2026-11-11 22:09",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "12": {
+       "n": 4,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 22:10",
+       "oldest": "2026-11-11 22:09",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "13": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 21:59",
+       "oldest": "2026-11-11 21:59",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "14": {
+       "n": 4,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 22:06",
+       "oldest": "2026-11-11 22:05",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "15": {
+       "n": 4,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 22:11",
+       "oldest": "2026-11-11 22:10",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 5,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": -2,
+       "zmax": 0,
+       "newest": "2026-11-11 22:26",
+       "oldest": "2026-11-11 22:03",
+       "after_11_9": 5
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.0.-1.mca",
+        "r.0.-2.mca",
+        "r.0.0.mca",
+        "r.1.-1.mca",
+        "r.1.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 5,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": -2,
+       "zmax": 0,
+       "newest": "2026-11-11 22:26",
+       "oldest": "2026-11-11 22:03",
+       "after_11_9": 5,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：1、10、11、12、13、14、15、biome、topo"
+    },
+    {
+     "world": "46ca09ee-5d0c-4000-8000-000000000002_djtaurus",
+     "mtime": "2026-11-11 04:21",
+     "layers": {
+      "1": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-11 04:20",
+       "oldest": "2026-11-11 04:20",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "11": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-11 04:22",
+       "oldest": "2026-11-11 04:22",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "12": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-11 04:22",
+       "oldest": "2026-11-11 04:22",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "13": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 04:20",
+       "oldest": "2026-11-11 04:20",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "14": {
+       "n": 4,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 04:21",
+       "oldest": "2026-11-11 04:21",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "15": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-11 04:14",
+       "oldest": "2026-11-11 04:14",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 04:22",
+       "oldest": "2026-11-11 04:20",
+       "after_11_9": 4
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.0.-1.mca",
+        "r.0.0.mca",
+        "r.1.-1.mca",
+        "r.1.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 4,
+       "xmin": 0,
+       "xmax": 1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 04:22",
+       "oldest": "2026-11-11 04:20",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：1、11、12、13、14、15、biome、topo"
+    },
+    {
+     "world": "overworld",
+     "mtime": "2026-11-11 01:33",
+     "layers": {
+      "-1": {
+       "n": 3,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": 1,
+       "newest": "2026-11-11 03:44",
+       "oldest": "2026-11-10 21:54",
+       "after_11_9": 3,
+       "other": [
+        "cache/"
+       ]
+      },
+      "-13": {
+       "n": 0
+      },
+      "-17": {
+       "n": 0
+      },
+      "-18": {
+       "n": 0
+      },
+      "-2": {
+       "n": 3,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": 1,
+       "newest": "2026-11-11 03:44",
+       "oldest": "2026-11-10 21:55",
+       "after_11_9": 3,
+       "other": [
+        "cache/"
+       ]
+      },
+      "-22": {
+       "n": 0
+      },
+      "-23": {
+       "n": 0
+      },
+      "-27": {
+       "n": 0
+      },
+      "-3": {
+       "n": 1,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-10 22:09",
+       "oldest": "2026-11-10 22:09",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "-31": {
+       "n": 0
+      },
+      "-36": {
+       "n": 0
+      },
+      "-4": {
+       "n": 1,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-10 22:08",
+       "oldest": "2026-11-10 22:08",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "-41": {
+       "n": 0
+      },
+      "-45": {
+       "n": 0
+      },
+      "-46": {
+       "n": 0
+      },
+      "-5": {
+       "n": 0
+      },
+      "-50": {
+       "n": 1,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-11 01:34",
+       "oldest": "2026-11-11 01:34",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "-51": {
+       "n": 0
+      },
+      "-56": {
+       "n": 0
+      },
+      "-61": {
+       "n": 0
+      },
+      "-66": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-10 19:32",
+       "oldest": "2026-11-10 19:32",
+       "after_11_9": 1,
+       "other": [
+        "cache/"
+       ]
+      },
+      "-8": {
+       "n": 0
+      },
+      "-9": {
+       "n": 0
+      },
+      "0": {
+       "n": 5,
+       "xmin": -2,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": 1,
+       "newest": "2026-11-11 03:52",
+       "oldest": "2026-11-10 21:53",
+       "after_11_9": 5,
+       "other": [
+        "cache/"
+       ]
+      },
+      "1": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 03:43",
+       "oldest": "2026-11-10 22:49",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "10": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -3,
+       "zmax": -2,
+       "newest": "2026-11-10 20:14",
+       "oldest": "2026-11-10 20:14",
+       "after_11_9": 4,
+       "other": [
+        "cache/"
+       ]
+      },
+      "11": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "12": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "13": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "14": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "15": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "16": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "17": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "18": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "19": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "2": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-11 03:28",
+       "oldest": "2026-11-11 02:06",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "20": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "21": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "22": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "23": {
+       "n": 0,
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 6,
+       "xmin": -2,
+       "xmax": 0,
+       "zmin": -2,
+       "zmax": 0,
+       "newest": "2026-11-10 22:06",
+       "oldest": "2026-11-09 21:44",
+       "after_11_9": 6,
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 12,
+       "xmin": -3,
+       "xmax": 1,
+       "zmin": -2,
+       "zmax": 0,
+       "newest": "2026-11-10 22:06",
+       "oldest": "2026-11-09 22:15",
+       "after_11_9": 12,
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 8,
+       "xmin": -2,
+       "xmax": 0,
+       "zmin": -2,
+       "zmax": 1,
+       "newest": "2026-11-11 04:31",
+       "oldest": "2026-11-09 22:15",
+       "after_11_9": 8,
+       "other": [
+        "cache/"
+       ]
+      },
+      "6": {
+       "n": 5,
+       "xmin": -2,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-10 21:27",
+       "oldest": "2026-11-09 22:07",
+       "after_11_9": 5,
+       "other": [
+        "cache/"
+       ]
+      },
+      "7": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-11-10 04:15",
+       "oldest": "2026-11-10 04:02",
+       "after_11_9": 2,
+       "other": [
+        "cache/"
+       ]
+      },
+      "8": {
+       "n": 6,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -2,
+       "zmax": 0,
+       "newest": "2026-11-10 23:52",
+       "oldest": "2026-11-09 21:46",
+       "after_11_9": 6,
+       "other": [
+        "cache/"
+       ]
+      },
+      "9": {
+       "n": 5,
+       "xmin": -2,
+       "xmax": 0,
+       "zmin": -2,
+       "zmax": -1,
+       "newest": "2026-11-10 00:37",
+       "oldest": "2026-11-09 22:18",
+       "after_11_9": 5,
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 20,
+       "xmin": -3,
+       "xmax": 1,
+       "zmin": -3,
+       "zmax": 2,
+       "newest": "2026-11-11 01:25",
+       "oldest": "2026-11-09 22:14",
+       "after_11_9": 20
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.-2.mca",
+        "r.-1.-3.mca",
+        "r.-1.-4.mca",
+        "r.-1.0.mca",
+        "r.-1.1.mca",
+        "r.-1.2.mca",
+        "r.-2.-1.mca",
+        "r.-2.-2.mca",
+        "r.-2.-3.mca",
+        "r.-2.-4.mca",
+        "r.-2.0.mca",
+        "r.-2.1.mca",
+        "r.-2.2.mca",
+        "r.-20.-12.mca",
+        "r.-3.-1.mca",
+        "r.-3.-2.mca",
+        "r.-3.-3.mca",
+        "r.-3.-4.mca",
+        "r.-3.0.mca",
+        "r.-3.1.mca",
+        "r.-3.2.mca",
+        "r.-4.-1.mca",
+        "r.-4.-2.mca",
+        "r.-4.-3.mca",
+        "r.-4.0.mca",
+        "r.-4.1.mca",
+        "r.-5.-3.mca",
+        "r.-5.-4.mca",
+        "r.-5.-5.mca",
+        "r.-5.0.mca",
+        "r.-5.1.mca",
+        "r.-6.-3.mca",
+        "r.-6.-4.mca",
+        "r.-7.-3.mca",
+        "r.0.-1.mca",
+        "r.0.-2.mca",
+        "r.0.-3.mca",
+        "r.0.0.mca",
+        "r.0.1.mca",
+        "r.1.-1.mca",
+        "r.1.-2.mca",
+        "r.1.0.mca",
+        "r.1.1.mca",
+        "r.2.0.mca"
+       ]
+      },
+      "day": {
+       "n": 18,
+       "xmin": -3,
+       "xmax": 1,
+       "zmin": -2,
+       "zmax": 2,
+       "newest": "2026-11-12 00:44",
+       "oldest": "2026-11-10 00:52",
+       "after_11_9": 18
+      },
+      "night": {
+       "n": 18,
+       "xmin": -3,
+       "xmax": 1,
+       "zmin": -2,
+       "zmax": 2,
+       "newest": "2026-11-12 00:44",
+       "oldest": "2026-11-10 00:52",
+       "after_11_9": 18
+      },
+      "topo": {
+       "n": 20,
+       "xmin": -3,
+       "xmax": 1,
+       "zmin": -3,
+       "zmax": 2,
+       "newest": "2026-11-11 22:52",
+       "oldest": "2026-11-09 23:09",
+       "after_11_9": 20,
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": [],
+     "hint": "這些圖層的圖片全部是 11/9 之後才出現的：-1、-2、-3、-4、-50、-66、0、1、10、2、3、4、5、6、7、8、9、biome、day、night、topo"
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-12 00:44"
+  },
+  {
+   "server": "Triggers_c3a6655c~cc53~4e6c~8924~fc2b097c64d1",
+   "mtime": "2026-10-30 02:57",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-30 02:57",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:10",
+       "oldest": "2026-10-30 02:58"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.-2.-1.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca",
+        "r.4.0.mca",
+        "r.4.7.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:10",
+       "oldest": "2026-10-30 03:10"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:10",
+       "oldest": "2026-10-30 03:10"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:10",
+       "oldest": "2026-10-30 03:10",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-30 03:10"
+  },
+  {
+   "server": "Triggers_c94f2905~6918~4df6~8358~8f154506317f",
+   "mtime": "2026-10-29 02:01",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-29 02:01",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 02:08",
+       "oldest": "2026-10-29 02:02"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 02:08",
+       "oldest": "2026-10-29 02:02"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 02:08",
+       "oldest": "2026-10-29 02:02"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 02:08",
+       "oldest": "2026-10-29 02:02",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 02:08"
+  },
+  {
+   "server": "Triggers_ce3a353f~8af4~482a~9603~4c02e05795ad",
+   "mtime": "2026-10-31 01:00",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-31 00:41",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:43",
+       "oldest": "2026-10-31 00:42"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:43",
+       "oldest": "2026-10-31 00:42"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:43",
+       "oldest": "2026-10-31 00:42"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:43",
+       "oldest": "2026-10-31 00:42",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "overworld",
+     "mtime": "2026-10-31 01:00",
+     "layers": {
+      "biome": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-31 01:54",
+       "oldest": "2026-10-31 01:54"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.0.-1.mca"
+       ]
+      },
+      "day": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-31 01:54",
+       "oldest": "2026-10-31 01:54"
+      },
+      "night": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-31 01:54",
+       "oldest": "2026-10-31 01:54"
+      },
+      "topo": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-31 01:54",
+       "oldest": "2026-10-31 01:54",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-31 01:54"
+  },
+  {
+   "server": "Triggers_d3697958~05bc~4f92~837c~9d8d2d5ab819",
+   "mtime": "2026-11-08 16:09",
+   "worlds": [
+    {
+     "world": "ice_cave",
+     "mtime": "2026-11-08 16:12",
+     "layers": {
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:49",
+       "oldest": "2026-11-08 16:12",
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-08 16:50",
+       "oldest": "2026-11-08 16:14",
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-11-08 16:47",
+       "oldest": "2026-11-08 16:47",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:47",
+       "oldest": "2026-11-08 16:47",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:48",
+       "oldest": "2026-11-08 16:12"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:50",
+       "oldest": "2026-11-08 16:12"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:50",
+       "oldest": "2026-11-08 16:12"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:50",
+       "oldest": "2026-11-08 16:12",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-08 16:50"
+  },
+  {
+   "server": "Triggers_d8bba21e~d2da~40ce~86fb~725259a56399",
+   "mtime": "2026-10-29 01:49",
+   "worlds": [],
+   "files": []
+  },
+  {
+   "server": "Triggers_d9cdabc9~0a00~4a63~a845~3a47947a0ee1",
+   "mtime": "2026-10-28 22:29",
+   "worlds": [
+    {
+     "world": "gigas_cedar",
+     "mtime": "2026-10-29 01:19",
+     "layers": {
+      "-2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:25",
+       "oldest": "2026-10-29 01:05",
+       "other": [
+        "cache/"
+       ]
+      },
+      "-3": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": 0,
+       "zmax": 0,
+       "newest": "2026-10-29 01:20",
+       "oldest": "2026-10-29 01:20",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:23",
+       "oldest": "2026-10-29 01:18"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.-1.1.mca",
+        "r.-1.2.mca",
+        "r.-1.3.mca",
+        "r.-1.4.mca",
+        "r.-142.-80.mca",
+        "r.-142.-81.mca",
+        "r.-2.-1.mca",
+        "r.-71.-40.mca",
+        "r.-71.-41.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca",
+        "r.0.3.mca",
+        "r.0.4.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:25",
+       "oldest": "2026-10-29 01:18"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:25",
+       "oldest": "2026-10-29 01:18"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:25",
+       "oldest": "2026-10-29 01:18",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 01:25"
+  },
+  {
+   "server": "Triggers_de1f5c41~8a76~43a9~a2b9~da9e0d86a10b",
+   "mtime": "2026-10-28 22:49",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-28 22:50",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:50",
+       "oldest": "2026-10-28 22:50"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:50",
+       "oldest": "2026-10-28 22:50"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:50",
+       "oldest": "2026-10-28 22:50"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:50",
+       "oldest": "2026-10-28 22:50",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-28 22:50"
+  },
+  {
+   "server": "Triggers_e00c9604~9906~4873~9990~2b628f7c1752",
+   "mtime": "2026-10-29 01:31",
+   "worlds": [
+    {
+     "world": "66ea2dea-5d0c-4000-8000-000000000003_memoryice",
+     "mtime": "2026-10-28 22:57",
+     "layers": {
+      "0": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:30",
+       "oldest": "2026-10-28 22:56",
+       "other": [
+        "cache/"
+       ]
+      },
+      "2": {
+       "n": 2,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:30",
+       "oldest": "2026-10-28 22:57",
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:57",
+       "oldest": "2026-10-28 22:57",
+       "other": [
+        "cache/"
+       ]
+      },
+      "9": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": 0,
+       "zmax": 1,
+       "newest": "2026-10-29 01:31",
+       "oldest": "2026-10-28 22:58",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 6,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 1,
+       "newest": "2026-10-29 01:30",
+       "oldest": "2026-10-28 22:57"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.-1.1.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca",
+        "r.0.1.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 6,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 1,
+       "newest": "2026-10-29 01:30",
+       "oldest": "2026-10-28 22:57",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "ice_cave",
+     "mtime": "2026-10-29 00:44",
+     "layers": {
+      "0": {
+       "n": 0
+      },
+      "2": {
+       "n": 1,
+       "xmin": -1,
+       "xmax": -1,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-29 00:46",
+       "oldest": "2026-10-29 00:46",
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-29 00:49",
+       "oldest": "2026-10-29 00:49",
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 3,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 00:50",
+       "oldest": "2026-10-29 00:50",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:28",
+       "oldest": "2026-10-28 23:02",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:07",
+       "oldest": "2026-10-29 00:41"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 0
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:28",
+       "oldest": "2026-10-29 00:41",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "overworld",
+     "mtime": "2026-10-29 01:31",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:33",
+       "oldest": "2026-10-29 01:32"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:33",
+       "oldest": "2026-10-29 01:32"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:33",
+       "oldest": "2026-10-29 01:32"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:33",
+       "oldest": "2026-10-29 01:32",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 01:33"
+  },
+  {
+   "server": "Triggers_e2f7ca5b~4237~4bcf~8fa9~ff7066ebe242",
+   "mtime": "2026-10-28 22:33",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-28 22:33",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:35",
+       "oldest": "2026-10-28 22:34"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:35",
+       "oldest": "2026-10-28 22:35"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:35",
+       "oldest": "2026-10-28 22:35"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:35",
+       "oldest": "2026-10-28 22:34",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-28 22:35"
+  },
+  {
+   "server": "Triggers_e750f025~0280~4bc6~990b~c536ac774330",
+   "mtime": "2026-10-28 22:21",
+   "worlds": [
+    {
+     "world": "rulid",
+     "mtime": "2026-10-28 22:21",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:32",
+       "oldest": "2026-10-28 22:23"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.-2.-1.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:12",
+       "oldest": "2026-10-28 22:32"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:12",
+       "oldest": "2026-10-28 22:32"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:12",
+       "oldest": "2026-10-28 22:32",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 01:12"
+  },
+  {
+   "server": "Triggers_e78b9867~c2c0~4dfb~b805~a35635a917bb",
+   "mtime": "2026-10-31 00:22",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-31 00:25",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:23",
+       "oldest": "2026-10-31 00:23"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:23",
+       "oldest": "2026-10-31 00:23"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:23",
+       "oldest": "2026-10-31 00:23"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-31 00:23",
+       "oldest": "2026-10-31 00:23",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-31 00:23"
+  },
+  {
+   "server": "Triggers_e7d2e0f2~6db0~4d77~adde~bd2541bfe9da",
+   "mtime": "2026-10-29 03:03",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-29 03:03",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:03",
+       "oldest": "2026-10-29 03:03"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:03",
+       "oldest": "2026-10-29 03:03"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:03",
+       "oldest": "2026-10-29 03:03"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:03",
+       "oldest": "2026-10-29 03:03",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 03:03"
+  },
+  {
+   "server": "Triggers_eadefcbf~c5b9~43cc~834e~e94010698325",
+   "mtime": "2026-10-29 03:05",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-29 03:13",
+     "layers": {
+      "5": {
+       "n": 0
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:12",
+       "oldest": "2026-10-29 03:06"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:13",
+       "oldest": "2026-10-29 03:12"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:13",
+       "oldest": "2026-10-29 03:12"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:13",
+       "oldest": "2026-10-29 03:12",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 03:13"
+  },
+  {
+   "server": "Triggers_eaf1caee~12fd~43cf~83d4~04fcdef13422",
+   "mtime": "2026-10-30 03:47",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-30 03:39",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:40",
+       "oldest": "2026-10-30 03:40"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:40",
+       "oldest": "2026-10-30 03:40"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:40",
+       "oldest": "2026-10-30 03:40"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-30 03:40",
+       "oldest": "2026-10-30 03:40",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "overworld",
+     "mtime": "2026-10-30 03:47",
+     "layers": {
+      "biome": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-30 03:47",
+       "oldest": "2026-10-30 03:47"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.0.-1.mca"
+       ]
+      },
+      "day": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-30 03:49",
+       "oldest": "2026-10-30 03:49"
+      },
+      "night": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-30 03:49",
+       "oldest": "2026-10-30 03:49"
+      },
+      "topo": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-30 03:49",
+       "oldest": "2026-10-30 03:49",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-30 03:49"
+  },
+  {
+   "server": "Triggers_f37ac294~4b89~418d~b4b8~b6a05e695abc",
+   "mtime": "2026-11-04 23:03",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-04 23:03",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 23:15",
+       "oldest": "2026-11-04 23:04"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 23:15",
+       "oldest": "2026-11-04 23:04"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 23:15",
+       "oldest": "2026-11-04 23:04"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-04 23:15",
+       "oldest": "2026-11-04 23:04",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-04 23:15"
+  },
+  {
+   "server": "Triggers_f53ec57d~77da~4861~aee2~52b9f79d13e9",
+   "mtime": "2026-10-29 01:12",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-29 01:12",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:16",
+       "oldest": "2026-10-29 01:13"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:16",
+       "oldest": "2026-10-29 01:13"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:16",
+       "oldest": "2026-10-29 01:13"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:16",
+       "oldest": "2026-10-29 01:13",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 01:16"
+  },
+  {
+   "server": "Triggers_f8f0e517~ce5b~453b~9975~fa247e044287",
+   "mtime": "2026-11-08 16:30",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-08 16:30",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:46",
+       "oldest": "2026-11-08 16:31"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:46",
+       "oldest": "2026-11-08 16:31"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:46",
+       "oldest": "2026-11-08 16:31"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:46",
+       "oldest": "2026-11-08 16:31",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-08 16:46"
+  },
+  {
+   "server": "Triggers_f9664a32~db7a~420f~9eab~7b25a6ee0ddf",
+   "mtime": "2026-10-28 21:50",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-28 21:50",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 21:53",
+       "oldest": "2026-10-28 21:51"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.-3.-2.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 21:53",
+       "oldest": "2026-10-28 21:51"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 21:53",
+       "oldest": "2026-10-28 21:51"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 21:53",
+       "oldest": "2026-10-28 21:51",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-28 21:53"
+  },
+  {
+   "server": "Triggers_faa9e26a~41e7~4a5c~970f~05f4ae224f7b",
+   "mtime": "2026-10-29 01:49",
+   "worlds": [
+    {
+     "world": "ice_cave",
+     "mtime": "2026-10-29 03:19",
+     "layers": {
+      "-8": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:20",
+       "oldest": "2026-10-29 03:20",
+       "other": [
+        "cache/"
+       ]
+      },
+      "2": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:21",
+       "oldest": "2026-10-29 03:19",
+       "other": [
+        "cache/"
+       ]
+      },
+      "3": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-29 03:18",
+       "oldest": "2026-10-29 01:59",
+       "other": [
+        "cache/"
+       ]
+      },
+      "4": {
+       "n": 2,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-29 03:24",
+       "oldest": "2026-10-29 02:13",
+       "other": [
+        "cache/"
+       ]
+      },
+      "5": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:25",
+       "oldest": "2026-10-29 02:00",
+       "other": [
+        "cache/"
+       ]
+      },
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:25",
+       "oldest": "2026-10-29 02:14"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.-3.-2.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:20",
+       "oldest": "2026-10-29 03:20"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:20",
+       "oldest": "2026-10-29 03:20"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 03:25",
+       "oldest": "2026-10-29 03:20",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 03:25"
+  },
+  {
+   "server": "Triggers_fc007d1d~4986~484f~89f5~3b07fc0f53d1",
+   "mtime": "2026-10-29 00:50",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-29 00:50",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:03",
+       "oldest": "2026-10-29 00:51"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:03",
+       "oldest": "2026-10-29 00:51"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:03",
+       "oldest": "2026-10-29 00:51"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-29 01:03",
+       "oldest": "2026-10-29 00:51",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-29 01:03"
+  },
+  {
+   "server": "Triggers_fe051812~80a4~40c8~aab9~7d3c30c345ec",
+   "mtime": "2026-11-08 15:57",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-11-08 15:57",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:02",
+       "oldest": "2026-11-08 15:58"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:02",
+       "oldest": "2026-11-08 15:58"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:02",
+       "oldest": "2026-11-08 15:58"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-11-08 16:02",
+       "oldest": "2026-11-08 15:58",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-11-08 16:02"
+  },
+  {
+   "server": "Triggers_fef56707~ba51~488b~8e70~4e0652f90f2c",
+   "mtime": "2026-10-28 03:49",
+   "worlds": [
+    {
+     "world": "scene_akihiko",
+     "mtime": "2026-10-28 03:49",
+     "layers": {
+      "biome": {
+       "n": 1,
+       "xmin": 3,
+       "xmax": 3,
+       "zmin": 8,
+       "zmax": 8,
+       "newest": "2026-10-28 03:49",
+       "oldest": "2026-10-28 03:49"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.3.8.mca"
+       ]
+      },
+      "day": {
+       "n": 1,
+       "xmin": 3,
+       "xmax": 3,
+       "zmin": 8,
+       "zmax": 8,
+       "newest": "2026-10-28 03:49",
+       "oldest": "2026-10-28 03:49"
+      },
+      "night": {
+       "n": 1,
+       "xmin": 3,
+       "xmax": 3,
+       "zmin": 8,
+       "zmax": 8,
+       "newest": "2026-10-28 03:49",
+       "oldest": "2026-10-28 03:49"
+      },
+      "topo": {
+       "n": 1,
+       "xmin": 3,
+       "xmax": 3,
+       "zmin": 8,
+       "zmax": 8,
+       "newest": "2026-10-28 03:49",
+       "oldest": "2026-10-28 03:49",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-28 03:49"
+  },
+  {
+   "server": "Triggers_ffc8bcd8~d3cb~4ca7~9a09~57cfea9731a7",
+   "mtime": "2026-10-28 22:05",
+   "worlds": [
+    {
+     "world": "island_player_728a3c30-4cb8-48ab-b4e2-59370f943134",
+     "mtime": "2026-10-28 21:59",
+     "layers": {
+      "biome": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:05",
+       "oldest": "2026-10-28 22:02"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.-1.-1.mca",
+        "r.-1.0.mca",
+        "r.0.-1.mca",
+        "r.0.0.mca"
+       ]
+      },
+      "day": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:05",
+       "oldest": "2026-10-28 22:04"
+      },
+      "night": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:05",
+       "oldest": "2026-10-28 22:04"
+      },
+      "topo": {
+       "n": 4,
+       "xmin": -1,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": 0,
+       "newest": "2026-10-28 22:05",
+       "oldest": "2026-10-28 22:04",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    },
+    {
+     "world": "overworld",
+     "mtime": "2026-10-28 22:05",
+     "layers": {
+      "biome": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-28 22:06",
+       "oldest": "2026-10-28 22:06"
+      },
+      "cache": {
+       "n": 0,
+       "other": [
+        "r.0.-1.mca"
+       ]
+      },
+      "day": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-28 22:06",
+       "oldest": "2026-10-28 22:06"
+      },
+      "night": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-28 22:06",
+       "oldest": "2026-10-28 22:06"
+      },
+      "topo": {
+       "n": 1,
+       "xmin": 0,
+       "xmax": 0,
+       "zmin": -1,
+       "zmax": -1,
+       "newest": "2026-10-28 22:06",
+       "oldest": "2026-10-28 22:06",
+       "other": [
+        "cache/"
+       ]
+      }
+     },
+     "files": []
+    }
+   ],
+   "files": [
+    "waypoints/WaypointData.dat",
+    "waypoints/backup/WaypointData.dat"
+   ],
+   "newest_tile": "2026-10-28 22:06"
+  }
+ ]
+}
