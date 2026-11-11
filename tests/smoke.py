@@ -610,11 +610,9 @@ with sync_playwright() as p:
           "report tab shows the F2 screenshot and JourneyMap folder paths with their backslashes")
 
     pg.goto(base + "#f2-report"); pg.wait_for_timeout(400)
-    # paused while waiting for the game team's reply (2026-11-09): form, suggestion and folder buttons greyed out
-    pz = pg.evaluate("(()=>({href:document.getElementById('formGo').getAttribute('href'),off:document.getElementById('formGo').classList.contains('off'),dir:document.getElementById('jmDir').disabled,pick:document.getElementById('jmPick').classList.contains('off'),note:document.querySelectorAll('.pausenote').length}))()")
-    check(pz["href"] is None and pz["off"] and pz["dir"] and pz["pick"] and pz["note"] >= 2, f"collab area paused: report form and folder button greyed out with a note ({pz})")
-    pb = pg.evaluate("(()=>{const e=document.getElementById('pauseBar');return e?{h:e.getBoundingClientRect().height,t:e.textContent}:null})()")
-    check(bool(pb) and pb["h"] > 0 and "本站暫停更新中" in pb["t"], f"site-wide pause notice shown above every page ({pb})")
+    # pause lifted 2026-11-11 (official permission): form and folder buttons usable again, no pause notice
+    pz = pg.evaluate("(()=>({href:document.getElementById('formGo').getAttribute('href'),off:document.getElementById('formGo').classList.contains('off'),dir:document.getElementById('jmDir').disabled,note:document.querySelectorAll('.pausenote').length,bar:!!document.getElementById('pauseBar')}))()")
+    check(bool(pz["href"]) and not pz["off"] and not pz["dir"] and pz["note"] == 0 and not pz["bar"], f"collab area open again, no pause notice ({pz})")
     b.close()
 srv.shutdown()
 print("\n" + ("ALL PASSED" if not fails else f"{len(fails)} FAILED"))

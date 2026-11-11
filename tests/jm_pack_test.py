@@ -105,7 +105,6 @@ try:
     with sync_playwright() as p:
         b = p.chromium.launch()
         pg = b.new_page(viewport={"width": 1280, "height": 900}, accept_downloads=True)
-        pg.add_init_script("window.__COLLAB_OPEN=1")   # the packer is greyed out on the site while waiting for the game team (2026-11-09)
         errs = []
         pg.on("pageerror", lambda e: errs.append(str(e)))
         pg.goto(base + "#report"); pg.wait_for_timeout(600)
