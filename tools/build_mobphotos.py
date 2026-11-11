@@ -80,6 +80,9 @@ MAYBE = {
 }
 NEWZ_ICON = "👾"
 
+# 256-colour palette PNG (with alpha): about 1/3 the size, looks the same at map-marker size (2026-11-11, slow mobile loading)
+def png8(im): return im.convert("RGBA").quantize(256, method=Image.Quantize.FASTOCTREE)
+
 def sq128(path):
     im = Image.open(path).convert("RGBA"); bb = im.getchannel("A").getbbox()
     if bb: im = im.crop(bb)
@@ -114,7 +117,7 @@ def main(src1028, src1109):
         row = {"fr": m["name"], "ch": [c["raw"] for c in m.get("changes_en", [])], "v": m.get("verdict_en", "")}
         li = m.get("local_img")
         if li:
-            fn = "img/mobs/" + os.path.basename(li); sq128(os.path.join(src1028, li)).save(os.path.join(root, fn), optimize=True); row["f"] = fn
+            fn = "img/mobs/" + os.path.basename(li); png8(sq128(os.path.join(src1028, li))).save(os.path.join(root, fn), optimize=True); row["f"] = fn
         put(fl, name, row, "old")
     # ---- 11/9 (latest) ----
     n9 = json.load(open(os.path.join(src1109, "news_monsters.json"), encoding="utf-8"))
@@ -149,7 +152,7 @@ def main(src1028, src1109):
         li = m.get("img")
         if li:
             fn = "img/mobs/n1109-" + os.path.basename(li).replace("news-1794200000000-mob-", "")
-            sq128(os.path.join(src1109, "news1109_imgs", os.path.basename(li))).save(os.path.join(root, fn), optimize=True); row["f"] = fn
+            png8(sq128(os.path.join(src1109, "news1109_imgs", os.path.basename(li)))).save(os.path.join(root, fn), optimize=True); row["f"] = fn
         put(fl, name, row, "rows")
         e = by[str(fl)][name]
         lv = [re.search(r"→\s*(\d+)", c).group(1) for c in ch if c.startswith("Level")]

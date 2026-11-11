@@ -353,8 +353,8 @@ const UNKNOWN = {
 
 return {
   floors: {
-    2: { name:"Urbus", lv:"11–15", boss:"Asterius", status:"new", opened:"2026-11-09", map:{img:"floor2.jpg", size:2124, x0:-1062, z0:-1062, clip:{c:500,r:484}, note:"座標換算是推算的（1 像素 = 1 格，地圖中心 = 0, 0），已用主城與城內 NPC 的座標核對。"}, ...F2 },
-    3: { name:"Forest of Wavering Mists", lv:"15–19", boss:"Nerius", status:"new", opened:"2026-11-09", map:{img:"floor3.jpg", size:1700, x0:-253, z0:-79, clip:{c:500,r:499}, blank:1, note:"第 3 層還沒有可以用的地圖圖片（wiki 沒有；參考互動地圖的圖沒有授權），這是本站畫的空白底圖（每 100 格一條格線），只用來標位置。座標取自參考互動地圖，還沒對過遊戲。"}, ...F3 }
+    2: { name:"Urbus", lv:"11–15", boss:"Asterius", status:"new", opened:"2026-11-09", map:{img:"floor2.jpg", lo:"floor2_s.jpg", size:2124, x0:-1062, z0:-1062, clip:{c:500,r:484}, note:"座標換算是推算的（1 像素 = 1 格，地圖中心 = 0, 0），已用主城與城內 NPC 的座標核對。"}, ...F2 },
+    3: { name:"Forest of Wavering Mists", lv:"15–19", boss:"Nerius", status:"new", opened:"2026-11-09", map:{img:"floor3.jpg", lo:"floor3_s.jpg", size:1700, x0:-253, z0:-79, clip:{c:500,r:499}, blank:1, note:"第 3 層還沒有可以用的地圖圖片（wiki 沒有；參考互動地圖的圖沒有授權），這是本站畫的空白底圖（每 100 格一條格線），只用來標位置。座標取自參考互動地圖，還沒對過遊戲。"}, ...F3 }
   },
   extra: EXTRA, unknown: UNKNOWN
 };
