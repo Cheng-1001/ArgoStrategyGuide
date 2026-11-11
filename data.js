@@ -158,7 +158,7 @@ const RAW = {
 "Skeleton Bone":["Os de Squelette","c",1,"material","Petit os que l’on trouve sur des squelettes de bas rang. Sûrement utile pour certaine confection.",null,null,-1],
 "Soul of the Ruins":["Âme des ruines","c",1,"material","Âme de squelette abreuvée de corruption",null,null,28],
 "Bone Dust":["Poussière d’Os","c",1,"material","Résidu d’os réduit en poudre. Sert de catalyseur pour des potions de vie.",null,null,29],
-"Skull of a Wolf":["Crâne de Loup","a",3,"artifact","Un crâne de loup imposant, symbole de puissance",null,null,-1],
+"Skull of a Wolf":[null,"a",3,"artifact","The skull of a great fallen wolf, which revives the hunting instinct",null,{"Attack Damage":"0.5","Attack Speed":"0.05/s"},-1],
 "Skeletal Sword":["Épée Squelettique","b",5,"sword","Elle appartient aux guerriers squelettiques, des morts-vivants perdus du palier 1","10",{"Attack Speed":1.15,"Classe requise":"guerrier","Health Regeneration":0.15,"Critical Strike Chance":1.75},30],
 "Reinforced Skeleton Bone":["Os de Squelette Renforcé","c",1,"material","Contrairement au petit os, ces os sont plus résistants et sûrement utiles aussi dans certaines confections.",null,null,31],
 "Cursed Cloth":["Tissu Maudit","c",1,"material","Les forces obscures devorent ce tissu",null,null,32],
@@ -259,6 +259,7 @@ const RAW = {
 // How each item is obtained besides monster drops (source text) and what it is used for (paraphrased from its official description).
 const EXTRA = {
 "Flower of a Nepenthes":{note:"名稱和數值取自遊戲的物品說明視窗（站長 2026-11-04 截圖）：飾品，需求等級 5，屬於 Nepenthes Set；說明「The flower of a Nepenthes torn off alive; it pours its magic into the veins of its bearer」。取得：Nephentes 掉落 0.5%；Shop - Mizunari 收購 25 珂爾。圖示取自站長的圖鑑截圖。"},
+"Skull of a Wolf":{note:"官網物品圖鑑沒有收錄。遊戲裡有兩件物品都叫「狼頭骨」：這件是等級 3、史詩、孱弱之狼套裝，Albal 掉落；另一件是等級 17、傳說、下級狼套裝（官網圖鑑的 Crâne de Loup）。等級、數值、說明取自遊戲的物品提示（站長 2026-11-05、11-07 截圖），圖示取自 11/5 拍賣場截圖。"},
 "Elite Gloves":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自遊戲的物品提示（站長 2026-11-04 拍賣場截圖）；稀有度取自製作視窗（COMMON）。圖示取自同一批拍賣場截圖。"},
 "Elite Carapace":{note:"官網物品圖鑑沒有收錄。名稱、等級、數值、說明取自遊戲的物品提示（站長 2026-11-04 拍賣場截圖）；稀有度取自製作視窗（RARE）。提示沒有寫裝備部位；部位是遺物（站長 2026-11-06 確認）。圖示取自同一批拍賣場截圖。"},
 "Elite Amulet":{note:"官網物品圖鑑沒有收錄，也還沒有這件的物品提示截圖：只有製作視窗（COMMON、15 秒、25 珂爾）。等級 3 取自參考互動地圖，數值未知。"},

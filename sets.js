@@ -4,6 +4,7 @@
    "zh": 1 = the set was only seen on a Chinese tooltip (English set name unknown): name and tiers are the game's Chinese text, shown as is.
    2026-11-07 checked against the Chinese tooltips: Standard Skeleton Set [4] is +2% Damage Reduction (was -2%); the rest match. */
 window.SAO_SETS = {date:"2026-11-07", sets:[
+ {"name": "下級狼套裝", "zh": 1, "tiers": [[2, "+0.5/秒 移動速度、+5 攻擊傷害、-5 最大耐力、-10 最大魔力"], [3, "+0.2 攻擊速度、+7.5% 爆擊率、+7.5% 爆擊傷害"]], "members": ["Crâne de Loup"]},   // 2026-11-07 15:21:05 拍賣場的狼頭骨（官網 1469，等級 17）
  {"name": "森靈套裝", "zh": 1, "tiers": [[2, "+1 HP"], [3, "+0.5 治療加成"], [4, "+0.1 HP/秒、+0.1 魔力/秒、+0.1 耐力/秒"]], "members": ["Amulet of the Sylve"]},
  {"name": "Misty Fangs Set", "tiers": [[2, "+1% Lifesteal"], [3, "+5% Crit Chance, +2.5% Crit Damage"], [4, "+5 Attack Damage, +5% Attack Speed"]], "members": ["Misty Ring"]},
  {"name": "Shark Set", "tiers": [[2, "+5% Ability Haste"], [3, "+3 Health"], [4, "+3% Physical Damage"]], "members": ["Ring of the Shark", "Shark Amulet", "Shark Fang", "Bracelet of the Shark", "Ring of the Leviathan"]},

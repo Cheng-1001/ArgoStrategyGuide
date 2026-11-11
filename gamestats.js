@@ -64,7 +64,7 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "1784":{"en": "nodachi dagger", "lvl": 10, "dmg": "20", "st": [["Attack Speed", "1.4/s"], ["Critical Strike Chance", "+3.375%"], ["Lifesteal", "+1%"]]},
  "2576":{"en": "nodachi magic staff", "lvl": 10, "dmg": "19", "st": [["Attack Speed", "1/s"], ["Magic Damage", "+3%"], ["Max Mana", "+6.5"]]},
  "1462":{"en": "occult robe", "lvl": 10, "dmg": null, "st": [["Attack Speed", "0.05/s"], ["Dodge", "+2.5%"], ["Max Stamina", "+1"], ["Movement Speed", "+2.5%"]]},
- "2048":{"en": "christmas mittens", "lvl": 10, "dmg": null, "st": [["Critical Strike Chance", "+1%"], ["Critical Strike Power", "+3%"], ["Skill Critical Strike Chance", "+1%"], ["Skill Critical Strike Power", "+3%"], ["Movement Speed", "+10%"]]},
+ "2048":{"date": "2026-11-07", "en": "christmas mittens", "lvl": 10, "dmg": null, "st": [["Defense", "+2"], ["Max Health", "+3"], ["Max Mana", "+1"], ["Max Stamina", "+1"]], "auc": 1},   // 11/7 15:18:54 拍賣場（中文）；11/5 00:51:51 拍賣場是 爆擊率 +1%、爆擊傷害 +3%、技能爆擊率 +1%、技能爆擊傷害 +3%、移動速度 +10%，圖示黃色（11/7 紅色）。數值統一改動，用較新的截圖
  "2044":{"en": "gloves of the wolves", "lvl": 5, "dmg": null, "st": [["Critical Strike Chance", "+1%"], ["Lifesteal", "+2.5%"], ["Movement Speed", "+5%"]]},
  "1471":{"en": "crown of the solstice", "lvl": 10, "dmg": null, "st": [["Magic Damage", "+2%"], ["Ability Haste", "+5%"], ["Max Health", "+2"], ["Max Mana", "+1"], ["Max Stamina", "+1"]]},
  "1461":{"en": "occult skull", "lvl": 10, "dmg": null, "st": [["Skill Critical Strike Power", "+5%"], ["Magic Damage", "+2%"], ["Max Mana", "+1"]]},
@@ -77,7 +77,6 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "2037":{"date": "2026-11-05", "en": "bony gloves", "lvl": 6, "dmg": null, "st": [["Defense", "+1"], ["Max Health", "+3"]]},
  "1289":{"date": "2026-11-05", "en": "skeletal amulet", "lvl": 6, "dmg": null, "st": [["Max Health", "+3"]]},
  "1450":{"date": "2026-11-05", "en": "skeleton skull", "lvl": 8, "dmg": null, "st": [["Skill Damage", "+1%"], ["Max Health", "+5"], ["Max Mana", "+1"], ["Max Stamina", "+1"], ["Health Regeneration", "+0.05/s"]]},
- "1469":{"date": "2026-11-05", "en": "skull of a wolf", "r": "a", "lvl": 3, "dmg": "0.5", "st": [["Attack Speed", "0.05/s"]]},
  "1463":{"date": "2026-11-07", "en": "occult hood", "lvl": 10, "dmg": "1", "st": [["Critical Strike Power", "+5%"], ["Block Chance", "+5%"]]},
  "2486":{"date": "2026-11-07", "en": "occult ring", "lvl": 10, "dmg": null, "st": [["Physical Damage", "+5%"], ["Magic Damage", "+5%"], ["Projectile Damage", "+5%"], ["Max Health", "+3"]]},
  "2045":{"date": "2026-11-07", "en": "occult gloves", "lvl": 10, "dmg": null, "st": [["Lifesteal", "+2%"], ["Spell Vampirism", "+2%"], ["Max Health", "+3"], ["Mana Regeneration", "+0.1/s"], ["Stamina Regeneration", "+0.1/s"]]},

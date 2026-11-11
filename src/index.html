@@ -2174,7 +2174,7 @@ function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").val
     ${(k=>k?`<div class="estat">${esc(k)}</div>`:"")(ES.length?ES.flatMap(t=>eqEffHit(e,t)).map(([zh,,v])=>zh+" "+v).join("・"):eqKey(e))}</button>`}).join("")+(a.length>shown.length?`<div class="empty-note">還有 ${a.length-shown.length} 件，請用篩選條件縮小範圍。</div>`:""):`<div class="empty-note">沒有符合條件的裝備。</div>`;
   bindGo($("lEq"));markSel()}
 const gstNote=e=>{const c=e.cat0,r=Object.entries(c.st).filter(([k])=>k!=="Classe requise"&&k!=="Arme à deux mains");
-  return`<div class="note">🎮 等級和數值取自遊戲裡的物品說明（站長截圖 ${esc(e.gstDate||GST.date)}${e.gstAuc?"，拍賣場上別人賣的那一件；拍賣場可能有改版前做出來的舊版本，之後有商店或製作視窗的截圖會再核對":""}）。官網圖鑑（2026-10-31）寫的是：等級 ${c.lv}${c.dmg?"、傷害 "+esc(c.dmg):""}${r.length?"、"+r.map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v)))).join("、"):""}。遊戲改版後官網圖鑑還沒更新，以遊戲為準。</div>`};
+  return`<div class="note">🎮 等級和數值取自遊戲裡的物品說明（站長截圖 ${esc(e.gstDate||GST.date)}${e.gstAuc?"，拍賣場上的物品提示":""}）。官網圖鑑（2026-10-31）寫的是：等級 ${c.lv}${c.dmg?"、傷害 "+esc(c.dmg):""}${r.length?"、"+r.map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v)))).join("、"):""}。遊戲改版後官網圖鑑還沒更新，以遊戲為準。</div>`};
 const patchNote=e=>{const S=EVT.eqPatch.src;return`<div class="note warn">⚖️ 數值已照官方公告〈<a href="${esc(S.url)}" target="_blank" rel="noopener">${esc(S.title)}</a>〉（${esc(S.date)}）調整，官網圖鑑還沒更新。圖鑑上的舊數值：${Object.entries(e.patch.old).map(([k,v])=>esc(STAT_ZH[k]||k)+" "+esc(String(statVal(k,v))||"0")).join("、")}。${esc(e.patch.note)}</div>`};
 function equipDetail(id){GI_NODESC=1;try{return equipDetail0(id)}finally{GI_NODESC=0}}
 function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
@@ -2184,7 +2184,7 @@ function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span class="muted" style="font-size:12px">${icK("min_level")}等級 ${e.lv}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):"・不限職業"}</span></div></div></div>
   ${loreHTML(e)}
   <dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
-  ${e.patch?patchNote(e):""}${e.gst?gstNote(e):""}${e.gstLv?`<div class="note">🎮 等級（和稀有度）取自遊戲裡的物品說明（站長截圖 ${esc(e.gstLv)}）${e.lv0!=null?`，官網圖鑑寫等級 ${e.lv0}`:""}；數值還沒有遊戲截圖，暫用官網圖鑑。</div>`:""}${setPotHTML(e.gen,en)}
+  ${e.patch?patchNote(e):""}${e.gst?gstNote(e):""}${e.gstLv?`<div class="note">🎮 等級（和稀有度）取自遊戲裡的物品說明（站長截圖 ${esc(e.gstLv)}）${e.lv0!=null?`，官網圖鑑寫等級 ${e.lv0}`:""}；數值還沒有遊戲截圖，暫用官網圖鑑。</div>`:""}${setPotHTML(e.gen,en,e.name)}
   ${e.extra?((SOURCES[en]||[]).length||(GATHER[en]||[]).length||(USES[en]||[]).length?itemObtainHTML(en):"")+giHTML(GI_EN[norm(e.gen||"")]):en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid])}${GI_OID[e.oid]?"":dgSrcHTML("e|"+e.oid)}${gachaHTML("e|"+e.oid,e.gen,en)}
   ${RECIPE_BY_EQ[e.oid]?`<h3 class="sec">${howTitle(RECIPE_BY_EQ[e.oid])}</h3>${recipeTable(RECIPE_BY_EQ[e.oid],true)}${recGoBtns(RECIPE_BY_EQ[e.oid])}`:""}
   ${e.extra&&ITEMS[en]&&ITEMS[en].note?`<div class="note">${esc(ITEMS[en].note)}</div>`:""}
@@ -2306,7 +2306,8 @@ SETS.sets.forEach(st=>st.members.forEach(m=>SET_BY[norm(m)]=st));SETS.potions.fo
 const SET_ZH=(window.SAO_ZHNAMES||{}).sets||{};
 const zhGo=g=>{if(!g)return"";const [t,i]=[g.slice(0,1),g.slice(2)];return t==="e"&&eqById[i]?zhE(eqById[i]):t==="p"&&prById[i]?zhE(prById[i]):t==="i"?zhI(i):""};
 const enGo=n=>{const k=norm(n);let e=EQ.find(x=>x.gen&&norm(x.gen)===k);if(e)return"e|"+e.oid;e=PR.find(x=>x.gen&&norm(x.gen)===k);if(e)return"p|"+e.oid;
-  const it=Object.keys(ITEMS).find(x=>norm(x)===k);if(it)return"i|"+it;const ri=ALLREC.findIndex(r=>norm(r.en)===k);return ri>=0?"r|"+ri:null};
+  const it=Object.keys(ITEMS).find(x=>norm(x)===k);if(it)return"i|"+it;const ri=ALLREC.findIndex(r=>norm(r.en)===k);if(ri>=0)return"r|"+ri;
+  e=EQ.find(x=>norm(x.name)===k)||PR.find(x=>norm(x.name)===k);return e?(EQ.includes(e)?"e|":"p|")+e.oid:null};   // official French name (e.g. a set member only known as Crâne de Loup)
 const setPotHTML=(...names)=>{const ns=names.filter(Boolean).map(norm);const st=ns.map(n=>SET_BY[n]).find(Boolean),po=ns.map(n=>POT_BY[n]).find(Boolean);let h="";
   if(po)h+=`<h3 class="sec">遊戲寫的效果</h3><ul class="gieff">${po.effects.map(x=>`<li>${effLine(x)}</li>`).join("")}</ul>`;
   if(st)h+=`<h3 class="sec">${icK("set")}套裝效果・${esc(SET_ZH[st.name]||st.name)}${SET_ZH[st.name]?` <span class="muted" style="font-weight:400;text-transform:none;letter-spacing:0">${esc(st.name)}</span>`:""}</h3><table class="settbl"><tbody>${st.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${st.zh?esc(e):effLine(e)}</td></tr>`).join("")}</tbody></table>

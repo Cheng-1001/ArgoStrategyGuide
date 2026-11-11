@@ -140,7 +140,8 @@ items:[
  {"zh": "熊魂碎片", "ids": ["i|Fragment of the Bear's Soul", "p|2190"], "en": "Fragment of the Bear's Soul", "fr": "Fragment de l’Âme de l’Ours"},
  {"zh": "狼牙", "ids": ["i|Wolf Fangs", "p|2176"], "en": "Wolf Fangs", "fr": "Crocs de Loup"},
  {"zh": "狼皮", "ids": ["i|Wolf Fur", "p|2175"], "en": "Wolf Fur", "fr": "Fourrure de Loup"},
- {"zh": "狼頭骨", "ids": ["e|1469", "i|Skull of a Wolf"], "en": "Skull of a Wolf", "fr": "Crâne de Loup"},
+ {"zh": "狼頭骨", "ids": ["i|Skull of a Wolf"], "en": "Skull of a Wolf"},   // 等級 3 史詩、孱弱之狼套裝（Albal 掉落；官網圖鑑沒有）
+ {"zh": "狼頭骨", "ids": ["e|1469"], "fr": "Crâne de Loup"},   // 等級 17 傳說、下級狼套裝（11/7 15:21:05 拍賣場）；和上一筆同名，是不同物品
  {"zh": "獵人大劍", "ids": ["e|2607"], "en": "Hunter's Greatsword", "fr": "Espadon du Chasseur"},
  {"zh": "獵人巨鐮", "ids": ["e|1773"], "fr": "Faux du Chasseur"},
  {"zh": "獵人束衣", "ids": ["e|1358"], "fr": "Tunique du Chasseur"},

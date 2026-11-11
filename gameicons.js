@@ -115,5 +115,10 @@ window.SAO_GAMEICONS = {
  "Witch's Dragée": "icons/game/witchs_dragee.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
  "Ring of the Nepenthes": "icons/game/ring_of_the_nepenthes.png",   // official item-model texture anneaunephente (2026-11-07)
  "Flower of a Nepenthes": "icons/game/flower_of_a_nepenthes.png",   // official item-model texture fleurnephente (2026-11-07)
- "Boots of the Foam": "icons/game/boots_of_the_foam.png"   // auction tile in9 2026-11-05 01:00:15, k≈4.64 (official catalogue has no icon for Bottes de l’écume)
+ "Boots of the Foam": "icons/game/boots_of_the_foam.png",   // auction tile in9 2026-11-05 01:00:15, k≈4.64 (official catalogue has no icon for Bottes de l’écume)
+ // 2026-11-11: two different items are both called 狼頭骨 (user: 物品素質都是統一改動 -> the 11/7 screenshots 15 min apart
+ // are two items). Level 3 epic (brown, fur): 32 px grid rebuilt from the 11/5 01:01:25 auction tile (k≈2.33, ×2);
+ // level 17 legendary (catalogue 1469 Crâne de Loup; the catalogue picture is the level-3 look): 11/7 15:21:05 auction tile, white disk removed.
+ "Skull of a Wolf": "icons/game/skull_of_a_wolf.png",
+ "Crâne de Loup": "icons/game/crane_de_loup_s.png",
 };
