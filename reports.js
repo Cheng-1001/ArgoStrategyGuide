@@ -128,5 +128,23 @@ window.SAO_REPORTS = [
   },
   "source": "form",
   "review": "自動核准：探索地圖由程式比對網站地圖檢查"
+ },
+ {
+  "id": "R0008",
+  "type": "item",
+  "floor": null,
+  "name": "Ninja Tunic",
+  "date": "2026-11-12",
+  "img": "reports/R0008.jpg",
+  "imgs": [
+   "reports/R0008.jpg"
+  ],
+  "raw": {
+   "物品・怎麼拿到的": "合成或鍛造",
+   "物品・備註": "iron ingot*4 Coal Ore*2 Spider Cloth*16 Shark Carapace",
+   "回報者・遊戲內暱稱": "Nosleo"
+  },
+  "source": "form",
+  "review": "審核：lintcbruce"
  }
 ];
