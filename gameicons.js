@@ -121,5 +121,7 @@ window.SAO_GAMEICONS = {
  // are two items). Level 3 epic (brown, fur): 32 px grid rebuilt from the 11/5 01:01:25 auction tile (k≈2.33, ×2);
  // level 17 legendary (catalogue 1469 Crâne de Loup; the catalogue picture is the level-3 look): 11/7 15:21:05 auction tile, white disk removed.
  "Skull of a Wolf": "icons/game/skull_of_a_wolf.png",
+ "Feather of the Little Flame": "icons/game/feather_of_the_little_flame.png",   // auction tile in9 2026-11-05 00:57:01, k≈4.68 (floor 2, Fire Harpy 1 %)
+ "Feather of the Little Drop": "icons/game/feather_of_the_little_drop.png",   // auction tile in9 2026-11-05 00:59:44, k≈4.68 (floor 2, Lightning Harpy 1 %)
  "Crâne de Loup": "icons/game/crane_de_loup_s.png",
 };

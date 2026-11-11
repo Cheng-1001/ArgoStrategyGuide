@@ -579,11 +579,12 @@ with sync_playwright() as p:
     ic = pg.evaluate("['Critical Strike Chance','Skill Critical Strike Chance','Critical Strike Power','Fall Damage Reduction'].map(k=>window.__effIc(k))")
     check(ic[:3] == ["crit_chance", "skill_crit_chance", "crit_damage"] and ic[3] != "damage_reduction", f"stat icons: crit chance is not the crit damage icon ({ic})")
     # official news pictures of the monsters (mobphotos.js): every floor, bosses facing right, the note names the source
-    ph = pg.evaluate("(()=>{const M=window.SAO_MOBPHOTO.by;return [M['1']['Bandit Archer'].f, Object.values(M).reduce((s,o)=>s+Object.values(o).reduce((t,e)=>t+e.rows.length,0),0), M['3']['Cave Goblin'].rows.length, JSON.stringify(M).includes('flip')]})()")
-    check(ph[0] == "img/mobs/bandit-archer-palier-1.png" and ph[1] == 44 and ph[2] == 3 and not ph[3] and not pg.evaluate("'Orc Samurai Boss' in window.SAO_MOBPHOTO.by['3']"),
-          f"mobphotos.js: 44 rows of the official table matched by name (Chef de la Tribu left out), nothing flipped ({ph})")
+    # 2026-11-11: rows = the 11/9 table (126 rows, every row kept), old = the 10/28 table (45 rows incl. Chef de la Tribu)
+    ph = pg.evaluate("(()=>{const M=window.SAO_MOBPHOTO.by,sum=k=>Object.values(M).reduce((s,o)=>s+Object.values(o).reduce((t,e)=>t+(e[k]||[]).length,0),0);return [M['1']['Bandit Archer'].f, sum('rows'), sum('old'), M['3']['Cave Goblin'].old.length, JSON.stringify(M).includes('flip')]})()")
+    check(ph[0] == "img/mobs/bandit-archer-palier-1.png" and ph[1] == 126 and ph[2] == 45 and ph[3] == 3 and not ph[4] and not pg.evaluate("'Orc Samurai Boss' in window.SAO_MOBPHOTO.by['3']"),
+          f"mobphotos.js: 11/9 table 126 rows + 10/28 table 45 rows matched by name, nothing flipped ({ph})")
     pg.goto(base + "#f3-monsters"); pg.wait_for_timeout(600)
-    fc = pg.evaluate("[...document.querySelectorAll('#lMon img.face')].map(i=>i.getAttribute('src')).filter(s=>s.startsWith('img/mobs/')&&s.includes('palier-3')).length")
+    fc = pg.evaluate("[...document.querySelectorAll('#lMon img.face')].map(i=>i.getAttribute('src')).filter(s=>s.startsWith('img/mobs/')).length")
     check(fc >= 30, f"floor 3 monster cards show the official pictures ({fc})")
     pg.goto(base + "#f1-monsters"); pg.wait_for_timeout(600)
     pg.click("#lMon [data-go='m|" + pg.evaluate("window.SAO.M.find(m=>m.name==='Kobold Warrior').id") + "']"); pg.wait_for_timeout(400)
@@ -591,11 +592,11 @@ with sync_playwright() as p:
     check("官網公布的模樣和數值調整" in pt and "生命 220 → 250" in pt and "圖片和數值取自官網新聞" in pt and "Guerrier Kobold" in pt, "the monster panel shows the news' balance change and the picture source")
     pg.goto(base + "#f3-monsters"); pg.wait_for_timeout(600)
     pg.click("#lMon [data-go='m|" + pg.evaluate("window.SAO23.floors[3].M.find(m=>m.name==='Cave Goblin').id") + "']"); pg.wait_for_timeout(400)
-    cg = [pg.locator("#panel .mphr img").count(), pg.inner_text("#panel").count("Gobelin de la Caverne")]
+    cg = [pg.locator("#panel .mphr img").count(), pg.locator("#panel details.mphold .mphr").count()]
     pg.click("#lMon [data-go='m|" + pg.evaluate("window.SAO23.floors[3].M.find(m=>m.name==='Jeune pousse').id") + "']"); pg.wait_for_timeout(400)
     jp = pg.inner_text("#panel")
-    check(cg[0] == 3 and cg[1] >= 3 and "生命 1000 → 800" in jp and "官網沒有附圖" in jp and pg.locator("#lMon [data-go]").filter(has_text="Nerius the Evil Treant").count() == 1,
-          f"the three Gobelin de la Caverne rows are Cave Goblin's variants; Jeune pousse and Nerius are on floor 3 ({cg})")
+    check(cg[0] >= 3 and cg[1] == 3 and "等級 1 → 19" in jp and "官網 11/9 公告" in jp and "Labyrinthe de la Tour" in jp and pg.locator("#lMon [data-go]").filter(has_text="Nerius the Evil Treant").count() == 1,
+          f"Cave Goblin keeps the three 10/28 rows; Jeune pousse shows the 11/9 level and area; Nerius is on floor 3 ({cg})")
     ic2 = pg.evaluate("['Heal Bonus','HEAL BONUS','HEAL_BONUS','Magic Damage','Skill Damage'].map(k=>window.__effIc(k))")
     check(ic2 == ["healing", "healing", "healing", "magic_damage", "skill_damage"], f"stat icons: every spelling of Heal Bonus gets the healing icon ({ic2})")
     # calibration mode is for the owner only (?edit)

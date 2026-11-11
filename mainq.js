@@ -1,4 +1,4 @@
-/* Aincrad main questline, floor 1.
+/* Aincrad main questline, floor 1 (and the first floor-2 rows, see 2: below).
    Sources (checked 2026-10-31):
    - NPC, level, reward and the short story text: saominecraft.wiki.gg/wiki/Quests/Aincrad/Main (rev 2700), rewritten in Chinese.
    - Quest order, step list and step coordinates: DelayedCode's SAO MC Interactive Map (Current Data). Only the facts
@@ -90,6 +90,16 @@ window.SAO_MAINQ = {1: [
   en:{0:"Go down beneath the crystal",1:"Meet Mephisto at the Kobold Tower"},
   img:{0:[["img/quests/34_redstone.jpg","水晶底下的浮空島：地上有一條紅石粉（紅線），沿著它往上走"]]},
   s:[["下到水晶底下",3047,1208],["在 Kobold Tower 和 Mephisto 會合",3400,1080]]},
- {t:"Floor 2", n:35, npc:"—", d:"前往第 2 層。第 2 層還沒開放（官方 Discord：預計 11/8 或 11/9 逐步開放），任務追蹤會停在這一步。", en:{0:"Reach Floor 2"},
+ {t:"Floor 2", n:35, npc:"—", d:"前往第 2 層（2026-11-09 開放）。", tip:"wiki（2026-11-10）把這一段寫成「清 Kobold 地下城，向 Archaeologist 買鑰匙 5,000 Col」，和遊戲任務追蹤寫的「第2層／Reach Floor 2」不同；兩邊都列，等遊戲畫面確認。", en:{0:"Reach Floor 2"},
   s:[["抵達第 2 層",null,null]]}
+],
+// Floor 2 (opened 2026-11-09): the three rows SpaceKat added to the wiki main-quest table on 2026-11-10 (rev 2894, "from actual play");
+// no game screenshot yet, no quest-tracker numbers. Story text and steps are our own Chinese wording of the wiki description.
+2: [
+ {t:"A Question in the air", npc:"The Master Swordsman", lv:"約 10", rw:"3150 經驗、1000 珂爾", d:"打倒 Kobold 領主後會出現在第 2 層。和劍術大師的回音（Echo of the Sword Master）對話，再走到懸崖邊。",
+  s:[["和劍術大師的回音對話",null,null],["走到懸崖邊",null,null]]},
+ {t:"The people from bellow", npc:"Elyra", lv:"10", d:"和 Elyra 對話後，往南穿過兩座山之間的山口，前往 Urbus。",
+  s:[["和 Elyra 對話",null,null],["往南穿過兩座山之間的山口，到 Urbus",null,null]]},
+ {t:"Five Opinions on Artheon", npc:"—", lv:"10", rw:"3150 經驗、1100 珂爾", d:"到了 Urbus 之後，和 5 位居民談談 Artheon。",
+  s:[["和 Calyss 對話",null,null],["和 Vaelith 對話",null,null],["和 Olyx 對話",null,null],["和 Oreyl 對話",null,null],["和 Duskwind 對話",null,null]]}
 ]};

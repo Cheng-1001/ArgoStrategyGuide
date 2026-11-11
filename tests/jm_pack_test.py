@@ -213,7 +213,7 @@ try:
         pg.fill("#jmFloorIn", "abc"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(100)
         bad = pg.input_value("#jmFloorIn")
         pg.fill("#jmFloorIn", "1"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(300)
-        check(f2[0] == 0 and f2[1] == 1 and "第 2 層開放後" in f2[2] and f3[0] == 0 and f3[1] == 1 and "地下城 1／1" in f3[2] and f12 == ["12", True] and bad == "12"
+        check(f2[0] == 0 and f2[1] == 1 and "第 2 層的打包還沒做好" in f2[2] and f3[0] == 0 and f3[1] == 1 and "地下城 1／1" in f3[2] and f12 == ["12", True] and bad == "12"
               and pg.locator("[data-jmreg]").count() > 0 and pg.evaluate("window.__jm.sel.off") == [] and pg.input_value("#jmFloorIn") == "1",
               f"floors switch by the list (2) and by typing (3, 12, back to 1); a non-number goes back; the picks stay ({f2[:2]}, {f3}, {f12}, {bad})")
         J = pg.evaluate("window.__jm")

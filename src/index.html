@@ -238,7 +238,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .th.boss{--ring:var(--boss);width:46px;height:46px;font-size:24px} .th.mini{--ring:var(--mini)} .th.minion{border-style:dashed}
 .th img.face{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
 .th .beh{position:absolute;right:-2px;bottom:-2px;width:11px;height:11px;border-radius:50%;border:2px solid #fff}
-.beh-A{background:#d6443a}.beh-N{background:#e3a21a}.beh-P{background:#3fa86b}
+.beh-A{background:#d6443a}.beh-N{background:#e3a21a}.beh-P{background:#3fa86b}.beh-U{display:none}
 .th.sm{width:28px;height:28px;font-size:14px;border-width:2px;box-shadow:none} .th.sm .beh{width:8px;height:8px;border-width:1.5px}
 .note{font-size:12.5px;color:var(--muted);background:var(--panel-2);border-radius:6px;padding:8px 10px}
 .note.warn{border-left:3px solid var(--warn)}
@@ -527,6 +527,7 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 .jmdl{display:flex;flex-wrap:wrap;gap:8px}
 .jmlays{font-size:12.5px}.jmlays .muted{font-size:11.5px;margin-left:4px}
 .hint.mph .mphr{display:flex;gap:10px;align-items:center;margin-top:6px}.hint.mph .mphr img{width:56px;height:56px;object-fit:contain;flex:none;background:radial-gradient(circle,#f3efe6 0,#e3dccd 70%);border-radius:50%}
+.hint.mph details.mphold{margin-top:8px}.hint.mph details.mphold summary{cursor:pointer;font-size:12.5px;color:var(--muted)}
 .hint.mph .mphn{width:56px;height:56px;flex:none;display:flex;align-items:center;justify-content:center;font-size:26px;background:var(--panel-2);border-radius:50%}
 .jmmode{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px;margin-bottom:8px}.jmmode>b{font-size:14px}.jmmode .jmmo{display:flex;flex-direction:column;gap:3px;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel-2);color:var(--fg);font:inherit;cursor:pointer}.jmmode .jmmo:hover,.jmmode .jmmo:focus-visible{border-color:var(--accent)}.jmmode .jmmo b{font-size:14px;color:var(--accent)}.jmmode .jmmo span{font-size:12.5px;color:var(--muted);line-height:1.5}.jmmode .jmsw{font-size:12.5px}.jmrows{display:flex;flex-direction:column;gap:6px}.jmtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center}#jmDl{display:contents}.jmtools .repbtn{align-self:auto}.jmtools .repbtn:disabled{opacity:.45;cursor:not-allowed}
 .jmdlnote{font-size:12.5px;line-height:1.55;min-height:1.55em}.jmdlnote .warn{color:var(--warn)}
@@ -712,7 +713,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <!-- MAP -->
   <section class="view" id="view-map" hidden>
     <div class="stage" id="stage" aria-label="第一層地圖（可拖曳與縮放）">
-      <div class="world" id="world"><img class="map" id="mapImg" src="floor1.jpg" alt="樓層俯視地圖" draggable="false"><div class="tiles" id="tiles" hidden></div></div>
+      <div class="world" id="world"><img class="map" id="mapImg" alt="樓層俯視地圖" draggable="false"><div class="tiles" id="tiles" hidden></div></div>
       <div class="nomap" id="noMap" hidden><b>這一層目前沒有地圖</b><span>wiki 還沒有這一層的地圖。怪物、物品資料可以在其他分頁查詢；右側列出圖鑑上的區域。</span></div>
       <div class="mapnote" id="mapNote" hidden></div>
       <div class="jmcredit" id="jmCredit" hidden></div>
@@ -1097,8 +1098,8 @@ const monPos=m=>{const sp=spotsOf(m.floor).find(x=>x.mons.some(n=>n===m.name||(m
 const unknownZones=f=>FLOORS[f].order.filter(z=>FLOORS[f].M.some(m=>m.zone===z&&!HAS_POS(m.id)));
 
 // ---------- labels ----------
-const TYPE_ZH={"Boss":"首領","Mini-Boss":"小首領","Monster":"一般怪物","Minion":"嘍囉"};
-const BEH_ZH={A:"主動攻擊（看到就打）",N:"中立（被打才反擊）",P:"被動（不會攻擊）"};
+const TYPE_ZH={"Boss":"首領","Mini-Boss":"小首領","Monster":"一般怪物","Minion":"嘍囉","Unknown":"類型未知"};
+const BEH_ZH={A:"主動攻擊（看到就打）",N:"中立（被打才反擊）",P:"被動（不會攻擊）",U:"還不知道"};
 const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["傳說+","r-s",5],splusplus:["傳說++","r-s",6],ss:["SS","r-s",7]};
 const GROUP={material:"材料",food:"食物",ring:"飾品",artifact:"飾品",amulet:"飾品",bracelet:"飾品",shield:"防具",armor_set:"防具",bow:"武器",crossbow:"武器",dagger:"武器",sword:"武器",staff_mage:"武器",staff_shaman:"武器",lumberjack_job:"採集",miner_job:"採集",farmer_job:"採集",tool:"工具",gem_stone:"符文",fortifier:"藥水",unknown:"未收錄"};
 const CAT_ZH={material:"材料",food:"食物",ring:"戒指",artifact:"遺物",amulet:"項鍊",bracelet:"手環",shield:"盾牌",armor_set:"防具套裝",bow:"弓",crossbow:"弩",dagger:"匕首",sword:"近戰武器",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",lumberjack_job:"伐木採集",miner_job:"採礦",farmer_job:"農作",tool:"工具",gem_stone:"符文",fortifier:"強化藥水",unknown:"未收錄"};
@@ -1117,15 +1118,18 @@ const cls=t=>t==="Boss"?"boss":t==="Mini-Boss"?"mini":t==="Minion"?"minion":"";
 const MPH=window.SAO_MOBPHOTO||{by:{}};const photoOf=m=>((MPH.by||{})[m.floor]||{})[m.name]||(m.floor===1&&S1.PHOTO[m.name]?{f:S1.PHOTO[m.name]}:null);
 const face=m=>{const p=photoOf(m);return p&&p.f?`<img class="face" src="${p.f}" alt="">`:`<span aria-hidden="true">${m.icon}</span>`};
 // the news' balance lines ("HP: 220 → 250 (+14%)") in Chinese
-const CH_ZH={HP:"生命",Damage:"傷害",Speed:"速度"};
-const chZh=t=>{const m=/^(（[^）]*）)?\s*([A-Za-z ]+):\s*(.+)$/.exec(t);return m?`${m[1]||""}${CH_ZH[m[2].trim()]||m[2].trim()} ${m[3]}`:t};
+const CH_ZH={HP:"生命",Damage:"傷害",Speed:"速度",Level:"等級",Attacks:"招式","Projectile damage taken":"受到的投射物傷害"};
+const chZh=t=>{const m=/^(（[^）]*）)?\s*([A-Za-z ]+):\s*(.+)$/.exec(t);if(!m)return t;const v=m[3].replace(/(\d+) attack\(s\) (weakened|strengthened)/,(_,n,w)=>`${n} 招${w==="weakened"?"減弱":"加強"}`).replace(/\s*\(([+-]?\d+)\s*%\)/,"（$1%）");return`${m[1]||""}${CH_ZH[m[2].trim()]||m[2].trim()} ${v}`};
 // the official table, row by row: a monster with several rows (Gobelin de la Caverne ×3, the summoned sentinel) shows each
 // row's own picture and numbers; nothing is flipped (使用者 2026-11-04 選 B、2026-11-06「首領不轉向」)
-const photoNote=m=>{const p=photoOf(m);if(!p||!p.rows)return"";const S=MPH.src||{},V={Nerf:"削弱",Stronger:"加強",Adjusted:"調整"},multi=p.rows.length>1;
-  return`<div class="hint mph"><span class="hk">官網公布的${multi?`${p.rows.length} 種`:""}模樣和數值調整</span><span class="muted">${esc(S.date||"")}〈<a href="${esc(S.url||"#")}" target="_blank" rel="noopener">${esc(S.title||"官網新聞")}</a>〉</span>
-    ${p.rows.map(r=>`<div class="mphr">${r.f?`<img src="${esc(r.f)}" alt="" loading="lazy">`:`<span class="mphn" aria-hidden="true">${m.icon}</span>`}<span><b>${esc(r.fr)}</b>${r.v?`<span class="muted">・${esc(V[r.v]||r.v)}</span>`:""}${r.ch.map(c=>`<br>${esc(chZh(c))}`).join("")}${r.f?"":`<br><span class="muted">官網沒有附圖</span>`}</span></div>`).join("")}
-    </div>
-  <div class="note srcn">🖼️ 圖片和數值取自官網新聞〈${esc(S.title||"")}〉（${esc(S.date||"")}）的怪物表，官網的名稱：${p.rows.map(r=>"「"+esc(r.fr)+"」").join("、")}。</div>`};
+const MPS=MPH.srcs||{"1028":MPH.src||{}};
+const mphRows=(m,rows)=>rows.map(r=>`<div class="mphr">${r.f?`<img src="${esc(r.f)}" alt="" loading="lazy">`:`<span class="mphn" aria-hidden="true">${m.icon}</span>`}<span><b>${esc(r.fr)}</b>${r.tw?`<span class="muted">・${esc(r.tw)}</span>`:""}${r.v?`<span class="muted">・${esc({Nerf:"削弱",Buff:"加強",Stronger:"加強",Adjusted:"調整"}[r.v]||r.v)}</span>`:""}${r.ch.map(c=>`<br>${esc(chZh(c))}`).join("")}${r.f?"":`<br><span class="muted">官網沒有附圖</span>`}</span></div>`).join("");
+const mphSrc=k=>{const S=MPS[k]||{};return`${esc(S.date||"")}〈<a href="${esc(S.url||"#")}" target="_blank" rel="noopener">${esc(S.title||"官網新聞")}</a>〉`};
+// the official tables, row by row (2026-11-09 = latest, 2026-10-28 = the previous adjustment, folded); nothing is flipped
+const photoNote=m=>{const p=photoOf(m);if(!p||!(p.rows||p.old))return"";const R=p.rows||[],O=p.old||[];
+  return`<div class="hint mph"><span class="hk">官網公布的${R.length>1?`${R.length} 種`:""}模樣和數值調整</span>${R.length?`<span class="muted">${mphSrc("1109")}</span>${mphRows(m,R)}`:`<span class="muted">${mphSrc("1028")}</span>${mphRows(m,O)}`}
+    ${R.length&&O.length?`<details class="mphold"><summary>之前的調整：${mphSrc("1028")}</summary>${mphRows(m,O)}</details>`:""}</div>
+  <div class="note srcn">🖼️ 圖片和數值取自官網新聞的怪物表${R.length?`（${esc((MPS["1109"]||{}).date||"")}〈${esc((MPS["1109"]||{}).title||"")}〉${O.length?`；之前的調整是 ${esc((MPS["1028"]||{}).date||"")}〈${esc((MPS["1028"]||{}).title||"")}〉`:""}）`:`（${esc((MPS["1028"]||{}).date||"")}〈${esc((MPS["1028"]||{}).title||"")}〉）`}，官網的名稱：${[...new Set(R.concat(O).map(r=>r.fr))].map(x=>"「"+esc(x)+"」").join("、")}${R.some(r=>r.tw)?"；中文是官網台灣版新聞的譯名，不是遊戲內的官方中文":""}。</div>`};
 const thHTML=(m,extra="")=>`<span class="th ${cls(m.type)} ${extra}" aria-hidden="true">${face(m)}<i class="beh beh-${m.beh}"></i></span>`;
 const GICON=window.SAO_GAMEICONS||{};   // icons cut from the owner's screenshots (gameicons.js)
 const slot=(id,s=36)=>{const it=ITEMS[id];const n=it&&it.ic!=null?it.ic:-1;if(GICON[id])return recicImg(GICON[id],s);   // game icon (gameicons.js) wins over the sprite sheets (2026-11-07 icon audit)
@@ -1209,17 +1213,18 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!panel.hidden&&!doc
 function markSel(){const cur=!panel.hidden&&stack[stack.length-1];
   document.querySelectorAll(".card.sel").forEach(e=>e.classList.remove("sel"));document.querySelectorAll(".th.selm").forEach(e=>e.classList.remove("selm"));
   if(!cur)return;document.querySelectorAll(`[data-key="${cur.type}|${CSS.escape(cur.id)}"]`).forEach(e=>e.classList.add(e.classList.contains("th")?"selm":"sel"))}
-const soonNote=f=>FLOORS[f].status==="soon"?`<div class="note warn">${FLN(f)}預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）。這是 wiki 目前的資料，官方說會調整進度設計，開放後可能不同。</div>`:"";
+const soonNote=f=>FLOORS[f].status==="new"?`<div class="note warn">${FLN(f)}已在 2026-11-09 開放（官網新聞〈<a href="https://saominecraft.com/news/paliers-2-et-3-ouverts" target="_blank" rel="noopener">Floors 2 and 3 are open!</a>〉）。本站這一層的資料取自 wiki 和官網公告，還沒有遊戲畫面確認，可能和遊戲不同；看到不一樣的地方歡迎用「協作區」回報。</div>`:"";
 
 function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.zones[m.zone];const p=monPos(m);const st=STATUS[p.s];
   const drops=m.drops.length?`<ul class="rows">${m.drops.map(([iid,pp,ww])=>{const it=ITEMS[iid];return`<li><button class="lrow" data-go="i|${esc(iid)}">${slot(iid)}<span class="t"><b>${esc(zhI(iid)||iid)}</b><span>${ww?WIKI_ONLY:""}${zhI(iid)&&zhI(iid)!==iid?esc(iid)+"・":""}${it.fr?esc(it.fr):"官方物品圖鑑沒有此物品"}</span></span><span class="v">${pct(pp)}</span></button><div class="bar"><b style="width:${pp==null?0:Math.max(pp,pp>0?1.5:0)}%"></b></div></li>`}).join("")}</ul>`:`<div class="note">wiki 沒有記錄掉落物。</div>`;
   const kq=KILLQ[m.id]||[];
   return`<div class="phead">${thHTML(m)}<div class="ttl"><div class="num">${flBadge(m.floor)} ${m.num?"#"+esc(m.num):"未編號"}</div><h2>${esc(mN(m))}</h2>${mN(m)!==m.name?`<div class="sub">${esc(m.name)}</div>`:""}${m.aka&&m.aka.length?`<div class="sub">舊名：${m.aka.map(esc).join("、")}${m.renamedBy?`・名稱依${m.renamedBy.how==="codex"?`遊戲圖鑑 #${esc(m.renamedBy.no)}`:"審核員確認"}（回報 ${esc(String(m.renamedBy.report||""))}）更新`:""}</div>`:""}</div></div>
   ${soonNote(m.floor)}
-  <dl class="facts"><dt>等級</dt><dd>${lvOf(m)!=null?`<b class="mono">${lvOf(m)}</b> <span class="pill rep">${repsOf(m).some(x=>x.level!=null)?"玩家回報":"遊戲截圖"}</span>`:`<span class="muted">未回報</span>`}</dd><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
+  <dl class="facts"><dt>等級</dt><dd>${lvOf(m)!=null?`<b class="mono">${lvOf(m)}</b> <span class="pill rep">${lvSrc(m)}</span>`:`<span class="muted">未回報</span>`}</dd><dt>類型</dt><dd><span class="pill ${cls(m.type)}">${TYPE_ZH[m.type]}</span></dd><dt>行為</dt><dd>${BEH_ZH[m.beh]}</dd><dt>難度</dt><dd>${stars(m.diff)}</dd>
   <dt>位置</dt><dd>${(()=>{const sp=p.spot,nm=sp?pN(sp):pN(z),sub=sp?nameSub(sp):(m.codexRegion?z.zh:nameSub(z));   // 圖鑑區域 and 地圖位置 were the same place twice (user 2026-11-08)
     const cr=m.codexRegion&&![nm,sp&&sp.n,z.n,sub].some(x=>x&&norm(x)===norm(m.codexRegion))?`<br><span class="muted" style="font-size:12.5px">遊戲圖鑑寫「${esc(m.codexRegion)}」</span>`:"";
-    return`${sp?`<button class="linkbtn" data-go="s|${sp.id}">${esc(nm)}</button>`:esc(nm)}${sub?`<br><span class="muted" style="font-size:12.5px">${esc(sub)}</span>`:""}${cr}<br><span class="pill ${st.c}">${st.t}</span>${SPAWN_OF[m.id]?"":p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}`})()}</dd>${SPAWN_OF[m.id]?`<dt>重生點</dt><dd>${SPAWN_OF[m.id].map((w,i)=>`${SPAWN_OF[m.id].length>1?`<span class="rnum">${i+1}</span>`:""}<button class="linkbtn mono" data-rep="${m.floor}|${w.x}|${w.z}">X ${w.x} · Z ${w.z}${w.u?"（地下）":""}</button>`).join("<br>")}</dd>`:""}</dl>
+    const nz=(photoOf(m)||{}).z,nzs=nz&&![nm,sp&&sp.n,z.n,sub].some(x=>x&&norm(x)===norm(nz[0]))?`<br><span class="muted" style="font-size:12.5px">官網 11/9 新聞寫「${esc(nz[0])}」${nz[1]?`（${esc(nz[1])}）`:""}</span>`:"";
+    return`${sp?`<button class="linkbtn" data-go="s|${sp.id}">${esc(nm)}</button>`:esc(nm)}${sub?`<br><span class="muted" style="font-size:12.5px">${esc(sub)}</span>`:""}${cr}${nzs}<br><span class="pill ${st.c}">${st.t}</span>${SPAWN_OF[m.id]?"":p.x!=null?` <span class="mono">X ${p.x} · Z ${p.z}</span>`:""}`})()}</dd>${SPAWN_OF[m.id]?`<dt>重生點</dt><dd>${SPAWN_OF[m.id].map((w,i)=>`${SPAWN_OF[m.id].length>1?`<span class="rnum">${i+1}</span>`:""}<button class="linkbtn mono" data-rep="${m.floor}|${w.x}|${w.z}">X ${w.x} · Z ${w.z}${w.u?"（地下）":""}</button>`).join("<br>")}</dd>`:""}</dl>
   ${m.note?`<div class="note">${esc(m.note)}</div>`:""}
   ${p.spot&&FLOORS[m.floor].map?`<button class="linkbtn" data-spot="${p.spot.id}">在地圖上查看</button>`:""}
   <h3 class="sec">掉落物 <span class="c">${m.drops.length+(m.dropsLocked?m.dropsLocked.length:0)}</span></h3>${drops}
@@ -1242,7 +1247,9 @@ const repLink=(id,label)=>id?`<a href="#report" class="replink" data-repgo="${es
 const repRef=(r,self)=>(r.issue?`<a href="${REPO}/issues/${r.issue}" target="_blank" rel="noopener">回報 #${r.issue}</a>`:self?`回報 ${esc(r.id||"")}`:repLink(r.id,"回報 "+r.id))+(r.by?`・<span class="repby">${esc(r.by)}</span> 提供`:"");
 const repKey=r=>r.issue?"#"+r.issue:(r.id||"");
 const repsOf=m=>REPS.filter(r=>r.type==="monster"&&r.floor===m.floor&&(r.monId?r.monId===m.id:(r.name===m.name||(m.aka||[]).includes(r.name))));
-const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:m.lvShot!=null?m.lvShot:null};
+const lvNews=m=>{const p=photoOf(m);return p&&p.lv!=null?p.lv:null};
+const lvSrc=m=>repsOf(m).some(x=>x.level!=null)?"玩家回報":m.lvShot!=null?"遊戲截圖":lvNews(m)!=null?"官網 11/9 公告":"";
+const lvOf=m=>{const r=repsOf(m).find(x=>x.level!=null);return r?r.level:m.lvShot!=null?m.lvShot:lvNews(m)};
 function repBlock(m){const r=repsOf(m);if(!r.length)return"";const a=r[0];
   return`<h3 class="sec">玩家回報 <span class="c">${r.length} 則</span></h3>
   <figure class="repfig"><a href="${esc(a.img)}" target="_blank" rel="noopener"><img src="${esc(a.img)}" alt="${esc(m.name)} 的遊戲截圖" loading="lazy"></a>
@@ -1942,7 +1949,7 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
 
   ${!Q.main&&(qq.need.length||qq.kill)?`<h3 class="sec">需要的物品和目標</h3><div class="reqs">${reqChips(qq)}</div>`:""}
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
-  <div class="note srcn">${Z.zh&&!Z.cont?"任務名稱"+(Z.d?"和說明":"")+"取自遊戲中文版的任務日誌（站長 2026-11-07 截圖）。":""}${Q.main?(Z.d?"":"說明取自 wiki 主線表，")+"步驟順序和座標取自參考互動地圖，文字是本站改寫。"+(qq.img?"步驟圖片是站長的遊戲截圖。":""):qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
+  <div class="note srcn">${Z.zh&&!Z.cont?"任務名稱"+(Z.d?"和說明":"")+"取自遊戲中文版的任務日誌（站長 2026-11-07 截圖）。":""}${Q.main?(FL>1?"說明、NPC、等級和獎勵取自 wiki 主線表（2026-11-10 新增，寫的人依實際遊玩），步驟和說明是本站改寫；還沒有遊戲截圖，任務追蹤的編號未知。":(Z.d?"":"說明取自 wiki 主線表，")+"步驟順序和座標取自參考互動地圖，文字是本站改寫。")+(qq.img?"步驟圖片是站長的遊戲截圖。":""):qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
   ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${repLink(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
   ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}`}
 function mqCard(qq,i){const Z=qZ(qq)||{},meta=[qT(qq)!==qq.t&&qq.t,qq.npc&&("NPC "+qNpc(qq.npc)),qq.lv&&("等級 "+qq.lv)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;
@@ -2926,7 +2933,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   const flSoon=f=>{const F=FLOORS[f],img=F&&F.map&&F.map.img;
     return`<section class="jmsec"><div class="jmsech"><b>地圖</b><span class="muted">第 ${f} 層尚未開放打包</span></div>
       <div class="jmsoon">${img?`<img src="${esc(img)}" alt="">`:`<span class="jmsoonx">第 ${f} 層還沒有地圖</span>`}</div>
-      <div class="muted jmsoonn">第 ${f} 層開放後，工具會像第 1 層一樣：${img?`拿你的地圖和網站這張第 ${f} 層地圖比對`:`先用玩家上傳的第一份地圖當這一層的底圖`}，你有、網站還沒有的地方會在這張圖上變成方格，點選後一起打包。</div></section>
+      <div class="muted jmsoonn">第 ${f} 層的打包還沒做好（要先確認 JourneyMap 怎麼存這一層）。做好後，工具會像第 1 層一樣：${img?`拿你的地圖和網站這張第 ${f} 層地圖比對`:`先用玩家上傳的第一份地圖當這一層的底圖`}，你有、網站還沒有的地方會在這張圖上變成方格，點選後一起打包。</div></section>
     <section class="jmsec"><div class="jmsech"><b>地下城</b><span class="muted">第 ${f} 層的地下城開放後列在這裡</span></div></section>`};
   const opts=FLv===1?mapPart+dgPart:flSoon(FLv);
   // download beside the folder button (使用者 2026-11-06：資料夾選擇跟壓縮檔下載要跟區塊選取分開); the button is
@@ -3260,7 +3267,7 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
    $("stage").style.setProperty("--noteh",n.hidden?"42px":((n.offsetHeight||82)+56)+"px")}
   {const c=m&&m.clip,mk=c?`radial-gradient(circle ${c.r}px at ${c.c}px ${c.c}px,#000 ${c.r-1.5}px,transparent ${c.r}px)`:"";
    [mapImg,$("tiles")].forEach(e=>{e.style.maskImage=mk;e.style.webkitMaskImage=mk})}   // floor 1 is a round island: hide the image corners (no square edge)
-  if(!mapImg.src.endsWith(want)){const same=mapImg.dataset.f===String(FL);mapImg.src=want;mapImg.dataset.f=String(FL);if(!same)fitted=false}
+  if(!mapImg.src.endsWith(want)){const same=mapImg.dataset.f===String(FL);if(!same)mapImg.style.opacity="0";mapImg.src=want;mapImg.dataset.f=String(FL);if(!same)fitted=false}
   renderFilter();SRCH_ALL=!!Sq();
   F().towns.forEach(t=>{if(!catOn(townCat(t)))return;const b=document.createElement("button");b.className="town";b.dataset.t=t.id;b.style.left=toPxX(t.x)+"px";b.style.top=toPxZ(t.z)+"px";
     b.classList.add(t.tp?"tp":"land");b.innerHTML=`<span class="pin"></span><span class="tname">${esc(pN(t))}</span>`;b.setAttribute("aria-label",(t.tp?"可傳送的村鎮 ":"村鎮 ")+t.n);if(t.tp)b.title="傳送點："+t.tp;
@@ -3425,7 +3432,7 @@ document.querySelectorAll("nav.tabs a,#codexTabs a,#collabBtn").forEach(a=>a.add
 const TOTAL=100;const flTrig=$("flTrig"),flPop=$("flPop");
 const flState=f=>FLOORS[f]?(FLOORS[f].status==="soon"?"soon":"open"):"lock";
 $("flGrid").innerHTML=Array.from({length:TOTAL},(_,i)=>{const f=i+1,st=flState(f);
-  const tip=st==="lock"?`第 ${f} 層・尚未開放`:`第 ${f} 層${st==="soon"?"（預計 11/8 或 11/9 逐步開放）":""}`;
+  const tip=st==="lock"?`第 ${f} 層・尚未開放`:`第 ${f} 層${FLOORS[f]&&FLOORS[f].status==="new"?"（11/9 開放，資料還沒有遊戲畫面確認）":""}`;
   return`<button class="flcell ${st}" data-f="${f}" title="${esc(tip)}" aria-label="${esc(tip)}" ${st==="lock"?'aria-disabled="true"':""}>${f}</button>`}).join("");
 function openPick(o){flPop.hidden=!o;flTrig.setAttribute("aria-expanded",o);$("flMsg").textContent="";if(o){$("flJump").value="";setTimeout(()=>$("flJump").focus(),0)}}
 flTrig.onclick=e=>{e.stopPropagation();openPick(flPop.hidden)};
@@ -3439,7 +3446,7 @@ $("flForm").onsubmit=e=>{e.preventDefault();pickFloor(parseInt($("flJump").value
 function setFloor(f){if(f===FL&&flTrig.dataset.ready)return;FL=f;flTrig.dataset.ready=1;
   $("flNo").textContent=f+"F";$("flNm").textContent=`第 ${f} 層`;   // no floor name: the game has no confirmed floor names (user 2026-11-02 chose A)
   $("flGrid").querySelectorAll(".flcell").forEach(b=>b.classList.toggle("cur",+b.dataset.f===f));
-  const Fx=F();$("floorInfo").innerHTML=`${COLLAB_PAUSE?`<div class="pausebar" id="pauseBar" role="status" tabindex="0" onclick="this.classList.toggle('open')"><span>${SITE_PAUSE_MSG.replace(/^([^：]+：)/,"<b>$1</b>")}</span></div>`:""}<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="soon"?`<span class="soon">預計 11/8（日）或 11/9（一）逐步開放（官方 Discord 公告：原定 11/4 因伺服器事故延後，本週內部測試後才開放）・wiki 現有資料，開放後可能變動</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
+  const Fx=F();$("floorInfo").innerHTML=`${COLLAB_PAUSE?`<div class="pausebar" id="pauseBar" role="status" tabindex="0" onclick="this.classList.toggle('open')"><span>${SITE_PAUSE_MSG.replace(/^([^：]+：)/,"<b>$1</b>")}</span></div>`:""}<span>建議等級 ${Fx.lv}</span><span>樓層首領 ${esc(Fx.boss)}</span>${Fx.status==="new"?`<span class="soon">11/9 已開放・資料取自 wiki 和官網公告，還沒有遊戲畫面確認</span>`:""}<button class="legal" id="legalBtn">非官方攻略・版權聲明</button>`;$("legalBtn").onclick=()=>{aboutJump="legal";if(view==="about")renderAbout();else go("about")};
   $("nMon").textContent=Fx.M.length;$("nQuest").textContent=Fx.quests.length+MQ(f).length;$("nEquip").textContent=EQ.length;$("nProp").textContent=PRV().length;$("nRec").textContent=RCV.length;if(ROUTE)clearRoute();
   $("nItem").textContent=matPool(f,false).length;$("nNpc").textContent=NPCS(f).length;fillNpcArea();
   fillZoneSelect();fillTownChips();if(editing)setEditing(false);if(f!==1)DGV=null;fitted=false;renderMap();renderZoneList()}
@@ -3524,7 +3531,7 @@ window.addEventListener("resize",fixCols);
 const setHead=()=>document.documentElement.style.setProperty("--head-h",$("top").getBoundingClientRect().height+"px");
 new ResizeObserver(setHead).observe($("top"));
 let lastW=0;new ResizeObserver(()=>{const w=Math.round(stage.getBoundingClientRect().width);if(w&&w!==lastW&&MP()){const first=!lastW;lastW=w;if(!first||!fitted)fit()}}).observe(stage);
-mapImg.addEventListener("load",()=>{if(view==="map"&&!fitted)fit()});
+mapImg.addEventListener("load",()=>{mapImg.style.opacity="";if(view==="map"&&!fitted)fit()});mapImg.addEventListener("error",()=>{mapImg.style.opacity=""});
 show();setHead();
 // 點「回報 R000N」：切到協作區「攻略資料維護」，把已收錄裡那一則捲到中間並閃一下
 function goRep(id){if(view!=="report"||rSub!=="data")go("report");let n=0;
