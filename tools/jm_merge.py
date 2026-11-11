@@ -648,8 +648,11 @@ def main(argv):
             else:
                 skipped.append((g["name"], f"地圖圖片都在第 {seed} 層的範圍外"))
             continue
+        # the floor whose explored map the colours match (frames of floors 1-3 overlap). Every floor is tried and the one
+        # with the most matching chunks wins: the owner's floor-3 folder also held a few floor-2 regions (written around the
+        # teleport, 2026-11-12), which match floor 2 exactly but are far fewer than its floor-3 ones
         tried, ok = [], None
-        for f in floors:            # the floor whose explored map the colours match (frames of floors 1-3 overlap)
+        for f in floors:
             cv, mask = st(f)
             inside = [(rx, rz, im) for rx, rz, im in g["layers"]["day"] if in_frame(rx, rz)]
             if not inside:
@@ -661,13 +664,34 @@ def main(argv):
                 tried.append((2, len(diffs), f"和目前地圖重疊的 {len(diffs)} 個區塊顏色對不上（差異 {med:.0f}），可能是別的樓層或別的世界"))
             elif len(diffs) < min_overlap:
                 tried.append((1, len(diffs), f"和網站現有的地圖只重疊 {len(diffs)} 個區塊（至少要 {min_overlap} 個），無法確認是第 {f} 層"))
-            else:
+            elif not ok or len(diffs) > ok["overlap"]:
                 ok = dict(g, inside=inside, overlap=len(diffs), floor=f)
-                break
         if ok:
+            # single regions that belong to another floor (they match that floor's map and none of this one's) stay out
+            if len(floors) > 1:
+                keep = []
+                for r in ok["inside"]:
+                    st(ok["floor"]); d0, _ = check_group([r], *state[ok["floor"]])
+                    other = False
+                    if not d0:
+                        for f in floors:
+                            if f == ok["floor"]:
+                                continue
+                            st(f)
+                            if in_frame(r[0], r[1]):
+                                d1, _ = check_group([r], *state[f])
+                                if len(d1) >= 8 and statistics.median(d1) <= 32:
+                                    other = True
+                                    break
+                    if other:
+                        skipped.append((g["name"], f"{r[0]},{r[1]}.png 是別的樓層的地圖，這一張不收"))
+                    else:
+                        keep.append(r)
+                ok["inside"] = keep
             accepted.append(ok)
         else:
-            skipped.append((g["name"], max(tried)[2] if tried else "網站還沒有可以比對的樓層地圖"))
+            # the reason from the first floor whose frame the world is in (floor 1 first), as the site's packer shows it
+            skipped.append((g["name"], next((t[2] for t in tried if t[0]), tried[0][2]) if tried else "網站還沒有可以比對的樓層地圖"))
     if not accepted:
         if len(skipped) == 1:
             reason = skipped[0][1]

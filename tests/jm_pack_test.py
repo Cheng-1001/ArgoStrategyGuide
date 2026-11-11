@@ -81,6 +81,30 @@ try:
     put("Triggers_noise~d/overworld/day", "%d,%d.png" % top[0], noise)
     put("Triggers_lone~e/overworld/day", "%d,%d.png" % lone, region(*lone, wiki))
     put("Triggers_out~f/overworld/day", "40,40.png", region(*top[0], cv))
+    # floors 2 and 3 (2026-11-12): worlds cut from the site's floor-2 / floor-3 explored maps (frames as FLOOR_CFG in tools/jm_merge.py)
+    def fl_canvas(f, full, x0, z0):
+        c = Image.new("RGB", (full, full))
+        for n in os.listdir(os.path.join(ROOT, "tiles", f"f{f}jm", "3")):
+            a, b = map(int, n[:-4].split("_"))
+            c.paste(Image.open(os.path.join(ROOT, "tiles", f"f{f}jm", "3", n)), (a * 256, b * 256))
+        m = Image.open(os.path.join(ROOT, "tiles", f"f{f}jm", "explored.png")).convert("L")
+        mx0, mz0 = x0 // 16, z0 // 16
+        def expl(rx, rz):
+            return sum(1 for cz in range(rz * 32, rz * 32 + 32) for cx in range(rx * 32, rx * 32 + 32)
+                       if 0 <= cx - mx0 < m.width and 0 <= cz - mz0 < m.height and m.getpixel((cx - mx0, cz - mz0)))
+        cut = lambda rx, rz: c.crop((rx * 512 - x0, rz * 512 - z0, rx * 512 - x0 + 512, rz * 512 - z0 + 512)).convert("RGBA")
+        return cut, expl
+    cut2, expl2 = fl_canvas(2, 2304, -1062, -1062)
+    best2 = max(((expl2(rx, rz), rx, rz) for rx in range(-3, 2) for rz in range(-3, 2)))[1:]
+    put("Triggers_f2~g/overworld/day", "%d,%d.png" % best2, cut2(*best2))
+    f2new = next((rx, rz) for rx in range(-2, 2) for rz in range(-2, 2) if expl2(rx, rz) == 0) if any(expl2(rx, rz) == 0 for rx in range(-2, 2) for rz in range(-2, 2)) else None
+    w2 = ImageEnhance.Brightness(Image.open(os.path.join(ROOT, "floor2.jpg")).convert("RGB").resize((2124, 2124))).enhance(1.1)
+    # a floor-2 region the site does not have yet (no explored chunk in it): the wiki floor-2 map there
+    if f2new:
+        put("Triggers_f2~g/overworld/day", "%d,%d.png" % f2new, w2.crop((f2new[0] * 512 + 1062, f2new[1] * 512 + 1062, f2new[0] * 512 + 1574, f2new[1] * 512 + 1574)).convert("RGBA"))
+    cut3, expl3 = fl_canvas(3, 1792, -253, -79)
+    best3 = max(((expl3(rx, rz), rx, rz) for rx in range(-1, 3) for rz in range(-1, 4)))[1:]
+    put("Triggers_f3~h/overworld/day", "%d,%d.png" % best3, cut3(*best3))
     # dungeons: "<uuid>_<name>" folders next to the floor 1 overworld (two Geldorack runs), an unknown one, and one
     # whose server folder has no floor 1 map
     put("Triggers_f1~a/a57676b0-5d0c-4000-8000-000000000001_geldorack/-1", "-1,-1.png", cave)
@@ -156,7 +180,7 @@ try:
         fw = pg.evaluate("document.querySelector('.jmfl').getBoundingClientRect().width")
         pg.click("#jmFloorBtn"); pg.wait_for_timeout(100)
         fo = pg.eval_on_selector_all("#jmFloorList [data-jmfl]", "o=>o.map(x=>x.textContent)")
-        check(pg.input_value("#jmFloorIn") == "1" and fw < 130 and fo[0] == "第 1 層" and len(fo) == 3 and all("還不能打包" in t for t in fo[1:]),
+        check(pg.input_value("#jmFloorIn") == "1" and fw < 130 and fo[0] == "第 1 層" and len(fo) == 3 and not any("還不能打包" in t for t in fo),
               f"the floor box is narrow ({fw:.0f}px), shows 1, and its list has floors 1-3 ({fo})")
         pg.keyboard.press("Escape"); pg.wait_for_timeout(100)
         check(not pg.is_visible("#jmFloorList"), "Esc closes the floor list")
@@ -199,13 +223,15 @@ try:
             pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_names.png"))
         pg.mouse.click(5, 5); pg.wait_for_timeout(100)
         check(not pg.locator("#jmNames").count(), "a click elsewhere closes it")
-        # switching floors: 2 shows its greyed map and what will appear, 3 has no map yet, back to 1 keeps the picks
+        # switching floors (2026-11-12: floors 2 and 3 can be packed): 2 shows the floor-2 world's new squares on the floor-2
+        # map, 3's world is all on the site already, 12 cannot be packed, back to 1 keeps the picks
         pg.click("#jmFloorBtn"); pg.click("#jmFloorList [data-jmfl='2']"); pg.wait_for_timeout(200)
-        f2 = [pg.locator("[data-jmreg]").count(), pg.locator(".jmsoon img").count(), pg.inner_text("#jmOpts")]
+        f2 = [pg.locator("[data-jmreg]").count(), pg.locator(".jmsoon img").count(), pg.inner_text("#jmOpts"),
+              pg.eval_on_selector_all("[data-jmreg]", "e=>e.map(x=>x.dataset.jmreg)"), pg.get_attribute(".jmmap", "viewBox")]
         if os.environ.get("SHOT_DIR"):
             pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_floor2.png"))
         pg.fill("#jmFloorIn", "3"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(200)
-        f3 = [pg.locator("[data-jmreg]").count(), pg.locator(".jmsoon img").count(), pg.inner_text("#jmRegSum")]   # floor 3 has the site's blank grid map since 2026-11-11
+        f3 = [pg.locator("[data-jmreg]").count(), pg.locator(".jmsoon img").count(), pg.inner_text("#jmRegSum"), pg.inner_text("#jmOpts")]
         if os.environ.get("SHOT_DIR"):
             pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_floor3.png"))
         pg.fill("#jmFloorIn", "12"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(200)
@@ -213,9 +239,10 @@ try:
         pg.fill("#jmFloorIn", "abc"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(100)
         bad = pg.input_value("#jmFloorIn")
         pg.fill("#jmFloorIn", "1"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(300)
-        check(f2[0] == 0 and f2[1] == 1 and "第 2 層的打包還沒做好" in f2[2] and f3[0] == 0 and f3[1] == 1 and "地下城 1／1" in f3[2] and f12 == ["12", True] and bad == "12"
-              and pg.locator("[data-jmreg]").count() > 0 and pg.evaluate("window.__jm.sel.off") == [] and pg.input_value("#jmFloorIn") == "1",
-              f"floors switch by the list (2) and by typing (3, 12, back to 1); a non-number goes back; the picks stay ({f2[:2]}, {f3}, {f12}, {bad})")
+        check(f2[0] > 0 and f2[1] == 0 and all(k.startswith("2:") for k in f2[3]) and f2[4] == "-1062 -1062 2124 2124"
+              and "已選：第 3 層" in f3[2] and "地下城 1／1" in f3[2] and f12 == ["12", True] and bad == "12"
+              and pg.locator("[data-jmreg]").count() > 0 and [k for k in pg.evaluate("window.__jm.sel.off") if ":" not in k] == [] and pg.input_value("#jmFloorIn") == "1",
+              f"floors switch by the list (2) and by typing (3, 12, back to 1); a non-number goes back; the picks stay ({f2[:2]}, {f2[3][:3]}, {f2[4]}, {f3[:3]}, {f12}, {bad})")
         J = pg.evaluate("window.__jm")
         st = {g["label"]: g for g in J["groups"]}
         check(J["found"].get("c1") == 1 and J["found"].get("c2") == 6 and J["found"].get("c0") == 1 and J["found"].get("day", 0) >= 1,
@@ -286,7 +313,7 @@ try:
         regs = pg.eval_on_selector_all("[data-jmreg]", "e=>e.map(x=>x.dataset.jmreg)")
         check("5,9" in regs and "2,2" in regs and "40,40" not in regs and pg.locator(".jmmap .jmtown").count() >= 5
               and "第 1 層 %d／%d 格" % (len(regs), len(regs)) in pg.inner_text("#jmRegSum"), f"the squares with new data are on a small map with town names ({regs})")
-        check(set(st) == {"Triggers_f1~a", "Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d", "Triggers_lone~e", "Triggers_out~f"},
+        check(set(st) == {"Triggers_f1~a", "Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d", "Triggers_lone~e", "Triggers_out~f", "Triggers_f2~g", "Triggers_f3~h"},
               "one entry per world folder (night / cave layers are not separate worlds)")
         check(st["Triggers_f1~a"]["state"] == "f1" and st["Triggers_f1~a"]["files"] == 4, f"the floor 1 world is recognised ({st['Triggers_f1~a']})")
         check(all(st[k]["state"] == "other" for k in ("Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d")),
@@ -342,7 +369,8 @@ try:
         check(packed == ["mp/Triggers_f1~a/overworld/2/2,2.png"] and "/overworld/1/5,9.png" not in " ".join(nn)
               and pg.get_attribute("[data-jmreg='5,9']", "aria-checked") == "false", f"clicking squares changes what is packed ({packed})")
         pg.click("#jmRegAll"); pg.wait_for_timeout(100)
-        check(pg.evaluate("window.__jm.sel.off") == [] and pg.evaluate("window.__jm.sel.dgOff") == ["geldorack"], "the floor's 全選 picks the squares only, not the dungeons")
+        check([k for k in pg.evaluate("window.__jm.sel.off") if ":" not in k] == [] and all(k[:2] in ("2:", "3:") for k in pg.evaluate("window.__jm.sel.off"))
+              and pg.evaluate("window.__jm.sel.dgOff") == ["geldorack"], "the floor's 全選 picks that floor's squares only (not other floors', not the dungeons)")
         pg.click("#jmDgAll"); pg.wait_for_timeout(100)
         check(pg.evaluate("window.__jm.sel.dgOff") == [] and len(names_now()) == len(names), "the dungeons' 全選 picks them again; everything is packed")
         if os.environ.get("SHOT_DIR"):
