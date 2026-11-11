@@ -652,7 +652,13 @@ def main(argv):
         # with the most matching chunks wins: the owner's floor-3 folder also held a few floor-2 regions (written around the
         # teleport, 2026-11-12), which match floor 2 exactly but are far fewer than its floor-3 ones
         tried, ok = [], None
-        for f in floors:
+        # floors 2 / 3 take only "overworld" folders: the owner's boss-room instances (gorge_rugiboeuf, pre_breches) sit on
+        # floor-2 coordinates but are changed copies (the gorge's arena has no sand disc), and would overwrite the real map
+        leaf = g.get("path", "").replace("\\", "/").rstrip("/").split("/")[-1].lower()
+        fl_ok = [f for f in floors if f == 1 or leaf == "overworld"]
+        if len(fl_ok) < len(floors):
+            tried.append((1, -1, f"「{leaf}」不是 overworld 資料夾：第 2、3 層只收 overworld（副本、首領房間先不收）"))
+        for f in fl_ok:
             cv, mask = st(f)
             inside = [(rx, rz, im) for rx, rz, im in g["layers"]["day"] if in_frame(rx, rz)]
             if not inside:
@@ -667,28 +673,34 @@ def main(argv):
             elif not ok or len(diffs) > ok["overlap"]:
                 ok = dict(g, inside=inside, overlap=len(diffs), floor=f)
         if ok:
-            # single regions that belong to another floor (they match that floor's map and none of this one's) stay out
-            if len(floors) > 1:
+            # single regions that clearly belong to another floor (no match on this one, a near-exact match there: a real
+            # duplicate is ~10 per pixel, JPEG noise; other terrain 40+) go to that floor; the rest stays with the world's floor
+            moved = {}
+            if len(fl_ok) > 1:
                 keep = []
                 for r in ok["inside"]:
                     st(ok["floor"]); d0, _ = check_group([r], *state[ok["floor"]])
-                    other = False
-                    if not d0:
-                        for f in floors:
+                    dest = None
+                    if not (len(d0) >= 8 and statistics.median(d0) <= 32):
+                        best = None
+                        for f in fl_ok:
                             if f == ok["floor"]:
                                 continue
                             st(f)
                             if in_frame(r[0], r[1]):
                                 d1, _ = check_group([r], *state[f])
-                                if len(d1) >= 8 and statistics.median(d1) <= 32:
-                                    other = True
-                                    break
-                    if other:
-                        skipped.append((g["name"], f"{r[0]},{r[1]}.png 是別的樓層的地圖，這一張不收"))
+                                if len(d1) >= 8 and statistics.median(d1) <= 16 and (not best or len(d1) > best[1]):
+                                    best = (f, len(d1))
+                        dest = best and best[0]
+                    if dest:
+                        moved.setdefault(dest, []).append(r)
                     else:
                         keep.append(r)
                 ok["inside"] = keep
-            accepted.append(ok)
+            if ok["inside"]:
+                accepted.append(ok)
+            for f, rs in moved.items():
+                accepted.append(dict(g, inside=rs, overlap=0, floor=f))
         else:
             # the reason from the first floor whose frame the world is in (floor 1 first), as the site's packer shows it
             skipped.append((g["name"], next((t[2] for t in tried if t[0]), tried[0][2]) if tried else "網站還沒有可以比對的樓層地圖"))
@@ -742,7 +754,7 @@ def main(argv):
     fl = sorted(per)
     res = {"ok": True, "regions": sum(v["regions"] for v in per.values()), "newChunks": sum(v["newChunks"] for v in per.values()),
            "overlap": sum(v["overlap"] for v in per.values()), "pct": per[fl[0]]["pct"], "date": date,
-           "folders": len(accepted), "skipped": len(skipped)}
+           "folders": len({g["name"] + "|" + g.get("path", "") for g in accepted}), "skipped": len(skipped)}
     if fl != [1]:
         res["floors"] = {str(f): {"newChunks": v["newChunks"], "pct": v["pct"]} for f, v in per.items()}
     if layers:

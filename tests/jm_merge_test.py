@@ -207,6 +207,63 @@ try:
     bad = os.path.join(tmp, "bad.zip"); open(bad, "wb").write(b"not a zip")
     code, res = run(bad)
     check(code == 2 and "zip" in res["reason"], "a file that is not a zip is rejected")
+    # 6. floors 2 and 3 (2026-11-12): a copy with all three explored maps; each world goes to the floor its colours match,
+    # a floor-3 folder's stray floor-2 region is dropped, non-overworld folders (boss-room instances) and the hub are not
+    # taken for floors 2 / 3, and floor 1 is not touched
+    import hashlib
+    t2 = tempfile.mkdtemp()
+    os.makedirs(os.path.join(t2, "tools"))
+    shutil.copy(os.path.join(ROOT, "tools", "jm_merge.py"), os.path.join(t2, "tools"))
+    for f in ("f1jm", "f2jm", "f3jm"):
+        shutil.copytree(os.path.join(ROOT, "tiles", f), os.path.join(t2, "tiles", f))
+    for f in ("floor1.jpg", "floor1_jm.jpg", "floor2.jpg", "floor3.jpg", "jmmeta.js"):
+        shutil.copy(os.path.join(ROOT, f), t2)
+
+    def fcanvas(f, full, x0, z0):
+        c = Image.new("RGB", (full, full))
+        for n in os.listdir(os.path.join(t2, "tiles", f"f{f}jm", "3")):
+            a, b = map(int, n[:-4].split("_"))
+            c.paste(Image.open(os.path.join(t2, "tiles", f"f{f}jm", "3", n)), (a * 256, b * 256))
+        m = Image.open(os.path.join(t2, "tiles", f"f{f}jm", "explored.png")).convert("L")
+        def ex(rx, rz):
+            return sum(1 for cz in range(rz * 32, rz * 32 + 32) for cx in range(rx * 32, rx * 32 + 32)
+                       if 0 <= cx - x0 // 16 < m.width and 0 <= cz - z0 // 16 < m.height and m.getpixel((cx - x0 // 16, cz - z0 // 16)))
+        return (lambda rx, rz: c.crop((rx * 512 - x0, rz * 512 - z0, rx * 512 - x0 + 512, rz * 512 - z0 + 512)).convert("RGBA")), ex
+
+    def fhash(d):
+        h = hashlib.sha256()
+        for dp, _, fs in sorted(os.walk(d)):
+            for n in sorted(fs):
+                h.update(open(os.path.join(dp, n), "rb").read())
+        return h.hexdigest()
+    c2, e2 = fcanvas(2, 2304, -1062, -1062)
+    c3, e3 = fcanvas(3, 1792, -253, -79)
+    r2 = max((e2(rx, rz), rx, rz) for rx in range(-3, 2) for rz in range(-3, 2))[1:]
+    r3 = max((e3(rx, rz), rx, rz) for rx in range(-1, 3) for rz in range(-1, 4))[1:]
+    stray = next(((rx, rz) for rx in range(-1, 3) for rz in range(-1, 3) if e3(rx, rz) == 0 and e2(rx, rz) > 100 and (rx, rz) != r3), None)
+    files = {f"S/Triggers_f2/overworld/day/{r2[0]},{r2[1]}.png": c2(*r2), f"S/Triggers_f3/overworld/day/{r3[0]},{r3[1]}.png": c3(*r3),
+             f"S/Triggers_inst/gorge_x/day/{r2[0]},{r2[1]}.png": c2(*r2), "S/Triggers/overworld/day/0,0.png": noise}
+    if stray:
+        files[f"S/Triggers_f3/overworld/day/{stray[0]},{stray[1]}.png"] = c2(*stray)
+    b = io.BytesIO()
+    with zipfile.ZipFile(b, "w") as z:
+        for n, im in files.items():
+            q = io.BytesIO(); im.save(q, "PNG"); z.writestr(n, q.getvalue())
+    zp = os.path.join(t2, "f23.zip"); open(zp, "wb").write(b.getvalue())
+    h1 = fhash(os.path.join(t2, "tiles", "f1jm"))
+    r = subprocess.run([sys.executable, "-I", os.path.join(t2, "tools", "jm_merge.py"), zp, "--report", "T950"], capture_output=True, text=True)
+    res = json.loads(r.stdout.strip().splitlines()[-1]) if r.stdout.strip() else {"stderr": r.stderr[-300:]}
+    why = " ".join(res.get("skippedWhy", []))
+    check(r.returncode == 0 and set(res.get("floors", {})) == {"2", "3"} and res.get("folders") == 2,
+          f"floor-2 and floor-3 worlds each go to their own floor ({res.get('floors')}, folders {res.get('folders')})")
+    check("不是 overworld" in why and "Triggers：" in why, f"a boss-room instance and the hub are not taken ({why[:200]})")
+    if stray:   # the stray region went to floor 2 (where it matches), not onto the floor-3 map
+        m3 = Image.open(os.path.join(t2, "tiles", "f3jm", "explored.png")).convert("L")
+        lit = [(cx, cz) for cz in range(stray[1] * 32, stray[1] * 32 + 32) for cx in range(stray[0] * 32, stray[0] * 32 + 32)
+               if 0 <= cx + 16 < m3.width and 0 <= cz + 5 < m3.height and m3.getpixel((cx + 16, cz + 5))]
+    check(stray is None or not lit, f"a floor-2 region inside the floor-3 folder is not put on the floor-3 map ({stray})")
+    check(fhash(os.path.join(t2, "tiles", "f1jm")) == h1, "floor 1's explored map is not touched")
+    shutil.rmtree(t2, ignore_errors=True)
 finally:
     shutil.rmtree(tmp, ignore_errors=True)
 print("\n" + ("ALL PASSED" if not fails else f"{len(fails)} FAILED"))

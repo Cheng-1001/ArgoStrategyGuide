@@ -949,8 +949,8 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
     o.summary=[o.cls,o.stype,o.unlock?"Lv "+o.unlock+" 解鎖":""].filter(Boolean).join("・")}
   o.by=(g(/遊戲內暱稱/)||g(/探索地圖・貢獻者名稱/)).slice(0,32);   // the old page-2 question (form not upgraded yet) counts too: R0007 answered only that one
   if(r.type==="idea"){o.idea=g(/建議・內容/);o.ipage=g(/建議・相關頁面/);o.reply=String(r.review||"").replace(/^審核[:：][^｜|]*[｜|]?/,"").trim();o.summary=o.idea}
-  if(r.type==="jmap"){const res=((window.SAO_JM||{}).results||{})[r.id];o.merge=res;
-    o.summary=!res?"合併中（核准後約 3～5 分鐘）":res.ok?`已合併：${res.layers&&!res.newChunks?"地面沒有新區塊":`新增 ${res.newChunks} 個區塊，地圖探索約 ${res.pct}%`}${res.layers?(()=>{const L=Object.entries(res.layers),tot=L.reduce((a,[,n])=>a+n,0),lab=k=>(((((window.SAO_JM||{})["1"]||{}).layers)||{})[k]||{}).label||k;
+  if(r.type==="jmap"){const res=((window.SAO_JM||{}).results||{})[r.id];o.merge=res;if(res&&res.floors&&!res.floors["1"])o.floor=+Object.keys(res.floors).sort()[0];   // the form fixes 探索地圖 to floor 1; the merge knows better
+    o.summary=!res?"合併中（核准後約 3～5 分鐘）":res.ok?`已合併：${res.floors?Object.entries(res.floors).map(([f,v])=>`第 ${f} 層新增 ${v.newChunks} 個區塊（探索約 ${v.pct}%）`).join("、"):res.layers&&!res.newChunks?"地面沒有新區塊":`新增 ${res.newChunks} 個區塊，地圖探索約 ${res.pct}%`}${res.layers?(()=>{const L=Object.entries(res.layers),tot=L.reduce((a,[,n])=>a+n,0),lab=k=>(((((window.SAO_JM||{})["1"]||{}).layers)||{})[k]||{}).label||k;
       o.layerRows=L.map(([k,n])=>[lab(k),n]);return`；室內・洞穴 ${L.length} 層，共新增 ${tot} 個區塊`})():""}`:`沒有合併：${res.reason}`}
   if(r.type==="place"){o.ug=/地下/.test(g(/地點・在地下嗎/));o.tpName=g(/地點・傳送選單名稱/);o.npcCat=g(/地點・NPC 類別/)}
   if(!o.summary){const t=[];if(o.level!=null)t.push("等級 "+o.level);if(o.codexNo)t.push("圖鑑 "+o.codexNo);if(o.drops)t.push("掉落物 "+o.drops.length+" 種");if(o.how)t.push(o.how+(o.from?"："+o.from:""));if(o.kind&&r.type==="place")t.push(o.kind);o.summary=t.join("・")}
@@ -1584,7 +1584,7 @@ function sideSteps(qq){const t=townById[qq.town]||{n:""};const st=[[`到 ${pN(t)
   if(qq.task)st.push([qq.task,null,null]);
   st.push([`回去交給 ${qNpc(qq.npc)}，領取獎勵`,qq.x,qq.z]);return st}
 // sharper route minimap: the explored-map tiles (1 block = 1 px) for the minimap's area; on the wiki base only the explored chunks are drawn over it
-let MT_ID=0;
+let MT_ID=0;window.__miniTiles=(f,cx,cz,s)=>miniTiles(FLOORS[f].map,cx,cz,s);   // tests
 // a floor's explored-map frame, as in tools/jm_merge.py FLOOR_CFG: floor 1's mask is in world chunks (320 x 320), the others'
 // start at the frame's first chunk
 const jmFrame=f=>{const m=FLOORS[f].map,x0=m.x0,z0=m.z0,S=m.size;if(f===1)return{f,x0,z0,size:S,full:m.tileFull,tiles:m.tiles,mx0:0,mz0:0,mw:320};
@@ -2659,8 +2659,10 @@ async function jmAnalyze(g,ref,cv){const {J,N}=ref,f=ref.f;cv.width=cv.height=N;
     try{const bm=await createImageBitmap(it.f);if(bm.width===512&&bm.height===512){x.drawImage(bm,(x0-J.x0)/4,(z0-J.z0)/4,128,128);inFrame.push(it)}bm.close&&bm.close()}catch(e){}}
   g.inFrame=inFrame;if(!inFrame.length){g.state="out";return g}
   const d=x.getImageData(0,0,N,N).data,R=ref.px,chunks=new Map(),lim=Math.ceil(J.size/4);
-  for(const it of inFrame){const px0=Math.max(0,Math.floor((it.rx*512-J.x0)/4)),pz0=Math.max(0,Math.floor((it.rz*512-J.z0)/4));
-    const px1=Math.min(lim,Math.ceil((it.rx*512+512-J.x0)/4)),pz1=Math.min(lim,Math.ceil((it.rz*512+512-J.z0)/4));it.ov=new Set();const nw=new Set(),nwc=new Map();
+  // only canvas pixels that lie wholly inside this region's image (frames start at 70 / -1062 / -253, so the images sit half a
+  // pixel off the grid and the seam pixels mix two regions; counting them made squares look new that are not, 2026-11-12)
+  for(const it of inFrame){const px0=Math.max(0,Math.ceil((it.rx*512-J.x0)/4)),pz0=Math.max(0,Math.ceil((it.rz*512-J.z0)/4));
+    const px1=Math.min(lim,Math.floor((it.rx*512+512-J.x0)/4)),pz1=Math.min(lim,Math.floor((it.rz*512+512-J.z0)/4));it.ov=new Set();const nw=new Set(),nwc=new Map();
     for(let py=pz0;py<pz1;py++)for(let px=px0;px<px1;px++){const i=(py*N+px)*4,a=d[i+3];if(!a)continue;
       const cx=(J.x0+px*4+2)>>4,cz=(J.z0+py*4+2)>>4;
       // a chunk is new when a quarter of it (4 of its 16 pixels at 1/4 scale) is solid: frames that do not start on a multiple of
@@ -2668,13 +2670,14 @@ async function jmAnalyze(g,ref,cv){const {J,N}=ref,f=ref.f;cv.width=cv.height=N;
       if(!ref.mask(cx,cz)){if(a>=250){const k=cz*1000+cx,c=(nwc.get(k)||0)+1;nwc.set(k,c);if(c>=4)nw.add(k)}continue}
       if(a<250)continue;const k=cz*1000+cx;let c=chunks.get(k);if(!c){c={s:0,n:0};chunks.set(k,c)}
       c.s+=(Math.abs(d[i]-R[i])+Math.abs(d[i+1]-R[i+1])+Math.abs(d[i+2]-R[i+2]))/3;c.n++;it.ov.add(k)}
-    it.newChunks=nw.size;it.isNew=nw.size>=4}   // a few stray chunks at the edge of the explored area are not worth uploading
+    it.newChunks=nw.size;it.nwKeys=[...nw].map(k=>{const cz=Math.round(k/1000),cx=k-cz*1000;return[cx,cz]});it.isNew=nw.size>=4}   // a few stray chunks at the edge of the explored area are not worth uploading
   const diffs=[];for(const c of chunks.values())if(c.n>=6)diffs.push(c.s/c.n);diffs.sort((a,b)=>a-b);
   g.overlap=diffs.length;g.med=diffs.length?diffs[diffs.length>>1]:null;
   g.state=g.overlap<JMP.MIN?"few":g.med>JMP.MED?"other":"f1";if(g.state==="f1")g.floor=f;g.news=g.state==="f1"?inFrame.filter(it=>it.isNew):[];return g}
 // which floor a world is: tried against every floor with an explored map (the frames overlap), the first one whose colours
 // match wins, the same way tools/jm_merge.py decides; a world that matches none keeps the most telling reason
-async function jmDetect(g,refs,cv,fn){let best=null,hit=null;   // no match: the reason from the first floor whose frame the world is in (floor 1 first)
+async function jmDetect(g,refs,cv,fn){let best=null,hit=null;
+  if(String(g.leaf||"").toLowerCase()!=="overworld")refs=refs.filter(r=>r.f===1);   // floors 2 / 3: overworld folders only (boss-room instances are changed copies), as in tools/jm_merge.py   // no match: the reason from the first floor whose frame the world is in (floor 1 first)
   // every floor is tried and the one with the most matching chunks wins (a floor-3 folder can hold a few floor-2 regions), as in tools/jm_merge.py
   for(const ref of refs){g.floor=null;await fn(g,ref,cv);
     if(g.state==="f1"){if(!hit||g.overlap>hit.overlap)hit={ref,overlap:g.overlap};continue}
@@ -2752,7 +2755,7 @@ const mb=b=>(b/1048576).toFixed(1)+" MB";
 const jmSt=g=>g.state==="f1"?[`第 ${g.floor||1} 層`,"ok"]:JM_ST[g.state];
 // a picked square is "rx,rz" on floor 1 (as before) and "f:rx,rz" on other floors, since the floors' coordinates overlap
 const jmKey=(f,rx,rz)=>(f===1?"":f+":")+rx+","+rz;
-let JMG=[];
+let JMG=[];window.__JMG=()=>JMG;   // tests
 // choose first, read after (user 2026-11-09「在選完資料夾的時候先選全圖還是更新打包地圖，不要每次都全讀」): 更新打包 compares
 // every image with the site (slow, lets you pick squares); 全地圖打包 decodes only a sample of surface images that overlap
 // the site's explored area to recognise floor 1 and takes everything else by its coordinates (fast, no picking)
