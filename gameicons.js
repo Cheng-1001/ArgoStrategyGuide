@@ -69,7 +69,8 @@ window.SAO_GAMEICONS = {
  "Oak String": "icons/game/oak_string.png",   // official item-model texture (saominecraft.com/item-models, 2026-11-07)
  "Copper Gloves": "icons/game/copper_gloves.png",   // official item-model texture (saominecraft.com/item-models, 2026-11-07)
  "Iron Gloves": "icons/game/iron_gloves.png",   // official item-model texture (saominecraft.com/item-models, 2026-11-07)
- "Christmas Mittens": "icons/game/christmas_mittens.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
+ "Christmas Mittens (3)": "icons/game/christmas_mittens.png",   // red mittens, auction tile 11/7 15:18:54, k≈4.67 (2026-11-11: catalogue 2048 is the pink pair, a different item)
+ "Christmas Mittens (2)": "icons/game/christmas_mittens_yellow.png",   // yellow mittens, auction tile 11/5 00:51:51, k≈4.68, TH 8
  "Occult Bracelet": "icons/game/occult_bracelet.png",   // auction tile, k≈4.67 (2026-11-07 audit: the site showed a wrong icon)
  "Occult Ring": "icons/game/occult_ring.png",       // 2026-11-07 (user: 神祕戒指圖示要檢查): official icon is an older black ring; game shows a crimson one. Auction tile 2026-11-07 00:47:31, k≈4.70
  "Occult Amulet": "icons/game/occult_amulet.png",   // same check: official icon is a grey chain; game chain is dark red. Auction tile 2026-11-04 19:20:11, k≈4.66 (4 screenshots agree)

@@ -166,7 +166,9 @@ items:[
  {"zh": "耐力藥水 I", "ids": ["p|2471"], "en": "Stamina Potion I", "fr": "Potion de Stamina I"},
  {"zh": "聖誕坐騎", "ids": ["p|1683"], "fr": "Monture Noël"},
  {"zh": "聖誕符文", "ids": ["p|2010"], "fr": "Rune de Noël"},
- {"zh": "聖誕連指手套", "ids": ["e|2048"], "en": "Christmas Mittens", "fr": "Moufles de Noël"},
+ {"zh": "聖誕連指手套", "ids": ["e|2048"], "en": "Christmas Mittens", "fr": "Moufles de Noël"},   // 粉紅色（官網圖鑑）
+ {"zh": "聖誕連指手套", "ids": ["i|Christmas Mittens (2)"], "en": "Christmas Mittens"},   // 黃色（11/5 拍賣場）
+ {"zh": "聖誕連指手套", "ids": ["i|Christmas Mittens (3)"], "en": "Christmas Mittens"},   // 紅色（11/7 拍賣場）
  {"zh": "腐化孢子", "ids": ["i|Corrupted Spore", "p|2172"], "en": "Corrupted Spore", "fr": "Spore Corrompu"},
  {"zh": "腐化水晶", "ids": ["i|Corrupted Crystal", "p|2173"], "en": "Corrupted Crystal", "fr": "Cristal Corrompu"},
  {"zh": "膠質斗篷", "ids": ["e|1453"], "en": "Gelatinous Cloak", "fr": "Manteau Gélatineux"},

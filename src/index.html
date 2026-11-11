@@ -2025,7 +2025,7 @@ const loreHTML=(e,hideFr)=>{const g=GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen||""
   return e.lore&&!hideFr?`<p class="lore">${esc(e.lore)}</p>`:""};
 const EQX_CATS=new Set(["acc","quiver","artifact","sword","dagger","bow","crossbow","staff_mage","staff_shaman","shield","armor","ring","amulet","bracelet","gloves"]),EQX_BY={};
 {let k=0;Object.keys(ITEMS).forEach(id=>{const it=ITEMS[id];if(it.fr||!EQX_CATS.has(it.cat))return;const st={...(it.st||{})};const dmg=st["Attack Damage"]||null;delete st["Attack Damage"];
-  const e={oid:"x"+(++k),name:id,gen:id,cat:it.cat,r:it.r,lv:it.lv||0,dmg,lore:"",st,ic:-1,itemId:id,extra:1};EQ.push(e);EQX_BY[id]=e.oid;
+  const e={oid:"x"+(++k),name:id,gen:id.replace(/ \(\d+\)$/,""),cat:it.cat,r:it.r,lv:it.lv||0,dmg,lore:"",st,ic:-1,itemId:id,extra:1};EQ.push(e);EQX_BY[id]=e.oid;
   // game-only equipment (not in the official catalogue, e.g. the Elite Treant set) gets its recipes by in-game English name (user 2026-11-06: elite套裝有截過圖，為什麼網頁沒有使用)
   const rows=ALLREC.filter(r=>norm(r.en)===norm(id));if(rows.length)RECIPE_BY_EQ[e.oid]=rows})}
 const eqById=Object.fromEntries(EQ.map(e=>[String(e.oid),e]));
@@ -2180,7 +2180,7 @@ function equipDetail(id){GI_NODESC=1;try{return equipDetail0(id)}finally{GI_NODE
 function equipDetail0(id){const e=eqById[id];const cl=eqClasses(e);
   const rows=Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
   const en=e.itemId||FR2ID[e.name];
-  return`<div class="phead">${eslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${zhE(e)?esc(dnSub(e))+"・":e.gen&&e.gen!==e.name?esc(e.name)+"・":""}${esc(eqCat(e))}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
+  return`<div class="phead">${eslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${zhE(e)?esc(dnSub(e))+"・":e.gen&&e.gen!==e.name?esc(e.name)+"・":""}${esc(eqCat(e))}${en&&en!==e.gen&&!e.extra?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}<span class="muted" style="font-size:12px">${icK("min_level")}等級 ${e.lv}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):"・不限職業"}</span></div></div></div>
   ${loreHTML(e)}
   <dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>
@@ -2318,7 +2318,7 @@ function propDetail0(id){const e=prById[id];const en=FR2ID[e.name];
   // potions: the catalogue's restore values are wrong (health potions list "Restore Stamina"); when the game's effect lines exist, show those instead
   const potGame=[e.gen,en].some(n=>n&&POT_BY[norm(n)]);   // game effect lines exist → they replace the catalogue numbers (user 2026-11-05: Boar Meat 效果寫了兩次)
   const rows=potGame?"":Object.entries(e.st).map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
-  return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${zhE(e)?esc(dnSub(e))+"・":(potZhE(e)?esc(potZhE(e))+"・":"")+(e.gen&&!e.extra?esc(e.name)+"・":"")}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen?"・本站名稱 "+esc(en):""}</div>
+  return`<div class="phead">${pslot(e,64)}<div class="ttl"><h2>${esc(dn(e))}</h2><div class="sub">${zhE(e)?esc(dnSub(e))+"・":(potZhE(e)?esc(potZhE(e))+"・":"")+(e.gen&&!e.extra?esc(e.name)+"・":"")}${esc(PR_CAT[e.cat]||e.cat)}${en&&en!==e.gen&&!e.extra?"・本站名稱 "+esc(en):""}</div>
     <div style="margin-top:4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center">${RAR[e.r]?`<span class="pill ${RAR[e.r][1]}">${RAR[e.r][0]}</span>`:""}${e.lv>1?`<span class="muted" style="font-size:12px">等級 ${e.lv}</span>`:""}</div></div></div>
   ${loreHTML(e,potGame&&/^potion_/.test(e.cat))}${rows?`<dl class="stats">${rows}</dl>`:""}${setPotHTML(e.gen,en)}
   ${en&&ITEMS[en]?itemObtainHTML(en):giHTML(GI_OID[e.oid]||(e.extra?GI_EN[norm(e.gen)]:null))}${GI_OID[e.oid]?"":dgSrcHTML("p|"+e.oid)}${gachaHTML("p|"+e.oid,e.gen,en)}
