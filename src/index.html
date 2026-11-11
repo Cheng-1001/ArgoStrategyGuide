@@ -247,7 +247,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 /* ---------- map ---------- */
 .stage{position:relative;overflow:hidden;background:var(--stage);touch-action:none;cursor:grab;min-height:0}
 .stage.dragging{cursor:grabbing} .stage.edit{cursor:crosshair}
-.world{position:absolute;left:0;top:0;width:1000px;height:1000px;transform-origin:0 0;--inv:1;will-change:transform}
+.world{position:absolute;left:0;top:0;width:1000px;height:1000px;transform-origin:0 0;--inv:1}
 .world img.map{width:1000px;height:1000px;max-width:none;display:block;user-select:none;-webkit-user-drag:none;pointer-events:none}
 .town{position:absolute;transform:translate(-50%,-8px) scale(var(--inv));transform-origin:50% 8px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;cursor:pointer;z-index:5}
 .town .pin{box-sizing:border-box;width:16px;height:16px;transform:rotate(45deg) scale(.82);background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.6)}
