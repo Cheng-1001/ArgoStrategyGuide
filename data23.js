@@ -82,15 +82,15 @@ const F2 = {
     { id:"f2boss", kind:"dungeon", n:"Taurus Tower", zh:"牛人之塔（樓層首領塔）", old:"Tour du Boss", x:-160, z:795, src:"ref", zone:["taurusD","taurusT"], note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。 wiki 第 2 層地圖標的「Tour du Boss」約在 X -260 Z 738。樓層首領塔，官網 11/9 新聞的「Antre d'Astérius」（阿斯忒里奧斯巢穴）地下城沒有寫開放。" },
     { id:"f2hive", kind:"dungeon", n:"Melliona's Hive Dungeon", zh:"Melliona 蜂巢（地下城）", x:506, z:-724, src:"ref", zone:"hive", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。 官方圖鑑有「Clé de Melliona」（Melliona 之鑰），應該是這個地下城的鑰匙。" },
     { id:"f2tomb", kind:"dungeon", n:"Necromancer's Tomb Dungeon", zh:"死靈法師之墓（地下城）", x:721, z:244, src:"ref", zone:"tomb", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
-    { id:"f2bull", kind:"mob", n:"Lake of the Bulls", zh:"公牛湖", x:118, z:-68, src:"ref", zone:"bull", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
-    { id:"f2sweet", kind:"mob", n:"Sweet Forest", zh:"甜蜜森林", x:484, z:-665, src:"ref", zone:"sweet", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
-    { id:"f2silver", kind:"mob", n:"Silver Fang Desert", zh:"銀牙沙漠", x:-372, z:-556, src:"ref", zone:"silver", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
-    { id:"f2ember", kind:"mob", n:"Brazier Nest", zh:"餘燼之巢", x:-581, z:234, src:"ref", zone:"ember", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
-    { id:"f2emerald", kind:"mob", n:"Emerald Wings Forest", zh:"翠翼森林", x:-550, z:476, src:"ref", zone:"emerald", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
-    { id:"f2bay", kind:"mob", n:"Wavy Monster Bay", zh:"漣漪怪物灣", x:-780, z:171, src:"ref", zone:"bay", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
-    { id:"f2khesun", kind:"mob", n:"Sanctuary of Khesun", zh:"Khesûn 聖所", x:-6, z:181, src:"ref", zone:"khesun", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
-    { id:"f2veins", kind:"mob", n:"Sablemor Veins", zh:"Sablemor 礦脈", x:225, z:295, src:"ref", zone:"veins", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
-    { id:"f2oasis", kind:"mob", n:"Secret Oasis", zh:"秘密綠洲", x:798, z:253, src:"ref", zone:"oasis", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2bull", area:[[20,-120],[90,-165],[190,-140],[205,-60],[170,10],[60,15],[15,-50]], kind:"mob", n:"Lake of the Bulls", zh:"公牛湖", x:118, z:-68, src:"ref", zone:"bull", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2sweet", area:[[330,-820],[420,-900],[600,-870],[640,-760],[600,-650],[450,-640],[340,-700]], kind:"mob", n:"Sweet Forest", zh:"甜蜜森林", x:484, z:-665, src:"ref", zone:"sweet", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2silver", area:[[-560,-640],[-420,-720],[-230,-680],[-170,-560],[-240,-450],[-420,-430],[-560,-500]], kind:"mob", n:"Silver Fang Desert", zh:"銀牙沙漠", x:-372, z:-556, src:"ref", zone:"silver", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2ember", area:[[-720,190],[-620,140],[-470,150],[-430,260],[-500,370],[-660,370],[-730,290]], kind:"mob", n:"Brazier Nest", zh:"餘燼之巢", x:-581, z:234, src:"ref", zone:"ember", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2emerald", area:[[-720,420],[-560,390],[-400,420],[-380,520],[-500,590],[-680,570]], kind:"mob", n:"Emerald Wings Forest", zh:"翠翼森林", x:-550, z:476, src:"ref", zone:"emerald", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2bay", area:[[-920,40],[-860,-30],[-720,-20],[-560,-10],[-560,120],[-700,170],[-880,180]], kind:"mob", n:"Wavy Monster Bay", zh:"漣漪怪物灣", x:-780, z:171, src:"ref", zone:"bay", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2khesun", area:[[-150,120],[-60,40],[80,60],[130,170],[80,280],[-60,300],[-160,230]], kind:"mob", n:"Sanctuary of Khesun", zh:"Khesûn 聖所", x:-6, z:181, src:"ref", zone:"khesun", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2veins", area:[[110,200],[230,170],[330,220],[320,330],[200,370],[110,300]], kind:"mob", n:"Sablemor Veins", zh:"Sablemor 礦脈", x:225, z:295, src:"ref", zone:"veins", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2oasis", area:[[730,220],[800,190],[880,220],[880,300],[800,330],[730,290]], kind:"mob", n:"Secret Oasis", zh:"秘密綠洲", x:798, z:253, src:"ref", zone:"oasis", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
     { id:"f2altar", kind:"poi", n:"Altar of Two Moons", zh:"雙月祭壇", x:570, z:-470, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
     { id:"f2baobab", kind:"poi", n:"Millennial Baobab", zh:"千年猴麵包樹", x:-88, z:-92, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
     { id:"f2tarancave", kind:"poi", n:"Taran Cave", zh:"Taran 洞窟", x:-316, z:-94, u:1, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
@@ -274,6 +274,7 @@ addNews(F3,"f3m",{"n_chenenoir": {"n": "Chêne noir", "zh": "黑橡樹", "news":
 ]);
 // END build_mobphotos
 
+// area = rough outline drawn by this site from the wiki map terrain (not the reference map polygons), like floor 1
 // spots that stand for a monster zone list every monster of that zone (wiki + official news)
 [F2,F3].forEach(F=>(F.spots||[]).forEach(sp=>{if(sp.zone){const z=[].concat(sp.zone);sp.mons=F.M.filter(m=>z.includes(m.zone)).map(m=>m.name)}}));
 
@@ -317,7 +318,7 @@ const UNKNOWN = {
 
 return {
   floors: {
-    2: { name:"Urbus", lv:"11–15", boss:"Asterius", status:"new", opened:"2026-11-09", map:{img:"floor2.jpg", size:2124, x0:-1062, z0:-1062, note:"座標換算是推算的（1 像素 = 1 格，地圖中心 = 0, 0），已用主城與城內 NPC 的座標核對。"}, ...F2 },
+    2: { name:"Urbus", lv:"11–15", boss:"Asterius", status:"new", opened:"2026-11-09", map:{img:"floor2.jpg", size:2124, x0:-1062, z0:-1062, clip:{c:500,r:484}, note:"座標換算是推算的（1 像素 = 1 格，地圖中心 = 0, 0），已用主城與城內 NPC 的座標核對。"}, ...F2 },
     3: { name:"Forest of Wavering Mists", lv:"15–19", boss:"Nerius", status:"new", opened:"2026-11-09", map:null, ...F3 }
   },
   extra: EXTRA, unknown: UNKNOWN
