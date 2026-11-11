@@ -73,14 +73,30 @@ const F2 = {
     ["","Taurus","Boss","A","taurusD",5,[],"wiki 的樓層總表寫第 2 層樓層首領是 Asterius；圖鑑裡最接近的是這隻 Taurus，兩者是否同一隻未確認。","🐂"]
   ]),
   towns: [
-    { id:"urbus", n:"Urbus（主城）", x:110, z:-360, note:"wiki 第 2 層地圖上標示的主城就在這裡（wiki 舊支線的 Charles、Ifa、Ife 三位 NPC 座標也在城內）。" },
-    { id:"f2west", n:"西部聚落", x:-578, z:-253, note:"位置依 wiki 舊支線（2026-11-07 已從 wiki 移除）的 NPC 座標，聚落名稱是依位置暫定的；參考互動地圖在旁邊標了 Kaelor（還沒對過遊戲座標）。" },
-    { id:"f2east", n:"東部聚落", x:687, z:-281, note:"位置依 wiki 舊支線（2026-11-07 已從 wiki 移除）的 NPC 座標，聚落名稱是依位置暫定的；參考互動地圖在旁邊標了 Marome（還沒對過遊戲座標）。" },
-    { id:"f2sw", n:"西南聚落", x:-450, z:273, note:"位置依 wiki 舊支線（2026-11-07 已從 wiki 移除）的 NPC 座標，聚落名稱是依位置暫定的；參考互動地圖在旁邊標了 Taran（還沒對過遊戲座標）。" }
+    { id:"urbus", n:"Urbus", zh:"主城", x:64, z:-348, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。 wiki 第 2 層地圖標的主城位置約 X 110 Z -360。遊戲的傳送選單還沒有截圖，不知道能不能傳送。" },
+    { id:"f2west", n:"Kaelor", x:-583, z:-264, src:"ref", old:"西部聚落", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。 原本網站依 wiki 舊支線 NPC 暫稱「西部聚落」。傳送選單還沒有截圖。" },
+    { id:"f2east", n:"Marome", x:721, z:-281, src:"ref", old:"東部聚落", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。 原本網站依 wiki 舊支線 NPC 暫稱「東部聚落」。傳送選單還沒有截圖。" },
+    { id:"f2sw", n:"Taran", x:-427, z:272, src:"ref", old:"西南聚落", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。 原本網站依 wiki 舊支線 NPC 暫稱「西南聚落」。傳送選單還沒有截圖。" }
   ],
   spots: [
-    { id:"f2boss", kind:"dungeon", n:"Tour du Boss", zh:"牛人之塔（樓層首領塔）", x:-260, z:738, src:"est", mons:["Rugibœuf, The Guardian","Taurus","Sand Skeleton Warrior","Sand Skeleton Archer","Guardian"], note:"位置取自 wiki 第 2 層地圖上的「Tour du Boss」標示，再用推算的比例換成座標。" }
+    { id:"f2boss", kind:"dungeon", n:"Taurus Tower", zh:"牛人之塔（樓層首領塔）", old:"Tour du Boss", x:-160, z:795, src:"ref", zone:["taurusD","taurusT"], note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。 wiki 第 2 層地圖標的「Tour du Boss」約在 X -260 Z 738。樓層首領塔，官網 11/9 新聞的「Antre d'Astérius」（阿斯忒里奧斯巢穴）地下城沒有寫開放。" },
+    { id:"f2hive", kind:"dungeon", n:"Melliona's Hive Dungeon", zh:"Melliona 蜂巢（地下城）", x:506, z:-724, src:"ref", zone:"hive", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。 官方圖鑑有「Clé de Melliona」（Melliona 之鑰），應該是這個地下城的鑰匙。" },
+    { id:"f2tomb", kind:"dungeon", n:"Necromancer's Tomb Dungeon", zh:"死靈法師之墓（地下城）", x:721, z:244, src:"ref", zone:"tomb", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2bull", kind:"mob", n:"Lake of the Bulls", zh:"公牛湖", x:118, z:-68, src:"ref", zone:"bull", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2sweet", kind:"mob", n:"Sweet Forest", zh:"甜蜜森林", x:484, z:-665, src:"ref", zone:"sweet", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2silver", kind:"mob", n:"Silver Fang Desert", zh:"銀牙沙漠", x:-372, z:-556, src:"ref", zone:"silver", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2ember", kind:"mob", n:"Brazier Nest", zh:"餘燼之巢", x:-581, z:234, src:"ref", zone:"ember", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2emerald", kind:"mob", n:"Emerald Wings Forest", zh:"翠翼森林", x:-550, z:476, src:"ref", zone:"emerald", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2bay", kind:"mob", n:"Wavy Monster Bay", zh:"漣漪怪物灣", x:-780, z:171, src:"ref", zone:"bay", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2khesun", kind:"mob", n:"Sanctuary of Khesun", zh:"Khesûn 聖所", x:-6, z:181, src:"ref", zone:"khesun", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2veins", kind:"mob", n:"Sablemor Veins", zh:"Sablemor 礦脈", x:225, z:295, src:"ref", zone:"veins", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2oasis", kind:"mob", n:"Secret Oasis", zh:"秘密綠洲", x:798, z:253, src:"ref", zone:"oasis", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2altar", kind:"poi", n:"Altar of Two Moons", zh:"雙月祭壇", x:570, z:-470, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2baobab", kind:"poi", n:"Millennial Baobab", zh:"千年猴麵包樹", x:-88, z:-92, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2tarancave", kind:"poi", n:"Taran Cave", zh:"Taran 洞窟", x:-316, z:-94, u:1, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" },
+    { id:"f2nganga", kind:"poi", n:"Nganga Houses", zh:"Nganga 之家", x:-430, z:-428, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" }
   ],
+
   quests: []
 };
 
@@ -257,6 +273,9 @@ addNews(F3,"f3m",{"n_chenenoir": {"n": "Chêne noir", "zh": "黑橡樹", "news":
   ["", "Chef de la Tribu Corrompu", "Unknown", "U", "orc", 0, [], "只有官網 2026-11-09 新聞的怪物表有這隻（還沒有遊戲圖鑑資料），名稱照官網原文。腐化版（Corrupted）；本體是 Chef de la Tribu。", "👾"]
 ]);
 // END build_mobphotos
+
+// spots that stand for a monster zone list every monster of that zone (wiki + official news)
+[F2,F3].forEach(F=>(F.spots||[]).forEach(sp=>{if(sp.zone){const z=[].concat(sp.zone);sp.mons=F.M.filter(m=>z.includes(m.zone)).map(m=>m.name)}}));
 
 const EXTRA = {
   "Fulgurant Scale":{use:["第 2 層獻給神祇的三種供品之一"]},

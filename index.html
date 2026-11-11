@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="51dbd5b171">
+<meta name="sao-build" content="b604d936e0">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -888,7 +888,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 </aside>
 
 <script src="data.js?v=a4992864"></script>
-<script src="data23.js?v=25d6559e"></script>
+<script src="data23.js?v=0ff12f91"></script>
 <script src="bosses.js?v=77b7ad43"></script>
 <script src="reports.js?v=091d538a"></script>
 <script src="hints.js?v=fcf000d6"></script>
@@ -899,7 +899,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=0e23c6f2"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=e7d05b11"></script>
-<script src="changelog.js?v=3d13495d"></script>
+<script src="changelog.js?v=d8cb16fa"></script>
 <script src="recipes.js?v=9163d1ce"></script>
 <script src="jmmeta.js?v=7238858b"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -1765,8 +1765,8 @@ const clsWeap=c=>Object.entries(Object.assign({},c.weapons,(n=>n?{catalyst:n}:{}
 const CLS_OFF=new Set(["guerrier","assassin","mage","shaman","archer"]);const cN=c=>CLS_OFF.has(c.id)?c.zh:c.name;const cSub=c=>(CLS_OFF.has(c.id)?c.name:c.zh)+"・"+c.role;
 const clsSoon=c=>!Object.keys(c.weapons).length&&!c.base.length;
 // ---- dungeons tab (preliminary, user 2026-11-02: only the dungeon names for now; floor-boss towers are left out) ----
-function renderDungeons(){const s=Sq();const a=spotsOf(FL).filter(x=>x.kind==="dungeon"&&!/樓層首領/.test(x.zh||"")&&(!s||norm([x.n,x.zh].join(" ")).includes(s)));
-  const ev=EVT.dungeons.filter(d=>!s||norm(JSON.stringify(d)).includes(s));
+function renderDungeons(){const s=Sq();const a=spotsOf(FL).filter(x=>x.kind==="dungeon"&&(!s||norm([x.n,x.zh].join(" ")).includes(s)));   // floor-boss towers too (user 2026-11-11)
+  const ev=FL===1?EVT.dungeons.filter(d=>!s||norm(JSON.stringify(d)).includes(s)):[];   // the event dungeon is entered from floor 1 (user 2026-11-11: 二三層出現了 Sanctuary of Souls)
   $("cDg").textContent=`${a.length+ev.length} 個`;
   // card icon = the dungeon's own key (user 2026-11-07「圖示用各自的鑰匙」); no key known / no clean key picture → the old emoji
   const keyOf=sp=>{const k=dgKeys(sp).hit[0];return k?{r:k,n:recZh(k)||k.en}:null};
@@ -3344,7 +3344,7 @@ function renderZoneList0(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(
     h.onclick=()=>{if(ZOPEN.has(title))ZOPEN.delete(title);else ZOPEN.add(title);zfoldSync()};zl.appendChild(h)};
   const coord=(x,z)=>`<span class="mono muted" style="font-size:11px;margin-left:auto">X ${x} · Z ${z}</span>`;
   const townRow=t=>{const row=document.createElement("div");row.className="zrow";row.dataset.tp=t.n+" "+(t.tp||"")+" "+(t.zh||"")+" "+(t.en||"")+" "+(t.old||"");
-    row.innerHTML=`<div class="zhead"><button class="zn">${esc(pN(t))}</button><span class="zzh">${pN(t)!==t.n?esc(t.n)+"・":""}${t.tp?"傳送選單："+esc(t.tp):"村鎮・無法傳送"}${t.zh&&pN(t)===t.n?"・"+esc(t.zh):""}</span>${coord(t.x,t.z)}</div>`;
+    row.innerHTML=`<div class="zhead"><button class="zn">${esc(pN(t))}</button><span class="zzh">${pN(t)!==t.n?esc(t.n)+"・":""}${t.tp?"傳送選單："+esc(t.tp):FL===1?"村鎮・無法傳送":"村鎮・傳送未知"}${t.zh&&pN(t)===t.n?"・"+esc(t.zh):""}</span>${coord(t.x,t.z)}</div>`;
     row.querySelector(".zn").onclick=()=>{centerOn(t.x,t.z,2.6);openP("t",t.id,"new")};zl.appendChild(row)};
   const spotRow=(x,noMons)=>{const st=STATUS[x.src];const row=document.createElement("div");row.className="zrow";row.dataset.s=x.id;
     row.innerHTML=`<div class="zhead"><button class="zn">${x.gt?GT[x.gt][1]+" ":""}${esc(pN(x))}</button><span class="zzh">${pN(x)!==x.n?esc(x.n)+"・":""}${x.tp?"傳送選單："+esc(x.tp)+"・":""}${esc(pN(x)!==x.n?"":x.zh)}</span>${x.gt?`<span class="pill">${GT[x.gt][0]}</span>`:""}<span class="pill ${st.c}">${st.t}</span>${coord(x.x,x.z)}</div>`;
@@ -3354,7 +3354,7 @@ function renderZoneList0(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(
   const tpT=F().towns.filter(t=>t.tp),tpS=sp.filter(x=>x.tp);
   if(catOn("tp")){if(tpT.length){sec("🌀 傳送點－城鎮",tpT.length);tpT.forEach(townRow)}if(tpS.length){sec("🌀 傳送點－地標",tpS.length);tpS.forEach(x=>spotRow(x,true))}}
   const lT=F().towns.filter(t=>!t.tp),lS=sp.filter(x=>x.kind==="poi"&&!x.tp);
-  if(catOn("land")&&lT.length+lS.length){sec("📍 地標（無法傳送）",lT.length+lS.length);lT.forEach(townRow);lS.forEach(x=>spotRow(x))}
+  if(catOn("land")&&lT.length+lS.length){sec(FL===1?"📍 地標（無法傳送）":"📍 地標（傳送選單還沒有資料）",lT.length+lS.length);lT.forEach(townRow);lS.forEach(x=>spotRow(x))}
   [["gather","⛏️ 採集點"],["wboss","🌋 世界王"],["dungeon","⚔️ 地下城"],["mob","🐾 怪物區"]].forEach(([k,title])=>{if(!catOn(k==="mob"?"area":k))return;const g=sp.filter(x=>x.kind===k);if(!g.length)return;sec(title,g.length);g.forEach(x=>spotRow(x))});
   const bossM=[...new Set(SPAWNS(FL).map(w=>w.m))];
   [["boss","👑 首領"],["mini","🎖️ 小首領"]].forEach(([k,title])=>{const g=bossM.filter(m=>bossCat(m)===k);if(!catOn(k)||!g.length)return;sec(title,g.length);g.forEach(m=>{const ws=SPAWN_OF[m.id];const row=document.createElement("div");row.className="zrow";row.dataset.tp=m.name+" "+(m.aka||[]).join(" ");

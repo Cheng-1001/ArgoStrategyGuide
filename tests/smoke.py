@@ -194,14 +194,14 @@ with sync_playwright() as p:
           "top tabs: recipes after quests, then dungeons, classes, world bosses; collaboration is a button by the changelog")
     pg.click('nav.tabs a[data-v="dungeons"]'); pg.wait_for_timeout(300)
     dn = pg.eval_on_selector_all("#lDg .card b", "e=>e.map(x=>x.textContent)")
-    check(len(dn) == 5 and dn[0] == "Sanctuary of Souls" and "狗頭人之塔" not in dn and "墮落者迷宮區" in dn, f"dungeons tab lists the event dungeon first, then the 4 floor-1 dungeons, not the boss tower ({dn})")
+    check(len(dn) == 6 and dn[0] == "Sanctuary of Souls" and "狗頭人之塔" in dn and "墮落者迷宮區" in dn, f"dungeons tab lists the event dungeon first, then the floor-1 dungeons including the boss tower (user 2026-11-11) ({dn})")
     pg.click('#lDg [data-go="d|souls"]'); pg.wait_for_timeout(300)
     check("靈魂聖所鑰匙" in pg.inner_text("#pBody") and pg.locator("#pBody .btbl").count() == 2 and "一般抽取" not in pg.inner_text("#pBody"),
           "event dungeon panel: key recipe, fragment zones and forge tables; no gacha rate table (gacha is only a source)")
     dg = pg.evaluate("(()=>({cols:getComputedStyle(document.getElementById('lDg')).gridTemplateColumns.split(' ').length,keys:document.querySelectorAll('#lDg .th.dgk').length,inline:document.body.classList.contains('cls-inline'),close:!!document.getElementById('pClose').offsetParent,kn:[...document.querySelectorAll('#lDg .dgkn')].map(e=>e.textContent)}))()")
     pg.click('#lDg [data-go="s|xal"]'); pg.wait_for_timeout(250)
     check(pg.locator("#pBody .phead .th.dgk").count() == 1, "the dungeon shown on the page uses its key as the header icon")
-    check(dg["cols"] == 1 and dg["keys"] == 3 and dg["inline"] and not dg["close"] and "鑰匙：森林鑰匙" in dg["kn"],
+    check(dg["cols"] == 1 and dg["keys"] == 4 and dg["inline"] and not dg["close"] and "鑰匙：森林鑰匙" in dg["kn"],
           f"dungeons: one column, each floor dungeon shows its own key icon, the dungeon is shown on the page next to the list (no window frame) ({dg})")
     pg.keyboard.press("Escape"); pg.wait_for_timeout(150)
     check(not pg.is_hidden("#panel"), "Esc does not close the dungeon shown on the page")
