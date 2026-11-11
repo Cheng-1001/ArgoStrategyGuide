@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: SAO system-window feel. A header with the four query tabs and one search box;
    each tab is a filter column + result list; one detail drawer on the right (bottom sheet on phones) links everything together. */
@@ -12,8 +12,8 @@
   --boss:#d9701a; --mini:#7b55c8; --minion:#8a96a1; --ok:#2f8a5b; --ref:#2b7a9e; --tp:#13909a; --warn:#b7791f; --unk:#8a6f6f; --rare:#2f6fc4;
   --stage:#0b1219; --shadow:0 10px 30px rgba(20,35,50,.22);
   --slot:#2b313a; --slot-edge:#46505c; --slot-ink:#9aa6b2;
-  --f-display:"Chakra Petch","Noto Sans TC",system-ui,sans-serif;
-  --f-body:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-display:"Chakra Petch","PingFang TC","Noto Sans CJK TC","Noto Sans TC","Source Han Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-body:system-ui,-apple-system,"Segoe UI","PingFang TC","Noto Sans CJK TC","Noto Sans TC","Source Han Sans TC","Microsoft JhengHei",sans-serif;   /* no CJK web font (user 2026-11-11 A: it was ~900 KB per first visit) */
   --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
   --head-h:58px;
 }
@@ -248,7 +248,8 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .stage{position:relative;overflow:hidden;background:var(--stage);touch-action:none;cursor:grab;min-height:0}
 .stage.dragging{cursor:grabbing} .stage.edit{cursor:crosshair}
 .world{position:absolute;left:0;top:0;width:1000px;height:1000px;transform-origin:0 0;--inv:1}
-.world img.map{width:1000px;height:1000px;max-width:none;display:block;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.world img.map{width:1000px;height:1000px;max-width:none;display:block;user-select:none;-webkit-user-drag:none;pointer-events:none;position:relative}
+.world img.map.lo{position:absolute;left:0;top:0}   /* 512px preview shown while the full map downloads */
 .town{position:absolute;transform:translate(-50%,-8px) scale(var(--inv));transform-origin:50% 8px;display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:0;padding:0;cursor:pointer;z-index:5}
 .town .pin{box-sizing:border-box;width:16px;height:16px;transform:rotate(45deg) scale(.82);background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.6)}
 /* teleport points look like the in-game teleport map: white name box with a pointer, orange dot on the coordinate */
@@ -714,7 +715,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <!-- MAP -->
   <section class="view" id="view-map" hidden>
     <div class="stage" id="stage" aria-label="第一層地圖（可拖曳與縮放）">
-      <div class="world" id="world"><img class="map" id="mapImg" alt="樓層俯視地圖" draggable="false"><div class="tiles" id="tiles" hidden></div></div>
+      <div class="world" id="world"><img class="map lo" id="mapLo" alt="" aria-hidden="true" draggable="false"><img class="map" id="mapImg" alt="樓層俯視地圖" draggable="false"><div class="tiles" id="tiles" hidden></div></div>
       <div class="nomap" id="noMap" hidden><b>這一層目前沒有地圖</b><span>wiki 還沒有這一層的地圖。怪物、物品資料可以在其他分頁查詢；右側列出圖鑑上的區域。</span></div>
       <div class="mapnote" id="mapNote" hidden></div>
       <div class="jmcredit" id="jmCredit" hidden></div>
@@ -806,6 +807,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">部位</span><div class="chips" id="fEqPart"></div></div>
       <div class="fgroup" id="gEqSub" hidden><span class="flabel">細分</span><div class="chips" id="fEqSub"></div></div>
       <div class="fgroup"><span class="flabel">職業</span><div class="chips" id="fEqClass"></div></div>
+      <div class="fgroup"><span class="flabel">取得樓層</span><div class="chips" id="fEqFl" data-def="here"></div></div>
       <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fEqRar"></div></div>
       <div class="fgroup"><span class="flabel">等級</span><div class="lvrange"><input type="number" class="sel" id="fEqMin" min="1" max="99" placeholder="最低" aria-label="最低等級"><span>～</span><input type="number" class="sel" id="fEqMax" min="1" max="99" placeholder="最高" aria-label="最高等級"></div></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fEqSort" aria-label="排序">
@@ -822,6 +824,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">分類</span><div class="chips" id="fPrGroup"></div></div>
       <div class="fgroup" id="gPrSub" hidden><span class="flabel">細分</span><div class="chips" id="fPrSub"></div></div>
       <div class="fgroup" id="gPrSub2" hidden><span class="flabel">種類</span><div class="chips" id="fPrSub2"></div></div>
+      <div class="fgroup"><span class="flabel">取得樓層</span><div class="chips" id="fPrFl" data-def="here"></div></div>
       <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fPrRar"></div></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fPrSort" aria-label="排序">
         <option value="name">名稱</option><option value="rar">稀有度（高→低）</option><option value="lv">等級（低→高）</option></select></div>
@@ -914,7 +917,7 @@ const REP_MAT={"Sylve Shoot":"Sylve Sprout"};  // other old names resolve throug
 
 // ---------- floors ----------
 const FLOORS={
-  1:{name:"Town of Beginnings",lv:"1–5",boss:"Illfang",status:"open",map:{img:"floor1.jpg",size:S1.MAP,x0:70,z0:70,clip:{c:500,r:499.5},jm:"floor1_jm.jpg",jmDate:((window.SAO_JM||{})["1"]||{}).date||"2026-11-01",jmPct:((window.SAO_JM||{})["1"]||{}).pct,jmN:(((window.SAO_JM||{})["1"]||{}).log||[]).filter(x=>x.report).length,tiles:"tiles/f1jm",tileFull:5120},
+  1:{name:"Town of Beginnings",lv:"1–5",boss:"Illfang",status:"open",map:{img:"floor1.jpg",lo:"floor1_s.jpg",size:S1.MAP,x0:70,z0:70,clip:{c:500,r:499.5},jm:"floor1_jm.jpg",jmDate:((window.SAO_JM||{})["1"]||{}).date||"2026-11-01",jmPct:((window.SAO_JM||{})["1"]||{}).pct,jmN:(((window.SAO_JM||{})["1"]||{}).log||[]).filter(x=>x.report).length,tiles:"tiles/f1jm",tileFull:5120},
      zones:S1.ZONES,order:S1.ZONE_ORDER,M:S1.M,towns:S1.TOWNS,spots:S1.SPOTS,quests:S1.QUESTS},
   2:S23.floors[2],3:S23.floors[3]
 };
@@ -2072,6 +2075,20 @@ let eqPart="all",eqClass="all",eqRar="all",eqSubV="all";
 const fillEqSub=()=>{const g=$("gEqSub"),ks=EQ_SUBS[eqPart];g.hidden=!ks;eqSubV="all";if(ks)chipsInto($("fEqSub"),[["all","全部"],...ks.map(k=>[k,`${subLab(k)} <span class="cn">${EQ.filter(e=>EQ_PART[e.cat]===eqPart&&eqSub(e)===k).length}</span>`])],()=>eqSubV,v=>eqSubV=v,renderEquip)};
 chipsInto($("fEqPart"),[["all","全部"],["weapon","武器（主手）"],["off","副手"],["armor","防具"],["acc","飾品"]],()=>eqPart,v=>{eqPart=v;fillEqSub()},renderEquip);
 chipsInto($("fEqClass"),[["all","全部"],...Object.entries(CLASS_ZH)],()=>eqClass,v=>eqClass=v,renderEquip);
+// which floors an equipment / prop is known to come from (user 2026-11-11: floor-1 items showed on floor 3). Official catalogue items carry no floor;
+// known floors come from this site's item data (drops, quests, gathering), recipes / shops, the game's "Loot: <monster>" lines and dungeon chests.
+// Items with no known floor stay on every floor (default "這一層＋還不知道"), so nothing is hidden on a guess.
+const OBJ_FL={};
+const objFloors=e=>{if(OBJ_FL[e.oid])return OBJ_FL[e.oid];const f=new Set(),en=e.itemId||FR2ID[e.name];
+  if(en&&ITEMS[en])itemFloors(en).forEach(x=>f.add(x));
+  (RECIPE_BY_EQ[e.oid]||[]).forEach(r=>f.add(r.f));
+  const g=GI_OID[e.oid]||(e.gen&&GI_EN[norm(e.gen)]);(g&&g.obt||[]).forEach(o=>{const m=/^Loot: (.+?) \(/.exec(o);if(m)FL_KEYS.forEach(k=>{if(FLOORS[k].monByName[m[1]])f.add(+k)})});
+  const nm=[en,e.gen,e.name].filter(Boolean);FL_KEYS.forEach(k=>spotsOf(k).forEach(sp=>((sp.dg&&sp.dg.loot)||[]).forEach(([it])=>{if(nm.includes(it))f.add(+k)})));
+  return OBJ_FL[e.oid]=[...f].sort()};
+window.__objFl=n=>{const e=EQ.find(x=>x.name===n||x.gen===n||dn(x)===n);return e&&{fl:objFloors(e),en:e.itemId||FR2ID[e.name],src:(SOURCES[e.itemId||FR2ID[e.name]]||[]).map(s=>s.m.name+"@"+s.m.floor)}};
+let eqFl="here",prFl="here";const FL_CHIPS=[["here","這一層＋還不知道"],["only","只看這一層"],["all","全部樓層"]];
+const flOk=(e,v)=>{if(v==="all")return true;const f=objFloors(e);return v==="only"?f.includes(FL):!f.length||f.includes(FL)};
+chipsInto($("fEqFl"),FL_CHIPS,()=>eqFl,v=>eqFl=v,renderEquip);
 chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
 ["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
 // effect filter (user 2026-11-07「裝備分頁增加輸入欄位，篩選效果」): matches the stat names as shown (爆擊率、HP…) and the raw keys;
@@ -2174,7 +2191,7 @@ window.__eqDump=()=>EQ.map(e=>({oid:e.oid,gen:e.gen||"",name:e.name,zh:zhE(e),lv
 const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ES=EFF_SEL.map(norm),EREQ=EFF_SEL.filter(z=>effMode(z)==="and").map(norm),EOPT=EFF_SEL.filter(z=>effMode(z)==="or").map(norm),
     effOk=e=>EREQ.every(t=>eqEffHit(e,t).length)&&(!EOPT.length||EOPT.some(t=>eqEffHit(e,t).length));   // every 且, and at least one 或
-  const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&effOk(e));
+  const base=EQ.filter(e=>flOk(e,eqFl)&&(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&effOk(e));
   // sub-part counts follow the other filters (class, rarity, level, search), so they match the list
   $("fEqSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>eqSub(e)===c.dataset.v).length});
   let a=base.filter(e=>eqSubV==="all"||eqSub(e)===eqSubV);
@@ -2247,11 +2264,12 @@ const fillPrSub2=()=>{const g=$("gPrSub2");prSub2="all";g.hidden=prSubV!=="採�
 const fillPrSub=()=>{const g=$("gPrSub");prSubV="all";const labs=[...new Set(PRV().filter(e=>PR_GROUP[e.cat]===prGroup).map(e=>PR_SUBLAB(e.cat)))].sort((a,b)=>{const ia=SUB_ORDER.indexOf(a),ib=SUB_ORDER.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)});g.hidden=prGroup==="all"||labs.length<2;
   if(!g.hidden)chipsInto($("fPrSub"),[["all","全部"],...labs.map(l=>[l,`${esc(l)} <span class="cn">${PRV().filter(e=>PR_GROUP[e.cat]===prGroup&&PR_SUBLAB(e.cat)===l).length}</span>`])],()=>prSubV,v=>{prSubV=v;fillPrSub2()},renderProps);fillPrSub2()};
 chipsInto($("fPrGroup"),[["all","全部"],...[...new Set(Object.values(PR_GROUP))].filter(g=>g!=="材料"&&g!=="採集").map(g=>[g,g==="活動"?"活動道具":g])],()=>prGroup,v=>{prGroup=v;fillPrSub()},renderProps);
+chipsInto($("fPrFl"),FL_CHIPS,()=>prFl,v=>prFl=v,renderProps);
 chipsInto($("fPrRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,RAR[r][0]])],()=>prRar,v=>prRar=v,renderProps);
 $("fPrSort").onchange=renderProps;
 const prHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+(PR_CAT[e.cat]||"")+" "+e.lore).includes(s);
 function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
-  const base=PRV().filter(e=>(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
+  const base=PRV().filter(e=>flOk(e,prFl)&&(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
   $("fPrSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>PR_SUBLAB(e.cat)===c.dataset.v).length});
   $("fPrSub2").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>e.cat===c.dataset.v).length});
   let a=base.filter(e=>(prSubV==="all"||PR_SUBLAB(e.cat)===prSubV)&&(prSubV!=="採集"||prSub2==="all"||e.cat===prSub2));
@@ -3083,7 +3101,7 @@ function renderReport(){
     L.classList.remove("muted")})}
 
 // ================= map =================
-const stage=$("stage"),world=$("world"),mapImg=$("mapImg");let sc=1,tx=0,ty=0,fitted=false;
+const stage=$("stage"),world=$("world"),mapImg=$("mapImg"),mapLo=$("mapLo");let sc=1,tx=0,ty=0,fitted=false;
 let DGV=null;const DJL={};   // dungeon shown on the map tab (jmmeta dg id) and its chosen height per dungeon
 const DGMAP={};
 const MP=()=>{if(DGV&&FL===1){const e=dgMeta()[DGV];if(e&&e.frame){const f=e.frame;
@@ -3258,14 +3276,14 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
   const m=MP();$("noMap").hidden=!!m;world.hidden=!m;document.querySelector(".zoombtns").hidden=!m;document.querySelector(".hud").hidden=!m;document.querySelector(".legend").hidden=!m;
   $("mapNote").hidden=!(m&&m.note);if(m&&m.note)$("mapNote").textContent=m.note;
   if(!m){filterMap();return}
-  const want=BASE==="jm"&&m.jm&&!m.tiles?m.jm:m.img;$("baseBtn").hidden=!m.jm;mapImg.style.visibility=useTiles()?"hidden":"";if(TL.size&&tilesEl.dataset.f!==String(FL)){tilesEl.innerHTML="";TL.clear()}tilesEl.dataset.f=String(FL);schedTiles();$("baseBtn").textContent=BASE==="jm"&&m.jm?"底圖：探索地圖":"底圖：wiki 地圖";
+  const want=BASE==="jm"&&m.jm&&!m.tiles?m.jm:m.img;$("baseBtn").hidden=!m.jm;mapImg.style.visibility=useTiles()?"hidden":"";mapLo.style.visibility=mapImg.style.visibility;if(TL.size&&tilesEl.dataset.f!==String(FL)){tilesEl.innerHTML="";TL.clear()}tilesEl.dataset.f=String(FL);schedTiles();$("baseBtn").textContent=BASE==="jm"&&m.jm?"底圖：探索地圖":"底圖：wiki 地圖";
   // dungeon maps are opened from the dungeon page (「在地圖上看」); the map tab itself has no dungeon list (user 2026-11-08「不用放地下城」)
   $("dgSel").hidden=true;{const b=$("dgBack");b.hidden=!m.dg;if(m.dg)b.textContent=`← 回到第 ${FL} 層（目前：${dgName(m.dg)}）`}
   $("stage").classList.toggle("dgmode",!!m.dg);
   if(m.dg){const ls=$("layerSel"),ks=Object.keys(m.e.layers).sort((a,b)=>(a==="day"?99:+a.slice(1))>(b==="day"?99:+b.slice(1))?-1:1);ls.hidden=ks.length<2;
    ls.innerHTML=ks.map(k=>`<option value="${k}">高度：${esc(m.e.layers[k].label||k)}</option>`).join("");ls.value=dgKey();
-   $("baseBtn").hidden=true;$("jmCredit").hidden=true;mapImg.style.visibility="hidden";
-   [mapImg,$("tiles")].forEach(e=>{e.style.maskImage="";e.style.webkitMaskImage=""});
+   $("baseBtn").hidden=true;$("jmCredit").hidden=true;mapImg.style.visibility="hidden";mapLo.style.visibility="hidden";
+   [mapImg,mapLo,$("tiles")].forEach(e=>{e.style.maskImage="";e.style.webkitMaskImage=""});
    $("mapNote").hidden=false;$("mapNote").textContent=`正在看 ${dgName(m.dg)} 的地圖（玩家上傳的 JourneyMap，${m.e.date} 更新，${m.e.layers[dgKey()].label}）。黑色是還沒有人上傳的地方。地下城的座標和第 1 層不同；按左上角「回到第 1 層」切回去。`;
    $("stage").style.setProperty("--noteh","42px");world.querySelectorAll(".areas").forEach(n=>n.remove());
    if(!fitted)requestAnimationFrame(dgFit);SRCH_ALL=false;return}
@@ -3282,8 +3300,8 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
   {const n=$("mapNote");/* desktop: the filter panel stops above the note so the note can stay at the left edge */
    $("stage").style.setProperty("--noteh",n.hidden?"42px":((n.offsetHeight||82)+56)+"px")}
   {const c=m&&m.clip,mk=c?`radial-gradient(circle ${c.r}px at ${c.c}px ${c.c}px,#000 ${c.r-1.5}px,transparent ${c.r}px)`:"";
-   [mapImg,$("tiles")].forEach(e=>{e.style.maskImage=mk;e.style.webkitMaskImage=mk})}   // floor 1 is a round island: hide the image corners (no square edge)
-  if(!mapImg.src.endsWith(want)){const same=mapImg.dataset.f===String(FL);if(!same)mapImg.style.opacity="0";mapImg.src=want;mapImg.dataset.f=String(FL);if(!same)fitted=false}
+   [mapImg,mapLo,$("tiles")].forEach(e=>{e.style.maskImage=mk;e.style.webkitMaskImage=mk})}   // floor 1 is a round island: hide the image corners (no square edge)
+  if(!mapImg.src.endsWith(want)){const same=mapImg.dataset.f===String(FL);if(!same){mapImg.style.opacity="0";const lo=want===m.img&&m.lo;mapLo.hidden=!lo;if(lo)mapLo.src=lo}mapImg.src=want;mapImg.dataset.f=String(FL);if(!same)fitted=false}
   renderFilter();SRCH_ALL=!!Sq();
   F().towns.forEach(t=>{if(!catOn(townCat(t)))return;const b=document.createElement("button");b.className="town";b.dataset.t=t.id;b.style.left=toPxX(t.x)+"px";b.style.top=toPxZ(t.z)+"px";
     b.classList.add(t.tp?"tp":"land");b.innerHTML=`<span class="pin"></span><span class="tname">${esc(pN(t))}</span>`;b.setAttribute("aria-label",(t.tp?"可傳送的村鎮 ":"村鎮 ")+t.n);if(t.tp)b.title="傳送點："+t.tp;
@@ -3511,7 +3529,7 @@ function syncVTabs(){CODEX_V.forEach(v=>{const F=document.querySelector(`#view-$
 document.addEventListener("click",e=>{const a=e.target.closest(".vtabs a");if(!a)return;e.preventDefault();go(a.dataset.v)});
 // "已篩選" row: active (non-default) controls of the current tab's left column, each removable
 function actControls(sec){const out=[];sec.querySelectorAll(".filters .fgroup,.topf .fgroup,.rsel .fgroup").forEach(g=>{if(g.hidden)return;if(g.closest(".vtabs"))return;const lab=(g.querySelector(".flabel")||{}).textContent||"";
-  g.querySelectorAll(".chips").forEach(c=>{const all=c.querySelector('.chip[data-v="all"]'),on=c.querySelector('.chip[aria-pressed="true"]');
+  g.querySelectorAll(".chips").forEach(c=>{const all=c.querySelector('.chip[data-v="'+(c.dataset.def||"all")+'"]'),on=c.querySelector('.chip[aria-pressed="true"]');
     if(all&&on&&on!==all)out.push({lab,val:on.textContent.replace(/\s*\d+\s*$/,"").trim(),clr:()=>all.click()})});
   g.querySelectorAll("select").forEach(x=>{if(/Sort$/.test(x.id)||x.selectedIndex<=0)return;out.push({lab,val:x.options[x.selectedIndex].text,clr:()=>{x.selectedIndex=0;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
   g.querySelectorAll("input[type=checkbox]").forEach(x=>{if(!x.checked)return;out.push({lab:"",val:(x.closest("label")||{}).textContent.trim(),clr:()=>{x.checked=false;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
@@ -3547,7 +3565,7 @@ window.addEventListener("resize",fixCols);
 const setHead=()=>document.documentElement.style.setProperty("--head-h",$("top").getBoundingClientRect().height+"px");
 new ResizeObserver(setHead).observe($("top"));
 let lastW=0;new ResizeObserver(()=>{const w=Math.round(stage.getBoundingClientRect().width);if(w&&w!==lastW&&MP()){const first=!lastW;lastW=w;if(!first||!fitted)fit()}}).observe(stage);
-mapImg.addEventListener("load",()=>{mapImg.style.opacity="";if(view==="map"&&!fitted)fit()});mapImg.addEventListener("error",()=>{mapImg.style.opacity=""});
+mapImg.addEventListener("load",()=>{mapImg.style.opacity="";mapLo.hidden=true;if(view==="map"&&!fitted)fit()});mapLo.addEventListener("load",()=>{if(view==="map"&&!fitted)fit()});mapImg.addEventListener("error",()=>{mapImg.style.opacity=""});
 show();setHead();
 // 點「回報 R000N」：切到協作區「攻略資料維護」，把已收錄裡那一則捲到中間並閃一下
 function goRep(id){if(view!=="report"||rSub!=="data")go("report");let n=0;
@@ -3560,14 +3578,14 @@ document.addEventListener("click",e=>{const a=e.target.closest("[data-repgo]");i
  const sp=new URLSearchParams(location.search);if(sp.has("u")){sp.delete("u");const q=sp.toString();history.replaceState(null,"",location.pathname+(q?"?"+q:"")+location.hash)}
  let last=0,shown="";
  async function updCheck(){if(!mine||location.protocol==="file:"||/githack/.test(location.hostname)||Date.now()-last<60000)return;last=Date.now();
-  try{const t=await(await fetch(location.pathname+"?_="+Date.now(),{cache:"no-store"})).text();const m=t.match(/<meta name="sao-build" content="([0-9a-f]+)"/);
+  try{const t=await(await fetch(location.pathname+"?_="+Date.now(),{cache:"no-store",headers:{Range:"bytes=0-2047"}})).text();const m=t.match(/<meta name="sao-build" content="([0-9a-f]+)"/);
    if(!m||m[1]===mine||m[1]===shown)return;shown=m[1];
    let bar=$("updBar");if(!bar){bar=document.createElement("div");bar.id="updBar";bar.setAttribute("role","status");document.body.appendChild(bar)}
    bar.innerHTML='<button type="button" class="ub-go">網站有更新，點這裡載入新版</button><button type="button" class="ub-x" aria-label="關閉">✕</button>';
    bar.querySelector(".ub-go").onclick=()=>{const p=new URLSearchParams(location.search);p.set("u",shown);location.replace(location.pathname+"?"+p.toString()+location.hash)};
    bar.querySelector(".ub-x").onclick=()=>bar.remove()}catch(e){}}
  window.__updCheck=()=>{last=0;return updCheck()};
- setTimeout(updCheck,3000);setInterval(updCheck,300000);
+ setTimeout(updCheck,20000);setInterval(updCheck,300000);
  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")updCheck()})}
 // 網頁導覽（關於本站 → 網頁導覽；第一次來自動開始）
 /* 網頁導覽：聚光燈框住一個介面元素，旁邊的說明卡寫用途，上一步／下一步／略過。
