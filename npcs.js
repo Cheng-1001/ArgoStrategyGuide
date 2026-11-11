@@ -1,7 +1,8 @@
 /* Floor 1 NPCs by role, from DelayedCode's SAO MC Interactive Map (titles, roles and X / Z only).
    Row: [category, name, x, z, src, underground?] (1 = underground, 2 = in a basement, owner-confirmed); src "ref" = Current Data, "beta" = only in the reference
    map's Beta-test data (may have moved since). Beta rows are used only for roles that Current Data does not list at all.
-   "site" = located in game by the site owner (SITE list in tools/build_npcs.py). */
+   "site" = located in game by the site owner (SITE list in tools/build_npcs.py); "site2" = the owner's position when taking the screenshot;
+   "calc" = computed from the owner's screenshots (CALC in tools/build_npcs.py; SAO_NPC_CALC: m tri = several directions, one = one screenshot). */
 window.SAO_NPCS={1:[
  ["alchemist", "Alchemist", 1771, 4097, "ref"],
  ["alchemist", "Crystallographer", 1777, 4098, "ref"],
@@ -54,13 +55,13 @@ window.SAO_NPCS={1:[
  ["materialsBlacksmith", "Cabinetmaker", 2461, 4301, "ref"],
  ["materialsBlacksmith", "Sewer Reshaper", 2864, 4740, "ref", 1],
  ["accessoriesBlacksmith", "Bandit Accessories", 4169, 3933, "ref"],
- ["accessoriesBlacksmith", "Copper Accessories", 1771, 4131, "ref"],
+ ["accessoriesBlacksmith", "Copper Accessories", 1773, 4135, "calc"],
  ["accessoriesBlacksmith", "Corrupted Boar Accessories", 1778, 3530, "site2"],
  ["accessoriesBlacksmith", "Deer Accessories", 3232, 1474, "ref"],
  ["accessoriesBlacksmith", "Elite Treant Accessories", 1491, 3419, "ref"],
  ["accessoriesBlacksmith", "Ice Golem Accessories", 3238, 1477, "ref"],
  ["accessoriesBlacksmith", "Ice Spirit Accessories", 3228, 1488, "ref"],
- ["accessoriesBlacksmith", "Iron Accessories", 1764, 4144, "ref"],
+ ["accessoriesBlacksmith", "Iron Accessories", 1763, 4144, "calc"],
  ["accessoriesBlacksmith", "Nepenthes Accessories", 3151, 3701, "ref"],
  ["accessoriesBlacksmith", "Shark Accessories", 1570, 1994, "ref"],
  ["accessoriesBlacksmith", "Skeleton Accessories", 1226, 3601, "ref"],
@@ -78,11 +79,12 @@ window.SAO_NPCS={1:[
  ["secretAccessoryBlacksmith", "Secret Sticky Ring Merchant", 390, 3064, "ref"],
  ["secretAccessoryBlacksmith", "Skeleton Skull", 1163, 3546, "ref"],
  ["beggar", "臭乞丐", 3336, 1760, "site"],
- ["other", "Accessory Recycling", 1766, 4123, "site2"],
- ["other", "Auction House", 1825, 4086, "site2"],
- ["other", "Labyrinth Archaeologist", 2389, 2412, "site2"],
+ ["other", "Accessory Recycling", 1766, 4126, "calc"],
+ ["other", "Auction House", 1831, 4079, "calc"],
+ ["other", "Labyrinth Archaeologist", 2389, 2408, "calc"],
  ["other", "Mine Archaeologist", 4280, 3891, "site2"],
  ["other", "Vault", 1825, 4091, "site2"],
- ["other", "Weapon Recycling", 1776, 4132, "site2"],
+ ["other", "Weapon Recycling", 1773, 4132, "calc"],
  ["other", "Web Archaeologist", 1019, 1178, "site2"]
 ]};
+window.SAO_NPC_CALC={"Accessory Recycling": {"m": "tri", "k": 5, "d": "2026-11-03、11-08"}, "Weapon Recycling": {"m": "tri", "k": 4, "d": "2026-11-03、11-08"}, "Iron Accessories": {"m": "tri", "k": 5, "d": "2026-11-03、11-08"}, "Copper Accessories": {"m": "tri", "k": 4, "d": "2026-11-03、11-08"}, "Labyrinth Archaeologist": {"m": "one", "k": 1, "d": "2026-11-03"}, "Auction House": {"m": "one", "k": 1, "d": "2026-11-07"}};

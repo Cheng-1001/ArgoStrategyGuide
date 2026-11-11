@@ -40,6 +40,18 @@ res+=SITE
 # sell-only window "Aragorn's Lair - Loot Info") and the Xal'Zirith guard)
 DROP={'Boar and Wolf loot buyer',"Aragorn's Lair - Loot Buyer"}
 res=[r for r in res if r['n'] not in DROP]
+# NPC positions computed from the owner's screenshots (2026-11-11, scratchpad npcpos/: compass bearing + where the NPC is on screen;
+# the minimap X/Z is the PLAYER's position, ~3 blocks off). 'tri' = sight lines from several screenshots taken from different directions
+# meet (lines within 0.4 block of the point), 'one' = one screenshot, distance from the NPC's on-screen face/body size x1.17 (about ±1 block).
+# Block coordinate = floor of the computed point (HUD X/Z taken as the block the player stands in).
+CALC={'Accessory Recycling':(1766,4126,'tri',5,'2026-11-03、11-08'),
+      'Weapon Recycling':(1773,4132,'tri',4,'2026-11-03、11-08'),
+      'Iron Accessories':(1763,4144,'tri',5,'2026-11-03、11-08'),
+      'Copper Accessories':(1773,4135,'tri',4,'2026-11-03、11-08'),   # reference map has 1771,4131 (4 blocks off; 4 lines meet within 0.04)
+      'Labyrinth Archaeologist':(2389,2408,'one',1,'2026-11-03'),
+      'Auction House':(1831,4079,'one',1,'2026-11-07')}   # a row of 4 clerks at X 1831-1832, Z 4072 / 4077 / 4079 / 4085 (NPC_NOTE)
+for r in res:
+    if r['n'] in CALC: x,z,m,k,d=CALC[r['n']]; r.update(x=x,z=z,src='calc')
 # underground hideouts the owner reached (2026-11-08): Secret Wolf Gloves = ice room at the bottom of a shaft in Wolf Valley (Y 70)
 for r in res:
     if r['n'] in ('Secret Accessory Blacksmith',): r['u']=True
@@ -53,7 +65,9 @@ rows=',\n'.join(' '+json.dumps([r['c'],r['n'],r['x'],r['z'],r['src']]+([2 if r['
 hdr='''/* Floor 1 NPCs by role, from DelayedCode's SAO MC Interactive Map (titles, roles and X / Z only).
    Row: [category, name, x, z, src, underground?] (1 = underground, 2 = in a basement, owner-confirmed); src "ref" = Current Data, "beta" = only in the reference
    map's Beta-test data (may have moved since). Beta rows are used only for roles that Current Data does not list at all.
-   "site" = located in game by the site owner (SITE list in tools/build_npcs.py). */
+   "site" = located in game by the site owner (SITE list in tools/build_npcs.py); "site2" = the owner's position when taking the screenshot;
+   "calc" = computed from the owner's screenshots (CALC in tools/build_npcs.py; SAO_NPC_CALC: m tri = several directions, one = one screenshot). */
 window.SAO_NPCS={1:[
 '''
-open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'npcs.js'),'w',encoding='utf-8').write(hdr+rows+'\n]};\n')
+calc='window.SAO_NPC_CALC='+json.dumps({n:{'m':m,'k':k,'d':d} for n,(x,z,m,k,d) in CALC.items()},ensure_ascii=False)+';\n'
+open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'npcs.js'),'w',encoding='utf-8').write(hdr+rows+'\n]};\n'+calc)
