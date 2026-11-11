@@ -146,5 +146,23 @@ window.SAO_REPORTS = [
   },
   "source": "form",
   "review": "審核：lintcbruce"
+ },
+ {
+  "id": "R0009",
+  "type": "item",
+  "floor": 1,
+  "name": "Ninja Leggings",
+  "date": "2026-11-12",
+  "img": "reports/R0009.jpg",
+  "imgs": [
+   "reports/R0009.jpg"
+  ],
+  "raw": {
+   "物品・怎麼拿到的": "合成或鍛造",
+   "物品・備註": "Iron Ingot*2 Coal Ore*2  Spider Cloth*10 Shark Carapace*8",
+   "回報者・遊戲內暱稱": "Nosleo"
+  },
+  "source": "form",
+  "review": "審核：lintcbruce"
  }
 ];
