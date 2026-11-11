@@ -18,7 +18,7 @@
 | [SAO Minecraft Wiki](https://saominecraft.wiki.gg/)（[Floor 1](https://saominecraft.wiki.gg/wiki/Floor_1)、[Bestiary](https://saominecraft.wiki.gg/wiki/Bestiary)） | 怪物圖鑑、掉落物、樓層地圖（`floor1.jpg`、`floor2.jpg`）、支線任務、主線任務表與編號 8～18 |
 | [官方物品圖鑑](https://saominecraft.com/wiki) | 物品與裝備的名稱（法文原文）、稀有度、數值、描述、圖示與 3D 預覽截圖 |
 | [官方世界首領頁](https://saominecraft.com/world-boss) | 世界王 Galiath、獨特怪物 Seraphel |
-| [SAO MC Interactive Map](https://delayedcode.github.io/SAO-MC-Interactive-Map/)（DelayedCode 製作的參考互動地圖，[repo](https://github.com/DelayedCode/SAO-MC-Interactive-Map)） | 第 1 層的座標與地名、NPC 位置與類別、區域首領重生點、配方材料、主線任務步驟順序；第 2、3 層的地名、NPC、首領重生點（它的 Beta 資料，座標還沒對過遊戲；它的地圖圖片不使用，第 3 層是本站畫的空白底圖）。該 repo 沒有授權條款，所以只取座標、名稱、數量這類事實資料，不使用它的描述文字、程式碼或區域範圍；網站上這些資料標示「參考互動地圖」 |
+| [SAO MC Interactive Map](https://delayedcode.github.io/SAO-MC-Interactive-Map/)（DelayedCode 製作的參考互動地圖，[repo](https://github.com/DelayedCode/SAO-MC-Interactive-Map)） | 第 1 層的座標與地名、NPC 位置與類別、區域首領重生點、配方材料、主線任務步驟順序；第 2、3 層的地名、NPC、首領重生點（它的 Beta 資料；座標系統已用站長的 JourneyMap 確認和遊戲一致，個別地點還沒在遊戲裡對過；它的地圖圖片不使用，第 3 層是本站畫的空白底圖）。該 repo 沒有授權條款，所以只取座標、名稱、數量這類事實資料，不使用它的描述文字、程式碼或區域範圍；網站上這些資料標示「參考互動地圖」 |
 | 遊戲內畫面（玩家截圖） | 傳送點清單、配方（製作時間、材料、價格）、任務追蹤上的主線編號、怪物改名 |
 | 遊戲模組的圖鑑提示（SAOUI `codex/hints.json`） | 怪物的出沒提示文字（只取文字，不放遊戲素材） |
 | JourneyMap 探索紀錄（站長，加上玩家在協作區上傳、自動合併的部分） | 第 1 層「探索地圖」底圖、修補 wiki 地圖的破損處 |
