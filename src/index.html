@@ -2,7 +2,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: SAO system-window feel. A header with the four query tabs and one search box;
    each tab is a filter column + result list; one detail drawer on the right (bottom sheet on phones) links everything together. */
@@ -12,8 +12,8 @@
   --boss:#d9701a; --mini:#7b55c8; --minion:#8a96a1; --ok:#2f8a5b; --ref:#2b7a9e; --tp:#13909a; --warn:#b7791f; --unk:#8a6f6f; --rare:#2f6fc4;
   --stage:#0b1219; --shadow:0 10px 30px rgba(20,35,50,.22);
   --slot:#2b313a; --slot-edge:#46505c; --slot-ink:#9aa6b2;
-  --f-display:"Chakra Petch","Noto Sans TC",system-ui,sans-serif;
-  --f-body:"Noto Sans TC",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-display:"Chakra Petch","PingFang TC","Noto Sans CJK TC","Noto Sans TC","Source Han Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  --f-body:system-ui,-apple-system,"Segoe UI","PingFang TC","Noto Sans CJK TC","Noto Sans TC","Source Han Sans TC","Microsoft JhengHei",sans-serif;   /* no CJK web font (user 2026-11-11 A: it was ~900 KB per first visit) */
   --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
   --head-h:58px;
 }
@@ -807,6 +807,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">部位</span><div class="chips" id="fEqPart"></div></div>
       <div class="fgroup" id="gEqSub" hidden><span class="flabel">細分</span><div class="chips" id="fEqSub"></div></div>
       <div class="fgroup"><span class="flabel">職業</span><div class="chips" id="fEqClass"></div></div>
+      <div class="fgroup"><span class="flabel">取得樓層</span><div class="chips" id="fEqFl" data-def="here"></div></div>
       <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fEqRar"></div></div>
       <div class="fgroup"><span class="flabel">等級</span><div class="lvrange"><input type="number" class="sel" id="fEqMin" min="1" max="99" placeholder="最低" aria-label="最低等級"><span>～</span><input type="number" class="sel" id="fEqMax" min="1" max="99" placeholder="最高" aria-label="最高等級"></div></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fEqSort" aria-label="排序">
@@ -823,6 +824,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
       <div class="fgroup"><span class="flabel">分類</span><div class="chips" id="fPrGroup"></div></div>
       <div class="fgroup" id="gPrSub" hidden><span class="flabel">細分</span><div class="chips" id="fPrSub"></div></div>
       <div class="fgroup" id="gPrSub2" hidden><span class="flabel">種類</span><div class="chips" id="fPrSub2"></div></div>
+      <div class="fgroup"><span class="flabel">取得樓層</span><div class="chips" id="fPrFl" data-def="here"></div></div>
       <div class="fgroup"><span class="flabel">稀有度</span><div class="chips" id="fPrRar"></div></div>
       <div class="fgroup"><span class="flabel">排序</span><select class="sel" id="fPrSort" aria-label="排序">
         <option value="name">名稱</option><option value="rar">稀有度（高→低）</option><option value="lv">等級（低→高）</option></select></div>
@@ -2073,6 +2075,20 @@ let eqPart="all",eqClass="all",eqRar="all",eqSubV="all";
 const fillEqSub=()=>{const g=$("gEqSub"),ks=EQ_SUBS[eqPart];g.hidden=!ks;eqSubV="all";if(ks)chipsInto($("fEqSub"),[["all","全部"],...ks.map(k=>[k,`${subLab(k)} <span class="cn">${EQ.filter(e=>EQ_PART[e.cat]===eqPart&&eqSub(e)===k).length}</span>`])],()=>eqSubV,v=>eqSubV=v,renderEquip)};
 chipsInto($("fEqPart"),[["all","全部"],["weapon","武器（主手）"],["off","副手"],["armor","防具"],["acc","飾品"]],()=>eqPart,v=>{eqPart=v;fillEqSub()},renderEquip);
 chipsInto($("fEqClass"),[["all","全部"],...Object.entries(CLASS_ZH)],()=>eqClass,v=>eqClass=v,renderEquip);
+// which floors an equipment / prop is known to come from (user 2026-11-11: floor-1 items showed on floor 3). Official catalogue items carry no floor;
+// known floors come from this site's item data (drops, quests, gathering), recipes / shops, the game's "Loot: <monster>" lines and dungeon chests.
+// Items with no known floor stay on every floor (default "這一層＋還不知道"), so nothing is hidden on a guess.
+const OBJ_FL={};
+const objFloors=e=>{if(OBJ_FL[e.oid])return OBJ_FL[e.oid];const f=new Set(),en=e.itemId||FR2ID[e.name];
+  if(en&&ITEMS[en])itemFloors(en).forEach(x=>f.add(x));
+  (RECIPE_BY_EQ[e.oid]||[]).forEach(r=>f.add(r.f));
+  const g=GI_OID[e.oid]||(e.gen&&GI_EN[norm(e.gen)]);(g&&g.obt||[]).forEach(o=>{const m=/^Loot: (.+?) \(/.exec(o);if(m)FL_KEYS.forEach(k=>{if(FLOORS[k].monByName[m[1]])f.add(+k)})});
+  const nm=[en,e.gen,e.name].filter(Boolean);FL_KEYS.forEach(k=>spotsOf(k).forEach(sp=>((sp.dg&&sp.dg.loot)||[]).forEach(([it])=>{if(nm.includes(it))f.add(+k)})));
+  return OBJ_FL[e.oid]=[...f].sort()};
+window.__objFl=n=>{const e=EQ.find(x=>x.name===n||x.gen===n||dn(x)===n);return e&&{fl:objFloors(e),en:e.itemId||FR2ID[e.name],src:(SOURCES[e.itemId||FR2ID[e.name]]||[]).map(s=>s.m.name+"@"+s.m.floor)}};
+let eqFl="here",prFl="here";const FL_CHIPS=[["here","這一層＋還不知道"],["only","只看這一層"],["all","全部樓層"]];
+const flOk=(e,v)=>{if(v==="all")return true;const f=objFloors(e);return v==="only"?f.includes(FL):!f.length||f.includes(FL)};
+chipsInto($("fEqFl"),FL_CHIPS,()=>eqFl,v=>eqFl=v,renderEquip);
 chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
 ["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
 // effect filter (user 2026-11-07「裝備分頁增加輸入欄位，篩選效果」): matches the stat names as shown (爆擊率、HP…) and the raw keys;
@@ -2175,7 +2191,7 @@ window.__eqDump=()=>EQ.map(e=>({oid:e.oid,gen:e.gen||"",name:e.name,zh:zhE(e),lv
 const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ES=EFF_SEL.map(norm),EREQ=EFF_SEL.filter(z=>effMode(z)==="and").map(norm),EOPT=EFF_SEL.filter(z=>effMode(z)==="or").map(norm),
     effOk=e=>EREQ.every(t=>eqEffHit(e,t).length)&&(!EOPT.length||EOPT.some(t=>eqEffHit(e,t).length));   // every 且, and at least one 或
-  const base=EQ.filter(e=>(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&effOk(e));
+  const base=EQ.filter(e=>flOk(e,eqFl)&&(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&effOk(e));
   // sub-part counts follow the other filters (class, rarity, level, search), so they match the list
   $("fEqSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>eqSub(e)===c.dataset.v).length});
   let a=base.filter(e=>eqSubV==="all"||eqSub(e)===eqSubV);
@@ -2248,11 +2264,12 @@ const fillPrSub2=()=>{const g=$("gPrSub2");prSub2="all";g.hidden=prSubV!=="採�
 const fillPrSub=()=>{const g=$("gPrSub");prSubV="all";const labs=[...new Set(PRV().filter(e=>PR_GROUP[e.cat]===prGroup).map(e=>PR_SUBLAB(e.cat)))].sort((a,b)=>{const ia=SUB_ORDER.indexOf(a),ib=SUB_ORDER.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib)});g.hidden=prGroup==="all"||labs.length<2;
   if(!g.hidden)chipsInto($("fPrSub"),[["all","全部"],...labs.map(l=>[l,`${esc(l)} <span class="cn">${PRV().filter(e=>PR_GROUP[e.cat]===prGroup&&PR_SUBLAB(e.cat)===l).length}</span>`])],()=>prSubV,v=>{prSubV=v;fillPrSub2()},renderProps);fillPrSub2()};
 chipsInto($("fPrGroup"),[["all","全部"],...[...new Set(Object.values(PR_GROUP))].filter(g=>g!=="材料"&&g!=="採集").map(g=>[g,g==="活動"?"活動道具":g])],()=>prGroup,v=>{prGroup=v;fillPrSub()},renderProps);
+chipsInto($("fPrFl"),FL_CHIPS,()=>prFl,v=>prFl=v,renderProps);
 chipsInto($("fPrRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,RAR[r][0]])],()=>prRar,v=>prRar=v,renderProps);
 $("fPrSort").onchange=renderProps;
 const prHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+(PR_CAT[e.cat]||"")+" "+e.lore).includes(s);
 function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
-  const base=PRV().filter(e=>(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
+  const base=PRV().filter(e=>flOk(e,prFl)&&(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
   $("fPrSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>PR_SUBLAB(e.cat)===c.dataset.v).length});
   $("fPrSub2").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>e.cat===c.dataset.v).length});
   let a=base.filter(e=>(prSubV==="all"||PR_SUBLAB(e.cat)===prSubV)&&(prSubV!=="採集"||prSub2==="all"||e.cat===prSub2));
@@ -3512,7 +3529,7 @@ function syncVTabs(){CODEX_V.forEach(v=>{const F=document.querySelector(`#view-$
 document.addEventListener("click",e=>{const a=e.target.closest(".vtabs a");if(!a)return;e.preventDefault();go(a.dataset.v)});
 // "已篩選" row: active (non-default) controls of the current tab's left column, each removable
 function actControls(sec){const out=[];sec.querySelectorAll(".filters .fgroup,.topf .fgroup,.rsel .fgroup").forEach(g=>{if(g.hidden)return;if(g.closest(".vtabs"))return;const lab=(g.querySelector(".flabel")||{}).textContent||"";
-  g.querySelectorAll(".chips").forEach(c=>{const all=c.querySelector('.chip[data-v="all"]'),on=c.querySelector('.chip[aria-pressed="true"]');
+  g.querySelectorAll(".chips").forEach(c=>{const all=c.querySelector('.chip[data-v="'+(c.dataset.def||"all")+'"]'),on=c.querySelector('.chip[aria-pressed="true"]');
     if(all&&on&&on!==all)out.push({lab,val:on.textContent.replace(/\s*\d+\s*$/,"").trim(),clr:()=>all.click()})});
   g.querySelectorAll("select").forEach(x=>{if(/Sort$/.test(x.id)||x.selectedIndex<=0)return;out.push({lab,val:x.options[x.selectedIndex].text,clr:()=>{x.selectedIndex=0;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
   g.querySelectorAll("input[type=checkbox]").forEach(x=>{if(!x.checked)return;out.push({lab:"",val:(x.closest("label")||{}).textContent.trim(),clr:()=>{x.checked=false;x.dispatchEvent(new Event("change",{bubbles:true}))}})});
