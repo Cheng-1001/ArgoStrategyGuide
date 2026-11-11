@@ -2955,7 +2955,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   // a floor that is not open yet: its map (if any) greyed, and what will appear here once it opens (使用者 2026-11-06：
   // 「沒有做模擬，無法看切換狀況」— every floor in the menu can be picked, so the switch can be tried now)
   const flSoon=f=>{const F=FLOORS[f],img=F&&F.map&&F.map.img;
-    return`<section class="jmsec"><div class="jmsech"><b>地圖</b><span class="muted">第 ${f} 層尚未開放打包</span></div>
+    return`<section class="jmsec"><div class="jmsech"><b>地圖</b><span class="muted">第 ${f} 層還不能打包</span></div>
       <div class="jmsoon">${img?`<img src="${esc(img)}" alt="">`:`<span class="jmsoonx">第 ${f} 層還沒有地圖</span>`}</div>
       <div class="muted jmsoonn">第 ${f} 層的打包還沒做好（要先確認 JourneyMap 怎麼存這一層）。做好後，工具會像第 1 層一樣：${img?`拿你的地圖和網站這張第 ${f} 層地圖比對`:`先用玩家上傳的第一份地圖當這一層的底圖`}，你有、網站還沒有的地方會在這張圖上變成方格，點選後一起打包。</div></section>
     <section class="jmsec"><div class="jmsech"><b>地下城</b><span class="muted">第 ${f} 層的地下城開放後列在這裡</span></div></section>`};
@@ -2977,7 +2977,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
     const U=JMSEL.ui||(JMSEL.ui={});
     const pk=`已選：第 1 層 ${on.length}／${regs.size} 格${dgNew.length?`・地下城 ${dOn.length}／${dgNew.length} 個`:""}`;
     head=`<div class="jmselbar"><span class="jmfl">第<input id="jmFloorIn" inputmode="numeric" autocomplete="off" maxlength="3" value="${FLv}" aria-label="樓層（可以直接輸入數字）" title="可以直接輸入樓層數字"><button type="button" class="jmflb" id="jmFloorBtn" aria-label="選擇樓層" aria-expanded="false">▾</button>層
-          <ul class="jmflist" id="jmFloorList" hidden>${JM_FLOORS.map(o=>`<li><button type="button" data-jmfl="${o.f}"${o.f===FLv?' aria-current="true"':""}>第 ${o.f} 層${o.open?"":"（尚未開放）"}</button></li>`).join("")}</ul></span>
+          <ul class="jmflist" id="jmFloorList" hidden>${JM_FLOORS.map(o=>`<li><button type="button" data-jmfl="${o.f}"${o.f===FLv?' aria-current="true"':""}>第 ${o.f} 層${o.open?"":"（還不能打包）"}</button></li>`).join("")}</ul></span>
         <span class="jmanch"><button type="button" class="pill r-b jmpb" id="jmNamesBtn" aria-expanded="${!!U.names}" aria-controls="jmNames"><span id="jmRegSum">${pk}</span></button>${U.names?`<div class="jmpopov" id="jmNames"><div class="jmpoptt">已選區塊</div>${on.length||dOn.length?`${on.length?`<div><b>第 1 層</b>：${esc(nm.join("、"))}</div>`:""}${dOn.length?`<div><b>地下城</b>：${esc(dOn.map(dgName).join("、"))}</div>`:""}`:`<span class="muted">還沒選。</span>`}</div>`:""}</span></div>`}
   $("jmHead").innerHTML=head;jmFitPop($("jmNames"));
   {const U=JMSEL.ui||{},b=(id,f)=>{const e=$(id);if(e)e.onclick=f};

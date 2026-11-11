@@ -156,7 +156,7 @@ try:
         fw = pg.evaluate("document.querySelector('.jmfl').getBoundingClientRect().width")
         pg.click("#jmFloorBtn"); pg.wait_for_timeout(100)
         fo = pg.eval_on_selector_all("#jmFloorList [data-jmfl]", "o=>o.map(x=>x.textContent)")
-        check(pg.input_value("#jmFloorIn") == "1" and fw < 130 and fo[0] == "第 1 層" and len(fo) == 3 and all("尚未開放" in t for t in fo[1:]),
+        check(pg.input_value("#jmFloorIn") == "1" and fw < 130 and fo[0] == "第 1 層" and len(fo) == 3 and all("還不能打包" in t for t in fo[1:]),
               f"the floor box is narrow ({fw:.0f}px), shows 1, and its list has floors 1-3 ({fo})")
         pg.keyboard.press("Escape"); pg.wait_for_timeout(100)
         check(not pg.is_visible("#jmFloorList"), "Esc closes the floor list")
@@ -165,7 +165,7 @@ try:
         hp = pg.evaluate("""(()=>{const b=document.querySelector('#jmHelpBtn').getBoundingClientRect(),m=document.querySelector('.jmmapw').getBoundingClientRect(),
             hit=[...document.querySelectorAll('[data-jmreg]')].some(e=>{const r=e.getBoundingClientRect();return !(r.right<=b.left||r.left>=b.right||r.bottom<=b.top||r.top>=b.bottom)});
             return [Math.round(b.left-m.left),Math.round(b.top-m.top),hit]})()""")
-        check(pg.locator(".jmmapw .jmhelpa #jmHelpBtn").count() == 1 and hp[0] == 0 and hp[1] == 0 and not hp[2]
+        check(pg.locator(".jmmapw .jmhelpa #jmHelpBtn").count() == 1 and abs(hp[0]) <= 1 and abs(hp[1]) <= 1 and not hp[2]   # ±1 px: system fonts since 2026-11-11
               and pg.locator(".jmselbar #jmNamesBtn #jmRegSum").count() == 1 and "已選：第 1 層" in pg.inner_text("#jmNamesBtn") and "已選的地方" not in pg.inner_text("#jmOut")
               and all("pill" in pg.get_attribute(q, "class") and "r-b" in pg.get_attribute(q, "class") for q in ("#jmHelpBtn", "#jmNamesBtn"))
               and not pg.locator(".jmselbar #jmHelpBtn, .jmtools #jmHelpBtn, #jmPrevOpen, .jmhint").count() and not pg.is_visible("#jmHelp"),
@@ -205,7 +205,7 @@ try:
         if os.environ.get("SHOT_DIR"):
             pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_floor2.png"))
         pg.fill("#jmFloorIn", "3"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(200)
-        f3 = [pg.locator("[data-jmreg]").count(), pg.locator(".jmsoonx").count(), pg.inner_text("#jmRegSum")]
+        f3 = [pg.locator("[data-jmreg]").count(), pg.locator(".jmsoon img").count(), pg.inner_text("#jmRegSum")]   # floor 3 has the site's blank grid map since 2026-11-11
         if os.environ.get("SHOT_DIR"):
             pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "pack_floor3.png"))
         pg.fill("#jmFloorIn", "12"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(200)
