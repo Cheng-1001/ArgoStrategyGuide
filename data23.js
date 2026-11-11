@@ -97,6 +97,8 @@ const F2 = {
     { id:"f2nganga", kind:"poi", n:"Nganga Houses", zh:"Nganga 之家", x:-430, z:-428, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料；第 2 層座標還沒對過遊戲，可能差幾十格）。" }
   ],
 
+  // boss spawn points from the reference map (Beta, map-local; names mapped to this site's monster names)
+  BOSS_SPAWNS: [["Sanctuary Guardian", 0, 190, 1], ["Magnus, Colossus of the Veins", 228, 316, 1], ["Melisara, Sovereign of the Hive", 175, -409, 1], ["Morverth the Soul Flayer", 583, -187, 1], ["Rugibœuf, The Guardian", -155, 571, 0], ["Velindra the Weaver", 800, 300, 1], ["Winnie, Man's Best Friend", 578, -774, 0]],
   quests: []
 };
 
@@ -201,7 +203,40 @@ const F3 = {
     ["","Nerius the Evil Treant","Boss","A","swamp",0,[],"官網 2026-10-28 新聞的怪物表有這隻；wiki 的樓層總表寫第 3 層樓層首領是 Nerius。區域照官網 2026-11-09 新聞（Marécage de Lanwaura，和網站 Swamp 的 Juvenile／Ravager Treant 同一區）；掉落還不知道。","🌳"],
     ["","Jeune pousse","Monster","A","none",0,[],"官網 2026-10-28 新聞的怪物表有這隻（法文名，意思是「幼苗」）。官網 2026-11-09 新聞寫在 Labyrinthe de la Tour（高塔迷宮區），網站的 Labyrinth 和 Labyrinth Entrance 都可能是，還不知道是哪一區；掉落還不知道。","🌱"]
   ]),
-  towns: [], spots: [], quests: []
+  towns: [],
+  // 2026-11-11 user: fill floor 3 from the old reference map (maps_floor3.js biome labels; its own "map-local" coordinates, not checked in game).
+  // A label is a monster area only when its name is the wiki region name (Camp/Camps, word order); everything else is a landmark.
+  spots: [
+    {"id": "f3labyrinth", "kind": "mob", "n": "Labyrinth", "x": 588, "z": 195, "src": "ref", "zone": "lab", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3entrancetothel", "kind": "mob", "n": "Entrance to the Labyrinth", "x": 382, "z": 433, "src": "ref", "zone": "labE", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3dungeonthemyst", "kind": "dungeon", "n": "Dungeon The Mysterious Islands", "x": 860, "z": 288, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3elessarhmine", "kind": "poi", "n": "Elessarh Mine", "x": 928, "z": 505, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3lysaat", "kind": "poi", "n": "Lysaat", "x": 346, "z": 592, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3weisslum", "kind": "mob", "n": "Weisslum", "x": 650, "z": 607, "src": "ref", "zone": "weiss", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3zumfut", "kind": "poi", "n": "Zumfut", "x": 932, "z": 609, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。 網站的怪物區域「Zumfut Mine」（wiki 圖鑑，Amethyst Spider）可能在這一帶，名稱不同、還沒確認，先不連起來。"},
+    {"id": "f3aldarya", "kind": "poi", "n": "Aldarya", "x": 1083, "z": 592, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3sylinga", "kind": "poi", "n": "Sylinga", "x": 163, "z": 721, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3ruinsofavrylne", "kind": "poi", "n": "Ruins of Avrylne", "x": 543, "z": 760, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3earanforest", "kind": "mob", "n": "Earan Forest", "x": 477, "z": 875, "src": "ref", "zone": "earan", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3caverns", "kind": "mob", "n": "Caverns", "x": 528, "z": 858, "src": "ref", "zone": "caverns", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3mistrefuge", "kind": "poi", "n": "Mist Refuge", "x": 705, "z": 847, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3mistcanyon", "kind": "mob", "n": "Mist Canyon", "x": 807, "z": 855, "src": "ref", "zone": "mist", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3wolfforest", "kind": "mob", "n": "Wolf Forest", "x": 970, "z": 828, "src": "ref", "zone": "wolfF", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3ilmarin", "kind": "poi", "n": "Ilmarin", "x": 1049, "z": 862, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3blackmarket", "kind": "poi", "n": "Black Market", "x": 1121, "z": 811, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3banditcamps", "kind": "mob", "n": "Bandit Camps", "x": 1138, "z": 844, "src": "ref", "zone": "banditC", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3earanland", "kind": "poi", "n": "Earan Land", "x": 587, "z": 984, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3terrialyswell", "kind": "poi", "n": "Terrialys Well", "x": 961, "z": 1103, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。 網站的怪物區域「Terrialys Pit」（wiki 圖鑑，哥布林、Cave King）名稱和這裡相近（Well／Pit），還沒確認是不是同一個地方，先不連起來。"},
+    {"id": "f3restofankyla", "kind": "poi", "n": "Rest of Ankyla", "x": 1105, "z": 1043, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3guildbase", "kind": "poi", "n": "Guild Base", "x": 775, "z": 1200, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3adoryllscage", "kind": "mob", "n": "Adoryll's cage", "x": 274, "z": 1244, "src": "ref", "zone": "cage", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3orccamps", "kind": "mob", "n": "Orc Camps", "x": 285, "z": 1191, "src": "ref", "zone": "orc", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3triyag", "kind": "poi", "n": "Triyag", "x": 582, "z": 1381, "src": "ref", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"},
+    {"id": "f3swamp", "kind": "mob", "n": "Swamp", "x": 633, "z": 1258, "src": "ref", "zone": "swamp", "note": "位置取自參考互動地圖（玩家製作的 Beta 資料；第 3 層座標是它自己推算的，還沒對過遊戲，可能差幾十格）。"}
+  ],
+  // boss spawn points from the reference map (names mapped to this site's monster names)
+  BOSS_SPAWNS: [["Furacas, Guardian of the Labyrinth", 393, 340, 0], ["Misty Wolf Alpha", 757, 790, 0], ["Woodland Alpha", 1060, 892, 0], ["Bandit Chief", 1175, 837, 0], ["Cave King", 886, 1098, 0], ["Muffet, Mother of Black Spiders", 344, 1273, 0], ["Adoryll, the Caged Bird", 275, 1245, 0], ["Orc Samurai Boss", 256, 1219, 0]],
+  quests: []
 };
 
 // BEGIN build_mobphotos (generated: monsters only in the 2026-11-09 official news table; do not edit by hand)
@@ -319,7 +354,7 @@ const UNKNOWN = {
 return {
   floors: {
     2: { name:"Urbus", lv:"11–15", boss:"Asterius", status:"new", opened:"2026-11-09", map:{img:"floor2.jpg", size:2124, x0:-1062, z0:-1062, clip:{c:500,r:484}, note:"座標換算是推算的（1 像素 = 1 格，地圖中心 = 0, 0），已用主城與城內 NPC 的座標核對。"}, ...F2 },
-    3: { name:"Forest of Wavering Mists", lv:"15–19", boss:"Nerius", status:"new", opened:"2026-11-09", map:null, ...F3 }
+    3: { name:"Forest of Wavering Mists", lv:"15–19", boss:"Nerius", status:"new", opened:"2026-11-09", map:{img:"floor3.jpg", size:1700, x0:-253, z0:-79, clip:{c:500,r:499}, blank:1, note:"第 3 層還沒有可以用的地圖圖片（wiki 沒有；參考互動地圖的圖沒有授權），這是本站畫的空白底圖（每 100 格一條格線），只用來標位置。座標取自參考互動地圖，還沒對過遊戲。"}, ...F3 }
   },
   extra: EXTRA, unknown: UNKNOWN
 };

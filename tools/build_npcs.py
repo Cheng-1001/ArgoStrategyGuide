@@ -66,8 +66,25 @@ hdr='''/* Floor 1 NPCs by role, from DelayedCode's SAO MC Interactive Map (title
    Row: [category, name, x, z, src, underground?] (1 = underground, 2 = in a basement, owner-confirmed); src "ref" = Current Data, "beta" = only in the reference
    map's Beta-test data (may have moved since). Beta rows are used only for roles that Current Data does not list at all.
    "site" = located in game by the site owner (SITE list in tools/build_npcs.py); "site2" = the owner's position when taking the screenshot;
-   "calc" = computed from the owner's screenshots (CALC in tools/build_npcs.py; SAO_NPC_CALC: m tri = several directions, one = one screenshot). */
+   "calc" = computed from the owner's screenshots (CALC in tools/build_npcs.py; SAO_NPC_CALC: m tri = several directions, one = one screenshot).
+   Floors 2 / 3: src "ref23" = the reference map's floor-2/3 rows, in its own "map-local" coordinates (not yet checked against the game). */
 window.SAO_NPCS={1:[
 '''
+# Floors 2 and 3 (2026-11-11, user: fill floors 2/3 from the old reference map): every NPC row of maps_floor2.js / maps_floor3.js.
+# The reference map marks these floors "map-local" (its own coordinates, not yet checked against the game) -> src "ref23".
+# 'refaire' (Refaiter / Refauncher) has no site category -> other; 'runeCraftsmen' gets its own type.
+def load23(f,fl):
+    t=open(D+f,encoding='utf-8').read();out=[]
+    for m in re.finditer(r'\n  "?([\w-]+)"?:\s*\{(.*?)\n  \}',t,re.S):   # some keys are unquoted
+        b=m.group(2);g=lambda k:(re.search(k+r':\s*"([^"]*)"',b) or [None,None])[1]
+        c=re.search(r'coords:\s*\{\s*x:\s*(-?[\d.]+),\s*z:\s*(-?[\d.]+)',b);cat=g('category')
+        if g('floor')!=fl or g('type')!='NPC' or not c: continue
+        cat=cat if cat in CATS+['runeCraftsmen'] else 'other'
+        out.append(dict(c=cat,n=g('title').strip(),x=round(float(c[1])),z=round(float(c[2])),u='underground: true' in b,src='ref23'))
+    out.sort(key=lambda r:((CATS+['runeCraftsmen','beggar','other']).index(r['c']),r['n']))
+    return out
+F23={2:load23('maps_floor2.js','floor2'),3:load23('maps_floor3.js','floor3')}
+print({k:len(v) for k,v in F23.items()})
+rows23=''.join(',\n'+str(k)+':[\n'+',\n'.join(' '+json.dumps([r['c'],r['n'],r['x'],r['z'],r['src']]+([1] if r['u'] else []),ensure_ascii=False) for r in v)+'\n]' for k,v in F23.items())
 calc='window.SAO_NPC_CALC='+json.dumps({n:{'m':m,'k':k,'d':d} for n,(x,z,m,k,d) in CALC.items()},ensure_ascii=False)+';\n'
-open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'npcs.js'),'w',encoding='utf-8').write(hdr+rows+'\n]};\n'+calc)
+open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'npcs.js'),'w',encoding='utf-8').write(hdr+rows+'\n]'+rows23+'};\n'+calc)
