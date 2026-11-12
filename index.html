@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="67c4fa0319">
+<meta name="sao-build" content="48a2a90145">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -17,7 +17,7 @@
 :root{
   --bg:#e9eef2; --panel:#f8fafb; --panel-2:#eef2f5; --line:#cfd8df; --fg:#1f2a33; --muted:#5d6b77;
   --accent:#e0811a; --accent-ink:#ffffff; --accent-soft:#fbe7cf;
-  --boss:#d9701a; --mini:#7b55c8; --minion:#8a96a1; --ok:#2f8a5b; --ref:#2b7a9e; --tp:#13909a; --warn:#b7791f; --unk:#8a6f6f; --rare:#2f6fc4;
+  --boss:#d9701a; --mini:#7b55c8; --minion:#8a96a1; --ok:#2f8a5b; --ref:#2b7a9e; --tp:#13909a; --warn:#b7791f; --unk:#8a6f6f; --rare:#2f6fc4;--r-c:#45c600;--r-b:#206bcb;--r-a:#8c34ff;--r-s:#d99700;--r-m:#f13f3f;
   --stage:#0b1219; --shadow:0 10px 30px rgba(20,35,50,.22);
   --slot:#2b313a; --slot-edge:#46505c; --slot-ink:#9aa6b2;
   --f-display:"Chakra Petch","PingFang TC","Noto Sans CJK TC","Noto Sans TC","Source Han Sans TC","Microsoft JhengHei",system-ui,sans-serif;
@@ -230,7 +230,8 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .pill.boss{border-color:var(--boss);color:var(--boss)} .pill.mini{border-color:var(--mini);color:var(--mini)}
 .pill.s-label,.pill.s-npc{border-color:var(--ok);color:var(--ok)} .pill.s-est{border-color:var(--warn);color:var(--warn)}
 .pill.s-unk{border-color:var(--unk);color:var(--unk)} .pill.s-player{border-color:var(--ok);color:var(--ok)} .pill.s-user{border-color:var(--accent);color:var(--accent)} .pill.s-ref{border-color:var(--ref);color:var(--ref)}
-.pill.r-c{color:var(--muted)} .pill.r-b{border-color:var(--rare);color:var(--rare)} .pill.r-a{border-color:var(--mini);color:var(--mini)} .pill.r-s{border-color:var(--boss);color:var(--boss)}
+.pill.r-c{--rc:var(--r-c)} .pill.r-b{--rc:var(--r-b)} .pill.r-a{--rc:var(--r-a)} .pill.r-s{--rc:var(--r-s)} .pill.r-m{--rc:var(--r-m)}
+.pill.r-c,.pill.r-b,.pill.r-a,.pill.r-s,.pill.r-m{border-color:var(--rc);color:var(--rct,var(--rc));background:color-mix(in srgb,var(--rc) 10%,transparent)}
 .pill.r-x{border-style:dashed;color:var(--muted)}
 .stars{color:var(--accent);letter-spacing:1.5px;font-size:12.5px} .stars .off{color:var(--line)}
 .slot{--s:36px;flex:none;width:var(--s);height:var(--s);border-radius:6px;background-color:var(--slot);background-image:url(items.png);background-repeat:no-repeat;
@@ -903,7 +904,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=1b3b5469"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=6e135c35"></script>
-<script src="changelog.js?v=720ae88e"></script>
+<script src="changelog.js?v=c8b2a1c1"></script>
 <script src="recipes.js?v=bffb48cc"></script>
 <script src="jmmeta.js?v=d349067c"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -1119,7 +1120,11 @@ const unknownZones=f=>FLOORS[f].order.filter(z=>FLOORS[f].M.some(m=>m.zone===z&&
 // ---------- labels ----------
 const TYPE_ZH={"Boss":"首領","Mini-Boss":"小首領","Monster":"一般怪物","Minion":"嘍囉","Unknown":"類型未知"};
 const BEH_ZH={A:"主動攻擊（看到就打）",N:"中立（被打才反擊）",P:"被動（不會攻擊）",U:"還不知道"};
-const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["傳說+","r-s",5],splusplus:["傳說++","r-s",6],ss:["SS","r-s",7]};
+// rarity = the game's tiers and tooltip-frame colours (user 2026-11-12「稀有度依遊戲，包含使用的顏色」): COMMON 普通 green,
+// RARE 稀有 blue, EPIC 史詩 purple, LEGENDARY 傳說 gold, MYTHIC 神話 red. The catalogue's splus / splusplus / ss are all MYTHIC in game
+// (catalogue filter lists Aileron d'Ame (splus) as MYTHIC; the Grimoire Faible Corruption (splus) craft window says MYTHIC; Nodachi (ss) altar says MYTHIC)
+const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["神話","r-m",5],splusplus:["神話","r-m",5],ss:["神話","r-m",5]};
+const rarK=r=>r==="splusplus"||r==="ss"?"splus":r;
 const GROUP={material:"材料",food:"食物",ring:"飾品",artifact:"飾品",amulet:"飾品",bracelet:"飾品",shield:"防具",armor_set:"防具",bow:"武器",crossbow:"武器",dagger:"武器",sword:"武器",staff_mage:"武器",staff_shaman:"武器",lumberjack_job:"採集",miner_job:"採集",farmer_job:"採集",tool:"工具",gem_stone:"符文",fortifier:"藥水",unknown:"未收錄"};
 const CAT_ZH={material:"材料",food:"食物",ring:"戒指",artifact:"遺物",amulet:"項鍊",bracelet:"手環",shield:"盾牌",armor_set:"防具套裝",bow:"弓",crossbow:"弩",dagger:"匕首",sword:"近戰武器",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",lumberjack_job:"伐木採集",miner_job:"採礦",farmer_job:"農作",tool:"工具",gem_stone:"符文",fortifier:"強化藥水",unknown:"未收錄"};
 const STAT_ZH={"Cooldown":"冷卻","Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"HP","Max Mana":"最大魔力","Max Stamina":"最大耐力","Attack Speed":"攻擊速度","Critical Strike Power":"爆擊傷害","Critical Strike Chance":"爆擊率","Skill Critical Strike Power":"技能爆擊傷害","Skill Critical Strike Chance":"技能爆擊率","Movement Speed":"移動速度","Health Regeneration":"HP 恢復","Mana Regeneration":"魔力恢復","Stamina Regeneration":"耐力恢復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"額外治療","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"生命偷取","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋威力","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力","Required Strength":"需求力量","Required Dexterity":"需求敏捷","Required Defense":"需求防禦","Dodge Rating":"閃避率","HEAL_BONUS":"額外治療","HEAL BONUS":"額外治療","Range":"攻擊距離","Entity Interaction Range":"互動距離","Knockback Resistance":"擊退抗性","Faction Damage Dungeon":"地下城傷害","Dodge Cooldown Reduction":"閃避冷卻縮減","Fall Damage Reduction":"墜落傷害減免","Additional Esprit":"額外精神","Additional Defense":"額外防禦","Additional Strength":"額外力量","Additional Vitality":"額外體力","Additional Dexterity":"額外敏捷","Additional Intelligence":"額外智力","Durability Bar":"耐久條","Inedible":"不能吃","Max Consume":"可用次數","Max Item Damage":"最大耐久","Max Stack Size":"堆疊上限","Movement_speed":"移動速度","Pickaxe Power":"採集威力","Random Unsocket":"隨機拆下符文","Repair Percent":"修理比例（%）","Restore Health":"回復生命","Restore Mana":"回復魔力","Restore Saturation":"回復飽和度","Restore Stamina":"回復耐力","Guard Durability":"防禦耐久度","Block Chance":"格擋率","Ability Haste":"技能加速","深海漫遊 X":"特殊效果：深海漫遊 X"};
@@ -1512,7 +1517,7 @@ const MAT_G={material:"材料",farmer_job:"作物",miner_job:"礦物",lumberjack
 const GROUPS=["怪物掉落物","材料","作物","礦物","木材","漁獲","官網未收錄"];   // 怪物掉落物 = dropped by a monster on any floor (user 2026-11-07: 素材再分怪物掉落物)
 const matGroup=x=>{if(x.k==="p")return MAT_G[x.e.cat]||"材料";if((SOURCES[x.id]||[]).length)return"怪物掉落物";const o=offOf(x.id);return MAT_G[o?o.e.cat:ITEMS[x.id].cat]||(o?"材料":"官網未收錄")};
 chipsInto($("fItemGroup"),[["all","全部"],...GROUPS.map(g=>[g,g])],()=>itemGroup,v=>itemGroup=v,renderItems);
-chipsInto($("fItemRar"),[["all","全部"],["c","普通"],["b","稀有"],["a","史詩"],["s","傳說"],["splus","傳說+"]],()=>itemRar,v=>itemRar=v,renderItems);
+chipsInto($("fItemRar"),[["all","全部"],["c","普通"],["b","稀有"],["a","史詩"],["s","傳說"],["splus","神話"]],()=>itemRar,v=>itemRar=v,renderItems);
 ["fItemQuest","fItemDrop","fItemSort","fItemAll"].forEach(i=>$(i).onchange=renderItems);
 // default: every material (this site's + the official catalogue's; fishing etc. have no floor data yet);
 // 「只看這一層有取得資料的」 keeps only this site's items with a drop / gather / quest on this floor (user 2026-11-04)
@@ -1522,7 +1527,7 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").c
   const pool=matPool(FL,!all);
   const gHas=new Set(pool.map(matGroup));$("fItemGroup").querySelectorAll(".chip").forEach(c=>c.hidden=c.dataset.v!=="all"&&!gHas.has(c.dataset.v)&&c.getAttribute("aria-pressed")!=="true");
   const R_=x=>x.k==="p"?x.e.r:ITEMS[x.id].r,NM=x=>x.k==="p"?x.e.name:x.id,SRC=x=>x.k==="p"?[]:SOURCES[x.id],USE=x=>x.k==="p"?[]:USES[x.id];
-  let a=pool.filter(x=>(itemGroup==="all"||matGroup(x)===itemGroup)&&(itemRar==="all"||R_(x)===itemRar)
+  let a=pool.filter(x=>(itemGroup==="all"||matGroup(x)===itemGroup)&&(itemRar==="all"||rarK(R_(x))===itemRar)
     &&(!$("fItemQuest").checked||USE(x).length)&&(!$("fItemDrop").checked||SRC(x).length)
     &&(x.k==="p"?!s||norm(x.e.name+" "+(x.e.gen||"")+" "+zhE(x.e)).includes(s):itemHit(x.id,s)||SOURCES[x.id].some(y=>norm(y.m.name).includes(s))));
   const rv=x=>R_(x)&&RAR[R_(x)]?RAR[R_(x)][2]:0;const nt=x=>x.k==="p"?0:needTotal(x.id,all?0:FL);const by=(x,y)=>NM(x).localeCompare(NM(y));
@@ -1659,7 +1664,7 @@ const RECIPES=window.SAO_RECIPES||{};
 const rKey=(f,n)=>+f===1?n:f+"|"+n,rSplit=k=>{const m=/^(\d+)\|(.*)$/.exec(k);return m?[m[2],+m[1]]:[k,1]},RCP=(f,n)=>RECIPES[rKey(f,n)];
 Object.values(RECIPES).forEach(v=>v.items.forEach(it=>(it[3]||[]).forEach(m=>{m[0]=ikey(m[0])})));
 // approved recipe reports replace the same NPC + item (keeping the catalogue link) or add a new row
-{const RC_ZH={"武器":"weapon","防具":"armor","飾品":"acc","藥水":"potion","鑰匙":"key","其他":"other"},RAR_ZH=Object.fromEntries(Object.entries(RAR).map(([k,v])=>[v[0],k]));
+{const RC_ZH={"武器":"weapon","防具":"armor","飾品":"acc","藥水":"potion","鑰匙":"key","其他":"other"},RAR_ZH=Object.fromEntries(Object.entries(RAR).reverse().map(([k,v])=>[v[0],k]));
  (window.SAO_REPORTS||[]).forEach(r=>{if(r.type!=="recipe"||!r.npc)return;const rk=rKey(r.floor||1,r.npc),Rn=RECIPES[rk]=RECIPES[rk]||{floor:r.floor,items:[]};
   const i=Rn.items.findIndex(it=>norm(it[1])===norm(r.name)),o=i>=0?Rn.items[i]:[null,r.name,null,[],null,null,"acc",null];
   const cost=r.cost===""||r.cost==null?o[4]:(+r.cost?String(+r.cost):"Free");
@@ -2119,7 +2124,7 @@ window.__objFl=n=>{const e=EQ.find(x=>x.name===n||x.gen===n||dn(x)===n);return e
 let eqFl="here",prFl="here";const FL_CHIPS=[["here","這一層＋還不知道"],["only","只看這一層"],["all","全部樓層"]];
 const flOk=(e,v)=>{if(v==="all")return true;const f=objFloors(e);return v==="only"?f.includes(FL):!f.length||f.includes(FL)};
 chipsInto($("fEqFl"),FL_CHIPS,()=>eqFl,v=>eqFl=v,renderEquip);
-chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
+chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
 ["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
 // effect filter (user 2026-11-07「裝備分頁增加輸入欄位，篩選效果」): matches the stat names as shown (爆擊率、HP…) and the raw keys;
 // the card then shows the matching stats; the dropdown suggests every stat name that some equipment has
@@ -2221,7 +2226,7 @@ window.__eqDump=()=>EQ.map(e=>({oid:e.oid,gen:e.gen||"",name:e.name,zh:zhE(e),lv
 const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ES=EFF_SEL.map(norm),EREQ=EFF_SEL.filter(z=>effMode(z)==="and").map(norm),EOPT=EFF_SEL.filter(z=>effMode(z)==="or").map(norm),
     effOk=e=>EREQ.every(t=>eqEffHit(e,t).length)&&(!EOPT.length||EOPT.some(t=>eqEffHit(e,t).length));   // every 且, and at least one 或
-  const base=EQ.filter(e=>flOk(e,eqFl)&&(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&effOk(e));
+  const base=EQ.filter(e=>flOk(e,eqFl)&&(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||rarK(e.r)===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&effOk(e));
   // sub-part counts follow the other filters (class, rarity, level, search), so they match the list
   $("fEqSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>eqSub(e)===c.dataset.v).length});
   let a=base.filter(e=>eqSubV==="all"||eqSub(e)===eqSubV);
@@ -2299,7 +2304,7 @@ chipsInto($("fPrRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,R
 $("fPrSort").onchange=renderProps;
 const prHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+(PR_CAT[e.cat]||"")+" "+e.lore).includes(s);
 function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
-  const base=PRV().filter(e=>flOk(e,prFl)&&(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
+  const base=PRV().filter(e=>flOk(e,prFl)&&(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||rarK(e.r)===prRar)&&prHit(e,s));
   $("fPrSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>PR_SUBLAB(e.cat)===c.dataset.v).length});
   $("fPrSub2").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>e.cat===c.dataset.v).length});
   let a=base.filter(e=>(prSubV==="all"||PR_SUBLAB(e.cat)===prSubV)&&(prSubV!=="採集"||prSub2==="all"||e.cat===prSub2));
