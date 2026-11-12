@@ -4,12 +4,23 @@
    "zh": 1 = the set was only seen on a Chinese tooltip (English set name unknown): name and tiers are the game's Chinese text, shown as is.
    2026-11-07 checked against the Chinese tooltips: Standard Skeleton Set [4] is +2% Damage Reduction (was -2%); the rest match. */
 window.SAO_SETS = {date:"2026-11-07", sets:[
- {"name": "下級狼套裝", "zh": 1, "tiers": [[2, "+0.5/秒 移動速度、+5 攻擊傷害、-5 最大耐力、-10 最大魔力"], [3, "+0.2 攻擊速度、+7.5% 爆擊率、+7.5% 爆擊傷害"]], "members": ["Crâne de Loup"]},   // 2026-11-07 15:21:05 拍賣場的狼頭骨（官網 1469，等級 17）
- {"name": "森靈套裝", "zh": 1, "tiers": [[2, "+1 HP"], [3, "+0.5 治療加成"], [4, "+0.1 HP/秒、+0.1 魔力/秒、+0.1 耐力/秒"]], "members": ["Amulet of the Sylve"]},
- {"name": "Misty Fangs Set", "tiers": [[2, "+1% Lifesteal"], [3, "+5% Crit Chance, +2.5% Crit Damage"], [4, "+5 Attack Damage, +5% Attack Speed"]], "members": ["Misty Ring"]},
+ {"name": "森林尖牙套裝", "zh": 1, "tiers": [[2, "+0.8 魔力/秒、+8 最大魔力"], [3, "+6% 冷卻縮減"], [4, "+6 治療威力"]], "members": ["Bottes des Crocs des Bois", "Couteau à la Griffe des Bois"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "部落套裝", "zh": 1, "tiers": [[2, "+10 HP、+0.25 HP/秒"], [3, "+2.5% 生命偷取"], [4, "+3% 物理傷害"]], "members": ["Bottes Orciennes", "Hache de la Tribu"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "暗林套裝", "zh": 1, "tiers": [[2, "+0.1/秒 移動速度、+2 治療威力"], [3, "+5% 魔法傷害"], [4, "+20% 攻擊速度"]], "members": ["Bottes des Bois Sombres", "Grimoire des Bois Sombres"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "蛛網套裝", "zh": 1, "tiers": [[2, "+2% 冷卻縮減、+0.2 魔力/秒"], [3, "+10 最大魔力、+2.5% 技能爆擊率"], [4, "+2.5% 技能爆擊率、+4 攻擊傷害"]], "members": ["Bottes de la Toile", "Masque de la Toile"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "發光套裝", "zh": 1, "tiers": [[2, "+4 攻擊傷害"], [3, "+2.5% 移動速度、+10% 攻擊速度"], [4, "+2.5% 投射物傷害、+1.5% 爆擊率"]], "members": ["Bottes Luminescentes", "Ceinture Luminescente"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "幽靈套裝", "zh": 1, "tiers": [[2, "+6 最大耐力"], [3, "+0.25/秒 移動速度、+2.5% 爆擊率"], [4, "+5 攻擊傷害、+10% 攻擊速度"]], "members": ["Bottes Spectrales", "Plume Spectrale"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "微弱腐化套裝", "zh": 1, "tiers": [[2, "+10% 冷卻縮減"], [3, "+5% 移動速度"], [4, "+10% 閃避率"]], "members": ["Masque Corrompu", "Grimoire Faible Corruption"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "守護者套裝", "zh": 1, "tiers": [[2, "+1.5 最大耐力"], [3, "+0.15 HP/秒"], [4, "+2% 格擋率"]], "members": ["Casque du Gardien"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "符文套裝", "zh": 1, "tiers": [[2, "+0.3 HP/秒、+0.3 魔力/秒、+0.3 耐力/秒"], [3, "+5% 格擋率、+5% 冷卻縮減、+4% 技能傷害"]], "members": ["Collier Runique"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "蜂巢套裝", "zh": 1, "tiers": [[2, "+1 最大魔力"], [3, "+5% 移動速度"], [4, "+1 治療加成"], [5, "+0.05 攻擊速度"]], "members": ["Bracelet Mielleux"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "純淨縞瑪瑙套裝", "zh": 1, "tiers": [[2, "+5.5% 移動速度"], [3, "+0.6 魔力/秒、+0.6 耐力/秒"], [4, "+7% 魔法傷害、+7% 物理傷害、+7% 投射物傷害"], [5, "+25 HP、+10 防禦"]], "members": ["Pièce d'Onyx Pur"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "下級狼套裝", "zh": 1, "tiers": [[2, "+0.5/秒 移動速度、+5 攻擊傷害、-5 最大耐力、-10 最大魔力"], [3, "+0.2 攻擊速度、+7.5% 爆擊率、+7.5% 爆擊傷害"]], "members": ["Crâne de Loup", "Gants Féroce", "Couteau en Dent de Loup"]},   // 2026-11-07 15:21:05 拍賣場的狼頭骨（官網 1469，等級 17）
+ {"name": "森靈套裝", "zh": 1, "tiers": [[2, "+1 HP"], [3, "+0.5 治療加成"], [4, "+0.1 HP/秒、+0.1 魔力/秒、+0.1 耐力/秒"]], "members": ["Amulet of the Sylve", "Lien de la Sylve"]},
+ {"name": "Misty Fangs Set", "tiers": [[2, "+1% Lifesteal"], [3, "+5% Crit Chance, +2.5% Crit Damage"], [4, "+5 Attack Damage, +5% Attack Speed"]], "members": ["Misty Ring", "Bottes au Crocs Brumeux", "Couteau à la Griffe de la Brume"]},
  {"name": "Shark Set", "tiers": [[2, "+5% Ability Haste"], [3, "+3 Health"], [4, "+3% Physical Damage"]], "members": ["Ring of the Shark", "Shark Amulet", "Shark Fang", "Bracelet of the Shark", "Ring of the Leviathan"]},
  {"name": "Standard Skeleton Set", "tiers": [[2, "+5% Ability Haste"], [3, "+0.05 Health/s"], [4, "+2% Damage Reduction"]], "members": ["Skeleton Skull", "Ring of Narax", "Skeletal Ring", "Bony Gloves", "Skeletal Amulet"]},
- {"name": "Shadow Neophyte Set", "tiers": [[2, "-0.6/s Health, -50% Healing Received"], [3, "-0.6/s Health"], [4, "-0.6/s Health"], [5, "-0.6/s Health"], [6, "-0.6/s Health"], [7, "-0.6/s Health"]], "members": ["Occult Bracelet", "Occult Amulet", "Occult Robe", "Occult Skull", "Occult Hood", "Occult Ring", "Occult Gloves"]},
+ {"name": "Shadow Neophyte Set", "tiers": [[2, "-0.6/s Health, -50% Healing Received"], [3, "-0.6/s Health"], [4, "-0.6/s Health"], [5, "-0.6/s Health"], [6, "-0.6/s Health"], [7, "-0.6/s Health"]], "members": ["Occult Bracelet", "Occult Amulet", "Occult Robe", "Occult Skull", "Occult Hood", "Occult Ring", "Occult Gloves", "Occult Amulet (2)"]},
  {"name": "Hunter Necromancer Set", "tiers": [[2, "+0.3 Stamina/s"], [3, "+3% Crit Chance, +3% Crit Damage"], [4, "+4 Attack Damage"]], "members": ["Boots of the Hunter Necromancer"]},
  {"name": "Hunter Set", "tiers": [[2, "+0.1 Stamina/s"], [3, "+0.5% Critical Chance"]], "members": ["Hunter's Boots", "Hunter's Leggings"]},
  {"name": "Bandit Set", "tiers": [[2, "+1 Health, +2% Critical Power"], [3, "+0.5 Attack Damage"], [4, "+1% Critical Chance"]], "members": ["Stolen Cloak", "Stolen Amulet", "Bandit Coin"]},
@@ -33,6 +44,19 @@ window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "Water Harpies Set", "tiers": [[2, "+4% Skill Critical Chance"], [3, "+5% Movement Speed, +1 Defense, +5% Magic Damage"]], "members": ["Feather of the Little Drop"]},
  {"name": "Tenacious Necromancer Set", "tiers": [[2, "+0.3 Health/s"], [3, "+5 Max Stamina"], [4, "-15% Damage Reduction, +10% Block Chance"]], "members": ["Helmet of the Tenacious Necromancer"]}
 ], potions:[
+ {"name": "Quality Endurance Fortifier III", "effects": ["Cooldown: 3600s", "Uses Remaining: 1", "Boosts your speed by 0.0325 for 15min", "Boosts your max mana by 7 for 15min", "Boosts your max endurance by 3.5 for 15min", "On consumption, applies 15min of cooldown on all fortifiers"]},
+ {"name": "Quality Knowledge Fortifier III", "effects": ["Cooldown: 3600s", "Uses Remaining: 1", "Boosts your magic damage by 3% for 15min", "Boosts your skill critical damage by 3% for 15min", "On consumption, applies 15min of cooldown on all fortifiers"]},
+ {"name": "Quality Ferocity Fortifier III", "effects": ["Cooldown: 3600s", "Uses Remaining: 1", "Boosts your attack damage by 3% for 15min", "Boosts your critical damage by 3% for 15min", "On consumption, applies 15min of cooldown on all fortifiers"]},
+ {"name": "Quality Vitality Fortifier III", "effects": ["Cooldown: 3600s", "Uses Remaining: 1", "Boosts your max health by 30 for 15min", "Boosts your health regeneration by 0.4/s for 15min", "On consumption, applies 15min of cooldown on all fortifiers"]},
+ {"name": "Quality Patience Fortifier III", "effects": ["Cooldown: 3600s", "Uses Remaining: 1", "Boosts your dodge chance by 3% for 15min", "Boosts your mana regeneration by 0.4/s for 15min", "Boosts your stamina regeneration by 0.2/s for 15min", "On consumption, applies 15min of cooldown on all fortifiers"]},
+ {"name": "Quality Resistance Fortifier III", "effects": ["Cooldown: 3600s", "Uses Remaining: 1", "Boosts your knockback resistance by 3% for 15min", "Boosts your block chance by 3% for 15min", "Boosts your block power by 3% for 15min", "On consumption, applies 15min of cooldown on all fortifiers"]},
+ {"name": "Quality Health Potion IV", "effects": ["Restores : 70 ♥"]},
+ {"name": "Quality Health Potion V", "effects": ["Restores : 85 ♥"]},
+ {"name": "Quality Health Potion VI", "effects": ["Restores : 100 ♥"]},
+ {"name": "Quality Mana Potion V", "effects": ["Restores : 40 Mana"]},
+ {"name": "Quality Mana Potion VI", "effects": ["Restores : 45 Mana"]},
+ {"name": "Quality Stamina Potion V", "effects": ["Restores : 20 Stamina"]},
+ {"name": "Quality Stamina Potion VI", "effects": ["Restores : 22.5 Stamina"]},
  {"name": "Health Potion I", "effects": ["Restores : 10 ♥", "Cooldown: 15s"]},
  {"name": "Health Potion II", "effects": ["Restores : 18 ♥", "Cooldown: 15s"]},
  {"name": "Health Potion III", "effects": ["Restores : 22 ♥", "Cooldown: 15s"]},

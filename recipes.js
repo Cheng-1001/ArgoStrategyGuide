@@ -1,4 +1,4 @@
-/* Floor 1 recipes by NPC (key = NPC name; matches npcs.js where that NPC is mapped). Built by tools/build_recipes.py.
+/* Recipes by NPC (key = floor-1 NPC name, or "3|name" for another floor; matches npcs.js where that NPC is mapped). Built by tools/build_recipes.py.
    Row: [catalogueId|null, name, seconds|null, [[material, qty]], cost Col ("Free"; null = unknown), rarity|null, category, level, source]
    category: weapon / armor / acc / potion / key. source: "shot" = owner's in-game screenshot (wins), "ref" = reference map.
    Weapons and armour here are only the starter gear sold by the Starting Merchant; smiths' recipes still need screenshots. */
@@ -1598,7 +1598,7 @@ null,
 [
 2485,
 "Ring of the Leviathan",
-null,
+300,
 [
 [
 "Shark Carapace",
@@ -1614,10 +1614,10 @@ null,
 ]
 ],
 "55",
-null,
+"s",
 "acc",
 7,
-"ref"
+"shot"
 ]
 ]
 },
@@ -2768,6 +2768,1315 @@ null,
 "shot"
 ]
 ]
+},
+"3|Assistant to the Alchemist": {
+"floor": 3,
+"items": [
+[
+1999,
+"Quality Endurance Fortifier III",
+60,
+[
+[
+"Wheat",
+14
+],
+[
+"Wheat Leaves",
+4
+],
+[
+"Wheat Flower",
+2
+],
+[
+"Yellow Spider Carcass",
+16
+]
+],
+"55",
+"b",
+"potion",
+null,
+"shot"
+],
+[
+1998,
+"Quality Knowledge Fortifier III",
+60,
+[
+[
+"Allium Flower",
+14
+],
+[
+"Lavender",
+4
+],
+[
+"Wisteria",
+5
+],
+[
+"Purple Spider Eyes",
+8
+]
+],
+"55",
+"b",
+"potion",
+null,
+"shot"
+],
+[
+1997,
+"Quality Ferocity Fortifier III",
+60,
+[
+[
+"琥珀萼片",
+14
+],
+[
+"琥珀種子",
+4
+],
+[
+"Flarevae",
+16
+],
+[
+"Orc Blood",
+8
+]
+],
+"55",
+"b",
+"potion",
+null,
+"shot"
+],
+[
+1996,
+"Quality Vitality Fortifier III",
+60,
+[
+[
+"奧拉西爾之刺",
+16
+],
+[
+"Sylvaerian Jewel",
+8
+],
+[
+"Sylvaer Essence",
+1
+]
+],
+"55",
+"b",
+"potion",
+null,
+"shot"
+],
+[
+2001,
+"Quality Patience Fortifier III",
+60,
+[
+[
+"Sylnovarian Leaves",
+12
+],
+[
+"Sylnovarian Jewel",
+8
+],
+[
+"Sylnovar Essence",
+1
+]
+],
+"55",
+"b",
+"potion",
+null,
+"shot"
+],
+[
+2000,
+"Quality Resistance Fortifier III",
+60,
+[
+[
+"White Spider Powder",
+12
+],
+[
+"Juvenile Bark",
+6
+],
+[
+"Ravager Bark",
+6
+],
+[
+"Orc Heart",
+1
+]
+],
+"55",
+"b",
+"potion",
+null,
+"shot"
+]
+]
+},
+"3|Alchemist": {
+"floor": 3,
+"items": [
+[
+2464,
+"Quality Health Potion II",
+5,
+[
+[
+"Allium Flower",
+6
+],
+[
+"Sylve Sprout",
+4
+],
+[
+"Magic Wood Shard",
+3
+]
+],
+"15",
+"b",
+"potion",
+5,
+"shot"
+],
+[
+null,
+"Quality Mana Potion II",
+5,
+[
+[
+"Allium Flower",
+6
+],
+[
+"Sylve Sprout",
+4
+],
+[
+"Magic Wood Shard",
+3
+]
+],
+"15",
+"b",
+"potion",
+5,
+"shot"
+],
+[
+null,
+"Quality Stamina Potion II",
+5,
+[
+[
+"Allium Flower",
+6
+],
+[
+"Sylve Sprout",
+4
+],
+[
+"Magic Wood Shard",
+3
+]
+],
+"15",
+"b",
+"potion",
+5,
+"shot"
+],
+[
+2465,
+"Quality Health Potion III",
+5,
+[
+[
+"Allium Flower",
+9
+],
+[
+"Sylve Sprout",
+6
+],
+[
+"Magic Wood Shard",
+5
+],
+[
+"Ancestral Root",
+1
+]
+],
+"15",
+"b",
+"potion",
+8,
+"shot"
+],
+[
+null,
+"Quality Mana Potion III",
+5,
+[
+[
+"Allium Flower",
+9
+],
+[
+"Sylve Sprout",
+6
+],
+[
+"Magic Wood Shard",
+5
+],
+[
+"Ancestral Root",
+1
+]
+],
+"15",
+"b",
+"potion",
+8,
+"shot"
+],
+[
+null,
+"Quality Stamina Potion III",
+5,
+[
+[
+"Allium Flower",
+9
+],
+[
+"Sylve Sprout",
+6
+],
+[
+"Magic Wood Shard",
+5
+],
+[
+"Ancestral Root",
+1
+]
+],
+"15",
+"b",
+"potion",
+8,
+"shot"
+],
+[
+2466,
+"Quality Health Potion IV",
+5,
+[
+[
+"Allium Flower",
+10
+],
+[
+"Flaming Feather",
+10
+],
+[
+"Marrow Powder",
+3
+]
+],
+"15",
+"b",
+"potion",
+12,
+"shot"
+],
+[
+2467,
+"Quality Health Potion V",
+5,
+[
+[
+"Allium Flower",
+12
+],
+[
+"Orc Blood",
+6
+]
+],
+"15",
+"b",
+"potion",
+15,
+"shot"
+],
+[
+2468,
+"Quality Health Potion VI",
+5,
+[
+[
+"Allium Flower",
+12
+],
+[
+"Orc Blood",
+10
+],
+[
+"Orc Eye",
+8
+]
+],
+"15",
+"b",
+"potion",
+18,
+"shot"
+],
+[
+null,
+"Quality Mana Potion V",
+5,
+[
+[
+"Allium Flower",
+12
+],
+[
+"Sylnovarian Leaves",
+6
+]
+],
+"15",
+"b",
+"potion",
+15,
+"shot"
+],
+[
+null,
+"Quality Mana Potion VI",
+5,
+[
+[
+"Allium Flower",
+12
+],
+[
+"Sylnovarian Leaves",
+10
+],
+[
+"Sylnovarian Jewel",
+8
+]
+],
+"15",
+"b",
+"potion",
+18,
+"shot"
+],
+[
+null,
+"Quality Stamina Potion V",
+5,
+[
+[
+"Allium Flower",
+12
+],
+[
+"Yellow Spider Carcass",
+12
+]
+],
+"15",
+"b",
+"potion",
+15,
+"shot"
+],
+[
+null,
+"Quality Stamina Potion VI",
+5,
+[
+[
+"Allium Flower",
+12
+],
+[
+"Yellow Spider Carcass",
+16
+],
+[
+"Wheat Flower",
+4
+]
+],
+"15",
+"b",
+"potion",
+18,
+"shot"
+]
+]
+},
+"3|Reinforced Tools Merchant": {
+"floor": 3,
+"items": [
+[
+2695,
+"Pioche Renforcée",
+null,
+[],
+"753.74",
+"c",
+"other",
+15,
+"shot"
+],
+[
+2707,
+"Hache Renforcée",
+null,
+[],
+"753.74",
+"c",
+"other",
+15,
+"shot"
+],
+[
+2701,
+"Houe Renforcée",
+null,
+[],
+"753.74",
+"c",
+"other",
+15,
+"shot"
+]
+]
+},
+"3|Consumables Merchant": {
+"floor": 3,
+"items": [
+[
+2457,
+"Health Potion I",
+null,
+[],
+"30.15",
+"c",
+"potion",
+1,
+"shot"
+],
+[
+null,
+"Mana Potion I",
+null,
+[],
+"30.15",
+"c",
+"potion",
+1,
+"shot"
+],
+[
+2471,
+"Stamina Potion I",
+null,
+[],
+"30.15",
+"c",
+"potion",
+1,
+"shot"
+],
+[
+2458,
+"Health Potion II",
+null,
+[],
+"65.32",
+"c",
+"potion",
+3,
+"shot"
+],
+[
+null,
+"Mana Potion II",
+null,
+[],
+"65.32",
+"c",
+"potion",
+5,
+"shot"
+],
+[
+2472,
+"Stamina Potion II",
+null,
+[],
+"65.32",
+"c",
+"potion",
+5,
+"shot"
+],
+[
+2459,
+"Health Potion III",
+null,
+[],
+"100.50",
+"c",
+"potion",
+5,
+"shot"
+],
+[
+2470,
+"Mana Potion III",
+null,
+[],
+"100.50",
+"c",
+"potion",
+8,
+"shot"
+],
+[
+null,
+"Stamina Potion III",
+null,
+[],
+"100.50",
+"c",
+"potion",
+8,
+"shot"
+],
+[
+1708,
+"Parchemin de Réallocation",
+null,
+[],
+"753.74",
+"b",
+"other",
+null,
+"shot"
+],
+[
+1707,
+"Parchemin de Maîtrise",
+null,
+[],
+"753.74",
+"b",
+"other",
+null,
+"shot"
+]
+]
+},
+"3|Basic Rune Craftsman": {
+"floor": 3,
+"items": [
+[
+2021,
+"Rune des Bois",
+60,
+[
+[
+"橙色赤鐵礦",
+8
+],
+[
+"蜂蜜琥珀",
+16
+],
+[
+"Woodland Tail",
+16
+]
+],
+"15",
+"b",
+"other",
+null,
+"shot"
+],
+[
+2020,
+"Rune Gobeline",
+60,
+[
+[
+"孔雀石",
+6
+],
+[
+"Goblin Essence",
+1
+]
+],
+"15",
+"b",
+"other",
+null,
+"shot"
+],
+[
+2019,
+"Rune Orcienne",
+60,
+[
+[
+"石榴石",
+2
+],
+[
+"鋁土礦錠",
+4
+],
+[
+"Orc Blood",
+16
+]
+],
+"15",
+"b",
+"other",
+null,
+"shot"
+],
+[
+2022,
+"Rune de la Toile",
+60,
+[
+[
+"赤鐵礦",
+4
+],
+[
+"Iron Ingot",
+4
+],
+[
+"Scrap Metal Piece",
+8
+]
+],
+"15",
+"b",
+"other",
+null,
+"shot"
+]
+]
+},
+"3|Complex Rune Craftsman": {
+"floor": 3,
+"items": [
+[
+2023,
+"Rune Sylnovarienne",
+60,
+[
+[
+"藍銅礦",
+6
+],
+[
+"藍寶石",
+2
+],
+[
+"Sylnovar Essence",
+1
+]
+],
+"15",
+"a",
+"other",
+null,
+"shot"
+],
+[
+2024,
+"Rune Sylvaerienne",
+60,
+[
+[
+"孔雀石",
+6
+],
+[
+"綠松石",
+2
+],
+[
+"Sylvaer Essence",
+1
+]
+],
+"15",
+"a",
+"other",
+null,
+"shot"
+],
+[
+2025,
+"Rune Brumeuse",
+60,
+[
+[
+"黃鐵礦",
+6
+],
+[
+"Anthracite",
+4
+],
+[
+"Misty Tail",
+32
+]
+],
+"15",
+"a",
+"other",
+null,
+"shot"
+],
+[
+2026,
+"Rune Luminiscente",
+60,
+[
+[
+"金黃鐵礦",
+4
+],
+[
+"蜂蜜琥珀",
+16
+],
+[
+"Luminescent Spider Venom",
+1
+]
+],
+"15",
+"a",
+"other",
+null,
+"shot"
+],
+[
+2027,
+"Rune Spectrale",
+60,
+[
+[
+"紅柱石",
+6
+],
+[
+"Jet",
+4
+],
+[
+"Spectral Essence",
+1
+]
+],
+"15",
+"a",
+"other",
+null,
+"shot"
+]
+]
+},
+"3|Sylnovar Accessories Blacksmith": {
+"floor": 3,
+"items": [
+[
+1517,
+"Bottes des Crocs des Bois",
+600,
+[
+[
+"Bottes des Bois",
+1
+],
+[
+"Woodland Tail",
+32
+],
+[
+"Sylnovarian Cloth",
+64
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1519,
+"Bottes au Crocs Brumeux",
+600,
+[
+[
+"Bottes Brumeuses",
+1
+],
+[
+"Misty Tail",
+32
+],
+[
+"Sylvaerian Cloth",
+64
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1514,
+"Bottes Orciennes",
+600,
+[
+[
+"Bottes Goblines",
+1
+],
+[
+"Ravager Bark",
+32
+],
+[
+"Ravager Heart",
+16
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1521,
+"Bottes des Bois Sombres",
+600,
+[
+[
+"Bottes Sylvestres",
+1
+],
+[
+"Sylvaerian Jewel",
+32
+],
+[
+"Juvenile Bark",
+32
+],
+[
+"Sylvaer Essence",
+16
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1526,
+"Bottes de la Toile",
+600,
+[
+[
+"Bottes en Toile d'Araignée",
+1
+],
+[
+"Black Silk",
+32
+],
+[
+"White Spider Silk",
+32
+],
+[
+"Egg Cocoon",
+16
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1523,
+"Bottes Luminescentes",
+600,
+[
+[
+"Yellow Spider Silk",
+64
+],
+[
+"Luminescent Spider Venom",
+16
+],
+[
+"Misty Fur",
+64
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1345,
+"Bottes Spectrales",
+600,
+[
+[
+"White Spider Silk",
+64
+],
+[
+"Spectral Essence",
+16
+],
+[
+"Misty Fur",
+64
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1538,
+"Couteau à la Griffe des Bois",
+600,
+[
+[
+"Woodland Claw",
+128
+],
+[
+"Juvenile Seed",
+16
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1540,
+"Couteau à la Griffe de la Brume",
+600,
+[
+[
+"Misty Claw",
+128
+],
+[
+"Juvenile Seed",
+16
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1542,
+"Hache de la Tribu",
+600,
+[
+[
+"Orc Eye",
+64
+],
+[
+"Orc Essence",
+16
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1545,
+"Grimoire des Bois Sombres",
+600,
+[
+[
+"Orc Heart",
+16
+],
+[
+"Ravager Heart",
+16
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1547,
+"Masque de la Toile",
+600,
+[
+[
+"強化蛛絲",
+16
+],
+[
+"White Spider Silk",
+64
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1549,
+"Ceinture Luminescente",
+600,
+[
+[
+"Yellow Spider Carcass",
+128
+],
+[
+"Yellow Spider Silk",
+64
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+1551,
+"Plume Spectrale",
+600,
+[
+[
+"Spectral Essence",
+16
+],
+[
+"White Spider Silk",
+64
+]
+],
+"30",
+"a",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Couteau en Dent de Loup": {
+"floor": 3,
+"items": [
+[
+1564,
+"Couteau en Dent de Loup",
+600,
+[
+[
+"Wolf Fangs",
+64
+],
+[
+"Fangs of Albal",
+8
+],
+[
+"Woodland Claw",
+96
+]
+],
+"55",
+"s",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Gants Féroce": {
+"floor": 3,
+"items": [
+[
+2074,
+"Gants Féroce",
+600,
+[
+[
+"Wolf Fur",
+64
+],
+[
+"狼皮（第 2 種，名稱相同）",
+64
+],
+[
+"Woodland Fur",
+96
+],
+[
+"Woodland Tail",
+32
+]
+],
+"55",
+"s",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Forgeron Grimoire Corrompu": {
+"floor": 3,
+"items": [
+[
+1565,
+"Grimoire Faible Corruption",
+600,
+[
+[
+"Corrupted Fragment",
+32
+],
+[
+"Corrupted Fragment (2)",
+16
+],
+[
+"Corrupted Fragment (3)",
+8
+]
+],
+"55",
+"splus",
+"acc",
+null,
+"shot"
+]
+]
+},
+"2|Manufacturer of the Runic Necklace": {
+"floor": 2,
+"items": [
+[
+1309,
+"Collier Runique",
+60,
+[
+[
+"Bone Dust",
+64
+],
+[
+"Spectral Chain",
+64
+],
+[
+"Runestone",
+64
+]
+],
+"55",
+"a",
+"acc",
+null,
+"shot"
+]
+]
 }
 };
-window.SAO_RECIPE_QTY = {"Alchemist|Quality Health Potion I": 3, "Alchemist|Quality Health Potion II": 3, "Alchemist|Quality Health Potion III": 3, "Alchemist|Quality Mana Potion I": 3, "Alchemist|Quality Mana Potion II": 3, "Alchemist|Quality Mana Potion III": 3, "Alchemist|Quality Stamina Potion I": 3, "Alchemist|Quality Stamina Potion II": 3, "Alchemist|Quality Stamina Potion III": 3};
+window.SAO_RECIPE_QTY = {"Alchemist|Quality Health Potion I": 3, "Alchemist|Quality Health Potion II": 3, "Alchemist|Quality Health Potion III": 3, "Alchemist|Quality Mana Potion I": 3, "Alchemist|Quality Mana Potion II": 3, "Alchemist|Quality Mana Potion III": 3, "Alchemist|Quality Stamina Potion I": 3, "Alchemist|Quality Stamina Potion II": 3, "Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion II": 3, "3|Alchemist|Quality Mana Potion II": 3, "3|Alchemist|Quality Stamina Potion II": 3, "3|Alchemist|Quality Health Potion III": 3, "3|Alchemist|Quality Mana Potion III": 3, "3|Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion IV": 3, "3|Alchemist|Quality Health Potion V": 3, "3|Alchemist|Quality Health Potion VI": 3, "3|Alchemist|Quality Mana Potion V": 3, "3|Alchemist|Quality Mana Potion VI": 3, "3|Alchemist|Quality Stamina Potion V": 3, "3|Alchemist|Quality Stamina Potion VI": 3};

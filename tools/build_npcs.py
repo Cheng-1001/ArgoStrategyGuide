@@ -84,7 +84,27 @@ def load23(f,fl):
     out.sort(key=lambda r:((CATS+['runeCraftsmen','beggar','other']).index(r['c']),r['n']))
     return out
 F23={2:load23('maps_floor2.js','floor2'),3:load23('maps_floor3.js','floor3')}
+# 2026-11-12 (in24, owner's floor-2/3 screenshots, user "3A"): positions worked out from one screenshot each — floor 3 has the
+# F3 debug screen (player X/Z, facing, the block the crosshair hits behind the NPC), so the NPC lies between the player and that block;
+# no second direction, about ±2 blocks. Key (floor, name) -> (x, z, date, note). NEW23 = NPCs the reference map does not have.
+CALC23={(3,'Assistant to the Alchemist'):(828,656,'2026-11-12',''),(3,'Alchemist'):(830,659,'2026-11-12',''),
+        (3,'Loot Buyer Sylnovar'):(824,663,'2026-11-12',''),(3,'Reinforced Tools Merchant'):(938,594,'2026-11-12',''),
+        (3,'Basic Rune Craftsman'):(912,598,'2026-11-12',''),(3,'Complex Rune Craftsman'):(856,536,'2026-11-12',''),
+        (3,'Sylnovar Accessories Blacksmith'):(919,598,'2026-11-12','遊戲名牌「神器鐵匠」、視窗「P3 - Craft Artefact de Sylnovar」；參考互動地圖的 Sylnovar Accessories Blacksmith 在 X 918 Z 579，差約 19 格，推測是同一位'),
+        (2,'Manufacturer of the Runic Necklace'):(1,196,'2026-11-10','遊戲視窗標題只寫「2 -」，會做符文項鍊；參考互動地圖寫 X -38 Z 199，差約 39 格，依名稱推測是同一位')}
+NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,675,'2026-11-12'),
+       (3,'accessoriesBlacksmith','P3 - Craft Couteau en Dent de Loup',707,855,'2026-11-12'),
+       (3,'accessoriesBlacksmith','P3 - Craft Gants Féroce',706,833,'2026-11-12'),
+       (3,'accessoriesBlacksmith','P3 - Forgeron Grimoire Corrompu',642,600,'2026-11-12')]
+for fl,rs in F23.items():
+    for r in rs:
+        if (fl,r['n']) in CALC23: x,z,d,nt=CALC23[(fl,r['n'])]; r.update(x=x,z=z,src='calc')
+for fl,c,n,x,z,d in NEW23:
+    F23[fl].append(dict(c=c,n=n,x=x,z=z,u=False,src='calc')); CALC23[(fl,n)]=(x,z,d,'')
+miss=[k for k in CALC23 if not any(r['n']==k[1] for r in F23[k[0]])]; assert not miss, miss
 print({k:len(v) for k,v in F23.items()})
 rows23=''.join(',\n'+str(k)+':[\n'+',\n'.join(' '+json.dumps([r['c'],r['n'],r['x'],r['z'],r['src']]+([1] if r['u'] else []),ensure_ascii=False) for r in v)+'\n]' for k,v in F23.items())
-calc='window.SAO_NPC_CALC='+json.dumps({n:{'m':m,'k':k,'d':d} for n,(x,z,m,k,d) in CALC.items()},ensure_ascii=False)+';\n'
+C={n:{'m':m,'k':k,'d':d} for n,(x,z,m,k,d) in CALC.items()}
+C.update({'%d|%s'%(f,n):{'m':'f3','k':1,'d':d,**({'t':nt} if nt else {})} for (f,n),(x,z,d,nt) in CALC23.items()})
+calc='window.SAO_NPC_CALC='+json.dumps(C,ensure_ascii=False)+';\n'
 open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'npcs.js'),'w',encoding='utf-8').write(hdr+rows+'\n]'+rows23+'};\n'+calc)
