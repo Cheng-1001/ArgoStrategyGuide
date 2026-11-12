@@ -5,7 +5,7 @@
    2026-11-07 checked against the Chinese tooltips: Standard Skeleton Set [4] is +2% Damage Reduction (was -2%); the rest match. */
 window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "森林尖牙套裝", "zh": 1, "tiers": [[2, "+0.8 魔力/秒、+8 最大魔力"], [3, "+6% 冷卻縮減"], [4, "+6 治療威力"]], "members": ["Bottes des Crocs des Bois", "Couteau à la Griffe des Bois"]},   // 2026-11-12 in24 Chinese tooltip
- {"name": "部落套裝", "zh": 1, "tiers": [[2, "+10 HP、+0.25 HP/秒"], [3, "+2.5% 生命偷取"], [4, "+3% 物理傷害"]], "members": ["Bottes Orciennes", "Hache de la Tribu"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "庇護者蜂針套裝", "zh": 1, "tiers": [[2, "+5% 閃避率、+1 攻擊傷害"], [3, "+5% 爆擊威力、+5% 技能爆擊傷害、+5% 技能爆擊率"]], "members": ["Anneau du Nectar Doré"]}, {"name": "水之鳥身女妖套裝", "zh": 1, "tiers": [[2, "+4% 技能爆擊率"], [3, "+5% 移動速度、+1 防禦、+5% 魔法傷害"]], "members": ["Feather of the Little Drop"]}, {"name": "部落套裝", "zh": 1, "tiers": [[2, "+10 HP、+0.25 HP/秒"], [3, "+2.5% 生命偷取"], [4, "+3% 物理傷害"]], "members": ["Bottes Orciennes", "Hache de la Tribu"]},   // 2026-11-12 in24 Chinese tooltip
  {"name": "暗林套裝", "zh": 1, "tiers": [[2, "+0.1/秒 移動速度、+2 治療威力"], [3, "+5% 魔法傷害"], [4, "+20% 攻擊速度"]], "members": ["Bottes des Bois Sombres", "Grimoire des Bois Sombres"]},   // 2026-11-12 in24 Chinese tooltip
  {"name": "蛛網套裝", "zh": 1, "tiers": [[2, "+2% 冷卻縮減、+0.2 魔力/秒"], [3, "+10 最大魔力、+2.5% 技能爆擊率"], [4, "+2.5% 技能爆擊率、+4 攻擊傷害"]], "members": ["Bottes de la Toile", "Masque de la Toile"]},   // 2026-11-12 in24 Chinese tooltip
  {"name": "發光套裝", "zh": 1, "tiers": [[2, "+4 攻擊傷害"], [3, "+2.5% 移動速度、+10% 攻擊速度"], [4, "+2.5% 投射物傷害、+1.5% 爆擊率"]], "members": ["Bottes Luminescentes", "Ceinture Luminescente"]},   // 2026-11-12 in24 Chinese tooltip

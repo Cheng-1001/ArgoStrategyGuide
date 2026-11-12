@@ -1279,11 +1279,11 @@ null,
 "Kobold Key",
 null,
 [],
-"5000",
-null,
+"5024.91",
+"b",
 "key",
 null,
-"ref"
+"shot"
 ]
 ]
 },
