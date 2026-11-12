@@ -42,12 +42,12 @@ window.SAO_EVENTS = {
   // the game's Dungeons window (owner's screenshots 2026-11-05 19:06): same block as the floor dungeons (dgInfoHTML)
   dg: { date: "2026-11-05", boss: "Skeleton Colossus", bossZh: "骷髏巨像", key: "靈魂聖所鑰匙（Key to the Sanctuary of Souls；遊戲寫在「Board - Sanctuary of Souls」製作）",
         modes: ["Easy", "Initiate", "Hard", "Integrity"],
-        easy: [["時間限制", "60 分鐘"], ["失敗時", "送回原處（Sent back if you fall）"], ["人數", "1～4 人"], ["建議等級", "13 級以上"]],
-        loot: [["Skeletal Sword", "Skeleton Warrior", 0.5], ["Bone Dust", "Skeleton Warrior", 70], ["Skeleton Bone", "Skeleton Warrior", 15], ["Soul of the Ruins", "Skeleton Warrior", 80]] },
+        easy: [["時間限制", "60 分鐘"], ["失敗時", "送回原處（Sent back if you fall）"], ["人數", "1～4 人"], ["建議等級", "13 級以上"], ["最快紀錄", "2:02"]],
+        loot: [["Skeletal Sword", "Skeleton Warrior", 0.5], ["回響鬼火", null, 1], ["幽靈水晶", null, 30], ["Bone Dust", "Skeleton Warrior", 70], ["Skeleton Bone", "Skeleton Warrior", 75], ["Soul of the Ruins", "Skeleton Warrior", 80], ["萬聖節禮物", null, 100]] },   // 2026-11-13: game window (owner 11/12 21:28): 7 items; Skeleton Bone 75% (was 15%)
   notes: ["11/6 維護（官方公告〈Halloween: fixes, balancing and a new weapon exchange〉）：Skeleton Colossus 生命 10,000 → 5,000、傷害 45 → 35，打擊範圍變大、不再鎖畫面；Cursed Valdor（3,000 → 2,100）和 the Archdemon（1,000）的生命和傷害少 30%，其他萬聖節惡魔也變弱；6 個萬聖節終極技能卷軸冷卻 8 小時 → 1 小時；Halloween Forge 買之前會顯示武器完整數值。",
           "新 NPC Halloween Weapon Merchant（在 Halloween Exchanger 旁邊）：舊的萬聖節武器 1 把＋黑暗贈禮南瓜 2 個（原本要 5 個）換一把自己職業的 Forge 新武器。",
           "活動期間（官方 Discord）：11/4 晚上 6 點巴黎時間（台灣 11/5 01:00）開放 Backrooms 和免費碎片；轉蛋、Echoes of Aincrad 戰鬥夥伴、裝備兌換、新怪物區和地下城在之後幾小時逐步開放；活動 11/15 結束。因伺服器停機兩天延後，補償：兌換碼 OVH2029（2,000 Triggiums）、Heroic Pass 延長 5 天、十月終極技能包延長 2 天。","Title: Pumpkin King（稱號）：戴著時 +15 生命、+3 防禦；使用後在稱號選單解鎖，已經有的不要再用（拍賣場提示，站長 2026-11-05 截圖）。",
-          "活動廣場在起始之城的競技場（站長 11-07 截圖，站的位置 X 1800 · Z 4287）：Shard Keeper（右鍵領每日碎片）、Halloween Exchanger（Échangeur d'Halloween）、Halloween Blacksmith、Echoes of Aincrad 和 Sanctuary of Souls 的入口告示牌（右鍵進入地下城）都在這一帶。",
+          "活動廣場在起始之城的競技場，約 X 1760 · Z 4275（站長 11-12 截圖推算：站在 X 1771 Z 4275 往西看，NPC 和轉蛋機台都在西邊約 8～12 格；只有一個方向的截圖，約 ±5 格）：Shard Keeper（右鍵領每日碎片）、Halloween Exchanger（Échangeur d'Halloween）、Halloween Blacksmith、Echoes of Aincrad 和 Sanctuary of Souls 的入口告示牌（右鍵進入地下城）都在這一帶。",
           "Cursed Jewel（糖果）：30 分鐘內 HP +15、防禦 +5、魔法傷害 +5%；所有 Reapkin 糖果共用 60 秒冷卻。",
           "Reapkin King's Lollipop（糖果）：30 分鐘內攻擊傷害 +8%、魔法傷害 +6%、HP +15、速度 +0.03；所有 Reapkin 糖果共用 60 秒冷卻。道具分頁也查得到。",
           "永恆之影：三種鑰匙碎片之一，說明寫「三個合起來在地下城告示牌鍛造鑰匙」。幽靈水晶：萬聖節之夜迷失靈魂起舞的水晶（轉蛋貨幣）。",

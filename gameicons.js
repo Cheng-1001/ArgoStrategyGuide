@@ -124,4 +124,5 @@ window.SAO_GAMEICONS = {
  "Feather of the Little Flame": "icons/game/feather_of_the_little_flame.png",   // auction tile in9 2026-11-05 00:57:01, k≈4.68 (floor 2, Fire Harpy 1 %)
  "Feather of the Little Drop": "icons/game/feather_of_the_little_drop.png",   // auction tile in9 2026-11-05 00:59:44, k≈4.68 (floor 2, Lightning Harpy 1 %)
  "Crâne de Loup": "icons/game/crane_de_loup_s.png",
+ "Anneau du Nectar Doré": "icons/game/anneau_du_nectar_dore.png",   // auction tile in25 2026-11-12 21:23:48, k≈4.68, TH=22 (official 2489 icon is the old orange-gold colouring)
 };

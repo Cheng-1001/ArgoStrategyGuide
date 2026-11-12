@@ -183,6 +183,8 @@ SHOTS = {
         ('Training Lantern (2)', 'c', None, [], '1.00', 'weapon'),
     ],
     # Occult Merchants (owner's screenshots 2026-11-07 02:09-03:18): Buy tab, LEGENDARY, 5 024.91 Col (the item's Obtainable line says 5000 Cols)
+    # 2026-11-13 (in25 21.22.30/34): the game sells the Kobold Key (RARE, stock ∞) at 巢穴考古學家, window 「狗頭人地下城-戰利品資訊」; it is not crafted
+    'Key Blacksmith': [('Kobold Key', 'b', None, [], '5024.91', 'key')],
     'Occult Merchant - Amulet': [('Occult Amulet', 's', None, [], '5024.91', 'acc')],
     'Occult Merchant - Bracelet': [('Occult Bracelet', 's', None, [], '5024.91', 'acc')],
     'Occult Merchant - Ring': [('Occult Ring', 's', None, [], '5024.91', 'acc')],
@@ -241,7 +243,7 @@ SHOTS = {
     ],
 }
 # the screenshot showed the NPC's whole list: drop reference-map rows the game no longer has
-FULL = {'Secret Accessory Blacksmith', 'Secret Deer Belt Merchant', 'Secret Sticky Ring Merchant', 'Occult Merchant - Amulet', 'Occult Merchant - Bracelet', 'Occult Merchant - Ring', 'Occult Merchant - Gloves', 'Occult Merchant - Artifacts', 'Wolf Accessories', 'Corrupted Boar Accessories', "Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
+FULL = {'Key Blacksmith', 'Secret Accessory Blacksmith', 'Secret Deer Belt Merchant', 'Secret Sticky Ring Merchant', 'Occult Merchant - Amulet', 'Occult Merchant - Bracelet', 'Occult Merchant - Ring', 'Occult Merchant - Gloves', 'Occult Merchant - Artifacts', 'Wolf Accessories', 'Corrupted Boar Accessories', "Xal'Zirith Dungeon Guard - Candelia", 'Skeleton Accessories', 'Skeleton Skull', 'Starting Merchant', 'Starting Town - Tools', 'Alchemist', 'The Assistant', 'Crystallographer', 'Copper Accessories', 'Iron Accessories'}
 SAME = {"Katana Training": "Training Katana", "Beginner Leggings": "Beginner's Leggings", "Bandit's Gloves": "Gloves of the Bandit", "Bracelet of the Sylvan": "Bracelet of the Sylve", "Amulet of the Sylvan": "Amulet of the Sylve"}          # reference-map name -> in-game name
 # material names used in game / by the reference map -> this site's ITEMS ids
 MAT = {"Sylve Shoot": "Sylve Sprout", "Sylvan Sprout": "Sylve Sprout", "Essence Slime": "Slime Essence", "Tear Slime": "Slime Tear"}   # reference-map name -> in-game name. 2026-11-07 merchant audit: the other

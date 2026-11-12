@@ -323,20 +323,23 @@ const GAME_DROPS = {
       "Tréant Ravageur Corrompu": {add:[["Ravager Heart",40],["Corrupted Fragment (2)",100]]},
       "Tréant Juvenile Corrompu": {add:[["Corrupted Fragment (2)",100]]},
       "Tréant du Labyrinthe Corrompu": {add:[["Corrupted Fragment (2)",100]]},
-      "Orc Warrior": {add:[["Corrupted Fragment (2)",100]]}, "Orc Samurai": {add:[["Corrupted Fragment (2)",100]]}, "Orc Shaman": {add:[["Corrupted Fragment (2)",100]]},
+      "Orc Warrior": {add:[["Corrupted Fragment (2)",100]],dup:[["Orc Eye",80]]}, "Orc Samurai": {add:[["Corrupted Fragment (2)",100]],dup:[["Orc Eye",80]]}, "Orc Shaman": {add:[["Corrupted Fragment (2)",100]],dup:[["Orc Essence",35]]},
+      "Chef de la Tribu": {add:[["Orc Eye",75]]},
       "Bandit Archer": {add:[["Corrupted Fragment (2)",100]]}, "Sturdy Bandit": {add:[["Corrupted Fragment (2)",100]]}, "Bandit Assassin": {add:[["Corrupted Fragment (2)",100]]},
       "Sylnovar Archer Corrompu": {add:[["Sylnovarian Cloth",100],["Sylnovarian Jewel",75],["Sylnovarian Leaves",75],["Sylnovar Essence",35],["Corrupted Fragment (2)",100]]},
       "Sylnovar Mage Corrompu": {add:[["Sylnovarian Cloth",100],["Sylnovarian Jewel",75],["Sylnovarian Leaves",75],["Sylnovar Essence",35],["Corrupted Fragment (2)",100]]},
       "Sylnovar Garde Corrompu": {add:[["Sylnovarian Cloth",100],["Sylnovarian Jewel",75],["Sylnovarian Leaves",75],["Sylnovar Essence",35],["Corrupted Fragment (2)",100]]},
       "Sylvaer Archer Corrompu": {add:[["Corrupted Fragment (2)",100]]}, "Sylvaer Mage Corrompu": {add:[["Corrupted Fragment (2)",100]]}, "Sylvaer Garde Corrompu": {add:[["Corrupted Fragment (2)",100]]},
       "Roi de la Caverne Corrompu": {add:[["Corrupted Fragment (3)",100]]}, "Muffet Corrompue": {add:[["Corrupted Fragment (3)",100]]},
-      "Adoryll, the Caged Bird": {add:[["Corrupted Fragment (3)",100]]}, "Chef de la Tribu Corrompu": {add:[["Corrupted Fragment (3)",100]]},
+      "Adoryll, the Caged Bird": {add:[["Corrupted Fragment (3)",100]],dup:[["Skyblue Feather",100]]}, "Chef de la Tribu Corrompu": {add:[["Orc Eye",100],["Corrupted Fragment (3)",100]]},
       "Chef des bandits Corrompu": {add:[["Corrupted Fragment (3)",100]]}, "Gardien du Labyrinthe Corrompu": {add:[["Corrupted Fragment (3)",100]]}}
 };
 [[2,F2],[3,F3]].forEach(([f,F])=>Object.entries(GAME_DROPS[f]).forEach(([n,p])=>{const m=F.M.find(x=>x.name===n);if(!m)throw new Error("GAME_DROPS: no monster "+n);
   if(p.set)m.drops=p.set.map(d=>d.slice());
   if(p.pct)m.drops.forEach(d=>{if(d[0] in p.pct)d[1]=p.pct[d[0]]});
   if(p.add)p.add.forEach(d=>{const o=m.drops.find(x=>x[0]===d[0]);if(o)o[1]=d[1];else m.drops.push(d.slice())});
+  // 2026-11-13 (in25, user "C1"): the game lists the same monster twice with different rates (Orc Eye 45% and 80%…); both rows are kept, the second marked "dup"
+  if(p.dup)p.dup.forEach(d=>m.drops.push([d[0],d[1],"dup"]));
   m.gameDrop=1;m.note=(m.note?m.note+" ":"")+"掉落物取自遊戲物品說明的取得途徑（站長 2026-11-12 截圖）。"}));
 
 // area = rough outline drawn by this site from the wiki map terrain (not the reference map polygons), like floor 1
