@@ -38,7 +38,7 @@ npcs:{"Assistant to the Alchemist": "煉金術士助手","Loot Buyer Sylnovar": 
 items:[
  {"zh": "金牛帽", "ids": ["e|1495"], "en": null, "fr": "Chapeau Taurus", "src": "shot24"},
  {"zh": "金牛護符", "ids": ["e|1496"], "en": null, "fr": "Talisman Taurus", "src": "shot24"},
- {"zh": "神祕護身符", "ids": ["i|Occult Amulet (2)"], "en": "Occult Amulet", "src": "shot24"},
+ {"zh": "神祕護身符", "ids": ["i|Occult Amulet (2)"], "en": null, "src": "shot24"},
  // 2026-11-12 (in24, owner's Chinese screenshots 11/8～11/12: tooltips, Specifications, shop windows); src shot24
  {"zh": "森林尖牙之靴", "ids": ["e|1517"], "en": null, "fr": "Bottes des Crocs des Bois", "src": "shot24"},
  {"zh": "迷霧尖牙之靴", "ids": ["e|1519"], "en": null, "fr": "Bottes au Crocs Brumeux", "src": "shot24"},
