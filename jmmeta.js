@@ -53,7 +53,8 @@ window.SAO_JM = {
     "report": "R0010",
     "date": "2026-11-12",
     "regions": 21,
-    "newChunks": 1641
+    "newChunks": 1641,
+    "by": "IICHENGII"
    }
   ],
   "chunks": 40775,
@@ -111,7 +112,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 2,
-      "newChunks": 143
+      "newChunks": 143,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y -48～-33",
@@ -179,7 +181,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 2,
-      "newChunks": 28
+      "newChunks": 28,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y -32～-17",
@@ -237,7 +240,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 2,
-      "newChunks": 30
+      "newChunks": 30,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y -16～-1",
@@ -304,7 +308,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 2,
-      "newChunks": 24
+      "newChunks": 24,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y 0～15",
@@ -415,7 +420,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 11,
-      "newChunks": 383
+      "newChunks": 383,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y 16～31",
@@ -595,7 +601,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 9,
-      "newChunks": 302
+      "newChunks": 302,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y 32～47",
@@ -886,7 +893,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 5,
-      "newChunks": 208
+      "newChunks": 208,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y 64～79",
@@ -999,7 +1007,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 8,
-      "newChunks": 121
+      "newChunks": 121,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y 80～95",
@@ -1153,7 +1162,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 4,
-      "newChunks": 187
+      "newChunks": 187,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y 96～111",
@@ -1295,7 +1305,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 7,
-      "newChunks": 83
+      "newChunks": 83,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y 112～127",
@@ -1409,7 +1420,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 2,
-      "newChunks": 329
+      "newChunks": 329,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y 128～143",
@@ -1518,7 +1530,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 4,
-      "newChunks": 74
+      "newChunks": 74,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y 144～159",
@@ -1634,7 +1647,8 @@ window.SAO_JM = {
       "report": "R0010",
       "date": "2026-11-12",
       "regions": 2,
-      "newChunks": 43
+      "newChunks": 43,
+      "by": "IICHENGII"
      }
     ],
     "label": "Y 160～175",
@@ -2669,7 +2683,8 @@ window.SAO_JM = {
      "report": "R0010",
      "date": "2026-11-12",
      "regions": 89,
-     "newChunks": 6573
+     "newChunks": 6573,
+     "by": "IICHENGII"
     }
    ],
    "name": "Labyrinth of the Fallen",
@@ -2873,7 +2888,8 @@ window.SAO_JM = {
      "report": "R0010",
      "date": "2026-11-12",
      "regions": 9,
-     "newChunks": 87
+     "newChunks": 87,
+     "by": "IICHENGII"
     }
    ],
    "name": "Sanctuary of Xal'Zirith",
@@ -3016,7 +3032,8 @@ window.SAO_JM = {
      "report": "R0010",
      "date": "2026-11-12",
      "regions": 10,
-     "newChunks": 3474
+     "newChunks": 3474,
+     "by": "IICHENGII"
     }
    ],
    "name": "Kobold Tower",
@@ -3100,7 +3117,8 @@ window.SAO_JM = {
     "report": "R0010",
     "date": "2026-11-12",
     "regions": 7,
-    "newChunks": 1046
+    "newChunks": 1046,
+    "by": "IICHENGII"
    }
   ],
   "chunks": 2450,
