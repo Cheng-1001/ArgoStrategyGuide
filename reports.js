@@ -164,5 +164,17 @@ window.SAO_REPORTS = [
   },
   "source": "form",
   "review": "審核：lintcbruce"
+ },
+ {
+  "id": "R0010",
+  "type": "jmap",
+  "floor": 1,
+  "name": "探索地圖",
+  "date": "2026-11-12",
+  "img": null,
+  "imgs": [],
+  "raw": {},
+  "source": "form",
+  "review": "自動核准：探索地圖由程式比對網站地圖檢查"
  }
 ];
