@@ -250,6 +250,18 @@ try:
               and "已選：第 3 層" in f3[2] and "地下城 1／1" in f3[2] and f12 == ["12", True] and bad == "12"
               and pg.locator("[data-jmreg]").count() > 0 and [k for k in pg.evaluate("window.__jm.sel.off") if ":" not in k] == [] and pg.input_value("#jmFloorIn") == "1",
               f"floors switch by the list (2) and by typing (3, 12, back to 1); a non-number goes back; the picks stay ({f2[:2]}, {f2[3][:3]}, {f2[4]}, {f3[:3]}, {f12}, {bad})")
+        # two floors picked at once (使用者 2026-11-12「沒有辦法同時選兩層」): pick floor 2's squares, go back to floor 1,
+        # the download must hold both floors' files
+        pg.fill("#jmFloorIn", "2"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(200)
+        pg.click("#jmRegAll"); pg.wait_for_timeout(150)
+        pg.fill("#jmFloorIn", "1"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(300)
+        pn = [n for p in pg.evaluate("window.__jm.parts") for n in p["names"]]
+        both = [any("Triggers_f1~a" in n for n in pn), any("Triggers_f2~g" in n for n in pn)]
+        sm = pg.inner_text("#jmRegSum")
+        check(all(both) and "第 2 層 " in sm and "其他樓層" not in sm, f"floor 1 and floor 2 picked together go into the same download, and the count names floor 2 ({both}, {sm})")
+        pg.fill("#jmFloorIn", "2"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(200)
+        pg.click("#jmRegNone"); pg.wait_for_timeout(150)
+        pg.fill("#jmFloorIn", "1"); pg.press("#jmFloorIn", "Enter"); pg.wait_for_timeout(300)
         J = pg.evaluate("window.__jm")
         st = {g["label"]: g for g in J["groups"]}
         check(J["found"].get("c1") == 1 and J["found"].get("c2") == 6 and J["found"].get("c0") == 1 and J["found"].get("day", 0) >= 1,

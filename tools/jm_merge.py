@@ -58,7 +58,7 @@ LAYER = re.compile(r"-?\d+")    # JourneyMap height-layer folder (16-block slice
 LAYER_MIN, LAYER_MAX = -4, 19   # world height -64..319; keep in sync with JMP.LMIN/LMAX in src/index.html
 DG_RE = re.compile(r"(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_)?([a-z0-9]+)")
 # JourneyMap dimension name suffix -> site name; keep in sync with DG_DIM in src/index.html
-DUNGEONS = {"xalzirith": "Sanctuary of Xal'Zirith", "geldorack": "Geldorack Dungeon", "labyrinthe": "Labyrinth of the Fallen"}
+DUNGEONS = {"xalzirith": "Sanctuary of Xal'Zirith", "geldorack": "Geldorack Dungeon", "labyrinthe": "Labyrinth of the Fallen", "kobold": "Kobold Tower"}
 DG_ROOT = os.path.join(ROOT, "tiles", "dg")
 DG_MIN_OVERLAP = 8   # dungeons are small: 8 matching chunks are enough to tell a wrong map
 MAX_REGIONS, MAX_BYTES = 1500, 4 * 1024 * 1024   # keep MAX_REGIONS in sync with JMP.MAXN in src/index.html

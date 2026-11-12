@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="f30d827bf0">
+<meta name="sao-build" content="bfcba35784">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -907,7 +907,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=1b3b5469"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=6e135c35"></script>
-<script src="changelog.js?v=a1f10600"></script>
+<script src="changelog.js?v=ec439ce8"></script>
 <script src="recipes.js?v=bffb48cc"></script>
 <script src="jmmeta.js?v=1fcc065c"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -2667,7 +2667,7 @@ async function jmRef(f=1){if(JMREFS[f])return JMREFS[f];const J=jmFrame(f),N=J.f
 // folder, named "<uuid>_<dungeon>" (…_geldorack, …_xalzirith, …_labyrinthe); DG_DIM maps that name to the site's
 // dungeon (keep in sync with DUNGEONS in tools/jm_merge.py). Height folders outside -4..19 (world height -64..319)
 // cannot be real slices (JourneyMap keeps folders like "-398") and are ignored.
-const DG_DIM={xalzirith:["xal","Sanctuary of Xal'Zirith"],geldorack:["geldorakd","Geldorack Dungeon"],labyrinthe:["fallen","Labyrinth of the Fallen"]};
+const DG_DIM={xalzirith:["xal","Sanctuary of Xal'Zirith"],geldorack:["geldorakd","Geldorack Dungeon"],labyrinthe:["fallen","Labyrinth of the Fallen"],kobold:["kobold","Kobold Tower"]};
 const dgOf=leaf=>{const m=/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}_)?([a-z0-9]+)$/.exec(String(leaf||"").toLowerCase());
   return!m?null:DG_DIM[m[1]]?m[1]:leaf.includes("_")?"?"+m[1]:null};
 const dgName=d=>{const e=DG_DIM[d];if(!e)return d;const sp=(FLOORS[1].spots||[]).find(x=>x.id===e[0]);return sp?sp.n:e[1]};
@@ -3063,8 +3063,10 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   let head="";
   if(anyNew||dgNew.length){const on=[...regs.values()].filter(r=>!JMSEL.off.has(jmKey(FLv,r.rx,r.rz))),nm=[...new Set(on.flatMap(r=>jmRegNames(r.rx,r.rz)))],dOn=dgNew.filter(d=>!JMSEL.dgOff.has(d));
     const U=JMSEL.ui||(JMSEL.ui={});
-    const oth=new Set(f1.filter(g=>(g.floor||1)!==FLv).flatMap(g=>[...g.news,...Object.values(g.layers).flatMap(L=>L.news||[])].map(it=>jmKey(g.floor||1,it.rx,it.rz))).filter(k=>!JMSEL.off.has(k))).size;
-    const pk=`已選：第 ${FLv} 層 ${on.length}／${regs.size} 格${dgNew.length?`・地下城 ${dOn.length}／${dgNew.length} 個`:""}${oth?`・其他樓層 ${oth} 格`:""}`;
+    // the other floors' picks are named floor by floor (使用者 2026-11-12「沒有辦法同時選兩層」: 「其他樓層 N 格」 did not say they were kept)
+    const othM=new Map();for(const g of f1){const gf=g.floor||1;if(gf===FLv)continue;for(const it of [...g.news,...Object.values(g.layers).flatMap(L=>L.news||[])]){const k=jmKey(gf,it.rx,it.rz);if(!JMSEL.off.has(k))(othM.get(gf)||othM.set(gf,new Set()).get(gf)).add(k)}}
+    const oth=[...othM.entries()].sort((a,b)=>a[0]-b[0]).map(([f,s])=>`・第 ${f} 層 ${s.size} 格`).join("");
+    const pk=`已選：第 ${FLv} 層 ${on.length}／${regs.size} 格${dgNew.length?`・地下城 ${dOn.length}／${dgNew.length} 個`:""}${oth}`;
     head=`<div class="jmselbar"><span class="jmfl">第<input id="jmFloorIn" inputmode="numeric" autocomplete="off" maxlength="3" value="${FLv}" aria-label="樓層（可以直接輸入數字）" title="可以直接輸入樓層數字"><button type="button" class="jmflb" id="jmFloorBtn" aria-label="選擇樓層" aria-expanded="false">▾</button>層
           <ul class="jmflist" id="jmFloorList" hidden>${JM_FLOORS.map(o=>`<li><button type="button" data-jmfl="${o.f}"${o.f===FLv?' aria-current="true"':""}>第 ${o.f} 層${o.open?"":"（還不能打包）"}</button></li>`).join("")}</ul></span>
         <span class="jmanch"><button type="button" class="pill r-b jmpb" id="jmNamesBtn" aria-expanded="${!!U.names}" aria-controls="jmNames"><span id="jmRegSum">${pk}</span></button>${U.names?`<div class="jmpopov" id="jmNames"><div class="jmpoptt">已選區塊</div>${on.length||dOn.length?`${on.length?`<div><b>第 ${FLv} 層</b>：${esc(nm.join("、"))}</div>`:""}${dOn.length?`<div><b>地下城</b>：${esc(dOn.map(dgName).join("、"))}</div>`:""}`:`<span class="muted">還沒選。</span>`}</div>`:""}</span></div>`}
@@ -3163,7 +3165,7 @@ function buildFormReport(){
       <li><b>選打包方式</b>：「更新打包」只打包網站還沒有的地方（每張都比對，比較久）；「全地圖打包」第 1 層的地圖全部打包、不用挑（比較快）。工具自動找出第 1 層的地圖和地下城，不用自己挑資料夾。</li>
       <li><b>挑要上傳的</b>（更新打包）：在小地圖上點方格、點地下城的圖選取（或按各段的「全選」）。滑鼠指著會在右下角的預覽視窗先看那一塊的地圖。全地圖打包跳過這一步。</li>
       <li><b>上傳</b>：按「下載壓縮檔」（或「全地圖打包」），再按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>、上傳壓縮檔後送出。不用截圖，送出後自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
-    <div class="jmscope"><span><b>會收</b>：第 1 層的地面、室內・洞穴（洞穴、地下室、建築內）和地下城（Geldorack Dungeon、Labyrinth of the Fallen、Sanctuary of Xal'Zirith）；第 2、3 層的地面；網站還沒有地圖的新樓層的地面（勾選後一起上傳，網站自動判斷是第幾層）</span><span><b>不收</b>：第 2 層以後的室內・洞穴和地下城（之後再加）、破碎的地下世界、限時活動的場地</span></div>
+    <div class="jmscope"><span><b>會收</b>：第 1 層的地面、室內・洞穴（洞穴、地下室、建築內）和地下城（Geldorack Dungeon、Labyrinth of the Fallen、Sanctuary of Xal'Zirith、Kobold Tower）；第 2、3 層的地面；網站還沒有地圖的新樓層的地面（勾選後一起上傳，網站自動判斷是第幾層）</span><span><b>不收</b>：第 2 層以後的室內・洞穴和地下城（之後再加）、破碎的地下世界、限時活動的場地</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden><span id="jmDl"></span></div>
     <div class="muted jmdlnote" id="jmDlNote">要在電腦上用 Chrome 或 Edge 開本站。</div>
