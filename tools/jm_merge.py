@@ -482,6 +482,19 @@ def read_manifest(src):
         return {}
 
 
+def read_times(src):
+    """per-file times the site's packer writes into sao_pack.json ("times": {zip path: ms since 1970, UTC}); the zip's own
+    timestamps are the player's local clock and cannot be compared across players"""
+    try:
+        if os.path.isdir(src):
+            return {}
+        with zipfile.ZipFile(src) as z:
+            n = next((i for i in z.namelist() if i.split("/")[-1] == "sao_pack.json"), None)
+            return (json.loads(z.read(n)).get("times") or {}) if n else {}
+    except Exception:
+        return {}
+
+
 def frame_for(f, regions):
     """a floor added with x0 None: a 5120-block square centred on its first upload (multiple of 16)"""
     xs = [rx * 512 for rx, _, _ in regions] + [rx * 512 + 512 for rx, _, _ in regions]
@@ -548,8 +561,10 @@ def read_upload(src):
             if im.size != (512, 512):
                 raise ValueError(f"{rx},{rz}.png 的大小是 {im.size[0]}x{im.size[1]}，JourneyMap 的地圖圖片應該是 512x512")
             regions.append((rx, rz, im.convert("RGBA")))
-        w = worlds.setdefault(world, {"name": folder_label(world), "path": world, "date": 0, "layers": {}})
+        w = worlds.setdefault(world, {"name": folder_label(world), "path": world, "date": 0, "layers": {}, "times": {}})
         w["layers"][key] = regions
+        for rx, rz, _, t in items:
+            w["times"][(key, rx, rz)] = t
         w["date"] = max(w["date"], max(t for *_, t in items))
     return list(worlds.values())
 
@@ -644,6 +659,7 @@ def main(argv):
     if not args:
         sys.exit(__doc__)
     min_overlap = int(opt.get("--min-overlap", MIN_OVERLAP))
+    times_ms = read_times(args[0]) if args else {}
     try:
         groups = read_upload(args[0])
     except (ValueError, zipfile.BadZipFile) as e:
@@ -800,7 +816,25 @@ def main(argv):
         new_chunks, touched = set(), set()
         if f in seeding and not os.path.exists(MASK):    # a new floor: write every tile of the frame
             touched = {(tx, ty) for ty in range((SIZE - 1) // T + 1) for tx in range((SIZE - 1) // T + 1)}
+        # per-square times (2026-11-12): a corrected file (newer, different) may replace explored chunks, an older copy may not.
+        # Time of a file = the packer's UTC time in sao_pack.json (zips without it are neither compared nor recorded);
+        # squares without a record take anything
+        rt = (load_meta().get(str(f)) or {}).get("rt") or {}
+        rt_new = {}
+        def ftime(g, rx, rz):
+            t = times_ms.get(f"{g.get('path', '')}/day/{rx},{rz}.png")
+            return float(t) if t else None      # zip times are the player's local clock: not compared, not recorded
         for g in sorted(acc, key=lambda g: g["date"]):          # oldest first: the newest data ends up on top
+            keep = []
+            for rx, rz, im in g["inside"]:
+                t, old = ftime(g, rx, rz), rt.get(f"{rx},{rz}")
+                if old and t and t < old:
+                    skipped.append((g["name"], f"{rx},{rz}.png 比網站上這一格舊，沒有蓋過去"))
+                    continue
+                keep.append((rx, rz, im))
+                if t:
+                    rt_new[f"{rx},{rz}"] = max(t, rt_new.get(f"{rx},{rz}", 0))
+            g["inside"] = keep
             for rx, rz, im in g["inside"]:
                 new_chunks |= new_in(rx, rz, im, mask)
                 ox, oz = rx * 512 - X0, rz * 512 - Z0
@@ -822,6 +856,11 @@ def main(argv):
             cv.crop((0, 0, SIZE, SIZE)).resize((3000, 3000), Image.LANCZOS).save(os.path.join(ROOT, FLOOR_CFG[f]["prev"]), quality=85, optimize=True)
         explored = sum(1 for cz in range(CZ0, CZ1 + 1) for cx in range(CX0, CX1 + 1) if mget(mask, cx, cz))
         pct = round(100 * explored / ((CX1 - CX0 + 1) * (CZ1 - CZ0 + 1)), 1)
+        if rt_new:
+            m_ = load_meta(); e_ = m_.setdefault(str(f), {"date": date, "pct": 0, "log": []}); r_ = e_.setdefault("rt", {})
+            for k, v in rt_new.items():
+                r_[k] = int(max(v, r_.get(k, 0)))
+            save_meta(m_)
         per[f] = {"regions": sum(len(g["inside"]) for g in acc), "newChunks": len(new_chunks),
                   "overlap": sum(g["overlap"] for g in acc), "pct": pct, "chunks": explored, "folders": len(acc)}
         if f == 1:     # height layers: floor 1 only

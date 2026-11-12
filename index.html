@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="87c6104471">
+<meta name="sao-build" content="062905c639">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -572,7 +572,9 @@ button.jmpb{font-family:inherit;cursor:pointer}button.jmpb:hover,button.jmpb[ari
 .jmunk{font-size:12px}.jmfold{font-size:12.5px}.jmfold>summary{cursor:pointer;color:var(--muted);font-size:12px}.jmfold>div{margin-top:4px}
 .jmmap{width:100%;max-width:340px;aspect-ratio:1;display:block;margin:2px auto}
 .jmmap .jmreg{fill:rgba(232,162,58,.42);stroke:#ffb347;stroke-width:28;cursor:pointer;outline:none}
+.jmmap .jmreg.chg{fill:rgba(85,136,255,.42);stroke:#7fa6ff}   /* already on the site, but the player's file is newer and differs */
 .jmmap .jmreg.off{fill:rgba(0,0,0,.35);stroke:rgba(255,255,255,.45);stroke-dasharray:60 50}
+.jmmap .jmreg.chg.off{stroke:rgba(127,166,255,.7)}
 .jmmap .jmreg:hover,.jmmap .jmreg:focus-visible{stroke:#fff}
 .jmmap .jmtown{pointer-events:none}.jmmap .jmtown circle{fill:#fff;stroke:#111;stroke-width:14}
 .jmmap .jmtown text{font:600 150px var(--f-body);fill:#fff;stroke:#0b1219;stroke-width:34;paint-order:stroke;text-anchor:middle}
@@ -905,7 +907,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=1b3b5469"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=6e135c35"></script>
-<script src="changelog.js?v=1626b8d8"></script>
+<script src="changelog.js?v=77c9a11b"></script>
 <script src="recipes.js?v=bffb48cc"></script>
 <script src="jmmeta.js?v=1fcc065c"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -2639,7 +2641,7 @@ function jmCredits(){const j=(window.SAO_JM||{})[String(FL)]||{},log=j.log||[],t
 // 2026-11-06 (使用者選 A＋選擇範圍): the height-layer folders (cave slices "0", "1", "-1"…) of floor 1 worlds are packed
 // too, all of them (no height choice); the player may take squares out on a small map. A layer-only pack still
 // carries a few surface regions as anchors, because the server recognises floor 1 only by its surface colours.
-const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,BUDGET:40*1048576,MAXN:1500,LMIN:-4,LMAX:19,DWELL:350,QUICK:40};   // QUICK: surface images decoded to recognise floor 1 in 全地圖打包   // DWELL: ms the pointer rests on a square before its preview shows   // MAXN = MAX_REGIONS in tools/jm_merge.py
+const JMP={X0:70,SIZE:4980,MIN:20,ANCHOR:60,MED:20,CHG:8,CHGD:32,BUDGET:40*1048576,MAXN:1500,LMIN:-4,LMAX:19,DWELL:350,QUICK:40};   // QUICK: surface images decoded to recognise floor 1 in 全地圖打包   // DWELL: ms the pointer rests on a square before its preview shows   // MAXN = MAX_REGIONS in tools/jm_merge.py
 window.__JMP=JMP;   // exposed for tests/jm_pack_test.py
 const JMV=(f=FL)=>{const j=(window.SAO_JM||{})[String(f)]||{};return encodeURIComponent(String(j.date||"")+"-"+String(j.pct||"")+"-"+String(j.chunks||""))};
 let JMREF=null;
@@ -2690,18 +2692,26 @@ async function jmAnalyze(g,ref,cv){const {J,N}=ref,f=ref.f;cv.width=cv.height=N;
   // only canvas pixels that lie wholly inside this region's image (frames start at 70 / -1062 / -253, so the images sit half a
   // pixel off the grid and the seam pixels mix two regions; counting them made squares look new that are not, 2026-11-12)
   for(const it of inFrame){const px0=Math.max(0,Math.ceil((it.rx*512-J.x0)/4)),pz0=Math.max(0,Math.ceil((it.rz*512-J.z0)/4));
-    const px1=Math.min(lim,Math.floor((it.rx*512+512-J.x0)/4)),pz1=Math.min(lim,Math.floor((it.rz*512+512-J.z0)/4));it.ov=new Set();const nw=new Set(),nwc=new Map();
+    const px1=Math.min(lim,Math.floor((it.rx*512+512-J.x0)/4)),pz1=Math.min(lim,Math.floor((it.rz*512+512-J.z0)/4));it.ov=new Set();const nw=new Set(),nwc=new Map(),avg=new Map();
     for(let py=pz0;py<pz1;py++)for(let px=px0;px<px1;px++){const i=(py*N+px)*4,a=d[i+3];if(!a)continue;
       const cx=(J.x0+px*4+2)>>4,cz=(J.z0+py*4+2)>>4;
       // a chunk is new when a quarter of it (4 of its 16 pixels at 1/4 scale) is solid: frames that do not start on a multiple of
       // 4 blocks (floors 1-3: 70, -1062, -253) draw the images half a pixel off, which smears their edges into the next chunk
       if(!ref.mask(cx,cz)){if(a>=250){const k=cz*1000+cx,c=(nwc.get(k)||0)+1;nwc.set(k,c);if(c>=4)nw.add(k)}continue}
       if(a<250)continue;const k=cz*1000+cx;let c=chunks.get(k);if(!c){c={s:0,n:0};chunks.set(k,c)}
+      {let v=avg.get(k);if(!v){v=[0,0,0,0,0,0,0];avg.set(k,v)}v[0]+=d[i];v[1]+=d[i+1];v[2]+=d[i+2];v[3]+=R[i];v[4]+=R[i+1];v[5]+=R[i+2];v[6]++}
       c.s+=(Math.abs(d[i]-R[i])+Math.abs(d[i+1]-R[i+1])+Math.abs(d[i+2]-R[i+2]))/3;c.n++;it.ov.add(k)}
-    it.newChunks=nw.size;it.nwKeys=[...nw].map(k=>{const cz=Math.round(k/1000),cx=k-cz*1000;return[cx,cz]});it.isNew=nw.size>=4}   // a few stray chunks at the edge of the explored area are not worth uploading
+    it.newChunks=nw.size;it.nwKeys=[...nw].map(k=>{const cz=Math.round(k/1000),cx=k-cz*1000;return[cx,cz]});it.isNew=nw.size>=4;
+    // already-explored chunks whose average colour clearly differs from the site's (2026-11-12, user: a corrected area must not
+    // need 全地圖打包): average colours, because a pixel-by-pixel diff of fine textures depends on how each side was scaled
+    // (measured on the owner's floor-2/3 folders: unchanged chunks differ by at most 31, at most 1 chunk per file above 30);
+    // a square counts as changed with JMP.CHG such chunks and a file newer than the site's copy of that square (jmmeta rt)
+    let chg=0;for(const v of avg.values())if(v[6]>=12&&(Math.abs(v[0]-v[3])+Math.abs(v[1]-v[4])+Math.abs(v[2]-v[5]))/3/v[6]>JMP.CHGD)chg++;
+    const rt=((((window.SAO_JM||{})[String(f)]||{}).rt)||{})[it.rx+","+it.rz];
+    it.chgChunks=chg;it.isChg=!it.isNew&&chg>=JMP.CHG&&(!rt||(it.f.lastModified||0)>rt)}   // a few stray chunks at the edge of the explored area are not worth uploading
   const diffs=[];for(const c of chunks.values())if(c.n>=6)diffs.push(c.s/c.n);diffs.sort((a,b)=>a-b);
   g.overlap=diffs.length;g.med=diffs.length?diffs[diffs.length>>1]:null;
-  g.state=g.overlap<JMP.MIN?"few":g.med>JMP.MED?"other":"f1";if(g.state==="f1")g.floor=f;g.news=g.state==="f1"?inFrame.filter(it=>it.isNew):[];return g}
+  g.state=g.overlap<JMP.MIN?"few":g.med>JMP.MED?"other":"f1";if(g.state==="f1")g.floor=f;g.news=g.state==="f1"?inFrame.filter(it=>it.isNew||it.isChg):[];return g}
 // which floor a world is: tried against every floor with an explored map (the frames overlap), the first one whose colours
 // match wins, the same way tools/jm_merge.py decides; a world that matches none keeps the most telling reason
 // 2026-11-12 (user「樓層確認…要自動」): the number in a JourneyMap server folder (Triggers_<id>) is the world ID the server sends to
@@ -2997,7 +3007,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
     return`<div class="jmrow"><span class="t"><b title="${esc(g.key)}">${esc(g.label.length>22?g.label.slice(0,22)+"…":g.label)}</b><span>${g.files.length} 張地面地圖${g.latest?"・最後更新 "+new Date(g.latest).toLocaleDateString("zh-TW"):""}${extra}</span></span><span class="pill ${c}">${t}</span></div>`}).join("");
   const nDay=(found.find(([k])=>k==="day")||[0,0])[1],nCave=found.filter(([k])=>k!=="day").reduce((s,[,n])=>s+n,0);
   const regs=new Map();   // squares with new data: "rx,rz" -> {rx,rz,day,cave}
-  for(const g of fl){for(const it of g.news){const k=jmKey(FLv,it.rx,it.rz),r=regs.get(k)||{rx:it.rx,rz:it.rz,day:0,cave:0};r.day++;regs.set(k,r)}
+  for(const g of fl){for(const it of g.news){const k=jmKey(FLv,it.rx,it.rz),r=regs.get(k)||{rx:it.rx,rz:it.rz,day:0,cave:0};r.day++;if(it.isChg&&!it.isNew)r.chg=(r.chg||0)+it.chgChunks;else r.nw=1;regs.set(k,r)}
     for(const L of Object.values(g.layers))for(const it of L.news||[]){const k=jmKey(FLv,it.rx,it.rz),r=regs.get(k)||{rx:it.rx,rz:it.rz,day:0,cave:0};r.cave++;regs.set(k,r)}}
   JMG.regs=regs;
   const OKF=JMFLS().includes(FLv),v=JMV(FLv),JF=OKF?jmFrame(FLv):{x0:0,z0:0,size:1,full:8,tiles:""},CL=OKF?FLOORS[FLv].map.clip:null,C=CL?[JF.x0+CL.c/1000*JF.size,JF.z0+CL.c/1000*JF.size]:null,R=CL?CL.r/1000*JF.size:0;
@@ -3011,6 +3021,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
         <li>滑鼠在方格或地下城上停留，預覽視窗就會顯示該區塊的地圖。</li>
         <li>要全部打包（網站已經有的也一起）就點上方「改用全地圖打包」；只放地圖圖片，不含路標（waypoint）。</li>
         <li>點預覽視窗裡的圖可以放大，按 Esc 或點右上 ✕ 關閉。</li>
+        <li>藍色方格：網站已經有這一格，但你的地圖比較新、內容也不一樣（例如重畫過的地方），一樣點選就會上傳。</li>
         <li>室內・洞穴（洞穴、地下室、建築內）的地圖會跟著方格一起打包，不用另外選。</li></ul></div></span>`;
   const nT=Math.ceil(JF.full/8/256);
   const mapPart=fl.length&&regs.size?`<section class="jmsec"><div class="jmsech"><b>地圖</b><span class="muted">地面 ${nDay} 張・室內・洞穴 ${nCave} 張</span>
@@ -3020,7 +3031,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
       ${C?`<circle cx="${C[0]}" cy="${C[1]}" r="${R}" fill="#070c11"/>`:`<rect x="${JF.x0}" y="${JF.z0}" width="${JF.size}" height="${JF.size}" fill="#070c11"/>`}
       <g clip-path="url(#jmClip)">${[...Array(nT).keys()].flatMap(r=>[...Array(nT).keys()].map(c=>`<image href="${JF.tiles}/0/${c}_${r}.jpg?v=${v}" x="${JF.x0+c*2048}" y="${JF.z0+r*2048}" width="2048" height="2048" preserveAspectRatio="none"/>`)).join("")}</g>
       ${[...regs.values()].map(r=>{const nm=jmRegNames(r.rx,r.rz),k=jmKey(FLv,r.rx,r.rz);
-        return`<rect class="jmreg" data-jmreg="${k}" x="${r.rx*512+8}" y="${r.rz*512+8}" width="496" height="496" rx="40" tabindex="0" role="checkbox"><title>${esc(nm.join("、")||"這一格")}：地面 ${r.day} 張、室內・洞穴 ${r.cave} 張</title></rect>`}).join("")}
+        return`<rect class="jmreg${r.chg&&!r.nw?" chg":""}" data-jmreg="${k}" x="${r.rx*512+8}" y="${r.rz*512+8}" width="496" height="496" rx="40" tabindex="0" role="checkbox"><title>${esc(nm.join("、")||"這一格")}：${r.chg&&!r.nw?`和網站的地圖不一樣（${r.chg} 個區塊），你的比較新・`:""}地面 ${r.day} 張、室內・洞穴 ${r.cave} 張</title></rect>`}).join("")}
       ${FLOORS[FLv].towns.filter(t=>t.x!=null).map(t=>`<g class="jmtown"><circle cx="${t.x}" cy="${t.z}" r="45"/><text x="${t.x}" y="${t.z-80}">${esc(pN(t))}</text></g>`).join("")}
     </svg></div></section>`:"";
   const dgPart=dgList.length?`<section class="jmsec"><div class="jmsech"><b>地下城</b><span class="muted">同一個地下城進場幾次都合成一張</span>
@@ -3088,7 +3099,7 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
 // the download buttons of either mode (parts from jmPlan)
 function jmDlBind(L,fu){
   $("jmDl").querySelectorAll(fu?"[data-jmfull]":"[data-jmpart]").forEach(b=>b.onclick=async()=>{const i=+(fu?b.dataset.jmfull:b.dataset.jmpart),p=L[i];b.disabled=true;const t0=b.textContent;b.textContent="打包中…";
-    try{const man={v:1,worlds:{}};for(const {g} of p.items)man.worlds[g.key]={siblings:g.sibs||jmSibs(g)};
+    try{const man={v:1,worlds:{},times:{}};for(const {g,it} of p.items){man.worlds[g.key]={siblings:g.sibs||jmSibs(g)};man.times[g.key+"/"+it.dir+"/"+it.f.name]=it.f.lastModified||0}
       const mf=new File([JSON.stringify(man)],"sao_pack.json",{lastModified:Date.now()});
       const blob=await jmZip([...p.items.map(({g,it})=>({name:g.key+"/"+it.dir+"/"+it.f.name,file:it.f})),{name:"sao_pack.json",file:mf}]);
       const d=new Date(),stamp=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
