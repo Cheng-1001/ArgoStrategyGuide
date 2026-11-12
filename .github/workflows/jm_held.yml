@@ -1,0 +1,52 @@
+# Uploads that may be the first map of a new floor (tools/jm_merge.py exit 3 / 4) keep their release "jmap-<report id>".
+# Every day, and by hand, this job tries them again: once the site marks the floor open (FLOOR_CFG in tools/jm_merge.py)
+# or a clue tells the floors apart, the map merges by itself and the release is deleted.
+name: 再試暫存的探索地圖
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: jm-merge
+  cancel-in-progress: false
+jobs:
+  retry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Pillow and NumPy
+        run: pip install "pillow==11.0.0" "numpy==2.1.3"
+      - name: Try every held upload again
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for TAG in $(gh release list --repo "$GITHUB_REPOSITORY" --limit 100 --json tagName --jq '.[].tagName' | grep '^jmap-' || true); do
+            # only releases the merge already saw and held (a fresh one is handled by jm_merge.yml)
+            python -I -c "import json,sys;t=open('jmmeta.js',encoding='utf-8').read();m=json.loads(t[t.index('window.SAO_JM =')+15:].strip().rstrip(';'));r=(m.get('results') or {}).get(sys.argv[1]) or {};sys.exit(0 if r.get('held') else 1)" "${TAG#jmap-}" || continue
+            rm -rf "$RUNNER_TEMP/up" && mkdir -p "$RUNNER_TEMP/up"
+            gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --pattern "*.zip" --dir "$RUNNER_TEMP/up" || continue
+            set +e
+            python -I tools/jm_merge.py "$RUNNER_TEMP"/up/*.zip --report "${TAG#jmap-}"
+            code=$?
+            set -e
+            if [ "$code" = "1" ]; then continue; fi
+            git add tiles floor1_jm.jpg jmmeta.js
+            git diff --cached --quiet || git commit -m "探索地圖：再試暫存的回報 ${TAG#jmap-}"
+            if [ "$code" = "0" ] || [ "$code" = "2" ]; then gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true; fi
+          done
+          for i in 1 2 3 4; do
+            git pull --rebase origin main && git push origin HEAD:main && break
+            sleep $((i * 5))
+          done
+          gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" || true
