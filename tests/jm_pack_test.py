@@ -329,6 +329,7 @@ try:
               "an unknown server folder with no match and no Underworld beside it is a possible new floor; outside the floor with the Underworld beside it -> skipped")
         check(pg.locator("#jmNfOn").count() == 1 and not pg.is_checked("#jmNfOn") and "網站還沒有地圖的樓層" in pg.inner_text("#jmHead"),
               "the new-floor folder is offered with a box, not ticked at first")
+        if os.environ.get("SHOT_DIR"): pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "jm_newfl.png"))
         t = pg.inner_text("#jmOut")
         nall = pg.evaluate("window.__jm.nNew")
         check(f"共 {nall} 張" in pg.inner_text("#jmDlNote") and "下載壓縮檔" in pg.inner_text("#jmDl"), f"the note counts the maps ({nall}) and the zip is offered")
