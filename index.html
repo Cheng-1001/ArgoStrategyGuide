@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="9af783fa51">
+<meta name="sao-build" content="ab1d398c4a">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -898,7 +898,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="data.js?v=a4992864"></script>
 <script src="data23.js?v=9d6fee10"></script>
 <script src="bosses.js?v=77b7ad43"></script>
-<script src="reports.js?v=6c62f92e"></script>
+<script src="reports.js?v=e679f231"></script>
 <script src="hints.js?v=fcf000d6"></script>
 <script src="codex.js?v=48141603"></script>
 <script src="mobphotos.js?v=5479cb35"></script>
@@ -909,7 +909,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="npcs.js?v=6e135c35"></script>
 <script src="changelog.js?v=4cc310e9"></script>
 <script src="recipes.js?v=bffb48cc"></script>
-<script src="jmmeta.js?v=1fcc065c"></script>
+<script src="jmmeta.js?v=22b4d53b"></script>
 <script src="formcfg.js?v=54663be2"></script>
 <script src="classes.js?v=877782cc"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
@@ -1228,7 +1228,7 @@ function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.
     const pts=grp.length>1?grp.map(p=>[p[1],p[2]]):[[x,z]];
     showPoints(f,pts,($("pCrumb").textContent.split(" › ").pop()||"位置"),()=>repPin(x,z),pts.findIndex(p=>p[0]===x&&p[1]===z))}));
   pBody.querySelectorAll("[data-eqcls]").forEach(b=>b.addEventListener("click",()=>openClassEquip(b.dataset.eqcls)));
-  pBody.querySelectorAll("[data-imap]").forEach(b=>b.addEventListener("click",()=>{const im=itemMap(b.dataset.imap);openRouteWin(b.dataset.imap+"・取得地點",im.steps,im.f,true)}));
+  pBody.querySelectorAll("[data-imap]").forEach(b=>b.addEventListener("click",()=>{const im=itemMap(b.dataset.imap);openRouteWin((zhI(b.dataset.imap)||b.dataset.imap)+"・取得地點",im.steps,im.f,true)}));
   pBody.querySelectorAll("[data-route]").forEach(b=>b.addEventListener("click",()=>{const Q=questById(b.dataset.route);if(Q)openRouteWin((Q.main?mqLabel(Q.q)+"・":"支線・")+Q.title,Q.steps,Q.f)}));
   pBody.querySelectorAll("[data-spot]").forEach(b=>b.addEventListener("click",()=>{const sp=spotById(b.dataset.spot);showPoints(sp.floor,[[sp.x,sp.z]],sp.n,()=>focusSpot(sp.id))}));
   pBody.querySelectorAll("[data-town]").forEach(b=>b.addEventListener("click",()=>{const t=townById[b.dataset.town];showPoints(t.floor,[[t.x,t.z]],t.n,()=>centerOn(t.x,t.z,2.6))}));
@@ -1467,7 +1467,7 @@ function gvRender(w){const [t,i]=w.hist[w.hist.length-1],el=w.el,B=el.querySelec
   B.querySelectorAll("[data-repgo]").forEach(b=>b.addEventListener("click",()=>gvCloseAll()));
   const ttl=el.querySelector(".gvtitle").textContent||"位置";
   B.querySelectorAll("[data-rep]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [f,x,z]=b.dataset.rep.split("|").map(Number);gvCloseAll();showPoints(f,[[x,z]],ttl,()=>repPin(x,z),0)});
-  B.querySelectorAll("[data-imap]").forEach(b=>b.onclick=e=>{e.stopPropagation();const im=itemMap(b.dataset.imap);gvCloseAll();openRouteWin(b.dataset.imap+"・取得地點",im.steps,im.f,true)});
+  B.querySelectorAll("[data-imap]").forEach(b=>b.onclick=e=>{e.stopPropagation();const im=itemMap(b.dataset.imap);gvCloseAll();openRouteWin((zhI(b.dataset.imap)||b.dataset.imap)+"・取得地點",im.steps,im.f,true)});
   B.querySelectorAll("[data-spot]").forEach(b=>b.onclick=e=>{e.stopPropagation();const sp=spotById(b.dataset.spot);gvCloseAll();showPoints(sp.floor,[[sp.x,sp.z]],sp.n,()=>focusSpot(sp.id))});
   B.scrollTop=0}
 function gvOpen(t,i){gvCloseAll();gvNew(t,i)}
@@ -1608,8 +1608,9 @@ let MT_ID=0;window.__miniTiles=(f,cx,cz,s)=>miniTiles(FLOORS[f].map,cx,cz,s);   
 // start at the frame's first chunk
 const jmFrame=f=>{const m=FLOORS[f].map,x0=m.x0,z0=m.z0,S=m.size;if(f===1)return{f,x0,z0,size:S,full:m.tileFull,tiles:m.tiles,mx0:0,mz0:0,mw:320};
   const mx0=Math.floor(x0/16),mz0=Math.floor(z0/16);return{f,x0,z0,size:S,full:m.tileFull,tiles:m.tiles,mx0,mz0,mw:Math.max(Math.floor((x0+S-1)/16)-mx0,Math.floor((z0+S-1)/16)-mz0)+1}};
-function miniTiles(m,cx,cz,span){if(!m.tiles||!m.tileFull||span>500)return"";
-  const bpu=m.size/1000,L=span<=260?3:2,px=L===3?1:2,tb=256*px,tu=tb/bpu,n=Math.ceil(m.tileFull/tb);
+// floors with no wiki map (jmAlways, floor 3) use the explored map at every span (使用者 2026-11-12 截圖：第 3 層幼嫩種子的小地圖只有空白格線)
+function miniTiles(m,cx,cz,span,lv){if(!m.tiles||!m.tileFull||(span>500&&!m.jmAlways))return"";
+  const bpu=m.size/1000,L=lv??(span<=260?3:span<=500?2:span<=1000?1:0),px=2**(3-L),tb=256*px,tu=tb/bpu,n=Math.ceil(m.tileFull/tb);
   const c0=Math.max(0,Math.floor((cx-span/2)/tu)),c1=Math.min(n-1,Math.floor((cx+span/2)/tu)),r0=Math.max(0,Math.floor((cz-span/2)/tu)),r1=Math.min(n-1,Math.floor((cz+span/2)/tu));
   const jf=m.tiles.match(/f(\d)jm/),fv=jf?+jf[1]:1,v=JMV(fv);
   let im="";for(let r=r0;r<=r1;r++)for(let c=c0;c<=c1;c++)im+=`<image href="${m.tiles}/${L}/${c}_${r}.jpg?v=${v}" x="${(c*tu).toFixed(2)}" y="${(r*tu).toFixed(2)}" width="${(tu+.2).toFixed(2)}" height="${(tu+.2).toFixed(2)}" preserveAspectRatio="none"/>`;
@@ -1646,7 +1647,7 @@ function rwRender(){if(!RW)return;const m=FLOORS[RW.f].map;const r=rwSvg.getBoun
     const on=RW.sel!=null&&ns.includes(RW.sel),Rr=on?R*1.35:R,w2=on?ww*1.35:ww;
     return`<g${on?' class="rwsel"':""}><title>${esc(ns.map(n=>n+". "+txt[n]).join("\n"))}</title>${on?`<circle cx="${X(bx)}" cy="${Z(bz)}" r="${Rr*1.9}" fill="none" stroke="#e5484d" stroke-width="${2.5*k}" opacity=".85"/>`:""}<rect x="${X(bx)-w2/2}" y="${Z(bz)-Rr}" width="${w2}" height="${Rr*2}" rx="${Rr}" fill="${on?"#e5484d":"#e8a23a"}" stroke="#fff" stroke-width="${2*k}"/><text x="${X(bx)}" y="${Z(bz)+fs*0.36}" font-size="${on?fs*1.3:fs}" text-anchor="middle" font-weight="700" fill="${on?"#fff":"#1b1206"}" font-family="monospace">${lab}</text></g>`}).join("");
   rwSvg.setAttribute("viewBox",`${x} ${y} ${w} ${h}`);
-  rwSvg.innerHTML=`<image href="${jmOn(m)?m.jm:m.img}" x="0" y="0" width="1000" height="1000" preserveAspectRatio="none"/>${RW.noLine?"":`<polyline points="${pts.map(p=>X(p[1]).toFixed(1)+","+Z(p[2]).toFixed(1)).join(" ")}" fill="none" stroke="#e8a23a" stroke-width="${3.5*k}" stroke-dasharray="${10*k} ${7*k}" stroke-linejoin="round" stroke-linecap="round"/>`}${refMarks(RW.f,X,Z,x,y,w,h,fs)}${dots}`}
+  rwSvg.innerHTML=`<image href="${jmOn(m)?m.jm:m.img}" x="0" y="0" width="1000" height="1000" preserveAspectRatio="none"/>${m.jmAlways?(bpp=>miniTiles(m,x+w/2,y+h/2,Math.max(w,h),bpp<=1.5?3:bpp<=3?2:bpp<=6?1:0))(w*m.size/1000/r.width/(window.devicePixelRatio||1)):""}${RW.noLine?"":`<polyline points="${pts.map(p=>X(p[1]).toFixed(1)+","+Z(p[2]).toFixed(1)).join(" ")}" fill="none" stroke="#e8a23a" stroke-width="${3.5*k}" stroke-dasharray="${10*k} ${7*k}" stroke-linejoin="round" stroke-linecap="round"/>`}${refMarks(RW.f,X,Z,x,y,w,h,fs)}${dots}`}
 function rwFocus(x,z){requestAnimationFrame(()=>requestAnimationFrame(()=>{if(!RW)return;const m=FLOORS[RW.f].map;const r=rwSvg.getBoundingClientRect();if(!r.width)return;
   const w=160,h=w*r.height/r.width,px=(x-m.x0)/m.size*1000,pz=(z-m.z0)/m.size*1000;RW.vb=[px-w/2,pz-h/2,w,h];rwRender()}))}
 function openRouteWin(title,steps,f,noLine){RW={steps,f,noLine:!!noLine,view,vb:[0,0,1000,1000]};$("rwTitle").textContent=title;$("rwin").hidden=false;requestAnimationFrame(()=>{rwFitBox();rwRender()})}
