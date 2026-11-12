@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="67c4fa0319">
+<meta name="sao-build" content="87c6104471">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -17,7 +17,7 @@
 :root{
   --bg:#e9eef2; --panel:#f8fafb; --panel-2:#eef2f5; --line:#cfd8df; --fg:#1f2a33; --muted:#5d6b77;
   --accent:#e0811a; --accent-ink:#ffffff; --accent-soft:#fbe7cf;
-  --boss:#d9701a; --mini:#7b55c8; --minion:#8a96a1; --ok:#2f8a5b; --ref:#2b7a9e; --tp:#13909a; --warn:#b7791f; --unk:#8a6f6f; --rare:#2f6fc4;
+  --boss:#d9701a; --mini:#7b55c8; --minion:#8a96a1; --ok:#2f8a5b; --ref:#2b7a9e; --tp:#13909a; --warn:#b7791f; --unk:#8a6f6f; --rare:#2f6fc4;--r-c:#55aa55;--r-b:#5588ff;--r-a:#aa55ff;--r-s:#ffaa00;--r-m:#f13f3f;
   --stage:#0b1219; --shadow:0 10px 30px rgba(20,35,50,.22);
   --slot:#2b313a; --slot-edge:#46505c; --slot-ink:#9aa6b2;
   --f-display:"Chakra Petch","PingFang TC","Noto Sans CJK TC","Noto Sans TC","Source Han Sans TC","Microsoft JhengHei",system-ui,sans-serif;
@@ -230,7 +230,8 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .pill.boss{border-color:var(--boss);color:var(--boss)} .pill.mini{border-color:var(--mini);color:var(--mini)}
 .pill.s-label,.pill.s-npc{border-color:var(--ok);color:var(--ok)} .pill.s-est{border-color:var(--warn);color:var(--warn)}
 .pill.s-unk{border-color:var(--unk);color:var(--unk)} .pill.s-player{border-color:var(--ok);color:var(--ok)} .pill.s-user{border-color:var(--accent);color:var(--accent)} .pill.s-ref{border-color:var(--ref);color:var(--ref)}
-.pill.r-c{color:var(--muted)} .pill.r-b{border-color:var(--rare);color:var(--rare)} .pill.r-a{border-color:var(--mini);color:var(--mini)} .pill.r-s{border-color:var(--boss);color:var(--boss)}
+.pill.r-c{--rc:var(--r-c)} .pill.r-b{--rc:var(--r-b)} .pill.r-a{--rc:var(--r-a)} .pill.r-s{--rc:var(--r-s)} .pill.r-m{--rc:var(--r-m)}
+.pill.r-c,.pill.r-b,.pill.r-a,.pill.r-s,.pill.r-m{border-color:var(--rc);color:var(--rct,var(--rc));background:color-mix(in srgb,var(--rc) 10%,transparent)}
 .pill.r-x{border-style:dashed;color:var(--muted)}
 .stars{color:var(--accent);letter-spacing:1.5px;font-size:12.5px} .stars .off{color:var(--line)}
 .slot{--s:36px;flex:none;width:var(--s);height:var(--s);border-radius:6px;background-color:var(--slot);background-image:url(items.png);background-repeat:no-repeat;
@@ -528,7 +529,8 @@ button.repbtn{font:inherit;font-weight:600;cursor:pointer}
 }
 @media (min-width:821px){.jmcredit{left:220px}}
 .jmlead{margin:0}.jmhow{border:1px solid var(--line);border-radius:8px;padding:6px 10px}.jmhow>summary{cursor:pointer;font-size:13px;color:var(--accent);font-weight:600}
-.jmhow .steps{margin:8px 0 6px}.jmscope{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:6px}
+.jmhow .steps{margin:8px 0 6px}.jmnf{display:block;margin:6px 0 2px;font-size:13px}.jmnf input{vertical-align:-2px;margin-right:4px}
+.jmscope{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:6px}
 .jmout{display:flex;flex-direction:column;gap:8px;font-size:13px}
 .jmout .jmrow{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:5px 2px;border-top:1px solid var(--line)}
 .jmout .jmrow:first-child{border-top:0}
@@ -903,9 +905,9 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=1b3b5469"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=6e135c35"></script>
-<script src="changelog.js?v=720ae88e"></script>
+<script src="changelog.js?v=1626b8d8"></script>
 <script src="recipes.js?v=bffb48cc"></script>
-<script src="jmmeta.js?v=d349067c"></script>
+<script src="jmmeta.js?v=1fcc065c"></script>
 <script src="formcfg.js?v=54663be2"></script>
 <script src="classes.js?v=877782cc"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
@@ -962,7 +964,7 @@ function normRep(r){if(!r.raw)return r;const o={...r};const g=re=>{for(const [k,
   if(r.type==="idea"){o.idea=g(/建議・內容/);o.ipage=g(/建議・相關頁面/);o.reply=String(r.review||"").replace(/^審核[:：][^｜|]*[｜|]?/,"").trim();o.summary=o.idea}
   if(r.type==="jmap"){const res=((window.SAO_JM||{}).results||{})[r.id];o.merge=res;if(res&&res.floors&&!res.floors["1"])o.floor=+Object.keys(res.floors).sort()[0];   // the form fixes 探索地圖 to floor 1; the merge knows better
     o.summary=!res?"合併中（核准後約 3～5 分鐘）":res.ok?`已合併：${res.floors?Object.entries(res.floors).map(([f,v])=>`第 ${f} 層新增 ${v.newChunks} 個區塊（探索約 ${v.pct}%）`).join("、"):res.layers&&!res.newChunks?"地面沒有新區塊":`新增 ${res.newChunks} 個區塊，地圖探索約 ${res.pct}%`}${res.layers?(()=>{const L=Object.entries(res.layers),tot=L.reduce((a,[,n])=>a+n,0),lab=k=>(((((window.SAO_JM||{})["1"]||{}).layers)||{})[k]||{}).label||k;
-      o.layerRows=L.map(([k,n])=>[lab(k),n]);return`；室內・洞穴 ${L.length} 層，共新增 ${tot} 個區塊`})():""}`:`沒有合併：${res.reason}`}
+      o.layerRows=L.map(([k,n])=>[lab(k),n]);return`；室內・洞穴 ${L.length} 層，共新增 ${tot} 個區塊`})():""}${res.newFloors?`（第 ${res.newFloors.join("、")} 層的第一份地圖）`:""}${res.held?"；有資料夾暫存中，之後自動再判斷是哪一層":""}`:res.held?`暫存中（每天自動再試）：${res.reason}`:`沒有合併：${res.reason}`}
   if(r.type==="place"){o.ug=/地下/.test(g(/地點・在地下嗎/));o.tpName=g(/地點・傳送選單名稱/);o.npcCat=g(/地點・NPC 類別/)}
   if(!o.summary){const t=[];if(o.level!=null)t.push("等級 "+o.level);if(o.codexNo)t.push("圖鑑 "+o.codexNo);if(o.drops)t.push("掉落物 "+o.drops.length+" 種");if(o.how)t.push(o.how+(o.from?"："+o.from:""));if(o.kind&&r.type==="place")t.push(o.kind);o.summary=t.join("・")}
   return o}
@@ -1119,7 +1121,11 @@ const unknownZones=f=>FLOORS[f].order.filter(z=>FLOORS[f].M.some(m=>m.zone===z&&
 // ---------- labels ----------
 const TYPE_ZH={"Boss":"首領","Mini-Boss":"小首領","Monster":"一般怪物","Minion":"嘍囉","Unknown":"類型未知"};
 const BEH_ZH={A:"主動攻擊（看到就打）",N:"中立（被打才反擊）",P:"被動（不會攻擊）",U:"還不知道"};
-const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["傳說+","r-s",5],splusplus:["傳說++","r-s",6],ss:["SS","r-s",7]};
+// rarity = the game's tiers and tooltip-frame colours (user 2026-11-12「稀有度依遊戲，包含使用的顏色」): COMMON 普通 green,
+// RARE 稀有 blue, EPIC 史詩 purple, LEGENDARY 傳說 gold, MYTHIC 神話 red. The catalogue's splus / splusplus / ss are all MYTHIC in game
+// (catalogue filter lists Aileron d'Ame (splus) as MYTHIC; the Grimoire Faible Corruption (splus) craft window says MYTHIC; Nodachi (ss) altar says MYTHIC)
+const RAR={c:["普通","r-c",1],b:["稀有","r-b",2],a:["史詩","r-a",3],s:["傳說","r-s",4],splus:["神話","r-m",5],splusplus:["神話","r-m",5],ss:["神話","r-m",5]};
+const rarK=r=>r==="splusplus"||r==="ss"?"splus":r;
 const GROUP={material:"材料",food:"食物",ring:"飾品",artifact:"飾品",amulet:"飾品",bracelet:"飾品",shield:"防具",armor_set:"防具",bow:"武器",crossbow:"武器",dagger:"武器",sword:"武器",staff_mage:"武器",staff_shaman:"武器",lumberjack_job:"採集",miner_job:"採集",farmer_job:"採集",tool:"工具",gem_stone:"符文",fortifier:"藥水",unknown:"未收錄"};
 const CAT_ZH={material:"材料",food:"食物",ring:"戒指",artifact:"遺物",amulet:"項鍊",bracelet:"手環",shield:"盾牌",armor_set:"防具套裝",bow:"弓",crossbow:"弩",dagger:"匕首",sword:"近戰武器",staff_mage:"法師法杖",staff_shaman:"薩滿法杖",lumberjack_job:"伐木採集",miner_job:"採礦",farmer_job:"農作",tool:"工具",gem_stone:"符文",fortifier:"強化藥水",unknown:"未收錄"};
 const STAT_ZH={"Cooldown":"冷卻","Projectile Damage":"投射物傷害","Dodge":"閃避","Defense":"防禦","Max Health":"HP","Max Mana":"最大魔力","Max Stamina":"最大耐力","Attack Speed":"攻擊速度","Critical Strike Power":"爆擊傷害","Critical Strike Chance":"爆擊率","Skill Critical Strike Power":"技能爆擊傷害","Skill Critical Strike Chance":"技能爆擊率","Movement Speed":"移動速度","Health Regeneration":"HP 恢復","Mana Regeneration":"魔力恢復","Stamina Regeneration":"耐力恢復","Cooldown Reduction":"冷卻縮減","Heal Bonus":"額外治療","Magic Damage":"魔法傷害","Physical Damage":"物理傷害","Weapon Damage":"武器傷害","Lifesteal":"生命偷取","Spell Vampirism":"法術吸血","Skill Damage":"技能傷害","Restore Food":"回復飽食度","Item Cooldown":"使用冷卻（秒）","Classe requise":"職業限制","Arme à deux mains":"雙手武器","Max Durability":"耐久度","Block Power":"格擋威力","Block Rating":"格擋率","Damage Reduction":"傷害減免","Sneaking Speed":"潛行速度","Required Esprit":"需求精神","Required Vitality":"需求體力","Required Intelligence":"需求智力","Required Strength":"需求力量","Required Dexterity":"需求敏捷","Required Defense":"需求防禦","Dodge Rating":"閃避率","HEAL_BONUS":"額外治療","HEAL BONUS":"額外治療","Range":"攻擊距離","Entity Interaction Range":"互動距離","Knockback Resistance":"擊退抗性","Faction Damage Dungeon":"地下城傷害","Dodge Cooldown Reduction":"閃避冷卻縮減","Fall Damage Reduction":"墜落傷害減免","Additional Esprit":"額外精神","Additional Defense":"額外防禦","Additional Strength":"額外力量","Additional Vitality":"額外體力","Additional Dexterity":"額外敏捷","Additional Intelligence":"額外智力","Durability Bar":"耐久條","Inedible":"不能吃","Max Consume":"可用次數","Max Item Damage":"最大耐久","Max Stack Size":"堆疊上限","Movement_speed":"移動速度","Pickaxe Power":"採集威力","Random Unsocket":"隨機拆下符文","Repair Percent":"修理比例（%）","Restore Health":"回復生命","Restore Mana":"回復魔力","Restore Saturation":"回復飽和度","Restore Stamina":"回復耐力","Guard Durability":"防禦耐久度","Block Chance":"格擋率","Ability Haste":"技能加速","深海漫遊 X":"特殊效果：深海漫遊 X"};
@@ -1512,7 +1518,7 @@ const MAT_G={material:"材料",farmer_job:"作物",miner_job:"礦物",lumberjack
 const GROUPS=["怪物掉落物","材料","作物","礦物","木材","漁獲","官網未收錄"];   // 怪物掉落物 = dropped by a monster on any floor (user 2026-11-07: 素材再分怪物掉落物)
 const matGroup=x=>{if(x.k==="p")return MAT_G[x.e.cat]||"材料";if((SOURCES[x.id]||[]).length)return"怪物掉落物";const o=offOf(x.id);return MAT_G[o?o.e.cat:ITEMS[x.id].cat]||(o?"材料":"官網未收錄")};
 chipsInto($("fItemGroup"),[["all","全部"],...GROUPS.map(g=>[g,g])],()=>itemGroup,v=>itemGroup=v,renderItems);
-chipsInto($("fItemRar"),[["all","全部"],["c","普通"],["b","稀有"],["a","史詩"],["s","傳說"],["splus","傳說+"]],()=>itemRar,v=>itemRar=v,renderItems);
+chipsInto($("fItemRar"),[["all","全部"],["c","普通"],["b","稀有"],["a","史詩"],["s","傳說"],["splus","神話"]],()=>itemRar,v=>itemRar=v,renderItems);
 ["fItemQuest","fItemDrop","fItemSort","fItemAll"].forEach(i=>$(i).onchange=renderItems);
 // default: every material (this site's + the official catalogue's; fishing etc. have no floor data yet);
 // 「只看這一層有取得資料的」 keeps only this site's items with a drop / gather / quest on this floor (user 2026-11-04)
@@ -1522,7 +1528,7 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").c
   const pool=matPool(FL,!all);
   const gHas=new Set(pool.map(matGroup));$("fItemGroup").querySelectorAll(".chip").forEach(c=>c.hidden=c.dataset.v!=="all"&&!gHas.has(c.dataset.v)&&c.getAttribute("aria-pressed")!=="true");
   const R_=x=>x.k==="p"?x.e.r:ITEMS[x.id].r,NM=x=>x.k==="p"?x.e.name:x.id,SRC=x=>x.k==="p"?[]:SOURCES[x.id],USE=x=>x.k==="p"?[]:USES[x.id];
-  let a=pool.filter(x=>(itemGroup==="all"||matGroup(x)===itemGroup)&&(itemRar==="all"||R_(x)===itemRar)
+  let a=pool.filter(x=>(itemGroup==="all"||matGroup(x)===itemGroup)&&(itemRar==="all"||rarK(R_(x))===itemRar)
     &&(!$("fItemQuest").checked||USE(x).length)&&(!$("fItemDrop").checked||SRC(x).length)
     &&(x.k==="p"?!s||norm(x.e.name+" "+(x.e.gen||"")+" "+zhE(x.e)).includes(s):itemHit(x.id,s)||SOURCES[x.id].some(y=>norm(y.m.name).includes(s))));
   const rv=x=>R_(x)&&RAR[R_(x)]?RAR[R_(x)][2]:0;const nt=x=>x.k==="p"?0:needTotal(x.id,all?0:FL);const by=(x,y)=>NM(x).localeCompare(NM(y));
@@ -1659,7 +1665,7 @@ const RECIPES=window.SAO_RECIPES||{};
 const rKey=(f,n)=>+f===1?n:f+"|"+n,rSplit=k=>{const m=/^(\d+)\|(.*)$/.exec(k);return m?[m[2],+m[1]]:[k,1]},RCP=(f,n)=>RECIPES[rKey(f,n)];
 Object.values(RECIPES).forEach(v=>v.items.forEach(it=>(it[3]||[]).forEach(m=>{m[0]=ikey(m[0])})));
 // approved recipe reports replace the same NPC + item (keeping the catalogue link) or add a new row
-{const RC_ZH={"武器":"weapon","防具":"armor","飾品":"acc","藥水":"potion","鑰匙":"key","其他":"other"},RAR_ZH=Object.fromEntries(Object.entries(RAR).map(([k,v])=>[v[0],k]));
+{const RC_ZH={"武器":"weapon","防具":"armor","飾品":"acc","藥水":"potion","鑰匙":"key","其他":"other"},RAR_ZH=Object.fromEntries(Object.entries(RAR).reverse().map(([k,v])=>[v[0],k]));
  (window.SAO_REPORTS||[]).forEach(r=>{if(r.type!=="recipe"||!r.npc)return;const rk=rKey(r.floor||1,r.npc),Rn=RECIPES[rk]=RECIPES[rk]||{floor:r.floor,items:[]};
   const i=Rn.items.findIndex(it=>norm(it[1])===norm(r.name)),o=i>=0?Rn.items[i]:[null,r.name,null,[],null,null,"acc",null];
   const cost=r.cost===""||r.cost==null?o[4]:(+r.cost?String(+r.cost):"Free");
@@ -2119,7 +2125,7 @@ window.__objFl=n=>{const e=EQ.find(x=>x.name===n||x.gen===n||dn(x)===n);return e
 let eqFl="here",prFl="here";const FL_CHIPS=[["here","這一層＋還不知道"],["only","只看這一層"],["all","全部樓層"]];
 const flOk=(e,v)=>{if(v==="all")return true;const f=objFloors(e);return v==="only"?f.includes(FL):!f.length||f.includes(FL)};
 chipsInto($("fEqFl"),FL_CHIPS,()=>eqFl,v=>eqFl=v,renderEquip);
-chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus","splusplus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
+chipsInto($("fEqRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,RAR[r][0]])],()=>eqRar,v=>eqRar=v,renderEquip);
 ["fEqMin","fEqMax","fEqSort"].forEach(id=>$(id).addEventListener(id==="fEqSort"?"change":"input",renderEquip));
 // effect filter (user 2026-11-07「裝備分頁增加輸入欄位，篩選效果」): matches the stat names as shown (爆擊率、HP…) and the raw keys;
 // the card then shows the matching stats; the dropdown suggests every stat name that some equipment has
@@ -2221,7 +2227,7 @@ window.__eqDump=()=>EQ.map(e=>({oid:e.oid,gen:e.gen||"",name:e.name,zh:zhE(e),lv
 const eqHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+eqSetN(e)+" "+(EQ_CAT_EN[e.cat]||"")+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+eqCat(e)+" "+e.lore).includes(s);
 function renderEquip(){const s=Sq(),mn=+$("fEqMin").value||0,mx=+$("fEqMax").value||999,so=$("fEqSort").value,ES=EFF_SEL.map(norm),EREQ=EFF_SEL.filter(z=>effMode(z)==="and").map(norm),EOPT=EFF_SEL.filter(z=>effMode(z)==="or").map(norm),
     effOk=e=>EREQ.every(t=>eqEffHit(e,t).length)&&(!EOPT.length||EOPT.some(t=>eqEffHit(e,t).length));   // every 且, and at least one 或
-  const base=EQ.filter(e=>flOk(e,eqFl)&&(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||e.r===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&effOk(e));
+  const base=EQ.filter(e=>flOk(e,eqFl)&&(eqPart==="all"||EQ_PART[e.cat]===eqPart)&&(eqRar==="all"||rarK(e.r)===eqRar)&&(eqClass==="all"||!eqClasses(e).length||eqClasses(e).includes(eqClass))&&e.lv>=mn&&e.lv<=mx&&eqHit(e,s)&&effOk(e));
   // sub-part counts follow the other filters (class, rarity, level, search), so they match the list
   $("fEqSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>eqSub(e)===c.dataset.v).length});
   let a=base.filter(e=>eqSubV==="all"||eqSub(e)===eqSubV);
@@ -2299,7 +2305,7 @@ chipsInto($("fPrRar"),[["all","全部"],...["c","b","a","s","splus"].map(r=>[r,R
 $("fPrSort").onchange=renderProps;
 const prHit=(e,s)=>!s||norm(e.name+" "+(e.gen||"")+" "+zhE(e)+" "+zhS(e)+" "+((ITEMS[FR2ID[e.name]]||{}).aka||[]).join(" ")+" "+(FR2ID[e.name]||"")+" "+(PR_CAT[e.cat]||"")+" "+e.lore).includes(s);
 function renderProps(){const s=Sq(),so=$("fPrSort").value;const rv=e=>RAR[e.r]?RAR[e.r][2]:0;
-  const base=PRV().filter(e=>flOk(e,prFl)&&(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||e.r===prRar)&&prHit(e,s));
+  const base=PRV().filter(e=>flOk(e,prFl)&&(prGroup==="all"||PR_GROUP[e.cat]===prGroup)&&(prRar==="all"||rarK(e.r)===prRar)&&prHit(e,s));
   $("fPrSub").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>PR_SUBLAB(e.cat)===c.dataset.v).length});
   $("fPrSub2").querySelectorAll(".chip").forEach(c=>{const cn=c.querySelector(".cn");if(cn)cn.textContent=base.filter(e=>e.cat===c.dataset.v).length});
   let a=base.filter(e=>(prSubV==="all"||PR_SUBLAB(e.cat)===prSubV)&&(prSubV!=="採集"||prSub2==="all"||e.cat===prSub2));
@@ -2698,14 +2704,29 @@ async function jmAnalyze(g,ref,cv){const {J,N}=ref,f=ref.f;cv.width=cv.height=N;
   g.state=g.overlap<JMP.MIN?"few":g.med>JMP.MED?"other":"f1";if(g.state==="f1")g.floor=f;g.news=g.state==="f1"?inFrame.filter(it=>it.isNew):[];return g}
 // which floor a world is: tried against every floor with an explored map (the frames overlap), the first one whose colours
 // match wins, the same way tools/jm_merge.py decides; a world that matches none keeps the most telling reason
-async function jmDetect(g,refs,cv,fn){let best=null,hit=null;
+// 2026-11-12 (user「樓層確認…要自動」): the number in a JourneyMap server folder (Triggers_<id>) is the world ID the server sends to
+// every player (JourneyMap server docs), so a folder whose id the merge has already tied to a floor (SAO_JM.ids) is that floor even
+// when it overlaps the site's map too little; a never-seen id with an "overworld" folder that matches no floor is a new floor:
+// state "newfl", packed whole, and tools/jm_merge.py decides which floor it is
+const JMIDS=()=>((window.SAO_JM||{}).ids)||{},jmSrv=g=>/^triggers_./i.test(g.label||"")?g.label:null;
+// every folder name beside each world, from the whole mp folder the player picked (JMFILES): the Fractured Underworld's server
+// folders also hold an "overworld" (next to island_player_… / rulid / ice_cave …), which must never count as a new floor.
+// The zip carries this list (sao_pack.json) so tools/jm_merge.py can apply the same rule
+const JM_UW=/^(island_|rulid$|ice_cave$|gigas_cedar$|tuto_arrivee$|scene_akihiko$|backrooms$)|_memoryice$/i;
+const jmSibs=g=>{const out=new Set();for(const f of (JMFILES||[])){const p=(f.webkitRelativePath||f.name).split("/");const i=p.indexOf(g.label);if(i>=0&&p.length>i+2)out.add(p[i+1])}return[...out].sort()};
+async function jmDetect(g,refs,cv,fn){let best=null,hit=null;const id=jmSrv(g),known=id&&JMIDS()[id];
+  if(known&&String(g.leaf||"").toLowerCase()==="overworld"){const ref=refs.find(r=>r.f===+known);
+    if(ref){await fn(g,ref,cv);if(g.state==="few"){g.state="f1";g.floor=+known;g.news=(g.inFrame||[]).filter(it=>it.isNew)}if(g.state==="f1"||g.state==="other")return g}}
   if(String(g.leaf||"").toLowerCase()!=="overworld")refs=refs.filter(r=>r.f===1);   // floors 2 / 3: overworld folders only (boss-room instances are changed copies), as in tools/jm_merge.py   // no match: the reason from the first floor whose frame the world is in (floor 1 first)
   // every floor is tried and the one with the most matching chunks wins (a floor-3 folder can hold a few floor-2 regions), as in tools/jm_merge.py
   for(const ref of refs){g.floor=null;await fn(g,ref,cv);
     if(g.state==="f1"){if(!hit||g.overlap>hit.overlap)hit={ref,overlap:g.overlap};continue}
     if(!best||(best.state==="out"&&g.state!=="out"))best={state:g.state,overlap:g.overlap,med:g.med}}
   if(hit){if(hit.ref!==refs[refs.length-1]||g.state!=="f1"||g.floor!==hit.ref.f){g.floor=null;await fn(g,hit.ref,cv)}return g}
-  if(best)Object.assign(g,best,{news:[]});return g}
+  if(best)Object.assign(g,best,{news:[]});
+  if(id&&!known&&String(g.leaf||"").toLowerCase()==="overworld"&&g.files.length&&(!best||best.state!=="noday")){g.sibs=jmSibs(g);
+    if(!g.sibs.some(n=>JM_UW.test(n))){g.state="newfl";g.floor=null;g.news=g.files.slice()}}
+  return g}
 // height layers of a floor 1 world: a region is new when it has data (alpha) on a chunk the site's map of that layer
 // (tiles/f1jm_c<n>/explored.png) does not have yet; cave maps are mostly transparent, so even one new chunk counts
 const JMLM={};
@@ -2746,7 +2767,8 @@ function jmRegNames(rx,rz,f=JMSEL.floor||1){const F1=FLOORS[f],x0=rx*512,z0=rz*5
 // of a world gets surface regions of that world that overlap the site's map until they cover ANCHOR explored chunks, so
 // the server can verify every part on its own (also when only height layers are packed)
 const jmFullSel=()=>{const sel=JMG.filter(g=>g.state==="f1").map(g=>({g,news:[...(g.inFrame||[]),...Object.values(g.layers).flatMap(L=>L.inFrame||[])]})).filter(s=>s.news.length);
-  JMG.filter(g=>g.state==="dg").forEach(g=>{const news=Object.values(g.layers).flatMap(L=>L.inFrame||[]);if(news.length)sel.push({g,news,anc:g.anc})});return sel};
+  JMG.filter(g=>g.state==="dg").forEach(g=>{const news=Object.values(g.layers).flatMap(L=>L.inFrame||[]);if(news.length)sel.push({g,news,anc:g.anc})});
+  JMG.filter(g=>g.state==="newfl").forEach(g=>sel.push({g,news:g.files}));return sel};
 function jmPlan(sel){const parts=[],cap=Math.max(1,JMP.MAXN-Math.min(40,JMP.MAXN>>2));   // room for the anchors
   for(const {g,news,anc} of sel){const src=anc||g,byOv=(src.inFrame||[]).filter(it=>it.ov&&it.ov.size).sort((a,b)=>b.ov.size-a.ov.size);let batch=[],bb=0;
     const close=()=>{if(!batch.length)return;const items=batch.map(it=>({g,it}));let ov=anc?0:batch.reduce((s,it)=>s+(it.ov&&it.dir.toLowerCase()==="day"?it.ov.size:0),0),anchors=0;
@@ -2772,7 +2794,7 @@ async function jmZip(entries){const enc=new TextEncoder(),body=[],cen=[];let off
   const cs=cen.reduce((s,v)=>s+v.byteLength,0),e=new DataView(new ArrayBuffer(22));e.setUint32(0,0x06054b50,true);
   e.setUint16(8,entries.length,true);e.setUint16(10,entries.length,true);e.setUint32(12,cs,true);e.setUint32(16,off,true);
   return new Blob([...body,...cen,e],{type:"application/zip"})}
-const JM_ST={f1:["第 1 層","ok"],other:["不是網站認得的樓層","no"],few:["和網站地圖重疊太少，無法確認","no"],out:["不在網站地圖的範圍","no"],noday:["沒有地面地圖，無法確認","no"],dg:["地下城","ok"],dgno:["旁邊沒有第 1 層地圖，無法確認","no"],dgunk:["網站還不認得的副本","no"]};
+const JM_ST={f1:["第 1 層","ok"],newfl:["新的樓層（網站還沒有這一層的地圖，上傳後自動判斷是第幾層）","ok"],other:["不是網站認得的樓層","no"],few:["和網站地圖重疊太少，無法確認","no"],out:["不在網站地圖的範圍","no"],noday:["沒有地面地圖，無法確認","no"],dg:["地下城","ok"],dgno:["旁邊沒有第 1 層地圖，無法確認","no"],dgunk:["網站還不認得的副本","no"]};
 const mb=b=>(b/1048576).toFixed(1)+" MB";
 const jmSt=g=>g.state==="f1"?[`第 ${g.floor||1} 層`,"ok"]:JM_ST[g.state];
 // a picked square is "rx,rz" on floor 1 (as before) and "f:rx,rz" on other floors, since the floors' coordinates overlap
@@ -2845,7 +2867,7 @@ async function jmRun(files){const O=$("jmOut");window.__jm=null;JMG=[];{const h=
   for(const g of f1)if(g.floor!==1)for(const L of Object.values(g.layers)){L.inFrame=[];L.news=[]}   // height layers: floor 1 only (for now)
   for(let i=0;i<f1only.length;i++){const n=Object.values(f1only[i].layers).reduce((s,L)=>s+L.items.length,0);if(!n)continue;
     O.firstElementChild.textContent=`正在整理室內・洞穴（高度層）地圖：第 ${i+1}／${f1only.length} 個世界，${n} 張…`;await jmLayers(f1only[i])}
-  jmPopClose();for(const k in JMDGC)delete JMDGC[k];JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();JMSEL.fresh=true;JMSEL.floor=f1.some(g=>g.floor===1)?1:((f1.find(g=>g.news.length)||f1[0]||{floor:1}).floor||1);/* floor 1 first when it is there */O.innerHTML=`<div class="jmmode jmmode1"><b>更新打包</b>${jmSwitch("full")}</div><div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
+  jmPopClose();for(const k in JMDGC)delete JMDGC[k];JMG=groups;JMSEL.layers=null;JMSEL.off=new Set();JMSEL.dgOff=new Set();JMSEL.nfOn=false;JMSEL.fresh=true;JMSEL.floor=f1.some(g=>g.floor===1)?1:((f1.find(g=>g.news.length)||f1[0]||{floor:1}).floor||1);/* floor 1 first when it is there */O.innerHTML=`<div class="jmmode jmmode1"><b>更新打包</b>${jmSwitch("full")}</div><div id="jmHead"></div><div id="jmOpts"></div><div id="jmRows"></div>`;jmShow(true)}
 // preview of one square: the player's own JourneyMap image of it (surface first, else the first underground one)
 const JMURL=new Map();const jmUrl=f=>{if(!JMURL.has(f))JMURL.set(f,URL.createObjectURL(f));return JMURL.get(f)};
 // crop a region image to where it has data (a small cave room fills the preview instead of a black square)
@@ -2958,14 +2980,15 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
   const dgNews=d=>dgOk.filter(g=>g.dg===d).reduce((s,g)=>s+Object.values(g.layers).reduce((t,L)=>t+(L.news||[]).length,0),0);
   const dgNew=dgList.filter(d=>dgNews(d));
   for(const g of dgOk)if(!JMSEL.dgOff.has(g.dg)){const news=Object.values(g.layers).flatMap(L=>L.news||[]);if(news.length)sel.push({g,news,anc:g.anc})}
+  const nf=groups.filter(g=>g.state==="newfl");if(JMSEL.nfOn)nf.forEach(g=>sel.push({g,news:g.files}));
   const parts=jmPlan(sel),nNew=sel.reduce((s,x)=>s+x.news.length,0),nAnc=parts.reduce((s,p)=>s+p.anchors,0);
   window.__jm={dgs:Object.fromEntries(dgList.map(d=>{const its=dgOk.filter(g=>g.dg===d).flatMap(g=>Object.values(g.layers).flatMap(L=>L.items));
       return[d,{inst:dgOk.filter(g=>g.dg===d).length,news:dgNews(d),bounds:its.length?[Math.min(...its.map(i=>i.rx)),Math.min(...its.map(i=>i.rz)),Math.max(...its.map(i=>i.rx)),Math.max(...its.map(i=>i.rz))]:null}]})),
     groups:groups.map(g=>({label:g.label,leaf:g.leaf,dg:g.dg,state:g.state,overlap:g.overlap,med:g.med,files:g.files.length,news:(g.news||[]).length,
       layers:Object.fromEntries(Object.values(g.layers).map(L=>[L.key,{files:L.items.length,news:(L.news||[]).length}]))})),
-    found:Object.fromEntries(found),nNew,sel:{layers:[...JMSEL.layers],off:[...JMSEL.off],dgOff:[...JMSEL.dgOff]},
+    found:Object.fromEntries(found),nNew,newfl:nf.map(g=>({label:g.label,files:g.files.length})),sel:{layers:[...JMSEL.layers],off:[...JMSEL.off],dgOff:[...JMSEL.dgOff],nfOn:!!JMSEL.nfOn},
     parts:parts.map(p=>({n:p.items.length,bytes:p.bytes,ov:p.ov,anchors:p.anchors,names:p.items.map(({g,it})=>g.key+"/"+it.dir+"/"+it.f.name)}))};
-  const order={f1:0,dg:1,dgunk:2,dgno:3,few:4,other:5,noday:6,out:7};
+  const order={f1:0,newfl:1,dg:2,dgunk:3,dgno:4,few:5,other:6,noday:7,out:8};
   const rows=groups.slice().sort((a,b)=>order[a.state]-order[b.state]||b.latest-a.latest).map(g=>{const [t,c]=JM_ST[g.state];
     const nl=Object.values(g.layers).filter(L=>L.inFrame&&L.inFrame.length).length;
     if(g.dg){const n=Object.values(g.layers).reduce((s,L)=>s+L.items.length,0),nm=g.dg.startsWith("?")?g.dg.slice(1):dgName(g.dg);
@@ -3034,7 +3057,8 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
     head=`<div class="jmselbar"><span class="jmfl">第<input id="jmFloorIn" inputmode="numeric" autocomplete="off" maxlength="3" value="${FLv}" aria-label="樓層（可以直接輸入數字）" title="可以直接輸入樓層數字"><button type="button" class="jmflb" id="jmFloorBtn" aria-label="選擇樓層" aria-expanded="false">▾</button>層
           <ul class="jmflist" id="jmFloorList" hidden>${JM_FLOORS.map(o=>`<li><button type="button" data-jmfl="${o.f}"${o.f===FLv?' aria-current="true"':""}>第 ${o.f} 層${o.open?"":"（還不能打包）"}</button></li>`).join("")}</ul></span>
         <span class="jmanch"><button type="button" class="pill r-b jmpb" id="jmNamesBtn" aria-expanded="${!!U.names}" aria-controls="jmNames"><span id="jmRegSum">${pk}</span></button>${U.names?`<div class="jmpopov" id="jmNames"><div class="jmpoptt">已選區塊</div>${on.length||dOn.length?`${on.length?`<div><b>第 ${FLv} 層</b>：${esc(nm.join("、"))}</div>`:""}${dOn.length?`<div><b>地下城</b>：${esc(dOn.map(dgName).join("、"))}</div>`:""}`:`<span class="muted">還沒選。</span>`}</div>`:""}</span></div>`}
-  $("jmHead").innerHTML=head;jmFitPop($("jmNames"));
+  if(nf.length)head+=`<label class="jmnf"><input type="checkbox" id="jmNfOn"${JMSEL.nfOn?" checked":""}> 另外找到 ${nf.length} 個<b>網站還沒有地圖的樓層</b>（${nf.reduce((t,g)=>t+g.files.length,0)} 張）：一起上傳，網站會自動判斷是第幾層</label>`;
+  $("jmHead").innerHTML=head;jmFitPop($("jmNames"));{const c=$("jmNfOn");if(c)c.onchange=()=>{JMSEL.nfOn=c.checked;jmShow()}}
   {const U=JMSEL.ui||{},b=(id,f)=>{const e=$(id);if(e)e.onclick=f};
     b("jmNamesBtn",ev=>{ev.stopPropagation();U.names=!U.names;jmShow()});
     // floor: type a number (Enter or leaving the box), or pick from the ▾ list; 1～100, anything else goes back
@@ -3064,7 +3088,9 @@ function jmShow(all){const O=$("jmOut"),groups=JMG,f1=groups.filter(g=>g.state==
 // the download buttons of either mode (parts from jmPlan)
 function jmDlBind(L,fu){
   $("jmDl").querySelectorAll(fu?"[data-jmfull]":"[data-jmpart]").forEach(b=>b.onclick=async()=>{const i=+(fu?b.dataset.jmfull:b.dataset.jmpart),p=L[i];b.disabled=true;const t0=b.textContent;b.textContent="打包中…";
-    try{const blob=await jmZip(p.items.map(({g,it})=>({name:g.key+"/"+it.dir+"/"+it.f.name,file:it.f})));
+    try{const man={v:1,worlds:{}};for(const {g} of p.items)man.worlds[g.key]={siblings:g.sibs||jmSibs(g)};
+      const mf=new File([JSON.stringify(man)],"sao_pack.json",{lastModified:Date.now()});
+      const blob=await jmZip([...p.items.map(({g,it})=>({name:g.key+"/"+it.dir+"/"+it.f.name,file:it.f})),{name:"sao_pack.json",file:mf}]);
       const d=new Date(),stamp=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
       const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`探索地圖-第1層-${fu?"全地圖-":""}${stamp}${L.length>1?"-"+(i+1):""}.zip`;document.body.appendChild(a);a.click();a.remove();
       setTimeout(()=>URL.revokeObjectURL(a.href),60000);window.__jmBlob=blob}
@@ -3126,7 +3152,7 @@ function buildFormReport(){
       <li><b>選打包方式</b>：「更新打包」只打包網站還沒有的地方（每張都比對，比較久）；「全地圖打包」第 1 層的地圖全部打包、不用挑（比較快）。工具自動找出第 1 層的地圖和地下城，不用自己挑資料夾。</li>
       <li><b>挑要上傳的</b>（更新打包）：在小地圖上點方格、點地下城的圖選取（或按各段的「全選」）。滑鼠指著會在右下角的預覽視窗先看那一塊的地圖。全地圖打包跳過這一步。</li>
       <li><b>上傳</b>：按「下載壓縮檔」（或「全地圖打包」），再按左邊的「填寫回報表單」，回報種類選 <b>探索地圖</b>、上傳壓縮檔後送出。不用截圖，送出後自動檢查、合併，結果顯示在右邊的「已收錄」。</li></ol>
-    <div class="jmscope"><span><b>會收</b>：第 1 層的地面、室內・洞穴（洞穴、地下室、建築內）和地下城（Geldorack Dungeon、Labyrinth of the Fallen、Sanctuary of Xal'Zirith）；第 2、3 層的地面</span><span><b>不收</b>：第 2、3 層的室內・洞穴和地下城（之後再加）、第 4 層以後、破碎的地下世界、限時活動的場地</span></div>
+    <div class="jmscope"><span><b>會收</b>：第 1 層的地面、室內・洞穴（洞穴、地下室、建築內）和地下城（Geldorack Dungeon、Labyrinth of the Fallen、Sanctuary of Xal'Zirith）；第 2、3 層的地面；網站還沒有地圖的新樓層的地面（勾選後一起上傳，網站自動判斷是第幾層）</span><span><b>不收</b>：第 2 層以後的室內・洞穴和地下城（之後再加）、破碎的地下世界、限時活動的場地</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmDir" id="jmPick">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmDir" webkitdirectory multiple hidden><span id="jmDl"></span></div>
     <div class="muted jmdlnote" id="jmDlNote">要在電腦上用 Chrome 或 Edge 開本站。</div>

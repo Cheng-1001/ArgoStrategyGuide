@@ -81,6 +81,9 @@ try:
     put("Triggers_noise~d/overworld/day", "%d,%d.png" % top[0], noise)
     put("Triggers_lone~e/overworld/day", "%d,%d.png" % lone, region(*lone, wiki))
     put("Triggers_out~f/overworld/day", "40,40.png", region(*top[0], cv))
+    for w in ("Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d", "Triggers_out~f"):
+        os.makedirs(os.path.join(mp, w, "island_player_728a3c30"), exist_ok=True)
+        open(os.path.join(mp, w, "island_player_728a3c30", "notes.txt"), "w").write("x")
     # floors 2 and 3 (2026-11-12): worlds cut from the site's floor-2 / floor-3 explored maps (frames as FLOOR_CFG in tools/jm_merge.py)
     def fl_canvas(f, full, x0, z0):
         c = Image.new("RGB", (full, full))
@@ -157,6 +160,10 @@ try:
             pg.click("#jmDl [data-jmfull]")
         zf = os.path.join(tmp, "full.zip"); dl.value.save_as(zf)
         zn = zipfile.ZipFile(zf).namelist()
+        man = json.loads(zipfile.ZipFile(zf).read("sao_pack.json")) if "sao_pack.json" in zn else {}
+        check("geldorack" in " ".join((man.get("worlds") or {}).get("mp/Triggers_f1~a/overworld", {}).get("siblings", [])),
+              f"the zip carries the folder list beside each world (sao_pack.json) ({str(man)[:160]})")
+        zn = [x for x in zn if x != "sao_pack.json"]
         check("全地圖" in dl.value.suggested_filename and set(zn) == set(F[0]["names"]) and not any(".json" in x for x in zn),
               f"the 全地圖 zip holds exactly those images ({len(zn)}, {dl.value.suggested_filename})")
         pg.click("#jmOut [data-jmsw='new']")
@@ -318,7 +325,11 @@ try:
         check(st["Triggers_f1~a"]["state"] == "f1" and st["Triggers_f1~a"]["files"] == 4, f"the floor 1 world is recognised ({st['Triggers_f1~a']})")
         check(all(st[k]["state"] == "other" for k in ("Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d")),
               "other worlds with real-looking terrain and noise are not floor 1 (" + ", ".join("%.0f" % st[k]["med"] for k in ("Triggers_other~b", "Triggers_other2~c", "Triggers_noise~d")) + ")")
-        check(st["Triggers_lone~e"]["state"] == "few" and st["Triggers_out~f"]["state"] == "out", "no overlap -> cannot confirm; outside the floor -> skipped")
+        check(st["Triggers_lone~e"]["state"] == "newfl" and st["Triggers_out~f"]["state"] == "out",
+              "an unknown server folder with no match and no Underworld beside it is a possible new floor; outside the floor with the Underworld beside it -> skipped")
+        check(pg.locator("#jmNfOn").count() == 1 and not pg.is_checked("#jmNfOn") and "網站還沒有地圖的樓層" in pg.inner_text("#jmHead"),
+              "the new-floor folder is offered with a box, not ticked at first")
+        if os.environ.get("SHOT_DIR"): pg.locator("#jmPack").screenshot(path=os.path.join(os.environ["SHOT_DIR"], "jm_newfl.png"))
         t = pg.inner_text("#jmOut")
         nall = pg.evaluate("window.__jm.nNew")
         check(f"共 {nall} 張" in pg.inner_text("#jmDlNote") and "下載壓縮檔" in pg.inner_text("#jmDl"), f"the note counts the maps ({nall}) and the zip is offered")
@@ -328,7 +339,7 @@ try:
         zp = os.path.join(tmp, "up.zip")
         dl.value.save_as(zp)
         z = zipfile.ZipFile(zp)
-        names = [i.filename for i in z.infolist()]
+        names = [i.filename for i in z.infolist() if i.filename != "sao_pack.json"]
         check(z.testzip() is None and dl.value.suggested_filename.endswith(".zip"), "the download is a valid zip")
         dgn = [nm for nm in names if "_geldorack/" in nm]
         check(sorted(dgn) == ["mp/Triggers_f1~a/a57676b0-5d0c-4000-8000-000000000001_geldorack/-1/-1,-1.png",

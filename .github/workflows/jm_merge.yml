@@ -41,12 +41,14 @@ jobs:
           done
           ls -l "$RUNNER_TEMP/up"
           ls "$RUNNER_TEMP"/up/*.zip
-      - name: Merge (exit 2 = upload rejected, recorded in jmmeta.js)
+      - name: Merge (exit 2 = upload rejected, 3 / 4 = a possible new floor waits; recorded in jmmeta.js)
+        id: merge
         run: |
           set +e
           python -I tools/jm_merge.py "$RUNNER_TEMP"/up/*.zip --report "${TAG#jmap-}"
           code=$?
           if [ "$code" = "1" ]; then exit 1; fi
+          if [ "$code" = "3" ] || [ "$code" = "4" ]; then echo "held=1" >> "$GITHUB_OUTPUT"; fi
           exit 0
       - name: Commit and push
         run: |
@@ -62,6 +64,8 @@ jobs:
           exit 1
       - name: Ask GitHub Pages to rebuild (pushes made by this job may not start a Pages build by themselves)
         run: gh api -X POST "repos/$GITHUB_REPOSITORY/pages/builds" || true
-      - name: Delete the release (kept when the download failed, so a retry from the Google script can reuse it)
-        if: always() && steps.dl.outcome == 'success'
+      # kept when the download failed (a retry from the Google script can reuse it) and when a possible new floor waits
+      # (.github/workflows/jm_held.yml tries those again every day)
+      - name: Delete the release
+        if: always() && steps.dl.outcome == 'success' && steps.merge.outputs.held != '1'
         run: gh release delete "$TAG" --repo "$GITHUB_REPOSITORY" --cleanup-tag --yes || true

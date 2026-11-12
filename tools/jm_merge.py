@@ -39,7 +39,8 @@ What it does
      level 3 tiles it touched, regenerates levels 0-2 and floor1_jm.jpg and updates jmmeta.js. The result (merged or
      rejected, with the reason) is stored in jmmeta.js under results[report]; reports.js is never touched, so this
      cannot conflict with the Google script that appends reports.
-Prints one JSON line; exit code 0 = merged, 2 = rejected (reason in the JSON), 1 = error.
+Prints one JSON line; exit code 0 = merged, 2 = rejected (reason in the JSON), 3 = held (a possible new floor that cannot be told
+yet; kept to try again), 4 = merged but some worlds held, 1 = error.
 """
 import datetime, io, json, os, re, shutil, statistics, sys, zipfile
 from PIL import Image, ImageChops, ImageEnhance, ImageStat
@@ -73,6 +74,13 @@ C0, C1 = X0 // CH, (X0 + SIZE - 1) // CH          # chunk range inside the frame
 FLOOR_CFG = {1: dict(x0=70, z0=70, size=4980, full=5120, base="floor1.jpg", prev="floor1_jm.jpg", mx0=0, mz0=0, mw=320),
              2: dict(x0=-1062, z0=-1062, size=2124, full=2304, base="floor2.jpg", prev=None),
              3: dict(x0=-253, z0=-79, size=1700, full=1792, base="floor3.jpg", prev=None)}
+# Opening a new floor (2026-11-12, user「樓層確認…要自動」): add it here with x0 = None (frame not known yet) and, if known, words =
+# dungeon / boss folder names of that floor (JourneyMap names a dungeon run "<uuid>_<name>", e.g. floor 2's "_djtaurus").
+# A never-seen server folder whose "overworld" matches no floor then becomes the one open floor that has no map yet, by
+# itself (see new_floor()). The frame of a floor added with x0 None is centred on its first upload, 5120 blocks wide.
+FLOOR_WORDS = {2: ["taurus", "djtaurus", "rugiboeuf", "velindra", "breches"]}
+# Fractured Underworld server folders also hold an "overworld" (beside island_player_… / rulid / ice_cave …): never a floor
+UNDERWORLD = re.compile(r"^(island_|rulid$|ice_cave$|gigas_cedar$|tuto_arrivee$|scene_akihiko$|backrooms$)|_memoryice$", re.I)
 FLOOR = 1
 Z0, CX0, CX1, CZ0, CZ1, MX0, MZ0 = X0, C0, C1, C0, C1, 0, 0
 
@@ -380,6 +388,8 @@ def build_under(date=None):
 
 
 def dark_base():
+    if not FLOOR_CFG[FLOOR].get("base"):
+        return Image.new("RGB", (SIZE, SIZE), BG)
     base = Image.open(os.path.join(ROOT, FLOOR_CFG[FLOOR]["base"])).convert("RGB").resize((SIZE, SIZE), Image.LANCZOS)
     return ImageEnhance.Brightness(ImageEnhance.Color(base).enhance(0.35)).enhance(0.45)
 
@@ -450,6 +460,34 @@ def dungeon_of(world):
 
 def parent_of(world):
     return "/".join(world.replace("\\", "/").rstrip("/").split("/")[:-1])
+
+
+def server_of(world):
+    """the JourneyMap server folder of a world path ("…/Triggers_<world id>/overworld" -> "Triggers_<world id>"); the id is the
+    world ID the server sends to every player (JourneyMap server docs), so the same floor has the same folder name for all"""
+    p = parent_of(world).split("/")[-1]
+    return p if re.match(r"(?i)triggers_.", p) else None
+
+
+def read_manifest(src):
+    """sao_pack.json written by the site's packer: {"worlds": {world path: {"siblings": [folder names beside it]}}}"""
+    try:
+        if os.path.isdir(src):
+            fp = os.path.join(src, "sao_pack.json")
+            return json.load(open(fp, encoding="utf-8")) if os.path.exists(fp) else {}
+        with zipfile.ZipFile(src) as z:
+            n = next((i for i in z.namelist() if i.split("/")[-1] == "sao_pack.json"), None)
+            return json.loads(z.read(n)) if n else {}
+    except Exception:
+        return {}
+
+
+def frame_for(f, regions):
+    """a floor added with x0 None: a 5120-block square centred on its first upload (multiple of 16)"""
+    xs = [rx * 512 for rx, _, _ in regions] + [rx * 512 + 512 for rx, _, _ in regions]
+    zs = [rz * 512 for _, rz, _ in regions] + [rz * 512 + 512 for _, rz, _ in regions]
+    cx, cz = (min(xs) + max(xs)) // 2, (min(zs) + max(zs)) // 2
+    return dict(x0=(cx - 2560) // 16 * 16, z0=(cz - 2560) // 16 * 16, size=5120, full=5120)
 
 
 def layer_label(key):
@@ -614,13 +652,20 @@ def main(argv):
     # --seed N (owner only, never in the Actions workflow): start floor N's explored map from this upload; every world in
     # the frame is taken without the colour check (there is nothing to compare with yet)
     seed = int(opt["--seed"]) if "--seed" in opt else None
+    meta0 = load_meta()
+    for f, fr in (meta0.get("frames") or {}).items():          # frames worked out for floors added with x0 None
+        if int(f) in FLOOR_CFG and FLOOR_CFG[int(f)].get("x0") is None:
+            FLOOR_CFG[int(f)].update(fr)
+    ids = dict(meta0.get("ids") or {})                          # server folder -> floor, learnt from accepted uploads
+    manifest = (read_manifest(args[0]).get("worlds") or {})
     floors = [f for f in FLOOR_CFG if os.path.exists(os.path.join(ROOT, "tiles", f"f{f}jm", "explored.png"))]
-    state = {}
+    seeding = {seed} if seed else set()
+    state, held, newids, conflicts = {}, [], {}, []
 
     def st(f):
         use_floor(f)
         if f not in state:
-            if f == seed and not os.path.exists(MASK):
+            if f in seeding and not os.path.exists(MASK):
                 cv = Image.new("RGB", (FULL, FULL), BG)
                 cv.paste(dark_base(), (0, 0))
                 state[f] = (cv, Image.new("L", (MW, MW), 0))
@@ -651,7 +696,7 @@ def main(argv):
         # the floor whose explored map the colours match (frames of floors 1-3 overlap). Every floor is tried and the one
         # with the most matching chunks wins: the owner's floor-3 folder also held a few floor-2 regions (written around the
         # teleport, 2026-11-12), which match floor 2 exactly but are far fewer than its floor-3 ones
-        tried, ok = [], None
+        tried, ok, perf = [], None, {}
         # floors 2 / 3 take only "overworld" folders: the owner's boss-room instances (gorge_rugiboeuf, pre_breches) sit on
         # floor-2 coordinates but are changed copies (the gorge's arena has no sand disc), and would overwrite the real map
         leaf = g.get("path", "").replace("\\", "/").rstrip("/").split("/")[-1].lower()
@@ -666,13 +711,26 @@ def main(argv):
                 continue
             diffs, new = check_group(inside, cv, mask)
             med = statistics.median(diffs) if diffs else None
+            perf[f] = (inside, diffs, med)
             if len(diffs) >= 20 and med > 32:
                 tried.append((2, len(diffs), f"和目前地圖重疊的 {len(diffs)} 個區塊顏色對不上（差異 {med:.0f}），可能是別的樓層或別的世界"))
             elif len(diffs) < min_overlap:
                 tried.append((1, len(diffs), f"和網站現有的地圖只重疊 {len(diffs)} 個區塊（至少要 {min_overlap} 個），無法確認是第 {f} 層"))
             elif not ok or len(diffs) > ok["overlap"]:
                 ok = dict(g, inside=inside, overlap=len(diffs), floor=f)
+        srv = server_of(g.get("path", ""))
+        known = (ids.get(srv) or newids.get(srv)) if srv and leaf == "overworld" else None
+        if not ok and known and known in perf:
+            # a server folder already tied to a floor: too little overlap is fine (the player explored new ground), a colour
+            # mismatch is not
+            inside, diffs, med = perf[known]
+            if not (len(diffs) >= 20 and med > 32):
+                ok = dict(g, inside=inside, overlap=len(diffs), floor=known)
         if ok:
+            if srv and leaf == "overworld":
+                if ids.get(srv) not in (None, ok["floor"]):
+                    conflicts.append(f"{srv} 原本記為第 {ids[srv]} 層，這次比色是第 {ok['floor']} 層")
+                newids[srv] = ok["floor"]
             # single regions that clearly belong to another floor (no match on this one, a near-exact match there: a real
             # duplicate is ~10 per pixel, JPEG noise; other terrain 40+) go to that floor; the rest stays with the world's floor
             moved = {}
@@ -702,8 +760,29 @@ def main(argv):
             for f, rs in moved.items():
                 accepted.append(dict(g, inside=rs, overlap=0, floor=f))
         else:
-            # the reason from the first floor whose frame the world is in (floor 1 first), as the site's packer shows it
-            skipped.append((g["name"], next((t[2] for t in tried if t[0]), tried[0][2]) if tried else "網站還沒有可以比對的樓層地圖"))
+            nf = new_floor(g, srv, leaf, known, perf, ids, floors, manifest, groups) if not seed else None
+            if nf and nf[0] == "floor":
+                f = nf[1]
+                if FLOOR_CFG[f].get("x0") is None:
+                    FLOOR_CFG[f].update(frame_for(f, g["layers"]["day"]))
+                    meta1 = load_meta(); meta1.setdefault("frames", {})[str(f)] = {k: FLOOR_CFG[f][k] for k in ("x0", "z0", "size", "full")}; save_meta(meta1)
+                seeding.add(f)
+                st(f)
+                inside = [(rx, rz, im) for rx, rz, im in g["layers"]["day"] if in_frame(rx, rz)]
+                accepted.append(dict(g, inside=inside, overlap=0, floor=f, newFloor=True))
+                newids[srv] = f
+                floors.append(f)
+            elif nf and nf[0] == "hold":
+                held.append((g["name"], nf[1]))
+            else:
+                # the reason from the first floor whose frame the world is in (floor 1 first), as the site's packer shows it
+                skipped.append((g["name"], next((t[2] for t in tried if t[0]), tried[0][2]) if tried else "網站還沒有可以比對的樓層地圖"))
+    if not accepted and held:
+        # kept for later (the Actions job keeps the release and tries again every day): new clues such as the floor being
+        # marked open on the site, or its words, decide it then
+        reason = "；".join(f"{n}：{w}" for n, w in held[:3])
+        record(report, {"ok": False, "held": True, "reason": reason, "date": date})
+        out(3, ok=False, held=True, reason=reason)
     if not accepted:
         if len(skipped) == 1:
             reason = skipped[0][1]
@@ -719,7 +798,7 @@ def main(argv):
         acc = [g for g in accepted if g["floor"] == f]
         os.makedirs(os.path.join(TILES, "3"), exist_ok=True)
         new_chunks, touched = set(), set()
-        if f == seed and not os.path.exists(MASK):       # a new floor: write every tile of the frame
+        if f in seeding and not os.path.exists(MASK):    # a new floor: write every tile of the frame
             touched = {(tx, ty) for ty in range((SIZE - 1) // T + 1) for tx in range((SIZE - 1) // T + 1)}
         for g in sorted(acc, key=lambda g: g["date"]):          # oldest first: the newest data ends up on top
             for rx, rz, im in g["inside"]:
@@ -739,7 +818,7 @@ def main(argv):
         for tx, ty in touched:
             save_tile(cv.crop((tx * T, ty * T, tx * T + T, ty * T + T)), os.path.join(TILES, "3", f"{tx}_{ty}.jpg"))
         pyramid(cv, TILES)
-        if FLOOR_CFG[f]["prev"]:
+        if FLOOR_CFG[f].get("prev"):
             cv.crop((0, 0, SIZE, SIZE)).resize((3000, 3000), Image.LANCZOS).save(os.path.join(ROOT, FLOOR_CFG[f]["prev"]), quality=85, optimize=True)
         explored = sum(1 for cz in range(CZ0, CZ1 + 1) for cx in range(CX0, CX1 + 1) if mget(mask, cx, cz))
         pct = round(100 * explored / ((CX1 - CX0 + 1) * (CZ1 - CZ0 + 1)), 1)
@@ -777,12 +856,51 @@ def main(argv):
     if skipped:
         res["skipped"] = len(skipped)
         res["skippedWhy"] = [f"{n}：{w}" for n, w in skipped[:5]]
+    if held:
+        res["held"] = [f"{n}：{w}" for n, w in held[:3]]
+    if newids or conflicts:
+        meta1 = load_meta()
+        meta1.setdefault("ids", {}).update({k: v for k, v in newids.items() if k not in meta1["ids"]})
+        if conflicts:
+            meta1.setdefault("idConflicts", []).extend({"report": report, "date": date, "what": c} for c in conflicts)
+            res["idConflicts"] = conflicts
+        save_meta(meta1)
+    newfl = sorted({g["floor"] for g in accepted if g.get("newFloor")})
+    if newfl:
+        res["newFloors"] = newfl
     for f, v in per.items():
         write_meta(report, dict(res, regions=v["regions"], newChunks=v["newChunks"], pct=v["pct"], chunks=v["chunks"]), layers if f == 1 else None, f)
     if layers:
         build_under(date)
     record(report, res)
-    out(0, **res)
+    out(4 if held else 0, **res)     # 4 = merged, but some worlds wait (the Actions job keeps the release for a later try)
+
+
+def new_floor(g, srv, leaf, known, perf, ids, floors, manifest, groups):
+    """("floor", f) when this world is the first map of an open floor, ("hold", why) to try again later, None = not a floor.
+    Only an "overworld" folder in a Triggers_<id> server folder that no floor's colours match (a mismatch against an existing
+    map is fine: that proves it is not that floor) and whose server folder holds no Fractured Underworld world."""
+    if not srv or leaf != "overworld" or known or not g["layers"].get("day"):
+        return None
+    if any(len(d) >= 20 and m <= 32 for _, d, m in perf.values()):
+        return None
+    sib = (manifest.get(g.get("path", "")) or {}).get("siblings")
+    if sib is None:      # not packed by the site (no folder list): cannot rule out the Fractured Underworld, treated as before
+        return None
+    if any(UNDERWORLD.search(n) for n in sib):
+        return None
+    taken = set(ids.values())
+    cands = [f for f in sorted(FLOOR_CFG) if f not in floors and f not in taken]
+    if len(cands) > 1:
+        words = " ".join(n.lower() for n in sib)
+        hit = [f for f in cands if any(w in words for w in FLOOR_WORDS.get(f, []))]
+        if len(hit) == 1:
+            cands = hit
+    if len(cands) == 1:
+        return ("floor", cands[0])
+    if not cands:
+        return ("hold", "這是網站還沒有的樓層（新的伺服器資料夾），網站標記新樓層開放後會自動合併")
+    return ("hold", f"有 {len(cands)} 個樓層（第 {'、'.join(map(str, cands))} 層）都還沒有地圖，還分不出是哪一層，有新線索時會自動再判斷")
 
 
 def load_meta():

@@ -264,6 +264,96 @@ try:
     check(stray is None or not lit, f"a floor-2 region inside the floor-3 folder is not put on the floor-3 map ({stray})")
     check(fhash(os.path.join(t2, "tiles", "f1jm")) == h1, "floor 1's explored map is not touched")
     shutil.rmtree(t2, ignore_errors=True)
+    # 7. automatic floors (2026-11-12): a known server folder (world id) is its floor even with little overlap; a never-seen
+    # "overworld" folder becomes the one open floor without a map (frame from its first upload, id remembered); it waits
+    # (exit 3) when two floors could be it; a zip without the packer's folder list is not a new floor; a Fractured Underworld folder is never a floor
+    import random
+
+    def setup(extra_cfg):
+        d = tempfile.mkdtemp()
+        os.makedirs(os.path.join(d, "tools"))
+        src = open(os.path.join(ROOT, "tools", "jm_merge.py"), encoding="utf-8").read()
+        src = src.replace('3: dict(x0=-253, z0=-79, size=1700, full=1792, base="floor3.jpg", prev=None)}',
+                          '3: dict(x0=-253, z0=-79, size=1700, full=1792, base="floor3.jpg", prev=None), ' + extra_cfg + '}')
+        open(os.path.join(d, "tools", "jm_merge.py"), "w", encoding="utf-8").write(src)
+        for f in ("f1jm", "f2jm", "f3jm"):
+            shutil.copytree(os.path.join(ROOT, "tiles", f), os.path.join(d, "tiles", f))
+        for f in ("floor1.jpg", "floor1_jm.jpg", "floor2.jpg", "floor3.jpg", "jmmeta.js"):
+            shutil.copy(os.path.join(ROOT, f), d)
+        return d
+
+    def terrain(seed):
+        rnd = random.Random(seed); im = Image.new("RGBA", (512, 512))
+        for y in range(0, 512, 16):
+            for x in range(0, 512, 16):
+                im.paste((rnd.randrange(40, 200), rnd.randrange(40, 200), rnd.randrange(40, 200), 255), (x, y, x + 16, y + 16))
+        return im
+
+    def zp(d, files, man):
+        b = io.BytesIO()
+        with zipfile.ZipFile(b, "w") as z:
+            for n, im in files.items():
+                q = io.BytesIO(); im.save(q, "PNG"); z.writestr(n, q.getvalue())
+            if man is not None:
+                z.writestr("sao_pack.json", json.dumps({"v": 1, "worlds": man}))
+        p = os.path.join(d, f"u{len(os.listdir(d))}.zip"); open(p, "wb").write(b.getvalue())
+        return p
+
+    def go(d, path, rep):
+        r = subprocess.run([sys.executable, "-I", os.path.join(d, "tools", "jm_merge.py"), path, "--report", rep], capture_output=True, text=True)
+        return r.returncode, (json.loads(r.stdout.strip().splitlines()[-1]) if r.stdout.strip() else {"stderr": r.stderr[-400:]})
+
+    def meta(d):
+        t = open(os.path.join(d, "jmmeta.js"), encoding="utf-8").read()
+        return json.loads(t[t.index("window.SAO_JM =") + 15:].strip().rstrip(";"))
+
+    NF = '4: dict(x0=None, z0=None, size=None, full=None, base=None, prev=None)'
+    d = setup(NF)
+    W = "mp/Triggers_aaaa1111~new/overworld"
+    files = {f"{W}/day/{rx},{rz}.png": terrain(rx * 7 + rz) for rx in (8, 9) for rz in (8, 9)}
+    code, res = go(d, zp(d, files, {W: {"siblings": ["overworld", "1234abcd-5d0c-4000-8000-000000000001_djnew"]}}), "T960")
+    m = meta(d)
+    check(code == 0 and res.get("newFloors") == [4] and m.get("ids", {}).get("Triggers_aaaa1111~new") == 4 and "4" in m.get("frames", {})
+          and os.path.exists(os.path.join(d, "tiles", "f4jm", "explored.png")),
+          f"a never-seen overworld becomes the one open floor without a map, by itself ({code} {res.get('newFloors')} {res.get('reason', '')[:80]})")
+    fr = m.get("frames", {}).get("4", {})
+    check(fr and fr["x0"] <= 8 * 512 and fr["x0"] + fr["size"] >= 10 * 512, f"its frame covers the first upload ({fr})")
+    # the next upload from the same server folder, somewhere new, needs no overlap: the folder is known now
+    code, res = go(d, zp(d, {f"{W}/day/12,8.png": terrain(99)}, {W: {"siblings": ["overworld"]}}), "T961")
+    check(code == 0 and set(res.get("floors", {"4": 0}) or {"4": 0}) <= {"4"} and res.get("newChunks", 0) > 0,
+          f"a later upload of that folder with no overlap still goes to floor 4 ({code} {res.get('reason', '')[:80]})")
+    # no folder list in the zip: wait
+    W2 = "mp/Triggers_bbbb2222~x/overworld"
+    code, res = go(d, zp(d, {f"{W2}/day/1,1.png": terrain(5)}, None), "T962")
+    check(code == 2 and not res.get("held"), f"a zip without the packer's folder list is not taken as a new floor ({code})")
+    # Fractured Underworld server folder: never a floor
+    W3 = "mp/Triggers_cccc3333~uw/overworld"
+    code, res = go(d, zp(d, {f"{W3}/day/1,1.png": terrain(6)}, {W3: {"siblings": ["island_player_728a3c30", "overworld"]}}), "T963")
+    check(code == 2 and not meta(d).get("ids", {}).get("Triggers_cccc3333~uw"), f"an overworld beside island_player_… is not a floor ({code})")
+    # every open floor has a map now: a further unknown folder waits for the site to open a floor
+    code, res = go(d, zp(d, {f"{W2}/day/1,1.png": terrain(5)}, {W2: {"siblings": ["overworld"]}}), "T964")
+    check(code == 3 and "還沒有的樓層" in res.get("reason", ""), f"no open floor left: it waits ({code} {res.get('reason', '')[:60]})")
+    shutil.rmtree(d, ignore_errors=True)
+    # two open floors without a map: waits, unless a dungeon word tells them apart
+    d = setup(NF + ', 5: dict(x0=None, z0=None, size=None, full=None, base=None, prev=None)')
+    code, res = go(d, zp(d, files, {W: {"siblings": ["overworld"]}}), "T965")
+    check(code == 3 and "分不出" in res.get("reason", ""), f"two candidate floors: it waits ({code} {res.get('reason', '')[:60]})")
+    shutil.rmtree(d, ignore_errors=True)
+    # floor 2's own server folder (remembered id) with a region the site has not explored: taken with no overlap
+    d = setup(NF)
+    m2 = Image.open(os.path.join(d, "tiles", "f2jm", "explored.png")).convert("L")
+    def lit2(rx, rz):
+        return sum(1 for cz in range(rz * 32, rz * 32 + 32) for cx in range(rx * 32, rx * 32 + 32)
+                   if 0 <= cx + 67 < m2.width and 0 <= cz + 67 < m2.height and m2.getpixel((cx + 67, cz + 67)))
+    blank = next(((rx, rz) for rx in range(-2, 2) for rz in range(-2, 2) if lit2(rx, rz) == 0), None)
+    if blank:
+        W4 = "mp/Triggers_ba411067~7be9~4787~a9dc~da5c74995cb4/overworld"
+        code, res = go(d, zp(d, {f"{W4}/day/{blank[0]},{blank[1]}.png": terrain(11)}, {W4: {"siblings": ["overworld"]}}), "T966")
+        check(code == 0 and "2" in (res.get("floors") or {}), f"floor 2's known server folder is taken without overlap ({code} {res.get('reason', '')[:80]})")
+    else:
+        check(True, "floor 2 has no unexplored region near the centre (known-id check skipped)")
+    check(fhash(os.path.join(d, "tiles", "f1jm")) == fhash(os.path.join(ROOT, "tiles", "f1jm")), "floor 1 is not touched by any of this")
+    shutil.rmtree(d, ignore_errors=True)
 finally:
     shutil.rmtree(tmp, ignore_errors=True)
 print("\n" + ("ALL PASSED" if not fails else f"{len(fails)} FAILED"))
