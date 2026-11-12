@@ -14,6 +14,8 @@ REF, CAT = sys.argv[1], sys.argv[2]
 # owner's in-game screenshots (2026-11-01, 2026-11-03 evening batch): npc -> [(name, rarity, seconds, mats, cost Col or "Free", category)]
 # loot buyers' Buy tab = potions sold for Col (no materials). Catalogue id comes from OID.
 SHOTS = {
+    # 2026-11-12 (in24 11/8 18:13): Secret Leviathan Ring window — LEGENDARY, 5 min, materials same as the reference map
+    'Ring of the Leviathan': [('Ring of the Leviathan', 's', 300, [['Shark Carapace', 24], ['Heart of Nymbrea', 3], ['Iron Ingot', 1]], '55', 'acc')],
     # 2026-11-05 evening batch (in12): Skeleton Accessories' full list, and the Skeleton Skull secret smith (window title "Secret Skeleton Skull")
     # 2026-11-07 batch (in14): new smith in the Boar Zone, window title "Corrupted Boar Accessories" (not in the reference map)
     'Corrupted Boar Accessories': [
@@ -301,16 +303,106 @@ for npc, rows in SHOTS.items():                              # screenshots repla
     names = {r[1] for r in new}
     npcs[npc] = new + ([] if npc in FULL else [r for r in npcs.get(npc, []) if r[1] not in names])
 
+
+# 2026-11-12 batch (in24, owner's Chinese screenshots 11/8～11/12): other floors. Key = (floor, npcs.js name of that floor);
+# recipes.js writes them as "3|Alchemist" (floor 3 also has an "Alchemist"). Window titles are in the comments.
+# Materials use the site's item key when the game's Chinese name matches one (data23.js / zhnames.js), otherwise the
+# game's Chinese name as shown (no English name seen for those).
+FORT3 = [("Endurance", [["Wheat", 14], ["Wheat Leaves", 4], ["Wheat Flower", 2], ["Yellow Spider Carcass", 16]]),
+         ("Knowledge", [["Allium Flower", 14], ["Lavender", 4], ["Wisteria", 5], ["Purple Spider Eyes", 8]]),
+         ("Ferocity", [["琥珀萼片", 14], ["琥珀種子", 4], ["Flarevae", 16], ["Orc Blood", 8]]),
+         ("Vitality", [["奧拉西爾之刺", 16], ["Sylvaerian Jewel", 8], ["Sylvaer Essence", 1]]),
+         ("Patience", [["Sylnovarian Leaves", 12], ["Sylnovarian Jewel", 8], ["Sylnovar Essence", 1]]),
+         ("Resistance", [["White Spider Powder", 12], ["Juvenile Bark", 6], ["Ravager Bark", 6], ["Orc Heart", 1]])]
+P3_II = [["Allium Flower", 6], ["Sylve Sprout", 4], ["Magic Wood Shard", 3]]
+P3_III = [["Allium Flower", 9], ["Sylve Sprout", 6], ["Magic Wood Shard", 5], ["Ancestral Root", 1]]
+SHOTS23 = {
+    # P3 - Assistant Alchimiste du Palier 3 (zh window「P3 - 樓層鍊金術師助手 3」), 11/12 01:47～01:48
+    (3, "Assistant to the Alchemist"): [("Quality %s Fortifier III" % k, "b", 60, m, "55", "potion") for k, m in FORT3],
+    # P3 - Alchimiste du Palier 3, 11/12 01:48～01:49: 13 recipes, 15 Col, 5 s, ×3 each (no tier I, no Mana/Stamina IV)
+    (3, "Alchemist"): [("Quality %s Potion II" % k, "b", 5, P3_II, "15", "potion") for k in ("Health", "Mana", "Stamina")]
+                      + [("Quality %s Potion III" % k, "b", 5, P3_III, "15", "potion") for k in ("Health", "Mana", "Stamina")]
+                      + [("Quality Health Potion IV", "b", 5, [["Allium Flower", 10], ["Flaming Feather", 10], ["Marrow Powder", 3]], "15", "potion"),
+                         ("Quality Health Potion V", "b", 5, [["Allium Flower", 12], ["Orc Blood", 6]], "15", "potion"),
+                         ("Quality Health Potion VI", "b", 5, [["Allium Flower", 12], ["Orc Blood", 10], ["Orc Eye", 8]], "15", "potion"),
+                         ("Quality Mana Potion V", "b", 5, [["Allium Flower", 12], ["Sylnovarian Leaves", 6]], "15", "potion"),
+                         ("Quality Mana Potion VI", "b", 5, [["Allium Flower", 12], ["Sylnovarian Leaves", 10], ["Sylnovarian Jewel", 8]], "15", "potion"),
+                         ("Quality Stamina Potion V", "b", 5, [["Allium Flower", 12], ["Yellow Spider Carcass", 12]], "15", "potion"),
+                         ("Quality Stamina Potion VI", "b", 5, [["Allium Flower", 12], ["Yellow Spider Carcass", 16], ["Wheat Flower", 4]], "15", "potion")],
+    # P3 - Marchand d'Outils (zh「P3 - 工具商人」), Buy tab 01:51:27
+    (3, "Reinforced Tools Merchant"): [(n, "c", None, [], "753.74", "other") for n in ("Pioche Renforcée", "Hache Renforcée", "Houe Renforcée")],
+    # P3 - Marchand de Consommables (zh「P3 - 消耗品商人」), Buy tab 01:51:58 / 01:52:34 / 01:52:47
+    (3, "Consumables Merchant"): [("%s Potion %s" % (k, t), "c", None, [], c, "potion") for t, c in (("I", "30.15"), ("II", "65.32"), ("III", "100.50")) for k in ("Health", "Mana", "Stamina")]
+                                 + [("Parchemin de Réallocation", "b", None, [], "753.74", "other"), ("Parchemin de Maîtrise", "b", None, [], "753.74", "other")],
+    # P3 - Artisan de Runes (zh「P3 - 符文工匠」), first one ≈911,598: 4 RARE runes 01:53
+    (3, "Basic Rune Craftsman"): [("Rune des Bois", "b", 60, [["橙色赤鐵礦", 8], ["蜂蜜琥珀", 16], ["Woodland Tail", 16]], "15", "other"),
+                                  ("Rune Gobeline", "b", 60, [["孔雀石", 6], ["Goblin Essence", 1]], "15", "other"),
+                                  ("Rune Orcienne", "b", 60, [["石榴石", 2], ["鋁土礦錠", 4], ["Orc Blood", 16]], "15", "other"),
+                                  ("Rune de la Toile", "b", 60, [["赤鐵礦", 4], ["Iron Ingot", 4], ["Scrap Metal Piece", 8]], "15", "other")],
+    # second Artisan de Runes ≈855,536: 5 EPIC runes 02:00
+    (3, "Complex Rune Craftsman"): [("Rune Sylnovarienne", "a", 60, [["藍銅礦", 6], ["藍寶石", 2], ["Sylnovar Essence", 1]], "15", "other"),
+                                    ("Rune Sylvaerienne", "a", 60, [["孔雀石", 6], ["綠松石", 2], ["Sylvaer Essence", 1]], "15", "other"),
+                                    ("Rune Brumeuse", "a", 60, [["黃鐵礦", 6], ["Anthracite", 4], ["Misty Tail", 32]], "15", "other"),
+                                    ("Rune Luminiscente", "a", 60, [["金黃鐵礦", 4], ["蜂蜜琥珀", 16], ["Luminescent Spider Venom", 1]], "15", "other"),
+                                    ("Rune Spectrale", "a", 60, [["紅柱石", 6], ["Jet", 4], ["Spectral Essence", 1]], "15", "other")],
+    # P3 - Craft Artefact de Sylnovar (nameplate 神器鐵匠, ≈918,598; reference map "Sylnovar Accessories Blacksmith" 918,579): 14 EPIC, 10 min, 30 Col
+    (3, "Sylnovar Accessories Blacksmith"): [(n, "a", 600, m, "30", "acc") for n, m in (
+        ("Bottes des Crocs des Bois", [["Bottes des Bois", 1], ["Woodland Tail", 32], ["Sylnovarian Cloth", 64]]),
+        ("Bottes au Crocs Brumeux", [["Bottes Brumeuses", 1], ["Misty Tail", 32], ["Sylvaerian Cloth", 64]]),
+        ("Bottes Orciennes", [["Bottes Goblines", 1], ["Ravager Bark", 32], ["Ravager Heart", 16]]),
+        ("Bottes des Bois Sombres", [["Bottes Sylvestres", 1], ["Sylvaerian Jewel", 32], ["Juvenile Bark", 32], ["Sylvaer Essence", 16]]),
+        ("Bottes de la Toile", [["Bottes en Toile d'Araignée", 1], ["Black Silk", 32], ["White Spider Silk", 32], ["Egg Cocoon", 16]]),
+        ("Bottes Luminescentes", [["Yellow Spider Silk", 64], ["Luminescent Spider Venom", 16], ["Misty Fur", 64]]),
+        ("Bottes Spectrales", [["White Spider Silk", 64], ["Spectral Essence", 16], ["Misty Fur", 64]]),
+        ("Couteau à la Griffe des Bois", [["Woodland Claw", 128], ["Juvenile Seed", 16]]),
+        ("Couteau à la Griffe de la Brume", [["Misty Claw", 128], ["Juvenile Seed", 16]]),
+        ("Hache de la Tribu", [["Orc Eye", 64], ["Orc Essence", 16]]),
+        ("Grimoire des Bois Sombres", [["Orc Heart", 16], ["Ravager Heart", 16]]),
+        ("Masque de la Toile", [["強化蛛絲", 16], ["White Spider Silk", 64]]),
+        ("Ceinture Luminescente", [["Yellow Spider Carcass", 128], ["Yellow Spider Silk", 64]]),
+        ("Plume Spectrale", [["Spectral Essence", 16], ["White Spider Silk", 64]]))],
+    # no nameplate; window titles P3 - Craft Couteau en Dent de Loup / Craft Gants Féroce / Forgeron Grimoire Corrompu (02:59～03:26)
+    (3, "P3 - Craft Couteau en Dent de Loup"): [("Couteau en Dent de Loup", "s", 600, [["Wolf Fangs", 64], ["Fangs of Albal", 8], ["Woodland Claw", 96]], "55", "acc")],
+    (3, "P3 - Craft Gants Féroce"): [("Gants Féroce", "s", 600, [["Wolf Fur", 64], ["狼皮（第 2 種，名稱相同）", 64], ["Woodland Fur", 96], ["Woodland Tail", 32]], "55", "acc")],
+    # the three rows are three different Corrupted Fragments (green / blue / purple tooltip, 03:26:09～15)
+    (3, "P3 - Forgeron Grimoire Corrompu"): [("Grimoire Faible Corruption", "splus", 600, [["Corrupted Fragment", 32], ["Corrupted Fragment (2)", 16], ["Corrupted Fragment (3)", 8]], "55", "acc")],
+    # floor 2, Khesûn sanctuary (window title "2 -", 11/10 04:08): Runic Necklace EPIC 1 min, 55 Col; the three materials are all ×64
+    (2, "Manufacturer of the Runic Necklace"): [("Collier Runique", "a", 60, [["Bone Dust", 64], ["Spectral Chain", 64], ["Runestone", 64]], "55", "acc")],
+}
+OID23 = {"Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
+         "Quality Patience Fortifier III": 2001, "Quality Resistance Fortifier III": 2000, "Quality Vitality Fortifier III": 1996,
+         "Quality Health Potion IV": 2466, "Quality Health Potion V": 2467, "Quality Health Potion VI": 2468, "Mana Potion III": 2470,
+         "Pioche Renforcée": 2695, "Hache Renforcée": 2707, "Houe Renforcée": 2701, "Parchemin de Réallocation": 1708, "Parchemin de Maîtrise": 1707,
+         "Rune des Bois": 2021, "Rune Gobeline": 2020, "Rune Orcienne": 2019, "Rune de la Toile": 2022, "Rune Sylnovarienne": 2023,
+         "Rune Sylvaerienne": 2024, "Rune Brumeuse": 2025, "Rune Luminiscente": 2026, "Rune Spectrale": 2027,
+         "Bottes des Crocs des Bois": 1517, "Bottes au Crocs Brumeux": 1519, "Bottes Orciennes": 1514, "Bottes des Bois Sombres": 1521,
+         "Bottes de la Toile": 1526, "Bottes Luminescentes": 1523, "Bottes Spectrales": 1345, "Couteau à la Griffe des Bois": 1538,
+         "Couteau à la Griffe de la Brume": 1540, "Hache de la Tribu": 1542, "Grimoire des Bois Sombres": 1545, "Masque de la Toile": 1547,
+         "Ceinture Luminescente": 1549, "Plume Spectrale": 1551, "Couteau en Dent de Loup": 1564, "Gants Féroce": 2074,
+         "Grimoire Faible Corruption": 1565, "Collier Runique": 1309}
+LV23 = {"Quality Health Potion II": 5, "Quality Mana Potion II": 5, "Quality Stamina Potion II": 5, "Quality Health Potion III": 8,
+        "Quality Mana Potion III": 8, "Quality Stamina Potion III": 8, "Quality Health Potion IV": 12, "Quality Health Potion V": 15,
+        "Quality Health Potion VI": 18, "Quality Mana Potion V": 15, "Quality Mana Potion VI": 18, "Quality Stamina Potion V": 15,
+        "Quality Stamina Potion VI": 18, "Health Potion I": 1, "Mana Potion I": 1, "Stamina Potion I": 1, "Health Potion II": 3,
+        "Health Potion III": 5, "Mana Potion II": 5, "Mana Potion III": 8, "Stamina Potion II": 5, "Stamina Potion III": 8,
+        "Pioche Renforcée": 15, "Hache Renforcée": 15, "Houe Renforcée": 15}
+out23 = {}
+for (fl, npc), rows in SHOTS23.items():
+    key = "%d|%s" % (fl, npc)
+    out23[key] = {"floor": fl, "items": [[OID23.get(n, OID.get(n)), n, sec, [m[:] for m in mats], cost, rar, cat, LV23.get(n), "shot"] for n, rar, sec, mats, cost, cat in rows]}
+    if npc == "Alchemist":
+        QTY.update({key + "|" + r[1]: 3 for r in out23[key]["items"]})
 cat_ids = {x["id"] for x in json.load(open(CAT, encoding="utf-8"))}
-bad = [r[1] for rows in npcs.values() for r in rows if r[0] is not None and r[0] not in cat_ids]
+bad = [r[1] for rows in list(npcs.values()) + [v["items"] for v in out23.values()] for r in rows if r[0] is not None and r[0] not in cat_ids]
 assert not bad, bad
 
-hdr = """/* Floor 1 recipes by NPC (key = NPC name; matches npcs.js where that NPC is mapped). Built by tools/build_recipes.py.
+hdr = """/* Recipes by NPC (key = floor-1 NPC name, or "3|name" for another floor; matches npcs.js where that NPC is mapped). Built by tools/build_recipes.py.
    Row: [catalogueId|null, name, seconds|null, [[material, qty]], cost Col ("Free"; null = unknown), rarity|null, category, level, source]
    category: weapon / armor / acc / potion / key. source: "shot" = owner's in-game screenshot (wins), "ref" = reference map.
    Weapons and armour here are only the starter gear sold by the Starting Merchant; smiths' recipes still need screenshots. */
 window.SAO_RECIPES = """
 out = {npc: {"floor": 1, "items": rows} for npc, rows in sorted(npcs.items())}
+out.update(out23)
 open(os.path.join(ROOT, "recipes.js"), "w", encoding="utf-8").write(hdr + json.dumps(out, ensure_ascii=False, indent=0) + ";\nwindow.SAO_RECIPE_QTY = " + json.dumps(QTY, ensure_ascii=False) + ";\n")
 n = sum(len(r) for r in npcs.values())
 from collections import Counter

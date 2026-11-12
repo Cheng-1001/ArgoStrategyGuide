@@ -4,8 +4,21 @@
    values are the game's own text; r = rarity from the tooltip frame colour when it differs from the catalogue ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
    (user 2026-11-05: 裝備資料要照新上傳的截圖更新). */
 window.SAO_GAMESTATS = {date:"2026-11-04", items:{
+ // 2026-11-12 (in24, Chinese tooltips 11/9～11/12). 1547/1549/1551: the catalogue says common, the game's tooltip frame and craft window say EPIC (st null = catalogue stats, which match)
+ "1448":{"date": "2026-11-09", "en": "bond of the sylve", "lvl": 5, "dmg": null, "st": [["Max Health", "+2"], ["Max Mana", "+1.5"], ["Max Stamina", "+1.5"], ["Heal Bonus", "+0.5"]], "r": "s"},
+ "1453":{"date": "2026-11-09", "en": "gelatinous cloak", "lvl": 7, "dmg": null, "st": [["Cooldown Reduction", "+5%"], ["Max Health", "+3"], ["Heal Bonus", "+1"]]},
+ "1572":{"date": "2026-11-09", "en": "herald's bow", "lvl": 9, "dmg": "18", "st": [["Attack Speed", "1.2/s"]]},
+ "1371":{"date": "2026-11-09", "en": "casque du gardien", "lvl": 9, "dmg": null, "st": [["Defense", "+4"], ["Max Health", "+9"]]},
+ "1309":{"date": "2026-11-10", "en": "collier runique", "lvl": 13, "dmg": null, "st": [["Skill Damage", "+2%"], ["Cooldown Reduction", "+5%"], ["Max Health", "+5"]]},
+ "2586":{"date": "2026-11-09", "en": "bâton magique du nécromancien", "lvl": 14, "dmg": "29", "st": [["Attack Speed", "1/s"]]},
+ "1607":{"date": "2026-11-09", "en": "bracelet mielleux", "lvl": 12, "dmg": null, "st": [["Max Health", "+3"], ["Heal Bonus", "+1.5"], ["Movement Speed", "+5%"]]},
+ "1484":{"date": "2026-11-09", "en": "masque corrompu", "lvl": 14, "dmg": null, "st": [["Critical Strike Chance", "+3%"], ["Critical Strike Power", "+3%"], ["Skill Critical Strike Chance", "+3%"], ["Skill Critical Strike Power", "+3%"], ["Weapon Damage", "+3%"], ["Skill Damage", "+3%"], ["Max Health", "-20"]]},
+ "1488":{"date": "2026-11-10", "en": "pièce d'onyx pur", "lvl": 14, "dmg": null, "st": [["Critical Strike Chance", "+4%"], ["Critical Strike Power", "+2%"], ["Defense", "+3"], ["Max Health", "+15"]]},
+ "2074":{"date": "2026-11-12", "en": "gants féroce", "lvl": 17, "dmg": "10", "st": [["Attack Speed", "0.2/s"], ["Lifesteal", "+2%"], ["Spell Vampirism", "+1%"], ["Movement Speed", "+3.5%"]]},
+ "1547":{"date": "2026-11-12", "en": "masque de la toile", "lvl": 16, "dmg": null, "st": null, "r": "a"},
+ "1549":{"date": "2026-11-12", "en": "ceinture luminescente", "lvl": 16, "dmg": null, "st": null, "r": "a"},
+ "1551":{"date": "2026-11-12", "en": "plume spectrale", "lvl": 16, "dmg": null, "st": null, "r": "a"},
  // level-only (st null = keep the catalogue's stats; 2026-11-07 merchant audit, tooltips' minimum level): Gelatinous Cloak 7 (catalogue 5), Bracelet of Ice 8 (catalogue 9)
- "1453":{"date": "2026-11-04", "en": "gelatinous cloak", "lvl": 7, "dmg": null, "st": null},
  "1596":{"date": "2026-11-04", "en": "bracelet of ice", "lvl": 8, "dmg": null, "st": null},
  "1335":{"date": "2026-11-07", "en": "jambières du débutant", "lvl": 1, "dmg": null, "st": [["Max Health", "+1"]]},   // 新手護腿 中文提示 2026-11-07_15.01.53.png
  "1336":{"date": "2026-11-07", "en": "bottes du débutant", "lvl": 1, "dmg": null, "st": [["Max Health", "+1"]]},   // 新手之靴 中文提示 2026-11-07_15.01.58.png

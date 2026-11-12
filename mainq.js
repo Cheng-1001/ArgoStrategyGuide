@@ -101,5 +101,17 @@ window.SAO_MAINQ = {1: [
  {t:"The people from bellow", npc:"Elyra", lv:"10", d:"和 Elyra 對話後，往南穿過兩座山之間的山口，前往 Urbus。",
   s:[["和 Elyra 對話",null,null],["往南穿過兩座山之間的山口，到 Urbus",null,null]]},
  {t:"Five Opinions on Artheon", npc:"—", lv:"10", rw:"3150 經驗、1100 珂爾", d:"到了 Urbus 之後，和 5 位居民談談 Artheon。",
-  s:[["和 Calyss 對話",null,null],["和 Vaelith 對話",null,null],["和 Olyx 對話",null,null],["和 Oreyl 對話",null,null],["和 Duskwind 對話",null,null]]}
+  s:[["和 Calyss 對話",null,null],["和 Vaelith 對話",null,null],["和 Olyx 對話",null,null],["和 Oreyl 對話",null,null],["和 Duskwind 對話",null,null]]},
+ // 2026-11-12 (in24): floor-2 main quests seen in the owner's quest tracker (Chinese UI). Floor 2 has its own numbering
+ // (28 here is not floor 1's 28). Titles are the game's Chinese names; no English/French title seen yet.
+ {t:"獸群狂奔", n:5, npc:"—", tip:"遊戲任務追蹤（站長 11/9 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", s:[["向亞瑟昂報告",null,null]]},
+ {t:"鬼火", n:16, npc:"—", tip:"遊戲任務追蹤（站長 11/10 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", s:[["擊退啃食樹根的鳥身女妖（6 隻）",null,null]]},
+ {t:"凱順的燈籠", n:17, npc:"—", tip:"遊戲任務追蹤（站長 11/10 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", s:[["重新點亮聖所的四盞燈籠（凱順聖所）",-6,181,1]]},
+ {t:"貢品", n:20, npc:"—", tip:"遊戲任務追蹤（站長 11/9 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", s:[["把戰士的貢品帶到塔諾的祭壇（公牛角 ×10、狼皮 ×10、熊脂 ×2）",null,null],["在塔諾的祭壇上獻上貢品",null,null]]},
+ {t:"登巴與倒影", n:24, npc:"—", tip:"遊戲任務追蹤（站長 11/10 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", s:[["在西邊區域採集腐化樹皮（6 個）",null,null]]},
+ {t:"阿斯特里歐斯的巢穴", n:28, npc:"—", tip:"遊戲任務追蹤（站長 11/11 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", en:{0:"Clear the Lair of Asterius dungeon"}, s:[["通關阿斯特里歐斯的巢穴地下城",null,null]]}
+],
+3: [
+ // 2026-11-12 (in24): floor-3 quest tracker, Chinese UI
+ {t:"令人不安的失蹤", n:5, npc:"—", tip:"遊戲任務追蹤（站長 11/12 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", s:[["在帕薩艾爾山的巢穴擊敗十名強盜（0/10）",null,null],["通知奧蕾莉安",null,null]]}
 ]};
