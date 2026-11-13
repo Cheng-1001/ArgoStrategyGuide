@@ -161,7 +161,7 @@ window.SAO_NPCS={1:[
  ["armorBlacksmith", "Amethyst Armor Blacksmith", 627, 1370, "ref23"],
  ["armorBlacksmith", "Ancient Wood Armor Blacksmith", 780, 253, "ref23"],
  ["accessoriesBlacksmith", "Accessories Bandit Blacksmith", 1192, 741, "ref23", 1],
- ["accessoriesBlacksmith", "Adventurer's Shoemaker", 359, 587, "calc"],
+ ["accessoriesBlacksmith", "Adventurer's Shoemaker", 358, 572, "ref23"],
  ["accessoriesBlacksmith", "Amulet Blacksmith", 559, 1367, "ref23"],
  ["accessoriesBlacksmith", "Bandit Loot Reseller", 1211, 751, "ref23", 1],
  ["accessoriesBlacksmith", "Bracelet Blacksmith", 561, 1361, "ref23"],
@@ -175,13 +175,11 @@ window.SAO_NPCS={1:[
  ["runeCraftsmen", "Basic Rune Craftsman", 912, 598, "calc"],
  ["runeCraftsmen", "Complex Rune Craftsman", 856, 536, "calc"],
  ["runeCraftsmen", "Occult Runes Merchant", 723, 151, "ref23"],
- ["other", "Refaiter", 345, 597, "calc"],
+ ["other", "Refaiter", 345, 583, "ref23"],
  ["other", "Vault", 815, 675, "calc"],
  ["other", "Auction House", 826, 675, "calc"],
  ["accessoriesBlacksmith", "P3 - Craft Couteau en Dent de Loup", 707, 855, "calc"],
  ["accessoriesBlacksmith", "P3 - Craft Gants Féroce", 706, 833, "calc"],
- ["accessoriesBlacksmith", "P3 - Forgeron Grimoire Corrompu", 642, 600, "calc"],
- ["accessoriesBlacksmith", "P3 - Craft Anneau Draconique Corrompu", 1157, 1043, "calc"],
- ["accessoriesBlacksmith", "P3 - Craft Bottes du Pionnier", 1068, 917, "calc"]
+ ["accessoriesBlacksmith", "P3 - Forgeron Grimoire Corrompu", 642, 600, "calc"]
 ]};
-window.SAO_NPC_CALC={"Accessory Recycling": {"m": "tri", "k": 5, "d": "2026-11-03、11-08"}, "Weapon Recycling": {"m": "tri", "k": 4, "d": "2026-11-03、11-08"}, "Iron Accessories": {"m": "tri", "k": 5, "d": "2026-11-03、11-08"}, "Copper Accessories": {"m": "tri", "k": 4, "d": "2026-11-03、11-08"}, "Labyrinth Archaeologist": {"m": "one", "k": 1, "d": "2026-11-03"}, "Auction House": {"m": "one", "k": 1, "d": "2026-11-07"}, "3|Assistant to the Alchemist": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Alchemist": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Loot Buyer Sylnovar": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Reinforced Tools Merchant": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Basic Rune Craftsman": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Complex Rune Craftsman": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Sylnovar Accessories Blacksmith": {"m": "f3", "k": 1, "d": "2026-11-12", "t": "遊戲名牌「神器鐵匠」、視窗「P3 - Craft Artefact de Sylnovar」；參考互動地圖的 Sylnovar Accessories Blacksmith 在 X 918 Z 579，差約 19 格，推測是同一位"}, "3|Refaiter": {"m": "f3", "k": 1, "d": "2026-11-13", "t": "遊戲名牌「[重塑師] 材料」、視窗「P3 - Refaçonneur 材料」；參考互動地圖寫 X 345 Z 583，差約 14 格"}, "3|Adventurer's Shoemaker": {"m": "f3", "k": 1, "d": "2026-11-13", "t": "沒有名牌；視窗「P3 - Craft 靴子 de l'Aventurier」會做冒險者之靴。參考互動地圖的 Adventurer's Shoemaker 在 X 358 Z 572，差約 15 格，推測是同一位"}, "2|Manufacturer of the Runic Necklace": {"m": "f3", "k": 1, "d": "2026-11-10", "t": "遊戲視窗標題只寫「2 -」，會做符文項鍊；參考互動地圖寫 X -38 Z 199，差約 39 格，依名稱推測是同一位"}, "3|Vault": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Auction House": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|P3 - Craft Couteau en Dent de Loup": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|P3 - Craft Gants Féroce": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|P3 - Forgeron Grimoire Corrompu": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|P3 - Craft Anneau Draconique Corrompu": {"m": "f3", "k": 1, "d": "2026-11-13", "t": "約 Y 77（森林）；視窗標題「P3 - Craft 戒指 Draconique 腐化」"}, "3|P3 - Craft Bottes du Pionnier": {"m": "f3", "k": 1, "d": "2026-11-13", "t": "推測：名牌沒拍到，依站長站的位置和一分鐘後打開的製作視窗推測是這一位；約 Y 172（室內）；視窗標題「P3 - Craft 靴子 du Pionnier」"}};
+window.SAO_NPC_CALC={"Accessory Recycling": {"m": "tri", "k": 5, "d": "2026-11-03、11-08"}, "Weapon Recycling": {"m": "tri", "k": 4, "d": "2026-11-03、11-08"}, "Iron Accessories": {"m": "tri", "k": 5, "d": "2026-11-03、11-08"}, "Copper Accessories": {"m": "tri", "k": 4, "d": "2026-11-03、11-08"}, "Labyrinth Archaeologist": {"m": "one", "k": 1, "d": "2026-11-03"}, "Auction House": {"m": "one", "k": 1, "d": "2026-11-07"}, "3|Assistant to the Alchemist": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Alchemist": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Loot Buyer Sylnovar": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Reinforced Tools Merchant": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Basic Rune Craftsman": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Complex Rune Craftsman": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Sylnovar Accessories Blacksmith": {"m": "f3", "k": 1, "d": "2026-11-12", "t": "遊戲名牌「神器鐵匠」、視窗「P3 - Craft Artefact de Sylnovar」；參考互動地圖的 Sylnovar Accessories Blacksmith 在 X 918 Z 579，差約 19 格，推測是同一位"}, "2|Manufacturer of the Runic Necklace": {"m": "f3", "k": 1, "d": "2026-11-10", "t": "遊戲視窗標題只寫「2 -」，會做符文項鍊；參考互動地圖寫 X -38 Z 199，差約 39 格，依名稱推測是同一位"}, "3|Vault": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|Auction House": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|P3 - Craft Couteau en Dent de Loup": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|P3 - Craft Gants Féroce": {"m": "f3", "k": 1, "d": "2026-11-12"}, "3|P3 - Forgeron Grimoire Corrompu": {"m": "f3", "k": 1, "d": "2026-11-12"}};
