@@ -4,6 +4,16 @@
    values are the game's own text; r = rarity from the tooltip frame colour when it differs from the catalogue ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
    (user 2026-11-05: 裝備資料要照新上傳的截圖更新). */
 window.SAO_GAMESTATS = {date:"2026-11-04", items:{
+ // 2026-11-13 (in26, Chinese tooltips 11/13). 1554: only the rarity differs (tooltip frame EPIC, catalogue common; stats match). 2015 / 2010 are runes (props):
+ // the site applies these to the props tab too (st = the game's values; catalogue values kept in the note)
+ "2492":{"date": "2026-11-13", "en": "anneau du dard protecteur", "r": "s", "lvl": 12, "dmg": null, "st": [["Critical Strike Chance", "+5%"]]},
+ "1646":{"date": "2026-11-13", "en": "catalyseur abeille", "r": "a", "lvl": 12, "dmg": null, "st": [["Magic Damage", "+3%"], ["Mana Regeneration", "+2/s"]]},
+ "2496":{"date": "2026-11-13", "en": "anneau de l'harpie enflammé", "r": "a", "lvl": 12, "dmg": null, "st": [["Physical Damage", "+5%"], ["Lifesteal", "+2.5%"], ["Max Stamina", "+2"]]},
+ "2483":{"date": "2026-11-13", "en": "ring of the reaper", "r": "s", "lvl": 9, "dmg": null, "st": [["Skill Damage", "+3%"], ["Max Health", "+3"], ["Max Mana", "+2"], ["Max Stamina", "+2"]]},
+ "1554":{"date": "2026-11-13", "en": "masque du voleur", "lvl": 17, "dmg": null, "st": null, "r": "a"},
+ "2015":{"date": "2026-11-13", "en": "rune du colosse", "r": "splus", "lvl": null, "dmg": null, "st": [["Physical Damage", "-5%"], ["Magic Damage", "-5%"], ["Defense", "+3"], ["Max Health", "+10"], ["Max Stamina", "+2"], ["Health Regeneration", "+0.4/s"]]},
+ "1587":{"date": "2026-11-13", "en": "arc en améthyste", "r": "a", "lvl": 17, "dmg": "29.5", "st": [["Attack Speed", "1.2/s"]]},
+ "2010":{"date": "2026-11-13", "en": "rune de noël", "lvl": 8, "dmg": null, "st": [["Lifesteal", "+1%"], ["Spell Vampirism", "+1%"], ["Max Mana", "+0.5"], ["Max Stamina", "+0.5"]]},
  // 2026-11-12 (in24, Chinese tooltips 11/9～11/12). 1547/1549/1551: the catalogue says common, the game's tooltip frame and craft window say EPIC (st null = catalogue stats, which match)
  "1448":{"date": "2026-11-09", "en": "bond of the sylve", "lvl": 5, "dmg": null, "st": [["Max Health", "+2"], ["Max Mana", "+1.5"], ["Max Stamina", "+1.5"], ["Heal Bonus", "+0.5"]], "r": "s"},
  "1453":{"date": "2026-11-09", "en": "gelatinous cloak", "lvl": 7, "dmg": null, "st": [["Cooldown Reduction", "+5%"], ["Max Health", "+3"], ["Heal Bonus", "+1"]]},

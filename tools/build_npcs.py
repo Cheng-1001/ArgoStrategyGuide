@@ -99,8 +99,8 @@ NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,6
 for fl,rs in F23.items():
     for r in rs:
         if (fl,r['n']) in CALC23: x,z,d,nt=CALC23[(fl,r['n'])]; r.update(x=x,z=z,src='calc')
-for fl,c,n,x,z,d in NEW23:
-    F23[fl].append(dict(c=c,n=n,x=x,z=z,u=False,src='calc')); CALC23[(fl,n)]=(x,z,d,'')
+for fl,c,n,x,z,d,*nt in NEW23:
+    F23[fl].append(dict(c=c,n=n,x=x,z=z,u=False,src='calc')); CALC23[(fl,n)]=(x,z,d,nt[0] if nt else '')
 miss=[k for k in CALC23 if not any(r['n']==k[1] for r in F23[k[0]])]; assert not miss, miss
 print({k:len(v) for k,v in F23.items()})
 rows23=''.join(',\n'+str(k)+':[\n'+',\n'.join(' '+json.dumps([r['c'],r['n'],r['x'],r['z'],r['src']]+([1] if r['u'] else []),ensure_ascii=False) for r in v)+'\n]' for k,v in F23.items())

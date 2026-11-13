@@ -130,7 +130,7 @@ const RAW = {
 "Boar Hide":["Peau de Sanglier","c",1,"material","Utilisable pour de la tannerie basique.",null,null,1],
 "Corrupted Crystal":["Cristal Corrompu","c",1,"material","Des traces de corruptions émanent de cet objet",null,null,2],
 "Ring of Pumba":["Anneau de Pumba","s",3,"ring","Taillé dans un métal épais et marqué par une rayure rouge, cet anneau est inspiré du célèbre sanglier massif",null,{"Defense":1,"Max Health":5},3],
-"Wolf Fur":["Fourrure de Loup","c",1,"material","Chaud et souple, ce pelage protège efficacement du froid. Parfait pour créer des armures légères.",null,null,4],
+"Wolf Fur":[null,"c",1,"material","A supple and light fur, used to craft armor.",null,null,4],   // 2026-11-13 (in26, user A): the floor-1 fur; catalogue 2175 (Chaud et souple…) is the floor-2 fur = data23 "Wolf Fur (2)"
 "Wolf Fangs":["Crocs de Loup","c",1,"material","Une dent longue et acérée, prisée de certains artisans.",null,null,5],
 "Fangs of Albal":["Crocs de Albal","b",1,"material","Un croc massif imprégné de sa rage sauvage. Son essence est utilisée pour concocter des potions de force redoutable.",null,null,6],
 "Corrupted Spore":["Spore Corrompu","c",1,"material","Une spore étrange imprégnée de corruption...",null,null,7],

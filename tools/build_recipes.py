@@ -365,11 +365,25 @@ SHOTS23 = {
         ("Plume Spectrale", [["Spectral Essence", 16], ["White Spider Silk", 64]]))],
     # no nameplate; window titles P3 - Craft Couteau en Dent de Loup / Craft Gants Féroce / Forgeron Grimoire Corrompu (02:59～03:26)
     (3, "P3 - Craft Couteau en Dent de Loup"): [("Couteau en Dent de Loup", "s", 600, [["Wolf Fangs", 64], ["Fangs of Albal", 8], ["Woodland Claw", 96]], "55", "acc")],
-    (3, "P3 - Craft Gants Féroce"): [("Gants Féroce", "s", 600, [["Wolf Fur", 64], ["狼皮（第 2 種，名稱相同）", 64], ["Woodland Fur", 96], ["Woodland Tail", 32]], "55", "acc")],
+    (3, "P3 - Craft Gants Féroce"): [("Gants Féroce", "s", 600, [["Wolf Fur", 64], ["Wolf Fur (2)", 64], ["Woodland Fur", 96], ["Woodland Tail", 32]], "55", "acc")],
     # the three rows are three different Corrupted Fragments (green / blue / purple tooltip, 03:26:09～15)
     (3, "P3 - Forgeron Grimoire Corrompu"): [("Grimoire Faible Corruption", "splus", 600, [["Corrupted Fragment", 32], ["Corrupted Fragment (2)", 16], ["Corrupted Fragment (3)", 8]], "55", "acc")],
     # floor 2, Khesûn sanctuary (window title "2 -", 11/10 04:08): Runic Necklace EPIC 1 min, 55 Col; the three materials are all ×64
     (2, "Manufacturer of the Runic Necklace"): [("Collier Runique", "a", 60, [["Bone Dust", 64], ["Spectral Chain", 64], ["Runestone", 64]], "55", "acc")],
+    # 2026-11-13 (in26): window "P3 - Craft 戒指 Draconique 腐化" (obtain line P3 - Craft Anneau Draconique Corrompu), 02.10.14～22: one MYTHIC recipe;
+    # the material list is text only, so which of the three Corrupted Fragments it takes cannot be seen
+    (3, "P3 - Craft Anneau Draconique Corrompu"): [("Anneau Draconique Corrompu", "splus", 600, [["腐化金屬錠", 1], ["腐化碎片（三種之一，看不出是哪一種）", 16], ["Fangs of Albal", 8]], "55", "acc")],
+    # window "P3 - Craft 靴子 du Pionnier" (04.49.08): LEGENDARY 15 min, 30 Col
+    (3, "P3 - Craft Bottes du Pionnier"): [("Bottes du Pionnier", "s", 900, [["探險家之靴", 1], ["Bear Hide", 128], ["Ravager Bark", 64], ["Thick Hide", 96]], "30", "acc")],
+    # nameplate [重塑師] 材料, window "P3 - Refaçonneur 材料" (05.11.47～50): one page of 4 strings, 1 min, 15 Col each (more pages may exist:
+    # 腐化獸血's obtain line also names P3 - Refaçonneur Matériaux). Log names with no confirmed English name stay in Chinese
+    (3, "Refaiter"): [("冷杉細繩", "c", 60, [["冷杉原木", 8], ["Spider Thread", 4]], "15", "other"),
+                      ("Ficelle de Bouleau", "b", 60, [["樺木原木", 8], ["Spider Thread", 4]], "15", "other"),
+                      ("橡木細繩", "c", 60, [["Oak Log", 8], ["Spider Thread", 4]], "15", "other"),
+                      ("金合歡細繩", "c", 60, [["金合歡原木", 8], ["Spider Thread", 4]], "15", "other")],
+    # window "P3 - Craft 靴子 de l'Aventurier" (05.12.14, no nameplate; the reference map's Adventurer's Shoemaker is ~15 blocks away, guessed the same NPC):
+    # RARE 5 min, 30 Col; which 狼皮 (floor 1 or floor 2, same name and icon) cannot be seen
+    (3, "Adventurer's Shoemaker"): [("Bottes de l'Aventurier", "b", 300, [["磨損皮革", 128], ["狼皮（第 1 或第 2 層，看不出來）", 128], ["Misty Fur", 96], ["Misty Tail", 48]], "30", "acc")],
 }
 OID23 = {"Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
          "Quality Patience Fortifier III": 2001, "Quality Resistance Fortifier III": 2000, "Quality Vitality Fortifier III": 1996,
@@ -381,13 +395,14 @@ OID23 = {"Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier I
          "Bottes de la Toile": 1526, "Bottes Luminescentes": 1523, "Bottes Spectrales": 1345, "Couteau à la Griffe des Bois": 1538,
          "Couteau à la Griffe de la Brume": 1540, "Hache de la Tribu": 1542, "Grimoire des Bois Sombres": 1545, "Masque de la Toile": 1547,
          "Ceinture Luminescente": 1549, "Plume Spectrale": 1551, "Couteau en Dent de Loup": 1564, "Gants Féroce": 2074,
-         "Grimoire Faible Corruption": 1565, "Collier Runique": 1309}
+         "Grimoire Faible Corruption": 1565, "Collier Runique": 1309,
+         "Anneau Draconique Corrompu": 2522, "Bottes du Pionnier": 1512, "Ficelle de Bouleau": 2367, "Bottes de l'Aventurier": 1510}
 LV23 = {"Quality Health Potion II": 5, "Quality Mana Potion II": 5, "Quality Stamina Potion II": 5, "Quality Health Potion III": 8,
         "Quality Mana Potion III": 8, "Quality Stamina Potion III": 8, "Quality Health Potion IV": 12, "Quality Health Potion V": 15,
         "Quality Health Potion VI": 18, "Quality Mana Potion V": 15, "Quality Mana Potion VI": 18, "Quality Stamina Potion V": 15,
         "Quality Stamina Potion VI": 18, "Health Potion I": 1, "Mana Potion I": 1, "Stamina Potion I": 1, "Health Potion II": 3,
         "Health Potion III": 5, "Mana Potion II": 5, "Mana Potion III": 8, "Stamina Potion II": 5, "Stamina Potion III": 8,
-        "Pioche Renforcée": 15, "Hache Renforcée": 15, "Houe Renforcée": 15}
+        "Pioche Renforcée": 15, "Hache Renforcée": 15, "Houe Renforcée": 15, "Bottes du Pionnier": 16}
 out23 = {}
 for (fl, npc), rows in SHOTS23.items():
     key = "%d|%s" % (fl, npc)

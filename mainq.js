@@ -109,7 +109,10 @@ window.SAO_MAINQ = {1: [
  {t:"凱順的燈籠", n:17, npc:"—", tip:"遊戲任務追蹤（站長 11/10 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", s:[["重新點亮聖所的四盞燈籠（凱順聖所）",-6,181,1]]},
  {t:"貢品", n:20, npc:"—", tip:"遊戲任務追蹤（站長 11/9 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", s:[["把戰士的貢品帶到塔諾的祭壇（公牛角 ×10、狼皮 ×10、熊脂 ×2）",null,null],["在塔諾的祭壇上獻上貢品",null,null]]},
  {t:"登巴與倒影", n:24, npc:"—", tip:"遊戲任務追蹤（站長 11/10 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", s:[["在西邊區域採集腐化樹皮（6 個）",null,null]]},
- {t:"阿斯特里歐斯的巢穴", n:28, npc:"—", tip:"遊戲任務追蹤（站長 11/11 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", en:{0:"Clear the Lair of Asterius dungeon"}, s:[["通關阿斯特里歐斯的巢穴地下城",null,null]]}
+ {t:"阿斯特里歐斯的巢穴", n:28, npc:"—", tip:"遊戲任務追蹤（站長 11/11 截圖）只看到名稱和這一步的目標，其他步驟、NPC、獎勵還不知道。", en:{0:"Clear the Lair of Asterius dungeon"}, s:[["通關阿斯特里歐斯的巢穴地下城",null,null]]},
+ // 2026-11-13 (in26, user E2): only the name is known, from the obtain line of 梅莉歐娜之鑰 (Clé de Melliona). Main or side quest is unknown; listed here
+ // (main-quest list) because a side-quest row needs a town and NPC position
+ {t:"前往梅莉歐娜途中", npc:"—", rw:"梅莉歐娜之鑰", d:"遊戲截圖只看到任務名稱（梅莉歐娜之鑰的取得途徑），任務內容、NPC、位置都還不知道。", tip:"名稱取自梅莉歐娜之鑰的屬性視窗（站長 2026-11-13 截圖）：「任務『前往梅莉歐娜途中』的獎勵」。是主線還是支線也還不知道，先列在這裡。", s:[]}
 ],
 3: [
   // 2026-11-13 (in25): floor-3 main quests 01～08 from the quest log (Chinese UI, owner 11/12 screenshots). Region label 失落迷霧之森.

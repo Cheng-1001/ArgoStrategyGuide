@@ -4,8 +4,10 @@
    "zh": 1 = the set was only seen on a Chinese tooltip (English set name unknown): name and tiers are the game's Chinese text, shown as is.
    2026-11-07 checked against the Chinese tooltips: Standard Skeleton Set [4] is +2% Damage Reduction (was -2%); the rest match. */
 window.SAO_SETS = {date:"2026-11-07", sets:[
+ {"name": "盜賊套裝", "zh": 1, "tiers": [[2, "+2 攻擊傷害"], [3, "+0.5/秒 移動速度、+10% 攻擊速度"], [4, "+7.5% 爆擊率、+7.5% 爆擊傷害"]], "members": ["Masque du Voleur"]},   // 2026-11-13 in26 Chinese tooltip (竊賊面具); not the English Bandit Set (different tiers)
+ {"name": "獵人紫水晶套裝", "zh": 1, "tiers": [[2, "+0.4 耐力/秒"], [3, "+4% 爆擊率、+4% 技能爆擊率"], [4, "+7 攻擊傷害"]], "members": ["獵人紫水晶靴", "獵人紫水晶護腿"]},   // 2026-11-13 in26 Chinese tooltips
  {"name": "森林尖牙套裝", "zh": 1, "tiers": [[2, "+0.8 魔力/秒、+8 最大魔力"], [3, "+6% 冷卻縮減"], [4, "+6 治療威力"]], "members": ["Bottes des Crocs des Bois", "Couteau à la Griffe des Bois"]},   // 2026-11-12 in24 Chinese tooltip
- {"name": "庇護者蜂針套裝", "zh": 1, "tiers": [[2, "+5% 閃避率、+1 攻擊傷害"], [3, "+5% 爆擊威力、+5% 技能爆擊傷害、+5% 技能爆擊率"]], "members": ["Anneau du Nectar Doré"]}, {"name": "水之鳥身女妖套裝", "zh": 1, "tiers": [[2, "+4% 技能爆擊率"], [3, "+5% 移動速度、+1 防禦、+5% 魔法傷害"]], "members": ["Feather of the Little Drop"]}, {"name": "部落套裝", "zh": 1, "tiers": [[2, "+10 HP、+0.25 HP/秒"], [3, "+2.5% 生命偷取"], [4, "+3% 物理傷害"]], "members": ["Bottes Orciennes", "Hache de la Tribu"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "庇護者蜂針套裝", "zh": 1, "tiers": [[2, "+5% 閃避率、+1 攻擊傷害"], [3, "+5% 爆擊威力、+5% 技能爆擊傷害、+5% 技能爆擊率"]], "members": ["Anneau du Nectar Doré", "Anneau du Dard Protecteur"]}, {"name": "水之鳥身女妖套裝", "zh": 1, "tiers": [[2, "+4% 技能爆擊率"], [3, "+5% 移動速度、+1 防禦、+5% 魔法傷害"]], "members": ["Feather of the Little Drop"]}, {"name": "部落套裝", "zh": 1, "tiers": [[2, "+10 HP、+0.25 HP/秒"], [3, "+2.5% 生命偷取"], [4, "+3% 物理傷害"]], "members": ["Bottes Orciennes", "Hache de la Tribu", "Ceinture de la Tribu"]},   // 2026-11-12 in24 Chinese tooltip
  {"name": "暗林套裝", "zh": 1, "tiers": [[2, "+0.1/秒 移動速度、+2 治療威力"], [3, "+5% 魔法傷害"], [4, "+20% 攻擊速度"]], "members": ["Bottes des Bois Sombres", "Grimoire des Bois Sombres"]},   // 2026-11-12 in24 Chinese tooltip
  {"name": "蛛網套裝", "zh": 1, "tiers": [[2, "+2% 冷卻縮減、+0.2 魔力/秒"], [3, "+10 最大魔力、+2.5% 技能爆擊率"], [4, "+2.5% 技能爆擊率、+4 攻擊傷害"]], "members": ["Bottes de la Toile", "Masque de la Toile"]},   // 2026-11-12 in24 Chinese tooltip
  {"name": "發光套裝", "zh": 1, "tiers": [[2, "+4 攻擊傷害"], [3, "+2.5% 移動速度、+10% 攻擊速度"], [4, "+2.5% 投射物傷害、+1.5% 爆擊率"]], "members": ["Bottes Luminescentes", "Ceinture Luminescente"]},   // 2026-11-12 in24 Chinese tooltip
@@ -14,7 +16,7 @@ window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "守護者套裝", "zh": 1, "tiers": [[2, "+1.5 最大耐力"], [3, "+0.15 HP/秒"], [4, "+2% 格擋率"]], "members": ["Casque du Gardien"]},   // 2026-11-12 in24 Chinese tooltip
  {"name": "符文套裝", "zh": 1, "tiers": [[2, "+0.3 HP/秒、+0.3 魔力/秒、+0.3 耐力/秒"], [3, "+5% 格擋率、+5% 冷卻縮減、+4% 技能傷害"]], "members": ["Collier Runique"]},   // 2026-11-12 in24 Chinese tooltip
  {"name": "蜂巢套裝", "zh": 1, "tiers": [[2, "+1 最大魔力"], [3, "+5% 移動速度"], [4, "+1 治療加成"], [5, "+0.05 攻擊速度"]], "members": ["Bracelet Mielleux"]},   // 2026-11-12 in24 Chinese tooltip
- {"name": "純淨縞瑪瑙套裝", "zh": 1, "tiers": [[2, "+5.5% 移動速度"], [3, "+0.6 魔力/秒、+0.6 耐力/秒"], [4, "+7% 魔法傷害、+7% 物理傷害、+7% 投射物傷害"], [5, "+25 HP、+10 防禦"]], "members": ["Pièce d'Onyx Pur"]},   // 2026-11-12 in24 Chinese tooltip
+ {"name": "純淨縞瑪瑙套裝", "zh": 1, "tiers": [[2, "+5.5% 移動速度"], [3, "+0.6 魔力/秒、+0.6 耐力/秒"], [4, "+7% 魔法傷害、+7% 物理傷害、+7% 投射物傷害"], [5, "+25 HP、+10 防禦"]], "members": ["Pièce d'Onyx Pur", "Amulette d''Onyx Pur"]},   // 2026-11-12 in24 Chinese tooltip
  {"name": "下級狼套裝", "zh": 1, "tiers": [[2, "+0.5/秒 移動速度、+5 攻擊傷害、-5 最大耐力、-10 最大魔力"], [3, "+0.2 攻擊速度、+7.5% 爆擊率、+7.5% 爆擊傷害"]], "members": ["Crâne de Loup", "Gants Féroce", "Couteau en Dent de Loup"]},   // 2026-11-07 15:21:05 拍賣場的狼頭骨（官網 1469，等級 17）
  {"name": "森靈套裝", "zh": 1, "tiers": [[2, "+1 HP"], [3, "+0.5 治療加成"], [4, "+0.1 HP/秒、+0.1 魔力/秒、+0.1 耐力/秒"]], "members": ["Amulet of the Sylve", "Lien de la Sylve"]},
  {"name": "Misty Fangs Set", "tiers": [[2, "+1% Lifesteal"], [3, "+5% Crit Chance, +2.5% Crit Damage"], [4, "+5 Attack Damage, +5% Attack Speed"]], "members": ["Misty Ring", "Bottes au Crocs Brumeux", "Couteau à la Griffe de la Brume"]},
@@ -27,10 +29,10 @@ window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "Little Slime Set", "tiers": [[2, "+2 Health"], [3, "+0.05 Health/s, +0.05 Mana/s, +0.05 Stamina/s"], [4, "+5% Cooldown Reduction"]], "members": ["Gelatinous Bracelet", "Gelatinous Cloak", "Slimy Ring", "Sticky Ring", "Gelatinous Amulet"]},
  {"name": "Elite Treant Set", "tiers": [[2, "+0.5% Critical Chance"], [3, "+2% Movement Speed"], [4, "+5% Projectile Damage"]], "members": ["Elite Gloves", "Elite Carapace", "Elite Bracelet"]},
  {"name": "Corrupted Boar Set", "tiers": [[2, "+0.25 Attack Damage"], [3, "+2 Health"], [4, "+0.25 Attack Damage"]], "members": ["Gloves of the Boar", "Bracelet of the Boar", "Belt of the Boar"]},
- {"name": "Ice Golem Set", "tiers": [[2, "+5 Health"], [3, "+3% Ability Haste, +0.1 Health/s"], [4, "+1 Defense, +2 Health, +2% Skill Damage"]], "members": ["Frozen Bracelet", "Frozen Ring", "Frozen Gloves", "Frozen Amulet", "Bracelet of Ice"]},
+ {"name": "Ice Golem Set", "tiers": [[2, "+5% 格擋率"], [3, "+3% Ability Haste, +0.1 Health/s"], [4, "+1 Defense, +2 Health, +2% Skill Damage"]], "members": ["Frozen Bracelet", "Frozen Ring", "Frozen Gloves", "Frozen Amulet", "Bracelet of Ice"]},   // 2026-11-13 in26 02.52.48 Chinese tooltip: [2] is now +5% 格擋率 (was +5 Health on the 11/4 English tooltip); [3] [4] unchanged. A tier in Chinese is shown as is
  {"name": "Ice Spirits Set", "tiers": [[2, "+1.5% Skill Crit Chance"], [3, "+1 Max Mana"], [4, "+3% Magic Damage"]], "members": ["Glacial Essence", "Glacial Ring", "Glacial Antenna", "Glacial Amulet"]},
  {"name": "Ika Set", "tiers": [[2, "+0.5 Stamina"], [3, "+0.5 Health/s"]], "members": ["Leggings of Ika"]},
- {"name": "Fallen Ones Set", "tiers": [[2, "+2% Skill Critical Damage, +3% Skill Damage"]], "members": ["Ring of the Fallen"]},
+ {"name": "Fallen Ones Set", "tiers": [[2, "+2% Skill Critical Damage, +3% Skill Damage"]], "members": ["Ring of the Fallen", "Ring of the Reaper"]},   // 2026-11-13 in26 05.34.26: the game tooltip itself lists only [2] (full resolution); 死神之戒 is a member
  {"name": "Nepenthes Set", "tiers": [[2, "+1% Skill Crit Chance"], [3, "+0.5 Max Mana"], [4, "+2.5% Magic Damage"]], "members": ["Amulet of the Nepenthes", "Flower of a Nepenthes", "Bracelet of the Nepenthes"]},
  {"name": "Iron Set", "tiers": [[2, "+3% Movement Speed"], [3, "+0.1 Health/s +0.1 Mana/s +0.1 Stamina/s"], [4, "+2% Magic Damage +2% Physical Damage +2% Projectile Damage"], [5, "+2 Health +2 Defense"]], "members": ["Iron Ring", "Iron Bracelet", "Iron Gloves", "Iron Coin", "Iron Amulet"]},
  {"name": "Copper Set", "tiers": [[2, "+2.5% Movement Speed"], [3, "+0.05 Health/s +0.05 Mana/s +0.05 Stamina/s"], [4, "+1% Magic Damage +1% Physical Damage +1% Projectile Damage"], [5, "+1 Health +1 Defense"]], "members": ["Copper Ring", "Copper Bracelet", "Copper Gloves", "Copper Coin", "Copper Amulet"]},
@@ -40,7 +42,7 @@ window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "Peaceful Deer Set", "tiers": [[2, "+1 Bonus Healing"], [3, "+2 Max Mana"]], "members": ["Gloves of the Stags", "Belt of the Stags", "Bracelet of the Stags"]},
  {"name": "Stealthy Herald Set", "tiers": [[2, "+5% Dodge Chance"], [3, "+3% Critical Damage"], [4, "+5% Movement Speed"]], "members": ["Tunic of the Herald", "Boots of the Herald"]},
  {"name": "Hunter Herald Set", "tiers": [[2, "+0.15 Stamina/s"], [3, "+1% Critical Chance"], [4, "+0.5 Attack Damage"]], "members": ["Helmet of the Herald"]},
- {"name": "Fire Harpies Set", "tiers": [[2, "+2% Critical Chance"], [3, "+7% Movement Speed, +2 Defense, +3% Physical Damage"]], "members": ["Feather of the Little Flame"]},
+ {"name": "Fire Harpies Set", "tiers": [[2, "+2% Critical Chance"], [3, "+7% Movement Speed, +2 Defense, +3% Physical Damage"]], "members": ["Feather of the Little Flame", "Anneau de l'Harpie Enflammé"]},
  {"name": "Water Harpies Set", "tiers": [[2, "+4% Skill Critical Chance"], [3, "+5% Movement Speed, +1 Defense, +5% Magic Damage"]], "members": ["Feather of the Little Drop"]},
  {"name": "Tenacious Necromancer Set", "tiers": [[2, "+0.3 Health/s"], [3, "+5 Max Stamina"], [4, "-15% Damage Reduction, +10% Block Chance"]], "members": ["Helmet of the Tenacious Necromancer"]}
 ], potions:[

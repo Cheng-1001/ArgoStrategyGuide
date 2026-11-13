@@ -4000,7 +4000,7 @@ null,
 64
 ],
 [
-"狼皮（第 2 種，名稱相同）",
+"Wolf Fur (2)",
 64
 ],
 [
@@ -4072,6 +4072,186 @@ null,
 ],
 "55",
 "a",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Anneau Draconique Corrompu": {
+"floor": 3,
+"items": [
+[
+2522,
+"Anneau Draconique Corrompu",
+600,
+[
+[
+"腐化金屬錠",
+1
+],
+[
+"腐化碎片（三種之一，看不出是哪一種）",
+16
+],
+[
+"Fangs of Albal",
+8
+]
+],
+"55",
+"splus",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Bottes du Pionnier": {
+"floor": 3,
+"items": [
+[
+1512,
+"Bottes du Pionnier",
+900,
+[
+[
+"探險家之靴",
+1
+],
+[
+"Bear Hide",
+128
+],
+[
+"Ravager Bark",
+64
+],
+[
+"Thick Hide",
+96
+]
+],
+"30",
+"s",
+"acc",
+16,
+"shot"
+]
+]
+},
+"3|Refaiter": {
+"floor": 3,
+"items": [
+[
+null,
+"冷杉細繩",
+60,
+[
+[
+"冷杉原木",
+8
+],
+[
+"Spider Thread",
+4
+]
+],
+"15",
+"c",
+"other",
+null,
+"shot"
+],
+[
+2367,
+"Ficelle de Bouleau",
+60,
+[
+[
+"樺木原木",
+8
+],
+[
+"Spider Thread",
+4
+]
+],
+"15",
+"b",
+"other",
+null,
+"shot"
+],
+[
+null,
+"橡木細繩",
+60,
+[
+[
+"Oak Log",
+8
+],
+[
+"Spider Thread",
+4
+]
+],
+"15",
+"c",
+"other",
+null,
+"shot"
+],
+[
+null,
+"金合歡細繩",
+60,
+[
+[
+"金合歡原木",
+8
+],
+[
+"Spider Thread",
+4
+]
+],
+"15",
+"c",
+"other",
+null,
+"shot"
+]
+]
+},
+"3|Adventurer's Shoemaker": {
+"floor": 3,
+"items": [
+[
+1510,
+"Bottes de l'Aventurier",
+300,
+[
+[
+"磨損皮革",
+128
+],
+[
+"狼皮（第 1 或第 2 層，看不出來）",
+128
+],
+[
+"Misty Fur",
+96
+],
+[
+"Misty Tail",
+48
+]
+],
+"30",
+"b",
 "acc",
 null,
 "shot"
