@@ -553,7 +553,7 @@ with sync_playwright() as p:
     pg.goto(base + "#recipes"); pg.wait_for_timeout(500)
     pg.fill("#q", ""); pg.click('#fRcCat .chip[data-v="all"]'); pg.wait_for_timeout(300)   # earlier steps left a category filter on
     pg.locator("#lRc .rcard", has_text="Belt of the Stags").first.click(); pg.wait_for_timeout(300)
-    check("裝備資料" in pg.inner_text("#pBody") and "HP" in pg.inner_text("#pBody"), "the recipe panel shows the crafted item's data")
+    check("裝備資料" in pg.inner_text("#pBody") and pg.locator("#pBody dl.stats").count() == 0, "the recipe panel shows the crafted item's data without its stats (user 2026-11-13)")
     pg.click('#pBody [data-goview^="equip"]'); pg.wait_for_timeout(500)
     hh, gt = pg.evaluate("location.hash"), pg.inner_text(".gvback:last-child .gvbody") if pg.locator(".gvback").count() else ""
     check(hh.endswith("recipes") and "Ceinture des Cerfs" in gt and "Belt of the Stags" in pg.inner_text("#pBody"),
