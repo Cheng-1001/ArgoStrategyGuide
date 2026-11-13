@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="8976785c5a">
+<meta name="sao-build" content="2ae73d499a">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -908,7 +908,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=913b0723"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=c2dedbf9"></script>
-<script src="changelog.js?v=b8d91336"></script>
+<script src="changelog.js?v=c8073dea"></script>
 <script src="recipes.js?v=f49dcd7d"></script>
 <script src="jmmeta.js?v=eb6caa75"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -1773,7 +1773,7 @@ $("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(V.ma
 rcFill();
 $("fRcNpc").onchange=renderRecipes;$("fRcSort").onchange=renderRecipes;
 const RECIC=window.SAO_RECICONS||{};
-// potion tiers IV～VI have no game icon yet: borrow the same series' III (rule from 2026-11-05 for Health; user 2026-11-13「為什麼沒有圖示」→ Mana / Stamina too)
+// potion tiers IV～VI use the same icon as III in the game (in24 2026-11-12 01:49:04: the alchemist list shows Quality Mana III/V/VI and Stamina II/III/V with one identical icon each, = the III icon here)
 ["","Quality "].forEach(q=>["Health","Mana","Stamina"].forEach(k=>{const b=RECIC[q+k+" Potion III"];if(b)["IV","V","VI"].forEach(t=>{if(!RECIC[q+k+" Potion "+t])RECIC[q+k+" Potion "+t]=b})}));
 // game icons (tools/recipe_icons.py) win over the official catalogue's: its potion pictures are shared placeholders
 // pixel-art icons are shown at a whole multiple of their 16 px grid (2026-11-07, user: Spider Gloves icon blurry — 64 px images

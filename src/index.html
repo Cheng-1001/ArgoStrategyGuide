@@ -1762,7 +1762,7 @@ $("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(V.ma
 rcFill();
 $("fRcNpc").onchange=renderRecipes;$("fRcSort").onchange=renderRecipes;
 const RECIC=window.SAO_RECICONS||{};
-// potion tiers IV～VI have no game icon yet: borrow the same series' III (rule from 2026-11-05 for Health; user 2026-11-13「為什麼沒有圖示」→ Mana / Stamina too)
+// potion tiers IV～VI use the same icon as III in the game (in24 2026-11-12 01:49:04: the alchemist list shows Quality Mana III/V/VI and Stamina II/III/V with one identical icon each, = the III icon here)
 ["","Quality "].forEach(q=>["Health","Mana","Stamina"].forEach(k=>{const b=RECIC[q+k+" Potion III"];if(b)["IV","V","VI"].forEach(t=>{if(!RECIC[q+k+" Potion "+t])RECIC[q+k+" Potion "+t]=b})}));
 // game icons (tools/recipe_icons.py) win over the official catalogue's: its potion pictures are shared placeholders
 // pixel-art icons are shown at a whole multiple of their 16 px grid (2026-11-07, user: Spider Gloves icon blurry — 64 px images
