@@ -91,20 +91,28 @@ CALC23={(3,'Assistant to the Alchemist'):(828,656,'2026-11-12',''),(3,'Alchemist
         (3,'Loot Buyer Sylnovar'):(824,663,'2026-11-12',''),(3,'Reinforced Tools Merchant'):(938,594,'2026-11-12',''),
         (3,'Basic Rune Craftsman'):(912,598,'2026-11-12',''),(3,'Complex Rune Craftsman'):(856,536,'2026-11-12',''),
         (3,'Sylnovar Accessories Blacksmith'):(919,598,'2026-11-12','遊戲名牌「神器鐵匠」、視窗「P3 - Craft Artefact de Sylnovar」；參考互動地圖的 Sylnovar Accessories Blacksmith 在 X 918 Z 579，差約 19 格，推測是同一位'),
+        # 2026-11-13 (in26, F3 player position + targeted block): 05.11.41 / 05.12.18. The reference map has both ~14-15 blocks further north (-Z);
+        # Sylnovar's smith above is +19: the reference points are not shifted as a whole (too few points)
+        (3,'Refaiter'):(345,597,'2026-11-13','遊戲名牌「[重塑師] 材料」、視窗「P3 - Refaçonneur 材料」；參考互動地圖寫 X 345 Z 583，差約 14 格'),
+        (3,"Adventurer's Shoemaker"):(359,587,'2026-11-13','沒有名牌；視窗「P3 - Craft 靴子 de l\'Aventurier」會做冒險者之靴。參考互動地圖的 Adventurer\'s Shoemaker 在 X 358 Z 572，差約 15 格，推測是同一位'),
         (2,'Manufacturer of the Runic Necklace'):(1,196,'2026-11-10','遊戲視窗標題只寫「2 -」，會做符文項鍊；參考互動地圖寫 X -38 Z 199，差約 39 格，依名稱推測是同一位')}
 NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,675,'2026-11-12'),
        (3,'accessoriesBlacksmith','P3 - Craft Couteau en Dent de Loup',707,855,'2026-11-12'),
        (3,'accessoriesBlacksmith','P3 - Craft Gants Féroce',706,833,'2026-11-12'),
-       (3,'accessoriesBlacksmith','P3 - Forgeron Grimoire Corrompu',642,600,'2026-11-12')]
+       (3,'accessoriesBlacksmith','P3 - Forgeron Grimoire Corrompu',642,600,'2026-11-12'),
+       # 2026-11-13 (in26): listed without a position (user 2026-11-13: in the NPC list, no coordinates). Estimates kept here only:
+       # Draconique ~X 1157 Z 1043 Y 77 (02.10.24/25 F3 player position + targeted block); Pionnier ~X 1068 Z 917 Y 172 (04.48.13, guessed: nameplate not seen)
+       (3,'accessoriesBlacksmith','P3 - Craft Anneau Draconique Corrompu',None,None,'2026-11-13','遊戲視窗標題「P3 - Craft 戒指 Draconique 腐化」，在第 3 層尊弗特東邊的森林'),
+       (3,'accessoriesBlacksmith','P3 - Craft Bottes du Pionnier',None,None,'2026-11-13','遊戲視窗標題「P3 - Craft 靴子 du Pionnier」，在室內')]
 for fl,rs in F23.items():
     for r in rs:
         if (fl,r['n']) in CALC23: x,z,d,nt=CALC23[(fl,r['n'])]; r.update(x=x,z=z,src='calc')
 for fl,c,n,x,z,d,*nt in NEW23:
-    F23[fl].append(dict(c=c,n=n,x=x,z=z,u=False,src='calc')); CALC23[(fl,n)]=(x,z,d,nt[0] if nt else '')
+    F23[fl].append(dict(c=c,n=n,x=x,z=z,u=False,src='calc' if x is not None else 'nopos')); CALC23[(fl,n)]=(x,z,d,nt[0] if nt else '')
 miss=[k for k in CALC23 if not any(r['n']==k[1] for r in F23[k[0]])]; assert not miss, miss
 print({k:len(v) for k,v in F23.items()})
 rows23=''.join(',\n'+str(k)+':[\n'+',\n'.join(' '+json.dumps([r['c'],r['n'],r['x'],r['z'],r['src']]+([1] if r['u'] else []),ensure_ascii=False) for r in v)+'\n]' for k,v in F23.items())
 C={n:{'m':m,'k':k,'d':d} for n,(x,z,m,k,d) in CALC.items()}
-C.update({'%d|%s'%(f,n):{'m':'f3','k':1,'d':d,**({'t':nt} if nt else {})} for (f,n),(x,z,d,nt) in CALC23.items()})
+C.update({'%d|%s'%(f,n):{'m':'f3' if x is not None else 'nopos','k':1,'d':d,**({'t':nt} if nt else {})} for (f,n),(x,z,d,nt) in CALC23.items()})
 calc='window.SAO_NPC_CALC='+json.dumps(C,ensure_ascii=False)+';\n'
 open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),'npcs.js'),'w',encoding='utf-8').write(hdr+rows+'\n]'+rows23+'};\n'+calc)

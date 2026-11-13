@@ -1069,7 +1069,7 @@ const NGRP={potion:["藥水・水晶","⚗️",["alchemist","consumablesMerchant
   mat:["材料加工","🧱",["materialsBlacksmith","ingotBlacksmith","lumberjack"]],tool:["工具商人","🔧",["toolMerchants"]],travel:["旅行商人","🧳",["travelingMerchants"]],beggar:["臭乞丐","🧑",["beggar"]],other:["其他 NPC","🧑",["other","runeCraftsmen"]]};
 const npcGrp=c=>Object.keys(NGRP).find(g=>NGRP[g][2].includes(c))||"other";
 const NPC_CALC=window.SAO_NPC_CALC||{},npcCalcNote=n=>{const c=NPC_CALC[n.floor===1?n.n:n.floor+"|"+n.n]||{};if(c.m==="f3")return`位置由站長的一張遊戲截圖推算（${esc(c.d||"")}）：${n.floor===3?"截圖開了除錯畫面（F3），依玩家座標、面向和準星打到的方塊推算":"依玩家座標和面向推算"}，NPC 在玩家和那一格之間，只有一個方向，約 ±2 格。${c.t?esc(c.t)+"。":""}`;return c.m==="tri"?`位置由站長的遊戲截圖推算（${esc(c.d||"")}）：${c.k} 張從不同方向拍的截圖，依羅盤度數和 NPC 在畫面上的位置各畫一條方向線，取交點，約 ±0.5 格。`:`位置由站長的一張遊戲截圖推算（${esc(c.d||"")}）：依羅盤度數、NPC 在畫面上的位置和大小估算，約 ±1 格。`};
-const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:r[5]===2?2:!!r[5],rep:r[6]}));
+const NPCS=f=>((window.SAO_NPCS||{})[f]||[]).map((r,i)=>({id:"n"+f+"_"+i,floor:f,c:r[0],n:r[1],x:r[2],z:r[3],src:r[4],u:r[5]===2?2:!!r[5],rep:r[6]})),hasPos=n=>n.x!=null&&n.z!=null,NPCM=f=>NPCS(f).filter(hasPos);   // NPCM = NPCs drawn on the map (some are listed without a position)
 const npcById=id=>{const f=+id.slice(1).split("_")[0];return NPCS(f).find(n=>n.id===id)};
 // default (owner, 2026-11-01): teleports, landmarks, monster areas and regular monsters on; the rest off.
 // NPC sub-categories: only alchemist, loot buyers, key smith and accessory smith on (listed first: NPC_TOP).
@@ -1321,7 +1321,7 @@ const kn=x=>String(x||"").replace(/[’']/g,"'").toLowerCase();
 function dgKeys(sp){const want=(String(sp.note||"").match(/Cl[ée] [^（）(),，。、]+/)||[""])[0].trim();
   const keys=ALLREC.filter(r=>r.cat==="key"&&r.f===sp.floor);
   let hit=want?keys.filter(r=>{const p=prById[String(r.oid)];return p&&kn(p.name)===kn(want)}):[];
-  if(!hit.length)hit=keys.filter(r=>{const n=npcByName(r.f,r.npc);return n&&Math.hypot(n.x-sp.x,n.z-sp.z)<=150});
+  if(!hit.length)hit=keys.filter(r=>{const n=npcByName(r.f,r.npc);return n&&hasPos(n)&&Math.hypot(n.x-sp.x,n.z-sp.z)<=150});
   return{want,hit}}
 // dungeon window (owner's screenshot): boss, difficulties, loot table; game names, linked to this site's items / monsters when they match
 const DG_ITEM={};  // dungeon-window names now match the item keys (renamed to the game's English names 2026-11-04)
@@ -1544,11 +1544,11 @@ function renderItems(){const s=Sq(),so=$("fItemSort").value,all=!$("fItemAll").c
   bindGo($("lItem"));markSel()}
 // 圖鑑・NPC (user 2026-11-07: 圖鑑頁新增 NPC，放在素材下面，用區域分，要可以篩選區域，收購商要顯示回收物品)
 const BB=window.SAO_BUYBACK||{items:{},shops:{}};
-const npcRegion=n=>{let b=null,d=1e9;FLOORS[n.floor].towns.forEach(t=>{const k=Math.hypot(t.x-n.x,t.z-n.z);if(k<d){d=k;b=t}});spotsOf(n.floor).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-n.x,p.z-n.z);if(k<d){d=k;b=p}});return d<=400&&b?{k:b.n,label:pN(b)}:{k:"~wild",label:"野外（離城鎮和地標較遠）"}};
+const npcRegion=n=>{if(!hasPos(n))return{k:"~nopos",label:"位置還沒放上地圖"};let b=null,d=1e9;FLOORS[n.floor].towns.forEach(t=>{const k=Math.hypot(t.x-n.x,t.z-n.z);if(k<d){d=k;b=t}});spotsOf(n.floor).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-n.x,p.z-n.z);if(k<d){d=k;b=p}});return d<=400&&b?{k:b.n,label:pN(b)}:{k:"~wild",label:"野外（離城鎮和地標較遠）"}};
 let npcGrpSel="all";
 const NPC_GORDER=Object.keys(NGRP);
 function fillNpcArea(){const sel=$("fNpcArea");if(!sel)return;const cur=sel.value;const R={};NPCS(FL).forEach(n=>{const r=npcRegion(n);R[r.k]=R[r.k]||{label:r.label,n:0};R[r.k].n++});
-  const ks=Object.keys(R).sort((a,b)=>(a==="~wild")-(b==="~wild")||R[b].n-R[a].n||R[a].label.localeCompare(R[b].label));
+  const ks=Object.keys(R).sort((a,b)=>((a==="~wild")+2*(a==="~nopos"))-((b==="~wild")+2*(b==="~nopos"))||R[b].n-R[a].n||R[a].label.localeCompare(R[b].label));
   sel.innerHTML=`<option value="all">全部區域</option>`+ks.map(k=>`<option value="${esc(k)}">${esc(R[k].label)}（${R[k].n}）</option>`).join("");sel.value=ks.includes(cur)?cur:"all"}
 chipsInto($("fNpcGrp"),[["all","全部"],...NPC_GORDER.map(g=>[g,NGRP[g][0]])],()=>npcGrpSel,v=>npcGrpSel=v,()=>renderNpcs());
 $("fNpcArea").onchange=()=>renderNpcs();
@@ -1566,7 +1566,7 @@ function renderNpcs(){const s=Sq(),area=$("fNpcArea").value;
   const a=all.filter(x=>(npcGrpSel==="all"||x.g===npcGrpSel)&&(area==="all"||x.r.k===area)&&npcCardHit(x.n,s));
   $("cNpc").textContent=`${a.length} / ${all.length} 位`;
   const R={};a.forEach(x=>{(R[x.r.k]=R[x.r.k]||{label:x.r.label,xs:[]}).xs.push(x)});
-  const ks=Object.keys(R).sort((p,q)=>(p==="~wild")-(q==="~wild")||R[q].xs.length-R[p].xs.length||R[p].label.localeCompare(R[q].label));
+  const ks=Object.keys(R).sort((p,q)=>((p==="~wild")+2*(p==="~nopos"))-((q==="~wild")+2*(q==="~nopos"))||R[q].xs.length-R[p].xs.length||R[p].label.localeCompare(R[q].label));
   $("lNpc").innerHTML=a.length?ks.map(k=>`<h3 class="npcgh">${esc(R[k].label)}<span class="c">${R[k].xs.length} 位</span></h3>`+R[k].xs.sort((p,q)=>NPC_GORDER.indexOf(p.g)-NPC_GORDER.indexOf(q.g)||npcN(p.n.n).localeCompare(npcN(q.n.n))).map(({n,g})=>{const G=NGRP[g],rc=RCP(n.floor,n.n)?RCP(n.floor,n.n).items.map(it=>recRow(n.n,n.floor,it)):[],mk=rc.filter(r=>!isShop(r)).length,sl=rc.length-mk,bb=(BB.items[n.n]||[]).length;
     return`<button class="card" data-key="n|${n.id}" data-go="n|${n.id}"><div class="chead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${G[1]}</span><div class="cname"><b>${esc(npcN(n.n))}</b><span>${npcN(n.n)!==npcEn(n.n)?esc(npcEn(n.n))+"・":""}${esc(G[0])}${n.u===2?"・地下室":n.u?"・在地下":""}</span></div></div>
     <div class="cmeta">${mk?`<span>可以製作 ${mk}</span>`:""}${sl?`<span>${mk?"· ":""}販售 ${sl}</span>`:""}${bb?`<span>${mk||sl?"· ":""}回收 ${bb} 種</span>`:""}${n.src==="beta"?`<span class="pill">測試版資料</span>`:""}</div></button>`}).join("")).join(""):`<div class="empty-note">沒有符合條件的 NPC。</div>`;
@@ -1672,7 +1672,7 @@ const RECIPE_BY_EQ={},RECIPE_BY_MAT={};Object.entries(RECIPES).forEach(([k,r])=>
 const npcByName=(f,name)=>NPCS(f).find(n=>n.n===name);
 // NPC 的位置直接寫在配方／裝備資料裡（使用者 2026-11-03：原本要點 3 次才知道在哪裡做）：最近的城鎮或傳送點＋可點的座標
 const nearPlace=(f,x,z)=>{let b=null,d=1e9;FLOORS[f].towns.forEach(t=>{const k=Math.hypot(t.x-x,t.z-z);if(k<d){d=k;b=pN(t)}});spotsOf(f).forEach(p=>{if(!p.tp&&p.kind!=="poi")return;const k=Math.hypot(p.x-x,p.z-z);if(k<d){d=k;b=pN(p)}});return d<=400?b:null};
-const npcWhere=n=>{if(!n)return"";const near=nearPlace(n.floor,n.x,n.z);return`<span class="npcw">📍 ${near?esc(near)+" 附近・":""}${FLOORS[n.floor].map?`<button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">X ${n.x} · Z ${n.z}</button>`:`X ${n.x} · Z ${n.z}`}${n.u===2?"（地下室）":n.u?"（地下）":""}</span>`};
+const npcWhere=n=>{if(!n)return"";if(!hasPos(n))return`<span class="npcw">📍 位置還沒放上地圖</span>`;const near=nearPlace(n.floor,n.x,n.z);return`<span class="npcw">📍 ${near?esc(near)+" 附近・":""}${FLOORS[n.floor].map?`<button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">X ${n.x} · Z ${n.z}</button>`:`X ${n.x} · Z ${n.z}`}${n.u===2?"（地下室）":n.u?"（地下）":""}</span>`};
 // a recipe material -> this site's item, or the official item with the same in-game English name (gameinfo / zhnames), or just the name
 // (2026-11-07, user: 藥水配方素材沒有更新: Wheat Flower, Lavender… are official items 1835-1841 but were shown as 「本站還沒有這個物品的資料」)
 let EN2GO=null;   // in-game English name -> item (zhnames.js en, recipe rows with a catalogue id); built on first use (the tables load later in the script)
@@ -1968,15 +1968,15 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   ${e?recItemInfo(r,e,isE):""}
   ${setPotHTML(r.en)}${r.oid?"":giHTML(GI_EN[norm(r.en)])+gachaHTML(r.en)}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
-  return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} X ${n.x} · Z ${n.z}</div><h2>${esc(npcN(n.n))}</h2><div class="sub">${npcN(n.n)!==npcEn(n.n)?esc(npcEn(n.n))+"・":""}${c[0]}${n.u===2?"・在地下室":n.u?"・在地下":""}</div></div></div>
+  return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} ${hasPos(n)?`X ${n.x} · Z ${n.z}`:"位置還沒放上地圖"}</div><h2>${esc(npcN(n.n))}</h2><div class="sub">${npcN(n.n)!==npcEn(n.n)?esc(npcEn(n.n))+"・":""}${c[0]}${n.u===2?"・在地下室":n.u?"・在地下":""}</div></div></div>
   ${ty&&ty[0]!==g[0]?`<dl class="facts"><dt>類型</dt><dd>${esc(ty[0])}<span class="muted">（參考互動地圖的分類）</span></dd></dl>`:""}
-  <button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>
+  ${hasPos(n)?`<button class="linkbtn" data-rep="${n.floor}|${n.x}|${n.z}">在地圖上查看</button>`:`<div class="note">這位 NPC 在遊戲裡看過，但位置還沒放上地圖，所以地圖上找不到他。</div>`}
   ${RCP(n.floor,n.n)?`${(()=>{const rs=RCP(n.floor,n.n).items.map(it=>recRow(n.n,n.floor,it)),mk=rs.filter(r=>!isShop(r)),sl=rs.filter(isShop);return(mk.length?`<h3 class="sec">可以製作 <span class="c">${mk.length}</span></h3>${recipeTable(mk)}`:"")+(sl.length?`<h3 class="sec">販售 <span class="c">${sl.length}</span></h3>${recipeTable(sl)}`:"")})()}<div class="muted" style="font-size:12px">配方來源：${[...new Set(RCP(n.floor,n.n).items.map(it=>it[8]==="ref"?"參考互動地圖":it[8]==="rep"?"玩家回報":"玩家的遊戲截圖"))].join("、")}</div>`
     :/Blacksmith|Accessories|smith/i.test(n.c)||n.c.endsWith("Blacksmith")?`<div class="note">這位工匠的配方還沒有資料。在遊戲裡打開他的製作選單，每個物品按 F2 截圖，用「協作區」回報就能補上。</div>`:""}
   ${buybackHTML(n)}
   ${n.floor===1&&NPC_NOTE[n.n]||""}
   ${n.n==="Nodachi Blacksmith"?`<h3 class="sec">Nodachi Altar（升階）</h3><div class="note">打開製作選單是「Nodachi Altar」：把兩把同種的 Nodachi 武器合成升一階。共 5 種武器（Nodachi、Nodachi Dagger、Nodachi Bow、Nodachi Magic Staff、Nodachi Staff），每種 5 階，製作時間 10 秒、20 秒、30 秒、45 秒、1 分鐘，全部神話級（MYTHIC）、免費。第 1 階的材料是同一把武器 ×2，之後每階是兩把各 1；每一階要哪一階的武器，畫面上沒寫，還在確認（站長 2026-11-03 的截圖）。</div>`:""}
-  <div class="note srcn">${n.src==="rep"?`位置和類別來自核准的玩家回報（${repLink(n.rep)}）。`:n.src==="site"?"位置取自站長的遊戲影片（2026-10-30），座標是站在 NPC 旁邊時的位置。":n.src==="calc"?npcCalcNote(n):n.src==="site2"?"位置取自站長的遊戲截圖（2026-11-03 起陸續補上），座標是截圖時站長站的位置，和 NPC 實際位置可能差 3 格左右。":n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":n.src==="ref23"?`名稱、類別和座標取自參考互動地圖的第 ${n.floor} 層資料（玩家製作的 Beta 資料）。它的第 ${n.floor} 層座標系統和遊戲一致（和站長的 JourneyMap 比對，差不到 2 格），但這位 NPC 的位置還沒在遊戲裡對過。`:"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
+  <div class="note srcn">${n.src==="rep"?`位置和類別來自核准的玩家回報（${repLink(n.rep)}）。`:n.src==="site"?"位置取自站長的遊戲影片（2026-10-30），座標是站在 NPC 旁邊時的位置。":n.src==="calc"?npcCalcNote(n):n.src==="nopos"?(c=>`名稱取自站長的遊戲截圖（${esc(c.d||"")}）${c.t?"："+esc(c.t):""}。位置還沒放上地圖。`)(NPC_CALC[n.floor+"|"+n.n]||{}):n.src==="site2"?"位置取自站長的遊戲截圖（2026-11-03 起陸續補上），座標是截圖時站長站的位置，和 NPC 實際位置可能差 3 格左右。":n.src==="beta"?"這個 NPC 只出現在參考互動地圖的測試版資料，正式版可能已經搬家或移除。":n.src==="ref23"?`名稱、類別和座標取自參考互動地圖的第 ${n.floor} 層資料（玩家製作的 Beta 資料）。它的第 ${n.floor} 層座標系統和遊戲一致（和站長的 JourneyMap 比對，差不到 2 格），但這位 NPC 的位置還沒在遊戲裡對過。`:"名稱、類別和座標取自參考互動地圖（Current Data）。"}有錯的話歡迎用「協作區」回報地點。</div>`}
 function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">找不到這個任務。</div>`;const qq=Q.q,f=Q.f,t=townById[qq.town];
   const Z=qZ(qq)||{},facts=Q.main?[["NPC",qq.npc&&qNpcFull(qq.npc)],["等級",qq.lv]].filter(x=>x[1]).map(([k,v])=>`<dt>${k}</dt><dd>${esc(v)}</dd>`).join("")+`<dt>獎勵</dt><dd class="reward" style="text-align:left">${rewardText(qq,true)}</dd>`
     :`<dt>NPC</dt><dd>${esc(qNpcFull(qq.npc))}・<button class="linkbtn" data-go="t|${qq.town}">${esc(t?pN(t):"")}</button></dd><dt>獎勵</dt><dd>${rewardText(qq,true)}</dd>`;
@@ -2211,7 +2211,7 @@ window.__zhGap=()=>{const gst=(window.SAO_GAMESTATS||{}).items||{},recBy={},matI
   Object.keys(ITEMS).forEach(id=>{if(offOf(id)||zhI(id))return;const s=(SOURCES[id]||[]).length+(GATHER[id]||[]).length,m=matIn[id];if(!s&&!m&&!GI_SITE[id])return;
     const src=(SOURCES[id]||[])[0];out.push({k:"素材",en:id,fr:ITEMS[id].fr||"",where:src&&src.m?"掉落："+mN(src.m):m?"配方材料："+npcN(m[0].npc):""})});
   FL_KEYS.forEach(f=>{if(f!==1)return;
-    NPCS(f).forEach(n=>{if(!ZNPC[n.n]&&!/[\u4e00-\u9fff]/.test(n.n))out.push({k:"NPC",en:npcEn(n.n),fr:"",where:"X "+n.x+" Z "+n.z})});
+    NPCS(f).forEach(n=>{if(!ZNPC[n.n]&&!/[\u4e00-\u9fff]/.test(n.n))out.push({k:"NPC",en:npcEn(n.n),fr:"",where:hasPos(n)?"X "+n.x+" Z "+n.z:"位置還沒放上地圖"})});
     ALLT.filter(t=>t.floor===f||!t.floor).forEach(t=>{if(pN(t)===t.n)out.push({k:"城鎮",en:t.n,fr:t.tp||"",where:""})});
     spotsOf(f).forEach(s=>{if(pN(s)===s.n)out.push({k:"地點",en:s.n,fr:s.tp||s.csrc||"",where:s.x!=null?"X "+s.x+" Z "+s.z:""})});
     FLOORS[f].M.forEach(m=>{if(mN(m)===m.name)out.push({k:"怪物",en:m.name,fr:"",where:m.num?"圖鑑 #"+m.num:""})})
@@ -3322,10 +3322,10 @@ async function underCrop(x,z){const LY=jmLayersMeta().under,R=UNDER_R,S=2*R,K=4,
   return await new Promise((ok,no)=>c.toBlob(bl=>bl?ok(URL.createObjectURL(bl)):no(new Error("blob")),"image/jpeg",0.9))}
 window.__underCrop=underCrop;
 // ---- map filter panel ----
-function mapCounts(){const sp=spotsOf(FL),tw=F().towns,np=NPCS(FL);const c={tp:tw.filter(t=>t.tp).length+sp.filter(x=>x.tp).length,land:tw.filter(t=>!t.tp).length+sp.filter(x=>x.kind==="poi"&&!x.tp).length,npc:np.length};
+function mapCounts(){const sp=spotsOf(FL),tw=F().towns,np=NPCM(FL);const c={tp:tw.filter(t=>t.tp).length+sp.filter(x=>x.tp).length,land:tw.filter(t=>!t.tp).length+sp.filter(x=>x.kind==="poi"&&!x.tp).length,npc:np.length};
   ["gather","dungeon","wboss"].forEach(k=>c[k]=sp.filter(x=>x.kind===k).length);c.area=sp.filter(x=>x.kind==="mob").length;c.boss=SPAWNS(FL).filter(w=>bossCat(w.m)==="boss").length;c.mini=SPAWNS(FL).length-c.boss;
   c.mobs=new Set(sp.flatMap(x=>x.mons.map(n=>F().monByName[n]).filter(m=>m&&!isBossT(m)).map(m=>m.id))).size;return c}
-function renderFilter(){const c=mapCounts();const np=NPCS(FL);const off=MAPCAT.filter(([k])=>!catOn(k)).length+Object.keys(FILT).filter(k=>k.startsWith("npc:")&&FILT[k]).length;
+function renderFilter(){const c=mapCounts();const np=NPCM(FL);const off=MAPCAT.filter(([k])=>!catOn(k)).length+Object.keys(FILT).filter(k=>k.startsWith("npc:")&&FILT[k]).length;
   $("filterBtn").textContent=off?`篩選（已隱藏 ${off} 類）▾`:"篩選 ▾";
   const nw=$("fpNpcWrap");$("fpanel").appendChild(nw);
   $("fpCats").innerHTML=MAPGRP.map(([g,cs])=>`<div class="fpgrp">${g}</div>`+cs.map(([k,l,ic])=>`<button class="fchip" data-k="${k}" aria-pressed="${catOn(k)}">${ic} ${l}<span class="n">${c[k]||0}</span></button>`).join("")).join("");
@@ -3421,7 +3421,7 @@ function renderMap(){world.querySelectorAll(".zone,.town,.rpin,.bsp").forEach(n=
   SPAWNS(FL).filter(w=>catOn(bossCat(w.m))).forEach(w=>{const m=w.m;const b=document.createElement("button");b.className="bsp "+cls(m.type)+(w.u?" ug":"");b.dataset.id=m.id;b.dataset.key="m|"+m.id;
     b.style.left=toPxX(w.x)+"px";b.style.top=toPxZ(w.z)+"px";b.innerHTML=face(m);b.title=`${mN(m)}${mN(m)!==m.name?"（"+m.name+"）":""}・重生點 X ${w.x} · Z ${w.z}${w.u?"（地下）":""}`;b.setAttribute("aria-label",b.title);
     b.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("m",m.id,"new")});world.appendChild(b)});
-  NPCS(FL).forEach(n=>{if(!npcVisible(n))return;const d=document.createElement("div");d.className="zone poi shop npc";d.dataset.n=n.id;d.style.left=toPxX(n.x)+"px";d.style.top=toPxZ(n.z)+"px";
+  NPCM(FL).forEach(n=>{if(!npcVisible(n))return;const d=document.createElement("div");d.className="zone poi shop npc";d.dataset.n=n.id;d.style.left=toPxX(n.x)+"px";d.style.top=toPxZ(n.z)+"px";
     const lb=document.createElement("button");lb.className="zlabel";lb.textContent=NGRP[npcGrp(n.c)][1];lb.title=`${NGRP[npcGrp(n.c)][0]}：${n.n}${n.u===2?"（地下室）":n.u?"（地下）":""}`;lb.setAttribute("aria-label",lb.title);
     lb.addEventListener("click",ev=>{if(moved>4)return;ev.stopPropagation();openP("n",n.id,"new")});d.appendChild(lb);world.appendChild(d)});
   SRCH_ALL=false;drawRoute();filterMap();markSel();requestAnimationFrame(declutter)}
@@ -3478,7 +3478,7 @@ function renderZoneList0(){const zl=$("zlist");zl.innerHTML="";const sp=spotsOf(
   [["boss","👑 首領"],["mini","🎖️ 小首領"]].forEach(([k,title])=>{const g=bossM.filter(m=>bossCat(m)===k);if(!catOn(k)||!g.length)return;sec(title,g.length);g.forEach(m=>{const ws=SPAWN_OF[m.id];const row=document.createElement("div");row.className="zrow";row.dataset.tp=m.name+" "+(m.aka||[]).join(" ");
     row.innerHTML=`<div class="zhead"><button class="zn">${esc(mN(m))}</button><span class="zzh">${TYPE_ZH[m.type]}・${ws.length} 個重生點${ws.some(w=>w.u)?"・地下":""}</span></div><div class="spawnl">${ws.map(w=>`<button class="linkbtn mono" data-x="${w.x}" data-z="${w.z}">X ${w.x} · Z ${w.z}</button>`).join("")}</div>`;
     row.querySelector(".zn").onclick=()=>{centerOn(ws[0].x,ws[0].z,2.6);openP("m",m.id,"new")};row.querySelectorAll("[data-x]").forEach(b=>b.onclick=()=>repPin(+b.dataset.x,+b.dataset.z));zl.appendChild(row)})});
-  const np=NPCS(FL).filter(npcVisible);
+  const np=NPCM(FL).filter(npcVisible);
   if(np.length){sec("🧑 NPC",np.length);Object.keys(NGRP).forEach(c=>{np.filter(n=>npcGrp(n.c)===c).forEach(n=>{const row=document.createElement("div");row.className="zrow npcrow";row.dataset.tp=n.n+" "+NGRP[c][0]+" "+(NPCCAT[n.c]||[""])[0];
     row.innerHTML=`<div class="zhead"><button class="zn">${NGRP[c][1]} ${esc(npcN(n.n))}</button><span class="zzh">${npcN(n.n)!==npcEn(n.n)?esc(npcEn(n.n))+"・":""}${NGRP[c][0]}${n.u===2?"・地下室":n.u?"・地下":""}${n.src==="beta"?"・測試版資料":""}</span>${coord(n.x,n.z)}</div>`;
     row.querySelector(".zn").onclick=()=>{centerOn(n.x,n.z,2.8);openP("n",n.id,"new")};zl.appendChild(row)})})}
@@ -3524,7 +3524,7 @@ function filterMap(){const s=Sq();
   document.querySelectorAll(".zsec").forEach(h=>{let n=h.nextElementSibling,any=false;while(n&&!n.classList.contains("zsec")){if(!n.hidden)any=true;n=n.nextElementSibling}h.hidden=!any});zfoldSync();
   // searching dims everything that does not match: say so on the map, with a way out
   document.querySelectorAll(".bsp").forEach(b=>{const m=monById[b.dataset.id];b.classList.toggle("shide",!!s&&!monHit(m,s))});
-  $("srchHint").hidden=!s;if(s){const n=F().towns.filter(t=>townHit(t,s)).length+sp.filter(x=>spotHit(x,s)).length+SPAWNS(FL).filter(w=>monHit(w.m,s)).length+NPCS(FL).filter(x=>npcHit(x,s)).length;
+  $("srchHint").hidden=!s;if(s){const n=F().towns.filter(t=>townHit(t,s)).length+sp.filter(x=>spotHit(x,s)).length+SPAWNS(FL).filter(w=>monHit(w.m,s)).length+NPCM(FL).filter(x=>npcHit(x,s)).length;
     $("srchTxt").textContent=`正在搜尋「${q.value.trim()}」：${n?`地圖上只顯示符合的 ${n} 個位置（篩選暫時不套用）`:"地圖上沒有符合的位置"}`}}
 $("srchClr").onclick=()=>{q.value="";q.dispatchEvent(new Event("input"))};
 const editbar=$("editbar"),editToggle=$("editToggle");
