@@ -10,6 +10,7 @@
 
 - 遊戲官網：https://saominecraft.com/
 - 官方 Discord：https://discord.gg/HdHba5awgn （官網上的邀請連結；開放時段異動、維護等公告會發在這裡）
+- 官方客服（Triggers Support）：https://support.triggersstudio.com/ （Triggers Studio 的官方客服，用 Microsoft 帳號登入開單，有繁體中文）
 
 ## 資料來源
 
