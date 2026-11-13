@@ -170,7 +170,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 #clCard,.cloldl{display:flex;flex-direction:column;gap:12px}.cloldl{margin-top:12px}.clday{margin:0;gap:4px}#view-changelog{scrollbar-gutter:stable}.clwait{margin:6px 0 2px;color:var(--muted)}.clhd{display:flex;align-items:baseline;gap:8px}.clhd .cln{margin-left:0}.clold>summary{cursor:pointer;padding:4px 2px}.clday .cld{font-family:var(--f-display);font-size:15px}.cll{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:4px;line-height:1.55}
 .clmode{flex:0 0 auto;margin-left:auto;align-self:center}.cln{font-size:12px;color:var(--muted);margin-left:8px}
 .cll.clsum{gap:6px}.cll.clsum b{color:var(--accent)}
-.mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}.note.srcend{margin-top:14px}.gieff{margin:4px 0 0 0;padding:0;list-style:none}.gieff li{margin:3px 0}.effen{color:var(--muted);font-size:11.5px;display:inline-block}.lore.lorefr{font-size:12px;color:var(--muted);margin-top:-4px}.effic{display:inline-block;width:1.4em;text-align:center;margin-right:2px;font-size:.95em}img.effic{width:1.15em;height:1.15em;vertical-align:-.18em;image-rendering:pixelated;object-fit:contain;filter:drop-shadow(.072em .072em 0 rgba(0,0,0,.72))}
+.mbonly{display:none}.mgo{display:none}.srcfold summary{list-style-position:inside}.note.srcend{margin-top:14px}.srcmerge p{margin:0}.srcmerge p+p{margin-top:6px}.gieff{margin:4px 0 0 0;padding:0;list-style:none}.gieff li{margin:3px 0}.effen{color:var(--muted);font-size:11.5px;display:inline-block}.lore.lorefr{font-size:12px;color:var(--muted);margin-top:-4px}.effic{display:inline-block;width:1.4em;text-align:center;margin-right:2px;font-size:.95em}img.effic{width:1.15em;height:1.15em;vertical-align:-.18em;image-rendering:pixelated;object-fit:contain;filter:drop-shadow(.072em .072em 0 rgba(0,0,0,.72))}
 @media (max-width:820px){.mgo{display:inline}}
 @media (max-width:820px){.mbonly{display:block}.pconly,.rwhead .muted{display:none!important}.qmap{width:100%}[data-route],[data-imap]{display:none!important}}
 @media (max-width:820px){.qside{grid-template-columns:minmax(0,1fr)}.qside .reward{grid-column:1;grid-row:auto;text-align:left}}
@@ -340,6 +340,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 aside.mapside{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
 .shopt{font-size:11.5px;font-weight:600;color:var(--ok)}
 .glist{margin:4px 0 8px 18px;padding:0;font-size:13px;line-height:1.55}.glist li{margin:2px 0}
+.ginote{margin:0 0 8px;font-size:12.5px;line-height:1.6;color:var(--muted)}.ginote b{font-weight:600;margin-right:6px;color:var(--fg)}
 .wonly{font-style:normal;font-size:11px;color:var(--warn);border:1px solid var(--warn);border-radius:4px;padding:0 4px;margin-right:6px;white-space:nowrap}
 .zlist{overflow:auto;padding:4px 16px 12px;flex:1;min-height:0}
 .zrow{padding:10px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
@@ -1195,11 +1196,13 @@ function fitClsPanel(){const b=document.body,cfg=INL[view],L=cfg&&$(cfg.list),cu
   b.style.setProperty("--clsw",w+"px");b.style.setProperty("--clsl",Math.round(r.right+18)+"px");b.style.setProperty("--clst",Math.round(V.top)+"px");
   b.classList.toggle("cls-one",w<900);b.classList.toggle("cls-inline",!panel.hidden)}
 addEventListener("resize",()=>fitClsPanel());
+// all "資料來源" notes of one panel in one box, one paragraph each (user 2026-11-13: two separate boxes at the bottom looked messy)
+function srcMerge(sn){if(sn.length===1){sn[0].remove();return sn[0]}const m=document.createElement("div");m.className="note srcn srcmerge";sn.forEach(n=>{const p=document.createElement("p");p.innerHTML=n.innerHTML;m.appendChild(p);n.remove()});return m}
 function renderP(){const cur=stack[stack.length-1];if(!cur)return;document.body.classList.toggle("panel-wide",cur.type==="q");document.body.classList.toggle("panel-xwide",cur.type==="c");fitClsPanel();
   $("pBack").hidden=stack.length<2;$("pCrumb").textContent=stack.map(nameOf).join(" › ");document.body.classList.toggle("pdeep",stack.length>1);
   pBody.innerHTML=detailHTML(cur.type,cur.id);
   // phones: source notes fold into one 「ⓘ 資料來源」 line at the bottom of the panel
-  {const sn=[...pBody.querySelectorAll(".note.srcn")];if(sn.length){if(matchMedia("(max-width:820px)").matches){const d=document.createElement("details");d.className="srcfold";d.innerHTML="<summary>ⓘ 資料來源</summary>";sn.forEach(n=>d.appendChild(n));pBody.appendChild(d)}else sn.forEach(n=>{n.classList.add("srcend");pBody.appendChild(n)})}}
+  {const sn=[...pBody.querySelectorAll(".note.srcn")];if(sn.length){const m=srcMerge(sn);if(matchMedia("(max-width:820px)").matches){const d=document.createElement("details");d.className="srcfold";d.innerHTML="<summary>ⓘ 資料來源</summary>";d.appendChild(m);pBody.appendChild(d)}else{m.classList.add("srcend");pBody.appendChild(m)}}}
   // inline class / dungeon pages (user 2026-11-07, clicking 骷髏之劍 in a dungeon's loot blanked the page): links open the
   // centre pop-up and the page stays; a link to another class / dungeon switches the page itself
   pBody.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>{const [t,i]=b.dataset.go.split("|");
@@ -1450,7 +1453,7 @@ function gvNew(t,i){const n=gvNorm(t,i);
 function gvRender(w){const [t,i]=w.hist[w.hist.length-1],el=w.el,B=el.querySelector(".gvbody");
   B.innerHTML=detailHTML(t,i);el.firstElementChild.classList.toggle("gvwide",t==="q"||t==="c");
   el.querySelector(".gvtitle").textContent=nameOf({type:t,id:i});el.querySelector(".gvprev").hidden=w.hist.length<2;
-  B.querySelectorAll(".note.srcn").forEach(n=>{n.classList.add("srcend");B.appendChild(n)});
+  {const sn=[...B.querySelectorAll(".note.srcn")];if(sn.length){const m=srcMerge(sn);m.classList.add("srcend");B.appendChild(m)}}
   B.querySelectorAll("[data-goview]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [,t2,i2]=b.dataset.goview.split("|");gvLink(w,t2,i2)});
   B.querySelectorAll("[data-go]").forEach(b=>b.onclick=e=>{e.stopPropagation();const [t2,i2]=b.dataset.go.split("|");gvLink(w,t2,i2)});
   B.querySelectorAll("[data-eqcls]").forEach(b=>b.onclick=e=>{e.stopPropagation();gvCloseAll();openClassEquip(b.dataset.eqcls)});
@@ -2053,7 +2056,14 @@ const obtZh=l=>{let m;
   if(l==="No known source")return"遊戲寫「No known source」：目前沒有已知來源";
   return l};
 let GI_NODESC=0;   // equipment / props panels show the game description at the top (loreHTML), not again under 取得方式
-const giHTML=g=>g?`<h3 class="sec">遊戲寫的取得方式</h3><ul class="glist">${g.obt.map(l=>`<li title="${esc(l)}">${esc(obtZh(l))}</li>`).join("")}${g.note?`<li>${esc(g.note)}</li>`:""}${g.obt.length||g.note?"":"<li>說明視窗沒有寫取得方式</li>"}</ul>${g.desc&&!GI_NODESC?`<p class="lore">${esc(g.desc)}</p>`:""}<div class="note srcn">遊戲名稱、取得方式和英文說明取自遊戲的物品說明視窗（站長 ${g.date||GI.date} 截圖）${g.lvl?`；需求等級 ${g.lvl}`:""}。</div>`:"";
+// gameinfo note → [lines for the 取得方式 list, sentences for the 資料來源 footer]: "站長 … 截圖" / "英文名沒看過" etc. are about where the data came from (user 2026-11-13「取得方式跟下方說明內容雜亂」)
+const GI_SRC_RE=/截圖|英文名|官網法文名|官方圖鑑還沒有|官網物品圖鑑沒有收錄|本站為了區分/;
+const giNote=n=>{const info=[],src=[];(n||"").split(/(?<=。)/).map(x=>x.trim()).filter(Boolean).forEach(x=>{const m=x.match(/^(站長 [^：。]*?截圖|遊戲中文提示(?:和屬性視窗)?（[^）]*）)：(.+)$/);if(m){info.push(m[2]);return}if(/^站長 [^。（]*截圖。$/.test(x))return;(GI_SRC_RE.test(x.replace(/（[^（）]*）/g,""))?src:info).push(x)});return{info,src}};
+// "Crafted at: X" / "Sold by X" already shown by a recipe row of the same NPC for this item → not repeated in the list
+const giRecNpc=(g,l)=>{const m=l.match(/^(?:Crafted at:?|Sold by)\s+(.+?)(?:\s*\([\d., ]+\s*Cols?\))?$/i);if(!m)return false;const X=norm(m[1]),oids=(g.oid||[]).map(String);return ALLREC.some(r=>(norm(r.npc)===X||norm(npcEn(r.npc))===X)&&(norm(r.en)===norm(g.en)||oids.includes(String(r.oid))))};
+const giHTML=g=>{if(!g)return"";const N=giNote(g.note),ob=g.obt.filter(l=>!giRecNpc(g,l)),zh=new Set(ob.map(obtZh)),info=N.info.filter(x=>!zh.has(x.replace(/。$/,"")));const skipped=ob.length<g.obt.length;
+  const li=ob.map(l=>`<li title="${esc(l)}">${esc(obtZh(l))}</li>`).join(""),nt=info.length?`<p class="ginote"><b>備註</b>${info.map(esc).join("")}</p>`:"";
+  return`${li||nt||!skipped?`<h3 class="sec">遊戲寫的取得方式</h3>${li?`<ul class="glist">${li}</ul>`:nt?"":`<ul class="glist"><li>說明視窗沒有寫取得方式</li></ul>`}${nt}`:""}${g.desc&&!GI_NODESC?`<p class="lore">${esc(g.desc)}</p>`:""}<div class="note srcn">遊戲名稱、取得方式和說明取自遊戲的物品說明視窗（站長 ${g.date||GI.date} 截圖）${g.lvl?`；需求等級 ${g.lvl}`:""}。${N.src.map(esc).join("")}</div>`};
 // gacha as an obtain source, no rates (gacha.js; user 2026-11-07); keys = "p|oid"/"e|oid" or English names
 const GACHA=window.SAO_GACHA||{banners:[]};
 const gachaHTML=(...keys)=>{const K=new Set(keys.filter(Boolean).map(k=>/^[ep]\|/.test(k)?k:norm(k)));
