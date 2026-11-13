@@ -9,13 +9,6 @@ window.SAO_PENDING = {
    "floor": 2,
    "date": "2026-11-13 01:35",
    "status": "pending"
-  },
-  {
-   "id": "R0013",
-   "type": "jmap",
-   "floor": 1,
-   "date": "2026-11-13 21:38",
-   "status": "approved"
   }
  ]
 };
