@@ -2186,6 +2186,8 @@ function zhTextRe(){if(ZT)return ZT;const m=new Map();const keep=s=>{if(s&&!m.ha
   ALLT.forEach(o=>{if(pN(o)===o.n)keep(o.n)});FL_KEYS.forEach(f=>{spotsOf(f).forEach(o=>{if(pN(o)===o.n)keep(o.n)});NPCS(f).forEach(n=>{if(!ZNPC[n.n])keep(npcEn(n.n))})});
   ALLM.forEach(o=>{if(mN(o)===o.name)keep(o.name)});Object.keys(ITEMS).forEach(k=>{if(!zhI(k))keep(k)});EQ.concat(PR).forEach(e=>{if(e.gen&&!zhE(e))keep(e.gen)});
   SETS.sets.forEach(s=>{if(!SET_ZH[s.name])keep(s.name)});
+  // zhKeep: a zone label this site wrote that must stay as is (「Zumfut 礦坑」: Zumfut Mine is not known to be the town 尊弗特; 2026-11-13)
+  FL_KEYS.forEach(f=>Object.values(FLOORS[f].zones||{}).forEach(o=>{if(o&&o.zhKeep&&o.zh&&!m.has(o.zh))m.set(o.zh,o.zh)}));
   const ks=[...m.keys()].sort((a,b)=>b.length-a.length).map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
   ZT={re:new RegExp("(?<![A-Za-z'’])(?:"+ks.join("|")+")(?![A-Za-z])","g"),m};return ZT}
 // decided per 「・」 segment: subtitles such as 「Wolf Fur・Fourrure de Loup・材料」 keep their English, 「Virelune 湖・鯊魚」 is converted

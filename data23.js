@@ -150,7 +150,7 @@ const F3 = {
     mist:    { n:"Mist Canyon", zh:"迷霧峽谷" },
     orc:     { n:"Orc Camp", zh:"獸人營地" },
     swamp:   { n:"Swamp", zh:"沼澤" },
-    zumfut:  { n:"Zumfut Mine", zh:"Zumfut 礦坑" },
+    zumfut:  { n:"Zumfut Mine", zh:"Zumfut 礦坑", zhKeep:1 },   // zhKeep: not translated to 尊弗特 (the town); the names differ and are not linked
     caverns: { n:"Caverns", zh:"洞窟" },
     pit:     { n:"Terrialys Pit", zh:"Terrialys 坑洞" },
     banditC: { n:"Bandit Camp", zh:"盜賊營地" },

@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="aa0d6f787e">
+<meta name="sao-build" content="55b913e268">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -896,7 +896,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 </aside>
 
 <script src="data.js?v=6b30703f"></script>
-<script src="data23.js?v=f833a0fb"></script>
+<script src="data23.js?v=e110ef5f"></script>
 <script src="bosses.js?v=77b7ad43"></script>
 <script src="reports.js?v=e679f231"></script>
 <script src="hints.js?v=fcf000d6"></script>
@@ -917,7 +917,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="gacha.js?v=48cf03e8"></script>
 <script src="gamestats.js?v=866c7d87"></script>
 <script src="sets.js?v=a6dc825b"></script>
-<script src="zhnames.js?v=fcdf2af2"></script>
+<script src="zhnames.js?v=a4b43ba2"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=b1639c8e"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -2197,6 +2197,8 @@ function zhTextRe(){if(ZT)return ZT;const m=new Map();const keep=s=>{if(s&&!m.ha
   ALLT.forEach(o=>{if(pN(o)===o.n)keep(o.n)});FL_KEYS.forEach(f=>{spotsOf(f).forEach(o=>{if(pN(o)===o.n)keep(o.n)});NPCS(f).forEach(n=>{if(!ZNPC[n.n])keep(npcEn(n.n))})});
   ALLM.forEach(o=>{if(mN(o)===o.name)keep(o.name)});Object.keys(ITEMS).forEach(k=>{if(!zhI(k))keep(k)});EQ.concat(PR).forEach(e=>{if(e.gen&&!zhE(e))keep(e.gen)});
   SETS.sets.forEach(s=>{if(!SET_ZH[s.name])keep(s.name)});
+  // zhKeep: a zone label this site wrote that must stay as is (「Zumfut 礦坑」: Zumfut Mine is not known to be the town 尊弗特; 2026-11-13)
+  FL_KEYS.forEach(f=>Object.values(FLOORS[f].zones||{}).forEach(o=>{if(o&&o.zhKeep&&o.zh&&!m.has(o.zh))m.set(o.zh,o.zh)}));
   const ks=[...m.keys()].sort((a,b)=>b.length-a.length).map(s=>s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
   ZT={re:new RegExp("(?<![A-Za-z'’])(?:"+ks.join("|")+")(?![A-Za-z])","g"),m};return ZT}
 // decided per 「・」 segment: subtitles such as 「Wolf Fur・Fourrure de Loup・材料」 keep their English, 「Virelune 湖・鯊魚」 is converted
