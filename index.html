@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="94febcf401">
+<meta name="sao-build" content="2ae73d499a">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -166,7 +166,7 @@ label.check{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointe
 .mq{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
 .mqh{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap}
 .mqn{flex:none;width:30px;height:30px;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center;font:600 13px var(--f-mono)}
-.rcard .mats{display:flex;gap:4px 6px;align-items:center;flex-wrap:wrap;font-size:12.5px}
+.rcard .mats{display:flex;gap:4px 6px;align-items:center;flex-wrap:wrap;font-size:12.5px}.mats .mat{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
 .spawnl{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11.5px;margin-top:4px}
 .recipes .mats{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}.recipes .mats .slot{vertical-align:middle}.mats.mblk{display:flex;margin-top:3px}.lyrfold{margin-top:4px}.lyrfold summary{cursor:pointer;color:var(--accent,#e8a23a);font-size:12.5px}.lyrtbl{border-collapse:collapse;font-size:12.5px;margin-top:4px}.lyrtbl th{font-weight:400;text-align:left;padding:1px 12px 1px 0;color:var(--muted,#8b98a5)}.lyrtbl td{text-align:right;font-variant-numeric:tabular-nums}.recipes .v{text-align:right;line-height:1.3}
 .mqn.est{background:none;color:var(--accent);border:2px dashed var(--accent)}.mqn.nonum{background:var(--panel-2);color:var(--muted);border:1px solid var(--line)}
@@ -908,7 +908,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=913b0723"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=c2dedbf9"></script>
-<script src="changelog.js?v=d22fa75c"></script>
+<script src="changelog.js?v=c8073dea"></script>
 <script src="recipes.js?v=f49dcd7d"></script>
 <script src="jmmeta.js?v=eb6caa75"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -1700,7 +1700,7 @@ const matRef=m=>{const k=ikey(m);if(ITEMS[k])return{go:"i|"+k,ic:s=>slot(k,s),nm
   if(g0&&g0[0]==="i"&&ITEMS[ikey(g0.slice(2))]){const k2=ikey(g0.slice(2));return{go:"i|"+k2,ic:s=>slot(k2,s),nm:zhI(k2)||k2}}
   if(g&&/^[ep]\|/.test(g)){const i=g.slice(2),e=g[0]==="e"?eqById[i]:prById[i];if(e)return{go:g,ic:s=>g[0]==="e"?eslot(e,s):pslot(e,s),nm:zhE(e)||e.gen||e.name}}
   return{go:null,ic:s=>GICON[m]?recicImg(GICON[m],s):"",nm:m}};
-const matText=mats=>mats.map(([m,q])=>{const r=matRef(m);return`${r.ic(22)}<span>${esc(r.nm)} ×${q}</span>`}).join("・");
+const matText=mats=>mats.map(([m,q])=>{const r=matRef(m);return`<span class="mat">${r.ic(22)}<span>${esc(r.nm)} ×${q}</span></span>`}).join("<span class=\"msep\">・</span>");   // icon + name never split across lines (user 2026-11-13)
 const costText=c=>c==="Free"||c==="0"?"免費":c==null?"費用未知":esc(c)+" 珂爾";
 // 查看配方 buttons under 製作方式 in the codex panels (one per NPC when several can make it)
 const recGoBtns=rows=>{const b=rows.map(x=>[x,ALLREC.findIndex(y=>y.npc===x.npc&&y.en===x.en)]).filter(([,ri])=>ri>=0);
@@ -1773,6 +1773,8 @@ $("fRcNpc").innerHTML='<option value="all">全部 NPC</option>'+[...new Set(V.ma
 rcFill();
 $("fRcNpc").onchange=renderRecipes;$("fRcSort").onchange=renderRecipes;
 const RECIC=window.SAO_RECICONS||{};
+// potion tiers IV～VI use the same icon as III in the game (in24 2026-11-12 01:49:04: the alchemist list shows Quality Mana III/V/VI and Stamina II/III/V with one identical icon each, = the III icon here)
+["","Quality "].forEach(q=>["Health","Mana","Stamina"].forEach(k=>{const b=RECIC[q+k+" Potion III"];if(b)["IV","V","VI"].forEach(t=>{if(!RECIC[q+k+" Potion "+t])RECIC[q+k+" Potion "+t]=b})}));
 // game icons (tools/recipe_icons.py) win over the official catalogue's: its potion pictures are shared placeholders
 // pixel-art icons are shown at a whole multiple of their 16 px grid (2026-11-07, user: Spider Gloves icon blurry — 64 px images
 // squeezed into 80 % of a 44 px box gave 2.2 screen px per texel, so the pixels came out uneven)
@@ -1964,12 +1966,10 @@ function renderAbout(){const iss=GH_ISSUES;
 // the crafted item's own data, shown right in the recipe panel (no extra click; 使用者 2026-11-02)
 function recItemInfo(r,e,isE){const en=FR2ID[e.name],cl=isE?eqClasses(e):[];
   const pg=!isE&&[e.gen,en,r.en].some(n=>n&&POT_BY[norm(n)]);   // game effect lines replace the catalogue numbers (same as the item panel; 2026-11-07: Quality Health Potion I showed the catalogue's "回復耐力 +10")
-  const rows=pg?"":Object.entries(e.st).filter(([k])=>k!=="Classe requise").map(([k,v])=>`<dt>${effIc(k)}${esc(STAT_ZH[k]||k)}</dt><dd class="mono">${esc(String(statVal(k,v)))}</dd>`).join("");
   const other=(RECIPE_BY_EQ[e.oid]||[]).filter(x=>x.npc!==r.npc);
   return`<h3 class="sec">${isE?"裝備":"道具"}資料 <span class="c">${e.extra?(e.dmg||Object.keys(e.st).length?"官網圖鑑沒有收錄，取自遊戲截圖":"官網圖鑑沒有收錄，還沒有物品提示截圖"):"官方圖鑑 #"+e.oid}</span></h3>
   <div class="muted" style="font-size:12.5px">${esc(isE?eqCat(e):PR_CAT[e.cat]||e.cat)}${e.lv>1?"・等級 "+e.lv:""}${cl.length?"・"+cl.map(c=>CLASS_ZH[c]).join("、"):""}</div>
   ${e.extra?"":loreHTML(e,pg)}
-  ${e.dmg||rows?`<dl class="stats">${e.dmg?`<dt>${effIc("damage")}傷害</dt><dd class="mono">${esc(e.dmg)}</dd>`:""}${rows}</dl>`:""}
   ${en?`<ul class="rows"><li><button class="lrow" data-go="i|${esc(en)}">${slot(en,34)}<span class="t"><b>${esc(en)}</b><span>${isE?"掉落來源、任務需求":"掉落來源、掉落率、任務需求"}</span></span><span class="v">›</span></button></li></ul>`:""}
   ${other.length?`<h3 class="sec">${other.some(x=>isShop(x))?"其他製作或購買地點":"其他製作地點"}</h3>${recipeTable(other,true)}`:""}
   <div class="gobtns"><button class="btn" data-goview="${isE?"equip|e":"props|p"}|${e.oid}">查看圖鑑</button></div>`}
@@ -1980,7 +1980,7 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   <dl class="facts"><dt>${shop?"在哪裡買":"在哪裡做"}</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button><br>${npcWhere(n)}`:esc(npcN(r.npc))}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvSrc==="game"?` <span class="muted" style="font-size:12px">（遊戲物品說明${r.lvRef?`；${esc(r.lvRefSrc)}寫 ${r.lvRef}`:""}）</span>`:r.lvRef?` <span class="muted" style="font-size:12px">（${esc(r.lvRefSrc)}寫 ${r.lvRef}，遊戲截圖還沒有這件，暫用官網圖鑑）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(pN(x))}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RQTY[rKey(r.f,r.npc)+"|"+r.en]?`<dt>產量</dt><dd>每次做 ${RQTY[rKey(r.f,r.npc)+"|"+r.en]} 個</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
   <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m0,q])=>{const m=ikey(m0),R=matRef(m0);return R.go?`<li><button class="lrow" data-go="${esc(R.go)}">${R.ic(32)}<span class="t"><b>${esc(R.nm)}</b>${R.nm!==m0?`<span>${esc(m0)}</span>`:""}<span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow">${GICON[m]?recicImg(GICON[m],32):""}<span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`}).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
-  ${setPotHTML(r.en)}${r.oid?"":giHTML(GI_EN[norm(r.en)])+gachaHTML(r.en)}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
+  ${r.oid?"":giHTML(GI_EN[norm(r.en)])+gachaHTML(r.en)}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
   return`<div class="phead"><span class="th" style="--ring:var(--ref)" aria-hidden="true">${c[1]}</span><div class="ttl"><div class="num mono">${flBadge(n.floor)} ${hasPos(n)?`X ${n.x} · Z ${n.z}`:"位置還沒放上地圖"}</div><h2>${esc(npcN(n.n))}</h2><div class="sub">${npcN(n.n)!==npcEn(n.n)?esc(npcEn(n.n))+"・":""}${c[0]}${n.u===2?"・在地下室":n.u?"・在地下":""}</div></div></div>
   ${ty&&ty[0]!==g[0]?`<dl class="facts"><dt>類型</dt><dd>${esc(ty[0])}<span class="muted">（參考互動地圖的分類）</span></dd></dl>`:""}
