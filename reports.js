@@ -279,5 +279,23 @@ window.SAO_REPORTS = [
   },
   "source": "form",
   "review": "自動核准：探索地圖由程式比對網站地圖檢查"
+ },
+ {
+  "id": "R0017",
+  "type": "item",
+  "floor": null,
+  "name": "銅匕首(Dague en Cuivre)",
+  "date": "2026-11-15",
+  "img": "reports/R0017.jpg",
+  "imgs": [
+   "reports/R0017.jpg"
+  ],
+  "raw": {
+   "物品・怎麼拿到的": "合成或鍛造",
+   "物品・來源": "鐵匠職業在underworld中鍛造",
+   "物品・備註": "攻擊傷害6、攻擊速度1.4/秒",
+   "回報者・遊戲內暱稱": "GOD_Collapse"
+  },
+  "source": "form"
  }
 ];
