@@ -232,5 +232,24 @@ window.SAO_REPORTS = [
   },
   "source": "form",
   "review": "自動核准：探索地圖由程式比對網站地圖檢查"
+ },
+ {
+  "id": "R0011",
+  "type": "place",
+  "floor": 2,
+  "name": "烏爾巴斯",
+  "date": "2026-11-14",
+  "img": "reports/R0011.jpg",
+  "imgs": [
+   "reports/R0011.jpg"
+  ],
+  "raw": {
+   "地點・種類": "傳送點",
+   "地點・座標 x, z": "約 X 110 Z -360",
+   "回報者・遊戲內暱稱": "VeritasLevis",
+   "地點・在地下嗎": "地面",
+   "地點・傳送選單名稱": "烏爾巴斯"
+  },
+  "source": "form"
  }
 ];
