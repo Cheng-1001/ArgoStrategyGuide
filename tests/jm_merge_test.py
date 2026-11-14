@@ -30,6 +30,25 @@ try:
     t = t.rstrip().rstrip(";").rstrip().rstrip("]") + (',' if t.count("{") else '') + '{"id":"T900","type":"jmap","floor":1,"name":"x","raw":{}}];\n'
     open(os.path.join(tmp, "reports.js"), "w", encoding="utf-8").write(t)
 
+    # B02 (2026-11-14): fixed test-only exploration state, so T900 / T902 no longer depend on how far the real map has been
+    # explored (R0012 explored 8,4 and left no empty region in rows / columns 1-8). Only the temporary copy is changed.
+    # 3,7: explored anchor for colour matching; 8,4: the new area for T900; 7,4: an untouched empty area for T902.
+    mask_path = os.path.join(tmp, "tiles", "f1jm", "explored.png")
+    fixture_mask = Image.open(mask_path).convert("L")
+    for rx, rz, value in ((3, 7, 255), (8, 4, 0), (7, 4, 0)):
+        fixture_mask.paste(value, (rx * 32, rz * 32, (rx + 1) * 32, (rz + 1) * 32))
+    fixture_mask.save(mask_path)
+    # keep the fixture's accounting consistent with its synthetic mask
+    baseline_chunks = sum(bool(fixture_mask.getpixel((cx, cz))) for cz in range(4, 316) for cx in range(4, 316))
+    meta_path = os.path.join(tmp, "jmmeta.js")
+    source = open(meta_path, encoding="utf-8").read()
+    prefix, payload = source.split("window.SAO_JM =", 1)
+    fixture_meta = json.loads(payload.strip().rstrip(";"))
+    fixture_meta["1"]["chunks"] = baseline_chunks
+    fixture_meta["1"]["pct"] = round(100 * baseline_chunks / (312 * 312), 1)
+    fixture_meta["1"]["log"] = [{"report": None, "date": "2026-11-02", "regions": 0, "newChunks": baseline_chunks}]
+    open(meta_path, "w", encoding="utf-8").write(prefix + "window.SAO_JM = " + json.dumps(fixture_meta, ensure_ascii=False, indent=1) + ";\n")
+
     def canvas():
         cv = Image.new("RGB", (5120, 5120))
         d = os.path.join(tmp, "tiles", "f1jm", "3")
@@ -102,7 +121,10 @@ try:
     def explored_in(rx, rz):
         return sum(1 for cz in range(rz * 32, rz * 32 + 32) for cx in range(rx * 32, rx * 32 + 32)
                    if 0 <= cx < 320 and 0 <= cz < 320 and mask_now.getpixel((cx, cz)))
-    lone = next((rx, rz) for rz in range(1, 9) for rx in range(1, 9) if explored_in(rx, rz) == 0)
+    lone = next(((rx, rz) for rz in range(1, 9) for rx in range(1, 9) if explored_in(rx, rz) == 0), None)
+    check(lone is not None, f"fixture: an unexplored region exists for T902 ({lone})")
+    if lone is None:
+        raise SystemExit("test fixture setup failed: no unexplored region in rows / columns 1-8")
     code, res = run(zipped({"Triggers_x/overworld/day/%d,%d.png" % lone: region(*lone, wiki)}), "--report", "T902")
     check(code == 2 and "重疊" in res["reason"] and "無法確認" in res["reason"], f"a folder with no overlap is not trusted ({res.get('reason')})")
     # 3b. (2026-11-14) the server folder named just "Triggers" (no world id, the lobby) is never a floor, even when its
@@ -112,6 +134,37 @@ try:
     t1 = {n: open(os.path.join(tmp, "tiles", "f1jm", "3", n), "rb").read() for n in os.listdir(os.path.join(tmp, "tiles", "f1jm", "3"))}
     check(code == 2 and "Triggers" in json.dumps(res, ensure_ascii=False) and t0 == t1,
           f"the lobby folder 'Triggers' is refused even when it matches, no tile changes ({code}, {res.get('reason')})")
+    # B01 (2026-11-14): every path with an exact "Triggers" directory is refused before floor / dungeon detection, and a
+    # refusal (run without --report) changes no map file and not jmmeta.js; "Triggers_<id>" and ".Triggers Client" are not
+    import hashlib
+    def state_hash():
+        h = {}
+        for base in (os.path.join(tmp, "tiles", "f1jm"),):
+            for dp, _, fs in os.walk(base):
+                for f in fs:
+                    q = os.path.join(dp, f); h[os.path.relpath(q, tmp)] = hashlib.sha256(open(q, "rb").read()).hexdigest()
+        for f in ("jmmeta.js", "floor1_jm.jpg"):
+            h[f] = hashlib.sha256(open(os.path.join(tmp, f), "rb").read()).hexdigest()
+        return h
+    rejected_worlds = ["mp/Triggers/overworld", "mp/Triggers", "Triggers", "mp/tRiGgErS/overworld",
+                       "mp/Triggers/a57676b0-5d0c-4000-8000-000000000001_geldorack"]
+    for i, world in enumerate(rejected_worlds):
+        h0 = state_hash()
+        code, res = run(zipped({f"{world}/day/3,6.png": region(3, 6, canvas())}))
+        h1 = state_hash()
+        check(code == 2 and not res.get("ok") and "沒有編號的 Triggers" in res.get("reason", "") and h0 == h1,
+              f"B01 path case {i} ({world}): refused, {len(h0)} map/meta files unchanged ({code}, {res.get('reason')})")
+    # allowed: a numbered server folder and the game folder ".Triggers Client" above it (run on a throwaway copy)
+    for i, world in enumerate([".Triggers Client/mp/Triggers_abc/overworld", "mp/Triggers_abc/overworld"]):
+        t2 = tempfile.mkdtemp(); shutil.rmtree(t2); shutil.copytree(tmp, t2)
+        zp = zipped({f"{world}/day/3,6.png": region(3, 6, canvas())})
+        r = subprocess.run([sys.executable, "-I", os.path.join(t2, "tools", "jm_merge.py"), zp], capture_output=True, text=True)
+        try:
+            res = json.loads(r.stdout.strip().splitlines()[-1])
+        except Exception:
+            res = {"stderr": r.stderr[-300:]}
+        shutil.rmtree(t2)
+        check(r.returncode == 0 and res.get("ok"), f"B01 allowed case {i} ({world}): accepted as usual ({r.returncode}, {res})")
     # 4. the whole journeymap mp folder: floor 1 folder merged, another world skipped, night / cave layers ignored
     cv2 = canvas()
     noise = Image.merge("RGB", (n, n.point(lambda v: 255 - v), n)).convert("RGBA")

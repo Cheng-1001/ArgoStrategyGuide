@@ -462,6 +462,14 @@ def parent_of(world):
     return "/".join(world.replace("\\", "/").rstrip("/").split("/")[:-1])
 
 
+def is_unnumbered_triggers(world):
+    """Reject an exact Triggers directory at any depth (2026-11-14 B01): the server folder named just "Triggers" (no world
+    id) looks like the lobby and is never a floor (CLAUDE.md). Each path part is compared exactly (case-folded), so
+    ".Triggers Client" and "Triggers_<id>" are not matched."""
+    parts = world.replace("\\", "/").split("/")
+    return any(p.casefold() == "triggers" for p in parts if p)
+
+
 def server_of(world):
     """the JourneyMap server folder of a world path ("…/Triggers_<world id>/overworld" -> "Triggers_<world id>"); the id is the
     world ID the server sends to every player (JourneyMap server docs), so the same floor has the same folder name for all"""
@@ -691,18 +699,15 @@ def main(argv):
 
     accepted, skipped, dgs = [], [], []
     for g in groups:
+        if is_unnumbered_triggers(g.get("path", "")):
+            skipped.append((g["name"], "沒有編號的 Triggers 資料夾（像大廳），不是任何一層，不收"))
+            continue
         d = dungeon_of(g.get("path", ""))
         if d and d.startswith("?"):
             skipped.append((g["name"], f"網站還不認得的副本「{d[1:]}」，先不收"))
             continue
         if d:
             dgs.append(dict(g, dg=d))
-            continue
-        # 2026-11-14 (user「1」): the server folder named just "Triggers" (no world id) looks like the lobby and is never a
-        # floor (CLAUDE.md). It was not excluded, so in R0016 its 0,-1.png matched floor 2's already-wrong region (0,-1)
-        # and was pasted over it (found by the owner's local Claude). Seeding is not exempt either.
-        if parent_of(g.get("path", "")).split("/")[-1].lower() == "triggers":
-            skipped.append((g["name"], "沒有編號的 Triggers 資料夾（像大廳），不是任何一層，不收"))
             continue
         if not g["layers"].get("day"):
             skipped.append((g["name"], "沒有地面（day）地圖，無法確認是第 1 層（只打包高度層時也要附上幾張地面圖）"))
