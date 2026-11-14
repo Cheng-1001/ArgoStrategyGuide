@@ -251,5 +251,19 @@ window.SAO_REPORTS = [
    "地點・傳送選單名稱": "烏爾巴斯"
   },
   "source": "form"
+ },
+ {
+  "id": "R0016",
+  "type": "jmap",
+  "floor": 1,
+  "name": "探索地圖",
+  "date": "2026-11-14",
+  "img": null,
+  "imgs": [],
+  "raw": {
+   "回報者・遊戲內暱稱": "IICHENGII"
+  },
+  "source": "form",
+  "review": "自動核准：探索地圖由程式比對網站地圖檢查"
  }
 ];
