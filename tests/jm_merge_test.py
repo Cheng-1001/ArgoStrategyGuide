@@ -105,6 +105,13 @@ try:
     lone = next((rx, rz) for rz in range(1, 9) for rx in range(1, 9) if explored_in(rx, rz) == 0)
     code, res = run(zipped({"Triggers_x/overworld/day/%d,%d.png" % lone: region(*lone, wiki)}), "--report", "T902")
     check(code == 2 and "重疊" in res["reason"] and "無法確認" in res["reason"], f"a folder with no overlap is not trusted ({res.get('reason')})")
+    # 3b. (2026-11-14) the server folder named just "Triggers" (no world id, the lobby) is never a floor, even when its
+    # image matches the site's map exactly (R0016 pasted its 0,-1.png over floor 2's region 0,-1)
+    t0 = {n: open(os.path.join(tmp, "tiles", "f1jm", "3", n), "rb").read() for n in os.listdir(os.path.join(tmp, "tiles", "f1jm", "3"))}
+    code, res = run(zipped({"mp/Triggers/overworld/day/3,6.png": region(3, 6, canvas())}), "--report", "T908")
+    t1 = {n: open(os.path.join(tmp, "tiles", "f1jm", "3", n), "rb").read() for n in os.listdir(os.path.join(tmp, "tiles", "f1jm", "3"))}
+    check(code == 2 and "Triggers" in json.dumps(res, ensure_ascii=False) and t0 == t1,
+          f"the lobby folder 'Triggers' is refused even when it matches, no tile changes ({code}, {res.get('reason')})")
     # 4. the whole journeymap mp folder: floor 1 folder merged, another world skipped, night / cave layers ignored
     cv2 = canvas()
     noise = Image.merge("RGB", (n, n.point(lambda v: 255 - v), n)).convert("RGBA")

@@ -698,6 +698,12 @@ def main(argv):
         if d:
             dgs.append(dict(g, dg=d))
             continue
+        # 2026-11-14 (user「1」): the server folder named just "Triggers" (no world id) looks like the lobby and is never a
+        # floor (CLAUDE.md). It was not excluded, so in R0016 its 0,-1.png matched floor 2's already-wrong region (0,-1)
+        # and was pasted over it (found by the owner's local Claude). Seeding is not exempt either.
+        if parent_of(g.get("path", "")).split("/")[-1].lower() == "triggers":
+            skipped.append((g["name"], "沒有編號的 Triggers 資料夾（像大廳），不是任何一層，不收"))
+            continue
         if not g["layers"].get("day"):
             skipped.append((g["name"], "沒有地面（day）地圖，無法確認是第 1 層（只打包高度層時也要附上幾張地面圖）"))
             continue
