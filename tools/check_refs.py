@@ -917,7 +917,7 @@ class Model:
         for f in (1, 2, 3):
             ix = self.npc[f] = Index('npc')
             for i, n in enumerate(D['SAO_NPCS'].get(str(f)) or []):
-                e = 'N%d:%s' % (f, n[1])
+                e = 'N%d:%d:%s' % (f, i, n[1])     # one entity per npcs.js row (same-name NPCs stay apart)
                 for name in [n[1]]:
                     ix.add(name, e)
                     self.npc_all.add(name, e)
@@ -948,7 +948,7 @@ class Model:
             ids = set()
             for kind, arr in (('town', x['towns']), ('spot', x['spots'])):
                 for p in arr:
-                    e = 'P%d:%s' % (f, p['id'])
+                    e = 'P%d:%s:%s' % (f, kind, p['id'])   # a town and a spot can share an id
                     ids.add(p['id'])
                     for n in [p.get('n'), p.get('id'), p.get('tp'), p.get('csrc') if isinstance(p.get('csrc'), str) else None]:
                         if n:

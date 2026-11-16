@@ -1,0 +1,1196 @@
+{
+ "version": 1,
+ "note": "R0.5 階段 1 例外清單。由 check_refs.py --write-exceptions 第一次產生；站長整批核准後才填 approved_by／approved_at。之後只能刪，不能自動加。",
+ "exceptions": [
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette0:1,000 Cols purse",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette0:500 Triggiums",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette0:Colossus Fragments",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette0:Galiath's Core",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette:1,000 Cols purse",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette:500 Triggiums",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette:Colossus Fragments",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette:Colossus Helmet",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette:Colossus Left Blade",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette:Colossus Right Blade",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "bosses.js",
+   "key": "boss:galiath/roulette:Galiath's Core",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "buyback.js",
+   "key": "buyback-npc:Local Farmer",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "data.js",
+   "key": "F1/spot:fallen/loot:500 Cols Pouch",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "data.js",
+   "key": "F1/spot:geldorakd/loot:250 Cols Pouch",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "events.js",
+   "key": "event:dg/loot:回響鬼火",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "events.js",
+   "key": "event:dg/loot:幽靈水晶",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "events.js",
+   "key": "event:dg/loot:萬聖節禮物",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:Aincrad 轉蛋/Greater Healing Crystal",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:Aincrad 轉蛋/Greater Mana Crystal",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:Aincrad 轉蛋/Greater Stamina Crystal",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:Aincrad 轉蛋/Superior Power Crystal",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Dark Gift Pumpkin",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Echo Will-o'-the-Wisp",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Halloween Gift",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Scroll: Gate of Souls (Earth)",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Scroll: Gate of Souls (Lightning)",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Scroll: Headless Ride",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Scroll: Hunter's Moon",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Scroll: Lights Out",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Scroll: Mutant Pumpkin",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Scroll: Pumpkin Knight",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Scroll: Witch's Broom",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Scroll: Witch's Cauldron",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Title: Pumpkin King",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Title: Soul Reaper",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gacha.js",
+   "key": "gacha:萬聖節轉蛋/Witch's Grimoire",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gameicons.js",
+   "key": "gameicons:Boar of Gluttony Candy",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gameicons.js",
+   "key": "gameicons:Halloween Candy Corn",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gameicons.js",
+   "key": "gameicons:Lion of Pride Candy",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gameicons.js",
+   "key": "gameicons:Pumpkin Caramel",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gameicons.js",
+   "key": "gameicons:Slime Tear",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gameicons.js",
+   "key": "gameicons:Training Dagger (2)",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Anneau des Cieux/crafted-at:P3 - Craft Anneau des Cieux",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Bottes de l'Explorateur/crafted-at:P3 - Craft Bottes de l'Explorateur",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Ceinture de la Tribu/crafted-at:P3 - Craft Artefact Ceinture Orc",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Chipped Axe/sold-by:F1 - Starting City - Tools",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Clé de Melliona/sold-by:戰利品資訊-蜜蜂地下城",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Corrupted Fragment/loot:Gobelin Archer",
+   "reason": "解析不到：沒有對得上的怪物",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 4"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Corrupted Fragment/loot:Gobelin Shaman",
+   "reason": "解析不到：沒有對得上的怪物",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 4"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Corrupted Fragment/loot:Spectral Spider",
+   "reason": "解析不到：沒有對得上的怪物",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 4"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Cracked Pickaxe/sold-by:F1 - Starting City - Tools",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Forest Key/crafted-at:F1 - Geldorack Dungeon Guard - Starting City",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Jeton Occulte/crafted-at:P3 - Craft Jeton Occulte",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Key of Xal'Zirith/crafted-at:F1 - Xal'Zirith Dungeon Guard - Candélia",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Key of the Fallen/crafted-at:F1 - Labyrinth of the Fallen Dungeon Guard - Tolbana",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Masque du Voleur/crafted-at:P3 - Craft Artefact Masque Voleur",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Nodachi/crafted-at:Nodachi Altar",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Occult Amulet/sold-by:Secret Occult Amulet",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Occult Bracelet/sold-by:Secret Occult Bracelet",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Occult Gloves/sold-by:Secret Occult Gloves",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Occult Hood/sold-by:Secret Occult Artifacts",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Occult Ring/sold-by:Secret Occult Ring",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Occult Robe/sold-by:Secret Occult Artifacts",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Occult Skull/sold-by:Secret Occult Artifacts",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Resurrection Crystal/loot:NICOLASBOSS",
+   "reason": "解析不到：沒有對得上的怪物",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 4"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Sang de Bête Corrompu/crafted-at:P3 - Refaçonneur Matériaux",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Scroll of Mastery/sold-by:P3 - Marchand de Consommables",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Scroll of Reallocation/sold-by:P3 - Marchand de Consommables",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Wooden Fishing Rod/sold-by:F1 - Starting City - Tools",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:獵人紫水晶護腿/crafted-at:P3 - Craft Armure d'Améthyste",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
+   "key": "gameinfo:獵人紫水晶靴/crafted-at:P3 - Craft Armure d'Améthyste",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "recipes.js",
+   "key": "recipe:3|Adventurer's Shoemaker/Bottes de l'Aventurier/mat:磨損皮革",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "recipes.js",
+   "key": "recipe:3|Refaiter/out:冷杉細繩",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "recipes.js",
+   "key": "recipe:3|Refaiter/out:金合歡細繩",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "recipes.js",
+   "key": "recipe:Iron Accessories/Iron Amulet/mat:Iron String",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "recipes.js",
+   "key": "recipe:Secret Gelatinous Cloak/Gelatinous Cloak/mat:Slime Tear",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "recipes.js",
+   "key": "recipe:Sewer Reshaper/out:Slime Tear",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "recipes.js",
+   "key": "recipe:Starting Merchant/out:Training Dagger (2)",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "sets.js",
+   "key": "potion:Boar of Gluttony Candy",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "sets.js",
+   "key": "potion:Effective Repair Kit",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "sets.js",
+   "key": "potion:Halloween Candy Corn",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "sets.js",
+   "key": "potion:Lion of Pride Candy",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "sets.js",
+   "key": "potion:Pumpkin Caramel",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "sets.js",
+   "key": "set:Stealthy Herald Set/member:Boots of the Herald",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "sets.js",
+   "key": "set:Stealthy Herald Set/member:Tunic of the Herald",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "sets.js",
+   "key": "set:Tenacious Necromancer Set/member:Helmet of the Tenacious Necromancer",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E1",
+   "file": "zhnames.js",
+   "key": "zhnames.places:Lair of Asterius",
+   "reason": "解析不到：沒有對得上的地點",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "zhnames.js",
+   "key": "zhnames:蜘蛛毒液/i|Spider Venom",
+   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E2",
+   "file": "data.js",
+   "key": "Cursed Skeleton Shaman Staff/fr",
+   "reason": "對到 2 個不同的實體：2592 Spectre Maudit（裝備）、2717 Spectre Maudit（裝備）",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Allium Flower/bought-back-by:F1 Local Farmer - Near the Starting City",
+   "reason": "對到 2 個不同的實體：N2:6:Local Farmer、N3:5:Local Farmer",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Bandit's Dagger/loot:Bandit Assassin",
+   "reason": "對到 2 個不同的實體：M1:m31、M3:f3m17",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 4"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Bone Dust/bought-back-by:Shop - Cursed Ruins",
+   "reason": "對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2)",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Crossbow of the Bandits/loot:Bandit Archer",
+   "reason": "對到 2 個不同的實體：M1:m30、M3:f3m19",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 4"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Cursed Cloth/bought-back-by:Shop - Cursed Ruins",
+   "reason": "對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2)",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Health Potion II/sold-by:Shop - Cursed Ruins",
+   "reason": "對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2)",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Metal Soul Piece/bought-back-by:F1 - Labyrinth of the Forgotten - Loot Buyer",
+   "reason": "對到 2 個不同的實體：N1:10:Labyrinth of the Fallen - Loot Buyer、N1:9:Labyrinth of the Fallen (2) - Loot Buyer",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Piece of Spectral Mane/bought-back-by:Shop - Cursed Ruins",
+   "reason": "對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2)",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Reinforced Skeleton Bone/bought-back-by:Shop - Cursed Ruins",
+   "reason": "對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2)",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Ring of Narax/bought-back-by:Shop - Cursed Ruins",
+   "reason": "對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2)",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Skeleton Bone/bought-back-by:Shop - Cursed Ruins",
+   "reason": "對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2)",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Soul of the Herald/bought-back-by:F1 - Labyrinth of the Forgotten - Loot Buyer",
+   "reason": "對到 2 個不同的實體：N1:10:Labyrinth of the Fallen - Loot Buyer、N1:9:Labyrinth of the Fallen (2) - Loot Buyer",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Soul of the Reaper/bought-back-by:F1 - Labyrinth of the Forgotten - Loot Buyer",
+   "reason": "對到 2 個不同的實體：N1:10:Labyrinth of the Fallen - Loot Buyer、N1:9:Labyrinth of the Fallen (2) - Loot Buyer",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Soul of the Ruins/bought-back-by:Shop - Cursed Ruins",
+   "reason": "對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2)",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Soul of the Warden/bought-back-by:F1 - Labyrinth of the Forgotten - Loot Buyer",
+   "reason": "對到 2 個不同的實體：N1:10:Labyrinth of the Fallen - Loot Buyer、N1:9:Labyrinth of the Fallen (2) - Loot Buyer",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Stamina Potion II/sold-by:Shop - Cursed Ruins",
+   "reason": "對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2)",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "gameinfo.js",
+   "key": "gameinfo:Wheat/bought-back-by:F1 Local Farmer - Near the Starting City",
+   "reason": "對到 2 個不同的實體：N2:6:Local Farmer、N3:5:Local Farmer",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "recipes.js",
+   "key": "recipe-npc:3|Consumables Merchant",
+   "reason": "對到 2 個不同的實體：N3:25:Consumables Merchant、N3:26:Consumables Merchant",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "recipes.js",
+   "key": "recipe:3|Adventurer's Shoemaker/Bottes de l'Aventurier/mat:狼皮（第 1 或第 2 層，看不出來）",
+   "reason": "對到 0 個不同的實體：",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E2",
+   "file": "recipes.js",
+   "key": "recipe:3|P3 - Craft Anneau Draconique Corrompu/Anneau Draconique Corrompu/mat:腐化碎片（三種之一，看不出是哪一種）",
+   "reason": "對到 0 個不同的實體：",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E2",
+   "file": "sets.js",
+   "key": "set:Ika Set/member:Leggings of Ika",
+   "reason": "對到 2 個不同的實體：1341 Jambières d'Ika（裝備）、1348 Jambières d’Ika（裝備）",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 2"
+  },
+  {
+   "code": "E2",
+   "file": "zhnames.js",
+   "key": "zhnames.npcEn:Assistant to the Alchemist",
+   "reason": "對到 2 個不同的實體：N2:1:Assistant to the Alchemist、N3:1:Assistant to the Alchemist",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "zhnames.js",
+   "key": "zhnames.npcs:Alchemist",
+   "reason": "對到 3 個不同的實體：N1:0:Alchemist、N2:0:Alchemist、N3:0:Alchemist",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "zhnames.js",
+   "key": "zhnames.npcs:Assistant to the Alchemist",
+   "reason": "對到 2 個不同的實體：N2:1:Assistant to the Alchemist、N3:1:Assistant to the Alchemist",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "zhnames.js",
+   "key": "zhnames.npcs:Auction House",
+   "reason": "對到 2 個不同的實體：N1:76:Auction House、N3:46:Auction House",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "zhnames.js",
+   "key": "zhnames.npcs:Consumables Merchant",
+   "reason": "對到 2 個不同的實體：N3:25:Consumables Merchant、N3:26:Consumables Merchant",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "zhnames.js",
+   "key": "zhnames.npcs:Vault",
+   "reason": "對到 2 個不同的實體：N1:79:Vault、N3:45:Vault",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "zhnames.js",
+   "key": "zhnames.places:Geldorack Mine",
+   "reason": "對到 2 個不同的實體：P1:spot:geldorak、P1:spot:geldorakd",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E2",
+   "file": "zhnames.js",
+   "key": "zhnames.places:Virelune",
+   "reason": "對到 2 個不同的實體：P1:spot:virelune、P1:town:virelune",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E3",
+   "file": "recipes.js",
+   "key": "id:1627",
+   "reason": "官網 1627 Lanterne d'Entraînement（道具） 掛在 2 筆本站紀錄：Training Lantern、Training Lantern (2)",
+   "status": "ambiguous",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 1.5"
+  }
+ ]
+}
