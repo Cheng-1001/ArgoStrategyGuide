@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""R0.5 stage 1 regression tests for tools/check_refs.py (plan v5: cases 1-26; 25-26 use tests/baseline_compare.js; 27-30 added after the P1 review).
+"""R0.5 stage 1 regression tests for tools/check_refs.py (plan v5: cases 1-26; 25-26 use tests/baseline_compare.js; 27-31 added after the P1 reviews).
 
 Every case works on a temporary copy of the repo: the data files are changed there by appending a small JS
 statement at the end of the file (it runs after the file's own code, like the page would), so the real data is
@@ -406,6 +406,20 @@ def c30(d):
     r2 = run(d)
     b = [e for e in r2['errors'] if e['key'] == k]
     return (len(a) == 1 and a[0]['code'] == 'E1' and len(b) == 1 and b[0]['code'] == 'E1'), str(a + b)[:300]
+
+
+@case(31, '雙欄陣列（座標點、Easy 條件、首領招式）宣告成 tuple：六組各加第三欄 → 各自報 E9')
+def c31(d):
+    append(d, 'data.js', 'window.SAO.SPOTS[0].area[0].push(9);window.SAO.SPOTS[14].dg.easy[0].push("x");')
+    append(d, 'data23.js', 'window.SAO23.floors[2].spots[3].area[0].push(9);window.SAO23.floors[2].spots[0].dg.easy[0].push("x");')
+    append(d, 'bosses.js', 'window.SAO_BOSSES.unique[0].attacks[0].push("x");')
+    append(d, 'events.js', 'window.SAO_EVENTS.dungeons[0].dg.easy[0].push("x");')
+    r = run(d)
+    want = ['field:SAO.SPOTS[].area[][2]', 'field:SAO.SPOTS[].dg.easy[][2]', 'field:SAO23.floors{}.spots[].area[][2]',
+            'field:SAO23.floors{}.spots[].dg.easy[][2]', 'field:SAO_BOSSES.unique[].attacks[][2]',
+            'field:SAO_EVENTS.dungeons[].dg.easy[][2]']
+    got = [e['key'] for e in errs(r, 'E9')]
+    return r['_exit'] == 1 and sorted(got) == sorted(want), str(got)[:400]
 
 
 def main():

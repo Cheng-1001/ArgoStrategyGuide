@@ -13,11 +13,11 @@
 | E7 | 0 | 0 | 0 |
 | E9 | 0 | 0 | 0 |
 
-建置判定：**失敗**（unapproved 119）
+建置判定：**通過**
 
 ## 來源覆蓋（G1，和例外分開統計）
 
-欄位簽名 542 個：掃描 61、排除 481、沒有登記 0（E9）。
+欄位簽名 548 個：掃描 61、排除 487、沒有登記 0（E9）。
 
 | 欄位 | 結論 | 列數 |
 | --- | --- | --- |
@@ -127,7 +127,7 @@
 - NPC 的遊戲商店名／英法文名（名字索引的一部分，被引用的一方）；—；2 個：`SAO_BUYBACK.shops{}`、`SAO_ZHNAMES.npcEn{}`
 - NPC 紀錄本身（被引用的一方）；—；1 個：`SAO_NPCS{}[][1]`
 - 不是引用（數值、座標、說明文字、日期、旗標）；—；162 個：`SAO.BOSS_SPAWNS[][1]`、`SAO.BOSS_SPAWNS[][2]`、`SAO.BOSS_SPAWNS[][3]`、`SAO.ITEMS{}.cat`、`SAO.ITEMS{}.dmg`、`SAO.ITEMS{}.ic`、`SAO.ITEMS{}.icsrc`、`SAO.ITEMS{}.id`、`SAO.ITEMS{}.locked`、`SAO.ITEMS{}.lore`、`SAO.ITEMS{}.lv`、`SAO.ITEMS{}.note`、`SAO.ITEMS{}.r`、`SAO.ITEMS{}.set.tiers[][0]`、`SAO.ITEMS{}.set.tiers[][1]`、`SAO.ITEMS{}.src`、`SAO.ITEMS{}.st`、`SAO.ITEMS{}.st{key}`、`SAO.ITEMS{}.st{}`、`SAO.ITEMS{}.use[]`、`SAO.ITEMS{}.vanilla`、`SAO.MAP`、`SAO.M[].beh`、`SAO.M[].diff`、`SAO.M[].drops[][1]`、`SAO.M[].icon`、`SAO.M[].id`、`SAO.M[].lvShot`、`SAO.M[].note`、`SAO.M[].type`、`SAO.PHOTO{}`、`SAO.QUESTS[].id`、`SAO.QUESTS[].kill[1]`、`SAO.QUESTS[].money`、`SAO.QUESTS[].need[][1]`、`SAO.QUESTS[].need[][2]`、`SAO.QUESTS[].src`、`SAO.QUESTS[].x`、`SAO.QUESTS[].xp`、`SAO.QUESTS[].z`、`SAO.STATUS.est.c`、`SAO.STATUS.est.d`、`SAO.STATUS.est.t`、`SAO.STATUS.label.c`、`SAO.STATUS.label.d`、`SAO.STATUS.label.t`、`SAO.STATUS.npc.c`、`SAO.STATUS.npc.d`、`SAO.STATUS.npc.t`、`SAO.STATUS.player.c`、`SAO.STATUS.player.d`、`SAO.STATUS.player.t`、`SAO.STATUS.ref.c`、`SAO.STATUS.ref.d`、`SAO.STATUS.ref.t`、`SAO.STATUS.unk.c`、`SAO.STATUS.unk.d`、`SAO.STATUS.unk.t`、`SAO.STATUS.user.c`、`SAO.STATUS.user.d`、`SAO.STATUS.user.t`、`SAO.ZONES{}.fr`、`SAO.ZONES{}.n`、`SAO.ZONES{}.note`、`SAO.ZONES{}.old`、`SAO.ZONES{}.zh`、`SAO.ZONES{}.zl`、`SAO23.extra{}.note`、`SAO23.extra{}.slot`、`SAO23.extra{}.src`、`SAO23.extra{}.use[]`、`SAO23.floors{}.BOSS_SPAWNS[][1]`、`SAO23.floors{}.BOSS_SPAWNS[][2]`、`SAO23.floors{}.BOSS_SPAWNS[][3]`、`SAO23.floors{}.M[].beh`、`SAO23.floors{}.M[].diff`、`SAO23.floors{}.M[].drops[][1]`、`SAO23.floors{}.M[].drops[][2]`、`SAO23.floors{}.M[].gameDrop`、`SAO23.floors{}.M[].icon`、`SAO23.floors{}.M[].id`、`SAO23.floors{}.M[].lvShot`、`SAO23.floors{}.M[].news`、`SAO23.floors{}.M[].note`、`SAO23.floors{}.M[].num`、`SAO23.floors{}.M[].type`、`SAO23.floors{}.boss`、`SAO23.floors{}.lv`、`SAO23.floors{}.map.blank`、`SAO23.floors{}.map.clip.c`、`SAO23.floors{}.map.clip.r`、`SAO23.floors{}.map.img`、`SAO23.floors{}.map.lo`、`SAO23.floors{}.map.note`、`SAO23.floors{}.map.size`、`SAO23.floors{}.map.x0`、`SAO23.floors{}.map.z0`、`SAO23.floors{}.name`、`SAO23.floors{}.opened`、`SAO23.floors{}.status`、`SAO23.floors{}.zones{}.n`、`SAO23.floors{}.zones{}.news`、`SAO23.floors{}.zones{}.note`、`SAO23.floors{}.zones{}.zh`、`SAO23.floors{}.zones{}.zhKeep`、`SAO23.unknown{}.note`、`SAO23_ITEMS{}[1]`、`SAO23_ITEMS{}[2]`、`SAO23_ITEMS{}[3]`、`SAO23_ITEMS{}[4]`、`SAO23_ITEMS{}[5]`、`SAO23_ITEMS{}[6]`、`SAO23_ITEMS{}[6]{key}`、`SAO23_ITEMS{}[6]{}`、`SAO23_ITEMS{}[7]`、`SAO_BUYBACK.items{}[][1]`、`SAO_BUYBACK.items{}[][2]`、`SAO_GACHA.banners[].n`、`SAO_GACHA.banners[].note`、`SAO_GACHA.src.date`、`SAO_GACHA.src.title`、`SAO_GACHA.src.url`、`SAO_GAMEINFO.date`、`SAO_GAMEINFO.items[].date`、`SAO_GAMEINFO.items[].desc`、`SAO_GAMEINFO.items[].lvl`、`SAO_GAMEINFO.items[].note`、`SAO_GAMESTATS.date`、`SAO_GAMESTATS.items{}.auc`、`SAO_GAMESTATS.items{}.date`、`SAO_GAMESTATS.items{}.dmg`、`SAO_GAMESTATS.items{}.lvl`、`SAO_GAMESTATS.items{}.r`、`SAO_GAMESTATS.items{}.st`、`SAO_GAMESTATS.items{}.st[][0]`、`SAO_GAMESTATS.items{}.st[][1]`、`SAO_HINTS{}{}[0]`、`SAO_HINTS{}{}[1]`、`SAO_HINTS{}{}[2]`、`SAO_NPCS{}[][0]`、`SAO_NPCS{}[][2]`、`SAO_NPCS{}[][3]`、`SAO_NPCS{}[][4]`、`SAO_NPCS{}[][5]`、`SAO_NPC_CALC{}.d`、`SAO_NPC_CALC{}.k`、`SAO_NPC_CALC{}.m`、`SAO_NPC_CALC{}.t`、`SAO_RECIPES{}.floor`、`SAO_RECIPES{}.items[][2]`、`SAO_RECIPES{}.items[][3][][1]`、`SAO_RECIPES{}.items[][4]`、`SAO_RECIPES{}.items[][5]`、`SAO_RECIPES{}.items[][6]`、`SAO_RECIPES{}.items[][7]`、`SAO_RECIPES{}.items[][8]`、`SAO_RECIPE_QTY{}`、`SAO_SETS.date`、`SAO_SETS.potions[].effects[]`、`SAO_SETS.sets[].tiers[][0]`、`SAO_SETS.sets[].tiers[][1]`、`SAO_SETS.sets[].zh`
-- 世界首領資料（說明、時間、攻擊招式；物品只有輪盤欄位掃描）；階段 2；47 個：`SAO_BOSSES.uniqueRules[]`、`SAO_BOSSES.uniqueWiki[][0]`、`SAO_BOSSES.uniqueWiki[][1]`、`SAO_BOSSES.uniqueWiki[][2]`、`SAO_BOSSES.uniqueWiki[][3]`、`SAO_BOSSES.uniqueWiki[][4]`、`SAO_BOSSES.unique[].attacks[][]`、`SAO_BOSSES.unique[].available`、`SAO_BOSSES.unique[].floor`、`SAO_BOSSES.unique[].fr`、`SAO_BOSSES.unique[].id`、`SAO_BOSSES.unique[].img`、`SAO_BOSSES.unique[].imgFront`、`SAO_BOSSES.unique[].level`、`SAO_BOSSES.unique[].levelSrc`、`SAO_BOSSES.unique[].name`、`SAO_BOSSES.unique[].note`、`SAO_BOSSES.unique[].phases`、`SAO_BOSSES.unique[].unit`、`SAO_BOSSES.unique[].zh`、`SAO_BOSSES.wikiWorld[][0]`、`SAO_BOSSES.wikiWorld[][1]`、`SAO_BOSSES.wikiWorld[][2]`、`SAO_BOSSES.world[].access`、`SAO_BOSSES.world[].attacks[][0]`、`SAO_BOSSES.world[].attacks[][1]`、`SAO_BOSSES.world[].desc`、`SAO_BOSSES.world[].fr`、`SAO_BOSSES.world[].guaranteed`、`SAO_BOSSES.world[].id`、`SAO_BOSSES.world[].img`、`SAO_BOSSES.world[].imgFront`、`SAO_BOSSES.world[].level`、`SAO_BOSSES.world[].maxPlayers`、`SAO_BOSSES.world[].name`、`SAO_BOSSES.world[].price`、`SAO_BOSSES.world[].queue`、`SAO_BOSSES.world[].rolls`、`SAO_BOSSES.world[].roulette0[][2]`、`SAO_BOSSES.world[].rouletteSrc`、`SAO_BOSSES.world[].roulette[][2]`、`SAO_BOSSES.world[].schedule[].day`、`SAO_BOSSES.world[].schedule[].minutes`、`SAO_BOSSES.world[].schedule[].time`、`SAO_BOSSES.world[].schedule[].zone`、`SAO_BOSSES.world[].weakness`、`SAO_BOSSES.world[].zh`
+- 世界首領資料（說明、時間、攻擊招式；物品只有輪盤欄位掃描）；階段 2；48 個：`SAO_BOSSES.uniqueRules[]`、`SAO_BOSSES.uniqueWiki[][0]`、`SAO_BOSSES.uniqueWiki[][1]`、`SAO_BOSSES.uniqueWiki[][2]`、`SAO_BOSSES.uniqueWiki[][3]`、`SAO_BOSSES.uniqueWiki[][4]`、`SAO_BOSSES.unique[].attacks[][0]`、`SAO_BOSSES.unique[].attacks[][1]`、`SAO_BOSSES.unique[].available`、`SAO_BOSSES.unique[].floor`、`SAO_BOSSES.unique[].fr`、`SAO_BOSSES.unique[].id`、`SAO_BOSSES.unique[].img`、`SAO_BOSSES.unique[].imgFront`、`SAO_BOSSES.unique[].level`、`SAO_BOSSES.unique[].levelSrc`、`SAO_BOSSES.unique[].name`、`SAO_BOSSES.unique[].note`、`SAO_BOSSES.unique[].phases`、`SAO_BOSSES.unique[].unit`、`SAO_BOSSES.unique[].zh`、`SAO_BOSSES.wikiWorld[][0]`、`SAO_BOSSES.wikiWorld[][1]`、`SAO_BOSSES.wikiWorld[][2]`、`SAO_BOSSES.world[].access`、`SAO_BOSSES.world[].attacks[][0]`、`SAO_BOSSES.world[].attacks[][1]`、`SAO_BOSSES.world[].desc`、`SAO_BOSSES.world[].fr`、`SAO_BOSSES.world[].guaranteed`、`SAO_BOSSES.world[].id`、`SAO_BOSSES.world[].img`、`SAO_BOSSES.world[].imgFront`、`SAO_BOSSES.world[].level`、`SAO_BOSSES.world[].maxPlayers`、`SAO_BOSSES.world[].name`、`SAO_BOSSES.world[].price`、`SAO_BOSSES.world[].queue`、`SAO_BOSSES.world[].rolls`、`SAO_BOSSES.world[].roulette0[][2]`、`SAO_BOSSES.world[].rouletteSrc`、`SAO_BOSSES.world[].roulette[][2]`、`SAO_BOSSES.world[].schedule[].day`、`SAO_BOSSES.world[].schedule[].minutes`、`SAO_BOSSES.world[].schedule[].time`、`SAO_BOSSES.world[].schedule[].zone`、`SAO_BOSSES.world[].weakness`、`SAO_BOSSES.world[].zh`
 - 主線標題（被引用的一方）；—；1 個：`SAO_MAINQ{}[].t`
 - 主線步驟文字、座標、圖片；階段 4；14 個：`SAO_MAINQ{key}`、`SAO_MAINQ{}[].d`、`SAO_MAINQ{}[].en{key}`、`SAO_MAINQ{}[].en{}`、`SAO_MAINQ{}[].img{key}`、`SAO_MAINQ{}[].img{}[][0]`、`SAO_MAINQ{}[].img{}[][1]`、`SAO_MAINQ{}[].lv`、`SAO_MAINQ{}[].n`、`SAO_MAINQ{}[].s[][0]`、`SAO_MAINQ{}[].s[][1]`、`SAO_MAINQ{}[].s[][2]`、`SAO_MAINQ{}[].s[][3]`、`SAO_MAINQ{}[].tip`
 - 主線獎勵（自由文字）；階段 4；1 個：`SAO_MAINQ{}[].rw`
@@ -138,11 +138,10 @@
 - 區域排序，值是 ZONES 的鍵（網站內部 id）；階段 3；1 個：`SAO.ZONE_ORDER[]`
 - 區域排序，值是 zones 的鍵（網站內部 id）；階段 3；1 個：`SAO23.floors{}.order[]`
 - 只用在搜尋的別名（鍵是 e|id／p|id）；階段 2；1 個：`SAO_ZHNAMES.search{key}`
-- 名稱文字（首領、活動怪物、官網新聞的法文名、區域標籤），不在 v5 階段 1 涵蓋表；之後依種類搬家時處理；階段 3／4；17 個：`SAO.SPOTS[].dg.boss`、`SAO.SPOTS[].dg.bossZh`、`SAO.SPOTS[].dg.title`、`SAO23.floors{}.spots[].dg.boss`、`SAO23.floors{}.spots[].dg.bossZh`、`SAO23.floors{}.spots[].dg.title`、`SAO_CODEX{}{}.reg`、`SAO_EVENTS.dungeons[].forge.npc`、`SAO_EVENTS.dungeons[].key.npc`、`SAO_EVENTS.dungeons[].zones[].frag`、`SAO_EVENTS.dungeons[].zones[].leader`、`SAO_EVENTS.dungeons[].zones[].mobs[]`、`SAO_MOBPHOTO.by{}{}.old[].fr`、`SAO_MOBPHOTO.by{}{}.rows[].fr`、`SAO_MOBPHOTO.by{}{}.rows[].tw`、`SAO_MOBPHOTO.by{}{}.z[]`、`SAO_ZHNAMES.quests{}.reg`
+- 名稱文字（首領、活動怪物、官網新聞的法文名、區域標籤），不在 v5 階段 1 涵蓋表；之後依種類搬家時處理；階段 3／4；19 個：`SAO.SPOTS[].dg.boss`、`SAO.SPOTS[].dg.bossZh`、`SAO.SPOTS[].dg.title`、`SAO23.floors{}.spots[].dg.boss`、`SAO23.floors{}.spots[].dg.bossZh`、`SAO23.floors{}.spots[].dg.title`、`SAO_CODEX{}{}.reg`、`SAO_EVENTS.dungeons[].bosses[][0]`、`SAO_EVENTS.dungeons[].dg.boss`、`SAO_EVENTS.dungeons[].forge.npc`、`SAO_EVENTS.dungeons[].key.npc`、`SAO_EVENTS.dungeons[].zones[].frag`、`SAO_EVENTS.dungeons[].zones[].leader`、`SAO_EVENTS.dungeons[].zones[].mobs[]`、`SAO_MOBPHOTO.by{}{}.old[].fr`、`SAO_MOBPHOTO.by{}{}.rows[].fr`、`SAO_MOBPHOTO.by{}{}.rows[].tw`、`SAO_MOBPHOTO.by{}{}.z[]`、`SAO_ZHNAMES.quests{}.reg`
 - 圖示檔路徑；—；1 個：`SAO_RECICONS{}`
 - 圖示檔路徑（E7 釘選另外檢查）；—；1 個：`SAO_GAMEICONS{}`
-- 地下城鑰匙名（顯示文字，網站另外用配方對鑰匙）；階段 2；2 個：`SAO.SPOTS[].dg.key`、`SAO23.floors{}.spots[].dg.key`
-- 地點紀錄本身（被引用的一方）或說明文字；—；36 個：`SAO.SPOTS[].area[][]`、`SAO.SPOTS[].csrc`、`SAO.SPOTS[].dg.date`、`SAO.SPOTS[].dg.easy[][]`、`SAO.SPOTS[].dg.loot[][2]`、`SAO.SPOTS[].dg.modes[]`、`SAO.SPOTS[].game`、`SAO.SPOTS[].gt`、`SAO.SPOTS[].id`、`SAO.SPOTS[].kind`、`SAO.SPOTS[].n`、`SAO.SPOTS[].note`、`SAO.SPOTS[].nsrc`、`SAO.SPOTS[].old`、`SAO.SPOTS[].src`、`SAO.SPOTS[].tp`、`SAO.SPOTS[].x`、`SAO.SPOTS[].z`、`SAO.SPOTS[].zh`、`SAO23.floors{}.spots[].area[][]`、`SAO23.floors{}.spots[].dg.date`、`SAO23.floors{}.spots[].dg.easy[][]`、`SAO23.floors{}.spots[].dg.lootNote`、`SAO23.floors{}.spots[].dg.loot[][2]`、`SAO23.floors{}.spots[].dg.modes[]`、`SAO23.floors{}.spots[].id`、`SAO23.floors{}.spots[].kind`、`SAO23.floors{}.spots[].n`、`SAO23.floors{}.spots[].note`、`SAO23.floors{}.spots[].old`、`SAO23.floors{}.spots[].src`、`SAO23.floors{}.spots[].tp`、`SAO23.floors{}.spots[].u`、`SAO23.floors{}.spots[].x`、`SAO23.floors{}.spots[].z`、`SAO23.floors{}.spots[].zh`
+- 地點紀錄本身（被引用的一方）或說明文字；—；40 個：`SAO.SPOTS[].area[][0]`、`SAO.SPOTS[].area[][1]`、`SAO.SPOTS[].csrc`、`SAO.SPOTS[].dg.date`、`SAO.SPOTS[].dg.easy[][0]`、`SAO.SPOTS[].dg.easy[][1]`、`SAO.SPOTS[].dg.loot[][2]`、`SAO.SPOTS[].dg.modes[]`、`SAO.SPOTS[].game`、`SAO.SPOTS[].gt`、`SAO.SPOTS[].id`、`SAO.SPOTS[].kind`、`SAO.SPOTS[].n`、`SAO.SPOTS[].note`、`SAO.SPOTS[].nsrc`、`SAO.SPOTS[].old`、`SAO.SPOTS[].src`、`SAO.SPOTS[].tp`、`SAO.SPOTS[].x`、`SAO.SPOTS[].z`、`SAO.SPOTS[].zh`、`SAO23.floors{}.spots[].area[][0]`、`SAO23.floors{}.spots[].area[][1]`、`SAO23.floors{}.spots[].dg.date`、`SAO23.floors{}.spots[].dg.easy[][0]`、`SAO23.floors{}.spots[].dg.easy[][1]`、`SAO23.floors{}.spots[].dg.lootNote`、`SAO23.floors{}.spots[].dg.loot[][2]`、`SAO23.floors{}.spots[].dg.modes[]`、`SAO23.floors{}.spots[].id`、`SAO23.floors{}.spots[].kind`、`SAO23.floors{}.spots[].n`、`SAO23.floors{}.spots[].note`、`SAO23.floors{}.spots[].old`、`SAO23.floors{}.spots[].src`、`SAO23.floors{}.spots[].tp`、`SAO23.floors{}.spots[].u`、`SAO23.floors{}.spots[].x`、`SAO23.floors{}.spots[].z`、`SAO23.floors{}.spots[].zh`
 - 城鎮紀錄本身（被引用的一方）；—；17 個：`SAO.TOWNS[].csrc`、`SAO.TOWNS[].id`、`SAO.TOWNS[].n`、`SAO.TOWNS[].note`、`SAO.TOWNS[].old`、`SAO.TOWNS[].tp`、`SAO.TOWNS[].x`、`SAO.TOWNS[].z`、`SAO.TOWNS[].zh`、`SAO23.floors{}.towns[].id`、`SAO23.floors{}.towns[].n`、`SAO23.floors{}.towns[].note`、`SAO23.floors{}.towns[].old`、`SAO23.floors{}.towns[].src`、`SAO23.floors{}.towns[].x`、`SAO23.floors{}.towns[].z`、`SAO23.floors{}.towns[].zh`
 - 套裝名稱本身（被引用的一方）；—；1 個：`SAO_SETS.sets[].name`
 - 套裝顯示名稱（說明文字）；階段 2；1 個：`SAO.ITEMS{}.set.name`
@@ -158,7 +157,8 @@
 - 更新紀錄文字；—；4 個：`SAO_CHANGELOG[][0]`、`SAO_CHANGELOG[][1][]`、`SAO_CHANGELOG_SUM{key}`、`SAO_CHANGELOG_SUM{}[]`
 - 本站物品紀錄本身（被引用的一方）；—；2 個：`SAO.ITEMS{key}`、`SAO23_ITEMS{key}`
 - 樓層號碼；—；5 個：`SAO23.floors{key}`、`SAO_CODEX{key}`、`SAO_HINTS{key}`、`SAO_MOBPHOTO.by{key}`、`SAO_NPCS{key}`
-- 活動公告文字、兌換表、碎片表；階段 2；41 個：`SAO_EVENTS.dungeons[].bosses[][0]`、`SAO_EVENTS.dungeons[].bosses[][1]`、`SAO_EVENTS.dungeons[].chest[]`、`SAO_EVENTS.dungeons[].dg.boss`、`SAO_EVENTS.dungeons[].dg.bossZh`、`SAO_EVENTS.dungeons[].dg.date`、`SAO_EVENTS.dungeons[].dg.easy[][]`、`SAO_EVENTS.dungeons[].dg.key`、`SAO_EVENTS.dungeons[].dg.loot[][2]`、`SAO_EVENTS.dungeons[].dg.modes[]`、`SAO_EVENTS.dungeons[].ev`、`SAO_EVENTS.dungeons[].forge.extra`、`SAO_EVENTS.dungeons[].forge.lvNote`、`SAO_EVENTS.dungeons[].forge.rows[][0]`、`SAO_EVENTS.dungeons[].forge.rows[][1]`、`SAO_EVENTS.dungeons[].forge.rows[][2]`、`SAO_EVENTS.dungeons[].forge.rows[][3]`、`SAO_EVENTS.dungeons[].fragRate`、`SAO_EVENTS.dungeons[].id`、`SAO_EVENTS.dungeons[].key.mats[][0]`、`SAO_EVENTS.dungeons[].key.mats[][1]`、`SAO_EVENTS.dungeons[].key.n`、`SAO_EVENTS.dungeons[].key.note`、`SAO_EVENTS.dungeons[].key.where`、`SAO_EVENTS.dungeons[].loop[]`、`SAO_EVENTS.dungeons[].n`、`SAO_EVENTS.dungeons[].notes[]`、`SAO_EVENTS.dungeons[].players`、`SAO_EVENTS.dungeons[].soon[]`、`SAO_EVENTS.dungeons[].src.date`、`SAO_EVENTS.dungeons[].src.title`、`SAO_EVENTS.dungeons[].src.url`、`SAO_EVENTS.dungeons[].zh`、`SAO_EVENTS.dungeons[].zones[].n`、`SAO_EVENTS.eqPatch.items{}.note`、`SAO_EVENTS.eqPatch.items{}.set{key}`、`SAO_EVENTS.eqPatch.items{}.set{}`、`SAO_EVENTS.eqPatch.src.date`、`SAO_EVENTS.eqPatch.src.title`、`SAO_EVENTS.eqPatch.src.url`、`SAO_EVENTS.eqPatch.unmatched`
+- 活動公告文字、兌換表的數值和職業、碎片表（物品名欄位見 R44，首領／怪物名見 RN）；階段 2；37 個：`SAO_EVENTS.dungeons[].bosses[][1]`、`SAO_EVENTS.dungeons[].chest[]`、`SAO_EVENTS.dungeons[].dg.bossZh`、`SAO_EVENTS.dungeons[].dg.date`、`SAO_EVENTS.dungeons[].dg.easy[][0]`、`SAO_EVENTS.dungeons[].dg.easy[][1]`、`SAO_EVENTS.dungeons[].dg.loot[][2]`、`SAO_EVENTS.dungeons[].dg.modes[]`、`SAO_EVENTS.dungeons[].ev`、`SAO_EVENTS.dungeons[].forge.extra`、`SAO_EVENTS.dungeons[].forge.lvNote`、`SAO_EVENTS.dungeons[].forge.rows[][1]`、`SAO_EVENTS.dungeons[].forge.rows[][2]`、`SAO_EVENTS.dungeons[].forge.rows[][3]`、`SAO_EVENTS.dungeons[].fragRate`、`SAO_EVENTS.dungeons[].id`、`SAO_EVENTS.dungeons[].key.mats[][1]`、`SAO_EVENTS.dungeons[].key.n`、`SAO_EVENTS.dungeons[].key.note`、`SAO_EVENTS.dungeons[].key.where`、`SAO_EVENTS.dungeons[].loop[]`、`SAO_EVENTS.dungeons[].n`、`SAO_EVENTS.dungeons[].notes[]`、`SAO_EVENTS.dungeons[].players`、`SAO_EVENTS.dungeons[].soon[]`、`SAO_EVENTS.dungeons[].src.date`、`SAO_EVENTS.dungeons[].src.title`、`SAO_EVENTS.dungeons[].src.url`、`SAO_EVENTS.dungeons[].zh`、`SAO_EVENTS.dungeons[].zones[].n`、`SAO_EVENTS.eqPatch.items{}.note`、`SAO_EVENTS.eqPatch.items{}.set{key}`、`SAO_EVENTS.eqPatch.items{}.set{}`、`SAO_EVENTS.eqPatch.src.date`、`SAO_EVENTS.eqPatch.src.title`、`SAO_EVENTS.eqPatch.src.url`、`SAO_EVENTS.eqPatch.unmatched`
+- 結構化的物品名欄位（地下城鑰匙名、活動兌換材料、兌換武器）：v5 階段 1 涵蓋表沒有列，階段 1 不掃描（P1 初審 S4，交站長決定要不要改成掃描）；階段 2；5 個：`SAO.SPOTS[].dg.key`、`SAO23.floors{}.spots[].dg.key`、`SAO_EVENTS.dungeons[].dg.key`、`SAO_EVENTS.dungeons[].forge.rows[][0]`、`SAO_EVENTS.dungeons[].key.mats[][0]`
 - 職業資料（wiki 文字、屬性、技能）；—；33 個：`SAO_CLASSES[].about`、`SAO_CLASSES[].base[][0]`、`SAO_CLASSES[].base[][1]`、`SAO_CLASSES[].diff`、`SAO_CLASSES[].ic`、`SAO_CLASSES[].id`、`SAO_CLASSES[].name`、`SAO_CLASSES[].perLv[][0]`、`SAO_CLASSES[].perLv[][1]`、`SAO_CLASSES[].role`、`SAO_CLASSES[].skillsSure`、`SAO_CLASSES[].skills[][0]`、`SAO_CLASSES[].skills[][1]`、`SAO_CLASSES[].skills[][2]`、`SAO_CLASSES[].skills[][3]`、`SAO_CLASSES[].stars[][0]`、`SAO_CLASSES[].stars[][1]`、`SAO_CLASSES[].subs[][0]`、`SAO_CLASSES[].subs[][1]`、`SAO_CLASSES[].talents[][0]`、`SAO_CLASSES[].talents[][1]`、`SAO_CLASSES[].talents[][2]`、`SAO_CLASSES[].talents[][3]`、`SAO_CLASSES[].talents[][4]`、`SAO_CLASSES[].weapons.bow`、`SAO_CLASSES[].weapons.crossbow`、`SAO_CLASSES[].weapons.dagger`、`SAO_CLASSES[].weapons.shield`、`SAO_CLASSES[].weapons.staff_mage`、`SAO_CLASSES[].weapons.staff_shaman`、`SAO_CLASSES[].weapons.sword`、`SAO_CLASSES[].wikiRev`、`SAO_CLASSES[].zh`
 - 說明文字；階段 4；1 個：`SAO.QUESTS[].tnote`
 - 遊戲取得途徑的商店名（顯示用對照）；階段 3；1 個：`SAO_ZHNAMES.terms{key}`
@@ -304,128 +304,6 @@
 | 檔案 | 鍵 | 行 | 原因 | 例外 |
 | --- | --- | --- | --- | --- |
 | recipes.js | `id:1627` |  | 官網 1627 Lanterne d'Entraînement（道具） 掛在 2 筆本站紀錄：Training Lantern、Training Lantern (2) | 有 |
-
-## 建置失敗的原因
-
-- unapproved：E1 `boss:galiath/roulette0:1,000 Cols purse`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `boss:galiath/roulette0:500 Triggiums`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `boss:galiath/roulette0:Colossus Fragments`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `boss:galiath/roulette0:Galiath's Core`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `boss:galiath/roulette:1,000 Cols purse`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `boss:galiath/roulette:500 Triggiums`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `boss:galiath/roulette:Colossus Fragments`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `boss:galiath/roulette:Colossus Helmet`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `boss:galiath/roulette:Colossus Left Blade`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `boss:galiath/roulette:Colossus Right Blade`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `boss:galiath/roulette:Galiath's Core`（bosses.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `buyback-npc:Local Farmer`（buyback.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `F1/spot:fallen/loot:500 Cols Pouch`（data.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `F1/spot:geldorakd/loot:250 Cols Pouch`（data.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `event:dg/loot:回響鬼火`（events.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `event:dg/loot:幽靈水晶`（events.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `event:dg/loot:萬聖節禮物`（events.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:Aincrad 轉蛋/Greater Healing Crystal`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:Aincrad 轉蛋/Greater Mana Crystal`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:Aincrad 轉蛋/Greater Stamina Crystal`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:Aincrad 轉蛋/Superior Power Crystal`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Dark Gift Pumpkin`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Echo Will-o'-the-Wisp`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Halloween Gift`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Scroll: Gate of Souls (Earth)`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Scroll: Gate of Souls (Lightning)`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Scroll: Headless Ride`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Scroll: Hunter's Moon`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Scroll: Lights Out`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Scroll: Mutant Pumpkin`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Scroll: Pumpkin Knight`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Scroll: Witch's Broom`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Scroll: Witch's Cauldron`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Title: Pumpkin King`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Title: Soul Reaper`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gacha:萬聖節轉蛋/Witch's Grimoire`（gacha.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameicons:Boar of Gluttony Candy`（gameicons.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameicons:Halloween Candy Corn`（gameicons.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameicons:Lion of Pride Candy`（gameicons.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameicons:Pumpkin Caramel`（gameicons.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameicons:Slime Tear`（gameicons.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameicons:Training Dagger (2)`（gameicons.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Allium Flower/bought-back-by:F1 Local Farmer - Near the Starting City`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Anneau des Cieux/crafted-at:P3 - Craft Anneau des Cieux`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Bottes de l'Explorateur/crafted-at:P3 - Craft Bottes de l'Explorateur`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Ceinture de la Tribu/crafted-at:P3 - Craft Artefact Ceinture Orc`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Chipped Axe/sold-by:F1 - Starting City - Tools`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Clé de Melliona/sold-by:戰利品資訊-蜜蜂地下城`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Corrupted Fragment/loot:Gobelin Archer`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Corrupted Fragment/loot:Gobelin Shaman`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Corrupted Fragment/loot:Spectral Spider`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Cracked Pickaxe/sold-by:F1 - Starting City - Tools`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Forest Key/crafted-at:F1 - Geldorack Dungeon Guard - Starting City`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Jeton Occulte/crafted-at:P3 - Craft Jeton Occulte`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Key of Xal'Zirith/crafted-at:F1 - Xal'Zirith Dungeon Guard - Candélia`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Key of the Fallen/crafted-at:F1 - Labyrinth of the Fallen Dungeon Guard - Tolbana`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Masque du Voleur/crafted-at:P3 - Craft Artefact Masque Voleur`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Nodachi/crafted-at:Nodachi Altar`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Occult Amulet/sold-by:Secret Occult Amulet`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Occult Bracelet/sold-by:Secret Occult Bracelet`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Occult Gloves/sold-by:Secret Occult Gloves`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Occult Hood/sold-by:Secret Occult Artifacts`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Occult Ring/sold-by:Secret Occult Ring`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Occult Robe/sold-by:Secret Occult Artifacts`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Occult Skull/sold-by:Secret Occult Artifacts`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Resurrection Crystal/loot:NICOLASBOSS`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Sang de Bête Corrompu/crafted-at:P3 - Refaçonneur Matériaux`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Scroll of Mastery/sold-by:P3 - Marchand de Consommables`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Scroll of Reallocation/sold-by:P3 - Marchand de Consommables`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Wheat/bought-back-by:F1 Local Farmer - Near the Starting City`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:Wooden Fishing Rod/sold-by:F1 - Starting City - Tools`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:獵人紫水晶護腿/crafted-at:P3 - Craft Armure d'Améthyste`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `gameinfo:獵人紫水晶靴/crafted-at:P3 - Craft Armure d'Améthyste`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `recipe:3|Adventurer's Shoemaker/Bottes de l'Aventurier/mat:磨損皮革`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `recipe:3|Refaiter/out:冷杉細繩`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `recipe:3|Refaiter/out:金合歡細繩`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `recipe:Iron Accessories/Iron Amulet/mat:Iron String`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `recipe:Secret Gelatinous Cloak/Gelatinous Cloak/mat:Slime Tear`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `recipe:Sewer Reshaper/out:Slime Tear`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `recipe:Starting Merchant/out:Training Dagger (2)`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `potion:Boar of Gluttony Candy`（sets.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `potion:Effective Repair Kit`（sets.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `potion:Halloween Candy Corn`（sets.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `potion:Lion of Pride Candy`（sets.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `potion:Pumpkin Caramel`（sets.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `set:Stealthy Herald Set/member:Boots of the Herald`（sets.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `set:Stealthy Herald Set/member:Tunic of the Herald`（sets.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `set:Tenacious Necromancer Set/member:Helmet of the Tenacious Necromancer`（sets.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `zhnames.places:Lair of Asterius`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E1 `zhnames:蜘蛛毒液/i|Spider Venom`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `Cursed Skeleton Shaman Staff/fr`（data.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Bandit's Dagger/loot:Bandit Assassin`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Bone Dust/bought-back-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Crossbow of the Bandits/loot:Bandit Archer`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Cursed Cloth/bought-back-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Health Potion II/sold-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Metal Soul Piece/bought-back-by:F1 - Labyrinth of the Forgotten - Loot Buyer`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Piece of Spectral Mane/bought-back-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Reinforced Skeleton Bone/bought-back-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Ring of Narax/bought-back-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Skeleton Bone/bought-back-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Soul of the Herald/bought-back-by:F1 - Labyrinth of the Forgotten - Loot Buyer`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Soul of the Reaper/bought-back-by:F1 - Labyrinth of the Forgotten - Loot Buyer`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Soul of the Ruins/bought-back-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Soul of the Warden/bought-back-by:F1 - Labyrinth of the Forgotten - Loot Buyer`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Stamina Potion II/sold-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `recipe-npc:3|Consumables Merchant`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `recipe:3|Adventurer's Shoemaker/Bottes de l'Aventurier/mat:狼皮（第 1 或第 2 層，看不出來）`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `recipe:3|P3 - Craft Anneau Draconique Corrompu/Anneau Draconique Corrompu/mat:腐化碎片（三種之一，看不出是哪一種）`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `set:Ika Set/member:Leggings of Ika`（sets.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `zhnames.npcEn:Assistant to the Alchemist`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `zhnames.npcs:Alchemist`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `zhnames.npcs:Assistant to the Alchemist`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `zhnames.npcs:Auction House`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `zhnames.npcs:Consumables Merchant`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `zhnames.npcs:Vault`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `zhnames.places:Geldorack Mine`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `zhnames.places:Virelune`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E3 `id:1627`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 
 ## 提醒（只寫報告）
 

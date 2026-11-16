@@ -57,7 +57,10 @@ jobs:
       # W8 / W9 (plan v5 B7): the site audit and the untranslated-name list, served from a local copy of the repo
       - name: site audit and untranslated names (W8 / W9)
         if: always()
+        # pipefail: a crash of site_audit.js / zh_gap.js fails this step even though the output goes through tee (P1 review S13)
+        shell: bash
         run: |
+          set -euo pipefail
           python3 -m http.server 8765 >/dev/null 2>&1 &
           sleep 2
           node tests/site_audit.js | tee build/site_audit.txt
