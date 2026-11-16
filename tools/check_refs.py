@@ -89,6 +89,7 @@ TUPLES = {
     'SAO_EVENTS.dungeons[]{}[]', 'SAO_SETS.sets[].tiers[]', 'SAO_MAINQ{}[].s[]', 'SAO_BOSSES.world[]{}[]',
     'SAO_CLASSES[]{}[]', 'SAO_EVENTS.dungeons[]{}.rows[]', 'SAO_EVENTS.dungeons[]{}.mats[]',
     'SAO_EVENTS.dungeons[]{}.loot[]', 'SAO_GAMESTATS.items{}.st[]', 'SAO_MAINQ{}[].img{}[]',
+    'SAO_BUYBACK.items{}[]',
 }
 
 # ------------------------------------------------------------------ COVERAGE: every field signature is scanned or excluded
@@ -498,7 +499,8 @@ SKIP = {
     'SAO_GAMEINFO.items[].desc': 'R1',
     'SAO_GAMEINFO.items[].note': 'R1',
     'SAO_BUYBACK.shops{}': 'R1',
-    'SAO_BUYBACK.items{}[][]': 'R1',
+    'SAO_BUYBACK.items{}[][1]': 'R1',
+    'SAO_BUYBACK.items{}[][2]': 'R1',
     'SAO_NPCS{key}': 'R16',
     'SAO_NPCS{}[][0]': 'R1',
     'SAO_NPCS{}[][1]': 'R28',

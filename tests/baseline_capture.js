@@ -15,6 +15,8 @@ const fs = require('fs'), path = require('path'), http = require('http'), crypto
 const EXTERNAL = ['reports.js', 'pending.js', 'jmmeta.js', 'formcfg.js'];
 const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json',
   '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.css': 'text/css', '.woff2': 'font/woff2' };
+// fixed clock, locale and time zone: the world-boss timetable and dates shown by the page depend on "now"
+const CLOCK = new Date('2026-11-16T12:00:00+08:00'), LOCALE = 'zh-TW', TZ = 'Asia/Taipei';
 const sha = b => crypto.createHash('sha256').update(b).digest('hex');
 const ROUTE_VIEWS = ['map', 'monsters', 'equip', 'items', 'props', 'npcs', 'quests', 'recipes', 'dungeons', 'classes', 'bosses',
   'report', 'feedback', 'about', 'changelog'];
@@ -43,7 +45,8 @@ function serve(root, fixtures) {
 }
 
 async function openPage(browser, base, vp) {
-  const ctx = await browser.newContext({ viewport: vp || { width: 1280, height: 900 } });
+  const ctx = await browser.newContext({ viewport: vp || { width: 1280, height: 900 }, locale: LOCALE, timezoneId: TZ });
+  await ctx.clock.setFixedTime(CLOCK);
   await ctx.addInitScript(() => { try { localStorage.setItem('sao-tour-v1', '1'); } catch (e) {} });
   const p = await ctx.newPage();
   p._errs = [];
@@ -151,7 +154,8 @@ async function searches(p) {
 }
 
 async function transfer(browser, base) {
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, locale: LOCALE, timezoneId: TZ });
+  await ctx.clock.setFixedTime(CLOCK);
   await ctx.addInitScript(() => { try { localStorage.setItem('sao-tour-v1', '1'); } catch (e) {} });
   const p = await ctx.newPage();
   const cdp = await ctx.newCDPSession(p);
