@@ -6,8 +6,8 @@
 
 | 代號 | 數量 | 在例外清單上 | 不在例外清單上 |
 | --- | --- | --- | --- |
-| E1 | 88 | 88 | 0 |
-| E2 | 30 | 30 | 0 |
+| E1 | 90 | 90 | 0 |
+| E2 | 28 | 28 | 0 |
 | E3 | 1 | 1 | 0 |
 | E6 | 0 | 0 | 0 |
 | E7 | 0 | 0 | 0 |
@@ -17,7 +17,7 @@
 
 ## 來源覆蓋（G1，和例外分開統計）
 
-欄位簽名 493 個：掃描 59、排除 434、沒有登記 0（E9）。
+欄位簽名 542 個：掃描 61、排除 481、沒有登記 0（E9）。
 
 | 欄位 | 結論 | 列數 |
 | --- | --- | --- |
@@ -53,20 +53,22 @@
 | `SAO23_ITEMS{}[0]` | excluded-row | 7 |
 | `SAO23_ITEMS{}[0]` | no-catalogue | 1 |
 | `SAO23_ITEMS{}[0]` | resolved | 117 |
-| `SAO_BOSSES.world[]{}[][0]` | excluded-row | 5 |
-| `SAO_BOSSES.world[]{}[][0]` | resolved | 6 |
-| `SAO_BOSSES.world[]{}[][0]` | unresolved | 11 |
-| `SAO_BOSSES.world[]{}[][1]` | excluded-row | 22 |
+| `SAO_BOSSES.world[].roulette0[][0]` | resolved | 3 |
+| `SAO_BOSSES.world[].roulette0[][0]` | unresolved | 4 |
+| `SAO_BOSSES.world[].roulette0[][1]` | excluded-row | 7 |
+| `SAO_BOSSES.world[].roulette[][0]` | resolved | 3 |
+| `SAO_BOSSES.world[].roulette[][0]` | unresolved | 7 |
+| `SAO_BOSSES.world[].roulette[][1]` | excluded-row | 10 |
 | `SAO_BUYBACK.items{key}` | resolved | 13 |
 | `SAO_BUYBACK.items{key}` | unresolved | 1 |
 | `SAO_BUYBACK.items{}[][0]` | resolved | 60 |
 | `SAO_BUYBACK.shops{key}` | resolved | 13 |
 | `SAO_BUYBACK.shops{key}` | unresolved | 1 |
 | `SAO_CODEX{}{key}` | resolved | 33 |
-| `SAO_EVENTS.dungeons[]{}.loot[][0]` | resolved | 4 |
-| `SAO_EVENTS.dungeons[]{}.loot[][0]` | unresolved | 3 |
-| `SAO_EVENTS.dungeons[]{}.loot[][1]` | excluded-row | 3 |
-| `SAO_EVENTS.dungeons[]{}.loot[][1]` | resolved | 4 |
+| `SAO_EVENTS.dungeons[].dg.loot[][0]` | resolved | 4 |
+| `SAO_EVENTS.dungeons[].dg.loot[][0]` | unresolved | 3 |
+| `SAO_EVENTS.dungeons[].dg.loot[][1]` | excluded-row | 3 |
+| `SAO_EVENTS.dungeons[].dg.loot[][1]` | resolved | 4 |
 | `SAO_EVENTS.eqPatch.items{key}` | resolved | 6 |
 | `SAO_EVENTS.eqPatch.items{}.en` | resolved | 6 |
 | `SAO_GACHA.banners[].items[].en` | resolved | 7 |
@@ -74,11 +76,11 @@
 | `SAO_GACHA.banners[].items[].id` | resolved | 2 |
 | `SAO_GAMEICONS{key}` | resolved | 96 |
 | `SAO_GAMEICONS{key}` | unresolved | 6 |
-| `SAO_GAMEINFO.items[].obt[]` | ambiguous | 17 |
+| `SAO_GAMEINFO.items[].obt[]` | ambiguous | 15 |
 | `SAO_GAMEINFO.items[].obt[]` | excluded-row | 105 |
 | `SAO_GAMEINFO.items[].obt[]` | resolved | 185 |
 | `SAO_GAMEINFO.items[].obt[]` | term | 19 |
-| `SAO_GAMEINFO.items[].obt[]` | unresolved | 29 |
+| `SAO_GAMEINFO.items[].obt[]` | unresolved | 31 |
 | `SAO_GAMEINFO.items[].oid[]` | resolved | 194 |
 | `SAO_GAMEINFO.items[].site` | excluded-row | 234 |
 | `SAO_GAMEINFO.items[].site` | resolved | 17 |
@@ -122,9 +124,10 @@
 
 排除的欄位（理由、處理階段、欄位數）：
 
+- NPC 的遊戲商店名／英法文名（名字索引的一部分，被引用的一方）；—；2 個：`SAO_BUYBACK.shops{}`、`SAO_ZHNAMES.npcEn{}`
 - NPC 紀錄本身（被引用的一方）；—；1 個：`SAO_NPCS{}[][1]`
-- 不是引用（數值、座標、說明文字、日期、旗標）；—；163 個：`SAO.BOSS_SPAWNS[][1]`、`SAO.BOSS_SPAWNS[][2]`、`SAO.BOSS_SPAWNS[][3]`、`SAO.ITEMS{}.cat`、`SAO.ITEMS{}.dmg`、`SAO.ITEMS{}.ic`、`SAO.ITEMS{}.icsrc`、`SAO.ITEMS{}.id`、`SAO.ITEMS{}.locked`、`SAO.ITEMS{}.lore`、`SAO.ITEMS{}.lv`、`SAO.ITEMS{}.note`、`SAO.ITEMS{}.r`、`SAO.ITEMS{}.set.tiers[][0]`、`SAO.ITEMS{}.set.tiers[][1]`、`SAO.ITEMS{}.src`、`SAO.ITEMS{}.st`、`SAO.ITEMS{}.st{key}`、`SAO.ITEMS{}.st{}`、`SAO.ITEMS{}.use[]`、`SAO.ITEMS{}.vanilla`、`SAO.MAP`、`SAO.M[].beh`、`SAO.M[].diff`、`SAO.M[].drops[][1]`、`SAO.M[].icon`、`SAO.M[].id`、`SAO.M[].lvShot`、`SAO.M[].note`、`SAO.M[].type`、`SAO.PHOTO{}`、`SAO.QUESTS[].id`、`SAO.QUESTS[].kill[1]`、`SAO.QUESTS[].money`、`SAO.QUESTS[].need[][1]`、`SAO.QUESTS[].need[][2]`、`SAO.QUESTS[].src`、`SAO.QUESTS[].x`、`SAO.QUESTS[].xp`、`SAO.QUESTS[].z`、`SAO.STATUS.est.c`、`SAO.STATUS.est.d`、`SAO.STATUS.est.t`、`SAO.STATUS.label.c`、`SAO.STATUS.label.d`、`SAO.STATUS.label.t`、`SAO.STATUS.npc.c`、`SAO.STATUS.npc.d`、`SAO.STATUS.npc.t`、`SAO.STATUS.player.c`、`SAO.STATUS.player.d`、`SAO.STATUS.player.t`、`SAO.STATUS.ref.c`、`SAO.STATUS.ref.d`、`SAO.STATUS.ref.t`、`SAO.STATUS.unk.c`、`SAO.STATUS.unk.d`、`SAO.STATUS.unk.t`、`SAO.STATUS.user.c`、`SAO.STATUS.user.d`、`SAO.STATUS.user.t`、`SAO.ZONES{}.fr`、`SAO.ZONES{}.n`、`SAO.ZONES{}.note`、`SAO.ZONES{}.old`、`SAO.ZONES{}.zh`、`SAO.ZONES{}.zl`、`SAO23.extra{}.note`、`SAO23.extra{}.slot`、`SAO23.extra{}.src`、`SAO23.extra{}.use[]`、`SAO23.floors{}.BOSS_SPAWNS[][1]`、`SAO23.floors{}.BOSS_SPAWNS[][2]`、`SAO23.floors{}.BOSS_SPAWNS[][3]`、`SAO23.floors{}.M[].beh`、`SAO23.floors{}.M[].diff`、`SAO23.floors{}.M[].drops[][1]`、`SAO23.floors{}.M[].drops[][2]`、`SAO23.floors{}.M[].gameDrop`、`SAO23.floors{}.M[].icon`、`SAO23.floors{}.M[].id`、`SAO23.floors{}.M[].lvShot`、`SAO23.floors{}.M[].news`、`SAO23.floors{}.M[].note`、`SAO23.floors{}.M[].num`、`SAO23.floors{}.M[].type`、`SAO23.floors{}.boss`、`SAO23.floors{}.lv`、`SAO23.floors{}.map.blank`、`SAO23.floors{}.map.clip.c`、`SAO23.floors{}.map.clip.r`、`SAO23.floors{}.map.img`、`SAO23.floors{}.map.lo`、`SAO23.floors{}.map.note`、`SAO23.floors{}.map.size`、`SAO23.floors{}.map.x0`、`SAO23.floors{}.map.z0`、`SAO23.floors{}.name`、`SAO23.floors{}.opened`、`SAO23.floors{}.status`、`SAO23.floors{}.zones{}.n`、`SAO23.floors{}.zones{}.news`、`SAO23.floors{}.zones{}.note`、`SAO23.floors{}.zones{}.zh`、`SAO23.floors{}.zones{}.zhKeep`、`SAO23.unknown{}.note`、`SAO23_ITEMS{}[1]`、`SAO23_ITEMS{}[2]`、`SAO23_ITEMS{}[3]`、`SAO23_ITEMS{}[4]`、`SAO23_ITEMS{}[5]`、`SAO23_ITEMS{}[6]`、`SAO23_ITEMS{}[6]{key}`、`SAO23_ITEMS{}[6]{}`、`SAO23_ITEMS{}[7]`、`SAO_BUYBACK.items{}[][1]`、`SAO_BUYBACK.items{}[][2]`、`SAO_BUYBACK.shops{}`、`SAO_GACHA.banners[].n`、`SAO_GACHA.banners[].note`、`SAO_GACHA.src.date`、`SAO_GACHA.src.title`、`SAO_GACHA.src.url`、`SAO_GAMEINFO.date`、`SAO_GAMEINFO.items[].date`、`SAO_GAMEINFO.items[].desc`、`SAO_GAMEINFO.items[].lvl`、`SAO_GAMEINFO.items[].note`、`SAO_GAMESTATS.date`、`SAO_GAMESTATS.items{}.auc`、`SAO_GAMESTATS.items{}.date`、`SAO_GAMESTATS.items{}.dmg`、`SAO_GAMESTATS.items{}.lvl`、`SAO_GAMESTATS.items{}.r`、`SAO_GAMESTATS.items{}.st`、`SAO_GAMESTATS.items{}.st[][0]`、`SAO_GAMESTATS.items{}.st[][1]`、`SAO_HINTS{}{}[0]`、`SAO_HINTS{}{}[1]`、`SAO_HINTS{}{}[2]`、`SAO_NPCS{}[][0]`、`SAO_NPCS{}[][2]`、`SAO_NPCS{}[][3]`、`SAO_NPCS{}[][4]`、`SAO_NPCS{}[][5]`、`SAO_NPC_CALC{}.d`、`SAO_NPC_CALC{}.k`、`SAO_NPC_CALC{}.m`、`SAO_NPC_CALC{}.t`、`SAO_RECIPES{}.floor`、`SAO_RECIPES{}.items[][2]`、`SAO_RECIPES{}.items[][3][][1]`、`SAO_RECIPES{}.items[][4]`、`SAO_RECIPES{}.items[][5]`、`SAO_RECIPES{}.items[][6]`、`SAO_RECIPES{}.items[][7]`、`SAO_RECIPES{}.items[][8]`、`SAO_RECIPE_QTY{}`、`SAO_SETS.date`、`SAO_SETS.potions[].effects[]`、`SAO_SETS.sets[].tiers[][0]`、`SAO_SETS.sets[].tiers[][1]`、`SAO_SETS.sets[].zh`
-- 世界首領資料（說明、時間、攻擊招式；物品只有輪盤欄位掃描）；階段 2；28 個：`SAO_BOSSES.uniqueRules[]`、`SAO_BOSSES.uniqueWiki[][0]`、`SAO_BOSSES.uniqueWiki[][1]`、`SAO_BOSSES.uniqueWiki[][2]`、`SAO_BOSSES.uniqueWiki[][3]`、`SAO_BOSSES.uniqueWiki[][4]`、`SAO_BOSSES.unique[].attacks[][]`、`SAO_BOSSES.unique[].available`、`SAO_BOSSES.unique[].floor`、`SAO_BOSSES.unique[].fr`、`SAO_BOSSES.unique[].id`、`SAO_BOSSES.unique[].img`、`SAO_BOSSES.unique[].imgFront`、`SAO_BOSSES.unique[].level`、`SAO_BOSSES.unique[].levelSrc`、`SAO_BOSSES.unique[].name`、`SAO_BOSSES.unique[].note`、`SAO_BOSSES.unique[].phases`、`SAO_BOSSES.unique[].unit`、`SAO_BOSSES.unique[].zh`、`SAO_BOSSES.wikiWorld[][]`、`SAO_BOSSES.world[]{key}`、`SAO_BOSSES.world[]{}`、`SAO_BOSSES.world[]{}[].day`、`SAO_BOSSES.world[]{}[].minutes`、`SAO_BOSSES.world[]{}[].time`、`SAO_BOSSES.world[]{}[].zone`、`SAO_BOSSES.world[]{}[][2]`
+- 不是引用（數值、座標、說明文字、日期、旗標）；—；162 個：`SAO.BOSS_SPAWNS[][1]`、`SAO.BOSS_SPAWNS[][2]`、`SAO.BOSS_SPAWNS[][3]`、`SAO.ITEMS{}.cat`、`SAO.ITEMS{}.dmg`、`SAO.ITEMS{}.ic`、`SAO.ITEMS{}.icsrc`、`SAO.ITEMS{}.id`、`SAO.ITEMS{}.locked`、`SAO.ITEMS{}.lore`、`SAO.ITEMS{}.lv`、`SAO.ITEMS{}.note`、`SAO.ITEMS{}.r`、`SAO.ITEMS{}.set.tiers[][0]`、`SAO.ITEMS{}.set.tiers[][1]`、`SAO.ITEMS{}.src`、`SAO.ITEMS{}.st`、`SAO.ITEMS{}.st{key}`、`SAO.ITEMS{}.st{}`、`SAO.ITEMS{}.use[]`、`SAO.ITEMS{}.vanilla`、`SAO.MAP`、`SAO.M[].beh`、`SAO.M[].diff`、`SAO.M[].drops[][1]`、`SAO.M[].icon`、`SAO.M[].id`、`SAO.M[].lvShot`、`SAO.M[].note`、`SAO.M[].type`、`SAO.PHOTO{}`、`SAO.QUESTS[].id`、`SAO.QUESTS[].kill[1]`、`SAO.QUESTS[].money`、`SAO.QUESTS[].need[][1]`、`SAO.QUESTS[].need[][2]`、`SAO.QUESTS[].src`、`SAO.QUESTS[].x`、`SAO.QUESTS[].xp`、`SAO.QUESTS[].z`、`SAO.STATUS.est.c`、`SAO.STATUS.est.d`、`SAO.STATUS.est.t`、`SAO.STATUS.label.c`、`SAO.STATUS.label.d`、`SAO.STATUS.label.t`、`SAO.STATUS.npc.c`、`SAO.STATUS.npc.d`、`SAO.STATUS.npc.t`、`SAO.STATUS.player.c`、`SAO.STATUS.player.d`、`SAO.STATUS.player.t`、`SAO.STATUS.ref.c`、`SAO.STATUS.ref.d`、`SAO.STATUS.ref.t`、`SAO.STATUS.unk.c`、`SAO.STATUS.unk.d`、`SAO.STATUS.unk.t`、`SAO.STATUS.user.c`、`SAO.STATUS.user.d`、`SAO.STATUS.user.t`、`SAO.ZONES{}.fr`、`SAO.ZONES{}.n`、`SAO.ZONES{}.note`、`SAO.ZONES{}.old`、`SAO.ZONES{}.zh`、`SAO.ZONES{}.zl`、`SAO23.extra{}.note`、`SAO23.extra{}.slot`、`SAO23.extra{}.src`、`SAO23.extra{}.use[]`、`SAO23.floors{}.BOSS_SPAWNS[][1]`、`SAO23.floors{}.BOSS_SPAWNS[][2]`、`SAO23.floors{}.BOSS_SPAWNS[][3]`、`SAO23.floors{}.M[].beh`、`SAO23.floors{}.M[].diff`、`SAO23.floors{}.M[].drops[][1]`、`SAO23.floors{}.M[].drops[][2]`、`SAO23.floors{}.M[].gameDrop`、`SAO23.floors{}.M[].icon`、`SAO23.floors{}.M[].id`、`SAO23.floors{}.M[].lvShot`、`SAO23.floors{}.M[].news`、`SAO23.floors{}.M[].note`、`SAO23.floors{}.M[].num`、`SAO23.floors{}.M[].type`、`SAO23.floors{}.boss`、`SAO23.floors{}.lv`、`SAO23.floors{}.map.blank`、`SAO23.floors{}.map.clip.c`、`SAO23.floors{}.map.clip.r`、`SAO23.floors{}.map.img`、`SAO23.floors{}.map.lo`、`SAO23.floors{}.map.note`、`SAO23.floors{}.map.size`、`SAO23.floors{}.map.x0`、`SAO23.floors{}.map.z0`、`SAO23.floors{}.name`、`SAO23.floors{}.opened`、`SAO23.floors{}.status`、`SAO23.floors{}.zones{}.n`、`SAO23.floors{}.zones{}.news`、`SAO23.floors{}.zones{}.note`、`SAO23.floors{}.zones{}.zh`、`SAO23.floors{}.zones{}.zhKeep`、`SAO23.unknown{}.note`、`SAO23_ITEMS{}[1]`、`SAO23_ITEMS{}[2]`、`SAO23_ITEMS{}[3]`、`SAO23_ITEMS{}[4]`、`SAO23_ITEMS{}[5]`、`SAO23_ITEMS{}[6]`、`SAO23_ITEMS{}[6]{key}`、`SAO23_ITEMS{}[6]{}`、`SAO23_ITEMS{}[7]`、`SAO_BUYBACK.items{}[][1]`、`SAO_BUYBACK.items{}[][2]`、`SAO_GACHA.banners[].n`、`SAO_GACHA.banners[].note`、`SAO_GACHA.src.date`、`SAO_GACHA.src.title`、`SAO_GACHA.src.url`、`SAO_GAMEINFO.date`、`SAO_GAMEINFO.items[].date`、`SAO_GAMEINFO.items[].desc`、`SAO_GAMEINFO.items[].lvl`、`SAO_GAMEINFO.items[].note`、`SAO_GAMESTATS.date`、`SAO_GAMESTATS.items{}.auc`、`SAO_GAMESTATS.items{}.date`、`SAO_GAMESTATS.items{}.dmg`、`SAO_GAMESTATS.items{}.lvl`、`SAO_GAMESTATS.items{}.r`、`SAO_GAMESTATS.items{}.st`、`SAO_GAMESTATS.items{}.st[][0]`、`SAO_GAMESTATS.items{}.st[][1]`、`SAO_HINTS{}{}[0]`、`SAO_HINTS{}{}[1]`、`SAO_HINTS{}{}[2]`、`SAO_NPCS{}[][0]`、`SAO_NPCS{}[][2]`、`SAO_NPCS{}[][3]`、`SAO_NPCS{}[][4]`、`SAO_NPCS{}[][5]`、`SAO_NPC_CALC{}.d`、`SAO_NPC_CALC{}.k`、`SAO_NPC_CALC{}.m`、`SAO_NPC_CALC{}.t`、`SAO_RECIPES{}.floor`、`SAO_RECIPES{}.items[][2]`、`SAO_RECIPES{}.items[][3][][1]`、`SAO_RECIPES{}.items[][4]`、`SAO_RECIPES{}.items[][5]`、`SAO_RECIPES{}.items[][6]`、`SAO_RECIPES{}.items[][7]`、`SAO_RECIPES{}.items[][8]`、`SAO_RECIPE_QTY{}`、`SAO_SETS.date`、`SAO_SETS.potions[].effects[]`、`SAO_SETS.sets[].tiers[][0]`、`SAO_SETS.sets[].tiers[][1]`、`SAO_SETS.sets[].zh`
+- 世界首領資料（說明、時間、攻擊招式；物品只有輪盤欄位掃描）；階段 2；47 個：`SAO_BOSSES.uniqueRules[]`、`SAO_BOSSES.uniqueWiki[][0]`、`SAO_BOSSES.uniqueWiki[][1]`、`SAO_BOSSES.uniqueWiki[][2]`、`SAO_BOSSES.uniqueWiki[][3]`、`SAO_BOSSES.uniqueWiki[][4]`、`SAO_BOSSES.unique[].attacks[][]`、`SAO_BOSSES.unique[].available`、`SAO_BOSSES.unique[].floor`、`SAO_BOSSES.unique[].fr`、`SAO_BOSSES.unique[].id`、`SAO_BOSSES.unique[].img`、`SAO_BOSSES.unique[].imgFront`、`SAO_BOSSES.unique[].level`、`SAO_BOSSES.unique[].levelSrc`、`SAO_BOSSES.unique[].name`、`SAO_BOSSES.unique[].note`、`SAO_BOSSES.unique[].phases`、`SAO_BOSSES.unique[].unit`、`SAO_BOSSES.unique[].zh`、`SAO_BOSSES.wikiWorld[][0]`、`SAO_BOSSES.wikiWorld[][1]`、`SAO_BOSSES.wikiWorld[][2]`、`SAO_BOSSES.world[].access`、`SAO_BOSSES.world[].attacks[][0]`、`SAO_BOSSES.world[].attacks[][1]`、`SAO_BOSSES.world[].desc`、`SAO_BOSSES.world[].fr`、`SAO_BOSSES.world[].guaranteed`、`SAO_BOSSES.world[].id`、`SAO_BOSSES.world[].img`、`SAO_BOSSES.world[].imgFront`、`SAO_BOSSES.world[].level`、`SAO_BOSSES.world[].maxPlayers`、`SAO_BOSSES.world[].name`、`SAO_BOSSES.world[].price`、`SAO_BOSSES.world[].queue`、`SAO_BOSSES.world[].rolls`、`SAO_BOSSES.world[].roulette0[][2]`、`SAO_BOSSES.world[].rouletteSrc`、`SAO_BOSSES.world[].roulette[][2]`、`SAO_BOSSES.world[].schedule[].day`、`SAO_BOSSES.world[].schedule[].minutes`、`SAO_BOSSES.world[].schedule[].time`、`SAO_BOSSES.world[].schedule[].zone`、`SAO_BOSSES.world[].weakness`、`SAO_BOSSES.world[].zh`
 - 主線標題（被引用的一方）；—；1 個：`SAO_MAINQ{}[].t`
 - 主線步驟文字、座標、圖片；階段 4；14 個：`SAO_MAINQ{key}`、`SAO_MAINQ{}[].d`、`SAO_MAINQ{}[].en{key}`、`SAO_MAINQ{}[].en{}`、`SAO_MAINQ{}[].img{key}`、`SAO_MAINQ{}[].img{}[][0]`、`SAO_MAINQ{}[].img{}[][1]`、`SAO_MAINQ{}[].lv`、`SAO_MAINQ{}[].n`、`SAO_MAINQ{}[].s[][0]`、`SAO_MAINQ{}[].s[][1]`、`SAO_MAINQ{}[].s[][2]`、`SAO_MAINQ{}[].s[][3]`、`SAO_MAINQ{}[].tip`
 - 主線獎勵（自由文字）；階段 4；1 個：`SAO_MAINQ{}[].rw`
@@ -135,7 +138,7 @@
 - 區域排序，值是 ZONES 的鍵（網站內部 id）；階段 3；1 個：`SAO.ZONE_ORDER[]`
 - 區域排序，值是 zones 的鍵（網站內部 id）；階段 3；1 個：`SAO23.floors{}.order[]`
 - 只用在搜尋的別名（鍵是 e|id／p|id）；階段 2；1 個：`SAO_ZHNAMES.search{key}`
-- 名稱文字（首領、活動怪物、官網新聞的法文名、區域標籤），不在 v5 階段 1 涵蓋表；之後依種類搬家時處理；階段 3／4；16 個：`SAO.SPOTS[].dg.boss`、`SAO.SPOTS[].dg.bossZh`、`SAO.SPOTS[].dg.title`、`SAO23.floors{}.spots[].dg.boss`、`SAO23.floors{}.spots[].dg.bossZh`、`SAO23.floors{}.spots[].dg.title`、`SAO_CODEX{}{}.reg`、`SAO_EVENTS.dungeons[]{}.npc`、`SAO_EVENTS.dungeons[]{}[].frag`、`SAO_EVENTS.dungeons[]{}[].leader`、`SAO_EVENTS.dungeons[]{}[].mobs[]`、`SAO_MOBPHOTO.by{}{}.old[].fr`、`SAO_MOBPHOTO.by{}{}.rows[].fr`、`SAO_MOBPHOTO.by{}{}.rows[].tw`、`SAO_MOBPHOTO.by{}{}.z[]`、`SAO_ZHNAMES.quests{}.reg`
+- 名稱文字（首領、活動怪物、官網新聞的法文名、區域標籤），不在 v5 階段 1 涵蓋表；之後依種類搬家時處理；階段 3／4；17 個：`SAO.SPOTS[].dg.boss`、`SAO.SPOTS[].dg.bossZh`、`SAO.SPOTS[].dg.title`、`SAO23.floors{}.spots[].dg.boss`、`SAO23.floors{}.spots[].dg.bossZh`、`SAO23.floors{}.spots[].dg.title`、`SAO_CODEX{}{}.reg`、`SAO_EVENTS.dungeons[].forge.npc`、`SAO_EVENTS.dungeons[].key.npc`、`SAO_EVENTS.dungeons[].zones[].frag`、`SAO_EVENTS.dungeons[].zones[].leader`、`SAO_EVENTS.dungeons[].zones[].mobs[]`、`SAO_MOBPHOTO.by{}{}.old[].fr`、`SAO_MOBPHOTO.by{}{}.rows[].fr`、`SAO_MOBPHOTO.by{}{}.rows[].tw`、`SAO_MOBPHOTO.by{}{}.z[]`、`SAO_ZHNAMES.quests{}.reg`
 - 圖示檔路徑；—；1 個：`SAO_RECICONS{}`
 - 圖示檔路徑（E7 釘選另外檢查）；—；1 個：`SAO_GAMEICONS{}`
 - 地下城鑰匙名（顯示文字，網站另外用配方對鑰匙）；階段 2；2 個：`SAO.SPOTS[].dg.key`、`SAO23.floors{}.spots[].dg.key`
@@ -144,7 +147,7 @@
 - 套裝名稱本身（被引用的一方）；—；1 個：`SAO_SETS.sets[].name`
 - 套裝顯示名稱（說明文字）；階段 2；1 個：`SAO.ITEMS{}.set.name`
 - 官方中文名本身（名字索引的一部分）；—；5 個：`SAO_ZHNAMES.items[].en`、`SAO_ZHNAMES.items[].fr`、`SAO_ZHNAMES.items[].inf`、`SAO_ZHNAMES.items[].src`、`SAO_ZHNAMES.items[].zh`
-- 官方中文名本身（顯示文字）；—；13 個：`SAO_ZHNAMES.date`、`SAO_ZHNAMES.mobsByName{}`、`SAO_ZHNAMES.mobs{}`、`SAO_ZHNAMES.npcEn{}`、`SAO_ZHNAMES.npcs{}`、`SAO_ZHNAMES.places{}`、`SAO_ZHNAMES.quests{}.d`、`SAO_ZHNAMES.quests{}.obj{key}`、`SAO_ZHNAMES.quests{}.obj{}`、`SAO_ZHNAMES.quests{}.zh`、`SAO_ZHNAMES.search{}[]`、`SAO_ZHNAMES.sets{}`、`SAO_ZHNAMES.terms{}`
+- 官方中文名本身（顯示文字）；—；12 個：`SAO_ZHNAMES.date`、`SAO_ZHNAMES.mobsByName{}`、`SAO_ZHNAMES.mobs{}`、`SAO_ZHNAMES.npcs{}`、`SAO_ZHNAMES.places{}`、`SAO_ZHNAMES.quests{}.d`、`SAO_ZHNAMES.quests{}.obj{key}`、`SAO_ZHNAMES.quests{}.obj{}`、`SAO_ZHNAMES.quests{}.zh`、`SAO_ZHNAMES.search{}[]`、`SAO_ZHNAMES.sets{}`、`SAO_ZHNAMES.terms{}`
 - 官網圖鑑匯入的紀錄本身；—；20 個：`SAO_EQUIP[][0]`、`SAO_EQUIP[][1]`、`SAO_EQUIP[][2]`、`SAO_EQUIP[][3]`、`SAO_EQUIP[][4]`、`SAO_EQUIP[][5]`、`SAO_EQUIP[][6]`、`SAO_EQUIP[][7]{key}`、`SAO_EQUIP[][7]{}`、`SAO_EQUIP[][8]`、`SAO_EQUIP[][9]`、`SAO_PROPS[][0]`、`SAO_PROPS[][1]`、`SAO_PROPS[][2]`、`SAO_PROPS[][3]`、`SAO_PROPS[][4]`、`SAO_PROPS[][5]`、`SAO_PROPS[][6]{key}`、`SAO_PROPS[][6]{}`、`SAO_PROPS[][7]`
 - 官網新聞的原文、圖片路徑和數值；—；14 個：`SAO_MOBPHOTO.by{}{}.f`、`SAO_MOBPHOTO.by{}{}.lv`、`SAO_MOBPHOTO.by{}{}.old[].ch[]`、`SAO_MOBPHOTO.by{}{}.old[].f`、`SAO_MOBPHOTO.by{}{}.old[].v`、`SAO_MOBPHOTO.by{}{}.rows[].ch[]`、`SAO_MOBPHOTO.by{}{}.rows[].f`、`SAO_MOBPHOTO.by{}{}.rows[].v`、`SAO_MOBPHOTO.srcs{key}`、`SAO_MOBPHOTO.srcs{}.date`、`SAO_MOBPHOTO.srcs{}.title`、`SAO_MOBPHOTO.srcs{}.title_fr`、`SAO_MOBPHOTO.srcs{}.title_tw`、`SAO_MOBPHOTO.srcs{}.url`
 - 怪物圖片的鍵（只有 3 張舊圖，網站內部用）；階段 4；1 個：`SAO.PHOTO{key}`
@@ -155,8 +158,8 @@
 - 更新紀錄文字；—；4 個：`SAO_CHANGELOG[][0]`、`SAO_CHANGELOG[][1][]`、`SAO_CHANGELOG_SUM{key}`、`SAO_CHANGELOG_SUM{}[]`
 - 本站物品紀錄本身（被引用的一方）；—；2 個：`SAO.ITEMS{key}`、`SAO23_ITEMS{key}`
 - 樓層號碼；—；5 個：`SAO23.floors{key}`、`SAO_CODEX{key}`、`SAO_HINTS{key}`、`SAO_MOBPHOTO.by{key}`、`SAO_NPCS{key}`
-- 活動公告文字、兌換表、碎片表；階段 2；33 個：`SAO_EVENTS.dungeons[]{key}`、`SAO_EVENTS.dungeons[]{}`、`SAO_EVENTS.dungeons[]{}.boss`、`SAO_EVENTS.dungeons[]{}.bossZh`、`SAO_EVENTS.dungeons[]{}.date`、`SAO_EVENTS.dungeons[]{}.easy[][]`、`SAO_EVENTS.dungeons[]{}.extra`、`SAO_EVENTS.dungeons[]{}.key`、`SAO_EVENTS.dungeons[]{}.loot[][2]`、`SAO_EVENTS.dungeons[]{}.lvNote`、`SAO_EVENTS.dungeons[]{}.mats[][0]`、`SAO_EVENTS.dungeons[]{}.mats[][1]`、`SAO_EVENTS.dungeons[]{}.modes[]`、`SAO_EVENTS.dungeons[]{}.n`、`SAO_EVENTS.dungeons[]{}.note`、`SAO_EVENTS.dungeons[]{}.rows[][0]`、`SAO_EVENTS.dungeons[]{}.rows[][1]`、`SAO_EVENTS.dungeons[]{}.rows[][2]`、`SAO_EVENTS.dungeons[]{}.rows[][3]`、`SAO_EVENTS.dungeons[]{}.title`、`SAO_EVENTS.dungeons[]{}.url`、`SAO_EVENTS.dungeons[]{}.where`、`SAO_EVENTS.dungeons[]{}[]`、`SAO_EVENTS.dungeons[]{}[].n`、`SAO_EVENTS.dungeons[]{}[][0]`、`SAO_EVENTS.dungeons[]{}[][1]`、`SAO_EVENTS.eqPatch.items{}.note`、`SAO_EVENTS.eqPatch.items{}.set{key}`、`SAO_EVENTS.eqPatch.items{}.set{}`、`SAO_EVENTS.eqPatch.src.date`、`SAO_EVENTS.eqPatch.src.title`、`SAO_EVENTS.eqPatch.src.url`、`SAO_EVENTS.eqPatch.unmatched`
-- 職業資料（wiki 文字、屬性、技能）；—；14 個：`SAO_CLASSES[]{key}`、`SAO_CLASSES[]{}`、`SAO_CLASSES[]{}.bow`、`SAO_CLASSES[]{}.crossbow`、`SAO_CLASSES[]{}.dagger`、`SAO_CLASSES[]{}.shield`、`SAO_CLASSES[]{}.staff_mage`、`SAO_CLASSES[]{}.staff_shaman`、`SAO_CLASSES[]{}.sword`、`SAO_CLASSES[]{}[][0]`、`SAO_CLASSES[]{}[][1]`、`SAO_CLASSES[]{}[][2]`、`SAO_CLASSES[]{}[][3]`、`SAO_CLASSES[]{}[][4]`
+- 活動公告文字、兌換表、碎片表；階段 2；41 個：`SAO_EVENTS.dungeons[].bosses[][0]`、`SAO_EVENTS.dungeons[].bosses[][1]`、`SAO_EVENTS.dungeons[].chest[]`、`SAO_EVENTS.dungeons[].dg.boss`、`SAO_EVENTS.dungeons[].dg.bossZh`、`SAO_EVENTS.dungeons[].dg.date`、`SAO_EVENTS.dungeons[].dg.easy[][]`、`SAO_EVENTS.dungeons[].dg.key`、`SAO_EVENTS.dungeons[].dg.loot[][2]`、`SAO_EVENTS.dungeons[].dg.modes[]`、`SAO_EVENTS.dungeons[].ev`、`SAO_EVENTS.dungeons[].forge.extra`、`SAO_EVENTS.dungeons[].forge.lvNote`、`SAO_EVENTS.dungeons[].forge.rows[][0]`、`SAO_EVENTS.dungeons[].forge.rows[][1]`、`SAO_EVENTS.dungeons[].forge.rows[][2]`、`SAO_EVENTS.dungeons[].forge.rows[][3]`、`SAO_EVENTS.dungeons[].fragRate`、`SAO_EVENTS.dungeons[].id`、`SAO_EVENTS.dungeons[].key.mats[][0]`、`SAO_EVENTS.dungeons[].key.mats[][1]`、`SAO_EVENTS.dungeons[].key.n`、`SAO_EVENTS.dungeons[].key.note`、`SAO_EVENTS.dungeons[].key.where`、`SAO_EVENTS.dungeons[].loop[]`、`SAO_EVENTS.dungeons[].n`、`SAO_EVENTS.dungeons[].notes[]`、`SAO_EVENTS.dungeons[].players`、`SAO_EVENTS.dungeons[].soon[]`、`SAO_EVENTS.dungeons[].src.date`、`SAO_EVENTS.dungeons[].src.title`、`SAO_EVENTS.dungeons[].src.url`、`SAO_EVENTS.dungeons[].zh`、`SAO_EVENTS.dungeons[].zones[].n`、`SAO_EVENTS.eqPatch.items{}.note`、`SAO_EVENTS.eqPatch.items{}.set{key}`、`SAO_EVENTS.eqPatch.items{}.set{}`、`SAO_EVENTS.eqPatch.src.date`、`SAO_EVENTS.eqPatch.src.title`、`SAO_EVENTS.eqPatch.src.url`、`SAO_EVENTS.eqPatch.unmatched`
+- 職業資料（wiki 文字、屬性、技能）；—；33 個：`SAO_CLASSES[].about`、`SAO_CLASSES[].base[][0]`、`SAO_CLASSES[].base[][1]`、`SAO_CLASSES[].diff`、`SAO_CLASSES[].ic`、`SAO_CLASSES[].id`、`SAO_CLASSES[].name`、`SAO_CLASSES[].perLv[][0]`、`SAO_CLASSES[].perLv[][1]`、`SAO_CLASSES[].role`、`SAO_CLASSES[].skillsSure`、`SAO_CLASSES[].skills[][0]`、`SAO_CLASSES[].skills[][1]`、`SAO_CLASSES[].skills[][2]`、`SAO_CLASSES[].skills[][3]`、`SAO_CLASSES[].stars[][0]`、`SAO_CLASSES[].stars[][1]`、`SAO_CLASSES[].subs[][0]`、`SAO_CLASSES[].subs[][1]`、`SAO_CLASSES[].talents[][0]`、`SAO_CLASSES[].talents[][1]`、`SAO_CLASSES[].talents[][2]`、`SAO_CLASSES[].talents[][3]`、`SAO_CLASSES[].talents[][4]`、`SAO_CLASSES[].weapons.bow`、`SAO_CLASSES[].weapons.crossbow`、`SAO_CLASSES[].weapons.dagger`、`SAO_CLASSES[].weapons.shield`、`SAO_CLASSES[].weapons.staff_mage`、`SAO_CLASSES[].weapons.staff_shaman`、`SAO_CLASSES[].weapons.sword`、`SAO_CLASSES[].wikiRev`、`SAO_CLASSES[].zh`
 - 說明文字；階段 4；1 個：`SAO.QUESTS[].tnote`
 - 遊戲取得途徑的商店名（顯示用對照）；階段 3；1 個：`SAO_ZHNAMES.terms{key}`
 - 遊戲圖鑑原文；—；2 個：`SAO_CODEX{}{}.desc`、`SAO_CODEX{}{}.n`
@@ -168,7 +171,7 @@
 
 ## 錯誤清單
 
-### E1（88）
+### E1（90）
 
 | 檔案 | 鍵 | 行 | 原因 | 例外 |
 | --- | --- | --- | --- | --- |
@@ -214,6 +217,7 @@
 | gameicons.js | `gameicons:Pumpkin Caramel` | 66 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | gameicons.js | `gameicons:Slime Tear` | 81 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | gameicons.js | `gameicons:Training Dagger (2)` | 88 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| gameinfo.js | `gameinfo:Allium Flower/bought-back-by:F1 Local Farmer - Near the Starting City` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Anneau des Cieux/crafted-at:P3 - Craft Anneau des Cieux` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Bottes de l'Explorateur/crafted-at:P3 - Craft Bottes de l'Explorateur` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Ceinture de la Tribu/crafted-at:P3 - Craft Artefact Ceinture Orc` | 4 | 解析不到：沒有對得上的 NPC | 有 |
@@ -240,6 +244,7 @@
 | gameinfo.js | `gameinfo:Sang de Bête Corrompu/crafted-at:P3 - Refaçonneur Matériaux` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Scroll of Mastery/sold-by:P3 - Marchand de Consommables` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Scroll of Reallocation/sold-by:P3 - Marchand de Consommables` | 4 | 解析不到：沒有對得上的 NPC | 有 |
+| gameinfo.js | `gameinfo:Wheat/bought-back-by:F1 Local Farmer - Near the Starting City` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Wooden Fishing Rod/sold-by:F1 - Starting City - Tools` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:獵人紫水晶護腿/crafted-at:P3 - Craft Armure d'Améthyste` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:獵人紫水晶靴/crafted-at:P3 - Craft Armure d'Améthyste` | 4 | 解析不到：沒有對得上的 NPC | 有 |
@@ -259,14 +264,13 @@
 | sets.js | `set:Stealthy Herald Set/member:Tunic of the Herald` | 43 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | sets.js | `set:Tenacious Necromancer Set/member:Helmet of the Tenacious Necromancer` | 47 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | zhnames.js | `zhnames.places:Lair of Asterius` | 25 | 解析不到：沒有對得上的地點 | 有 |
-| zhnames.js | `zhnames:蜘蛛毒液/i\|Spider Venom` | 249 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| zhnames.js | `zhnames:蜘蛛毒液/i\|Spider Venom` | 249 | 解析不到：「i\|」指到的本站物品表（ITEMS）鍵不存在 | 有 |
 
-### E2（30）
+### E2（28）
 
 | 檔案 | 鍵 | 行 | 原因 | 例外 |
 | --- | --- | --- | --- | --- |
 | data.js | `Cursed Skeleton Shaman Staff/fr` | 170 | 對到 2 個不同的實體：2592 Spectre Maudit（裝備）、2717 Spectre Maudit（裝備） | 有 |
-| gameinfo.js | `gameinfo:Allium Flower/bought-back-by:F1 Local Farmer - Near the Starting City` | 4 | 對到 2 個不同的實體：N2:6:Local Farmer、N3:5:Local Farmer | 有 |
 | gameinfo.js | `gameinfo:Bandit's Dagger/loot:Bandit Assassin` | 4 | 對到 2 個不同的實體：M1:m31、M3:f3m17 | 有 |
 | gameinfo.js | `gameinfo:Bone Dust/bought-back-by:Shop - Cursed Ruins` | 4 | 對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2) | 有 |
 | gameinfo.js | `gameinfo:Crossbow of the Bandits/loot:Bandit Archer` | 4 | 對到 2 個不同的實體：M1:m30、M3:f3m19 | 有 |
@@ -282,10 +286,9 @@
 | gameinfo.js | `gameinfo:Soul of the Ruins/bought-back-by:Shop - Cursed Ruins` | 4 | 對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2) | 有 |
 | gameinfo.js | `gameinfo:Soul of the Warden/bought-back-by:F1 - Labyrinth of the Forgotten - Loot Buyer` | 4 | 對到 2 個不同的實體：N1:10:Labyrinth of the Fallen - Loot Buyer、N1:9:Labyrinth of the Fallen (2) - Loot Buyer | 有 |
 | gameinfo.js | `gameinfo:Stamina Potion II/sold-by:Shop - Cursed Ruins` | 4 | 對到 2 個不同的實體：N1:4:Cursed Ruins - Loot Buyer、N1:5:Cursed Ruins - Loot Buyer (2) | 有 |
-| gameinfo.js | `gameinfo:Wheat/bought-back-by:F1 Local Farmer - Near the Starting City` | 4 | 對到 2 個不同的實體：N2:6:Local Farmer、N3:5:Local Farmer | 有 |
 | recipes.js | `recipe-npc:3\|Consumables Merchant` | 3292 | 對到 2 個不同的實體：N3:25:Consumables Merchant、N3:26:Consumables Merchant | 有 |
-| recipes.js | `recipe:3\|Adventurer's Shoemaker/Bottes de l'Aventurier/mat:狼皮（第 1 或第 2 層，看不出來）` | 4241 | 對到 0 個不同的實體： | 有 |
-| recipes.js | `recipe:3\|P3 - Craft Anneau Draconique Corrompu/Anneau Draconique Corrompu/mat:腐化碎片（三種之一，看不出是哪一種）` | 4094 | 對到 0 個不同的實體： | 有 |
+| recipes.js | `recipe:3\|Adventurer's Shoemaker/Bottes de l'Aventurier/mat:狼皮（第 1 或第 2 層，看不出來）` | 4241 | 資料本身寫明看不出是哪一種（已知的多重可能，沒有指定實體） | 有 |
+| recipes.js | `recipe:3\|P3 - Craft Anneau Draconique Corrompu/Anneau Draconique Corrompu/mat:腐化碎片（三種之一，看不出是哪一種）` | 4094 | 資料本身寫明看不出是哪一種（已知的多重可能，沒有指定實體） | 有 |
 | sets.js | `set:Ika Set/member:Leggings of Ika` | 34 | 對到 2 個不同的實體：1341 Jambières d'Ika（裝備）、1348 Jambières d’Ika（裝備） | 有 |
 | zhnames.js | `zhnames.npcEn:Assistant to the Alchemist` | 34 | 對到 2 個不同的實體：N2:1:Assistant to the Alchemist、N3:1:Assistant to the Alchemist | 有 |
 | zhnames.js | `zhnames.npcs:Alchemist` | 32 | 對到 3 個不同的實體：N1:0:Alchemist、N2:0:Alchemist、N3:0:Alchemist | 有 |
@@ -346,6 +349,7 @@
 - unapproved：E1 `gameicons:Pumpkin Caramel`（gameicons.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `gameicons:Slime Tear`（gameicons.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `gameicons:Training Dagger (2)`（gameicons.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
+- unapproved：E1 `gameinfo:Allium Flower/bought-back-by:F1 Local Farmer - Near the Starting City`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `gameinfo:Anneau des Cieux/crafted-at:P3 - Craft Anneau des Cieux`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `gameinfo:Bottes de l'Explorateur/crafted-at:P3 - Craft Bottes de l'Explorateur`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `gameinfo:Ceinture de la Tribu/crafted-at:P3 - Craft Artefact Ceinture Orc`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
@@ -372,6 +376,7 @@
 - unapproved：E1 `gameinfo:Sang de Bête Corrompu/crafted-at:P3 - Refaçonneur Matériaux`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `gameinfo:Scroll of Mastery/sold-by:P3 - Marchand de Consommables`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `gameinfo:Scroll of Reallocation/sold-by:P3 - Marchand de Consommables`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
+- unapproved：E1 `gameinfo:Wheat/bought-back-by:F1 Local Farmer - Near the Starting City`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `gameinfo:Wooden Fishing Rod/sold-by:F1 - Starting City - Tools`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `gameinfo:獵人紫水晶護腿/crafted-at:P3 - Craft Armure d'Améthyste`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `gameinfo:獵人紫水晶靴/crafted-at:P3 - Craft Armure d'Améthyste`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
@@ -393,7 +398,6 @@
 - unapproved：E1 `zhnames.places:Lair of Asterius`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E1 `zhnames:蜘蛛毒液/i|Spider Venom`（zhnames.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E2 `Cursed Skeleton Shaman Staff/fr`（data.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Allium Flower/bought-back-by:F1 Local Farmer - Near the Starting City`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E2 `gameinfo:Bandit's Dagger/loot:Bandit Assassin`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E2 `gameinfo:Bone Dust/bought-back-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E2 `gameinfo:Crossbow of the Bandits/loot:Bandit Archer`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
@@ -409,7 +413,6 @@
 - unapproved：E2 `gameinfo:Soul of the Ruins/bought-back-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E2 `gameinfo:Soul of the Warden/bought-back-by:F1 - Labyrinth of the Forgotten - Loot Buyer`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E2 `gameinfo:Stamina Potion II/sold-by:Shop - Cursed Ruins`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
-- unapproved：E2 `gameinfo:Wheat/bought-back-by:F1 Local Farmer - Near the Starting City`（gameinfo.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E2 `recipe-npc:3|Consumables Merchant`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E2 `recipe:3|Adventurer's Shoemaker/Bottes de l'Aventurier/mat:狼皮（第 1 或第 2 層，看不出來）`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
 - unapproved：E2 `recipe:3|P3 - Craft Anneau Draconique Corrompu/Anneau Draconique Corrompu/mat:腐化碎片（三種之一，看不出是哪一種）`（recipes.js）：例外還沒有核准（approved_by／approved_at 空白），不算鎖定
@@ -600,4 +603,4 @@
 - W1（同順位來源矛盾：資料檔沒有同時保存 catalog 和 wiki 的值）
 - W3（同一來源的不同觀察：資料檔每件物品只存一個值）
 - W4（同一外部編號在新舊匯入之間改名：階段 1 沒有上一次匯入的快照）
-- W8、W9 由瀏覽器測試 tests/zh_gap.js、tests/site_audit.js 產生（CI 執行）
+- W8、W9 由瀏覽器測試 tests/zh_gap.js、tests/site_audit.js 產生（CI 的「site audit and untranslated names」步驟執行，輸出在 CI 的 registry_report 附件；只記錄、不擋建置）

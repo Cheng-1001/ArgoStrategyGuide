@@ -16,7 +16,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 _args = [a for a in sys.argv[1:] if a in ("--draft",)]
 _chk = subprocess.run([sys.executable, "-I", os.path.join(ROOT, "tools", "check_refs.py"), "--root", ROOT, "--quiet"] + _args)
 if _chk.returncode != 0:
-    print("build stopped: reference check failed (see build/registry_report.md)", file=sys.stderr)
+    print("build stopped: reference check failed (see build/registry_report.md, or registry_report.draft.md with --draft)", file=sys.stderr)
     sys.exit(1)
 body = open(os.path.join(ROOT, "src", "index.html"), encoding="utf-8").read()
 head = '''<!doctype html>

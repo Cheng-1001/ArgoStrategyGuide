@@ -9,7 +9,8 @@ What it does
   * finds external ids claimed by two site records  -> E3,
   * checks the pins in registry/pins.json  -> E6 (identity) / E7 (icon),
   * compares the errors with registry/exceptions.json (locked, item by item),
-  * writes build/registry_report.md (committed, deterministic) and build/registry_report.json (not committed).
+  * writes build/registry_report.md (committed, deterministic) and build/registry_report.json (not committed);
+    with --draft it writes build/registry_report.draft.md / .json instead (not committed).
 
 It never writes data files or index.html.  Exit code 1 when an error is not covered by an approved exception,
 when an exception is no longer needed, or when the exception file itself is invalid.
@@ -79,16 +80,20 @@ MAPS = {
     'SAO_EVENTS.eqPatch.items', 'SAO_EVENTS.eqPatch.items{}.set', 'SAO_GAMESTATS.items', 'SAO_ZHNAMES.search',
     'SAO_ZHNAMES.sets', 'SAO_ZHNAMES.mobs', 'SAO_ZHNAMES.mobsByName', 'SAO_ZHNAMES.places', 'SAO_ZHNAMES.terms',
     'SAO_ZHNAMES.npcEn', 'SAO_ZHNAMES.npcs', 'SAO_ZHNAMES.quests', 'SAO_ZHNAMES.quests{}.obj', 'SAO_STATICONS',
-    'SAO_GAMEICONS', 'SAO_RECICONS', 'SAO_BOSSES.world[]', 'SAO_CLASSES[]', 'SAO_EVENTS.dungeons[]',
+    'SAO_GAMEICONS', 'SAO_RECICONS',
 }
 TUPLES = {
     'SAO.BOSS_SPAWNS[]', 'SAO.M[].drops[]', 'SAO.SPOTS[].dg.loot[]', 'SAO.QUESTS[].need[]', 'SAO.QUESTS[].kill',
     'SAO.ITEMS{}.set.tiers[]', 'SAO23_ITEMS{}', 'SAO23.floors{}.M[].drops[]', 'SAO23.floors{}.spots[].dg.loot[]',
     'SAO23.floors{}.BOSS_SPAWNS[]', 'SAO_HINTS{}{}', 'SAO_EQUIP[]', 'SAO_PROPS[]', 'SAO_NPCS{}[]',
     'SAO_CHANGELOG[]', 'SAO_RECIPES{}.items[]', 'SAO_RECIPES{}.items[][3][]', 'SAO_BOSSES.uniqueWiki[]',
-    'SAO_EVENTS.dungeons[]{}[]', 'SAO_SETS.sets[].tiers[]', 'SAO_MAINQ{}[].s[]', 'SAO_BOSSES.world[]{}[]',
-    'SAO_CLASSES[]{}[]', 'SAO_EVENTS.dungeons[]{}.rows[]', 'SAO_EVENTS.dungeons[]{}.mats[]',
-    'SAO_EVENTS.dungeons[]{}.loot[]', 'SAO_GAMESTATS.items{}.st[]', 'SAO_MAINQ{}[].img{}[]',
+    'SAO_SETS.sets[].tiers[]', 'SAO_MAINQ{}[].s[]', 'SAO_GAMESTATS.items{}.st[]', 'SAO_MAINQ{}[].img{}[]',
+    # records with fixed fields (world boss, event dungeon, class) are NOT maps: their field names are fields, so a
+    # new field gets its own signature and is E9 until registered (P1 review M3)
+    'SAO_BOSSES.world[].roulette[]', 'SAO_BOSSES.world[].roulette0[]', 'SAO_BOSSES.world[].attacks[]', 'SAO_BOSSES.wikiWorld[]',
+    'SAO_EVENTS.dungeons[].bosses[]', 'SAO_EVENTS.dungeons[].key.mats[]', 'SAO_EVENTS.dungeons[].forge.rows[]',
+    'SAO_EVENTS.dungeons[].dg.loot[]', 'SAO_CLASSES[].stars[]', 'SAO_CLASSES[].subs[]', 'SAO_CLASSES[].skills[]',
+    'SAO_CLASSES[].base[]', 'SAO_CLASSES[].perLv[]', 'SAO_CLASSES[].talents[]',
     'SAO_BUYBACK.items{}[]',
 }
 
@@ -96,9 +101,17 @@ TUPLES = {
 # Signature format: '.field' dict field, '{}' map entry, '{key}' the key of a map entry, '[]' list element,
 # '[N]' tuple position.  Exact signatures only (no wildcards): a field listed in neither COVERAGE nor SKIP is E9.
 COVERAGE = {
+    'SAO_BOSSES.world[].roulette0[][0]': 'item_roulette',
+    'SAO_BOSSES.world[].roulette0[][1]': 'item_roulette_fr',
+    'SAO_BOSSES.world[].roulette[][0]': 'item_roulette',
+    'SAO_BOSSES.world[].roulette[][1]': 'item_roulette_fr',
+    'SAO_EVENTS.dungeons[].dg.loot[][0]': 'item_loot',
+    'SAO_EVENTS.dungeons[].dg.loot[][1]': 'mob_loot_any',
+    'SAO_EVENTS.eqPatch.items{}.en': 'item_patch',
     'SAO.BOSS_SPAWNS[][0]': 'mob_bs',
     'SAO.M[].drops[][0]': 'item_drop',
     'SAO.M[].zone': 'zone_ref',
+    # zone may also be written as an array (data23 spots use it); these array forms are kept ready for floor 1 data
     'SAO.M[].zone[]': 'zone_ref',
     'SAO.ITEMS{}.fr': 'item_fr',
     'SAO.SPOTS[].mons[]': 'mob_spot',
@@ -123,8 +136,6 @@ COVERAGE = {
     'SAO23.floors{}.spots[].dg.loot[][1]': 'mob_loot',
     'SAO23.floors{}.BOSS_SPAWNS[][0]': 'mob_bs',
     'SAO23.extra{key}': 'item_extra',
-    'SAO_BOSSES.world[]{}[][0]': 'item_roulette',
-    'SAO_BOSSES.world[]{}[][1]': 'item_roulette_fr',
     'SAO_HINTS{}{key}': 'mob_hint',
     'SAO_CODEX{}{key}': 'codex_num',
     'SAO_MOBPHOTO.by{}{key}': 'mob_photo',
@@ -140,9 +151,6 @@ COVERAGE = {
     'SAO_RECIPES{}.items[][0]': 'rec_out_id',
     'SAO_RECIPES{}.items[][1]': 'rec_out_name',
     'SAO_RECIPES{}.items[][3][][0]': 'item_mat',
-    'SAO_EVENTS.dungeons[]{}.loot[][0]': 'item_loot',
-    'SAO_EVENTS.dungeons[]{}.loot[][1]': 'mob_loot_any',
-    'SAO_EVENTS.eqPatch.items{}.en': 'item_patch',
     'SAO_EVENTS.eqPatch.items{key}': 'cat_id_key',
     'SAO_GACHA.banners[].items[].en': 'item_gacha',
     'SAO_GACHA.banners[].items[].id': 'gacha_id',
@@ -204,9 +212,135 @@ SKIP_REASONS = {
     'R40': ('數值圖示（鍵是數值名，不是物品）', '—'),
     'R41': ('圖示檔路徑（E7 釘選另外檢查）', '—'),
     'R42': ('圖示檔路徑', '—'),
+    'R43': ('NPC 的遊戲商店名／英法文名（名字索引的一部分，被引用的一方）', '—'),
     'RN': ('名稱文字（首領、活動怪物、官網新聞的法文名、區域標籤），不在 v5 階段 1 涵蓋表；之後依種類搬家時處理', '階段 3／4'),
 }
 SKIP = {
+    'SAO_BOSSES.uniqueRules[]': 'R19',
+    'SAO_BOSSES.uniqueWiki[][0]': 'R19',
+    'SAO_BOSSES.uniqueWiki[][1]': 'R19',
+    'SAO_BOSSES.uniqueWiki[][2]': 'R19',
+    'SAO_BOSSES.uniqueWiki[][3]': 'R19',
+    'SAO_BOSSES.uniqueWiki[][4]': 'R19',
+    'SAO_BOSSES.unique[].attacks[][]': 'R19',
+    'SAO_BOSSES.unique[].available': 'R19',
+    'SAO_BOSSES.unique[].floor': 'R19',
+    'SAO_BOSSES.unique[].fr': 'R19',
+    'SAO_BOSSES.unique[].id': 'R19',
+    'SAO_BOSSES.unique[].img': 'R19',
+    'SAO_BOSSES.unique[].imgFront': 'R19',
+    'SAO_BOSSES.unique[].level': 'R19',
+    'SAO_BOSSES.unique[].levelSrc': 'R19',
+    'SAO_BOSSES.unique[].name': 'R19',
+    'SAO_BOSSES.unique[].note': 'R19',
+    'SAO_BOSSES.unique[].phases': 'R19',
+    'SAO_BOSSES.unique[].unit': 'R19',
+    'SAO_BOSSES.unique[].zh': 'R19',
+    'SAO_BOSSES.wikiWorld[][0]': 'R19',
+    'SAO_BOSSES.wikiWorld[][1]': 'R19',
+    'SAO_BOSSES.wikiWorld[][2]': 'R19',
+    'SAO_BOSSES.world[].access': 'R19',
+    'SAO_BOSSES.world[].attacks[][0]': 'R19',
+    'SAO_BOSSES.world[].attacks[][1]': 'R19',
+    'SAO_BOSSES.world[].desc': 'R19',
+    'SAO_BOSSES.world[].fr': 'R19',
+    'SAO_BOSSES.world[].guaranteed': 'R19',
+    'SAO_BOSSES.world[].id': 'R19',
+    'SAO_BOSSES.world[].img': 'R19',
+    'SAO_BOSSES.world[].imgFront': 'R19',
+    'SAO_BOSSES.world[].level': 'R19',
+    'SAO_BOSSES.world[].maxPlayers': 'R19',
+    'SAO_BOSSES.world[].name': 'R19',
+    'SAO_BOSSES.world[].price': 'R19',
+    'SAO_BOSSES.world[].queue': 'R19',
+    'SAO_BOSSES.world[].rolls': 'R19',
+    'SAO_BOSSES.world[].roulette0[][2]': 'R19',
+    'SAO_BOSSES.world[].rouletteSrc': 'R19',
+    'SAO_BOSSES.world[].roulette[][2]': 'R19',
+    'SAO_BOSSES.world[].schedule[].day': 'R19',
+    'SAO_BOSSES.world[].schedule[].minutes': 'R19',
+    'SAO_BOSSES.world[].schedule[].time': 'R19',
+    'SAO_BOSSES.world[].schedule[].zone': 'R19',
+    'SAO_BOSSES.world[].weakness': 'R19',
+    'SAO_BOSSES.world[].zh': 'R19',
+    'SAO_CLASSES[].about': 'R31',
+    'SAO_CLASSES[].base[][0]': 'R31',
+    'SAO_CLASSES[].base[][1]': 'R31',
+    'SAO_CLASSES[].diff': 'R31',
+    'SAO_CLASSES[].ic': 'R31',
+    'SAO_CLASSES[].id': 'R31',
+    'SAO_CLASSES[].name': 'R31',
+    'SAO_CLASSES[].perLv[][0]': 'R31',
+    'SAO_CLASSES[].perLv[][1]': 'R31',
+    'SAO_CLASSES[].role': 'R31',
+    'SAO_CLASSES[].skillsSure': 'R31',
+    'SAO_CLASSES[].skills[][0]': 'R31',
+    'SAO_CLASSES[].skills[][1]': 'R31',
+    'SAO_CLASSES[].skills[][2]': 'R31',
+    'SAO_CLASSES[].skills[][3]': 'R31',
+    'SAO_CLASSES[].stars[][0]': 'R31',
+    'SAO_CLASSES[].stars[][1]': 'R31',
+    'SAO_CLASSES[].subs[][0]': 'R31',
+    'SAO_CLASSES[].subs[][1]': 'R31',
+    'SAO_CLASSES[].talents[][0]': 'R31',
+    'SAO_CLASSES[].talents[][1]': 'R31',
+    'SAO_CLASSES[].talents[][2]': 'R31',
+    'SAO_CLASSES[].talents[][3]': 'R31',
+    'SAO_CLASSES[].talents[][4]': 'R31',
+    'SAO_CLASSES[].weapons.bow': 'R31',
+    'SAO_CLASSES[].weapons.crossbow': 'R31',
+    'SAO_CLASSES[].weapons.dagger': 'R31',
+    'SAO_CLASSES[].weapons.shield': 'R31',
+    'SAO_CLASSES[].weapons.staff_mage': 'R31',
+    'SAO_CLASSES[].weapons.staff_shaman': 'R31',
+    'SAO_CLASSES[].weapons.sword': 'R31',
+    'SAO_CLASSES[].wikiRev': 'R31',
+    'SAO_CLASSES[].zh': 'R31',
+    'SAO_EVENTS.dungeons[].bosses[][0]': 'R33',
+    'SAO_EVENTS.dungeons[].bosses[][1]': 'R33',
+    'SAO_EVENTS.dungeons[].chest[]': 'R33',
+    'SAO_EVENTS.dungeons[].dg.boss': 'R33',
+    'SAO_EVENTS.dungeons[].dg.bossZh': 'R33',
+    'SAO_EVENTS.dungeons[].dg.date': 'R33',
+    'SAO_EVENTS.dungeons[].dg.easy[][]': 'R33',
+    'SAO_EVENTS.dungeons[].dg.key': 'R33',
+    'SAO_EVENTS.dungeons[].dg.loot[][2]': 'R33',
+    'SAO_EVENTS.dungeons[].dg.modes[]': 'R33',
+    'SAO_EVENTS.dungeons[].ev': 'R33',
+    'SAO_EVENTS.dungeons[].forge.extra': 'R33',
+    'SAO_EVENTS.dungeons[].forge.lvNote': 'R33',
+    'SAO_EVENTS.dungeons[].forge.npc': 'RN',
+    'SAO_EVENTS.dungeons[].forge.rows[][0]': 'R33',
+    'SAO_EVENTS.dungeons[].forge.rows[][1]': 'R33',
+    'SAO_EVENTS.dungeons[].forge.rows[][2]': 'R33',
+    'SAO_EVENTS.dungeons[].forge.rows[][3]': 'R33',
+    'SAO_EVENTS.dungeons[].fragRate': 'R33',
+    'SAO_EVENTS.dungeons[].id': 'R33',
+    'SAO_EVENTS.dungeons[].key.mats[][0]': 'R33',
+    'SAO_EVENTS.dungeons[].key.mats[][1]': 'R33',
+    'SAO_EVENTS.dungeons[].key.n': 'R33',
+    'SAO_EVENTS.dungeons[].key.note': 'R33',
+    'SAO_EVENTS.dungeons[].key.npc': 'RN',
+    'SAO_EVENTS.dungeons[].key.where': 'R33',
+    'SAO_EVENTS.dungeons[].loop[]': 'R33',
+    'SAO_EVENTS.dungeons[].n': 'R33',
+    'SAO_EVENTS.dungeons[].notes[]': 'R33',
+    'SAO_EVENTS.dungeons[].players': 'R33',
+    'SAO_EVENTS.dungeons[].soon[]': 'R33',
+    'SAO_EVENTS.dungeons[].src.date': 'R33',
+    'SAO_EVENTS.dungeons[].src.title': 'R33',
+    'SAO_EVENTS.dungeons[].src.url': 'R33',
+    'SAO_EVENTS.dungeons[].zh': 'R33',
+    'SAO_EVENTS.dungeons[].zones[].frag': 'RN',
+    'SAO_EVENTS.dungeons[].zones[].leader': 'RN',
+    'SAO_EVENTS.dungeons[].zones[].mobs[]': 'RN',
+    'SAO_EVENTS.dungeons[].zones[].n': 'R33',
+    'SAO_EVENTS.eqPatch.items{}.note': 'R33',
+    'SAO_EVENTS.eqPatch.items{}.set{}': 'R33',
+    'SAO_EVENTS.eqPatch.src.date': 'R33',
+    'SAO_EVENTS.eqPatch.src.title': 'R33',
+    'SAO_EVENTS.eqPatch.src.url': 'R33',
+    'SAO_EVENTS.eqPatch.unmatched': 'R33',
     'SAO.BOSS_SPAWNS[][1]': 'R1',
     'SAO.BOSS_SPAWNS[][2]': 'R1',
     'SAO.BOSS_SPAWNS[][3]': 'R1',
@@ -400,34 +534,6 @@ SKIP = {
     'SAO23.extra{}.src': 'R1',
     'SAO23.unknown{key}': 'R18',
     'SAO23.unknown{}.note': 'R1',
-    'SAO_BOSSES.world[]{key}': 'R19',
-    'SAO_BOSSES.world[]{}': 'R19',
-    'SAO_BOSSES.world[]{}[].day': 'R19',
-    'SAO_BOSSES.world[]{}[].time': 'R19',
-    'SAO_BOSSES.world[]{}[].zone': 'R19',
-    'SAO_BOSSES.world[]{}[].minutes': 'R19',
-    'SAO_BOSSES.world[]{}[][2]': 'R19',
-    'SAO_BOSSES.unique[].id': 'R19',
-    'SAO_BOSSES.unique[].img': 'R19',
-    'SAO_BOSSES.unique[].imgFront': 'R19',
-    'SAO_BOSSES.unique[].name': 'R19',
-    'SAO_BOSSES.unique[].fr': 'R19',
-    'SAO_BOSSES.unique[].zh': 'R19',
-    'SAO_BOSSES.unique[].unit': 'R19',
-    'SAO_BOSSES.unique[].floor': 'R19',
-    'SAO_BOSSES.unique[].level': 'R19',
-    'SAO_BOSSES.unique[].levelSrc': 'R19',
-    'SAO_BOSSES.unique[].available': 'R19',
-    'SAO_BOSSES.unique[].attacks[][]': 'R19',
-    'SAO_BOSSES.unique[].phases': 'R19',
-    'SAO_BOSSES.unique[].note': 'R19',
-    'SAO_BOSSES.uniqueRules[]': 'R19',
-    'SAO_BOSSES.uniqueWiki[][0]': 'R19',
-    'SAO_BOSSES.uniqueWiki[][1]': 'R19',
-    'SAO_BOSSES.uniqueWiki[][2]': 'R19',
-    'SAO_BOSSES.uniqueWiki[][3]': 'R19',
-    'SAO_BOSSES.uniqueWiki[][4]': 'R19',
-    'SAO_BOSSES.wikiWorld[][]': 'R19',
     'SAO_HINTS{key}': 'R16',
     'SAO_HINTS{}{}[0]': 'R1',
     'SAO_HINTS{}{}[1]': 'R1',
@@ -498,7 +604,7 @@ SKIP = {
     'SAO_GAMEINFO.items[].date': 'R1',
     'SAO_GAMEINFO.items[].desc': 'R1',
     'SAO_GAMEINFO.items[].note': 'R1',
-    'SAO_BUYBACK.shops{}': 'R1',
+    'SAO_BUYBACK.shops{}': 'R43',
     'SAO_BUYBACK.items{}[][1]': 'R1',
     'SAO_BUYBACK.items{}[][2]': 'R1',
     'SAO_NPCS{key}': 'R16',
@@ -526,20 +632,6 @@ SKIP = {
     'SAO_RECIPES{}.items[][8]': 'R1',
     'SAO_RECIPE_QTY{key}': 'R30',
     'SAO_RECIPE_QTY{}': 'R1',
-    'SAO_CLASSES[]{key}': 'R31',
-    'SAO_CLASSES[]{}': 'R31',
-    'SAO_CLASSES[]{}[][0]': 'R31',
-    'SAO_CLASSES[]{}[][1]': 'R31',
-    'SAO_CLASSES[]{}[][2]': 'R31',
-    'SAO_CLASSES[]{}[][3]': 'R31',
-    'SAO_CLASSES[]{}.shield': 'R31',
-    'SAO_CLASSES[]{}.sword': 'R31',
-    'SAO_CLASSES[]{}[][4]': 'R31',
-    'SAO_CLASSES[]{}.dagger': 'R31',
-    'SAO_CLASSES[]{}.staff_mage': 'R31',
-    'SAO_CLASSES[]{}.staff_shaman': 'R31',
-    'SAO_CLASSES[]{}.crossbow': 'R31',
-    'SAO_CLASSES[]{}.bow': 'R31',
     'SAO_GAMESKILLS{key}': 'R32',
     'SAO_GAMESKILLS{}.date': 'R32',
     'SAO_GAMESKILLS{}.lv': 'R32',
@@ -558,43 +650,7 @@ SKIP = {
     'SAO_GAMESKILLS{}.list[].data[]': 'R32',
     'SAO_GAMESKILLS{}.list[].dz[]': 'R32',
     'SAO_GAMESKILLS{}.list[].base': 'R32',
-    'SAO_EVENTS.dungeons[]{key}': 'R33',
-    'SAO_EVENTS.dungeons[]{}': 'R33',
-    'SAO_EVENTS.dungeons[]{}.title': 'R33',
-    'SAO_EVENTS.dungeons[]{}.url': 'R33',
-    'SAO_EVENTS.dungeons[]{}.date': 'R33',
-    'SAO_EVENTS.dungeons[]{}[][0]': 'R33',
-    'SAO_EVENTS.dungeons[]{}[][1]': 'R33',
-    'SAO_EVENTS.dungeons[]{}[]': 'R33',
-    'SAO_EVENTS.dungeons[]{}[].n': 'R33',
-    'SAO_EVENTS.dungeons[]{}[].mobs[]': 'RN',
-    'SAO_EVENTS.dungeons[]{}[].leader': 'RN',
-    'SAO_EVENTS.dungeons[]{}[].frag': 'RN',
-    'SAO_EVENTS.dungeons[]{}.n': 'R33',
-    'SAO_EVENTS.dungeons[]{}.npc': 'RN',
-    'SAO_EVENTS.dungeons[]{}.where': 'R33',
-    'SAO_EVENTS.dungeons[]{}.mats[][0]': 'R33',
-    'SAO_EVENTS.dungeons[]{}.mats[][1]': 'R33',
-    'SAO_EVENTS.dungeons[]{}.note': 'R33',
-    'SAO_EVENTS.dungeons[]{}.rows[][0]': 'R33',
-    'SAO_EVENTS.dungeons[]{}.rows[][1]': 'R33',
-    'SAO_EVENTS.dungeons[]{}.rows[][2]': 'R33',
-    'SAO_EVENTS.dungeons[]{}.rows[][3]': 'R33',
-    'SAO_EVENTS.dungeons[]{}.extra': 'R33',
-    'SAO_EVENTS.dungeons[]{}.lvNote': 'R33',
-    'SAO_EVENTS.dungeons[]{}.boss': 'R33',
-    'SAO_EVENTS.dungeons[]{}.bossZh': 'R33',
-    'SAO_EVENTS.dungeons[]{}.key': 'R33',
-    'SAO_EVENTS.dungeons[]{}.modes[]': 'R33',
-    'SAO_EVENTS.dungeons[]{}.easy[][]': 'R33',
-    'SAO_EVENTS.dungeons[]{}.loot[][2]': 'R33',
-    'SAO_EVENTS.eqPatch.src.title': 'R33',
-    'SAO_EVENTS.eqPatch.src.url': 'R33',
-    'SAO_EVENTS.eqPatch.src.date': 'R33',
     'SAO_EVENTS.eqPatch.items{}.set{key}': 'R33',
-    'SAO_EVENTS.eqPatch.items{}.set{}': 'R33',
-    'SAO_EVENTS.eqPatch.items{}.note': 'R33',
-    'SAO_EVENTS.eqPatch.unmatched': 'R33',
     'SAO_GACHA.src.title': 'R1',
     'SAO_GACHA.src.url': 'R1',
     'SAO_GACHA.src.date': 'R1',
@@ -625,7 +681,7 @@ SKIP = {
     'SAO_ZHNAMES.places{}': 'R36',
     'SAO_ZHNAMES.terms{key}': 'R38',
     'SAO_ZHNAMES.terms{}': 'R36',
-    'SAO_ZHNAMES.npcEn{}': 'R36',
+    'SAO_ZHNAMES.npcEn{}': 'R43',
     'SAO_ZHNAMES.npcs{}': 'R36',
     'SAO_ZHNAMES.items[].zh': 'R39',
     'SAO_ZHNAMES.items[].en': 'R39',
@@ -926,7 +982,9 @@ class Model:
                 if n[1] in npcEn:
                     ix.add(npcEn[n[1]], e)
                     self.npc_all.add(npcEn[n[1]], e)
-                if n[1] in shops:                      # buyback.shops: site NPC -> shop name in the game text
+                if f == 1 and n[1] in shops:           # buyback.shops: floor-1 site NPC -> shop name in the game text
+                    # (buyback.js keys are floor-1 NPCs, h_npc_buyback reads floor 1; P1 review M1: the alias must not
+                    # attach to same-name NPCs on floors 2/3)
                     ix.add(shops[n[1]], e)
                     self.npc_all.add(shops[n[1]], e)
             ix.finish()
@@ -1066,8 +1124,7 @@ class Checker:
 
     def h_item_loot(self, leaf):
         if leaf.root == 'SAO_EVENTS':
-            dg = self.pk(leaf, 'k')
-            where = 'event:%s' % dg
+            where = 'event:%s' % leaf.path[2][1]          # dungeons[i].dg.loot -> 'dg'
         else:
             spot = self.parent(leaf, 4)
             where = 'F%d/spot:%s' % (self.floor_of(leaf), spot['id'])
@@ -1085,7 +1142,7 @@ class Checker:
         if leaf.value is None:
             return self.ok(leaf, None, None, '寶箱這一格沒有寫怪物')
         st, ents, how = self.m.mob_all.resolve(leaf.value)
-        return self.conclude(leaf, 'event:%s/loot-mob:%s' % (self.pk(leaf, 'k'), leaf.value), leaf.value, st, ents, how, 'mob')
+        return self.conclude(leaf, 'event:%s/loot-mob:%s' % (leaf.path[2][1], leaf.value), leaf.value, st, ents, how, 'mob')
 
     def h_item_gather(self, leaf):
         spot = self.parent(leaf, 2)
@@ -1285,9 +1342,7 @@ class Checker:
 
     def h_item_roulette(self, leaf):
         """world boss roulette row [en, fr, %]: one item; the English name first, then the French one"""
-        key = self.pk(leaf, 'k')
-        if key not in ('roulette', 'roulette0'):
-            return self.ok(leaf, None, leaf.value, '不是物品（攻擊招式等文字）')
+        key = leaf.path[2][1]                               # world[i].roulette / roulette0
         row = self.parent(leaf, 1)
         clean = lambda s: re.sub(r'（[^）]*）\s*$', '', (TIMES.match(s).group(1) if TIMES.match(s or '') else (s or ''))).strip()
         en, fr = clean(row[0]), clean(row[1]) if len(row) > 1 and isinstance(row[1], str) else None
@@ -1299,8 +1354,6 @@ class Checker:
         return self.conclude(leaf, 'boss:%s/%s:%s' % (boss, key, en), en, st, ents, how, 'item')
 
     def h_item_roulette_fr(self, leaf):
-        if self.pk(leaf, 'k') not in ('roulette', 'roulette0'):
-            return self.ok(leaf, None, leaf.value, '不是物品（攻擊招式等文字）')
         return self.ok(leaf, None, leaf.value, '和同一列的英文名一起解析')
 
     def h_item_fr(self, leaf):
@@ -1727,7 +1780,7 @@ def warnings(ck):
     W['未量測'] = ['W1（同順位來源矛盾：資料檔沒有同時保存 catalog 和 wiki 的值）',
                   'W3（同一來源的不同觀察：資料檔每件物品只存一個值）',
                   'W4（同一外部編號在新舊匯入之間改名：階段 1 沒有上一次匯入的快照）',
-                  'W8、W9 由瀏覽器測試 tests/zh_gap.js、tests/site_audit.js 產生（CI 執行）']
+                  'W8、W9 由瀏覽器測試 tests/zh_gap.js、tests/site_audit.js 產生（CI 的「site audit and untranslated names」步驟執行，輸出在 CI 的 registry_report 附件；只記錄、不擋建置）']
     return W
 
 
@@ -1737,11 +1790,15 @@ CLEAR_BY = {'item': '階段 2', 'npc': '階段 3', 'place': '階段 3', 'zone': 
 
 
 def reason_of(r, m):
+    if r['code'] == 'E1' and r.get('file') == 'zhnames.js' and '/i|' in (r.get('key') or ''):
+        return '解析不到：「i|」指到的本站物品表（ITEMS）鍵不存在'
     if r['code'] == 'E1':
         c = r.get('cands') or []
         return '解析不到：沒有任何物品紀錄、官網名或遊戲名對得上' + ('（單複數候選：%s）' % '、'.join(c) if c else '') \
             if r.get('kind') == 'item' else '解析不到：沒有對得上的%s' % {'npc': ' NPC', 'mob': '怪物', 'place': '地點',
                                                                     'zone': '區域', 'quest': '任務', 'set': '套裝'}.get(r.get('kind'), '紀錄')
+    if r['code'] == 'E2' and r.get('how') == 'text-says-ambiguous':
+        return '資料本身寫明看不出是哪一種（已知的多重可能，沒有指定實體）'
     if r['code'] == 'E2':
         return '對到 %d 個不同的實體：%s' % (len(r['ents']), '、'.join(ent_label(m, e) for e in r['ents']))
     return r.get('note') or ''
@@ -1905,8 +1962,10 @@ def main(argv=None):
                coverage={s: dict(rule=v['rule'], action=v['action'], n=v['n'], file=v['file']) for s, v in ck.sigs.items()},
                rows=[{k: v for k, v in r.items() if k != 'ctx'} for r in ck.res.rows],
                warnings=W, draft=a.draft)
-    write_text(os.path.join(out, 'registry_report.json'), json.dumps(rep, ensure_ascii=False, indent=1, default=str) + '\n')
-    write_text(os.path.join(out, 'registry_report.md'), md_report(ck, errs, probs, W, exc, a.draft))
+    # --draft writes its own files, so a development run does not rewrite the committed report (P1 review S8)
+    base = 'registry_report.draft' if a.draft else 'registry_report'
+    write_text(os.path.join(out, base + '.json'), json.dumps(rep, ensure_ascii=False, indent=1, default=str) + '\n')
+    write_text(os.path.join(out, base + '.md'), md_report(ck, errs, probs, W, exc, a.draft))
     cnt = collections.Counter(k[0] for k in errs)
     if not a.quiet:
         print('check_refs: ' + '、'.join('%s %d' % (c, cnt.get(c, 0)) for c in ERROR_CODES) +

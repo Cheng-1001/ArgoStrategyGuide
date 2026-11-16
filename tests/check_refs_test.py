@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""R0.5 stage 1 regression tests for tools/check_refs.py (plan v5: cases 1-26; 25-26 use tests/baseline_compare.js).
+"""R0.5 stage 1 regression tests for tools/check_refs.py (plan v5: cases 1-26; 25-26 use tests/baseline_compare.js; 27-30 added after the P1 review).
 
 Every case works on a temporary copy of the repo: the data files are changed there by appending a small JS
 statement at the end of the file (it runs after the file's own code, like the page would), so the real data is
@@ -362,6 +362,50 @@ def c26(d):
     c1, o1 = compare(d, only)
     e5 = [l for l in o1.splitlines() if l.startswith('E5 ')]
     return (n == 1 and c0 == 0 and c1 == 1 and len(e5) == 1 and 'search:items|Shark Shell' in e5[0]), (o0[-200:] + ' / ' + o1[-400:])
+
+
+@case(27, 'E9 欄位層（紀錄型容器）：世界王、活動地下城、職業的紀錄加新欄位 → 各自報 E9')
+def c27(d):
+    append(d, 'bosses.js', 'window.SAO_BOSSES.world[0].drops="Galiath\'s Axe";')
+    append(d, 'events.js', 'window.SAO_EVENTS.dungeons[0].reward="Nonexistent Test Item";')
+    append(d, 'classes.js', 'window.SAO_CLASSES[0].newRef="Iron Ingot";')
+    r = run(d)
+    want = ['field:SAO_BOSSES.world[].drops', 'field:SAO_EVENTS.dungeons[].reward', 'field:SAO_CLASSES[].newRef']
+    got = [e['key'] for e in errs(r, 'E9')]
+    return r['_exit'] == 1 and all(w in got for w in want), str(got)[:300]
+
+
+@case(28, '例外清單同一筆出現兩次 → 建置失敗（duplicate）')
+def c28(d):
+    ex = approved_exceptions(d)
+    j = json.load(open(ex, encoding='utf-8'))
+    j['exceptions'].append(dict(j['exceptions'][0]))
+    json.dump(j, open(ex, 'w', encoding='utf-8'), ensure_ascii=False)
+    r = run(d, exceptions=ex)
+    return r['_exit'] == 1 and [p['kind'] for p in r['problems']] == ['duplicate'], str(r['problems'])[:300]
+
+
+@case(29, '例外清單登記 E9 → 建置失敗（not-exceptable）；只收 E1、E2、E3')
+def c29(d):
+    append(d, 'bosses.js', 'window.SAO_BOSSES.world[0].drops="x";')
+    ex = approved_exceptions(d)
+    j = json.load(open(ex, encoding='utf-8'))
+    j['exceptions'].append(dict(code='E9', file='bosses.js', key='field:SAO_BOSSES.world[].drops', reason='test',
+                                status='', approved_by='test', approved_at='2026-01-01', clear_by=''))
+    json.dump(j, open(ex, 'w', encoding='utf-8'), ensure_ascii=False)
+    r = run(d, exceptions=ex)
+    return r['_exit'] == 1 and any(p['kind'] == 'not-exceptable' for p in r['problems']), str(r['problems'])[:300]
+
+
+@case(30, 'Local Farmer：收購商店名只接第 1 層 NPC → 第 2、3 層同名的不會被當成遊戲文字指的 NPC')
+def c30(d):
+    r = run(d)
+    k = 'gameinfo:Wheat/bought-back-by:F1 Local Farmer - Near the Starting City'
+    a = [e for e in r['errors'] if e['key'] == k]
+    append(d, 'npcs.js', 'window.SAO_NPCS["3"]=window.SAO_NPCS["3"].filter(n=>n[1]!=="Local Farmer");')
+    r2 = run(d)
+    b = [e for e in r2['errors'] if e['key'] == k]
+    return (len(a) == 1 and a[0]['code'] == 'E1' and len(b) == 1 and b[0]['code'] == 'E1'), str(a + b)[:300]
 
 
 def main():

@@ -48,6 +48,25 @@ jobs:
       - name: behaviour baseline (G5)
         if: always()
         run: node tests/baseline_compare.js --transfer
+      - name: smoke test
+        if: always()
+        run: |
+          pip install playwright==1.63.0
+          python3 -m playwright install --with-deps chromium
+          PYTHONIOENCODING=utf-8 python3 tests/smoke.py
+      # W8 / W9 (plan v5 B7): the site audit and the untranslated-name list, served from a local copy of the repo
+      - name: site audit and untranslated names (W8 / W9)
+        if: always()
+        run: |
+          python3 -m http.server 8765 >/dev/null 2>&1 &
+          sleep 2
+          node tests/site_audit.js | tee build/site_audit.txt
+          node tests/zh_gap.js build/zh_gap.md | tee build/zh_gap.txt
       - uses: actions/upload-artifact@v4
         if: always()
-        with: { name: registry_report, path: 'build/registry_report.*' }
+        with:
+          name: registry_report
+          path: |
+            build/registry_report.*
+            build/site_audit.txt
+            build/zh_gap.*

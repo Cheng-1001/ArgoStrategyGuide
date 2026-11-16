@@ -425,6 +425,16 @@
   {
    "code": "E1",
    "file": "gameinfo.js",
+   "key": "gameinfo:Allium Flower/bought-back-by:F1 Local Farmer - Near the Starting City",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
    "key": "gameinfo:Anneau des Cieux/crafted-at:P3 - Craft Anneau des Cieux",
    "reason": "解析不到：沒有對得上的 NPC",
    "status": "unresolved",
@@ -685,6 +695,16 @@
   {
    "code": "E1",
    "file": "gameinfo.js",
+   "key": "gameinfo:Wheat/bought-back-by:F1 Local Farmer - Near the Starting City",
+   "reason": "解析不到：沒有對得上的 NPC",
+   "status": "unresolved",
+   "approved_by": "",
+   "approved_at": "",
+   "clear_by": "階段 3"
+  },
+  {
+   "code": "E1",
+   "file": "gameinfo.js",
    "key": "gameinfo:Wooden Fishing Rod/sold-by:F1 - Starting City - Tools",
    "reason": "解析不到：沒有對得上的 NPC",
    "status": "unresolved",
@@ -876,7 +896,7 @@
    "code": "E1",
    "file": "zhnames.js",
    "key": "zhnames:蜘蛛毒液/i|Spider Venom",
-   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
+   "reason": "解析不到：「i|」指到的本站物品表（ITEMS）鍵不存在",
    "status": "unresolved",
    "approved_by": "",
    "approved_at": "",
@@ -891,16 +911,6 @@
    "approved_by": "",
    "approved_at": "",
    "clear_by": "階段 2"
-  },
-  {
-   "code": "E2",
-   "file": "gameinfo.js",
-   "key": "gameinfo:Allium Flower/bought-back-by:F1 Local Farmer - Near the Starting City",
-   "reason": "對到 2 個不同的實體：N2:6:Local Farmer、N3:5:Local Farmer",
-   "status": "ambiguous",
-   "approved_by": "",
-   "approved_at": "",
-   "clear_by": "階段 3"
   },
   {
    "code": "E2",
@@ -1054,16 +1064,6 @@
   },
   {
    "code": "E2",
-   "file": "gameinfo.js",
-   "key": "gameinfo:Wheat/bought-back-by:F1 Local Farmer - Near the Starting City",
-   "reason": "對到 2 個不同的實體：N2:6:Local Farmer、N3:5:Local Farmer",
-   "status": "ambiguous",
-   "approved_by": "",
-   "approved_at": "",
-   "clear_by": "階段 3"
-  },
-  {
-   "code": "E2",
    "file": "recipes.js",
    "key": "recipe-npc:3|Consumables Merchant",
    "reason": "對到 2 個不同的實體：N3:25:Consumables Merchant、N3:26:Consumables Merchant",
@@ -1076,7 +1076,7 @@
    "code": "E2",
    "file": "recipes.js",
    "key": "recipe:3|Adventurer's Shoemaker/Bottes de l'Aventurier/mat:狼皮（第 1 或第 2 層，看不出來）",
-   "reason": "對到 0 個不同的實體：",
+   "reason": "資料本身寫明看不出是哪一種（已知的多重可能，沒有指定實體）",
    "status": "ambiguous",
    "approved_by": "",
    "approved_at": "",
@@ -1086,7 +1086,7 @@
    "code": "E2",
    "file": "recipes.js",
    "key": "recipe:3|P3 - Craft Anneau Draconique Corrompu/Anneau Draconique Corrompu/mat:腐化碎片（三種之一，看不出是哪一種）",
-   "reason": "對到 0 個不同的實體：",
+   "reason": "資料本身寫明看不出是哪一種（已知的多重可能，沒有指定實體）",
    "status": "ambiguous",
    "approved_by": "",
    "approved_at": "",
