@@ -1315,7 +1315,7 @@ function itemDetail(id){const it=ITEMS[id];
   ${it.set?"":setPotHTML(id,...(it.aka||[]))}${it.set?`<h3 class="sec">套裝效果・${esc(it.set.name)}</h3><table class="settbl"><tbody>${it.set.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${esc(e)}</td></tr>`).join("")}</tbody></table>`:""}
   ${it.note?`<div class="note">${esc(it.note)}</div>`:""}
   ${it.vanilla?`<div class="note">這是 Minecraft 原版物品，官方圖鑑沒有自訂圖示；圖示取自 ${it.icsrc?`<a href="${esc(it.icsrc)}" target="_blank" rel="noopener">Minecraft Wiki</a>`:"Minecraft Wiki"}。</div>`:""}
-  ${it.ic<0&&it.fr&&!it.vanilla?`<div class="note">官方圖鑑還沒有這個物品的圖示或模型。</div>`:""}
+  ${it.ic<0&&it.fr&&!it.vanilla&&!(offOf(id)&&offOf(id).e.ic>=0)?`<div class="note">官方圖鑑還沒有這個物品的圖示或模型。</div>`:""}
   ${itemObtainHTML(id)}
   <div class="note warn">配方：公開資料尚未提供鍛造或合成配方（wiki 鍛造頁標示為「待補」），以上用途只來自任務需求與物品描述。</div>`}
 
