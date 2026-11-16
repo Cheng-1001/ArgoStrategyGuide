@@ -4,12 +4,20 @@ src/index.html is the editable page. It has no <!doctype>/<head> because it star
 Claude artifact (the artifact host adds the skeleton). This script adds the skeleton and moves
 everything up to the first </style> into <head>.
 
-Usage (from the repo root):  python3 src/build.py
+Usage (from the repo root):  python3 src/build.py [--draft]
+Before writing index.html it runs the reference checker (tools/check_refs.py, R0.5 stage 1; needs Node).
+If the checker finds an error that is not an approved exception, the build stops with exit 1 and
+index.html is not written. --draft is for development only (unapproved exceptions are reported, not fatal).
 Data files (data.js, data23.js, bosses.js, reports.js, hints.js) and images live in the repo
 root and are edited there directly; this script does not touch them.
 """
-import os
+import os, sys, subprocess
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+_args = [a for a in sys.argv[1:] if a in ("--draft",)]
+_chk = subprocess.run([sys.executable, "-I", os.path.join(ROOT, "tools", "check_refs.py"), "--root", ROOT, "--quiet"] + _args)
+if _chk.returncode != 0:
+    print("build stopped: reference check failed (see build/registry_report.md)", file=sys.stderr)
+    sys.exit(1)
 body = open(os.path.join(ROOT, "src", "index.html"), encoding="utf-8").read()
 head = '''<!doctype html>
 <html lang="zh-Hant">

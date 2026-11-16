@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""R0.5 stage 1 regression tests for tools/check_refs.py (plan v5: cases 1-24; cases 25-26 are in baseline_compare.js).
+"""R0.5 stage 1 regression tests for tools/check_refs.py (plan v5: cases 1-26; 25-26 use tests/baseline_compare.js).
 
 Every case works on a temporary copy of the repo: the data files are changed there by appending a small JS
 statement at the end of the file (it runs after the file's own code, like the page would), so the real data is
 never touched.  Fake pins / fake approved exceptions live only in the temporary copy.
 
 Usage (repo root):  python3 tests/check_refs_test.py      -> prints one line per case, "ALL PASSED" or exit 1
-Needs: Python 3, Node (same as the checker).  No browser.
+Needs: Python 3, Node (same as the checker); cases 25-26 also need Playwright Chromium.
 """
 import json, os, shutil, subprocess, sys, tempfile, hashlib
 
@@ -21,7 +21,7 @@ for s in (sys.stdout, sys.stderr):
 def copy_repo():
     d = tempfile.mkdtemp(prefix='checkrefs_')
     for f in os.listdir(ROOT):
-        if f.endswith('.js'):
+        if f.endswith('.js') or f == 'index.html':
             shutil.copy2(os.path.join(ROOT, f), d)
     for sub in ('src', 'tools', 'registry', 'icons'):
         if os.path.isdir(os.path.join(ROOT, sub)):
@@ -333,6 +333,35 @@ def c24(d):
             and len(b['配方等級']) == len(a['配方等級']) and still and len(b['gameinfo 等級']) == len(a['gameinfo 等級'])), \
         'gamestats %d→%d、配方 %d→%d、gameinfo %d→%d' % (len(a['gamestats 等級']), len(b['gamestats 等級']), len(a['配方等級']),
                                                     len(b['配方等級']), len(a['gameinfo 等級']), len(b['gameinfo 等級']))
+
+
+def compare(d, only):
+    p = subprocess.run(['node', os.path.join(ROOT, 'tests', 'baseline_compare.js'), d, '--links-only', '--only', only],
+                       capture_output=True)
+    return p.returncode, p.stdout.decode('utf-8', 'replace') + p.stderr.decode('utf-8', 'replace')
+
+
+@case(25, '固定連結打不開：從官網裝備表刪掉 2484（墮落者之戒）→ 行為比對的 e|2484 是 E5，同批的腐化碎片 (3) 不變')
+def c25(d):
+    only = r'^(entity:i\|Corrupted Fragment \(3\)|entity:e\|2484)$'
+    c0, o0 = compare(d, only)             # unchanged copy: identical
+    append(d, 'equip.js', 'window.SAO_EQUIP=window.SAO_EQUIP.filter(r=>r[0]!==2484);')
+    c1, o1 = compare(d, only)
+    e5 = [l for l in o1.splitlines() if l.startswith('E5 ')]
+    return (c0 == 0 and c1 == 1 and len(e5) == 1 and 'entity:e|2484' in e5[0]), (o0[-200:] + ' / ' + o1[-400:])
+
+
+@case(26, '舊名搜尋：從 index.html 的 ITEM_OLD 拿掉 Shark Shell → 「Shark Shell」搜尋是 E5，其他舊名不變')
+def c26(d):
+    only = r'^search:items\|(Shark Shell|Leaf Fragment)$'
+    c0, o0 = compare(d, only)
+    f = os.path.join(d, 'index.html')
+    h = open(f, encoding='utf-8').read()
+    n = h.count('"Shark Shell": "Shark Carapace", ')
+    open(f, 'w', encoding='utf-8', newline='\n').write(h.replace('"Shark Shell": "Shark Carapace", ', ''))
+    c1, o1 = compare(d, only)
+    e5 = [l for l in o1.splitlines() if l.startswith('E5 ')]
+    return (n == 1 and c0 == 0 and c1 == 1 and len(e5) == 1 and 'search:items|Shark Shell' in e5[0]), (o0[-200:] + ' / ' + o1[-400:])
 
 
 def main():

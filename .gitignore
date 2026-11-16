@@ -1,1 +1,3 @@
 recipe_icon_candidates.png
+build/*.json
+__pycache__/

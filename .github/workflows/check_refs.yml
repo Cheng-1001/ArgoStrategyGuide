@@ -1,0 +1,39 @@
+# R0.5 stage 1 (B9): reference check on every push / pull request.
+# CI only reports: GitHub Pages deploys from main directly (Apps Script, jm_merge, jm_held also push to main),
+# so a red run here does NOT stop a deploy. The gate that stops a bad build is src/build.py (exit 1).
+name: check_refs
+on:
+  push:
+    paths-ignore: [reports.js, 'reports/**', pending.js, formcfg.js, jmmeta.js, 'tiles/**', floor1_jm.jpg]
+  pull_request:
+    paths-ignore: [reports.js, 'reports/**', pending.js, formcfg.js, jmmeta.js, 'tiles/**', floor1_jm.jpg]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - name: reference check (no --draft)
+        run: python3 -I tools/check_refs.py
+      - name: build is byte-identical to the committed index.html
+        run: |
+          cp index.html /tmp/index.committed.html
+          python3 src/build.py
+          cmp index.html /tmp/index.committed.html
+      - name: install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.48.2
+          npx playwright install --with-deps chromium
+      - name: regression cases
+        run: python3 -I tests/check_refs_test.py
+      - name: behaviour baseline (G5)
+        run: node tests/baseline_compare.js
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: registry_report, path: 'build/registry_report.*' }
