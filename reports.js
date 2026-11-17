@@ -297,5 +297,25 @@ window.SAO_REPORTS = [
    "回報者・遊戲內暱稱": "GOD_Collapse"
   },
   "source": "form"
+ },
+ {
+  "id": "R0019",
+  "type": "monster",
+  "floor": 2,
+  "name": "火焰鳥身女妖",
+  "date": "2026-11-17",
+  "img": "reports/R0019.jpg",
+  "imgs": [
+   "reports/R0019.jpg"
+  ],
+  "raw": {
+   "怪物・截圖種類": "野外截圖（看得到等級和座標）",
+   "怪物・等級": "12",
+   "怪物・座標 x, z": "-521196",
+   "怪物・類型": "一般怪物",
+   "怪物・行為": "主動攻擊（看到就打）"
+  },
+  "source": "form",
+  "review": "審核：lintcbruce"
  }
 ];
