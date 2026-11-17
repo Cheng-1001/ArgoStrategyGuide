@@ -6,7 +6,7 @@
 
 | 代號 | 數量 | 在例外清單上 | 不在例外清單上 |
 | --- | --- | --- | --- |
-| E1 | 90 | 90 | 0 |
+| E1 | 88 | 88 | 0 |
 | E2 | 28 | 28 | 0 |
 | E3 | 1 | 1 | 0 |
 | E6 | 0 | 0 | 0 |
@@ -43,14 +43,14 @@
 | `SAO.SPOTS[].mons[]` | resolved | 60 |
 | `SAO23.extra{key}` | resolved | 39 |
 | `SAO23.floors{}.BOSS_SPAWNS[][0]` | resolved | 15 |
-| `SAO23.floors{}.M[].drops[][0]` | resolved | 254 |
+| `SAO23.floors{}.M[].drops[][0]` | resolved | 258 |
 | `SAO23.floors{}.M[].zone` | resolved | 137 |
-| `SAO23.floors{}.spots[].dg.loot[][0]` | resolved | 2 |
-| `SAO23.floors{}.spots[].dg.loot[][1]` | excluded-row | 2 |
+| `SAO23.floors{}.spots[].dg.loot[][0]` | resolved | 5 |
+| `SAO23.floors{}.spots[].dg.loot[][1]` | excluded-row | 5 |
 | `SAO23.floors{}.spots[].mons[]` | resolved | 107 |
 | `SAO23.floors{}.spots[].zone` | resolved | 22 |
 | `SAO23.floors{}.spots[].zone[]` | resolved | 2 |
-| `SAO23_ITEMS{}[0]` | excluded-row | 7 |
+| `SAO23_ITEMS{}[0]` | excluded-row | 8 |
 | `SAO23_ITEMS{}[0]` | no-catalogue | 1 |
 | `SAO23_ITEMS{}[0]` | resolved | 117 |
 | `SAO_BOSSES.world[].roulette0[][0]` | resolved | 3 |
@@ -77,49 +77,49 @@
 | `SAO_GAMEICONS{key}` | resolved | 96 |
 | `SAO_GAMEICONS{key}` | unresolved | 6 |
 | `SAO_GAMEINFO.items[].obt[]` | ambiguous | 15 |
-| `SAO_GAMEINFO.items[].obt[]` | excluded-row | 105 |
-| `SAO_GAMEINFO.items[].obt[]` | resolved | 185 |
+| `SAO_GAMEINFO.items[].obt[]` | excluded-row | 113 |
+| `SAO_GAMEINFO.items[].obt[]` | resolved | 187 |
 | `SAO_GAMEINFO.items[].obt[]` | term | 19 |
-| `SAO_GAMEINFO.items[].obt[]` | unresolved | 31 |
-| `SAO_GAMEINFO.items[].oid[]` | resolved | 194 |
-| `SAO_GAMEINFO.items[].site` | excluded-row | 234 |
+| `SAO_GAMEINFO.items[].obt[]` | unresolved | 29 |
+| `SAO_GAMEINFO.items[].oid[]` | resolved | 201 |
+| `SAO_GAMEINFO.items[].site` | excluded-row | 241 |
 | `SAO_GAMEINFO.items[].site` | resolved | 17 |
-| `SAO_GAMESTATS.items{key}` | resolved | 111 |
+| `SAO_GAMESTATS.items{key}` | resolved | 117 |
 | `SAO_HINTS{}{key}` | resolved | 49 |
-| `SAO_MAINQ{}[].npc` | excluded-row | 21 |
+| `SAO_MAINQ{}[].npc` | excluded-row | 43 |
 | `SAO_MAINQ{}[].npc` | quest-npc | 34 |
 | `SAO_MOBPHOTO.by{}{key}` | resolved | 133 |
-| `SAO_NPC_CALC{key}` | resolved | 23 |
+| `SAO_NPC_CALC{key}` | resolved | 40 |
 | `SAO_RECICONS{key}` | resolved | 19 |
 | `SAO_RECIPES{key}` | ambiguous | 1 |
-| `SAO_RECIPES{key}` | resolved | 61 |
-| `SAO_RECIPES{}.items[][0]` | excluded-row | 66 |
-| `SAO_RECIPES{}.items[][0]` | resolved | 157 |
-| `SAO_RECIPES{}.items[][1]` | excluded-row | 157 |
-| `SAO_RECIPES{}.items[][1]` | resolved | 62 |
+| `SAO_RECIPES{key}` | resolved | 70 |
+| `SAO_RECIPES{}.items[][0]` | excluded-row | 67 |
+| `SAO_RECIPES{}.items[][0]` | resolved | 179 |
+| `SAO_RECIPES{}.items[][1]` | excluded-row | 179 |
+| `SAO_RECIPES{}.items[][1]` | resolved | 63 |
 | `SAO_RECIPES{}.items[][1]` | unresolved | 4 |
 | `SAO_RECIPES{}.items[][3][][0]` | ambiguous | 2 |
-| `SAO_RECIPES{}.items[][3][][0]` | resolved | 333 |
+| `SAO_RECIPES{}.items[][3][][0]` | resolved | 378 |
 | `SAO_RECIPES{}.items[][3][][0]` | unresolved | 3 |
 | `SAO_SETS.potions[].name` | resolved | 58 |
 | `SAO_SETS.potions[].name` | unresolved | 5 |
 | `SAO_SETS.sets[].members[]` | ambiguous | 1 |
-| `SAO_SETS.sets[].members[]` | resolved | 106 |
+| `SAO_SETS.sets[].members[]` | resolved | 123 |
 | `SAO_SETS.sets[].members[]` | unresolved | 3 |
 | `SAO_ZHNAMES.items[].ids[]` | excluded-row | 40 |
-| `SAO_ZHNAMES.items[].ids[]` | resolved | 514 |
+| `SAO_ZHNAMES.items[].ids[]` | resolved | 549 |
 | `SAO_ZHNAMES.items[].ids[]` | unresolved | 1 |
-| `SAO_ZHNAMES.mobsByName{key}` | resolved | 66 |
+| `SAO_ZHNAMES.mobsByName{key}` | resolved | 74 |
 | `SAO_ZHNAMES.mobs{key}` | resolved | 46 |
 | `SAO_ZHNAMES.npcEn{key}` | ambiguous | 1 |
 | `SAO_ZHNAMES.npcEn{key}` | resolved | 24 |
 | `SAO_ZHNAMES.npcs{key}` | ambiguous | 5 |
 | `SAO_ZHNAMES.npcs{key}` | quest-npc | 20 |
-| `SAO_ZHNAMES.npcs{key}` | resolved | 46 |
+| `SAO_ZHNAMES.npcs{key}` | resolved | 48 |
 | `SAO_ZHNAMES.places{key}` | ambiguous | 2 |
-| `SAO_ZHNAMES.places{key}` | resolved | 30 |
+| `SAO_ZHNAMES.places{key}` | resolved | 31 |
 | `SAO_ZHNAMES.places{key}` | unresolved | 1 |
-| `SAO_ZHNAMES.quests{key}` | resolved | 38 |
+| `SAO_ZHNAMES.quests{key}` | resolved | 40 |
 | `SAO_ZHNAMES.sets{key}` | resolved | 18 |
 
 排除的欄位（理由、處理階段、欄位數）：
@@ -171,7 +171,7 @@
 
 ## 錯誤清單
 
-### E1（90）
+### E1（88）
 
 | 檔案 | 鍵 | 行 | 原因 | 例外 |
 | --- | --- | --- | --- | --- |
@@ -228,10 +228,8 @@
 | gameinfo.js | `gameinfo:Corrupted Fragment/loot:Spectral Spider` | 4 | 解析不到：沒有對得上的怪物 | 有 |
 | gameinfo.js | `gameinfo:Cracked Pickaxe/sold-by:F1 - Starting City - Tools` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Forest Key/crafted-at:F1 - Geldorack Dungeon Guard - Starting City` | 4 | 解析不到：沒有對得上的 NPC | 有 |
-| gameinfo.js | `gameinfo:Jeton Occulte/crafted-at:P3 - Craft Jeton Occulte` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Key of Xal'Zirith/crafted-at:F1 - Xal'Zirith Dungeon Guard - Candélia` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Key of the Fallen/crafted-at:F1 - Labyrinth of the Fallen Dungeon Guard - Tolbana` | 4 | 解析不到：沒有對得上的 NPC | 有 |
-| gameinfo.js | `gameinfo:Masque du Voleur/crafted-at:P3 - Craft Artefact Masque Voleur` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Nodachi/crafted-at:Nodachi Altar` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Occult Amulet/sold-by:Secret Occult Amulet` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Occult Bracelet/sold-by:Secret Occult Bracelet` | 4 | 解析不到：沒有對得上的 NPC | 有 |
@@ -255,16 +253,16 @@
 | recipes.js | `recipe:Secret Gelatinous Cloak/Gelatinous Cloak/mat:Slime Tear` | 1687 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | recipes.js | `recipe:Sewer Reshaper/out:Slime Tear` | 1687 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | recipes.js | `recipe:Starting Merchant/out:Training Dagger (2)` | 2333 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Boar of Gluttony Candy` | 107 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Effective Repair Kit` | 111 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Halloween Candy Corn` | 104 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Lion of Pride Candy` | 108 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Pumpkin Caramel` | 103 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `set:Stealthy Herald Set/member:Boots of the Herald` | 43 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `set:Stealthy Herald Set/member:Tunic of the Herald` | 43 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `set:Tenacious Necromancer Set/member:Helmet of the Tenacious Necromancer` | 47 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Boar of Gluttony Candy` | 109 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Effective Repair Kit` | 113 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Halloween Candy Corn` | 106 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Lion of Pride Candy` | 110 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Pumpkin Caramel` | 105 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `set:Stealthy Herald Set/member:Boots of the Herald` | 45 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `set:Stealthy Herald Set/member:Tunic of the Herald` | 45 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `set:Tenacious Necromancer Set/member:Helmet of the Tenacious Necromancer` | 49 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | zhnames.js | `zhnames.places:Lair of Asterius` | 25 | 解析不到：沒有對得上的地點 | 有 |
-| zhnames.js | `zhnames:蜘蛛毒液/i\|Spider Venom` | 249 | 解析不到：「i\|」指到的本站物品表（ITEMS）鍵不存在 | 有 |
+| zhnames.js | `zhnames:蜘蛛毒液/i\|Spider Venom` | 284 | 解析不到：「i\|」指到的本站物品表（ITEMS）鍵不存在 | 有 |
 
 ### E2（28）
 
@@ -289,7 +287,7 @@
 | recipes.js | `recipe-npc:3\|Consumables Merchant` | 3292 | 對到 2 個不同的實體：N3:25:Consumables Merchant、N3:26:Consumables Merchant | 有 |
 | recipes.js | `recipe:3\|Adventurer's Shoemaker/Bottes de l'Aventurier/mat:狼皮（第 1 或第 2 層，看不出來）` | 4241 | 資料本身寫明看不出是哪一種（已知的多重可能，沒有指定實體） | 有 |
 | recipes.js | `recipe:3\|P3 - Craft Anneau Draconique Corrompu/Anneau Draconique Corrompu/mat:腐化碎片（三種之一，看不出是哪一種）` | 4094 | 資料本身寫明看不出是哪一種（已知的多重可能，沒有指定實體） | 有 |
-| sets.js | `set:Ika Set/member:Leggings of Ika` | 34 | 對到 2 個不同的實體：1341 Jambières d'Ika（裝備）、1348 Jambières d’Ika（裝備） | 有 |
+| sets.js | `set:Ika Set/member:Leggings of Ika` | 36 | 對到 2 個不同的實體：1341 Jambières d'Ika（裝備）、1348 Jambières d’Ika（裝備） | 有 |
 | zhnames.js | `zhnames.npcEn:Assistant to the Alchemist` | 34 | 對到 2 個不同的實體：N2:1:Assistant to the Alchemist、N3:1:Assistant to the Alchemist | 有 |
 | zhnames.js | `zhnames.npcs:Alchemist` | 32 | 對到 3 個不同的實體：N1:0:Alchemist、N2:0:Alchemist、N3:0:Alchemist | 有 |
 | zhnames.js | `zhnames.npcs:Assistant to the Alchemist` | 34 | 對到 2 個不同的實體：N2:1:Assistant to the Alchemist、N3:1:Assistant to the Alchemist | 有 |
@@ -310,11 +308,11 @@
 ### W2
 
 - gameinfo 等級：43 件
-- gamestats 稀有度：7 件
-- gamestats 等級：44 件
-- 配方等級：45 件
+- gamestats 稀有度：8 件
+- gamestats 等級：47 件
+- 配方等級：48 件
 
-### W5（89）
+### W5（90）
 
 - 第 1 層 NPC：Lumberjack ↔ Cabinetmaker（3.6 格）
 - 第 1 層 NPC：Cursed Ruins - Loot Buyer ↔ Cursed Ruins - Loot Buyer (2)（223.4 格）
@@ -374,8 +372,9 @@
 - 第 3 層 NPC：Alchemist ↔ Assistant to the Alchemist（3.6 格）
 - 第 3 層 NPC：Loot Buyer Sylnovar ↔ Loot Buyer Sylvaer（741.8 格）
 - 第 3 層 NPC：Equipment Merchant ↔ Equipment Merchant（823.4 格）
-- 第 3 層 NPC：Occult Rings Merchant ↔ Occult Runes Merchant（904.8 格）
+- 第 3 層 NPC：Occult Rings Merchant ↔ Occult Runes Merchant（886.8 格）
 - 第 3 層 NPC：Consumables Merchant ↔ Consumables Merchant（796.1 格）
+- 第 3 層 NPC：P3 - Craft Clée des Bois Ancien ↔ P3 - Craft Outils des Bois Anciens（1043.5 格）
 - 物品：Amulet of the Nepenthes ↔ Bracelet of the Nepenthes
 - 物品：Bear Hide ↔ Boar Hide
 - 物品：Blazing Feather ↔ Flaming Feather
@@ -466,7 +465,7 @@
 
 ### W10
 
-- 數量：187
+- 數量：180
 
 ### W11
 
@@ -474,7 +473,7 @@
 
 ### W12
 
-- 數量：{"ITEMS fr": 7, "SAO23 fr": 102, "gameinfo oid": 10, "zhnames ids": 93, "配方 id": 5}
+- 數量：{"ITEMS fr": 7, "SAO23 fr": 101, "gameinfo oid": 10, "zhnames ids": 94, "配方 id": 5}
 
 ### 未量測（4）
 

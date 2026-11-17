@@ -4257,6 +4257,499 @@ null,
 "shot"
 ]
 ]
+},
+"3|P3 - Craft Artefact Manteau Crocs Bois": {
+"floor": 3,
+"items": [
+[
+1539,
+"Manteau des Crocs des Bois",
+600,
+[
+[
+"Woodland Fur",
+256
+],
+[
+"Woodland Tail",
+64
+]
+],
+"55",
+"a",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|Accessories Bandit Blacksmith": {
+"floor": 3,
+"items": [
+[
+1553,
+"Cagoule du Voleur",
+300,
+[
+[
+"Medium Pouch",
+8
+],
+[
+"Small Purse",
+64
+],
+[
+"Bandit Gold Coin",
+32
+]
+],
+"55",
+"a",
+"acc",
+null,
+"shot"
+],
+[
+2075,
+"Gants du Voleur",
+300,
+[
+[
+"Medium Pouch",
+8
+],
+[
+"Small Purse",
+64
+],
+[
+"Bandit Gold Coin",
+32
+]
+],
+"55",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2519,
+"Anneau du Voleur",
+300,
+[
+[
+"Medium Pouch",
+8
+],
+[
+"Small Purse",
+64
+],
+[
+"Bandit Gold Coin",
+32
+]
+],
+"55",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1331,
+"Amulette du Voleur",
+300,
+[
+[
+"Medium Pouch",
+8
+],
+[
+"Small Purse",
+64
+],
+[
+"Bandit Gold Coin",
+32
+]
+],
+"55",
+"b",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Artefact Masque Voleur": {
+"floor": 3,
+"items": [
+[
+1554,
+"Masque du Voleur",
+600,
+[
+[
+"Medium Pouch",
+32
+],
+[
+"Small Purse",
+64
+],
+[
+"Bandit Gold Coin",
+64
+]
+],
+"55",
+"a",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Artefact Boucles d'Oreilles Bois Sombres": {
+"floor": 3,
+"items": [
+[
+1546,
+"Boucles d'Oreilles des Bois Sombres",
+600,
+[
+[
+"Juvenile Bark",
+64
+],
+[
+"Sylvaerian Jewel",
+64
+],
+[
+"Iron Ingot",
+16
+]
+],
+"55",
+"a",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Jeton Occulte": {
+"floor": 3,
+"items": [
+[
+2386,
+"Jeton Occulte",
+0,
+[
+[
+"Medium Pouch",
+64
+]
+],
+"55",
+"splusplus",
+"other",
+null,
+"shot"
+]
+]
+},
+"3|Leatherworker": {
+"floor": 3,
+"items": [
+[
+1516,
+"Bottes des Bois",
+300,
+[
+[
+"Woodland Fur",
+64
+],
+[
+"Woodland Tail",
+32
+],
+[
+"Bear Hide",
+32
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1518,
+"Bottes Brumeuses",
+300,
+[
+[
+"Misty Fur",
+64
+],
+[
+"Misty Tail",
+32
+],
+[
+"Bear Hide",
+32
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1513,
+"Bottes Goblines",
+300,
+[
+[
+"Orc Blood",
+32
+],
+[
+"Juvenile Bark",
+32
+],
+[
+"Bear Hide",
+32
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1525,
+"Bottes en Toile d'Araignée",
+300,
+[
+[
+"Spider Cloth",
+64
+],
+[
+"強化蛛絲",
+16
+],
+[
+"Spider Thread",
+64
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Outils des Bois Anciens": {
+"floor": 3,
+"items": [
+[
+2696,
+"Pioche de la Forêt",
+600,
+[
+[
+"Ancient Woods Essence",
+1
+],
+[
+"Juvenile Seed",
+16
+],
+[
+"Ravager Bark",
+16
+],
+[
+"Dark Branch",
+32
+]
+],
+"40",
+"a",
+"other",
+18,
+"shot"
+],
+[
+2702,
+"Houe de la Forêt",
+600,
+[
+[
+"Ancient Woods Essence",
+1
+],
+[
+"Juvenile Seed",
+16
+],
+[
+"Ravager Bark",
+16
+],
+[
+"Dark Branch",
+32
+]
+],
+"40",
+"a",
+"other",
+18,
+"shot"
+],
+[
+2708,
+"Hache de la Forêt",
+600,
+[
+[
+"Ancient Woods Essence",
+1
+],
+[
+"Juvenile Seed",
+16
+],
+[
+"Ravager Bark",
+16
+],
+[
+"Dark Branch",
+32
+]
+],
+"40",
+"a",
+"other",
+18,
+"shot"
+]
+]
+},
+"3|Occult Artifact Merchant": {
+"floor": 3,
+"items": [
+[
+1557,
+"Grimoire Occulte",
+null,
+[],
+"65323.81",
+"s",
+"acc",
+null,
+"shot"
+],
+[
+1558,
+"Boucle d'Oreille Occultes",
+null,
+[],
+"65323.81",
+"s",
+"acc",
+null,
+"shot"
+],
+[
+1559,
+"Bague Occulte",
+null,
+[],
+"65323.81",
+"s",
+"acc",
+null,
+"shot"
+],
+[
+1493,
+"Masque Occulte",
+null,
+[],
+"65323.81",
+"s",
+"acc",
+null,
+"shot"
+],
+[
+1560,
+"Hache Occulte",
+null,
+[],
+"65323.81",
+"s",
+"acc",
+null,
+"shot"
+],
+[
+1561,
+"Casque Occulte",
+null,
+[],
+"65323.81",
+"s",
+"acc",
+null,
+"shot"
+],
+[
+1562,
+"Bottes Occultes",
+null,
+[],
+"65323.81",
+"s",
+"acc",
+null,
+"shot"
+]
+]
+},
+"2|考古學家 de l'Antre": {
+"floor": 2,
+"items": [
+[
+null,
+"Clé du Roi Taurus",
+null,
+[],
+"10049.82",
+"b",
+"key",
+null,
+"shot"
+]
+]
 }
 };
 window.SAO_RECIPE_QTY = {"Alchemist|Quality Health Potion I": 3, "Alchemist|Quality Health Potion II": 3, "Alchemist|Quality Health Potion III": 3, "Alchemist|Quality Mana Potion I": 3, "Alchemist|Quality Mana Potion II": 3, "Alchemist|Quality Mana Potion III": 3, "Alchemist|Quality Stamina Potion I": 3, "Alchemist|Quality Stamina Potion II": 3, "Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion II": 3, "3|Alchemist|Quality Mana Potion II": 3, "3|Alchemist|Quality Stamina Potion II": 3, "3|Alchemist|Quality Health Potion III": 3, "3|Alchemist|Quality Mana Potion III": 3, "3|Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion IV": 3, "3|Alchemist|Quality Health Potion V": 3, "3|Alchemist|Quality Health Potion VI": 3, "3|Alchemist|Quality Mana Potion V": 3, "3|Alchemist|Quality Mana Potion VI": 3, "3|Alchemist|Quality Stamina Potion V": 3, "3|Alchemist|Quality Stamina Potion VI": 3};

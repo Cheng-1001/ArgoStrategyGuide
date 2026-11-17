@@ -4,6 +4,14 @@
    values are the game's own text; r = rarity from the tooltip frame colour when it differs from the catalogue ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
    (user 2026-11-05: 裝備資料要照新上傳的截圖更新). */
 window.SAO_GAMESTATS = {date:"2026-11-04", items:{
+ // 2026-11-17 (in27, owner's Chinese tooltips 11/15～11/16). 1553: only the rarity differs (tooltip frame EPIC, catalogue common; stats match).
+ // 2696 / 2702 / 2708 (forest tools, props): the tooltip says minimum level 18 (catalogue 1) and EPIC; 2025 is a rune (props)
+ "1512":{"date": "2026-11-16", "en": "bottes du pionnier", "lvl": 16, "dmg": null, "st": [["Physical Damage", "-30%"], ["Magic Damage", "-30%"], ["Projectile Damage", "-30%"], ["Movement Speed", "+50%"]]},
+ "2025":{"date": "2026-11-16", "en": "rune brumeuse", "lvl": null, "dmg": null, "st": [["Critical Strike Chance", "+2%"], ["Critical Strike Power", "+2%"], ["Weapon Damage", "+5%"], ["Stamina Regeneration", "-0.2/s"]]},
+ "1553":{"date": "2026-11-15", "en": "cagoule du voleur", "r": "a", "lvl": 16, "dmg": null, "st": null},
+ "2696":{"date": "2026-11-16", "en": "pioche de la forêt", "lvl": 18, "r": "a", "dmg": null, "st": null},
+ "2702":{"date": "2026-11-16", "en": "houe de la forêt", "lvl": 18, "r": "a", "dmg": null, "st": null},
+ "2708":{"date": "2026-11-16", "en": "hache de la forêt", "lvl": 18, "r": "a", "dmg": null, "st": null},
  // 2026-11-13 (in26, Chinese tooltips 11/13). 1554: only the rarity differs (tooltip frame EPIC, catalogue common; stats match). 2015 / 2010 are runes (props):
  // the site applies these to the props tab too (st = the game's values; catalogue values kept in the note)
  "2492":{"date": "2026-11-13", "en": "anneau du dard protecteur", "r": "s", "lvl": 12, "dmg": null, "st": [["Critical Strike Chance", "+5%"]]},

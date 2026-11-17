@@ -384,6 +384,33 @@ SHOTS23 = {
     # window "P3 - Craft 靴子 de l'Aventurier" (05.12.14, no nameplate; the reference map's Adventurer's Shoemaker is ~15 blocks away, guessed the same NPC):
     # RARE 5 min, 30 Col; which 狼皮 (floor 1 or floor 2, same name and icon) cannot be seen
     (3, "Adventurer's Shoemaker"): [("Bottes de l'Aventurier", "b", 300, [["磨損皮革", 128], ["狼皮（第 1 或第 2 層，看不出來）", 128], ["Misty Fur", 96], ["Misty Tail", 48]], "30", "acc")],
+    # 2026-11-17 (in27, owner's 11/15～11/18 screenshots; scratchpad in27/TRIAGE.md 1-D). Window titles in the comments.
+    # window 03.59.27 / 03.59.30: EPIC 10 min, 55 Col
+    (3, "P3 - Craft Artefact Manteau Crocs Bois"): [("Manteau des Crocs des Bois", "a", 600, [["Woodland Fur", 256], ["Woodland Tail", 64]], "55", "acc")],
+    # window「P3 - 製作飾品 強盜」(04.09.25～45): 5 min, 55 Col; the window's 盜賊手環 is not listed yet (its catalogue match is open)
+    (3, "Accessories Bandit Blacksmith"): [(n, r, 300, [["Medium Pouch", 8], ["Small Purse", 64], ["Bandit Gold Coin", 32]], "55", "acc")
+                                          for n, r in (("Cagoule du Voleur", "a"), ("Gants du Voleur", "b"), ("Anneau du Voleur", "b"), ("Amulette du Voleur", "b"))],
+    # window 04.25.45: EPIC 10 min, 55 Col
+    (3, "P3 - Craft Artefact Masque Voleur"): [("Masque du Voleur", "a", 600, [["Medium Pouch", 32], ["Small Purse", 64], ["Bandit Gold Coin", 64]], "55", "acc")],
+    # window 04.33.08: EPIC 10 min, 55 Col
+    (3, "P3 - Craft Artefact Boucles d'Oreilles Bois Sombres"): [("Boucles d'Oreilles des Bois Sombres", "a", 600, [["Juvenile Bark", 64], ["Sylvaerian Jewel", 64], ["Iron Ingot", 16]], "55", "acc")],
+    # window 04.11.46: MYTHIC, instant (0 s), 55 Col; the window's second row (free, internal-code materials) is not listed
+    (3, "P3 - Craft Jeton Occulte"): [("Jeton Occulte", "splusplus", 0, [["Medium Pouch", 64]], "55", "other")],
+    # nameplate [NPC] 皮革匠, window「P3 - Craft 靴子 de Sylnovar」(18.48.39～54): RARE 5 min, 30 Col. Bottes Sylvestres (材料「野獸毛皮」) and the
+    # amethyst boots row wait for the owner's decision
+    (3, "Leatherworker"): [(n, "b", 300, m, "30", "acc") for n, m in (
+        ("Bottes des Bois", [["Woodland Fur", 64], ["Woodland Tail", 32], ["Bear Hide", 32]]),
+        ("Bottes Brumeuses", [["Misty Fur", 64], ["Misty Tail", 32], ["Bear Hide", 32]]),
+        ("Bottes Goblines", [["Orc Blood", 32], ["Juvenile Bark", 32], ["Bear Hide", 32]]),
+        ("Bottes en Toile d'Araignée", [["Spider Cloth", 64], ["強化蛛絲", 16], ["Spider Thread", 64]]))],
+    # window 11-16 04.12.24～33: EPIC 10 min, 40 Col
+    (3, "P3 - Craft Outils des Bois Anciens"): [(n, "a", 600, [["Ancient Woods Essence", 1], ["Juvenile Seed", 16], ["Ravager Bark", 16], ["Dark Branch", 32]], "40", "other")
+                                               for n in ("Pioche de la Forêt", "Houe de la Forêt", "Hache de la Forêt")],
+    # window「P3 - 神秘 - 神器」Buy tab (11-17 19.05.43～19.06.19): LEGENDARY, 65 323.81 Col, stock ∞ (obtain line: 65000 = base price)
+    (3, "Occult Artifact Merchant"): [(n, "s", None, [], "65323.81", "acc") for n in (
+        "Grimoire Occulte", "Boucle d'Oreille Occultes", "Bague Occulte", "Masque Occulte", "Hache Occulte", "Casque Occulte", "Bottes Occultes")],
+    # floor 2, nameplate [NPC] 考古學家 de l'Antre, window「L'Antre d'Astérius - 戰利品資訊」(14.14.04): RARE key, 10 049.82 Col
+    (2, "考古學家 de l'Antre"): [("Clé du Roi Taurus", "b", None, [], "10049.82", "key")],
 }
 OID23 = {"Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
          "Quality Patience Fortifier III": 2001, "Quality Resistance Fortifier III": 2000, "Quality Vitality Fortifier III": 1996,
@@ -396,13 +423,20 @@ OID23 = {"Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier I
          "Couteau à la Griffe de la Brume": 1540, "Hache de la Tribu": 1542, "Grimoire des Bois Sombres": 1545, "Masque de la Toile": 1547,
          "Ceinture Luminescente": 1549, "Plume Spectrale": 1551, "Couteau en Dent de Loup": 1564, "Gants Féroce": 2074,
          "Grimoire Faible Corruption": 1565, "Collier Runique": 1309,
-         "Anneau Draconique Corrompu": 2522, "Bottes du Pionnier": 1512, "Ficelle de Bouleau": 2367, "Bottes de l'Aventurier": 1510}
+         "Anneau Draconique Corrompu": 2522, "Bottes du Pionnier": 1512, "Ficelle de Bouleau": 2367, "Bottes de l'Aventurier": 1510,
+         "Manteau des Crocs des Bois": 1539, "Cagoule du Voleur": 1553, "Gants du Voleur": 2075, "Anneau du Voleur": 2519, "Amulette du Voleur": 1331,
+         "Masque du Voleur": 1554, "Boucles d'Oreilles des Bois Sombres": 1546, "Jeton Occulte": 2386,
+         "Bottes des Bois": 1516, "Bottes Brumeuses": 1518, "Bottes Goblines": 1513, "Bottes en Toile d'Araignée": 1525,
+         "Pioche de la Forêt": 2696, "Houe de la Forêt": 2702, "Hache de la Forêt": 2708,
+         "Grimoire Occulte": 1557, "Boucle d'Oreille Occultes": 1558, "Bague Occulte": 1559, "Masque Occulte": 1493, "Hache Occulte": 1560,
+         "Casque Occulte": 1561, "Bottes Occultes": 1562}
 LV23 = {"Quality Health Potion II": 5, "Quality Mana Potion II": 5, "Quality Stamina Potion II": 5, "Quality Health Potion III": 8,
         "Quality Mana Potion III": 8, "Quality Stamina Potion III": 8, "Quality Health Potion IV": 12, "Quality Health Potion V": 15,
         "Quality Health Potion VI": 18, "Quality Mana Potion V": 15, "Quality Mana Potion VI": 18, "Quality Stamina Potion V": 15,
         "Quality Stamina Potion VI": 18, "Health Potion I": 1, "Mana Potion I": 1, "Stamina Potion I": 1, "Health Potion II": 3,
         "Health Potion III": 5, "Mana Potion II": 5, "Mana Potion III": 8, "Stamina Potion II": 5, "Stamina Potion III": 8,
-        "Pioche Renforcée": 15, "Hache Renforcée": 15, "Houe Renforcée": 15, "Bottes du Pionnier": 16}
+        "Pioche Renforcée": 15, "Hache Renforcée": 15, "Houe Renforcée": 15, "Bottes du Pionnier": 16,
+        "Pioche de la Forêt": 18, "Houe de la Forêt": 18, "Hache de la Forêt": 18}
 out23 = {}
 for (fl, npc), rows in SHOTS23.items():
     key = "%d|%s" % (fl, npc)

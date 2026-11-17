@@ -535,16 +535,6 @@
   {
    "code": "E1",
    "file": "gameinfo.js",
-   "key": "gameinfo:Jeton Occulte/crafted-at:P3 - Craft Jeton Occulte",
-   "reason": "解析不到：沒有對得上的 NPC",
-   "status": "unresolved",
-   "approved_by": "站長",
-   "approved_at": "2026-11-17",
-   "clear_by": "階段 3"
-  },
-  {
-   "code": "E1",
-   "file": "gameinfo.js",
    "key": "gameinfo:Key of Xal'Zirith/crafted-at:F1 - Xal'Zirith Dungeon Guard - Candélia",
    "reason": "解析不到：沒有對得上的 NPC",
    "status": "unresolved",
@@ -556,16 +546,6 @@
    "code": "E1",
    "file": "gameinfo.js",
    "key": "gameinfo:Key of the Fallen/crafted-at:F1 - Labyrinth of the Fallen Dungeon Guard - Tolbana",
-   "reason": "解析不到：沒有對得上的 NPC",
-   "status": "unresolved",
-   "approved_by": "站長",
-   "approved_at": "2026-11-17",
-   "clear_by": "階段 3"
-  },
-  {
-   "code": "E1",
-   "file": "gameinfo.js",
-   "key": "gameinfo:Masque du Voleur/crafted-at:P3 - Craft Artefact Masque Voleur",
    "reason": "解析不到：沒有對得上的 NPC",
    "status": "unresolved",
    "approved_by": "站長",
