@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="0b2d98b65e">
+<meta name="sao-build" content="358574d036">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -897,20 +897,20 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 </aside>
 
 <script src="data.js?v=6b30703f"></script>
-<script src="data23.js?v=e110ef5f"></script>
+<script src="data23.js?v=1486abfa"></script>
 <script src="bosses.js?v=77b7ad43"></script>
-<script src="reports.js?v=c054fcaf"></script>
+<script src="reports.js?v=bf86915d"></script>
 <script src="hints.js?v=fcf000d6"></script>
 <script src="codex.js?v=48141603"></script>
 <script src="mobphotos.js?v=5479cb35"></script>
 <script src="mainq.js?v=e6ca26e2"></script>
 <script src="equip.js?v=afe010ec"></script>
 <script src="props.js?v=a6c9503f"></script>
-<script src="gameinfo.js?v=913b0723"></script><script src="buyback.js?v=4371e5e3"></script>
+<script src="gameinfo.js?v=3eeec29e"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=c2dedbf9"></script>
-<script src="changelog.js?v=06a4ef3f"></script>
+<script src="changelog.js?v=9f6f368d"></script>
 <script src="recipes.js?v=f49dcd7d"></script>
-<script src="jmmeta.js?v=0926b344"></script>
+<script src="jmmeta.js?v=8935be97"></script>
 <script src="formcfg.js?v=54663be2"></script>
 <script src="classes.js?v=877782cc"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
@@ -1326,7 +1326,7 @@ function itemDetail(id){const it=ITEMS[id];
   ${it.set?"":setPotHTML(id,...(it.aka||[]))}${it.set?`<h3 class="sec">套裝效果・${esc(it.set.name)}</h3><table class="settbl"><tbody>${it.set.tiers.map(([n,e])=>`<tr><th>${n} 件</th><td>${esc(e)}</td></tr>`).join("")}</tbody></table>`:""}
   ${it.note?`<div class="note">${esc(it.note)}</div>`:""}
   ${it.vanilla?`<div class="note">這是 Minecraft 原版物品，官方圖鑑沒有自訂圖示；圖示取自 ${it.icsrc?`<a href="${esc(it.icsrc)}" target="_blank" rel="noopener">Minecraft Wiki</a>`:"Minecraft Wiki"}。</div>`:""}
-  ${it.ic<0&&it.fr&&!it.vanilla?`<div class="note">官方圖鑑還沒有這個物品的圖示或模型。</div>`:""}
+  ${it.ic<0&&it.fr&&!it.vanilla&&!(offOf(id)&&offOf(id).e.ic>=0)?`<div class="note">官方圖鑑還沒有這個物品的圖示或模型。</div>`:""}
   ${itemObtainHTML(id)}
   <div class="note warn">配方：公開資料尚未提供鍛造或合成配方（wiki 鍛造頁標示為「待補」），以上用途只來自任務需求與物品描述。</div>`}
 

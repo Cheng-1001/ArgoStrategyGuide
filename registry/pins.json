@@ -1,0 +1,15 @@
+{
+ "version": 1,
+ "note": "R0.5 階段 1 最小釘選檔（E6 身份、E7 圖示）。釘選只能由人加，工具不產生（定稿第 337 行）。依站長決策 D3，正式釘選先只放站長已確認的 2380；其他候選（墮落者之戒＝2484、銅／鐵手套圖示、森林連結＝1448）等站長確認後才加。",
+ "pins": [
+  {
+   "id": "corrupted-fragment-3",
+   "type": "identity",
+   "names": ["Corrupted Fragment (3)"],
+   "oid": 2380,
+   "evidence": "站長決策 A（2026-11-16）：官網 2380 Fragment Corrompu 依官網 CMD 12346／corruptedore3 對應紫框腐化碎片；修正 commit 經本機 Claude 初審、GPT 最終審查 PASS 後合併（27bc5b8）。身份證據包本身本機沒有初審（追溯檢查第 11 項）。",
+   "date": "2026-11-16",
+   "confirmed_by": "站長（決策 A）"
+  }
+ ]
+}

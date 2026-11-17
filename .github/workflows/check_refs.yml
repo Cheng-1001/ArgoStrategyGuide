@@ -1,0 +1,75 @@
+# R0.5 stage 1 (B9): reference check on every push / pull request.
+# CI only reports: GitHub Pages deploys from main directly (Apps Script, jm_merge, jm_held also push to main),
+# so a red run here does NOT stop a deploy. The gate that stops a bad build is src/build.py (exit 1).
+name: check_refs
+on:
+  push:
+    paths-ignore: [reports.js, 'reports/**', pending.js, formcfg.js, jmmeta.js, 'tiles/**', floor1_jm.jpg]
+  pull_request:
+    paths-ignore: [reports.js, 'reports/**', pending.js, formcfg.js, jmmeta.js, 'tiles/**', floor1_jm.jpg]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      # every step runs even when an earlier one fails, so one run gives all raw outputs
+      - name: reference check (no --draft)
+        run: python3 -I tools/check_refs.py
+      - name: build is byte-identical to the committed index.html
+        if: always()
+        # reports.js / pending.js / jmmeta.js / formcfg.js are pushed by Apps Script and Actions without a rebuild,
+        # so their ?v= hash in the committed page may be old: those four are left out of the comparison
+        run: |
+          cp index.html /tmp/index.committed.html
+          python3 src/build.py
+          python3 -I - <<'PY'
+          import re, sys
+          ext = r'(<script src="(?:reports|pending|jmmeta|formcfg)\.js)\?v=[0-9a-f]+"'
+          clean = lambda p: re.sub(ext, r'\1"', open(p, encoding='utf-8').read())
+          a, b = clean('/tmp/index.committed.html'), clean('index.html')
+          a = re.sub(r'<meta name="sao-build" content="[0-9a-f]+">', '', a); b = re.sub(r'<meta name="sao-build" content="[0-9a-f]+">', '', b)
+          print('identical' if a == b else 'DIFFERENT'); sys.exit(0 if a == b else 1)
+          PY
+      - name: install Playwright Chromium
+        if: always()
+        run: |
+          npm install --no-save playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: regression cases
+        if: always()
+        run: python3 -I tests/check_refs_test.py
+      - name: behaviour baseline (G5)
+        if: always()
+        run: node tests/baseline_compare.js --transfer
+      - name: smoke test
+        if: always()
+        run: |
+          pip install playwright==1.63.0
+          python3 -m playwright install --with-deps chromium
+          PYTHONIOENCODING=utf-8 python3 tests/smoke.py
+      # W8 / W9 (plan v5 B7): the site audit and the untranslated-name list, served from a local copy of the repo
+      - name: site audit and untranslated names (W8 / W9)
+        if: always()
+        # pipefail: a crash of site_audit.js / zh_gap.js fails this step even though the output goes through tee (P1 review S13)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m http.server 8765 >/dev/null 2>&1 &
+          sleep 2
+          node tests/site_audit.js | tee build/site_audit.txt
+          node tests/zh_gap.js build/zh_gap.md | tee build/zh_gap.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: registry_report
+          path: |
+            build/registry_report.*
+            build/site_audit.txt
+            build/zh_gap.*
