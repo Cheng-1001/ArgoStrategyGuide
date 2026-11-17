@@ -470,7 +470,7 @@
 
 ### W11
 
-- 數量：{"resolved": 3, "unresolved": 2}
+- 數量：{"resolved": 3, "unresolved": 6}
 
 ### W12
 
