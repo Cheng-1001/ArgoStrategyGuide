@@ -317,5 +317,25 @@ window.SAO_REPORTS = [
   },
   "source": "form",
   "review": "審核：lintcbruce"
+ },
+ {
+  "id": "R0020",
+  "type": "monster",
+  "floor": 3,
+  "name": "迷宮區樹人",
+  "date": "2026-11-17",
+  "img": "reports/R0020.jpg",
+  "imgs": [
+   "reports/R0020.jpg"
+  ],
+  "raw": {
+   "怪物・截圖種類": "野外截圖（看得到等級和座標）",
+   "怪物・等級": "18",
+   "怪物・座標 x, z": "374281",
+   "怪物・類型": "一般怪物",
+   "怪物・行為": "主動攻擊（看到就打）"
+  },
+  "source": "form",
+  "review": "審核：lintcbruce"
  }
 ];
