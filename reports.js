@@ -337,5 +337,22 @@ window.SAO_REPORTS = [
   },
   "source": "form",
   "review": "審核：lintcbruce"
+ },
+ {
+  "id": "R0021",
+  "type": "monster",
+  "floor": 3,
+  "name": "迷宮區遠古樹人",
+  "date": "2026-11-17",
+  "img": "reports/R0021.jpg",
+  "imgs": [
+   "reports/R0021.jpg"
+  ],
+  "raw": {
+   "怪物・截圖種類": "野外截圖（看得到等級和座標）",
+   "怪物・座標 x, z": "832285"
+  },
+  "source": "form",
+  "review": "審核：lintcbruce"
  }
 ];
