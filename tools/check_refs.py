@@ -597,6 +597,8 @@ SKIP = {
     'SAO_MAINQ{}[].rw': 'R24',
     'SAO_MAINQ{}[].s[][3]': 'R22',
     'SAO_MAINQ{}[].d': 'R22',
+    'SAO_MAINQ{}[].wen': 'R25',   # wiki English title (2026-11-18)
+    'SAO_MAINQ{}[].wrev': 'R1',
     'SAO_MAINQ{}[].en{key}': 'R22',
     'SAO_MAINQ{}[].en{}': 'R22',
     'SAO_MAINQ{}[].img{key}': 'R22',

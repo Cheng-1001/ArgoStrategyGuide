@@ -371,6 +371,10 @@ const GAME_DROPS = {
   // 2026-11-13 (in25, user "C1"): the game lists the same monster twice with different rates (Orc Eye 45% and 80%…); both rows are kept, the second marked "dup"
   if(p.dup)p.dup.forEach(d=>m.drops.push([d[0],d[1],"dup"]));
   m.gameDrop=1;m.note=(m.note?m.note+" ":"")+"掉落物取自遊戲物品說明的取得途徑（站長 2026-11-12～11-13 截圖）。"}));
+// 2026-11-18 owner: the corrupted Sylvaer drop cloth / jewel / leaves (seen in the 11/18 kill results, no rates) — rates copied from the corrupted Sylnovar
+["Sylvaer Archer Corrompu","Sylvaer Mage Corrompu","Sylvaer Garde Corrompu"].forEach(n=>{const m=F3.M.find(x=>x.name===n);if(!m)throw new Error("copied drops: no monster "+n);
+  m.drops=[["Sylvaerian Cloth",100],["Sylvaerian Jewel",75],["Sylvaerian Leaves",75],...m.drops.filter(d=>!/^Sylvaerian /.test(d[0]))];
+  m.note=(m.note?m.note+" ":"")+"希爾維爾布料、寶石、之葉的機率是照腐化希爾諾瓦填的（站長 2026-11-18 指定）：遊戲的擊殺結果（11/18 截圖）證實會掉，但沒有顯示機率。"});
 // level seen above the monster in game (owner's screenshots); floor-1 rows carry it in M column 11, floors 2/3 here
 // 2026-11-13 (in26 04.05.26): Woodland Wolf LV 14 in 狼之森 (X 879 Z 866); wolves showing LV 1 near X 827 Z 878 (05.03.56) are not used
 // 2026-11-17 (in27): Luminescent Spider 15 (11-18 03.48.58), Labyrinth Treant 18 (nameplate 19.05.22; the official news said 19),
