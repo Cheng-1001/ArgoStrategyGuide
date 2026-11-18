@@ -1,0 +1,597 @@
+{
+ "source": "https://saominecraft.wiki.gg/wiki/Quests/Aincrad/Main",
+ "revision": 5673,
+ "revision_time": "2026-11-17T09:09:39Z",
+ "revision_comment": "Floors 2 and 3: replaced with the in-game main quests; tables now use the Floor 1 format",
+ "fetched": "2026-11-18",
+ "license_note": "wiki.gg 內容依該 wiki 授權（通常為 CC BY-SA），網站使用時需註明來源",
+ "notes": [
+  "原文為英文，未翻譯；欄位照 wiki 表格：#、NPC、Quest、Lvl、Reward、Description",
+  "lvl 欄 wiki 全部填 ---（未提供）；npc 為 --- 表示 wiki 未填",
+  "exp/cols 為 null 表示 wiki 該列獎勵為 ---（子任務或任務本子）",
+  "第 2 層 wiki 沒有 #2，直接從 #1 跳到 #3，照原樣保留",
+  "第 3 層有一列 # 為 ---（The Mission Notebook），以及 16 bis"
+ ],
+ "quests": [
+  {
+   "floor": 2,
+   "no": "1",
+   "npc": "The Master Swordsman's Echo",
+   "quest": "A Question in the Air",
+   "lvl": "---",
+   "exp": 3150,
+   "cols": 1000,
+   "items": [],
+   "description": "The Echo of the Master Swordsman is waiting for you. Speak to it, then head to the edge of the cliff."
+  },
+  {
+   "floor": 2,
+   "no": "3",
+   "npc": "Urbus residents",
+   "quest": "Five Opinions on Artheon",
+   "lvl": "---",
+   "exp": 3150,
+   "cols": 1100,
+   "items": [],
+   "description": "Five residents of Urbus tell you about Artheon. Go and meet them to make yourself known."
+  },
+  {
+   "floor": 2,
+   "no": "4",
+   "npc": "Artheon",
+   "quest": "Where the Bulls Come From",
+   "lvl": "---",
+   "exp": 3150,
+   "cols": 1150,
+   "items": [],
+   "description": "Artheon sends you to find out where the bulls come from, south of the mountain."
+  },
+  {
+   "floor": 2,
+   "no": "5",
+   "npc": "Artheon",
+   "quest": "The Stampede",
+   "lvl": "---",
+   "exp": 3150,
+   "cols": 1250,
+   "items": [],
+   "description": "The meadow has opened up. Close the brown portal spitting out the bulls, then report back to Artheon."
+  },
+  {
+   "floor": 2,
+   "no": "6",
+   "npc": "Artheon",
+   "quest": "The Horned Mystery",
+   "lvl": "---",
+   "exp": 3150,
+   "cols": 1300,
+   "items": [],
+   "description": "Artheon wants answers about what is happening. Speak to him, then head to the village of Kaelor."
+  },
+  {
+   "floor": 2,
+   "no": "7",
+   "npc": "---",
+   "quest": "The Village of Forges",
+   "lvl": "---",
+   "exp": 3150,
+   "cols": 1350,
+   "items": [],
+   "description": "Someone is making a lot of noise in the village of Kaelor. Go and see what is going on."
+  },
+  {
+   "floor": 2,
+   "no": "8",
+   "npc": "Kwabena",
+   "quest": "Kwabena",
+   "lvl": "---",
+   "exp": 3150,
+   "cols": 1400,
+   "items": [],
+   "description": "Kwabena, one of the two Ngangas, knows how to make the Suman. She does not much like people climbing up to see her."
+  },
+  {
+   "floor": 2,
+   "no": "9",
+   "npc": "Kwabeno",
+   "quest": "The Pebble Game",
+   "lvl": "---",
+   "exp": 3300,
+   "cols": 1450,
+   "items": [],
+   "description": "Kwabeno, Kwabena's brother, makes the heart of the Suman. If only he could remember it."
+  },
+  {
+   "floor": 2,
+   "no": "10",
+   "npc": "Kwabena",
+   "quest": "The Suman",
+   "lvl": "---",
+   "exp": 4000,
+   "cols": 1500,
+   "items": [],
+   "description": "Kwabena carves the seal of the Suman from acacia wood. You must hold the wood for her, without moving."
+  },
+  {
+   "floor": 2,
+   "no": "11",
+   "npc": "Millennial Baobab",
+   "quest": "The Thousand-Year Baobab",
+   "lvl": "---",
+   "exp": 4000,
+   "cols": 1600,
+   "items": [],
+   "description": "The oldest tree on the floor always asks for something before letting anyone climb."
+  },
+  {
+   "floor": 2,
+   "no": "12",
+   "npc": "Yaa",
+   "quest": "The Bouquet",
+   "lvl": "---",
+   "exp": 4000,
+   "cols": 1650,
+   "items": [],
+   "description": "Yaa especially likes the flowers that nobody ever brings her."
+  },
+  {
+   "floor": 2,
+   "no": "13",
+   "npc": "Yaa",
+   "quest": "The Voice Beneath the Altar",
+   "lvl": "---",
+   "exp": 4000,
+   "cols": 1700,
+   "items": [],
+   "description": "Yaa no longer hears Marome's prayers. Three of them are waiting for an answer."
+  },
+  {
+   "floor": 2,
+   "no": "13.1",
+   "npc": "Ondo",
+   "quest": "The Blanket",
+   "lvl": "---",
+   "exp": null,
+   "cols": null,
+   "items": [],
+   "description": "Ondo prays that his son will no longer be cold on the lake."
+  },
+  {
+   "floor": 2,
+   "no": "13.2",
+   "npc": "Ismaël",
+   "quest": "His Wife's Song",
+   "lvl": "---",
+   "exp": null,
+   "cols": null,
+   "items": [],
+   "description": "Ismaël lost his wife's music box on the shore of the silver lake."
+  },
+  {
+   "floor": 2,
+   "no": "13.3",
+   "npc": "Mama Esi",
+   "quest": "The Lullaby",
+   "lvl": "---",
+   "exp": null,
+   "cols": null,
+   "items": [],
+   "description": "Mama Esi is looking for the lullaby her husband used to sing to their daughter."
+  },
+  {
+   "floor": 2,
+   "no": "14",
+   "npc": "Archaeologist",
+   "quest": "The Queen One Wing Away",
+   "lvl": "---",
+   "exp": 4000,
+   "cols": 1750,
+   "items": [],
+   "description": "An archaeologist is noting everything at the entrance to the Hive: the workers are singing the name of a queen who no longer reigns."
+  },
+  {
+   "floor": 2,
+   "no": "15",
+   "npc": "The Master Swordsman's Echo",
+   "quest": "The Echo of the Square",
+   "lvl": "---",
+   "exp": 4000,
+   "cols": 1800,
+   "items": [],
+   "description": "In Urbus square, an Echo of the Master Swordsman watches the children play. He already knew Yaa."
+  },
+  {
+   "floor": 2,
+   "no": "16",
+   "npc": "Bia",
+   "quest": "The Will-o'-the-Wisp",
+   "lvl": "---",
+   "exp": 4000,
+   "cols": 1850,
+   "items": [],
+   "description": "Bia's voice cuts out. A green will-o'-the-wisp leads you to whatever is cutting it."
+  },
+  {
+   "floor": 2,
+   "no": "17",
+   "npc": "Bia",
+   "quest": "The Lanterns of Khesun",
+   "lvl": "---",
+   "exp": 4000,
+   "cols": 1950,
+   "items": [],
+   "description": "The four lanterns of the Khesun sanctuary went out on the same night. Since then, Bia's chain has been wearing away."
+  },
+  {
+   "floor": 2,
+   "no": "18",
+   "npc": "Bia",
+   "quest": "What Bia Held",
+   "lvl": "---",
+   "exp": 4000,
+   "cols": 2000,
+   "items": [],
+   "description": "Back from Khesun, you tell Bia what the fresco shows."
+  },
+  {
+   "floor": 2,
+   "no": "19",
+   "npc": "Bia",
+   "quest": "Defend Bia",
+   "lvl": "---",
+   "exp": 4200,
+   "cols": 2050,
+   "items": [],
+   "description": "The dead are pulling on Bia's chain. The stele must hold while she regains her strength."
+  },
+  {
+   "floor": 2,
+   "no": "20",
+   "npc": "Tano",
+   "quest": "The Tribute",
+   "lvl": "---",
+   "exp": 4200,
+   "cols": 2100,
+   "items": [],
+   "description": "Tano has two faces. The Warrior wants trophies: 10 Bull Horns from the bulls south of Urbus, 10 Wolf Furs in the wolf valley north of Kaelor, and 2 Bear Fats from the bears of the Sugar Forest, in the Bear Valley."
+  },
+  {
+   "floor": 2,
+   "no": "21",
+   "npc": "The Judge",
+   "quest": "The Verdict",
+   "lvl": "---",
+   "exp": 4200,
+   "cols": 2150,
+   "items": [],
+   "description": "The Judge asks three questions about what you have done. He already knows the answers."
+  },
+  {
+   "floor": 2,
+   "no": "22",
+   "npc": "Tano",
+   "quest": "The Weaver",
+   "lvl": "---",
+   "exp": 4200,
+   "cols": 2200,
+   "items": [],
+   "description": "Tano wants Velindra, the Master's Weaver, dead, locked behind a woven door at the back of the mesa."
+  },
+  {
+   "floor": 2,
+   "no": "23",
+   "npc": "The Master Swordsman's Echo",
+   "quest": "What the Gods Are",
+   "lvl": "---",
+   "exp": 4200,
+   "cols": 2300,
+   "items": [],
+   "description": "In Urbus square, the Echo of the Master Swordsman tells you what the three Protectors really are."
+  },
+  {
+   "floor": 2,
+   "no": "24",
+   "npc": "Demba",
+   "quest": "Demba and the Reflection",
+   "lvl": "---",
+   "exp": 4200,
+   "cols": 2350,
+   "items": [],
+   "description": "Demba, the sorcerer with the cats, knows how to slow down rust. He needs barks that nobody can pick."
+  },
+  {
+   "floor": 2,
+   "no": "25",
+   "npc": "---",
+   "quest": "The Altar of Wishes",
+   "lvl": "---",
+   "exp": 4200,
+   "cols": 2400,
+   "items": [],
+   "description": "Three steles around the pool, three artifacts, three statues that have been waiting for a very long time."
+  },
+  {
+   "floor": 2,
+   "no": "26",
+   "npc": "---",
+   "quest": "The Guardian of the Pass",
+   "lvl": "---",
+   "exp": 4200,
+   "cols": 2450,
+   "items": [],
+   "description": "Rugibœuf, the largest of the sleeping Taurus, guards the gorge leading to Asterius's Lair."
+  },
+  {
+   "floor": 2,
+   "no": "27",
+   "npc": "---",
+   "quest": "The Bull's Head",
+   "lvl": "---",
+   "exp": 4200,
+   "cols": 2500,
+   "items": [],
+   "description": "The great bull's head carved into the cliff face opens its eyes."
+  },
+  {
+   "floor": 2,
+   "no": "28",
+   "npc": "---",
+   "quest": "Asterius's Lair",
+   "lvl": "---",
+   "exp": 4200,
+   "cols": 2650,
+   "items": [],
+   "description": "The door of Asterius's Lair has opened beneath the bull's head. Click the board at the foot of the wall to open the dungeon menu, then defeat the Taurus King at the back of the Lair. Open the final chest: back on Floor 2, the quest is completed and you are sent to Floor 3."
+  },
+  {
+   "floor": 3,
+   "no": "1",
+   "npc": "Elora",
+   "quest": "Into the Mist",
+   "lvl": "---",
+   "exp": 10000,
+   "cols": 1800,
+   "items": [],
+   "description": "Follow Elora's directions to the bridge without getting lost in the mist."
+  },
+  {
+   "floor": 3,
+   "no": "2",
+   "npc": "Faelir, Nyrath",
+   "quest": "Two Versions",
+   "lvl": "---",
+   "exp": 12000,
+   "cols": 1950,
+   "items": [],
+   "description": "Faelir and Nyrath are arguing about the sacred tree. Listen to each one's version before choosing a side."
+  },
+  {
+   "floor": 3,
+   "no": "3.1",
+   "npc": "Faelir",
+   "quest": "Hand on the Bark",
+   "lvl": "---",
+   "exp": null,
+   "cols": null,
+   "items": [],
+   "description": "Faelir is waiting for you at the foot of Aldarya, the white tree, east of Zumfut. Go and see what the Sylvaer defend."
+  },
+  {
+   "floor": 3,
+   "no": "3.2",
+   "npc": "Nyrath",
+   "quest": "The Leaf and the Root",
+   "lvl": "---",
+   "exp": null,
+   "cols": null,
+   "items": [],
+   "description": "Nyrath is waiting for you at Weisslum, on the river, west of Zumfut. Go and see what the Sylnovar defend."
+  },
+  {
+   "floor": 3,
+   "no": "3.3",
+   "npc": "Faelir, Nyrath",
+   "quest": "The Choice",
+   "lvl": "---",
+   "exp": 13000,
+   "cols": 2050,
+   "items": [
+    "Notebook of the Mist x1"
+   ],
+   "description": "You have seen both sides. Meet Faelir and Nyrath at the south gate of Zumfut, and choose."
+  },
+  {
+   "floor": 3,
+   "no": "4",
+   "npc": "Aurelianne, Swarrik",
+   "quest": "Hard-Won Trust",
+   "lvl": "---",
+   "exp": 14500,
+   "cols": 2200,
+   "items": [],
+   "description": "Win the trust of your camp: a favor for Aurelianne among the Sylvaer, a proof for Swarrik among the Sylnovar."
+  },
+  {
+   "floor": 3,
+   "no": "5",
+   "npc": "---",
+   "quest": "A Worrying Disappearance",
+   "lvl": "---",
+   "exp": 8150,
+   "cols": 2700,
+   "items": [],
+   "description": "Bandits from Mount Pasaël are holding a scout from your camp. They may not be the only ones in their cages."
+  },
+  {
+   "floor": 3,
+   "no": "---",
+   "npc": "Camp leader",
+   "quest": "The Mission Notebook",
+   "lvl": "---",
+   "exp": null,
+   "cols": null,
+   "items": [],
+   "description": "Your leader keeps a notebook of missions. Each one completed raises your reputation; at 8, the rite opens."
+  },
+  {
+   "floor": 3,
+   "no": "6",
+   "npc": "---",
+   "quest": "Surprise Attack",
+   "lvl": "---",
+   "exp": 8150,
+   "cols": 2700,
+   "items": [],
+   "description": "Exhausted invaders attack the town. Drive them back, and listen to what the last one says."
+  },
+  {
+   "floor": 3,
+   "no": "7",
+   "npc": "---",
+   "quest": "Sabotage",
+   "lvl": "---",
+   "exp": 8150,
+   "cols": 2700,
+   "items": [],
+   "description": "Steal fifteen cloths from the other camp's drying racks without being spotted: crouch near the guards."
+  },
+  {
+   "floor": 3,
+   "no": "8",
+   "npc": "---",
+   "quest": "What Stands Upright",
+   "lvl": "---",
+   "exp": 8150,
+   "cols": 2700,
+   "items": [],
+   "description": "Repair what the attack broke, with your own hands, following your camp's rule: Zumfut's guard circle for the Sylvaer, Weisslum's barricade for the Sylnovar."
+  },
+  {
+   "floor": 3,
+   "no": "9",
+   "npc": "---",
+   "quest": "Messenger in Danger",
+   "lvl": "---",
+   "exp": 8150,
+   "cols": 2700,
+   "items": [],
+   "description": "Escort a messenger along a dangerous road: Sulva toward the Lands of Eäran, or Morrtis toward Lysaät. If he falls too low, he retreats and everything starts over."
+  },
+  {
+   "floor": 3,
+   "no": "10",
+   "npc": "---",
+   "quest": "Perilous Ritual",
+   "lvl": "---",
+   "exp": 8150,
+   "cols": 2700,
+   "items": [],
+   "description": "Defend a ritual altar from the beasts drawn by the magic: the purification of Aldarya, or the calling of Lysaät's spirits."
+  },
+  {
+   "floor": 3,
+   "no": "11",
+   "npc": "---",
+   "quest": "A Growing Population",
+   "lvl": "---",
+   "exp": 8150,
+   "cols": 2700,
+   "items": [],
+   "description": "A hostile and growing population: the beasts are coming up from the south. Make the roads passable and bring back the hunter, or the scout, stuck in the trees."
+  },
+  {
+   "floor": 3,
+   "no": "12",
+   "npc": "---",
+   "quest": "The Rite of Passage",
+   "lvl": "---",
+   "exp": 19950,
+   "cols": 3200,
+   "items": [
+    "Cord x1"
+   ],
+   "description": "The rite of passage: track the rite's creature by following its trail, defeat it, and bring its loot back to the leader."
+  },
+  {
+   "floor": 3,
+   "no": "13",
+   "npc": "Lyrath, Eryndil",
+   "quest": "A Disagreement Underground",
+   "lvl": "---",
+   "exp": 9400,
+   "cols": 3300,
+   "items": [
+    "Mask x1"
+   ],
+   "description": "A disagreement underground: examine the Ellesar mine, step between Lyrath and Eryndil, and present the evidence."
+  },
+  {
+   "floor": 3,
+   "no": "14",
+   "npc": "---",
+   "quest": "A Remedy for the Tree",
+   "lvl": "---",
+   "exp": 9700,
+   "cols": 3450,
+   "items": [],
+   "description": "A remedy for the tree: the village mages are gathering for a ritual. They need young treant seeds and orc blood. At the Groulagh, something falls from the cage."
+  },
+  {
+   "floor": 3,
+   "no": "15",
+   "npc": "---",
+   "quest": "One Evil Can Hide Another",
+   "lvl": "---",
+   "exp": 10000,
+   "cols": 3550,
+   "items": [
+    "Adoryll's Loot x1"
+   ],
+   "description": "One evil can hide another: the mages' ritual fails. Adoryll's cry rises from the Terrialys well; you must climb up to its cage, above the Groulagh."
+  },
+  {
+   "floor": 3,
+   "no": "16",
+   "npc": "---",
+   "quest": "What the Tree Keeps",
+   "lvl": "---",
+   "exp": 10300,
+   "cols": 3700,
+   "items": [],
+   "description": "What the tree keeps: at the foot of Aldarya, wear the mine's mask, listen to the figures of a memory, and question the mages."
+  },
+  {
+   "floor": 3,
+   "no": "16 bis",
+   "npc": "Aurelianne, Swarrik",
+   "quest": "The Smooth Stone",
+   "lvl": "---",
+   "exp": 600,
+   "cols": 1000,
+   "items": [],
+   "description": "The smooth stone: carry Ilvane's object to the leader of the other camp, then bring Aurelianne and Swarrik together before the smooth stone."
+  },
+  {
+   "floor": 3,
+   "no": "17",
+   "npc": "---",
+   "quest": "Battle Preparation",
+   "lvl": "---",
+   "exp": 10600,
+   "cols": 3800,
+   "items": [],
+   "description": "Battle preparation: go back to the mages in the village, get ready, then reach the entrance of Shalheira's labyrinth."
+  },
+  {
+   "floor": 3,
+   "no": "18",
+   "npc": "Shalheira",
+   "quest": "The Labyrinth Guardian",
+   "lvl": "---",
+   "exp": 10900,
+   "cols": 3950,
+   "items": [],
+   "description": "The labyrinth guardian: speak to Shalheira in front of the arch, then kill Furacas, the guardian who has been closing the labyrinth for a century."
+  }
+ ]
+}
