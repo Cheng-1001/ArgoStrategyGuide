@@ -75,7 +75,7 @@
 | `SAO_GACHA.banners[].items[].en` | resolved | 7 |
 | `SAO_GACHA.banners[].items[].en` | unresolved | 19 |
 | `SAO_GACHA.banners[].items[].id` | resolved | 2 |
-| `SAO_GAMEICONS{key}` | resolved | 96 |
+| `SAO_GAMEICONS{key}` | resolved | 97 |
 | `SAO_GAMEICONS{key}` | unresolved | 6 |
 | `SAO_GAMEINFO.items[].obt[]` | ambiguous | 15 |
 | `SAO_GAMEINFO.items[].obt[]` | excluded-row | 117 |
@@ -84,34 +84,34 @@
 | `SAO_GAMEINFO.items[].obt[]` | unresolved | 25 |
 | `SAO_GAMEINFO.items[].oid[]` | resolved | 204 |
 | `SAO_GAMEINFO.items[].site` | excluded-row | 243 |
-| `SAO_GAMEINFO.items[].site` | resolved | 20 |
-| `SAO_GAMESTATS.items{key}` | resolved | 117 |
+| `SAO_GAMEINFO.items[].site` | resolved | 21 |
+| `SAO_GAMESTATS.items{key}` | resolved | 125 |
 | `SAO_HINTS{}{key}` | resolved | 49 |
 | `SAO_MAINQ{}[].npc` | excluded-row | 21 |
 | `SAO_MAINQ{}[].npc` | quest-npc | 68 |
 | `SAO_MOBCODEX.by{}{key}` | resolved | 56 |
 | `SAO_MOBPHOTO.by{}{key}` | resolved | 133 |
-| `SAO_NPC_CALC{key}` | resolved | 60 |
+| `SAO_NPC_CALC{key}` | resolved | 61 |
 | `SAO_RECICONS{key}` | resolved | 19 |
 | `SAO_RECIPES{key}` | ambiguous | 1 |
-| `SAO_RECIPES{key}` | resolved | 87 |
+| `SAO_RECIPES{key}` | resolved | 88 |
 | `SAO_RECIPES{}.items[][0]` | excluded-row | 69 |
-| `SAO_RECIPES{}.items[][0]` | resolved | 235 |
-| `SAO_RECIPES{}.items[][1]` | excluded-row | 235 |
+| `SAO_RECIPES{}.items[][0]` | resolved | 236 |
+| `SAO_RECIPES{}.items[][1]` | excluded-row | 236 |
 | `SAO_RECIPES{}.items[][1]` | resolved | 65 |
 | `SAO_RECIPES{}.items[][1]` | unresolved | 4 |
 | `SAO_RECIPES{}.items[][3][][0]` | ambiguous | 2 |
-| `SAO_RECIPES{}.items[][3][][0]` | resolved | 472 |
+| `SAO_RECIPES{}.items[][3][][0]` | resolved | 477 |
 | `SAO_RECIPES{}.items[][3][][0]` | unresolved | 2 |
 | `SAO_SETS.potions[].name` | resolved | 58 |
 | `SAO_SETS.potions[].name` | unresolved | 5 |
 | `SAO_SETS.sets[].members[]` | ambiguous | 1 |
-| `SAO_SETS.sets[].members[]` | resolved | 162 |
+| `SAO_SETS.sets[].members[]` | resolved | 170 |
 | `SAO_SETS.sets[].members[]` | unresolved | 3 |
 | `SAO_ZHNAMES.items[].ids[]` | excluded-row | 40 |
-| `SAO_ZHNAMES.items[].ids[]` | resolved | 631 |
+| `SAO_ZHNAMES.items[].ids[]` | resolved | 639 |
 | `SAO_ZHNAMES.items[].ids[]` | unresolved | 1 |
-| `SAO_ZHNAMES.mobsByName{key}` | resolved | 76 |
+| `SAO_ZHNAMES.mobsByName{key}` | resolved | 78 |
 | `SAO_ZHNAMES.mobs{key}` | resolved | 46 |
 | `SAO_ZHNAMES.npcEn{key}` | ambiguous | 1 |
 | `SAO_ZHNAMES.npcEn{key}` | resolved | 39 |
@@ -119,10 +119,10 @@
 | `SAO_ZHNAMES.npcs{key}` | quest-npc | 20 |
 | `SAO_ZHNAMES.npcs{key}` | resolved | 61 |
 | `SAO_ZHNAMES.places{key}` | ambiguous | 2 |
-| `SAO_ZHNAMES.places{key}` | resolved | 39 |
+| `SAO_ZHNAMES.places{key}` | resolved | 42 |
 | `SAO_ZHNAMES.places{key}` | unresolved | 1 |
 | `SAO_ZHNAMES.quests{key}` | resolved | 40 |
-| `SAO_ZHNAMES.sets{key}` | resolved | 18 |
+| `SAO_ZHNAMES.sets{key}` | resolved | 19 |
 
 排除的欄位（理由、處理階段、欄位數）：
 
@@ -216,8 +216,8 @@
 | gameicons.js | `gameicons:Halloween Candy Corn` | 64 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | gameicons.js | `gameicons:Lion of Pride Candy` | 65 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | gameicons.js | `gameicons:Pumpkin Caramel` | 66 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| gameicons.js | `gameicons:Slime Tear` | 81 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| gameicons.js | `gameicons:Training Dagger (2)` | 88 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| gameicons.js | `gameicons:Slime Tear` | 82 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| gameicons.js | `gameicons:Training Dagger (2)` | 89 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | gameinfo.js | `gameinfo:Allium Flower/bought-back-by:F1 Local Farmer - Near the Starting City` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Chipped Axe/sold-by:F1 - Starting City - Tools` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Corrupted Fragment/loot:Gobelin Archer` | 4 | 解析不到：沒有對得上的怪物 | 有 |
@@ -249,14 +249,14 @@
 | recipes.js | `recipe:Secret Gelatinous Cloak/Gelatinous Cloak/mat:Slime Tear` | 1687 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | recipes.js | `recipe:Sewer Reshaper/out:Slime Tear` | 1687 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | recipes.js | `recipe:Starting Merchant/out:Training Dagger (2)` | 2333 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Boar of Gluttony Candy` | 111 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Effective Repair Kit` | 115 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Halloween Candy Corn` | 108 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Lion of Pride Candy` | 112 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Pumpkin Caramel` | 107 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Boar of Gluttony Candy` | 115 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Effective Repair Kit` | 119 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Halloween Candy Corn` | 112 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Lion of Pride Candy` | 116 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Pumpkin Caramel` | 111 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | sets.js | `set:Stealthy Herald Set/member:Boots of the Herald` | 47 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | sets.js | `set:Stealthy Herald Set/member:Tunic of the Herald` | 47 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `set:Tenacious Necromancer Set/member:Helmet of the Tenacious Necromancer` | 51 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `set:Tenacious Necromancer Set/member:Helmet of the Tenacious Necromancer` | 55 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | zhnames.js | `zhnames.places:Lair of Asterius` | 25 | 解析不到：沒有對得上的地點 | 有 |
 | zhnames.js | `zhnames:蜘蛛毒液/i\|Spider Venom` | 294 | 解析不到：「i\|」指到的本站物品表（ITEMS）鍵不存在 | 有 |
 
@@ -305,7 +305,7 @@
 
 - gameinfo 等級：41 件
 - gamestats 稀有度：10 件
-- gamestats 等級：45 件
+- gamestats 等級：46 件
 - 配方等級：46 件
 
 ### W5（92）

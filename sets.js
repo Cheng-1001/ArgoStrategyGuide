@@ -47,7 +47,11 @@ window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "Stealthy Herald Set", "tiers": [[2, "+5% Dodge Chance"], [3, "+3% Critical Damage"], [4, "+5% Movement Speed"]], "members": ["Tunic of the Herald", "Boots of the Herald"]},
  {"name": "Hunter Herald Set", "tiers": [[2, "+0.15 Stamina/s"], [3, "+1% Critical Chance"], [4, "+0.5 Attack Damage"]], "members": ["Helmet of the Herald"]},
  {"name": "Fire Harpies Set", "tiers": [[2, "+2% Critical Chance"], [3, "+7% Movement Speed, +2 Defense, +3% Physical Damage"]], "members": ["Feather of the Little Flame", "Anneau de l'Harpie Enflammé"]},
- {"name": "Water Harpies Set", "tiers": [[2, "+4% Skill Critical Chance"], [3, "+5% Movement Speed, +1 Defense, +5% Magic Damage"]], "members": ["Feather of the Little Drop"]},
+ {"name": "Water Harpies Set", "tiers": [[2, "+4% Skill Critical Chance"], [3, "+5% Movement Speed, +1 Defense, +5% Magic Damage"]], "members": ["Feather of the Little Drop", "Anneau de l'Harpie Noyé"]},
+ // 2026-11-19 (in29, owner's Chinese craft-window tooltips 11/18～11/19); members = items whose tooltip shows the set
+ {"name": "土之鳥身女妖套裝", "zh": 1, "tiers": [[2, "+1 防禦"], [3, "+2 防禦、+5% 冷卻縮減、+1 攻擊傷害"]], "members": ["Anneau de l'Harpie Ecrasé"]},
+ {"name": "廢鐵套裝", "zh": 1, "tiers": [[2, "+4% 移動速度"], [3, "+0.15 魔力/秒、+0.15 耐力/秒、+0.15 HP/秒"], [4, "+3% 魔法傷害、+3% 物理傷害、+3% 投射物傷害"], [5, "+3 HP、+3 防禦"]], "members": ["Anneau de Ferraille", "Bracelet de Ferraille", "Gants de Ferraille", "Pièce de Ferraille", "Amulette de Ferraille"]},
+ {"name": "凶猛之熊套裝", "zh": 1, "tiers": [[2, "+2 最大耐力"], [3, "+5% 物理傷害"], [4, "+2.5% 生命偷取"]], "members": ["Anneau de Winnie"]},
  {"name": "Tenacious Necromancer Set", "tiers": [[2, "+0.3 Health/s"], [3, "+5 Max Stamina"], [4, "-15% Damage Reduction, +10% Block Chance"]], "members": ["Helmet of the Tenacious Necromancer"]}
 ], potions:[
  {"name": "Quality Endurance Fortifier III", "effects": ["Cooldown: 3600s", "Uses Remaining: 1", "Boosts your speed by 0.0325 for 15min", "Boosts your max mana by 7 for 15min", "Boosts your max endurance by 3.5 for 15min", "On consumption, applies 15min of cooldown on all fortifiers"]},

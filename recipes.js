@@ -5874,6 +5874,43 @@ null,
 "shot"
 ]
 ]
+},
+"2|第 2 層 - 飾品鍛造：維尼戒指": {
+"floor": 2,
+"items": [
+[
+2503,
+"Anneau de Winnie",
+60,
+[
+[
+"Copper Ingot",
+32
+],
+[
+"Bear Hide",
+64
+],
+[
+"Honey Residue",
+64
+],
+[
+"Honey",
+64
+],
+[
+"Bear Fat",
+32
+]
+],
+"55",
+"splus",
+"acc",
+null,
+"shot"
+]
+]
 }
 };
 window.SAO_RECIPE_QTY = {"Alchemist|Quality Health Potion I": 3, "Alchemist|Quality Health Potion II": 3, "Alchemist|Quality Health Potion III": 3, "Alchemist|Quality Mana Potion I": 3, "Alchemist|Quality Mana Potion II": 3, "Alchemist|Quality Mana Potion III": 3, "Alchemist|Quality Stamina Potion I": 3, "Alchemist|Quality Stamina Potion II": 3, "Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion II": 3, "3|Alchemist|Quality Mana Potion II": 3, "3|Alchemist|Quality Stamina Potion II": 3, "3|Alchemist|Quality Health Potion III": 3, "3|Alchemist|Quality Mana Potion III": 3, "3|Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion IV": 3, "3|Alchemist|Quality Health Potion V": 3, "3|Alchemist|Quality Health Potion VI": 3, "3|Alchemist|Quality Mana Potion V": 3, "3|Alchemist|Quality Mana Potion VI": 3, "3|Alchemist|Quality Stamina Potion V": 3, "3|Alchemist|Quality Stamina Potion VI": 3};

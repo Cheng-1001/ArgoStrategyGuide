@@ -22,11 +22,11 @@ const F2 = {
     sweet:   { n:"Sweet Forest", zh:"甜蜜森林" },
     silver:  { n:"Silver Fang Desert", zh:"銀牙沙漠" },
     hive:    { n:"Hive of Melliona Dungeon", zh:"Melliona 蜂巢（地下城）", note:"官方圖鑑有「Clé de Melliona」（Melliona 之鑰），應該是這個地下城的鑰匙。" },
-    ember:   { n:"Ember Nest", zh:"餘燼之巢" },
+    ember:   { n:"Ember Nest", zh:"烈焰巢穴" },
     emerald: { n:"Emerald Wings Forest", zh:"翠翼森林" },
     bay:     { n:"Rippling Monster Bay", zh:"漣漪怪物灣" },
     khesun:  { n:"Sanctuary of Khesûn", zh:"Khesûn 聖所", note:"NPC SamaelTVS 有「在 Khesûn 聖所擊殺 30 隻骷髏」任務。" },
-    veins:   { n:"The Veins of Sablemor", zh:"Sablemor 礦脈" },
+    veins:   { n:"The Veins of Sablemor", zh:"薩布勒莫礦脈" },
     tomb:    { n:"Necromancer's Tomb Dungeon", zh:"死靈法師之墓（地下城）" },
     taurusT: { n:"Taurus Tower", zh:"牛頭人之塔" },
     taurusD: { n:"Taurus Tower Dungeon", zh:"牛頭人之塔（地下城）" },
@@ -85,16 +85,16 @@ const F2 = {
     { id:"f2bull", area:[[20,-120],[90,-165],[190,-140],[205,-60],[170,10],[60,15],[15,-50]], kind:"mob", n:"Lake of the Bulls", zh:"公牛湖", x:118, z:-68, src:"ref", zone:"bull", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2sweet", area:[[330,-820],[420,-900],[600,-870],[640,-760],[600,-650],[450,-640],[340,-700]], kind:"mob", n:"Sweet Forest", zh:"甜蜜森林", x:484, z:-665, src:"ref", zone:"sweet", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2silver", area:[[-560,-640],[-420,-720],[-230,-680],[-170,-560],[-240,-450],[-420,-430],[-560,-500]], kind:"mob", n:"Silver Fang Desert", zh:"銀牙沙漠", x:-372, z:-556, src:"ref", zone:"silver", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
-    { id:"f2ember", area:[[-720,190],[-620,140],[-470,150],[-430,260],[-500,370],[-660,370],[-730,290]], kind:"mob", n:"Brazier Nest", zh:"餘燼之巢", x:-581, z:234, src:"ref", zone:"ember", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
+    { id:"f2ember", area:[[-720,190],[-620,140],[-470,150],[-430,260],[-500,370],[-660,370],[-730,290]], kind:"mob", n:"Brazier Nest", zh:"烈焰巢穴", x:-581, z:234, src:"ref", zone:"ember", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2emerald", area:[[-720,420],[-560,390],[-400,420],[-380,520],[-500,590],[-680,570]], kind:"mob", n:"Emerald Wings Forest", zh:"翠翼森林", x:-550, z:476, src:"ref", zone:"emerald", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2bay", area:[[-920,40],[-860,-30],[-720,-20],[-560,-10],[-560,120],[-700,170],[-880,180]], kind:"mob", n:"Wavy Monster Bay", zh:"漣漪怪物灣", x:-780, z:171, src:"ref", zone:"bay", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2khesun", area:[[-150,120],[-60,40],[80,60],[130,170],[80,280],[-60,300],[-160,230]], kind:"mob", n:"Sanctuary of Khesun", zh:"Khesûn 聖所", x:-6, z:181, src:"ref", zone:"khesun", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
-    { id:"f2veins", area:[[110,200],[230,170],[330,220],[320,330],[200,370],[110,300]], kind:"mob", n:"Sablemor Veins", zh:"Sablemor 礦脈", x:225, z:295, src:"ref", zone:"veins", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
+    { id:"f2veins", area:[[110,200],[230,170],[330,220],[320,330],[200,370],[110,300]], kind:"mob", n:"Sablemor Veins", zh:"薩布勒莫礦脈", x:225, z:295, src:"ref", zone:"veins", u:1, note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2oasis", area:[[730,220],[800,190],[880,220],[880,300],[800,330],[730,290]], kind:"mob", n:"Secret Oasis", zh:"秘密綠洲", x:798, z:253, src:"ref", zone:"oasis", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2altar", kind:"poi", n:"Altar of Two Moons", zh:"雙月祭壇", x:570, z:-470, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2baobab", kind:"poi", n:"Millennial Baobab", zh:"千年猴麵包樹", x:-88, z:-92, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2tarancave", kind:"poi", n:"Taran Cave", zh:"Taran 洞窟", x:-316, z:-94, u:1, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
-    { id:"f2nganga", kind:"poi", n:"Nganga Houses", zh:"Nganga 之家", x:-430, z:-428, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" }
+    { id:"f2nganga", kind:"poi", n:"Nganga Houses", zh:"恩岡加之家", x:-430, z:-428, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" }
   ],
 
   // boss spawn points from the reference map (Beta, map-local; names mapped to this site's monster names)
@@ -113,7 +113,7 @@ const F2 = {
     {title:"Honey at the door",src:"shot",date:"2026-11-15",xp:4000,money:1800,
      d:"Les ours de la Forêt sucrée déposent du miel devant une maison vide. L'Archéologue veut savoir d'où il vient. Comment : chassez les ours de la Forêt sucrée jusqu'à avoir 8 Résidus de Miel et 3 Griffes d'Ours, puis parlez à l'Archéologue et choisissez « J'ai ce que vous m'avez demandé ».",
      steps:["在 Forêt sucrée 打熊，收集 Résidus de Miel ×8","收集 Griffes d'Ours ×3","回去和考古學家說話，選「J'ai ce que vous m'avez demandé」（任務說明）"],
-     en:{0:"Get Honey Residues from the Sweet Forest bears - 0/8",1:"Get Bear Claws from the Sweet Forest bears - 0/3"}},
+     en:{0:"Get Honey Residues from the Sweet Forest bears - 0/8",1:"Get Bear Claws from the Sweet Forest bears - 0/3",2:"Bring 8 Honey Residues and 3 Bear Claws to the Archaeologist"}},
     {title:"Our bones will hold",src:"shot",date:"2026-11-15",xp:4000,money:1800,
      d:"Les gardiens de Khesun avaient juré que leurs os tiendraient. Ils tiennent encore, et frappent tout ce qui passe. Comment : tuez 12 squelettes dans le sanctuaire de Khesun, puis retournez voir le gardien devant l'entrée.",
      steps:["在凱順聖所擊殺 12 隻骷髏","回到入口前的守衛那裡（任務說明）"],
@@ -121,7 +121,7 @@ const F2 = {
     {title:"The storm omelette",src:"shot",date:"2026-11-15",xp:3600,money:1600,
      d:"Mama Esi veut refaire l'omelette des orages, comme quand les harpies apportaient la pluie à Marome. Comment : chassez les harpies de foudre de la baie ondoyante jusqu'à avoir 3 Œufs d'Harpie d'Eau, puis rapportez-les à Mama Esi.",
      steps:["在 baie ondoyante 打雷霆鳥身女妖，收集 Œufs d'Harpie d'Eau ×3","交給 Mama Esi（任務說明）"],
-     en:{0:"Get Water Harpy Eggs from the lightning harpies, rippling ba…（截圖裡被截斷）"}}
+     en:{0:"Get Water Harpy Eggs from the lightning harpies, rippling ba…（截圖裡被截斷）",1:"Bring 3 Water Harpy Eggs to Mama Esi"}}
   ]
 };
 
@@ -338,7 +338,8 @@ addNews(F3,"f3m",{"n_chenenoir": {"n": "Chêne noir", "zh": "黑橡樹", "news":
 // Three different items are all called 腐化碎片 (green / blue / purple tooltip, different icons, 11/12 03:26): the site keys them
 // "Corrupted Fragment" / "(2)" / "(3)". 2026-11-16 (owner decision A): the official catalogue 2380 (EPIC; paper / CustomModelData 12346
 // = model nerfs/item/ia_auto/corruptedore3, the round purple gem) is "(3)" (purple); green and blue have no catalogue id.
-// The Grimoire Faible Corruption needs 32 / 16 / 8 of them (row order of the craft window; the colour of each row is inferred).
+// The Grimoire Faible Corruption needs 32 / 16 / 8 of them. 2026-11-19 (in29 19.37.19～24): pointing at each material row of the
+// Bracelet Faible Corruption window shows the tooltip frame: 32 = green, 16 = blue, 8 = purple (confirmed, no longer inferred).
 const GAME_DROPS = {
   2: {"Winnie, Man's Best Friend": {set:[["Bear Hide",50],["Bear Claw",45],["Honey Residue",null]]},   // game lists Bear Fat only for the Forest Bear
       "Sanctuary Guardian": {pct:{"Runestone":30}},
@@ -380,8 +381,9 @@ const GAME_DROPS = {
 // 2026-11-13 (in26 04.05.26): Woodland Wolf LV 14 in 狼之森 (X 879 Z 866); wolves showing LV 1 near X 827 Z 878 (05.03.56) are not used
 // 2026-11-17 (in27): Luminescent Spider 15 (11-18 03.48.58), Labyrinth Treant 18 (nameplate 19.05.22; the official news said 19),
 // corrupted Sylnovar / Sylvaer archers 17 (11-18 02.53.07 / 03.44.17)
+// 2026-11-19 (in29): Lightning Harpy 12 (05.05.01), Fire Harpy 12 (05.09.36), Earth Harpy 12 (05.14.46), Magnus 15 (05.28.19), Stone Golem 13 (05.29.24), Winnie 11 (00.32.21)
 // 2026-11-18 (in28): Cave Goblin 16 (19.28.39), Juvenile Treant 16 (19.35.09), Forest Bear 11 (03.30.00, 甜蜜森林), Savanna Wolf 11 (03.40.50, 銀牙沙漠)
-[[3,"Cave Goblin",16],[3,"Juvenile Treant",16],[2,"Forest Bear",11],[2,"Savanna Wolf",11],[3,"Woodland Wolf",14],[3,"Luminescent Spider",15],[3,"Labyrinth Treant",18],[3,"Sylnovar Archer Corrompu",17],[3,"Sylvaer Archer Corrompu",17]].forEach(([f,n,lv])=>{const m=(f===2?F2:F3).M.find(x=>x.name===n);if(!m)throw new Error("lvShot: no monster "+n);m.lvShot=lv});
+[[2,"Lightning Harpy",12],[2,"Fire Harpy",12],[2,"Earth Harpy",12],[2,"Magnus, Colossus of the Veins",15],[2,"Stone Golem",13],[2,"Winnie, Man's Best Friend",11],[3,"Cave Goblin",16],[3,"Juvenile Treant",16],[2,"Forest Bear",11],[2,"Savanna Wolf",11],[3,"Woodland Wolf",14],[3,"Luminescent Spider",15],[3,"Labyrinth Treant",18],[3,"Sylnovar Archer Corrompu",17],[3,"Sylvaer Archer Corrompu",17]].forEach(([f,n,lv])=>{const m=(f===2?F2:F3).M.find(x=>x.name===n);if(!m)throw new Error("lvShot: no monster "+n);m.lvShot=lv});
 
 // area = rough outline drawn by this site from the wiki map terrain (not the reference map polygons), like floor 1
 // spots that stand for a monster zone list every monster of that zone (wiki + official news)

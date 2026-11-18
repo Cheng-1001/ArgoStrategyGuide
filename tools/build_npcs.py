@@ -147,7 +147,9 @@ NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,6
        (3,'accessoriesBlacksmith','P3 - Craft Artefact Manteau Crocs Brumeux',727,801,'2026-11-13','洞穴裡，Y 53；房間有告示牌「SI AUCUN NPC PREVENEZ LA MODERATION」'),
        (3,'accessoriesBlacksmith','P3 - Forgeron Gants Corrompus',923,490,'2026-11-13','Y 99；遊戲視窗「P3 - 鐵匠 手套 Corrompus」'),
        # 03.30.50: the NPC fills the frame ~2-3 blocks in front of the player (520.6, -709.1, facing north); the targeted block (520, -717) is behind it
-       (2,'other','蜂巢考古學家',520,-712,'2026-11-14','梅莉歐娜蜂巢入口旁，Y 74；遊戲名牌「[NPC] 蜂巢考古學家」、視窗「蜜蜂地下城 - 戰利品資訊」。位置是推測：NPC 在玩家正前方約 2～3 格（依畫面大小估距離），準星打到它後面的方塊 X 520 Z -717')]
+       (2,'other','蜂巢考古學家',520,-712,'2026-11-14','梅莉歐娜蜂巢入口旁，Y 74；遊戲名牌「[NPC] 蜂巢考古學家」、視窗「蜜蜂地下城 - 戰利品資訊」。位置是推測：NPC 在玩家正前方約 2～3 格（依畫面大小估距離），準星打到它後面的方塊 X 520 Z -717'),
+       # 2026-11-19 (in29 00.32.40～42, F3 player 597.1 / 69 / -721.6, targeted block 598, 70, -723): name = the window title (nameplate is ???)
+       (2,'accessoriesBlacksmith','第 2 層 - 飾品鍛造：維尼戒指',597,-722,'2026-11-19','甜蜜森林，Y 69；名牌「???」；只做維尼之戒。參考互動地圖附近沒有這位（只有 Honeyed Loot Buyer、Bees Weapon Blacksmith）；它的熊飾品鐵匠 Bull & Bear Accessories Blacksmith 在 -602,-285，差約 1200 格、是多品項鐵匠，判斷不是同一位')]
 for fl,rs in F23.items():
     for r in rs:
         if (fl,r['n']) in CALC23: x,z,d,nt=CALC23[(fl,r['n'])]; r.update(x=x,z=z,src='calc')

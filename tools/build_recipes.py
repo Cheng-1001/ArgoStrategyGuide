@@ -469,6 +469,9 @@ SHOTS23 = {
                                       for n in ("Pioche Nécrotique", "Houe Nécrotique", "Hache Nécrotique")],
     # floor 2, nameplate [NPC] 蜂巢考古學家, window「蜜蜂地下城 - 戰利品資訊」(03.30.54): RARE key, 1 758.72 Col (obtain line: 1750)
     (2, "蜂巢考古學家"): [("Clé de Melliona", "b", None, [], "1758.72", "key")],
+    # 2026-11-19 (in29)
+    # Window「第 2 層 - 飾品鍛造：維尼戒指」(00.32.46 / 00.32.52, 材料 0/5, two scrolls = all 5 rows): MYTHIC 1 min, 55 Col
+    (2, "第 2 層 - 飾品鍛造：維尼戒指"): [("Anneau de Winnie", "splus", 60, [["Copper Ingot", 32], ["Bear Hide", 64], ["Honey Residue", 64], ["Honey", 64], ["Bear Fat", 32]], "55", "acc")],
 }
 OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
          "Quality Patience Fortifier III": 2001, "Quality Resistance Fortifier III": 2000, "Quality Vitality Fortifier III": 1996,
@@ -497,7 +500,8 @@ OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quali
          "Anneau des Bois": 2511, "Anneau Brumeux": 2512, "Anneau Orcien": 2513, "Anneau des Bois Sombres": 2515, "Anneau de la Toile": 2516, "Anneau Spectral": 2517, "Anneau Luminescent": 2518,
          "Gants des Bois": 2063, "Gants Brumeux": 2065, "Gants des Bois Sombres": 2069, "Gants de la Toile": 2070, "Gants Spectral": 2071, "Gants Luminescents": 2072,
          "Bracelet des Bois": 1616, "Bracelet Brumeux": 1617, "Bracelet Orcien": 1618, "Bracelet des Bois Sombres": 1620, "Bracelet de la Toile": 1621, "Bracelet Spectral": 1622, "Bracelet Luminescent": 1623,
-         "Manteau des Crocs Brumeux": 1541, "Gants Faible Corruption": 2076, "Pioche Nécrotique": 2694, "Houe Nécrotique": 2700, "Hache Nécrotique": 2706, "Clé de Melliona": 1830}
+         "Manteau des Crocs Brumeux": 1541, "Gants Faible Corruption": 2076, "Pioche Nécrotique": 2694, "Houe Nécrotique": 2700, "Hache Nécrotique": 2706, "Clé de Melliona": 1830,
+         "Anneau de Winnie": 2503}
 # recipes whose window lists more materials than the screenshot shows: number of unseen rows (site shows ??? for them)
 MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1}
 LV23 = {"Quality Health Potion II": 5, "Quality Mana Potion II": 5, "Quality Stamina Potion II": 5, "Quality Health Potion III": 8,

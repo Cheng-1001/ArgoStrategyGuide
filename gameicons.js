@@ -75,6 +75,7 @@ window.SAO_GAMEICONS = {
  "Occult Ring": "icons/game/occult_ring.png",       // 2026-11-07 (user: 神祕戒指圖示要檢查): official icon is an older black ring; game shows a crimson one. Auction tile 2026-11-07 00:47:31, k≈4.70
  "Occult Amulet": "icons/game/occult_amulet.png",   // same check: official icon is a grey chain; game chain is dark red. Auction tile 2026-11-04 19:20:11, k≈4.66 (4 screenshots agree)
  // 2026-11-07 merchant audit (user: 所有的商人都要再看一次): shop-window icons that differed from the site.
+ "Gants de Ferraille": "icons/game/gants_de_ferraille.png",   // 2026-11-19 (in29): official model texture nerfs:item/ia_auto/gantsferraille ×4 = the game icon (05.19.48 craft window); equip.png slot 32 showed a brown glove with skin-coloured fingers
  "Occult Gloves": "icons/game/occult_gloves.png",       // shop version (Occult Merchant - Gloves 03:18, level 10) = official model texture nerfs:item/ia_auto/gantsocculte ×4; the auction's black glove is the older level-14 version
  "Copper Amulet": "icons/game/copper_amulet.png",       // nerfs:item/ia_auto/amulettecuivre ×4 = Copper Accessories window 2026-11-03 22:40:39 (catalogue showed a black chain)
  "Iron Amulet": "icons/game/iron_amulet.png",           // nerfs:item/ia_auto/amulettefer ×4 = Iron Accessories window 22:40:21
