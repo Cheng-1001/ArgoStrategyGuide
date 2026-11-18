@@ -28,7 +28,7 @@ STATUS_OF = {'E1': 'unresolved', 'E2': 'ambiguous', 'E3': 'ambiguous'}
 # data written by Apps Script / Actions, not by builds: loaded (W11 reads reports), never walked (design Q13, G5)
 EXTERNAL_FILES = {'reports.js': '玩家回報（Apps Script 寫入）', 'jmmeta.js': '探索地圖紀錄（Actions 寫入）',
                   'formcfg.js': '回報表單設定（Apps Script 寫入）'}
-DATA_FILES = ['data.js', 'data23.js', 'bosses.js', 'hints.js', 'codex.js', 'mobphotos.js', 'mainq.js', 'equip.js',
+DATA_FILES = ['data.js', 'data23.js', 'bosses.js', 'hints.js', 'codex.js', 'mobphotos.js', 'mobrenders.js', 'mainq.js', 'equip.js',
               'props.js', 'gameinfo.js', 'buyback.js', 'npcs.js', 'changelog.js', 'recipes.js', 'classes.js',
               'gameskills.js', 'events.js', 'gacha.js', 'gamestats.js', 'sets.js', 'zhnames.js', 'staticons.js',
               'gameicons.js', 'recicons.js']
@@ -74,7 +74,7 @@ TIMES = re.compile(r'^(.+?)\s*[×x]\s*\d+\s*$')          # "Colossus Fragments �
 MAPS = {
     'SAO.ZONES', 'SAO.PHOTO', 'SAO.ITEMS', 'SAO.ITEMS{}.st', 'SAO23_ITEMS', 'SAO23_ITEMS{}[6]', 'SAO23.floors',
     'SAO23.floors{}.zones', 'SAO23.extra', 'SAO23.unknown', 'SAO_HINTS', 'SAO_HINTS{}', 'SAO_CODEX', 'SAO_CODEX{}',
-    'SAO_MOBPHOTO.srcs', 'SAO_MOBPHOTO.by', 'SAO_MOBPHOTO.by{}', 'SAO_MAINQ', 'SAO_MAINQ{}[].en', 'SAO_MAINQ{}[].img', 'SAO23.floors{}.quests[].en',
+    'SAO_MOBPHOTO.srcs', 'SAO_MOBPHOTO.by', 'SAO_MOBPHOTO.by{}', 'SAO_MOBRENDER.by', 'SAO_MOBRENDER.by{}', 'SAO_MAINQ', 'SAO_MAINQ{}[].en', 'SAO_MAINQ{}[].img', 'SAO23.floors{}.quests[].en',
     'SAO_EQUIP[][7]', 'SAO_PROPS[][6]', 'SAO_BUYBACK.shops', 'SAO_BUYBACK.items', 'SAO_NPCS', 'SAO_NPC_CALC',
     'SAO_CHANGELOG_SUM', 'SAO_RECIPES', 'SAO_RECIPE_QTY', 'SAO_GAMESKILLS', 'SAO_GAMESKILLS{}.icons',
     'SAO_EVENTS.eqPatch.items', 'SAO_EVENTS.eqPatch.items{}.set', 'SAO_GAMESTATS.items', 'SAO_ZHNAMES.search',
@@ -141,6 +141,7 @@ COVERAGE = {
     'SAO_HINTS{}{key}': 'mob_hint',
     'SAO_CODEX{}{key}': 'codex_num',
     'SAO_MOBPHOTO.by{}{key}': 'mob_photo',
+    'SAO_MOBRENDER.by{}{key}': 'mob_photo',   # owner's 3D renders (2026-11-18): key = site monster name on that floor
     'SAO_MAINQ{}[].npc': 'npc_mainq',
     'SAO_GAMEINFO.items[].oid[]': 'gi_oid',
     'SAO_GAMEINFO.items[].site': 'gi_site',
@@ -572,6 +573,9 @@ SKIP = {
     'SAO_MOBPHOTO.by{}{}.old[].v': 'R21',
     'SAO_MOBPHOTO.by{}{}.old[].f': 'R21',
     'SAO_MOBPHOTO.by{}{}.f': 'R21',
+    'SAO_MOBRENDER.src': 'R1',
+    'SAO_MOBRENDER.by{key}': 'R16',
+    'SAO_MOBRENDER.by{}{}': 'R42',
     'SAO_MOBPHOTO.by{}{}.rows[].fr': 'RN',
     'SAO_MOBPHOTO.by{}{}.rows[].ch[]': 'R21',
     'SAO_MOBPHOTO.by{}{}.rows[].v': 'R21',

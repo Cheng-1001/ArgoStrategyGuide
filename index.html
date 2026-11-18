@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="dcb63e9e95">
+<meta name="sao-build" content="83439b2044">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -897,18 +897,19 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 </aside>
 
 <script src="data.js?v=40b98aa3"></script>
-<script src="data23.js?v=ba518bfb"></script>
+<script src="data23.js?v=37548379"></script>
 <script src="bosses.js?v=77b7ad43"></script>
 <script src="reports.js?v=5eab9ad2"></script>
 <script src="hints.js?v=fcf000d6"></script>
 <script src="codex.js?v=48141603"></script>
 <script src="mobphotos.js?v=5479cb35"></script>
+<script src="mobrenders.js?v=f0a0e8e1"></script>
 <script src="mainq.js?v=8f000fd8"></script>
 <script src="equip.js?v=afe010ec"></script>
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=a3091072"></script><script src="buyback.js?v=4371e5e3"></script>
 <script src="npcs.js?v=8952b979"></script>
-<script src="changelog.js?v=c54dfcb2"></script>
+<script src="changelog.js?v=d0a09a4d"></script>
 <script src="recipes.js?v=e40831c3"></script>
 <script src="jmmeta.js?v=8935be97"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -1145,7 +1146,10 @@ const flBadge=f=>`<span class="fl fl${f}">F${f}</span>`;
 const cls=t=>t==="Boss"?"boss":t==="Mini-Boss"?"mini":t==="Minion"?"minion":"";
 // monster pictures: the official news images (mobphotos.js, every floor; 使用者 2026-11-06 選 A), else the three old floor 1 photos
 const MPH=window.SAO_MOBPHOTO||{by:{}};const photoOf=m=>((MPH.by||{})[m.floor]||{})[m.name]||(m.floor===1&&S1.PHOTO[m.name]?{f:S1.PHOTO[m.name]}:null);
-const face=m=>{const p=photoOf(m);return p&&p.f?`<img class="face" src="${p.f}" alt="">`:`<span aria-hidden="true">${m.icon}</span>`};
+// avatar: the owner's 3D render when there is one (mobrenders.js, owner 2026-11-18 「怪物圖片要更新」), else the news image / old photo;
+// the「官網公布的模樣」section keeps the news images
+const MRD=(window.SAO_MOBRENDER||{}).by||{},renderOf=m=>(MRD[m.floor]||{})[m.name]||null;
+const face=m=>{const r=renderOf(m),p=photoOf(m),f=r||(p&&p.f);return f?`<img class="face" src="${f}" alt="">`:`<span aria-hidden="true">${m.icon}</span>`};
 // the news' balance lines ("HP: 220 → 250 (+14%)") in Chinese
 const CH_ZH={HP:"生命",Damage:"傷害",Speed:"速度",Level:"等級",Attacks:"招式","Projectile damage taken":"受到的投射物傷害"};
 const chZh=t=>{const m=/^(（[^）]*）)?\s*([A-Za-z ]+):\s*(.+)$/.exec(t);if(!m)return t;const v=m[3].replace(/(\d+) attack\(s\) (weakened|strengthened)/,(_,n,w)=>`${n} 招${w==="weakened"?"減弱":"加強"}`).replace(/\s*\(([+-]?\d+)\s*%\)/,"（$1%）");return`${m[1]||""}${CH_ZH[m[2].trim()]||m[2].trim()} ${v}`};
@@ -1267,6 +1271,7 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   ${(()=>{const C=((window.SAO_CODEX||{})[m.floor]||{})[m.num];return C?`<div class="hint cdx"><span class="hk">遊戲圖鑑說明</span><span class="muted">#${esc(m.num)}${C.reg?"・"+esc(C.reg):""}${C.n!==m.name?"・圖鑑名稱 "+esc(C.n):""}</span><span>${esc(C.desc)}</span></div>`:""})()}
   ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
   ${photoNote(m)}
+  ${renderOf(m)?`<div class="note srcn">頭像是站長在自己電腦上畫的 3D 圖：貼圖和零件取自遊戲資源包，骨架位置取自 Exiled Order 網站的模型資料，畫好後和遊戲圖鑑截圖核對過是同一隻。</div>`:""}
   ${repBlock(m)}
   <div class="note srcn">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>`}
 // ---- player reports ----
