@@ -1,0 +1,380 @@
+[
+ {
+  "no": "066",
+  "model": "bull_lake",
+  "file": "render_066_bull_lake.png",
+  "codex_name": "Taureau",
+  "basis": "編號 066 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_lac_taureaux-bull_lake」的 codice 欄位＝66（區域 p2-lago-toros，法文名「Taureau」，西文名「Toro」）。模型是同一個 id 的 /bestiario/3d/p2_lac_taureaux-bull_lake.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "067",
+  "model": "taurus_hammer_lake",
+  "file": "render_067_taurus_hammer_lake.png",
+  "codex_name": "Taureau Monstrueux",
+  "basis": "編號 067 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_lac_taureaux-taurus_hammer_lake」的 codice 欄位＝67（區域 p2-lago-toros，法文名「Taureau Monstrueux」，西文名「Toro monstruoso」）。模型是同一個 id 的 /bestiario/3d/p2_lac_taureaux-taurus_hammer_lake.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "068",
+  "model": "wolf-gray",
+  "file": "render_068_wolf-gray.png",
+  "codex_name": "Loup des Montagnes",
+  "basis": "編號 068 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_desert-wolf-gray」的 codice 欄位＝68（區域 p2-desierto，法文名「Loup des Montagnes」，西文名「Lobo de las montañas」）。模型是同一個 id 的 /bestiario/3d/p2_desert-wolf-gray.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "069",
+  "model": "wolf-red",
+  "file": "render_069_wolf-red.png",
+  "codex_name": "Loup des Savanes",
+  "basis": "編號 069 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_desert-wolf-red」的 codice 欄位＝69（區域 p2-desierto，法文名「Loup des Savanes」，西文名「Lobo de la sabana」）。模型是同一個 id 的 /bestiario/3d/p2_desert-wolf-red.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "070",
+  "model": "bear",
+  "file": "render_070_bear.png",
+  "codex_name": "Ours de la Forêt",
+  "basis": "編號 070 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_foret_sucree-bear」的 codice 欄位＝70（區域 p2-bosque-dulce，法文名「Ours de la Forêt」，西文名「Oso del bosque」）。模型是同一個 id 的 /bestiario/3d/p2_foret_sucree-bear.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "073",
+  "model": "voxelspawns_harpy_lightning",
+  "file": "render_073_voxelspawns_harpy_lightning.png",
+  "codex_name": "Harpy de Foudre",
+  "basis": "編號 073 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_harpies-voxelspawns_harpy_lightning」的 codice 欄位＝73（區域 p2-arpias，法文名「Harpy de Foudre」，西文名「Arpía del rayo」）。模型是同一個 id 的 /bestiario/3d/p2_harpies-voxelspawns_harpy_lightning.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "077",
+  "model": "skeleton_warrior_samus",
+  "file": "render_077_skeleton_warrior_samus.png",
+  "codex_name": "Squelette du Sanctuaire",
+  "basis": "編號 077 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_sanctuaire-skeleton_warrior_samus」的 codice 欄位＝77（區域 p2-santuario，法文名「Squelette du Sanctuaire」，西文名「Esqueleto del santuario (guerrero)」）。模型是同一個 id 的 /bestiario/3d/p2_sanctuaire-skeleton_warrior_samus.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "078",
+  "model": "skeleton_archer_samus",
+  "file": "render_078_skeleton_archer_samus.png",
+  "codex_name": "Squelette du Sanctuaire",
+  "basis": "編號 078 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_sanctuaire-skeleton_archer_samus」的 codice 欄位＝78（區域 p2-santuario，法文名「Squelette du Sanctuaire」，西文名「Esqueleto del santuario (arquero)」）。模型是同一個 id 的 /bestiario/3d/p2_sanctuaire-skeleton_archer_samus.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "079",
+  "model": "skeleton_shaman_samus",
+  "file": "render_079_skeleton_shaman_samus.png",
+  "codex_name": "Squelette du Sanctuaire",
+  "basis": "編號 079 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_sanctuaire-skeleton_shaman_samus」的 codice 欄位＝79（區域 p2-santuario，法文名「Squelette du Sanctuaire」，西文名「Esqueleto del santuario (chamán)」）。模型是同一個 id 的 /bestiario/3d/p2_sanctuaire-skeleton_shaman_samus.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "082",
+  "model": "voxelspawns_witch",
+  "file": "render_082_voxelspawns_witch.png",
+  "codex_name": "Velindra la Tisseuse",
+  "basis": "編號 082 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_oasis-voxelspawns_witch」的 codice 欄位＝82（區域 p2-oasis，法文名「Velindra la Tisseuse」，西文名「Velindra la Tejedora」）。模型是同一個 id 的 /bestiario/3d/p2_oasis-voxelspawns_witch.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "083",
+  "model": "minotaur",
+  "file": "render_083_minotaur.png",
+  "codex_name": "Rugiboeuf, Le Gardien",
+  "basis": "編號 083 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_rugiboeuf-minotaur」的 codice 欄位＝83（區域 p2-rugibuey，法文名「Rugiboeuf, Le Gardien」，西文名「Rugibuey, el Guardián」）。模型是同一個 id 的 /bestiario/3d/p2_rugiboeuf-minotaur.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "087",
+  "model": "dskeleton_footman_cinder_em",
+  "file": "render_087_dskeleton_footman_cinder_em.png",
+  "codex_name": "Squelette de Feu",
+  "basis": "編號 087 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tombeau-dskeleton_footman_cinder_em」的 codice 欄位＝87（區域 p2-tumba，法文名「Squelette de Feu」，西文名「Esqueleto de fuego」）。模型是同一個 id 的 /bestiario/3d/p2_tombeau-dskeleton_footman_cinder_em.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "088",
+  "model": "dskeleton_swordman_cinder_em",
+  "file": "render_088_dskeleton_swordman_cinder_em.png",
+  "codex_name": "Squelette Épéiste de Feu",
+  "basis": "編號 088 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tombeau-dskeleton_swordman_cinder_em」的 codice 欄位＝88（區域 p2-tumba，法文名「Squelette Épéiste de Feu」，西文名「Esqueleto espadachín de fuego」）。模型是同一個 id 的 /bestiario/3d/p2_tombeau-dskeleton_swordman_cinder_em.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "089",
+  "model": "dskeleton_halberdier_cinder_em",
+  "file": "render_089_dskeleton_halberdier_cinder_em.png",
+  "codex_name": "Squelette Lancier de Feu",
+  "basis": "編號 089 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tombeau-dskeleton_halberdier_cinder_em」的 codice 欄位＝89（區域 p2-tumba，法文名「Squelette Lancier de Feu」，西文名「Esqueleto lancero de fuego」）。模型是同一個 id 的 /bestiario/3d/p2_tombeau-dskeleton_halberdier_cinder_em.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "090",
+  "model": "dskeleton_archer_cinder_em",
+  "file": "render_090_dskeleton_archer_cinder_em.png",
+  "codex_name": "Squelette Archer de Feu",
+  "basis": "編號 090 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tombeau-dskeleton_archer_cinder_em」的 codice 欄位＝90（區域 p2-tumba，法文名「Squelette Archer de Feu」，西文名「Esqueleto arquero de fuego」）。模型是同一個 id 的 /bestiario/3d/p2_tombeau-dskeleton_archer_cinder_em.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "091",
+  "model": "dskeleton_wizard_cinder_em",
+  "file": "render_091_dskeleton_wizard_cinder_em.png",
+  "codex_name": "Squelette Sorcier de Feu",
+  "basis": "編號 091 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tombeau-dskeleton_wizard_cinder_em」的 codice 欄位＝91（區域 p2-tumba，法文名「Squelette Sorcier de Feu」，西文名「Esqueleto hechicero de fuego」）。模型是同一個 id 的 /bestiario/3d/p2_tombeau-dskeleton_wizard_cinder_em.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "092",
+  "model": "dskeleton_tank_cinder_em",
+  "file": "render_092_dskeleton_tank_cinder_em.png",
+  "codex_name": "Squelette Tank de Feu",
+  "basis": "編號 092 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tombeau-dskeleton_tank_cinder_em」的 codice 欄位＝92（區域 p2-tumba，法文名「Squelette Tank de Feu」，西文名「Esqueleto tanque de fuego」）。模型是同一個 id 的 /bestiario/3d/p2_tombeau-dskeleton_tank_cinder_em.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "097",
+  "model": "dungeonskeletonsskeletonsword",
+  "file": "render_097_dungeonskeletonsskeletonsword.png",
+  "codex_name": "Squelette de Sable",
+  "basis": "編號 097 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tour_taurus-dungeonskeletonsskeletonsword」的 codice 欄位＝97（區域 p2-torre-taurus，法文名「Squelette de Sable」，西文名「Esqueleto de arena (espada)」）。模型是同一個 id 的 /bestiario/3d/p2_tour_taurus-dungeonskeletonsskeletonsword.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "098",
+  "model": "dungeonskeletonsskeletonspear",
+  "file": "render_098_dungeonskeletonsskeletonspear.png",
+  "codex_name": "Squelette de Sable",
+  "basis": "編號 098 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tour_taurus-dungeonskeletonsskeletonspear」的 codice 欄位＝98（區域 p2-torre-taurus，法文名「Squelette de Sable」，西文名「Esqueleto de arena (lanza)」）。模型是同一個 id 的 /bestiario/3d/p2_tour_taurus-dungeonskeletonsskeletonspear.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "099",
+  "model": "dungeonskeletonsskeletonarcher",
+  "file": "render_099_dungeonskeletonsskeletonarcher.png",
+  "codex_name": "Squelette de Sable",
+  "basis": "編號 099 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tour_taurus-dungeonskeletonsskeletonarcher」的 codice 欄位＝99（區域 p2-torre-taurus，法文名「Squelette de Sable」，西文名「Esqueleto de arena (arquero)」）。模型是同一個 id 的 /bestiario/3d/p2_tour_taurus-dungeonskeletonsskeletonarcher.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "100",
+  "model": "taurus_hammer_brown",
+  "file": "render_100_taurus_hammer_brown.png",
+  "codex_name": "Gardien",
+  "basis": "編號 100 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tour_taurus-taurus_hammer_brown」的 codice 欄位＝100（區域 p2-torre-taurus，法文名「Gardien」，西文名「Guardián (pardo)」）。模型是同一個 id 的 /bestiario/3d/p2_tour_taurus-taurus_hammer_brown.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "101",
+  "model": "taurus_hammer_gray",
+  "file": "render_101_taurus_hammer_gray.png",
+  "codex_name": "Gardien",
+  "basis": "編號 101 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p2_tour_taurus-taurus_hammer_gray」的 codice 欄位＝101（區域 p2-torre-taurus，法文名「Gardien」，西文名「Guardián (gris)」）。模型是同一個 id 的 /bestiario/3d/p2_tour_taurus-taurus_hammer_gray.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "103",
+  "model": "wolf-brown",
+  "file": "render_103_wolf-brown.png",
+  "codex_name": "Loup des bois",
+  "basis": "編號 103 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_loups-wolf-brown」的 codice 欄位＝103（區域 p3-lobos，法文名「Loup des bois」，西文名「Lobo de los bosques」）。模型是同一個 id 的 /bestiario/3d/p3_loups-wolf-brown.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "105",
+  "model": "wolf-spectral",
+  "file": "render_105_wolf-spectral.png",
+  "codex_name": "Loup brumeux",
+  "basis": "編號 105 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_loups-wolf-spectral」的 codice 欄位＝105（區域 p3-lobos，法文名「Loup brumeux」，西文名「Lobo brumoso」）。模型是同一個 id 的 /bestiario/3d/p3_loups-wolf-spectral.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "106",
+  "model": "wolf-spectral-boss",
+  "file": "render_106_wolf-spectral-boss.png",
+  "codex_name": "Alpha Spectral",
+  "basis": "編號 106 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_loups-wolf-spectral-boss」的 codice 欄位＝106（區域 p3-lobos，法文名「Alpha Spectral」，西文名「Alfa espectral」）。模型是同一個 id 的 /bestiario/3d/p3_loups-wolf-spectral-boss.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "107",
+  "model": "sylvaer_archer",
+  "file": "render_107_sylvaer_archer.png",
+  "codex_name": "Sylvaer Archer Exilé",
+  "basis": "編號 107 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_elfes-sylvaer_archer」的 codice 欄位＝107（區域 p3-elfos，法文名「Sylvaer Archer Exilé」，西文名「Arquero sylvaer exiliado」）。模型是同一個 id 的 /bestiario/3d/p3_elfes-sylvaer_archer.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "108",
+  "model": "sylvaer_guard",
+  "file": "render_108_sylvaer_guard.png",
+  "codex_name": "Sylvaer Garde Exilé",
+  "basis": "編號 108 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_elfes-sylvaer_guard」的 codice 欄位＝108（區域 p3-elfos，法文名「Sylvaer Garde Exilé」，西文名「Guardia sylvaer exiliado」）。模型是同一個 id 的 /bestiario/3d/p3_elfes-sylvaer_guard.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "109",
+  "model": "sylvaer_mage",
+  "file": "render_109_sylvaer_mage.png",
+  "codex_name": "Sylvaer Mage Exilé",
+  "basis": "編號 109 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_elfes-sylvaer_mage」的 codice 欄位＝109（區域 p3-elfos，法文名「Sylvaer Mage Exilé」，西文名「Mago sylvaer exiliado」）。模型是同一個 id 的 /bestiario/3d/p3_elfes-sylvaer_mage.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "110",
+  "model": "sylnovar_archer",
+  "file": "render_110_sylnovar_archer.png",
+  "codex_name": "Sylnovar Archer Exilé",
+  "basis": "編號 110 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_elfes-sylnovar_archer」的 codice 欄位＝110（區域 p3-elfos，法文名「Sylnovar Archer Exilé」，西文名「Arquero sylnovar exiliado」）。模型是同一個 id 的 /bestiario/3d/p3_elfes-sylnovar_archer.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "111",
+  "model": "sylnovar_guard",
+  "file": "render_111_sylnovar_guard.png",
+  "codex_name": "Sylnovar Garde Exilé",
+  "basis": "編號 111 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_elfes-sylnovar_guard」的 codice 欄位＝111（區域 p3-elfos，法文名「Sylnovar Garde Exilé」，西文名「Guardia sylnovar exiliado」）。模型是同一個 id 的 /bestiario/3d/p3_elfes-sylnovar_guard.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "112",
+  "model": "sylnovar_mage",
+  "file": "render_112_sylnovar_mage.png",
+  "codex_name": "Sylnovar Mage Exilé",
+  "basis": "編號 112 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_elfes-sylnovar_mage」的 codice 欄位＝112（區域 p3-elfos，法文名「Sylnovar Mage Exilé」，西文名「Mago sylnovar exiliado」）。模型是同一個 id 的 /bestiario/3d/p3_elfes-sylnovar_mage.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "113",
+  "model": "gm_orcs_axe_v1",
+  "file": "render_113_gm_orcs_axe_v1.png",
+  "codex_name": "Orc Guerrier",
+  "basis": "編號 113 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_orcs-gm_orcs_axe_v1」的 codice 欄位＝113（區域 p3-orcos，法文名「Orc Guerrier」，西文名「Orco guerrero」）。模型是同一個 id 的 /bestiario/3d/p3_orcs-gm_orcs_axe_v1.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "114",
+  "model": "gm_orcs_shaman_v1",
+  "file": "render_114_gm_orcs_shaman_v1.png",
+  "codex_name": "Orc Shaman",
+  "basis": "編號 114 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_orcs-gm_orcs_shaman_v1」的 codice 欄位＝114（區域 p3-orcos，法文名「Orc Shaman」，西文名「Orco chamán」）。模型是同一個 id 的 /bestiario/3d/p3_orcs-gm_orcs_shaman_v1.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "115",
+  "model": "gm_orcs_samurai_v1",
+  "file": "render_115_gm_orcs_samurai_v1.png",
+  "codex_name": "Orc Samourai",
+  "basis": "編號 115 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_orcs-gm_orcs_samurai_v1」的 codice 欄位＝115（區域 p3-orcos，法文名「Orc Samourai」，西文名「Orco samurái」）。模型是同一個 id 的 /bestiario/3d/p3_orcs-gm_orcs_samurai_v1.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "116",
+  "model": "gm_orcs_wolf_v1",
+  "file": "render_116_gm_orcs_wolf_v1.png",
+  "codex_name": "Loup Esclave",
+  "basis": "編號 116 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_orcs-gm_orcs_wolf_v1」的 codice 欄位＝116（區域 p3-orcos，法文名「Loup Esclave」，西文名「Lobo esclavo」）。模型是同一個 id 的 /bestiario/3d/p3_orcs-gm_orcs_wolf_v1.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "117",
+  "model": "gm_orcs_samurai_boss",
+  "file": "render_117_gm_orcs_samurai_boss.png",
+  "codex_name": "Tribe Chief",
+  "basis": "編號 117 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_orcs-gm_orcs_samurai_boss」的 codice 欄位＝117（區域 p3-orcos，法文名「Tribe Chief」，西文名「Jefe de la tribu」）。模型是同一個 id 的 /bestiario/3d/p3_orcs-gm_orcs_samurai_boss.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "118",
+  "model": "wolfhawk_stormcloud",
+  "file": "render_118_wolfhawk_stormcloud.png",
+  "codex_name": "Adoryll",
+  "basis": "編號 118 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_orcs-wolfhawk_stormcloud」的 codice 欄位＝118（區域 p3-orcos，法文名「Adoryll」，西文名「Adoryll」）。模型是同一個 id 的 /bestiario/3d/p3_orcs-wolfhawk_stormcloud.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "119",
+  "model": "banditafloor3",
+  "file": "render_119_banditafloor3.png",
+  "codex_name": "Bandit Assassin",
+  "basis": "編號 119 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_bandits-banditafloor3」的 codice 欄位＝119（區域 p3-bandidos，法文名「Bandit Assassin」，西文名「Bandido asesino」）。模型是同一個 id 的 /bestiario/3d/p3_bandits-banditafloor3.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "120",
+  "model": "banditbfloor3",
+  "file": "render_120_banditbfloor3.png",
+  "codex_name": "Bandit Robuste",
+  "basis": "編號 120 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_bandits-banditbfloor3」的 codice 欄位＝120（區域 p3-bandidos，法文名「Bandit Robuste」，西文名「Bandido robusto」）。模型是同一個 id 的 /bestiario/3d/p3_bandits-banditbfloor3.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "122",
+  "model": "banditbfloor3boss",
+  "file": "render_122_banditbfloor3boss.png",
+  "codex_name": "Chef des bandits",
+  "basis": "編號 122 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_bandits-banditbfloor3boss」的 codice 欄位＝122（區域 p3-bandidos，法文名「Chef des bandits」，西文名「Jefe de los bandidos」）。模型是同一個 id 的 /bestiario/3d/p3_bandits-banditbfloor3boss.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "123",
+  "model": "lp_spider_v1",
+  "file": "render_123_lp_spider_v1.png",
+  "codex_name": "Araignée Noir",
+  "basis": "編號 123 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_araignees-lp_spider_v1」的 codice 欄位＝123（區域 p3-aranas，法文名「Araignée Noir」，西文名「Araña negra」）。模型是同一個 id 的 /bestiario/3d/p3_araignees-lp_spider_v1.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "124",
+  "model": "bl_flying_spider",
+  "file": "render_124_bl_flying_spider.png",
+  "codex_name": "Araignée Volante",
+  "basis": "編號 124 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_araignees-bl_flying_spider」的 codice 欄位＝124（區域 p3-aranas，法文名「Araignée Volante」，西文名「Araña voladora」）。模型是同一個 id 的 /bestiario/3d/p3_araignees-bl_flying_spider.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "126",
+  "model": "bl_toxin_spider",
+  "file": "render_126_bl_toxin_spider.png",
+  "codex_name": "Araignée Luminescente",
+  "basis": "編號 126 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_araignees-bl_toxin_spider」的 codice 欄位＝126（區域 p3-aranas，法文名「Araignée Luminescente」，西文名「Araña luminiscente」）。模型是同一個 id 的 /bestiario/3d/p3_araignees-bl_toxin_spider.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "127",
+  "model": "muffet",
+  "file": "render_127_muffet.png",
+  "codex_name": "Muffet",
+  "basis": "編號 127 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_araignees-muffet」的 codice 欄位＝127（區域 p3-aranas，法文名「Muffet」，西文名「Muffet」）。模型是同一個 id 的 /bestiario/3d/p3_araignees-muffet.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "128",
+  "model": "lp_spider_crystal",
+  "file": "render_128_lp_spider_crystal.png",
+  "codex_name": "Araignée d'Améthyste",
+  "basis": "編號 128 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_araignees-lp_spider_crystal」的 codice 欄位＝128（區域 p3-aranas，法文名「Araignée d'Améthyste」，西文名「Araña de amatista」）。模型是同一個 id 的 /bestiario/3d/p3_araignees-lp_spider_crystal.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "129",
+  "model": "goblin",
+  "file": "render_129_goblin.png",
+  "codex_name": "Gobelin de la Caverne",
+  "basis": "編號 129 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_gobelins-goblin」的 codice 欄位＝129（區域 p3-goblins，法文名「Gobelin de la Caverne」，西文名「Goblin de la caverna」）。模型是同一個 id 的 /bestiario/3d/p3_gobelins-goblin.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ },
+ {
+  "no": "130",
+  "model": "goblinarcher",
+  "file": "render_130_goblinarcher.png",
+  "codex_name": "Gobelin de la Caverne",
+  "basis": "編號 130 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_gobelins-goblinarcher」的 codice 欄位＝130（區域 p3-goblins，法文名「Gobelin de la Caverne」，西文名「Goblin de la caverna (arquero)」）。模型是同一個 id 的 /bestiario/3d/p3_gobelins-goblinarcher.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。影片清單中第3層 #028、#029 都叫「洞窟哥布林」，網站 129～131 三筆同名，無法從截圖確認哪個模型對哪個遊戲編號：不確定。"
+ },
+ {
+  "no": "131",
+  "model": "goblinsoldier",
+  "file": "render_131_goblinsoldier.png",
+  "codex_name": "Gobelin de la Caverne",
+  "basis": "編號 131 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_gobelins-goblinsoldier」的 codice 欄位＝131（區域 p3-goblins，法文名「Gobelin de la Caverne」，西文名「Goblin de la caverna (soldado)」）。模型是同一個 id 的 /bestiario/3d/p3_gobelins-goblinsoldier.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。影片清單中第3層 #028、#029 都叫「洞窟哥布林」，網站 129～131 三筆同名，無法從截圖確認哪個模型對哪個遊戲編號：不確定。"
+ },
+ {
+  "no": "132",
+  "model": "goblinshaman",
+  "file": "render_132_goblinshaman.png",
+  "codex_name": "Goblin_Shaman",
+  "basis": "編號 132 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_gobelins-goblinshaman」的 codice 欄位＝132（區域 p3-goblins，法文名「Goblin_Shaman」，西文名「Goblin chamán」）。模型是同一個 id 的 /bestiario/3d/p3_gobelins-goblinshaman.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。同一段影片畫面的清單可見遊戲「第3層 #030 哥布林薩滿」，名稱與網站法文名對得上、且網站編號－102＝遊戲編號（與 #032 幼年樹人同規律），推測遊戲內編號＝第3層 #030；但這隻的模型沒有在截圖中出現，未逐一比對。"
+ },
+ {
+  "no": "133",
+  "model": "goblinking",
+  "file": "render_133_goblinking.png",
+  "codex_name": "Roi de la Caverne",
+  "basis": "編號 133 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_gobelins-goblinking」的 codice 欄位＝133（區域 p3-goblins，法文名「Roi de la Caverne」，西文名「Rey de la caverna」）。模型是同一個 id 的 /bestiario/3d/p3_gobelins-goblinking.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。同一段影片畫面的清單可見遊戲「第3層 #031 洞窟之王」，名稱與網站法文名對得上、且網站編號－102＝遊戲編號（與 #032 幼年樹人同規律），推測遊戲內編號＝第3層 #031；但這隻的模型沒有在截圖中出現，未逐一比對。"
+ },
+ {
+  "no": "134",
+  "model": "dark_oak_entling",
+  "file": "render_134_dark_oak_entling.png",
+  "codex_name": "幼年樹人",
+  "basis": "編號 134 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_marecage-dark_oak_entling」的 codice 欄位＝134（區域 p3-pantano，法文名「Tréant Juvenile」，西文名「Treant joven」）。模型是同一個 id 的 /bestiario/3d/p3_marecage-dark_oak_entling.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。另有站長截圖佐證：站長 2026-11-16 錄的圖鑑影片「2026-11-16 21-25-48.mp4」（本機，未上傳）約第 12 秒畫面，遊戲圖鑑「第3層 #032 幼年樹人」，模型外形與貼圖已和渲染圖逐一比對一致（本機 compare_dark_oak_entling.png）。遊戲內編號＝第3層 #032。"
+ },
+ {
+  "no": "135",
+  "model": "dark_oak_bark_beast",
+  "file": "render_135_dark_oak_bark_beast.png",
+  "codex_name": "Tréant Ravageur",
+  "basis": "編號 135 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_marecage-dark_oak_bark_beast」的 codice 欄位＝135（區域 p3-pantano，法文名「Tréant Ravageur」，西文名「Treant devastador」）。模型是同一個 id 的 /bestiario/3d/p3_marecage-dark_oak_bark_beast.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。同一段影片畫面的清單可見遊戲「第3層 #033 樹人破壞者」，名稱與網站法文名對得上、且網站編號－102＝遊戲編號（與 #032 幼年樹人同規律），推測遊戲內編號＝第3層 #033；但這隻的模型沒有在截圖中出現，未逐一比對。"
+ },
+ {
+  "no": "136",
+  "model": "dark_oak_tree_ent",
+  "file": "render_136_dark_oak_tree_ent.png",
+  "codex_name": "Tréant du Labyrinthe",
+  "basis": "編號 136 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_labyrinthe-dark_oak_tree_ent」的 codice 欄位＝136（區域 p3-laberinto，法文名「Tréant du Labyrinthe」，西文名「Treant del Laberinto」）。模型是同一個 id 的 /bestiario/3d/p3_labyrinthe-dark_oak_tree_ent.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。同一段影片畫面的清單可見遊戲「第3層 #034 迷宮區樹人」，名稱與網站法文名對得上、且網站編號－102＝遊戲編號（與 #032 幼年樹人同規律），推測遊戲內編號＝第3層 #034；但這隻的模型沒有在截圖中出現，未逐一比對。"
+ },
+ {
+  "no": "138",
+  "model": "furacas",
+  "file": "render_138_furacas.png",
+  "codex_name": "Gardien du Labyrinthe",
+  "basis": "編號 138 取自Exiled Order 網站（exiled-order.pages.dev）怪物清單 assets/mobs-CSvNhVC4.js：id「p3_labyrinthe-furacas」的 codice 欄位＝138（區域 p3-laberinto，法文名「Gardien du Labyrinthe」，西文名「Guardián del Laberinto」）。模型是同一個 id 的 /bestiario/3d/p3_labyrinthe-furacas.json，所以這張圖＝網站上的這一筆。注意：這是網站的全樓層連號，不是遊戲內圖鑑編號（遊戲第 3 層已確認是該層自己從 #001 起編，例：幼年樹人＝第3層 #032；第 2 層未確認）。站長的遊戲截圖（含 11/04、11/15 圖鑑、11/16 影片）都沒有這一隻的第 2、3 層圖鑑畫面，遊戲內編號：不確定。"
+ }
+]
