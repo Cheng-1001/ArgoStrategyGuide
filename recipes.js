@@ -4130,6 +4130,14 @@ null,
 [
 "Thick Hide",
 96
+],
+[
+"Black Silk",
+64
+],
+[
+"Ancient Woods Essence",
+8
 ]
 ],
 "30",
@@ -4879,6 +4887,987 @@ null,
 null,
 [],
 "10049.82",
+"b",
+"key",
+null,
+"shot"
+]
+]
+},
+"3|Ringman": {
+"floor": 3,
+"items": [
+[
+2506,
+"Anneau de Granite",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2508,
+"Anneau d'Andésite",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2509,
+"Anneau de Pierre",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2510,
+"Anneau Abordable",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2507,
+"Anneau en Cuivre Granuleux",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|Glove Merchant": {
+"floor": 3,
+"items": [
+[
+2059,
+"Gants de Granite",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2060,
+"Gants Andesite",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2061,
+"Gants en Pierre",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2062,
+"Gants Abordables",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2058,
+"Gants Novices",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|Amulet Merchant": {
+"floor": 3,
+"items": [
+[
+1319,
+"Collier de Granite",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1320,
+"Collier d'Andésite",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1321,
+"Collier de Pierre",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1322,
+"Collier Abordable",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1318,
+"Collier Novice",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|Artifact Merchant": {
+"floor": 3,
+"items": [
+[
+1531,
+"Ceinture Simple",
+null,
+[],
+"6532.38",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1534,
+"Ceinture en Cuivre Granuleux",
+null,
+[],
+"6532.38",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1537,
+"Ceinture Abordable",
+null,
+[],
+"6532.38",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1533,
+"Ceinture Novice",
+null,
+[],
+"6532.38",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1535,
+"Ceinture Étrange",
+null,
+[],
+"6532.38",
+"c",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|Bracelet Merchant": {
+"floor": 3,
+"items": [
+[
+1611,
+"Bracelet de Granite",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1613,
+"Bracelet d'Andésite",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1614,
+"Bracelet de Pierre",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1615,
+"Bracelet Abordable",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1612,
+"Bracelet en Cuivre Granuleux",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|Simple Accessories Merchant": {
+"floor": 3,
+"items": [
+[
+2056,
+"Gants Simples",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1531,
+"Ceinture Simple",
+null,
+[],
+"5024.91",
+"c",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|Ring Blacksmith": {
+"floor": 3,
+"items": [
+[
+2511,
+"Anneau des Bois",
+300,
+[
+[
+"Woodland Claw",
+64
+],
+[
+"Sylnovarian Jewel",
+32
+],
+[
+"Copper Ingot",
+16
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2512,
+"Anneau Brumeux",
+300,
+[
+[
+"Misty Claw",
+64
+],
+[
+"Sylvaerian Jewel",
+16
+],
+[
+"Iron Ingot",
+16
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2513,
+"Anneau Orcien",
+300,
+[
+[
+"Orc Blood",
+32
+],
+[
+"White Spider Powder",
+64
+],
+[
+"鋁土礦錠",
+12
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2515,
+"Anneau des Bois Sombres",
+300,
+[
+[
+"Juvenile Bark",
+32
+],
+[
+"Sylvaerian Jewel",
+16
+],
+[
+"Iron Ingot",
+16
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2516,
+"Anneau de la Toile",
+300,
+[
+[
+"Spider Cloth",
+64
+],
+[
+"White Spider Silk",
+32
+],
+[
+"Iron Ingot",
+32
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2517,
+"Anneau Spectral",
+300,
+[
+[
+"Spectral Essence",
+16
+],
+[
+"White Spider Silk",
+32
+],
+[
+"White Spider Powder",
+64
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2518,
+"Anneau Luminescent",
+300,
+[
+[
+"Yellow Spider Carcass",
+64
+],
+[
+"Yellow Spider Silk",
+32
+],
+[
+"Copper Ingot",
+32
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|Glove Blacksmith": {
+"floor": 3,
+"items": [
+[
+2063,
+"Gants des Bois",
+300,
+[
+[
+"Woodland Fur",
+64
+],
+[
+"Worn Leather",
+64
+],
+[
+"Thick Hide",
+32
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2065,
+"Gants Brumeux",
+300,
+[
+[
+"Misty Fur",
+64
+],
+[
+"Worn Leather",
+64
+],
+[
+"Thick Hide",
+32
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2069,
+"Gants des Bois Sombres",
+300,
+[
+[
+"Juvenile Bark",
+32
+],
+[
+"Sylvaerian Leaves",
+32
+],
+[
+"Sylvaerian Cloth",
+32
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2070,
+"Gants de la Toile",
+300,
+[
+[
+"Spider Cloth",
+64
+],
+[
+"White Spider Silk",
+32
+],
+[
+"Spider Thread",
+64
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2071,
+"Gants Spectral",
+300,
+[
+[
+"Spectral Essence",
+8
+],
+[
+"White Spider Silk",
+32
+],
+[
+"White Spider Powder",
+64
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+2072,
+"Gants Luminescents",
+300,
+[
+[
+"Yellow Spider Carcass",
+64
+],
+[
+"Yellow Spider Silk",
+32
+],
+[
+"Worn Leather",
+64
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|Bracelet Blacksmith": {
+"floor": 3,
+"items": [
+[
+1616,
+"Bracelet des Bois",
+300,
+[
+[
+"Woodland Claw",
+64
+],
+[
+"Sylnovarian Jewel",
+16
+],
+[
+"Copper Ingot",
+16
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1617,
+"Bracelet Brumeux",
+300,
+[
+[
+"Misty Claw",
+64
+],
+[
+"Sylvaerian Jewel",
+16
+],
+[
+"Iron Ingot",
+16
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1618,
+"Bracelet Orcien",
+300,
+[
+[
+"Orc Blood",
+32
+],
+[
+"White Spider Powder",
+64
+],
+[
+"鋁土礦錠",
+12
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1620,
+"Bracelet des Bois Sombres",
+300,
+[
+[
+"Juvenile Bark",
+32
+],
+[
+"Sylvaerian Jewel",
+16
+],
+[
+"Iron Ingot",
+16
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1621,
+"Bracelet de la Toile",
+300,
+[
+[
+"Spider Cloth",
+64
+],
+[
+"White Spider Silk",
+32
+],
+[
+"Iron Ingot",
+16
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1622,
+"Bracelet Spectral",
+300,
+[
+[
+"Spectral Essence",
+8
+],
+[
+"White Spider Silk",
+32
+],
+[
+"White Spider Powder",
+64
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+],
+[
+1623,
+"Bracelet Luminescent",
+300,
+[
+[
+"Yellow Spider Carcass",
+64
+],
+[
+"Yellow Spider Silk",
+32
+],
+[
+"Copper Ingot",
+16
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Artefact Manteau Crocs Brumeux": {
+"floor": 3,
+"items": [
+[
+1541,
+"Manteau des Crocs Brumeux",
+600,
+[
+[
+"Misty Fur",
+256
+],
+[
+"Misty Tail",
+64
+]
+],
+"55",
+"a",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Forgeron Gants Corrompus": {
+"floor": 3,
+"items": [
+[
+2076,
+"Gants Faible Corruption",
+600,
+[
+[
+"Corrupted Fragment",
+32
+],
+[
+"Corrupted Fragment (2)",
+16
+],
+[
+"Corrupted Fragment (3)",
+8
+]
+],
+"55",
+"splus",
+"acc",
+null,
+"shot"
+]
+]
+},
+"2|Necrotic Tool Blacksmith": {
+"floor": 2,
+"items": [
+[
+2694,
+"Pioche Nécrotique",
+1800,
+[
+[
+"Dark Bone",
+24
+],
+[
+"Black Powder",
+24
+],
+[
+"Necromancer Powder",
+6
+],
+[
+"Black Bone Stone",
+8
+]
+],
+"40",
+"a",
+"other",
+null,
+"shot"
+],
+[
+2700,
+"Houe Nécrotique",
+1800,
+[
+[
+"Dark Bone",
+24
+],
+[
+"Black Powder",
+24
+],
+[
+"Necromancer Powder",
+6
+],
+[
+"Black Bone Stone",
+8
+]
+],
+"40",
+"a",
+"other",
+null,
+"shot"
+],
+[
+2706,
+"Hache Nécrotique",
+1800,
+[
+[
+"Dark Bone",
+24
+],
+[
+"Black Powder",
+24
+],
+[
+"Necromancer Powder",
+6
+],
+[
+"Black Bone Stone",
+8
+]
+],
+"40",
+"a",
+"other",
+null,
+"shot"
+]
+]
+},
+"2|蜂巢考古學家": {
+"floor": 2,
+"items": [
+[
+1830,
+"Clé de Melliona",
+null,
+[],
+"1758.72",
 "b",
 "key",
 null,

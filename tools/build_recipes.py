@@ -374,7 +374,8 @@ SHOTS23 = {
     # the material list is text only, so which of the three Corrupted Fragments it takes cannot be seen
     (3, "P3 - Craft Anneau Draconique Corrompu"): [("Anneau Draconique Corrompu", "splus", 600, [["腐化金屬錠", 1], ["腐化碎片（三種之一，看不出是哪一種）", 16], ["Fangs of Albal", 8]], "55", "acc")],
     # window "P3 - Craft 靴子 du Pionnier" (04.49.08): LEGENDARY 15 min, 30 Col
-    (3, "P3 - Craft Bottes du Pionnier"): [("Bottes du Pionnier", "s", 900, [["探險家之靴", 1], ["Bear Hide", 128], ["Ravager Bark", 64], ["Thick Hide", 96]], "30", "acc")],
+    # 2026-11-18 (in28 16.34.32, 11/14 after scrolling: 6 materials, 0/6) adds 黑線 64 and 古林精華 8 (11/13 04.49.08 showed only the first 4)
+    (3, "P3 - Craft Bottes du Pionnier"): [("Bottes du Pionnier", "s", 900, [["探險家之靴", 1], ["Bear Hide", 128], ["Ravager Bark", 64], ["Thick Hide", 96], ["Black Silk", 64], ["Ancient Woods Essence", 8]], "30", "acc")],
     # nameplate [重塑師] 材料, window "P3 - Refaçonneur 材料" (05.11.47～50): one page of 4 strings, 1 min, 15 Col each (more pages may exist:
     # 腐化獸血's obtain line also names P3 - Refaçonneur Matériaux). Log names with no confirmed English name stay in Chinese
     (3, "Refaiter"): [("冷杉細繩", "c", 60, [["冷杉原木", 8], ["Spider Thread", 4]], "15", "other"),
@@ -423,6 +424,51 @@ SHOTS23 = {
     (3, "Occult Rings Merchant"): [("Anneau Occulte", "s", None, [], "65323.81", "acc")],
     # floor 2, nameplate [NPC] 考古學家 de l'Antre, window「L'Antre d'Astérius - 戰利品資訊」(14.14.04): RARE key, 10 049.82 Col
     (2, "考古學家 de l'Antre"): [("Clé du Roi Taurus", "b", None, [], "10049.82", "key")],
+    # 2026-11-18 (in28, owner's 11/13～11/14 Chinese screenshots; scratchpad in28/TRIAGE.md 1-D). Added at the end so existing recipe ids keep their place.
+    # Floor-3 shops in 特里亞格 (Buy tab, COMMON, stock ∞; obtain lines say 5000 / 6500 Cols = base price). Window titles: P3 - 戒指商人 (19.38.56),
+    # P3 - 手套商人 (19.40.08), P3 - 護符商人 (19.36.07), P3 - 神器商人 (19.37.11, 6 532.38), P3 - 手環商人 (19.37.59), P3 - 飾品商人 (19.43.56).
+    (3, "Ringman"): [(n, "c", None, [], "5024.91", "acc") for n in ("Anneau de Granite", "Anneau d'Andésite", "Anneau de Pierre", "Anneau Abordable", "Anneau en Cuivre Granuleux")],
+    (3, "Glove Merchant"): [(n, "c", None, [], "5024.91", "acc") for n in ("Gants de Granite", "Gants Andesite", "Gants en Pierre", "Gants Abordables", "Gants Novices")],
+    (3, "Amulet Merchant"): [(n, "c", None, [], "5024.91", "acc") for n in ("Collier de Granite", "Collier d'Andésite", "Collier de Pierre", "Collier Abordable", "Collier Novice")],
+    (3, "Artifact Merchant"): [(n, "c", None, [], "6532.38", "acc") for n in ("Ceinture Simple", "Ceinture en Cuivre Granuleux", "Ceinture Abordable", "Ceinture Novice", "Ceinture Étrange")],
+    (3, "Bracelet Merchant"): [(n, "c", None, [], "5024.91", "acc") for n in ("Bracelet de Granite", "Bracelet d'Andésite", "Bracelet de Pierre", "Bracelet Abordable", "Bracelet en Cuivre Granuleux")],
+    # the window's third row 簡易之靴 waits for the owner's decision (TRIAGE A-3: game stats differ from the catalogue); 簡易腰帶 is 5 024.91 here, 6 532.38 above
+    (3, "Simple Accessories Merchant"): [(n, "c", None, [], "5024.91", "acc") for n in ("Gants Simples", "Ceinture Simple")],
+    # window「P3 - 製作飾品 de Sylnovar」(obtain line P3 - Craft Accessoires de Sylnovar, 19.41.19～56): RARE 5 min, 30 Col. 紫水晶戒指 waits (TRIAGE B-1)
+    (3, "Ring Blacksmith"): [(n, "b", 300, m, "30", "acc") for n, m in (
+        ("Anneau des Bois", [["Woodland Claw", 64], ["Sylnovarian Jewel", 32], ["Copper Ingot", 16]]),
+        ("Anneau Brumeux", [["Misty Claw", 64], ["Sylvaerian Jewel", 16], ["Iron Ingot", 16]]),
+        ("Anneau Orcien", [["Orc Blood", 32], ["White Spider Powder", 64], ["鋁土礦錠", 12]]),
+        ("Anneau des Bois Sombres", [["Juvenile Bark", 32], ["Sylvaerian Jewel", 16], ["Iron Ingot", 16]]),
+        ("Anneau de la Toile", [["Spider Cloth", 64], ["White Spider Silk", 32], ["Iron Ingot", 32]]),
+        ("Anneau Spectral", [["Spectral Essence", 16], ["White Spider Silk", 32], ["White Spider Powder", 64]]),
+        ("Anneau Luminescent", [["Yellow Spider Carcass", 64], ["Yellow Spider Silk", 32], ["Copper Ingot", 32]]))],
+    # window「P3 - Craft 手套 de Sylnovar」(19.42.15～47): RARE 5 min, 30 Col. 獸人手套, 紫水晶手套 wait (TRIAGE B-1)
+    (3, "Glove Blacksmith"): [(n, "b", 300, m, "30", "acc") for n, m in (
+        ("Gants des Bois", [["Woodland Fur", 64], ["Worn Leather", 64], ["Thick Hide", 32]]),
+        ("Gants Brumeux", [["Misty Fur", 64], ["Worn Leather", 64], ["Thick Hide", 32]]),
+        ("Gants des Bois Sombres", [["Juvenile Bark", 32], ["Sylvaerian Leaves", 32], ["Sylvaerian Cloth", 32]]),
+        ("Gants de la Toile", [["Spider Cloth", 64], ["White Spider Silk", 32], ["Spider Thread", 64]]),
+        ("Gants Spectral", [["Spectral Essence", 8], ["White Spider Silk", 32], ["White Spider Powder", 64]]),
+        ("Gants Luminescents", [["Yellow Spider Carcass", 64], ["Yellow Spider Silk", 32], ["Worn Leather", 64]]))],
+    # window「P3 - Craft Bracelets de Sylnovar」(19.44.54～19.45.37): RARE 5 min, 30 Col. 盜賊手環 waits (TRIAGE B-1)
+    (3, "Bracelet Blacksmith"): [(n, "b", 300, m, "30", "acc") for n, m in (
+        ("Bracelet des Bois", [["Woodland Claw", 64], ["Sylnovarian Jewel", 16], ["Copper Ingot", 16]]),
+        ("Bracelet Brumeux", [["Misty Claw", 64], ["Sylvaerian Jewel", 16], ["Iron Ingot", 16]]),
+        ("Bracelet Orcien", [["Orc Blood", 32], ["White Spider Powder", 64], ["鋁土礦錠", 12]]),
+        ("Bracelet des Bois Sombres", [["Juvenile Bark", 32], ["Sylvaerian Jewel", 16], ["Iron Ingot", 16]]),
+        ("Bracelet de la Toile", [["Spider Cloth", 64], ["White Spider Silk", 32], ["Iron Ingot", 16]]),
+        ("Bracelet Spectral", [["Spectral Essence", 8], ["White Spider Silk", 32], ["White Spider Powder", 64]]),
+        ("Bracelet Luminescent", [["Yellow Spider Carcass", 64], ["Yellow Spider Silk", 32], ["Copper Ingot", 16]]))],
+    # window 23.10.45: EPIC 10 min, 55 Col
+    (3, "P3 - Craft Artefact Manteau Crocs Brumeux"): [("Manteau des Crocs Brumeux", "a", 600, [["Misty Fur", 256], ["Misty Tail", 64]], "55", "acc")],
+    # window「P3 - 鐵匠 手套 Corrompus」(23.22.26): MYTHIC 10 min, 55 Col; three 腐化碎片 rows 32 / 16 / 8 like the Grimoire Faible Corruption
+    (3, "P3 - Forgeron Gants Corrompus"): [("Gants Faible Corruption", "splus", 600, [["Corrupted Fragment", 32], ["Corrupted Fragment (2)", 16], ["Corrupted Fragment (3)", 8]], "55", "acc")],
+    # floor 2, nameplate [地下城] 工具鐵匠, window「第2層 - 死靈地下城工具鍛造」(03.24.25～34): EPIC 30 min, 40 Col
+    (2, "Necrotic Tool Blacksmith"): [(n, "a", 1800, [["Dark Bone", 24], ["Black Powder", 24], ["Necromancer Powder", 6], ["Black Bone Stone", 8]], "40", "other")
+                                      for n in ("Pioche Nécrotique", "Houe Nécrotique", "Hache Nécrotique")],
+    # floor 2, nameplate [NPC] 蜂巢考古學家, window「蜜蜂地下城 - 戰利品資訊」(03.30.54): RARE key, 1 758.72 Col (obtain line: 1750)
+    (2, "蜂巢考古學家"): [("Clé de Melliona", "b", None, [], "1758.72", "key")],
 }
 OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
          "Quality Patience Fortifier III": 2001, "Quality Resistance Fortifier III": 2000, "Quality Vitality Fortifier III": 1996,
@@ -442,7 +488,16 @@ OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quali
          "Pioche de la Forêt": 2696, "Houe de la Forêt": 2702, "Hache de la Forêt": 2708,
          "Grimoire Occulte": 1557, "Boucle d'Oreille Occultes": 1558, "Bague Occulte": 1559, "Masque Occulte": 1493, "Hache Occulte": 1560,
          "Casque Occulte": 1561, "Bottes Occultes": 1562,
-         "Bottes Sylvestres": 1520, "Orbe Goblinne": 1544, "Bracelet Goblin": 1619, "Anneau des Cieux": 2521}
+         "Bottes Sylvestres": 1520, "Orbe Goblinne": 1544, "Bracelet Goblin": 1619, "Anneau des Cieux": 2521,
+         "Anneau de Granite": 2506, "Anneau d'Andésite": 2508, "Anneau de Pierre": 2509, "Anneau Abordable": 2510, "Anneau en Cuivre Granuleux": 2507,
+         "Gants de Granite": 2059, "Gants Andesite": 2060, "Gants en Pierre": 2061, "Gants Abordables": 2062, "Gants Novices": 2058, "Gants Simples": 2056,
+         "Collier de Granite": 1319, "Collier d'Andésite": 1320, "Collier de Pierre": 1321, "Collier Abordable": 1322, "Collier Novice": 1318,
+         "Ceinture Simple": 1531, "Ceinture en Cuivre Granuleux": 1534, "Ceinture Abordable": 1537, "Ceinture Novice": 1533, "Ceinture Étrange": 1535,
+         "Bracelet de Granite": 1611, "Bracelet d'Andésite": 1613, "Bracelet de Pierre": 1614, "Bracelet Abordable": 1615, "Bracelet en Cuivre Granuleux": 1612,
+         "Anneau des Bois": 2511, "Anneau Brumeux": 2512, "Anneau Orcien": 2513, "Anneau des Bois Sombres": 2515, "Anneau de la Toile": 2516, "Anneau Spectral": 2517, "Anneau Luminescent": 2518,
+         "Gants des Bois": 2063, "Gants Brumeux": 2065, "Gants des Bois Sombres": 2069, "Gants de la Toile": 2070, "Gants Spectral": 2071, "Gants Luminescents": 2072,
+         "Bracelet des Bois": 1616, "Bracelet Brumeux": 1617, "Bracelet Orcien": 1618, "Bracelet des Bois Sombres": 1620, "Bracelet de la Toile": 1621, "Bracelet Spectral": 1622, "Bracelet Luminescent": 1623,
+         "Manteau des Crocs Brumeux": 1541, "Gants Faible Corruption": 2076, "Pioche Nécrotique": 2694, "Houe Nécrotique": 2700, "Hache Nécrotique": 2706, "Clé de Melliona": 1830}
 # recipes whose window lists more materials than the screenshot shows: number of unseen rows (site shows ??? for them)
 MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1}
 LV23 = {"Quality Health Potion II": 5, "Quality Mana Potion II": 5, "Quality Stamina Potion II": 5, "Quality Health Potion III": 8,

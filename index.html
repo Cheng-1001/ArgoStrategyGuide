@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="b54aabf772">
+<meta name="sao-build" content="b93453f4ee">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -896,30 +896,30 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
   <div class="pbody" id="pBody"></div>
 </aside>
 
-<script src="data.js?v=40b98aa3"></script>
-<script src="data23.js?v=c27b966e"></script>
+<script src="data.js?v=231c1095"></script>
+<script src="data23.js?v=efb3b350"></script>
 <script src="bosses.js?v=77b7ad43"></script>
 <script src="reports.js?v=5eab9ad2"></script>
 <script src="hints.js?v=fcf000d6"></script>
 <script src="codex.js?v=48141603"></script>
 <script src="mobphotos.js?v=5479cb35"></script>
 <script src="mobcodex.js?v=671ee192"></script>
-<script src="mainq.js?v=651913d1"></script>
+<script src="mainq.js?v=7f99b923"></script>
 <script src="equip.js?v=afe010ec"></script>
 <script src="props.js?v=a6c9503f"></script>
-<script src="gameinfo.js?v=a3091072"></script><script src="buyback.js?v=4371e5e3"></script>
-<script src="npcs.js?v=aeaf0c40"></script>
-<script src="changelog.js?v=aa1292cc"></script>
-<script src="recipes.js?v=656f9b5b"></script>
+<script src="gameinfo.js?v=05bc608a"></script><script src="buyback.js?v=75ad19b4"></script>
+<script src="npcs.js?v=b78e5afa"></script>
+<script src="changelog.js?v=85eaf4b6"></script>
+<script src="recipes.js?v=736a55e1"></script>
 <script src="jmmeta.js?v=8935be97"></script>
 <script src="formcfg.js?v=54663be2"></script>
 <script src="classes.js?v=1be646b7"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
 <script src="events.js?v=ca16a154"></script>
 <script src="gacha.js?v=48cf03e8"></script>
-<script src="gamestats.js?v=00a2af8c"></script>
-<script src="sets.js?v=282addd5"></script>
-<script src="zhnames.js?v=cc865337"></script>
+<script src="gamestats.js?v=c0626999"></script>
+<script src="sets.js?v=094d7a09"></script>
+<script src="zhnames.js?v=4cbefcaa"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=b1639c8e"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1746,7 +1746,7 @@ const NPC_NOTE={
 const SHOP_CATS=new Set(["lootBuyers","toolMerchants"]);
 // a row is "sold" when its NPC is a shop, or (screenshot rows) it has no materials and no crafting time but a Col price,
 // e.g. the Alchemist both crafts Quality potions and sells Potion I-III on its Buy tab
-const isShop=r=>{const n=npcByName(r.f,r.npc);return!!n&&SHOP_CATS.has(n.c)||r.src==="shot"&&!(r.mats||[]).length&&r.sec==null&&!!r.cost&&r.cost!=="Free"};
+const isShop=r=>{const n=npcByName(r.f,r.npc);return!!n&&SHOP_CATS.has(n.c)&&!(r.mats||[]).length||r.src==="shot"&&!(r.mats||[]).length&&r.sec==null&&!!r.cost&&r.cost!=="Free"};
 const howTitle=rs=>{const sh=rs.filter(x=>isShop(x)).length;return!sh?"製作方式":sh===rs.length?"NPC 販售":"製作或購買"};
 const RC_CAT={weapon:["武器","⚔️"],armor:["防具","🛡️"],acc:["飾品","💍"],potion:["藥水","🧪"],key:["鑰匙","🗝️"],other:["其他","📦"]};
 const recEnD=r=>r.en.replace(/ \(2\)$/,"");   // display name: the "(2)" only tells two same-named rows apart inside the site

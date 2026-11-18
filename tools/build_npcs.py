@@ -104,7 +104,24 @@ CALC23={(3,'Assistant to the Alchemist'):(828,656,'2026-11-12',''),(3,'Alchemist
         (3,'Amethyst Armor Blacksmith'):(626,1388,'2026-11-15','Y 74；遊戲名牌「[NPC] 防具鐵匠」、視窗「P3 - Craft Armure d\'紫水晶」；參考互動地圖寫 X 627 Z 1370，差約 18 格'),
         (3,'Occult Artifact Merchant'):(953,519,'2026-11-17','Y 14，木屋室內；遊戲視窗「P3 - 神秘 - 神器」；參考互動地圖寫 X 939 Z 510，差約 17 格'),
         (3,'Occult Runes Merchant'):(723,166,'2026-11-15','Y 93；符文視窗的截圖沒有拍到名牌，NPC 和神祕商人同款（紅色火把），推測是同一位；參考互動地圖寫 X 723 Z 151，差約 15 格'),
-        (3,'Loot Buyer Treant'):(501,1401,'2026-11-18','Y 69；遊戲名牌「[NPC] 戰利品收購商」、視窗「P3 - 收購商 - 樹人」；參考互動地圖寫 X 499 Z 1390，差約 11 格')}
+        (3,'Loot Buyer Treant'):(501,1401,'2026-11-18','Y 69；遊戲名牌「[NPC] 戰利品收購商」、視窗「P3 - 收購商 - 樹人」；參考互動地圖寫 X 499 Z 1390，差約 11 格'),
+        # 2026-11-18 (in28, owner's 11/13～11/14 screenshots with F3: player X/Z + targeted block, about ±2 blocks; scratchpad in28/TRIAGE.md 1-C).
+        # Only these points are moved; the reference map is not shifted as a whole
+        (3,'Ringman'):(526,1387,'2026-11-13','Y 73；遊戲名牌「[NPC] 戒指商人」、視窗「P3 - 戒指商人」；參考互動地圖寫 X 537 Z 1382，差約 12 格'),
+        (3,'Glove Merchant'):(505,1414,'2026-11-13','Y 69；遊戲名牌「[NPC] 手套商人」、視窗「P3 - 手套商人」；參考互動地圖寫 X 505 Z 1408，差約 6 格'),
+        (3,'Ring Blacksmith'):(561,1412,'2026-11-13','Y 74；遊戲視窗「P3 - 製作飾品 de Sylnovar」（取得途徑寫 P3 - Craft Accessoires de Sylnovar）；參考互動地圖寫 X 562 Z 1409，差約 3 格'),
+        (3,'Glove Blacksmith'):(568,1414,'2026-11-13','Y 79，和戒指鐵匠同一棟；遊戲視窗「P3 - Craft 手套 de Sylnovar」；參考互動地圖寫 X 567 Z 1411，差約 3 格'),
+        (3,'Simple Accessories Merchant'):(570,1383,'2026-11-13','Y 79；遊戲名牌「[NPC] 飾品商人」、視窗「P3 - 飾品商人」；參考互動地圖寫 X 570 Z 1378，差約 5 格'),
+        (3,'Bracelet Blacksmith'):(561,1363,'2026-11-13','Y 84；遊戲視窗「P3 - Craft Bracelets de Sylnovar」；參考互動地圖寫 X 561 Z 1361，差約 2 格'),
+        (3,'Amulet Blacksmith'):(559,1370,'2026-11-13','Y 79；遊戲名牌「[NPC] 護符鐵匠」；參考互動地圖寫 X 559 Z 1367，差約 3 格'),
+        (3,'Amulet Merchant'):(581,1343,'2026-11-13','Y 77；遊戲名牌「[NPC] 護符商人」、視窗「P3 - 護符商人」；參考互動地圖寫 X 581 Z 1338，差約 5 格'),
+        (3,'Artifact Merchant'):(561,1344,'2026-11-13','Y 77；遊戲名牌「[NPC] 神器商人」、視窗「P3 - 神器商人」；參考互動地圖寫 X 561 Z 1338，差約 6 格'),
+        (3,'Bracelet Merchant'):(536,1356,'2026-11-13','Y 78～80；遊戲名牌「[NPC] 手環商人」、視窗「P3 - 手環商人」；參考互動地圖寫 X 537 Z 1352，差約 4 格'),
+        (3,'Loot Buyer Sylvaer'):(610,1384,'2026-11-13','Y 74；遊戲名牌「[SYLVAER] 戰利品收購商」；參考互動地圖寫 X 609 Z 1373，差約 11 格'),
+        (3,'Spider Loot Repreneur'):(533,869,'2026-11-14','Y 67；遊戲名牌「[NPC] 戰利品收購商」、視窗「P3 - Repreneur - Araignées」；參考互動地圖寫 X 532 Z 860，差約 9 格'),
+        (3,'Tribe Belt Blacksmith'):(236,1221,'2026-11-13','Y 79；遊戲視窗「P3 - Craft Artefact Ceinture Orc」；參考互動地圖寫 X 235 Z 1200，差約 21 格'),
+        (3,'Ancient Wood Armor Blacksmith'):(779,274,'2026-11-14','Y 88，羅盤「迷宮區」；遊戲視窗「P3 - Craft Armure des Bois Anciens」；參考互動地圖寫 X 780 Z 253，差約 21 格'),
+        (2,'Manufacturer of the Fierce Talisman'):(98,-55,'2026-11-14','Y 70；名牌「???」、視窗「第 2 層 - 飾品鍛造：凶猛護符」；參考互動地圖寫 X 78 Z -71，差約 25 格（第 2 層參考地圖的座標系統和遊戲一致，這個點本身沒對過）')}
 NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,675,'2026-11-12'),
        (3,'accessoriesBlacksmith','P3 - Craft Couteau en Dent de Loup',707,855,'2026-11-12'),
        (3,'accessoriesBlacksmith','P3 - Craft Gants Féroce',706,833,'2026-11-12'),
@@ -124,7 +141,13 @@ NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,6
        (3,'accessoriesBlacksmith','P3 - Craft Orbe Goblinne',957,1140,'2026-11-15','泰瑞亞莉絲之井的石室，Y 60；這張沒有開 F3，依小地圖座標和面向推算'),
        (3,'accessoriesBlacksmith','P3 - Craft Anneau des Cieux',None,None,'2026-11-15','獸人營地；21.43.04 從約 X 256 Z 1169 Y 116 往下看到 NPC 的頭頂（沒有 F3），推測在這附近、比玩家低'),
        (3,'other','P3 - Craft Outils des Bois Anciens',254,312,'2026-11-16','羅盤「迷宮區」，Y 85'),
-       (2,'other',"考古學家 de l'Antre",-157,721,'2026-11-15','阿斯特里歐斯的巢穴入口告示板左邊，Y 83；遊戲名牌「[NPC] 考古學家 de l\'Antre」，視窗「L\'Antre d\'Astérius - 戰利品資訊」')]
+       (2,'other',"考古學家 de l'Antre",-157,721,'2026-11-15','阿斯特里歐斯的巢穴入口告示板左邊，Y 83；遊戲名牌「[NPC] 考古學家 de l\'Antre」，視窗「L\'Antre d\'Astérius - 戰利品資訊」'),
+       # 2026-11-18 (in28, F3 player position + targeted block; TRIAGE 1-C 16～19)
+       (3,'accessoriesBlacksmith',"P3 - Craft Bottes de l'Explorateur",427,740,'2026-11-13','沒有名牌；視窗「P3 - Craft 靴子 de l\'Explorateur」，Y 87'),
+       (3,'accessoriesBlacksmith','P3 - Craft Artefact Manteau Crocs Brumeux',727,801,'2026-11-13','洞穴裡，Y 53；房間有告示牌「SI AUCUN NPC PREVENEZ LA MODERATION」'),
+       (3,'accessoriesBlacksmith','P3 - Forgeron Gants Corrompus',923,490,'2026-11-13','Y 99；遊戲視窗「P3 - 鐵匠 手套 Corrompus」'),
+       # 03.30.50: the NPC fills the frame ~2-3 blocks in front of the player (520.6, -709.1, facing north); the targeted block (520, -717) is behind it
+       (2,'other','蜂巢考古學家',520,-712,'2026-11-14','梅莉歐娜蜂巢入口旁，Y 74；遊戲名牌「[NPC] 蜂巢考古學家」、視窗「蜜蜂地下城 - 戰利品資訊」。位置是推測：NPC 在玩家正前方約 2～3 格（依畫面大小估距離），準星打到它後面的方塊 X 520 Z -717')]
 for fl,rs in F23.items():
     for r in rs:
         if (fl,r['n']) in CALC23: x,z,d,nt=CALC23[(fl,r['n'])]; r.update(x=x,z=z,src='calc')
