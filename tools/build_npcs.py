@@ -95,7 +95,16 @@ CALC23={(3,'Assistant to the Alchemist'):(828,656,'2026-11-12',''),(3,'Alchemist
         # Sylnovar's smith above is +19: the reference points are not shifted as a whole (too few points)
         (3,'Refaiter'):(345,597,'2026-11-13','遊戲名牌「[重塑師] 材料」、視窗「P3 - Refaçonneur 材料」；參考互動地圖寫 X 345 Z 583，差約 14 格'),
         (3,"Adventurer's Shoemaker"):(359,587,'2026-11-13','沒有名牌；視窗「P3 - Craft 靴子 de l\'Aventurier」會做冒險者之靴。參考互動地圖的 Adventurer\'s Shoemaker 在 X 358 Z 572，差約 15 格，推測是同一位'),
-        (2,'Manufacturer of the Runic Necklace'):(1,196,'2026-11-10','遊戲視窗標題只寫「2 -」，會做符文項鍊；參考互動地圖寫 X -38 Z 199，差約 39 格，依名稱推測是同一位')}
+        (2,'Manufacturer of the Runic Necklace'):(1,196,'2026-11-10','遊戲視窗標題只寫「2 -」，會做符文項鍊；參考互動地圖寫 X -38 Z 199，差約 39 格，依名稱推測是同一位'),
+        # 2026-11-17 (in27, owner's 11/15～11/18 screenshots with F3: player X/Z + targeted block; scratchpad in27/TRIAGE.md 1-C). Only these points
+        # are moved; the reference map is not shifted as a whole
+        (3,'Occult Rings Merchant'):(979,1015,'2026-11-15','Y 68；遊戲視窗「P3 - 神秘 - 戒指」，羅盤「霧之避難所」；參考互動地圖寫 X 985 Z 1017'),
+        (3,'Accessories Bandit Blacksmith'):(1191,750,'2026-11-15','Y 62；遊戲視窗「P3 - 製作飾品 強盜」（取得途徑寫 P3 - Craft Accessoires Bandit）；參考互動地圖寫 X 1192 Z 741，差約 9 格'),
+        (3,'Bandit Loot Repreneur'):(1186,742,'2026-11-15','Y 62；遊戲視窗「P3 - Repreneur - Bandits」；參考互動地圖寫 X 1185 Z 732，差約 10 格'),
+        (3,'Amethyst Armor Blacksmith'):(626,1388,'2026-11-15','Y 74；遊戲名牌「[NPC] 防具鐵匠」、視窗「P3 - Craft Armure d\'紫水晶」；參考互動地圖寫 X 627 Z 1370，差約 18 格'),
+        (3,'Occult Artifact Merchant'):(953,519,'2026-11-17','Y 14，木屋室內；遊戲視窗「P3 - 神秘 - 神器」；參考互動地圖寫 X 939 Z 510，差約 17 格'),
+        (3,'Occult Runes Merchant'):(723,166,'2026-11-15','Y 93；符文視窗的截圖沒有拍到名牌，NPC 和神祕商人同款（紅色火把），推測是同一位；參考互動地圖寫 X 723 Z 151，差約 15 格'),
+        (3,'Loot Buyer Treant'):(501,1401,'2026-11-18','Y 69；遊戲名牌「[NPC] 戰利品收購商」、視窗「P3 - 收購商 - 樹人」；參考互動地圖寫 X 499 Z 1390，差約 11 格')}
 NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,675,'2026-11-12'),
        (3,'accessoriesBlacksmith','P3 - Craft Couteau en Dent de Loup',707,855,'2026-11-12'),
        (3,'accessoriesBlacksmith','P3 - Craft Gants Féroce',706,833,'2026-11-12'),
@@ -103,7 +112,19 @@ NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,6
        # 2026-11-13 (in26): listed without a position (user 2026-11-13: in the NPC list, no coordinates). Estimates kept here only:
        # Draconique ~X 1157 Z 1043 Y 77 (02.10.24/25 F3 player position + targeted block); Pionnier ~X 1068 Z 917 Y 172 (04.48.13, guessed: nameplate not seen)
        (3,'accessoriesBlacksmith','P3 - Craft Anneau Draconique Corrompu',None,None,'2026-11-13','遊戲視窗標題「P3 - Craft 戒指 Draconique 腐化」，在第 3 層尊弗特東邊的森林'),
-       (3,'accessoriesBlacksmith','P3 - Craft Bottes du Pionnier',None,None,'2026-11-13','遊戲視窗標題「P3 - Craft 靴子 du Pionnier」，在室內')]
+       (3,'accessoriesBlacksmith','P3 - Craft Bottes du Pionnier',None,None,'2026-11-13','遊戲視窗標題「P3 - Craft 靴子 du Pionnier」，在室內'),
+       # 2026-11-17 (in27, F3 player position + targeted block, about ±2 blocks; names = the obtain line / window title; TRIAGE 1-C)
+       (3,'accessoriesBlacksmith','P3 - Craft Artefact Manteau Crocs Bois',956,999,'2026-11-15','洞穴裡，Y 63；房間有告示牌「SI AUCUN NPC PREVENEZ LA MODERATION」'),
+       (3,'other','P3 - Craft Clée des Bois Ancien',1203,746,'2026-11-15','Y 62'),
+       (3,'other','P3 - Craft Jeton Occulte',1175,745,'2026-11-15','Y 62'),
+       (3,'other','P3 - Craft Clée des Bandits',1172,739,'2026-11-15','Y 62'),
+       (3,'accessoriesBlacksmith','P3 - Craft Artefact Masque Voleur',1186,803,'2026-11-15','Y 90'),
+       (3,'accessoriesBlacksmith',"P3 - Craft Artefact Boucles d'Oreilles Bois Sombres",689,1428,'2026-11-15','樹上，Y 118'),
+       (3,'accessoriesBlacksmith','P3 - Craft Bracelet Goblin',978,1079,'2026-11-15','泰瑞亞莉絲之井，Y 67'),
+       (3,'accessoriesBlacksmith','P3 - Craft Orbe Goblinne',957,1140,'2026-11-15','泰瑞亞莉絲之井的石室，Y 60；這張沒有開 F3，依小地圖座標和面向推算'),
+       (3,'accessoriesBlacksmith','P3 - Craft Anneau des Cieux',None,None,'2026-11-15','獸人營地；21.43.04 從約 X 256 Z 1169 Y 116 往下看到 NPC 的頭頂（沒有 F3），推測在這附近、比玩家低'),
+       (3,'other','P3 - Craft Outils des Bois Anciens',254,312,'2026-11-16','羅盤「迷宮區」，Y 85'),
+       (2,'other',"考古學家 de l'Antre",-157,721,'2026-11-15','阿斯特里歐斯的巢穴入口告示板左邊，Y 83；遊戲名牌「[NPC] 考古學家 de l\'Antre」，視窗「L\'Antre d\'Astérius - 戰利品資訊」')]
 for fl,rs in F23.items():
     for r in rs:
         if (fl,r['n']) in CALC23: x,z,d,nt=CALC23[(fl,r['n'])]; r.update(x=x,z=z,src='calc')

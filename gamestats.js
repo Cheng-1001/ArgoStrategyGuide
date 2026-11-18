@@ -4,6 +4,14 @@
    values are the game's own text; r = rarity from the tooltip frame colour when it differs from the catalogue ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
    (user 2026-11-05: 裝備資料要照新上傳的截圖更新). */
 window.SAO_GAMESTATS = {date:"2026-11-04", items:{
+ // 2026-11-17 (in27, owner's Chinese tooltips 11/15～11/16). 1553: only the rarity differs (tooltip frame EPIC, catalogue common; stats match).
+ // 2696 / 2702 / 2708 (forest tools, props): the tooltip says minimum level 18 (catalogue 1) and EPIC; 2025 is a rune (props)
+ "1512":{"date": "2026-11-16", "en": "bottes du pionnier", "lvl": 16, "dmg": null, "st": [["Physical Damage", "-30%"], ["Magic Damage", "-30%"], ["Projectile Damage", "-30%"], ["Movement Speed", "+50%"]]},
+ "2025":{"date": "2026-11-16", "en": "rune brumeuse", "lvl": null, "dmg": null, "st": [["Critical Strike Chance", "+2%"], ["Critical Strike Power", "+2%"], ["Weapon Damage", "+5%"], ["Stamina Regeneration", "-0.2/s"]]},
+ "1553":{"date": "2026-11-15", "en": "cagoule du voleur", "r": "a", "lvl": 16, "dmg": null, "st": null},
+ "2696":{"date": "2026-11-16", "en": "pioche de la forêt", "lvl": 18, "r": "a", "dmg": null, "st": null},
+ "2702":{"date": "2026-11-16", "en": "houe de la forêt", "lvl": 18, "r": "a", "dmg": null, "st": null},
+ "2708":{"date": "2026-11-16", "en": "hache de la forêt", "lvl": 18, "r": "a", "dmg": null, "st": null},
  // 2026-11-13 (in26, Chinese tooltips 11/13). 1554: only the rarity differs (tooltip frame EPIC, catalogue common; stats match). 2015 / 2010 are runes (props):
  // the site applies these to the props tab too (st = the game's values; catalogue values kept in the note)
  "2492":{"date": "2026-11-13", "en": "anneau du dard protecteur", "r": "s", "lvl": 12, "dmg": null, "st": [["Critical Strike Chance", "+5%"]]},
@@ -100,7 +108,6 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "1289":{"date": "2026-11-05", "en": "skeletal amulet", "lvl": 6, "dmg": null, "st": [["Max Health", "+3"]]},
  "1450":{"date": "2026-11-05", "en": "skeleton skull", "lvl": 8, "dmg": null, "st": [["Skill Damage", "+1%"], ["Max Health", "+5"], ["Max Mana", "+1"], ["Max Stamina", "+1"], ["Health Regeneration", "+0.05/s"]]},
  "1463":{"date": "2026-11-07", "en": "occult hood", "lvl": 10, "dmg": "1", "st": [["Critical Strike Power", "+5%"], ["Block Chance", "+5%"]]},
- "2486":{"date": "2026-11-07", "en": "occult ring", "lvl": 10, "dmg": null, "st": [["Physical Damage", "+5%"], ["Magic Damage", "+5%"], ["Projectile Damage", "+5%"], ["Max Health", "+3"]]},
  "2045":{"date": "2026-11-07", "en": "occult gloves", "lvl": 10, "dmg": null, "st": [["Lifesteal", "+2%"], ["Spell Vampirism", "+2%"], ["Max Health", "+3"], ["Mana Regeneration", "+0.1/s"], ["Stamina Regeneration", "+0.1/s"]]},
  "1455":{"date": "2026-11-07", "en": "bandit coin", "lvl": 5, "dmg": null, "st": [["Critical Strike Chance", "+1%"]]},
  "2512":{"date": "2026-11-07", "en": "misty ring", "lvl": 15, "dmg": null, "st": [["Attack Speed", "0.1/s"], ["Critical Strike Chance", "+3%"], ["Physical Damage", "+3%"]]},
@@ -112,7 +119,6 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "2505":{"date": "2026-11-07", "en": "ring of the adventurer", "lvl": 12, "dmg": null, "st": [["Attack Speed", "0.01/s"], ["Critical Strike Chance", "+1%"], ["Skill Critical Strike Chance", "+1%"], ["Physical Damage", "+1%"], ["Magic Damage", "+1%"], ["Projectile Damage", "+1%"], ["Lifesteal", "+1%"], ["Spell Vampirism", "+1%"], ["Defense", "+1"], ["Max Health", "+1"], ["Max Mana", "+1"], ["Max Stamina", "+1"], ["Heal Bonus", "+1"], ["Movement Speed", "+1%"]]},
  "1379":{"date": "2026-11-07", "en": "boots of the revenant", "lvl": 5, "dmg": null, "st": [["Movement Speed", "+50%"]]},
  "1597":{"date": "2026-11-07", "en": "occult bracelet", "lvl": 10, "dmg": null, "st": [["Defense", "+2"], ["Max Health", "+10"]]},
- "1298":{"date": "2026-11-07", "en": "occult amulet", "lvl": 10, "dmg": null, "st": [["Critical Strike Chance", "+2%"], ["Skill Critical Strike Chance", "+2%"], ["Max Health", "+5"]]},
  "1592":{"date": "2026-11-08", "en": "gelatinous bracelet", "lvl": 4, "dmg": null, "st": [["Max Health", "+1"], ["Health Regeneration", "+0.05/s"], ["Mana Regeneration", "+0.05/s"], ["Stamina Regeneration", "+0.05/s"]]},   // 膠質手環 史萊姆飾品工坊 2026-11-08_03.33.53.png
  "1291":{"date": "2026-11-08", "en": "gelatinous amulet", "lvl": 4, "dmg": null, "st": [["Heal Bonus", "+0.5"]]},   // 凝膠護符 史萊姆飾品工坊 2026-11-08_03.33.57.png
  "1288":{"date": "2026-11-08", "en": "amulet of the sylve", "lvl": 3, "dmg": null, "st": [["Heal Bonus", "+0.5"]], "auc": 1},   // 森靈護符 拍賣場 (owner's screenshot 2026-11-08, sent in chat)

@@ -28,7 +28,7 @@ STATUS_OF = {'E1': 'unresolved', 'E2': 'ambiguous', 'E3': 'ambiguous'}
 # data written by Apps Script / Actions, not by builds: loaded (W11 reads reports), never walked (design Q13, G5)
 EXTERNAL_FILES = {'reports.js': '玩家回報（Apps Script 寫入）', 'jmmeta.js': '探索地圖紀錄（Actions 寫入）',
                   'formcfg.js': '回報表單設定（Apps Script 寫入）'}
-DATA_FILES = ['data.js', 'data23.js', 'bosses.js', 'hints.js', 'codex.js', 'mobphotos.js', 'mainq.js', 'equip.js',
+DATA_FILES = ['data.js', 'data23.js', 'bosses.js', 'hints.js', 'codex.js', 'mobphotos.js', 'mobcodex.js', 'mobrenders.js', 'mainq.js', 'equip.js',
               'props.js', 'gameinfo.js', 'buyback.js', 'npcs.js', 'changelog.js', 'recipes.js', 'classes.js',
               'gameskills.js', 'events.js', 'gacha.js', 'gamestats.js', 'sets.js', 'zhnames.js', 'staticons.js',
               'gameicons.js', 'recicons.js']
@@ -74,9 +74,9 @@ TIMES = re.compile(r'^(.+?)\s*[×x]\s*\d+\s*$')          # "Colossus Fragments �
 MAPS = {
     'SAO.ZONES', 'SAO.PHOTO', 'SAO.ITEMS', 'SAO.ITEMS{}.st', 'SAO23_ITEMS', 'SAO23_ITEMS{}[6]', 'SAO23.floors',
     'SAO23.floors{}.zones', 'SAO23.extra', 'SAO23.unknown', 'SAO_HINTS', 'SAO_HINTS{}', 'SAO_CODEX', 'SAO_CODEX{}',
-    'SAO_MOBPHOTO.srcs', 'SAO_MOBPHOTO.by', 'SAO_MOBPHOTO.by{}', 'SAO_MAINQ', 'SAO_MAINQ{}[].en', 'SAO_MAINQ{}[].img',
+    'SAO_MOBPHOTO.srcs', 'SAO_MOBPHOTO.by', 'SAO_MOBPHOTO.by{}', 'SAO_MOBRENDER.by', 'SAO_MOBRENDER.by{}', 'SAO_MOBCODEX.by', 'SAO_MOBCODEX.by{}', 'SAO_MAINQ', 'SAO_MAINQ{}[].en', 'SAO_MAINQ{}[].img', 'SAO23.floors{}.quests[].en',
     'SAO_EQUIP[][7]', 'SAO_PROPS[][6]', 'SAO_BUYBACK.shops', 'SAO_BUYBACK.items', 'SAO_NPCS', 'SAO_NPC_CALC',
-    'SAO_CHANGELOG_SUM', 'SAO_RECIPES', 'SAO_RECIPE_QTY', 'SAO_GAMESKILLS', 'SAO_GAMESKILLS{}.icons',
+    'SAO_CHANGELOG_SUM', 'SAO_RECIPES', 'SAO_RECIPE_QTY', 'SAO_RECIPE_MISS', 'SAO_GAMESKILLS', 'SAO_GAMESKILLS{}.icons',
     'SAO_EVENTS.eqPatch.items', 'SAO_EVENTS.eqPatch.items{}.set', 'SAO_GAMESTATS.items', 'SAO_ZHNAMES.search',
     'SAO_ZHNAMES.sets', 'SAO_ZHNAMES.mobs', 'SAO_ZHNAMES.mobsByName', 'SAO_ZHNAMES.places', 'SAO_ZHNAMES.terms',
     'SAO_ZHNAMES.npcEn', 'SAO_ZHNAMES.npcs', 'SAO_ZHNAMES.quests', 'SAO_ZHNAMES.quests{}.obj', 'SAO_STATICONS',
@@ -141,6 +141,8 @@ COVERAGE = {
     'SAO_HINTS{}{key}': 'mob_hint',
     'SAO_CODEX{}{key}': 'codex_num',
     'SAO_MOBPHOTO.by{}{key}': 'mob_photo',
+    'SAO_MOBRENDER.by{}{key}': 'mob_photo',   # owner's 3D renders (2026-11-18, kept but not shown): key = site monster name on that floor
+    'SAO_MOBCODEX.by{}{key}': 'mob_photo',    # avatars from the owner's codex screenshots (2026-11-18)
     'SAO_MAINQ{}[].npc': 'npc_mainq',
     'SAO_GAMEINFO.items[].oid[]': 'gi_oid',
     'SAO_GAMEINFO.items[].site': 'gi_site',
@@ -497,6 +499,16 @@ SKIP = {
     'SAO23.floors{}.M[].icon': 'R1',
     'SAO23.floors{}.M[].gameDrop': 'R1',
     'SAO23.floors{}.M[].news': 'R1',
+    # floor-2 side quests from the game's quest journal (2026-11-18; no NPC / town / coordinates yet, so nothing to resolve)
+    'SAO23.floors{}.quests[].title': 'R14',
+    'SAO23.floors{}.quests[].d': 'R13',
+    'SAO23.floors{}.quests[].en{key}': 'R13',
+    'SAO23.floors{}.quests[].en{}': 'R13',
+    'SAO23.floors{}.quests[].steps[]': 'R15',
+    'SAO23.floors{}.quests[].xp': 'R1',
+    'SAO23.floors{}.quests[].money': 'R1',
+    'SAO23.floors{}.quests[].src': 'R1',
+    'SAO23.floors{}.quests[].date': 'R1',
     'SAO23.floors{}.towns[].id': 'R10',
     'SAO23.floors{}.towns[].n': 'R10',
     'SAO23.floors{}.towns[].zh': 'R10',
@@ -562,6 +574,11 @@ SKIP = {
     'SAO_MOBPHOTO.by{}{}.old[].v': 'R21',
     'SAO_MOBPHOTO.by{}{}.old[].f': 'R21',
     'SAO_MOBPHOTO.by{}{}.f': 'R21',
+    'SAO_MOBRENDER.src': 'R1',
+    'SAO_MOBRENDER.by{key}': 'R16',
+    'SAO_MOBRENDER.by{}{}': 'R42',
+    'SAO_MOBCODEX.by{key}': 'R16',
+    'SAO_MOBCODEX.by{}{}': 'R42',
     'SAO_MOBPHOTO.by{}{}.rows[].fr': 'RN',
     'SAO_MOBPHOTO.by{}{}.rows[].ch[]': 'R21',
     'SAO_MOBPHOTO.by{}{}.rows[].v': 'R21',
@@ -580,6 +597,8 @@ SKIP = {
     'SAO_MAINQ{}[].rw': 'R24',
     'SAO_MAINQ{}[].s[][3]': 'R22',
     'SAO_MAINQ{}[].d': 'R22',
+    'SAO_MAINQ{}[].wen': 'R25',   # wiki English title (2026-11-18)
+    'SAO_MAINQ{}[].wrev': 'R1',
     'SAO_MAINQ{}[].en{key}': 'R22',
     'SAO_MAINQ{}[].en{}': 'R22',
     'SAO_MAINQ{}[].img{key}': 'R22',
@@ -640,6 +659,8 @@ SKIP = {
     'SAO_RECIPES{}.items[][8]': 'R1',
     'SAO_RECIPE_QTY{key}': 'R30',
     'SAO_RECIPE_QTY{}': 'R1',
+    'SAO_RECIPE_MISS{key}': 'R30',   # recipe rows with materials the screenshot did not show (2026-11-18)
+    'SAO_RECIPE_MISS{}': 'R1',
     'SAO_GAMESKILLS{key}': 'R32',
     'SAO_GAMESKILLS{}.date': 'R32',
     'SAO_GAMESKILLS{}.lv': 'R32',

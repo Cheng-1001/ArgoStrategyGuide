@@ -251,7 +251,7 @@ MAT = {"Sylve Shoot": "Sylve Sprout", "Sylvan Sprout": "Sylve Sprout", "Essence 
 # Leaf Fragment…); the site's items now use the game names (old names resolve through ITEM_OLD), so materials keep the game spelling.
 # item name -> official catalogue id (checked by hand: name keyword, level and set)
 OID = {"Ring of the Boar": 2475, "Gloves of the Boar": 2038, "Bracelet of the Boar": 1590, "Belt of the Boar": 1451,   # 2026-11-07: Anneau/Gants/Bracelet/Ceinture de Sanglier (name, level-3 set; game level 1)
-       "Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "Amulet of the Sylve": 1288, "Gloves of the Bandit": 2040, "Bandit Hood": 1456, "Stolen Amulet": 1292, "Bandit Coin": 1455, "Bracelet of the Sylve": 1589, "Health Potion II": 2458, "Health Potion III": 2459, "Stamina Potion II": 2472, "Ring of the Leviathan": 2485, "Necklace of Aragorn": 1458, "Bracelet of Ice": 1596, "Gloves of the Wolves": 2044, "Occult Amulet": 1298, "Occult Ring": 2486, "Occult Bracelet": 1597, "Occult Gloves": 2045,   # 2026-11-02: official names matched by hand (Anneau de Léviathan, Collier de Aragorn, Capuche/Robe Occulte…; level may differ, the site shows the official one)
+       "Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "Amulet of the Sylve": 1288, "Gloves of the Bandit": 2040, "Bandit Hood": 1456, "Stolen Amulet": 1292, "Bandit Coin": 1455, "Bracelet of the Sylve": 1589, "Health Potion II": 2458, "Health Potion III": 2459, "Stamina Potion II": 2472, "Ring of the Leviathan": 2485, "Necklace of Aragorn": 1458, "Bracelet of Ice": 1596, "Gloves of the Wolves": 2044, "Occult Bracelet": 1597, "Occult Gloves": 2045,   # 2026-11-02: official names matched by hand (Anneau de Léviathan, Collier de Aragorn, Capuche/Robe Occulte…; level may differ, the site shows the official one)
        "Training Sword": 2596, "Training Bow": 1566, "Training Crossbow": 1727, "Training Scythe": 1761, "Training Katana": 1762, "Training Dagger": 1760, "Training Pavise": 2534, "Training Buckler": 2533,
        "Boar Meat": 1957, "Chipped Axe": 2703, "Cracked Pickaxe": 2691, "Wooden Fishing Rod": 2709,
        "Training Magic Staff": 2569, "Unbound Grimoire": 1626, "Training Lantern": 1627, "Training Lantern (2)": 1627, "Wild Grimoire": 1628,
@@ -384,8 +384,47 @@ SHOTS23 = {
     # window "P3 - Craft 靴子 de l'Aventurier" (05.12.14, no nameplate; the reference map's Adventurer's Shoemaker is ~15 blocks away, guessed the same NPC):
     # RARE 5 min, 30 Col; which 狼皮 (floor 1 or floor 2, same name and icon) cannot be seen
     (3, "Adventurer's Shoemaker"): [("Bottes de l'Aventurier", "b", 300, [["磨損皮革", 128], ["狼皮（第 1 或第 2 層，看不出來）", 128], ["Misty Fur", 96], ["Misty Tail", 48]], "30", "acc")],
+    # 2026-11-17 (in27, owner's 11/15～11/18 screenshots; scratchpad in27/TRIAGE.md 1-D). Window titles in the comments.
+    # window 03.59.27 / 03.59.30: EPIC 10 min, 55 Col
+    (3, "P3 - Craft Artefact Manteau Crocs Bois"): [("Manteau des Crocs des Bois", "a", 600, [["Woodland Fur", 256], ["Woodland Tail", 64]], "55", "acc")],
+    # window「P3 - 製作飾品 強盜」(04.09.25～45): 5 min, 55 Col; the window's 盜賊手環 is not listed yet (its catalogue match is open)
+    (3, "Accessories Bandit Blacksmith"): [(n, r, 300, [["Medium Pouch", 8], ["Small Purse", 64], ["Bandit Gold Coin", 32]], "55", "acc")
+                                          for n, r in (("Cagoule du Voleur", "a"), ("Gants du Voleur", "b"), ("Anneau du Voleur", "b"), ("Amulette du Voleur", "b"))],
+    # window 04.25.45: EPIC 10 min, 55 Col
+    (3, "P3 - Craft Artefact Masque Voleur"): [("Masque du Voleur", "a", 600, [["Medium Pouch", 32], ["Small Purse", 64], ["Bandit Gold Coin", 64]], "55", "acc")],
+    # window 04.33.08: EPIC 10 min, 55 Col
+    (3, "P3 - Craft Artefact Boucles d'Oreilles Bois Sombres"): [("Boucles d'Oreilles des Bois Sombres", "a", 600, [["Juvenile Bark", 64], ["Sylvaerian Jewel", 64], ["Iron Ingot", 16]], "55", "acc")],
+    # window 04.11.46: MYTHIC, instant (0 s), 55 Col; the window's second row (free, internal-code materials) is not listed
+    (3, "P3 - Craft Jeton Occulte"): [("Jeton Occulte", "splusplus", 0, [["Medium Pouch", 64]], "55", "other")],
+    # nameplate [NPC] 皮革匠, window「P3 - Craft 靴子 de Sylnovar」(18.48.39～54): RARE 5 min, 30 Col. The amethyst boots row waits for
+    # the owner's decision (A-3)
+    (3, "Leatherworker"): [(n, "b", 300, m, "30", "acc") for n, m in (
+        ("Bottes des Bois", [["Woodland Fur", 64], ["Woodland Tail", 32], ["Bear Hide", 32]]),
+        ("Bottes Brumeuses", [["Misty Fur", 64], ["Misty Tail", 32], ["Bear Hide", 32]]),
+        ("Bottes Goblines", [["Orc Blood", 32], ["Juvenile Bark", 32], ["Bear Hide", 32]]),
+        ("Bottes en Toile d'Araignée", [["Spider Cloth", 64], ["強化蛛絲", 16], ["Spider Thread", 64]]),
+        # 森林之靴 (18.48.50): 魔法木碎片 64、野獸毛皮 64、熊皮 32 — 野獸毛皮＝Beast Fur by name only (owner 2026-11-18 chose C14 A)
+        ("Bottes Sylvestres", [["Magic Wood Shard", 64], ["Beast Fur", 64], ["Bear Hide", 32]]))],
+    # owner 2026-11-18 (C14 A, A13/A14): window「P3 - Craft Orbe Goblinne」(20.02.26): EPIC 10 min, 55 Col
+    (3, "P3 - Craft Orbe Goblinne"): [("Orbe Goblinne", "a", 600, [["Goblin Blood", 128], ["Goblin Eye", 32], ["Goblin Essence", 8]], "55", "acc")],
+    # window「P3 - 製作手環 Goblin」(20.01.22): RARE 10 min, 55 Col; the window says 3/5 materials but only 4 rows are on screen
+    # (the 5th is written as ??? on the site: SAO_RECIPE_MISS)
+    (3, "P3 - Craft Bracelet Goblin"): [("Bracelet Goblin", "b", 600, [["Goblin Blood", 64], ["Goblin Armor", 32], ["哥布林之耳", 16], ["Goblin Eye", 16]], "55", "acc")],
+    # window「P3 - Craft 戒指 des Cieux」(21.43.13): LEGENDARY 10 min, 55 Col; 0/5 materials, 4 rows on screen
+    (3, "P3 - Craft Anneau des Cieux"): [("Anneau des Cieux", "s", 600, [["Majestic Essence", 1], ["Skyblue Feather", 10], ["Sylnovarian Jewel", 8], ["不純黑瑪瑙錠", 10]], "55", "acc")],
+    # window 11-16 04.12.24～33: EPIC 10 min, 40 Col
+    (3, "P3 - Craft Outils des Bois Anciens"): [(n, "a", 600, [["Ancient Woods Essence", 1], ["Juvenile Seed", 16], ["Ravager Bark", 16], ["Dark Branch", 32]], "40", "other")
+                                               for n in ("Pioche de la Forêt", "Houe de la Forêt", "Hache de la Forêt")],
+    # window「P3 - 神秘 - 神器」Buy tab (11-17 19.05.43～19.06.19): LEGENDARY, 65 323.81 Col, stock ∞ (obtain line: 65000 = base price)
+    (3, "Occult Artifact Merchant"): [(n, "s", None, [], "65323.81", "acc") for n in (
+        "Grimoire Occulte", "Boucle d'Oreille Occultes", "Bague Occulte", "Masque Occulte", "Hache Occulte", "Casque Occulte", "Bottes Occultes")],
+    # window「P3 - 神秘 - 戒指」(2026-11-15 03.56.43～47): the grey ring = official 2486 (LEGENDARY Lv18, stats identical), 65 323.81 Col, stock ∞.
+    # The red ring sold next to it is not in the catalogue (left out, owner to decide)
+    (3, "Occult Rings Merchant"): [("Anneau Occulte", "s", None, [], "65323.81", "acc")],
+    # floor 2, nameplate [NPC] 考古學家 de l'Antre, window「L'Antre d'Astérius - 戰利品資訊」(14.14.04): RARE key, 10 049.82 Col
+    (2, "考古學家 de l'Antre"): [("Clé du Roi Taurus", "b", None, [], "10049.82", "key")],
 }
-OID23 = {"Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
+OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
          "Quality Patience Fortifier III": 2001, "Quality Resistance Fortifier III": 2000, "Quality Vitality Fortifier III": 1996,
          "Quality Health Potion IV": 2466, "Quality Health Potion V": 2467, "Quality Health Potion VI": 2468, "Mana Potion III": 2470,
          "Pioche Renforcée": 2695, "Hache Renforcée": 2707, "Houe Renforcée": 2701, "Parchemin de Réallocation": 1708, "Parchemin de Maîtrise": 1707,
@@ -396,13 +435,23 @@ OID23 = {"Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier I
          "Couteau à la Griffe de la Brume": 1540, "Hache de la Tribu": 1542, "Grimoire des Bois Sombres": 1545, "Masque de la Toile": 1547,
          "Ceinture Luminescente": 1549, "Plume Spectrale": 1551, "Couteau en Dent de Loup": 1564, "Gants Féroce": 2074,
          "Grimoire Faible Corruption": 1565, "Collier Runique": 1309,
-         "Anneau Draconique Corrompu": 2522, "Bottes du Pionnier": 1512, "Ficelle de Bouleau": 2367, "Bottes de l'Aventurier": 1510}
+         "Anneau Draconique Corrompu": 2522, "Bottes du Pionnier": 1512, "Ficelle de Bouleau": 2367, "Bottes de l'Aventurier": 1510,
+         "Manteau des Crocs des Bois": 1539, "Cagoule du Voleur": 1553, "Gants du Voleur": 2075, "Anneau du Voleur": 2519, "Amulette du Voleur": 1331,
+         "Masque du Voleur": 1554, "Boucles d'Oreilles des Bois Sombres": 1546, "Jeton Occulte": 2386,
+         "Bottes des Bois": 1516, "Bottes Brumeuses": 1518, "Bottes Goblines": 1513, "Bottes en Toile d'Araignée": 1525,
+         "Pioche de la Forêt": 2696, "Houe de la Forêt": 2702, "Hache de la Forêt": 2708,
+         "Grimoire Occulte": 1557, "Boucle d'Oreille Occultes": 1558, "Bague Occulte": 1559, "Masque Occulte": 1493, "Hache Occulte": 1560,
+         "Casque Occulte": 1561, "Bottes Occultes": 1562,
+         "Bottes Sylvestres": 1520, "Orbe Goblinne": 1544, "Bracelet Goblin": 1619, "Anneau des Cieux": 2521}
+# recipes whose window lists more materials than the screenshot shows: number of unseen rows (site shows ??? for them)
+MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1}
 LV23 = {"Quality Health Potion II": 5, "Quality Mana Potion II": 5, "Quality Stamina Potion II": 5, "Quality Health Potion III": 8,
         "Quality Mana Potion III": 8, "Quality Stamina Potion III": 8, "Quality Health Potion IV": 12, "Quality Health Potion V": 15,
         "Quality Health Potion VI": 18, "Quality Mana Potion V": 15, "Quality Mana Potion VI": 18, "Quality Stamina Potion V": 15,
         "Quality Stamina Potion VI": 18, "Health Potion I": 1, "Mana Potion I": 1, "Stamina Potion I": 1, "Health Potion II": 3,
         "Health Potion III": 5, "Mana Potion II": 5, "Mana Potion III": 8, "Stamina Potion II": 5, "Stamina Potion III": 8,
-        "Pioche Renforcée": 15, "Hache Renforcée": 15, "Houe Renforcée": 15, "Bottes du Pionnier": 16}
+        "Pioche Renforcée": 15, "Hache Renforcée": 15, "Houe Renforcée": 15, "Bottes du Pionnier": 16,
+        "Pioche de la Forêt": 18, "Houe de la Forêt": 18, "Hache de la Forêt": 18}
 out23 = {}
 for (fl, npc), rows in SHOTS23.items():
     key = "%d|%s" % (fl, npc)
@@ -420,7 +469,7 @@ hdr = """/* Recipes by NPC (key = floor-1 NPC name, or "3|name" for another floo
 window.SAO_RECIPES = """
 out = {npc: {"floor": 1, "items": rows} for npc, rows in sorted(npcs.items())}
 out.update(out23)
-open(os.path.join(ROOT, "recipes.js"), "w", encoding="utf-8").write(hdr + json.dumps(out, ensure_ascii=False, indent=0) + ";\nwindow.SAO_RECIPE_QTY = " + json.dumps(QTY, ensure_ascii=False) + ";\n")
+open(os.path.join(ROOT, "recipes.js"), "w", encoding="utf-8").write(hdr + json.dumps(out, ensure_ascii=False, indent=0) + ";\nwindow.SAO_RECIPE_QTY = " + json.dumps(QTY, ensure_ascii=False) + ";\nwindow.SAO_RECIPE_MISS = " + json.dumps(MISS, ensure_ascii=False) + ";\n")
 n = sum(len(r) for r in npcs.values())
 from collections import Counter
 print(n, "recipes,", len(npcs), "NPCs", Counter(r[6] for rows in npcs.values() for r in rows), Counter(r[8] for rows in npcs.values() for r in rows))
