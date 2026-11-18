@@ -483,7 +483,7 @@
 {"id":"entity:m|f3m5","type":"entity","target":"m|f3m5","expect":"F3 未編號Slave Wolf 第 3 層已在 2026-11-09 開放（官網新聞〈Floors 2 and 3 a","why":"基準快照裡的連結"},
 {"id":"entity:m|f3m54","type":"entity","target":"m|f3m54","expect":"F3 未編號腐化的洞窟之王Roi de la Caverne Corrompu 第 3 層已在 2026-11-09 開","why":"基準快照裡的連結"},
 {"id":"entity:m|f3m59","type":"entity","target":"m|f3m59","expect":"F3 未編號腐化迷宮區樹人Tréant du Labyrinthe Corrompu 第 3 層已在 2026-11-0","why":"基準快照裡的連結"},
-{"id":"entity:m|f3m6","type":"entity","target":"m|f3m6","expect":"F3 未編號Juvenile Treant 第 3 層已在 2026-11-09 開放（官網新聞〈Floors 2 an","why":"基準快照裡的連結"},
+{"id":"entity:m|f3m6","type":"entity","target":"m|f3m6","expect":"F3 未編號幼年樹人Juvenile Treant 第 3 層已在 2026-11-09 開放（官網新聞〈Floors ","why":"基準快照裡的連結"},
 {"id":"entity:m|f3m60","type":"entity","target":"m|f3m60","expect":"F3 未編號腐化遠古樹人Tréant Ancien Corrompu 第 3 層已在 2026-11-09 開放（官網新","why":"基準快照裡的連結"},
 {"id":"entity:m|f3m61","type":"entity","target":"m|f3m61","expect":"F3 未編號腐化迷宮區守護者Gardien du Labyrinthe Corrompu 第 3 層已在 2026-11","why":"基準快照裡的連結"},
 {"id":"entity:m|f3m62","type":"entity","target":"m|f3m62","expect":"F3 未編號腐化幼年樹人Tréant Juvenile Corrompu 第 3 層已在 2026-11-09 開放（官","why":"基準快照裡的連結"},
