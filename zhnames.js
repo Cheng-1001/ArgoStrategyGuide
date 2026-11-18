@@ -22,7 +22,7 @@ mobsByName:{"Sylvaer Guard": "流亡的希爾維爾守衛","Sylvaer Mage": "流�
 // quests (2026-11-07 18:13～18:16 quest-log screenshots): site English title -> {zh, reg = journal region label, d = journal text, obj = objective lines by step index};
 // quest NPC names (Master Swordsman, Mephisto, Guard Tomas…) in npcs come from the same journal text.
 // places (site English name -> Chinese codex region / teleport map name); npcs (site NPC name -> nameplate, or the obtain line paired with the English one for the same item)
-places:{"Snow Citadel": "雪之要塞","Lysaat": "莉薩特","Weisslum": "懷斯倫","Zumfut": "尊弗特","Aldarya": "阿爾達里亞之樹","Melliona's Hive Dungeon": "梅莉歐娜蜂巢","Elessarh Mine": "艾勒薩礦坑","Lake of the Bulls": "公牛之湖","Sanctuary of Khesun": "凱順聖所","Earan Land": "埃蘭之地","Urbus": "烏爾巴斯","Marome": "瑪羅姆","Lair of Asterius": "阿斯特里歐斯的巢穴", "Starting Town": "起始之鎮", "Hanaka": "哈娜卡", "Vallhat": "瓦爾哈特", "Tolbana": "托爾巴納", "Castelbrume": "霧堡", "Candelia": "坎德莉亞", "Virelune": "維勒倫", "Mizunari": "水成", "Wolf Valley": "狼之谷", "Boar Zone": "野豬區", "Arakh'Nol": "阿拉克諾", "Putrid Swamp": "腐臭沼澤", "Lac des Nénuphars": "睡蓮之湖", "Valley of Petals": "花瓣谷", "Giant's Garden": "巨人花園", "Kobold Tower": "狗頭人之塔", "Cursed Ruins": "骷髏詛咒遺跡", "Geldorack Mine": "蓋爾多拉克礦坑", "OG Quarter": "OG 區", "Merchant Guild": "商人公會", "Labyrinth of the Fallen": "墮落者迷宮區"},
+places:{"Snow Citadel": "雪之要塞","Triyag": "特里亞格","Terrialys Well": "泰瑞亞莉絲之井","Labyrinth": "迷宮區","Orc Camps": "獸人營地","Kaelor": "凱洛爾","Lysaat": "莉薩特","Weisslum": "懷斯倫","Zumfut": "尊弗特","Aldarya": "阿爾達里亞之樹","Melliona's Hive Dungeon": "梅莉歐娜蜂巢","Elessarh Mine": "艾勒薩礦坑","Lake of the Bulls": "公牛之湖","Sanctuary of Khesun": "凱順聖所","Earan Land": "埃蘭之地","Urbus": "烏爾巴斯","Marome": "瑪羅姆","Lair of Asterius": "阿斯特里歐斯的巢穴", "Starting Town": "起始之鎮", "Hanaka": "哈娜卡", "Vallhat": "瓦爾哈特", "Tolbana": "托爾巴納", "Castelbrume": "霧堡", "Candelia": "坎德莉亞", "Virelune": "維勒倫", "Mizunari": "水成", "Wolf Valley": "狼之谷", "Boar Zone": "野豬區", "Arakh'Nol": "阿拉克諾", "Putrid Swamp": "腐臭沼澤", "Lac des Nénuphars": "睡蓮之湖", "Valley of Petals": "花瓣谷", "Giant's Garden": "巨人花園", "Kobold Tower": "狗頭人之塔", "Cursed Ruins": "骷髏詛咒遺跡", "Geldorack Mine": "蓋爾多拉克礦坑", "OG Quarter": "OG 區", "Merchant Guild": "商人公會", "Labyrinth of the Fallen": "墮落者迷宮區"},
 /* npcEn：網站 NPC 鍵（npcs.js，參考互動地圖的名稱）→ 遊戲裡的英文名（2026-11-08，使用者「NPC 再檢查一次，名子有問題」）。
    使用者 2026-11-08「AB 混用，如果對應地點已經有中文名稱，就套用地點中文名英文放副標」：英文＝商店視窗標題（沒截到視窗的用物品提示的商店名），
    中文標題（npcs）＝「商店-<地點官方中文>」（遊戲中文商店名的寫法；遊戲裡看過的商店-哈娜卡／瓦爾哈特／水成／受詛廢墟照原樣）；地點沒有官方中文的維持英文。
@@ -59,6 +59,15 @@ items:[
  {"zh": "森林之靴", "ids": ["e|1520"], "en": null, "fr": "Bottes Sylvestres", "src": "shot27"},
  {"zh": "蛛絲靴", "ids": ["e|1525"], "en": null, "fr": "Bottes en Toile d'Araignée", "src": "shot27"},
  {"zh": "哥布林寶珠", "ids": ["e|1544"], "en": null, "fr": "Orbe Goblinne", "src": "shot27"},
+ {"zh": "哥布林手環", "ids": ["e|1619"], "en": null, "fr": "Bracelet Goblin", "src": "shot27"},
+ {"zh": "哥布林之耳", "ids": ["p|2329"], "en": null, "fr": "Oreille Gobline", "src": "shot27"},
+ {"zh": "不純黑瑪瑙錠", "ids": ["p|2410"], "en": null, "fr": "Lingot d’Onyx Impur", "src": "shot27"},
+ {"zh": "哥布林之血", "ids": ["i|Goblin Blood"], "en": "Goblin Blood", "fr": null, "src": "shot27"},
+ {"zh": "哥布林之眼", "ids": ["i|Goblin Eye"], "en": "Goblin Eye", "fr": null, "src": "shot27"},
+ {"zh": "哥布林骨架", "ids": ["i|Goblin Armor"], "en": "Goblin Armor", "fr": null, "src": "shot27"},
+ {"zh": "野獸毛皮", "ids": ["i|Beast Fur"], "en": "Beast Fur", "fr": null, "src": "shot27"},
+ {"zh": "希爾維爾之葉", "ids": ["i|Sylvaerian Leaves"], "en": "Sylvaerian Leaves", "fr": null, "src": "shot27"},
+ {"zh": "毀滅樹枝", "ids": ["i|Ravager Branch"], "en": "Ravager Branch", "fr": "Branche Ravageuse", "src": "shot27"},
  {"zh": "森林十字鎬", "ids": ["p|2696"], "en": null, "fr": "Pioche de la Forêt", "src": "shot27"},
  {"zh": "森林之斧", "ids": ["p|2708"], "en": null, "fr": "Hache de la Forêt", "src": "shot27"},
  {"zh": "林地手環", "ids": ["e|1616"], "en": null, "fr": "Bracelet des Bois", "src": "shot27"},

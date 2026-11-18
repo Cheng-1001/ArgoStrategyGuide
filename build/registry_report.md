@@ -6,7 +6,7 @@
 
 | 代號 | 數量 | 在例外清單上 | 不在例外清單上 |
 | --- | --- | --- | --- |
-| E1 | 88 | 88 | 0 |
+| E1 | 87 | 87 | 0 |
 | E2 | 28 | 28 | 0 |
 | E3 | 1 | 1 | 0 |
 | E6 | 0 | 0 | 0 |
@@ -17,7 +17,7 @@
 
 ## 來源覆蓋（G1，和例外分開統計）
 
-欄位簽名 559 個：掃描 62、排除 497、沒有登記 0（E9）。
+欄位簽名 561 個：掃描 62、排除 499、沒有登記 0（E9）。
 
 | 欄位 | 結論 | 列數 |
 | --- | --- | --- |
@@ -41,16 +41,16 @@
 | `SAO.SPOTS[].dg.loot[][1]` | resolved | 7 |
 | `SAO.SPOTS[].items[]` | resolved | 10 |
 | `SAO.SPOTS[].mons[]` | resolved | 60 |
-| `SAO23.extra{key}` | resolved | 41 |
+| `SAO23.extra{key}` | resolved | 49 |
 | `SAO23.floors{}.BOSS_SPAWNS[][0]` | resolved | 15 |
 | `SAO23.floors{}.M[].drops[][0]` | resolved | 258 |
 | `SAO23.floors{}.M[].zone` | resolved | 137 |
 | `SAO23.floors{}.spots[].dg.loot[][0]` | resolved | 5 |
 | `SAO23.floors{}.spots[].dg.loot[][1]` | excluded-row | 5 |
-| `SAO23.floors{}.spots[].mons[]` | resolved | 107 |
+| `SAO23.floors{}.spots[].mons[]` | resolved | 108 |
 | `SAO23.floors{}.spots[].zone` | resolved | 22 |
 | `SAO23.floors{}.spots[].zone[]` | resolved | 2 |
-| `SAO23_ITEMS{}[0]` | excluded-row | 10 |
+| `SAO23_ITEMS{}[0]` | excluded-row | 18 |
 | `SAO23_ITEMS{}[0]` | no-catalogue | 1 |
 | `SAO23_ITEMS{}[0]` | resolved | 117 |
 | `SAO_BOSSES.world[].roulette0[][0]` | resolved | 3 |
@@ -78,9 +78,9 @@
 | `SAO_GAMEICONS{key}` | unresolved | 6 |
 | `SAO_GAMEINFO.items[].obt[]` | ambiguous | 15 |
 | `SAO_GAMEINFO.items[].obt[]` | excluded-row | 113 |
-| `SAO_GAMEINFO.items[].obt[]` | resolved | 187 |
+| `SAO_GAMEINFO.items[].obt[]` | resolved | 188 |
 | `SAO_GAMEINFO.items[].obt[]` | term | 19 |
-| `SAO_GAMEINFO.items[].obt[]` | unresolved | 29 |
+| `SAO_GAMEINFO.items[].obt[]` | unresolved | 28 |
 | `SAO_GAMEINFO.items[].oid[]` | resolved | 199 |
 | `SAO_GAMEINFO.items[].site` | excluded-row | 239 |
 | `SAO_GAMEINFO.items[].site` | resolved | 19 |
@@ -90,25 +90,25 @@
 | `SAO_MAINQ{}[].npc` | quest-npc | 34 |
 | `SAO_MOBPHOTO.by{}{key}` | resolved | 133 |
 | `SAO_MOBRENDER.by{}{key}` | resolved | 55 |
-| `SAO_NPC_CALC{key}` | resolved | 40 |
+| `SAO_NPC_CALC{key}` | resolved | 41 |
 | `SAO_RECICONS{key}` | resolved | 19 |
 | `SAO_RECIPES{key}` | ambiguous | 1 |
-| `SAO_RECIPES{key}` | resolved | 71 |
+| `SAO_RECIPES{key}` | resolved | 74 |
 | `SAO_RECIPES{}.items[][0]` | excluded-row | 69 |
-| `SAO_RECIPES{}.items[][0]` | resolved | 178 |
-| `SAO_RECIPES{}.items[][1]` | excluded-row | 178 |
+| `SAO_RECIPES{}.items[][0]` | resolved | 182 |
+| `SAO_RECIPES{}.items[][1]` | excluded-row | 182 |
 | `SAO_RECIPES{}.items[][1]` | resolved | 65 |
 | `SAO_RECIPES{}.items[][1]` | unresolved | 4 |
 | `SAO_RECIPES{}.items[][3][][0]` | ambiguous | 2 |
-| `SAO_RECIPES{}.items[][3][][0]` | resolved | 378 |
+| `SAO_RECIPES{}.items[][3][][0]` | resolved | 392 |
 | `SAO_RECIPES{}.items[][3][][0]` | unresolved | 3 |
 | `SAO_SETS.potions[].name` | resolved | 58 |
 | `SAO_SETS.potions[].name` | unresolved | 5 |
 | `SAO_SETS.sets[].members[]` | ambiguous | 1 |
-| `SAO_SETS.sets[].members[]` | resolved | 125 |
+| `SAO_SETS.sets[].members[]` | resolved | 129 |
 | `SAO_SETS.sets[].members[]` | unresolved | 3 |
 | `SAO_ZHNAMES.items[].ids[]` | excluded-row | 40 |
-| `SAO_ZHNAMES.items[].ids[]` | resolved | 551 |
+| `SAO_ZHNAMES.items[].ids[]` | resolved | 560 |
 | `SAO_ZHNAMES.items[].ids[]` | unresolved | 1 |
 | `SAO_ZHNAMES.mobsByName{key}` | resolved | 74 |
 | `SAO_ZHNAMES.mobs{key}` | resolved | 46 |
@@ -118,7 +118,7 @@
 | `SAO_ZHNAMES.npcs{key}` | quest-npc | 20 |
 | `SAO_ZHNAMES.npcs{key}` | resolved | 48 |
 | `SAO_ZHNAMES.places{key}` | ambiguous | 2 |
-| `SAO_ZHNAMES.places{key}` | resolved | 31 |
+| `SAO_ZHNAMES.places{key}` | resolved | 36 |
 | `SAO_ZHNAMES.places{key}` | unresolved | 1 |
 | `SAO_ZHNAMES.quests{key}` | resolved | 40 |
 | `SAO_ZHNAMES.sets{key}` | resolved | 18 |
@@ -127,7 +127,7 @@
 
 - NPC 的遊戲商店名／英法文名（名字索引的一部分，被引用的一方）；—；2 個：`SAO_BUYBACK.shops{}`、`SAO_ZHNAMES.npcEn{}`
 - NPC 紀錄本身（被引用的一方）；—；1 個：`SAO_NPCS{}[][1]`
-- 不是引用（數值、座標、說明文字、日期、旗標）；—；167 個：`SAO.BOSS_SPAWNS[][1]`、`SAO.BOSS_SPAWNS[][2]`、`SAO.BOSS_SPAWNS[][3]`、`SAO.ITEMS{}.cat`、`SAO.ITEMS{}.dmg`、`SAO.ITEMS{}.ic`、`SAO.ITEMS{}.icsrc`、`SAO.ITEMS{}.id`、`SAO.ITEMS{}.locked`、`SAO.ITEMS{}.lore`、`SAO.ITEMS{}.lv`、`SAO.ITEMS{}.note`、`SAO.ITEMS{}.r`、`SAO.ITEMS{}.set.tiers[][0]`、`SAO.ITEMS{}.set.tiers[][1]`、`SAO.ITEMS{}.src`、`SAO.ITEMS{}.st`、`SAO.ITEMS{}.st{key}`、`SAO.ITEMS{}.st{}`、`SAO.ITEMS{}.use[]`、`SAO.ITEMS{}.vanilla`、`SAO.MAP`、`SAO.M[].beh`、`SAO.M[].diff`、`SAO.M[].drops[][1]`、`SAO.M[].icon`、`SAO.M[].id`、`SAO.M[].lvShot`、`SAO.M[].note`、`SAO.M[].type`、`SAO.PHOTO{}`、`SAO.QUESTS[].id`、`SAO.QUESTS[].kill[1]`、`SAO.QUESTS[].money`、`SAO.QUESTS[].need[][1]`、`SAO.QUESTS[].need[][2]`、`SAO.QUESTS[].src`、`SAO.QUESTS[].x`、`SAO.QUESTS[].xp`、`SAO.QUESTS[].z`、`SAO.STATUS.est.c`、`SAO.STATUS.est.d`、`SAO.STATUS.est.t`、`SAO.STATUS.label.c`、`SAO.STATUS.label.d`、`SAO.STATUS.label.t`、`SAO.STATUS.npc.c`、`SAO.STATUS.npc.d`、`SAO.STATUS.npc.t`、`SAO.STATUS.player.c`、`SAO.STATUS.player.d`、`SAO.STATUS.player.t`、`SAO.STATUS.ref.c`、`SAO.STATUS.ref.d`、`SAO.STATUS.ref.t`、`SAO.STATUS.unk.c`、`SAO.STATUS.unk.d`、`SAO.STATUS.unk.t`、`SAO.STATUS.user.c`、`SAO.STATUS.user.d`、`SAO.STATUS.user.t`、`SAO.ZONES{}.fr`、`SAO.ZONES{}.n`、`SAO.ZONES{}.note`、`SAO.ZONES{}.old`、`SAO.ZONES{}.zh`、`SAO.ZONES{}.zl`、`SAO23.extra{}.note`、`SAO23.extra{}.slot`、`SAO23.extra{}.src`、`SAO23.extra{}.use[]`、`SAO23.floors{}.BOSS_SPAWNS[][1]`、`SAO23.floors{}.BOSS_SPAWNS[][2]`、`SAO23.floors{}.BOSS_SPAWNS[][3]`、`SAO23.floors{}.M[].beh`、`SAO23.floors{}.M[].diff`、`SAO23.floors{}.M[].drops[][1]`、`SAO23.floors{}.M[].drops[][2]`、`SAO23.floors{}.M[].gameDrop`、`SAO23.floors{}.M[].icon`、`SAO23.floors{}.M[].id`、`SAO23.floors{}.M[].lvShot`、`SAO23.floors{}.M[].news`、`SAO23.floors{}.M[].note`、`SAO23.floors{}.M[].num`、`SAO23.floors{}.M[].type`、`SAO23.floors{}.boss`、`SAO23.floors{}.lv`、`SAO23.floors{}.map.blank`、`SAO23.floors{}.map.clip.c`、`SAO23.floors{}.map.clip.r`、`SAO23.floors{}.map.img`、`SAO23.floors{}.map.lo`、`SAO23.floors{}.map.note`、`SAO23.floors{}.map.size`、`SAO23.floors{}.map.x0`、`SAO23.floors{}.map.z0`、`SAO23.floors{}.name`、`SAO23.floors{}.opened`、`SAO23.floors{}.quests[].date`、`SAO23.floors{}.quests[].money`、`SAO23.floors{}.quests[].src`、`SAO23.floors{}.quests[].xp`、`SAO23.floors{}.status`、`SAO23.floors{}.zones{}.n`、`SAO23.floors{}.zones{}.news`、`SAO23.floors{}.zones{}.note`、`SAO23.floors{}.zones{}.zh`、`SAO23.floors{}.zones{}.zhKeep`、`SAO23.unknown{}.note`、`SAO23_ITEMS{}[1]`、`SAO23_ITEMS{}[2]`、`SAO23_ITEMS{}[3]`、`SAO23_ITEMS{}[4]`、`SAO23_ITEMS{}[5]`、`SAO23_ITEMS{}[6]`、`SAO23_ITEMS{}[6]{key}`、`SAO23_ITEMS{}[6]{}`、`SAO23_ITEMS{}[7]`、`SAO_BUYBACK.items{}[][1]`、`SAO_BUYBACK.items{}[][2]`、`SAO_GACHA.banners[].n`、`SAO_GACHA.banners[].note`、`SAO_GACHA.src.date`、`SAO_GACHA.src.title`、`SAO_GACHA.src.url`、`SAO_GAMEINFO.date`、`SAO_GAMEINFO.items[].date`、`SAO_GAMEINFO.items[].desc`、`SAO_GAMEINFO.items[].lvl`、`SAO_GAMEINFO.items[].note`、`SAO_GAMESTATS.date`、`SAO_GAMESTATS.items{}.auc`、`SAO_GAMESTATS.items{}.date`、`SAO_GAMESTATS.items{}.dmg`、`SAO_GAMESTATS.items{}.lvl`、`SAO_GAMESTATS.items{}.r`、`SAO_GAMESTATS.items{}.st`、`SAO_GAMESTATS.items{}.st[][0]`、`SAO_GAMESTATS.items{}.st[][1]`、`SAO_HINTS{}{}[0]`、`SAO_HINTS{}{}[1]`、`SAO_HINTS{}{}[2]`、`SAO_MOBRENDER.src`、`SAO_NPCS{}[][0]`、`SAO_NPCS{}[][2]`、`SAO_NPCS{}[][3]`、`SAO_NPCS{}[][4]`、`SAO_NPCS{}[][5]`、`SAO_NPC_CALC{}.d`、`SAO_NPC_CALC{}.k`、`SAO_NPC_CALC{}.m`、`SAO_NPC_CALC{}.t`、`SAO_RECIPES{}.floor`、`SAO_RECIPES{}.items[][2]`、`SAO_RECIPES{}.items[][3][][1]`、`SAO_RECIPES{}.items[][4]`、`SAO_RECIPES{}.items[][5]`、`SAO_RECIPES{}.items[][6]`、`SAO_RECIPES{}.items[][7]`、`SAO_RECIPES{}.items[][8]`、`SAO_RECIPE_QTY{}`、`SAO_SETS.date`、`SAO_SETS.potions[].effects[]`、`SAO_SETS.sets[].tiers[][0]`、`SAO_SETS.sets[].tiers[][1]`、`SAO_SETS.sets[].zh`
+- 不是引用（數值、座標、說明文字、日期、旗標）；—；168 個：`SAO.BOSS_SPAWNS[][1]`、`SAO.BOSS_SPAWNS[][2]`、`SAO.BOSS_SPAWNS[][3]`、`SAO.ITEMS{}.cat`、`SAO.ITEMS{}.dmg`、`SAO.ITEMS{}.ic`、`SAO.ITEMS{}.icsrc`、`SAO.ITEMS{}.id`、`SAO.ITEMS{}.locked`、`SAO.ITEMS{}.lore`、`SAO.ITEMS{}.lv`、`SAO.ITEMS{}.note`、`SAO.ITEMS{}.r`、`SAO.ITEMS{}.set.tiers[][0]`、`SAO.ITEMS{}.set.tiers[][1]`、`SAO.ITEMS{}.src`、`SAO.ITEMS{}.st`、`SAO.ITEMS{}.st{key}`、`SAO.ITEMS{}.st{}`、`SAO.ITEMS{}.use[]`、`SAO.ITEMS{}.vanilla`、`SAO.MAP`、`SAO.M[].beh`、`SAO.M[].diff`、`SAO.M[].drops[][1]`、`SAO.M[].icon`、`SAO.M[].id`、`SAO.M[].lvShot`、`SAO.M[].note`、`SAO.M[].type`、`SAO.PHOTO{}`、`SAO.QUESTS[].id`、`SAO.QUESTS[].kill[1]`、`SAO.QUESTS[].money`、`SAO.QUESTS[].need[][1]`、`SAO.QUESTS[].need[][2]`、`SAO.QUESTS[].src`、`SAO.QUESTS[].x`、`SAO.QUESTS[].xp`、`SAO.QUESTS[].z`、`SAO.STATUS.est.c`、`SAO.STATUS.est.d`、`SAO.STATUS.est.t`、`SAO.STATUS.label.c`、`SAO.STATUS.label.d`、`SAO.STATUS.label.t`、`SAO.STATUS.npc.c`、`SAO.STATUS.npc.d`、`SAO.STATUS.npc.t`、`SAO.STATUS.player.c`、`SAO.STATUS.player.d`、`SAO.STATUS.player.t`、`SAO.STATUS.ref.c`、`SAO.STATUS.ref.d`、`SAO.STATUS.ref.t`、`SAO.STATUS.unk.c`、`SAO.STATUS.unk.d`、`SAO.STATUS.unk.t`、`SAO.STATUS.user.c`、`SAO.STATUS.user.d`、`SAO.STATUS.user.t`、`SAO.ZONES{}.fr`、`SAO.ZONES{}.n`、`SAO.ZONES{}.note`、`SAO.ZONES{}.old`、`SAO.ZONES{}.zh`、`SAO.ZONES{}.zl`、`SAO23.extra{}.note`、`SAO23.extra{}.slot`、`SAO23.extra{}.src`、`SAO23.extra{}.use[]`、`SAO23.floors{}.BOSS_SPAWNS[][1]`、`SAO23.floors{}.BOSS_SPAWNS[][2]`、`SAO23.floors{}.BOSS_SPAWNS[][3]`、`SAO23.floors{}.M[].beh`、`SAO23.floors{}.M[].diff`、`SAO23.floors{}.M[].drops[][1]`、`SAO23.floors{}.M[].drops[][2]`、`SAO23.floors{}.M[].gameDrop`、`SAO23.floors{}.M[].icon`、`SAO23.floors{}.M[].id`、`SAO23.floors{}.M[].lvShot`、`SAO23.floors{}.M[].news`、`SAO23.floors{}.M[].note`、`SAO23.floors{}.M[].num`、`SAO23.floors{}.M[].type`、`SAO23.floors{}.boss`、`SAO23.floors{}.lv`、`SAO23.floors{}.map.blank`、`SAO23.floors{}.map.clip.c`、`SAO23.floors{}.map.clip.r`、`SAO23.floors{}.map.img`、`SAO23.floors{}.map.lo`、`SAO23.floors{}.map.note`、`SAO23.floors{}.map.size`、`SAO23.floors{}.map.x0`、`SAO23.floors{}.map.z0`、`SAO23.floors{}.name`、`SAO23.floors{}.opened`、`SAO23.floors{}.quests[].date`、`SAO23.floors{}.quests[].money`、`SAO23.floors{}.quests[].src`、`SAO23.floors{}.quests[].xp`、`SAO23.floors{}.status`、`SAO23.floors{}.zones{}.n`、`SAO23.floors{}.zones{}.news`、`SAO23.floors{}.zones{}.note`、`SAO23.floors{}.zones{}.zh`、`SAO23.floors{}.zones{}.zhKeep`、`SAO23.unknown{}.note`、`SAO23_ITEMS{}[1]`、`SAO23_ITEMS{}[2]`、`SAO23_ITEMS{}[3]`、`SAO23_ITEMS{}[4]`、`SAO23_ITEMS{}[5]`、`SAO23_ITEMS{}[6]`、`SAO23_ITEMS{}[6]{key}`、`SAO23_ITEMS{}[6]{}`、`SAO23_ITEMS{}[7]`、`SAO_BUYBACK.items{}[][1]`、`SAO_BUYBACK.items{}[][2]`、`SAO_GACHA.banners[].n`、`SAO_GACHA.banners[].note`、`SAO_GACHA.src.date`、`SAO_GACHA.src.title`、`SAO_GACHA.src.url`、`SAO_GAMEINFO.date`、`SAO_GAMEINFO.items[].date`、`SAO_GAMEINFO.items[].desc`、`SAO_GAMEINFO.items[].lvl`、`SAO_GAMEINFO.items[].note`、`SAO_GAMESTATS.date`、`SAO_GAMESTATS.items{}.auc`、`SAO_GAMESTATS.items{}.date`、`SAO_GAMESTATS.items{}.dmg`、`SAO_GAMESTATS.items{}.lvl`、`SAO_GAMESTATS.items{}.r`、`SAO_GAMESTATS.items{}.st`、`SAO_GAMESTATS.items{}.st[][0]`、`SAO_GAMESTATS.items{}.st[][1]`、`SAO_HINTS{}{}[0]`、`SAO_HINTS{}{}[1]`、`SAO_HINTS{}{}[2]`、`SAO_MOBRENDER.src`、`SAO_NPCS{}[][0]`、`SAO_NPCS{}[][2]`、`SAO_NPCS{}[][3]`、`SAO_NPCS{}[][4]`、`SAO_NPCS{}[][5]`、`SAO_NPC_CALC{}.d`、`SAO_NPC_CALC{}.k`、`SAO_NPC_CALC{}.m`、`SAO_NPC_CALC{}.t`、`SAO_RECIPES{}.floor`、`SAO_RECIPES{}.items[][2]`、`SAO_RECIPES{}.items[][3][][1]`、`SAO_RECIPES{}.items[][4]`、`SAO_RECIPES{}.items[][5]`、`SAO_RECIPES{}.items[][6]`、`SAO_RECIPES{}.items[][7]`、`SAO_RECIPES{}.items[][8]`、`SAO_RECIPE_MISS{}`、`SAO_RECIPE_QTY{}`、`SAO_SETS.date`、`SAO_SETS.potions[].effects[]`、`SAO_SETS.sets[].tiers[][0]`、`SAO_SETS.sets[].tiers[][1]`、`SAO_SETS.sets[].zh`
 - 世界首領資料（說明、時間、攻擊招式；物品只有輪盤欄位掃描）；階段 2；48 個：`SAO_BOSSES.uniqueRules[]`、`SAO_BOSSES.uniqueWiki[][0]`、`SAO_BOSSES.uniqueWiki[][1]`、`SAO_BOSSES.uniqueWiki[][2]`、`SAO_BOSSES.uniqueWiki[][3]`、`SAO_BOSSES.uniqueWiki[][4]`、`SAO_BOSSES.unique[].attacks[][0]`、`SAO_BOSSES.unique[].attacks[][1]`、`SAO_BOSSES.unique[].available`、`SAO_BOSSES.unique[].floor`、`SAO_BOSSES.unique[].fr`、`SAO_BOSSES.unique[].id`、`SAO_BOSSES.unique[].img`、`SAO_BOSSES.unique[].imgFront`、`SAO_BOSSES.unique[].level`、`SAO_BOSSES.unique[].levelSrc`、`SAO_BOSSES.unique[].name`、`SAO_BOSSES.unique[].note`、`SAO_BOSSES.unique[].phases`、`SAO_BOSSES.unique[].unit`、`SAO_BOSSES.unique[].zh`、`SAO_BOSSES.wikiWorld[][0]`、`SAO_BOSSES.wikiWorld[][1]`、`SAO_BOSSES.wikiWorld[][2]`、`SAO_BOSSES.world[].access`、`SAO_BOSSES.world[].attacks[][0]`、`SAO_BOSSES.world[].attacks[][1]`、`SAO_BOSSES.world[].desc`、`SAO_BOSSES.world[].fr`、`SAO_BOSSES.world[].guaranteed`、`SAO_BOSSES.world[].id`、`SAO_BOSSES.world[].img`、`SAO_BOSSES.world[].imgFront`、`SAO_BOSSES.world[].level`、`SAO_BOSSES.world[].maxPlayers`、`SAO_BOSSES.world[].name`、`SAO_BOSSES.world[].price`、`SAO_BOSSES.world[].queue`、`SAO_BOSSES.world[].rolls`、`SAO_BOSSES.world[].roulette0[][2]`、`SAO_BOSSES.world[].rouletteSrc`、`SAO_BOSSES.world[].roulette[][2]`、`SAO_BOSSES.world[].schedule[].day`、`SAO_BOSSES.world[].schedule[].minutes`、`SAO_BOSSES.world[].schedule[].time`、`SAO_BOSSES.world[].schedule[].zone`、`SAO_BOSSES.world[].weakness`、`SAO_BOSSES.world[].zh`
 - 主線標題（被引用的一方）；—；1 個：`SAO_MAINQ{}[].t`
 - 主線步驟文字、座標、圖片；階段 4；14 個：`SAO_MAINQ{key}`、`SAO_MAINQ{}[].d`、`SAO_MAINQ{}[].en{key}`、`SAO_MAINQ{}[].en{}`、`SAO_MAINQ{}[].img{key}`、`SAO_MAINQ{}[].img{}[][0]`、`SAO_MAINQ{}[].img{}[][1]`、`SAO_MAINQ{}[].lv`、`SAO_MAINQ{}[].n`、`SAO_MAINQ{}[].s[][0]`、`SAO_MAINQ{}[].s[][1]`、`SAO_MAINQ{}[].s[][2]`、`SAO_MAINQ{}[].s[][3]`、`SAO_MAINQ{}[].tip`
@@ -167,11 +167,11 @@
 - 遊戲技能文字和圖示路徑；—；18 個：`SAO_GAMESKILLS{key}`、`SAO_GAMESKILLS{}.date`、`SAO_GAMESKILLS{}.icons{key}`、`SAO_GAMESKILLS{}.icons{}`、`SAO_GAMESKILLS{}.list[].base`、`SAO_GAMESKILLS{}.list[].d`、`SAO_GAMESKILLS{}.list[].dOff`、`SAO_GAMESKILLS{}.list[].data[]`、`SAO_GAMESKILLS{}.list[].dz[]`、`SAO_GAMESKILLS{}.list[].en`、`SAO_GAMESKILLS{}.list[].fr`、`SAO_GAMESKILLS{}.list[].g`、`SAO_GAMESKILLS{}.list[].lore`、`SAO_GAMESKILLS{}.list[].max`、`SAO_GAMESKILLS{}.list[].slot`、`SAO_GAMESKILLS{}.list[].t`、`SAO_GAMESKILLS{}.list[].zh`、`SAO_GAMESKILLS{}.lv`
 - 遊戲英文名（名字索引的一部分）；—；1 個：`SAO_GAMEINFO.items[].en`
 - 遊戲英文名（小寫，W7 跨檔線索用）；—；1 個：`SAO_GAMESTATS.items{}.en`
-- 配方產量的鍵（NPC|產出，網站內部組合鍵）；階段 2；1 個：`SAO_RECIPE_QTY{key}`
+- 配方產量的鍵（NPC|產出，網站內部組合鍵）；階段 2；2 個：`SAO_RECIPE_MISS{key}`、`SAO_RECIPE_QTY{key}`
 
 ## 錯誤清單
 
-### E1（88）
+### E1（87）
 
 | 檔案 | 鍵 | 行 | 原因 | 例外 |
 | --- | --- | --- | --- | --- |
@@ -218,7 +218,6 @@
 | gameicons.js | `gameicons:Slime Tear` | 81 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | gameicons.js | `gameicons:Training Dagger (2)` | 88 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | gameinfo.js | `gameinfo:Allium Flower/bought-back-by:F1 Local Farmer - Near the Starting City` | 4 | 解析不到：沒有對得上的 NPC | 有 |
-| gameinfo.js | `gameinfo:Anneau des Cieux/crafted-at:P3 - Craft Anneau des Cieux` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Bottes de l'Explorateur/crafted-at:P3 - Craft Bottes de l'Explorateur` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Ceinture de la Tribu/crafted-at:P3 - Craft Artefact Ceinture Orc` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:Chipped Axe/sold-by:F1 - Starting City - Tools` | 4 | 解析不到：沒有對得上的 NPC | 有 |
@@ -253,16 +252,16 @@
 | recipes.js | `recipe:Secret Gelatinous Cloak/Gelatinous Cloak/mat:Slime Tear` | 1687 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | recipes.js | `recipe:Sewer Reshaper/out:Slime Tear` | 1687 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | recipes.js | `recipe:Starting Merchant/out:Training Dagger (2)` | 2333 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Boar of Gluttony Candy` | 109 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Effective Repair Kit` | 113 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Halloween Candy Corn` | 106 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Lion of Pride Candy` | 110 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `potion:Pumpkin Caramel` | 105 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `set:Stealthy Herald Set/member:Boots of the Herald` | 45 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `set:Stealthy Herald Set/member:Tunic of the Herald` | 45 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| sets.js | `set:Tenacious Necromancer Set/member:Helmet of the Tenacious Necromancer` | 49 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Boar of Gluttony Candy` | 110 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Effective Repair Kit` | 114 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Halloween Candy Corn` | 107 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Lion of Pride Candy` | 111 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `potion:Pumpkin Caramel` | 106 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `set:Stealthy Herald Set/member:Boots of the Herald` | 46 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `set:Stealthy Herald Set/member:Tunic of the Herald` | 46 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
+| sets.js | `set:Tenacious Necromancer Set/member:Helmet of the Tenacious Necromancer` | 50 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | zhnames.js | `zhnames.places:Lair of Asterius` | 25 | 解析不到：沒有對得上的地點 | 有 |
-| zhnames.js | `zhnames:蜘蛛毒液/i\|Spider Venom` | 284 | 解析不到：「i\|」指到的本站物品表（ITEMS）鍵不存在 | 有 |
+| zhnames.js | `zhnames:蜘蛛毒液/i\|Spider Venom` | 293 | 解析不到：「i\|」指到的本站物品表（ITEMS）鍵不存在 | 有 |
 
 ### E2（28）
 
@@ -287,7 +286,7 @@
 | recipes.js | `recipe-npc:3\|Consumables Merchant` | 3292 | 對到 2 個不同的實體：N3:25:Consumables Merchant、N3:26:Consumables Merchant | 有 |
 | recipes.js | `recipe:3\|Adventurer's Shoemaker/Bottes de l'Aventurier/mat:狼皮（第 1 或第 2 層，看不出來）` | 4241 | 資料本身寫明看不出是哪一種（已知的多重可能，沒有指定實體） | 有 |
 | recipes.js | `recipe:3\|P3 - Craft Anneau Draconique Corrompu/Anneau Draconique Corrompu/mat:腐化碎片（三種之一，看不出是哪一種）` | 4094 | 資料本身寫明看不出是哪一種（已知的多重可能，沒有指定實體） | 有 |
-| sets.js | `set:Ika Set/member:Leggings of Ika` | 36 | 對到 2 個不同的實體：1341 Jambières d'Ika（裝備）、1348 Jambières d’Ika（裝備） | 有 |
+| sets.js | `set:Ika Set/member:Leggings of Ika` | 37 | 對到 2 個不同的實體：1341 Jambières d'Ika（裝備）、1348 Jambières d’Ika（裝備） | 有 |
 | zhnames.js | `zhnames.npcEn:Assistant to the Alchemist` | 34 | 對到 2 個不同的實體：N2:1:Assistant to the Alchemist、N3:1:Assistant to the Alchemist | 有 |
 | zhnames.js | `zhnames.npcs:Alchemist` | 32 | 對到 3 個不同的實體：N1:0:Alchemist、N2:0:Alchemist、N3:0:Alchemist | 有 |
 | zhnames.js | `zhnames.npcs:Assistant to the Alchemist` | 34 | 對到 2 個不同的實體：N2:1:Assistant to the Alchemist、N3:1:Assistant to the Alchemist | 有 |
@@ -312,7 +311,7 @@
 - gamestats 等級：45 件
 - 配方等級：46 件
 
-### W5（90）
+### W5（91）
 
 - 第 1 層 NPC：Lumberjack ↔ Cabinetmaker（3.6 格）
 - 第 1 層 NPC：Cursed Ruins - Loot Buyer ↔ Cursed Ruins - Loot Buyer (2)（223.4 格）
@@ -398,6 +397,7 @@
 - 物品：Sylnovarian Jewel ↔ Sylvaerian Jewel
 - 物品：Sylnovarian Leaves ↔ Sylvaerian Leaves
 - zhnames 重複條目：g|Kobold Key → 狗頭人之鑰、狗頭人之鑰
+- zhnames 重複條目：i|Ravager Branch → 毀滅樹枝、毀滅樹枝
 - zhnames 重複條目：p|1835 → 麥葉、麥葉
 - zhnames 重複條目：p|1836 → 麥花、麥花
 - zhnames 重複條目：p|1837 → 精煉小麥、精煉小麥

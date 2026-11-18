@@ -396,13 +396,22 @@ SHOTS23 = {
     (3, "P3 - Craft Artefact Boucles d'Oreilles Bois Sombres"): [("Boucles d'Oreilles des Bois Sombres", "a", 600, [["Juvenile Bark", 64], ["Sylvaerian Jewel", 64], ["Iron Ingot", 16]], "55", "acc")],
     # window 04.11.46: MYTHIC, instant (0 s), 55 Col; the window's second row (free, internal-code materials) is not listed
     (3, "P3 - Craft Jeton Occulte"): [("Jeton Occulte", "splusplus", 0, [["Medium Pouch", 64]], "55", "other")],
-    # nameplate [NPC] 皮革匠, window「P3 - Craft 靴子 de Sylnovar」(18.48.39～54): RARE 5 min, 30 Col. Bottes Sylvestres (材料「野獸毛皮」) and the
-    # amethyst boots row wait for the owner's decision
+    # nameplate [NPC] 皮革匠, window「P3 - Craft 靴子 de Sylnovar」(18.48.39～54): RARE 5 min, 30 Col. The amethyst boots row waits for
+    # the owner's decision (A-3)
     (3, "Leatherworker"): [(n, "b", 300, m, "30", "acc") for n, m in (
         ("Bottes des Bois", [["Woodland Fur", 64], ["Woodland Tail", 32], ["Bear Hide", 32]]),
         ("Bottes Brumeuses", [["Misty Fur", 64], ["Misty Tail", 32], ["Bear Hide", 32]]),
         ("Bottes Goblines", [["Orc Blood", 32], ["Juvenile Bark", 32], ["Bear Hide", 32]]),
-        ("Bottes en Toile d'Araignée", [["Spider Cloth", 64], ["強化蛛絲", 16], ["Spider Thread", 64]]))],
+        ("Bottes en Toile d'Araignée", [["Spider Cloth", 64], ["強化蛛絲", 16], ["Spider Thread", 64]]),
+        # 森林之靴 (18.48.50): 魔法木碎片 64、野獸毛皮 64、熊皮 32 — 野獸毛皮＝Beast Fur by name only (owner 2026-11-18 chose C14 A)
+        ("Bottes Sylvestres", [["Magic Wood Shard", 64], ["Beast Fur", 64], ["Bear Hide", 32]]))],
+    # owner 2026-11-18 (C14 A, A13/A14): window「P3 - Craft Orbe Goblinne」(20.02.26): EPIC 10 min, 55 Col
+    (3, "P3 - Craft Orbe Goblinne"): [("Orbe Goblinne", "a", 600, [["Goblin Blood", 128], ["Goblin Eye", 32], ["Goblin Essence", 8]], "55", "acc")],
+    # window「P3 - 製作手環 Goblin」(20.01.22): RARE 10 min, 55 Col; the window says 3/5 materials but only 4 rows are on screen
+    # (the 5th is written as ??? on the site: SAO_RECIPE_MISS)
+    (3, "P3 - Craft Bracelet Goblin"): [("Bracelet Goblin", "b", 600, [["Goblin Blood", 64], ["Goblin Armor", 32], ["哥布林之耳", 16], ["Goblin Eye", 16]], "55", "acc")],
+    # window「P3 - Craft 戒指 des Cieux」(21.43.13): LEGENDARY 10 min, 55 Col; 0/5 materials, 4 rows on screen
+    (3, "P3 - Craft Anneau des Cieux"): [("Anneau des Cieux", "s", 600, [["Majestic Essence", 1], ["Skyblue Feather", 10], ["Sylnovarian Jewel", 8], ["不純黑瑪瑙錠", 10]], "55", "acc")],
     # window 11-16 04.12.24～33: EPIC 10 min, 40 Col
     (3, "P3 - Craft Outils des Bois Anciens"): [(n, "a", 600, [["Ancient Woods Essence", 1], ["Juvenile Seed", 16], ["Ravager Bark", 16], ["Dark Branch", 32]], "40", "other")
                                                for n in ("Pioche de la Forêt", "Houe de la Forêt", "Hache de la Forêt")],
@@ -432,7 +441,10 @@ OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quali
          "Bottes des Bois": 1516, "Bottes Brumeuses": 1518, "Bottes Goblines": 1513, "Bottes en Toile d'Araignée": 1525,
          "Pioche de la Forêt": 2696, "Houe de la Forêt": 2702, "Hache de la Forêt": 2708,
          "Grimoire Occulte": 1557, "Boucle d'Oreille Occultes": 1558, "Bague Occulte": 1559, "Masque Occulte": 1493, "Hache Occulte": 1560,
-         "Casque Occulte": 1561, "Bottes Occultes": 1562}
+         "Casque Occulte": 1561, "Bottes Occultes": 1562,
+         "Bottes Sylvestres": 1520, "Orbe Goblinne": 1544, "Bracelet Goblin": 1619, "Anneau des Cieux": 2521}
+# recipes whose window lists more materials than the screenshot shows: number of unseen rows (site shows ??? for them)
+MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1}
 LV23 = {"Quality Health Potion II": 5, "Quality Mana Potion II": 5, "Quality Stamina Potion II": 5, "Quality Health Potion III": 8,
         "Quality Mana Potion III": 8, "Quality Stamina Potion III": 8, "Quality Health Potion IV": 12, "Quality Health Potion V": 15,
         "Quality Health Potion VI": 18, "Quality Mana Potion V": 15, "Quality Mana Potion VI": 18, "Quality Stamina Potion V": 15,
@@ -457,7 +469,7 @@ hdr = """/* Recipes by NPC (key = floor-1 NPC name, or "3|name" for another floo
 window.SAO_RECIPES = """
 out = {npc: {"floor": 1, "items": rows} for npc, rows in sorted(npcs.items())}
 out.update(out23)
-open(os.path.join(ROOT, "recipes.js"), "w", encoding="utf-8").write(hdr + json.dumps(out, ensure_ascii=False, indent=0) + ";\nwindow.SAO_RECIPE_QTY = " + json.dumps(QTY, ensure_ascii=False) + ";\n")
+open(os.path.join(ROOT, "recipes.js"), "w", encoding="utf-8").write(hdr + json.dumps(out, ensure_ascii=False, indent=0) + ";\nwindow.SAO_RECIPE_QTY = " + json.dumps(QTY, ensure_ascii=False) + ";\nwindow.SAO_RECIPE_MISS = " + json.dumps(MISS, ensure_ascii=False) + ";\n")
 n = sum(len(r) for r in npcs.values())
 from collections import Counter
 print(n, "recipes,", len(npcs), "NPCs", Counter(r[6] for rows in npcs.values() for r in rows), Counter(r[8] for rows in npcs.values() for r in rows))

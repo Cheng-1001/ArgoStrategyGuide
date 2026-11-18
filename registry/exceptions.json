@@ -435,16 +435,6 @@
   {
    "code": "E1",
    "file": "gameinfo.js",
-   "key": "gameinfo:Anneau des Cieux/crafted-at:P3 - Craft Anneau des Cieux",
-   "reason": "解析不到：沒有對得上的 NPC",
-   "status": "unresolved",
-   "approved_by": "站長",
-   "approved_at": "2026-11-17",
-   "clear_by": "階段 3"
-  },
-  {
-   "code": "E1",
-   "file": "gameinfo.js",
    "key": "gameinfo:Bottes de l'Explorateur/crafted-at:P3 - Craft Bottes de l'Explorateur",
    "reason": "解析不到：沒有對得上的 NPC",
    "status": "unresolved",

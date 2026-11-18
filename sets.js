@@ -5,6 +5,7 @@
    2026-11-07 checked against the Chinese tooltips: Standard Skeleton Set [4] is +2% Damage Reduction (was -2%); the rest match. */
 window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "暗影士兵套裝", "zh": 1, "tiers": [[2, "-1.5 HP/秒"], [3, "-1.5 HP/秒"], [4, "-1.5 HP/秒"], [5, "-1.5 HP/秒"], [6, "-1.5 HP/秒"], [7, "-1.5 HP/秒"]], "members": ["Grimoire Occulte", "Boucle d'Oreille Occultes", "Bague Occulte", "Masque Occulte", "Hache Occulte", "Casque Occulte", "Bottes Occultes", "Anneau Occulte", "Amulette Occulte"]},   // 2026-11-17 in27 Chinese tooltips (11-17 19.05.47～19.06.19, 7 pieces)
+ {"name": "武術古林套裝", "zh": 1, "tiers": [[2, "+7% 爆擊傷害、+7% 技能爆擊傷害"], [3, "+10% 閃避率"], [4, "+5 攻擊傷害、+5% 移動速度、+20% 生命偷取"]], "members": ["武術古林頭盔", "武術古林胸甲", "武術古林護腿", "武術古林靴"]},   // 2026-11-14 in27 Chinese tooltips (20.40.45～20.41.16)
  {"name": "小部落套裝", "zh": 1, "tiers": [[2, "+5 HP、+0.15 HP/秒"], [3, "+1.5% 法術吸血"], [4, "+5% 魔法傷害"]], "members": ["Orbe Goblinne"]},   // 2026-11-17 in27 Chinese tooltip (哥布林寶珠 20.02.26)
  {"name": "盜賊套裝", "zh": 1, "tiers": [[2, "+2 攻擊傷害"], [3, "+0.5/秒 移動速度、+10% 攻擊速度"], [4, "+7.5% 爆擊率、+7.5% 爆擊傷害"]], "members": ["Masque du Voleur", "Cagoule du Voleur", "Gants du Voleur", "Anneau du Voleur", "Amulette du Voleur"]},   // 2026-11-13 in26 Chinese tooltip (竊賊面具); not the English Bandit Set (different tiers). 2026-11-17 in27: 4 more pieces (04.09.25～45)
  {"name": "獵人紫水晶套裝", "zh": 1, "tiers": [[2, "+0.4 耐力/秒"], [3, "+4% 爆擊率、+4% 技能爆擊率"], [4, "+7 攻擊傷害"]], "members": ["獵人紫水晶靴", "獵人紫水晶護腿"]},   // 2026-11-13 in26 Chinese tooltips

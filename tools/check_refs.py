@@ -76,7 +76,7 @@ MAPS = {
     'SAO23.floors{}.zones', 'SAO23.extra', 'SAO23.unknown', 'SAO_HINTS', 'SAO_HINTS{}', 'SAO_CODEX', 'SAO_CODEX{}',
     'SAO_MOBPHOTO.srcs', 'SAO_MOBPHOTO.by', 'SAO_MOBPHOTO.by{}', 'SAO_MOBRENDER.by', 'SAO_MOBRENDER.by{}', 'SAO_MAINQ', 'SAO_MAINQ{}[].en', 'SAO_MAINQ{}[].img', 'SAO23.floors{}.quests[].en',
     'SAO_EQUIP[][7]', 'SAO_PROPS[][6]', 'SAO_BUYBACK.shops', 'SAO_BUYBACK.items', 'SAO_NPCS', 'SAO_NPC_CALC',
-    'SAO_CHANGELOG_SUM', 'SAO_RECIPES', 'SAO_RECIPE_QTY', 'SAO_GAMESKILLS', 'SAO_GAMESKILLS{}.icons',
+    'SAO_CHANGELOG_SUM', 'SAO_RECIPES', 'SAO_RECIPE_QTY', 'SAO_RECIPE_MISS', 'SAO_GAMESKILLS', 'SAO_GAMESKILLS{}.icons',
     'SAO_EVENTS.eqPatch.items', 'SAO_EVENTS.eqPatch.items{}.set', 'SAO_GAMESTATS.items', 'SAO_ZHNAMES.search',
     'SAO_ZHNAMES.sets', 'SAO_ZHNAMES.mobs', 'SAO_ZHNAMES.mobsByName', 'SAO_ZHNAMES.places', 'SAO_ZHNAMES.terms',
     'SAO_ZHNAMES.npcEn', 'SAO_ZHNAMES.npcs', 'SAO_ZHNAMES.quests', 'SAO_ZHNAMES.quests{}.obj', 'SAO_STATICONS',
@@ -654,6 +654,8 @@ SKIP = {
     'SAO_RECIPES{}.items[][8]': 'R1',
     'SAO_RECIPE_QTY{key}': 'R30',
     'SAO_RECIPE_QTY{}': 'R1',
+    'SAO_RECIPE_MISS{key}': 'R30',   # recipe rows with materials the screenshot did not show (2026-11-18)
+    'SAO_RECIPE_MISS{}': 'R1',
     'SAO_GAMESKILLS{key}': 'R32',
     'SAO_GAMESKILLS{}.date': 'R32',
     'SAO_GAMESKILLS{}.lv': 'R32',

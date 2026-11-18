@@ -122,6 +122,7 @@ NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,6
        (3,'accessoriesBlacksmith',"P3 - Craft Artefact Boucles d'Oreilles Bois Sombres",689,1428,'2026-11-15','樹上，Y 118'),
        (3,'accessoriesBlacksmith','P3 - Craft Bracelet Goblin',978,1079,'2026-11-15','泰瑞亞莉絲之井，Y 67'),
        (3,'accessoriesBlacksmith','P3 - Craft Orbe Goblinne',957,1140,'2026-11-15','泰瑞亞莉絲之井的石室，Y 60；這張沒有開 F3，依小地圖座標和面向推算'),
+       (3,'accessoriesBlacksmith','P3 - Craft Anneau des Cieux',None,None,'2026-11-15','獸人營地；21.43.04 從約 X 256 Z 1169 Y 116 往下看到 NPC 的頭頂（沒有 F3），推測在這附近、比玩家低'),
        (3,'other','P3 - Craft Outils des Bois Anciens',254,312,'2026-11-16','羅盤「迷宮區」，Y 85'),
        (2,'other',"考古學家 de l'Antre",-157,721,'2026-11-15','阿斯特里歐斯的巢穴入口告示板左邊，Y 83；遊戲名牌「[NPC] 考古學家 de l\'Antre」，視窗「L\'Antre d\'Astérius - 戰利品資訊」')]
 for fl,rs in F23.items():

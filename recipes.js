@@ -4561,6 +4561,125 @@ null,
 "acc",
 null,
 "shot"
+],
+[
+1520,
+"Bottes Sylvestres",
+300,
+[
+[
+"Magic Wood Shard",
+64
+],
+[
+"Beast Fur",
+64
+],
+[
+"Bear Hide",
+32
+]
+],
+"30",
+"b",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Orbe Goblinne": {
+"floor": 3,
+"items": [
+[
+1544,
+"Orbe Goblinne",
+600,
+[
+[
+"Goblin Blood",
+128
+],
+[
+"Goblin Eye",
+32
+],
+[
+"Goblin Essence",
+8
+]
+],
+"55",
+"a",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Bracelet Goblin": {
+"floor": 3,
+"items": [
+[
+1619,
+"Bracelet Goblin",
+600,
+[
+[
+"Goblin Blood",
+64
+],
+[
+"Goblin Armor",
+32
+],
+[
+"哥布林之耳",
+16
+],
+[
+"Goblin Eye",
+16
+]
+],
+"55",
+"b",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Craft Anneau des Cieux": {
+"floor": 3,
+"items": [
+[
+2521,
+"Anneau des Cieux",
+600,
+[
+[
+"Majestic Essence",
+1
+],
+[
+"Skyblue Feather",
+10
+],
+[
+"Sylnovarian Jewel",
+8
+],
+[
+"不純黑瑪瑙錠",
+10
+]
+],
+"55",
+"s",
+"acc",
+null,
+"shot"
 ]
 ]
 },
@@ -4769,3 +4888,4 @@ null,
 }
 };
 window.SAO_RECIPE_QTY = {"Alchemist|Quality Health Potion I": 3, "Alchemist|Quality Health Potion II": 3, "Alchemist|Quality Health Potion III": 3, "Alchemist|Quality Mana Potion I": 3, "Alchemist|Quality Mana Potion II": 3, "Alchemist|Quality Mana Potion III": 3, "Alchemist|Quality Stamina Potion I": 3, "Alchemist|Quality Stamina Potion II": 3, "Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion II": 3, "3|Alchemist|Quality Mana Potion II": 3, "3|Alchemist|Quality Stamina Potion II": 3, "3|Alchemist|Quality Health Potion III": 3, "3|Alchemist|Quality Mana Potion III": 3, "3|Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion IV": 3, "3|Alchemist|Quality Health Potion V": 3, "3|Alchemist|Quality Health Potion VI": 3, "3|Alchemist|Quality Mana Potion V": 3, "3|Alchemist|Quality Mana Potion VI": 3, "3|Alchemist|Quality Stamina Potion V": 3, "3|Alchemist|Quality Stamina Potion VI": 3};
+window.SAO_RECIPE_MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1};
