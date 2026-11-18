@@ -892,7 +892,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="hints.js"></script>
 <script src="codex.js"></script>
 <script src="mobphotos.js"></script>
-<script src="mobrenders.js"></script>
+<script src="mobcodex.js"></script>
 <script src="mainq.js"></script>
 <script src="equip.js"></script>
 <script src="props.js"></script>
@@ -1135,9 +1135,9 @@ const flBadge=f=>`<span class="fl fl${f}">F${f}</span>`;
 const cls=t=>t==="Boss"?"boss":t==="Mini-Boss"?"mini":t==="Minion"?"minion":"";
 // monster pictures: the official news images (mobphotos.js, every floor; 使用者 2026-11-06 選 A), else the three old floor 1 photos
 const MPH=window.SAO_MOBPHOTO||{by:{}};const photoOf=m=>((MPH.by||{})[m.floor]||{})[m.name]||(m.floor===1&&S1.PHOTO[m.name]?{f:S1.PHOTO[m.name]}:null);
-// avatar: the owner's 3D render when there is one (mobrenders.js, owner 2026-11-18 「怪物圖片要更新」), else the news image / old photo;
-// the「官網公布的模樣」section keeps the news images
-const MRD=(window.SAO_MOBRENDER||{}).by||{},renderOf=m=>(MRD[m.floor]||{})[m.name]||null;
+// avatar: cut out of the owner's codex screenshot when there is one (mobcodex.js; owner 2026-11-18 「怪物圖片使用截圖，渲染圖先保留」:
+// the 3D renders stay in inbox / mobrenders.js unused), else the news image / old photo; the「官網公布的模樣」section keeps the news images
+const MCX=(window.SAO_MOBCODEX||{}).by||{},renderOf=m=>(MCX[m.floor]||{})[m.name]||null;
 const face=m=>{const r=renderOf(m),p=photoOf(m),f=r||(p&&p.f);return f?`<img class="face" src="${f}" alt="">`:`<span aria-hidden="true">${m.icon}</span>`};
 // the news' balance lines ("HP: 220 → 250 (+14%)") in Chinese
 const CH_ZH={HP:"生命",Damage:"傷害",Speed:"速度",Level:"等級",Attacks:"招式","Projectile damage taken":"受到的投射物傷害"};
@@ -1260,7 +1260,7 @@ function monDetail(id){const m=monById[id];const Fx=FLOORS[m.floor];const z=Fx.z
   ${(()=>{const C=((window.SAO_CODEX||{})[m.floor]||{})[m.num];return C?`<div class="hint cdx"><span class="hk">遊戲圖鑑說明</span><span class="muted">#${esc(m.num)}${C.reg?"・"+esc(C.reg):""}${C.n!==m.name?"・圖鑑名稱 "+esc(C.n):""}</span><span>${esc(C.desc)}</span></div>`:""})()}
   ${m.codexDesc?`<p class="lore">${esc(m.codexDesc)}</p>`:""}
   ${photoNote(m)}
-  ${renderOf(m)?`<div class="note srcn">頭像是站長在自己電腦上畫的 3D 圖：貼圖和零件取自遊戲資源包，骨架位置取自 Exiled Order 網站的模型資料，畫好後和遊戲圖鑑截圖核對過是同一隻。</div>`:""}
+  ${renderOf(m)?`<div class="note srcn">頭像取自站長的遊戲圖鑑截圖（去掉背景）。</div>`:""}
   ${repBlock(m)}
   <div class="note srcn">${esc(st.d)}${p.spot&&p.spot.note?"<br>"+esc(p.spot.note):""}${z.note?"<br>"+esc(z.note):""}</div>`}
 // ---- player reports ----

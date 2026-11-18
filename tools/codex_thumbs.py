@@ -15,7 +15,9 @@ from PIL import Image,ImageDraw
 import cv2
 src,out=sys.argv[1],sys.argv[2];os.makedirs(out,exist_ok=True)
 # the codex draws these models twice (whole monster on top, loose parts underneath; a server-side glitch): keep the top
-TOP_ONLY={'041','042','043'}
+TOP_ONLY={'041','042','043','046'}
+# bright or translucent bodies (boar eye glow, slimes): every enclosed hole is model (2026-11-18 sheet: white holes otherwise)
+FILL_HOLES={'001','002','020','021','023'}
 tiles=[]
 def panel_x(im):
     row=im[455];light=(row.min(1)>175)&(row.max(1)-row.min(1)<30)
@@ -62,7 +64,7 @@ for f in sorted(glob.glob(src+'/*.png')):
     for i in range(1,n):
         if st[i,0]>0 and st[i,1]>0 and st[i,0]+st[i,2]<W and st[i,1]+st[i,3]<H:
             h=lab==i
-            if st[i,4]<=12 or bgl[h].mean()<0.5: m[h]=1
+            if num in FILL_HOLES or st[i,4]<=12 or bgl[h].mean()<0.5: m[h]=1
     alpha=cv2.GaussianBlur(cv2.erode(m*255,np.ones((2,2),np.uint8)).astype(np.float32),(0,0),0.8)
     rgba=np.dstack([reg,np.clip(alpha,0,255).astype(np.uint8)])
     # 5: square crop
