@@ -251,7 +251,7 @@ MAT = {"Sylve Shoot": "Sylve Sprout", "Sylvan Sprout": "Sylve Sprout", "Essence 
 # Leaf Fragment…); the site's items now use the game names (old names resolve through ITEM_OLD), so materials keep the game spelling.
 # item name -> official catalogue id (checked by hand: name keyword, level and set)
 OID = {"Ring of the Boar": 2475, "Gloves of the Boar": 2038, "Bracelet of the Boar": 1590, "Belt of the Boar": 1451,   # 2026-11-07: Anneau/Gants/Bracelet/Ceinture de Sanglier (name, level-3 set; game level 1)
-       "Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "Amulet of the Sylve": 1288, "Gloves of the Bandit": 2040, "Bandit Hood": 1456, "Stolen Amulet": 1292, "Bandit Coin": 1455, "Bracelet of the Sylve": 1589, "Health Potion II": 2458, "Health Potion III": 2459, "Stamina Potion II": 2472, "Ring of the Leviathan": 2485, "Necklace of Aragorn": 1458, "Bracelet of Ice": 1596, "Gloves of the Wolves": 2044, "Occult Amulet": 1298, "Occult Ring": 2486, "Occult Bracelet": 1597, "Occult Gloves": 2045,   # 2026-11-02: official names matched by hand (Anneau de Léviathan, Collier de Aragorn, Capuche/Robe Occulte…; level may differ, the site shows the official one)
+       "Occult Hood": 1463, "Occult Robe": 1462, "Amulet of the Sylvan": 1288, "Amulet of the Sylve": 1288, "Gloves of the Bandit": 2040, "Bandit Hood": 1456, "Stolen Amulet": 1292, "Bandit Coin": 1455, "Bracelet of the Sylve": 1589, "Health Potion II": 2458, "Health Potion III": 2459, "Stamina Potion II": 2472, "Ring of the Leviathan": 2485, "Necklace of Aragorn": 1458, "Bracelet of Ice": 1596, "Gloves of the Wolves": 2044, "Occult Bracelet": 1597, "Occult Gloves": 2045,   # 2026-11-02: official names matched by hand (Anneau de Léviathan, Collier de Aragorn, Capuche/Robe Occulte…; level may differ, the site shows the official one)
        "Training Sword": 2596, "Training Bow": 1566, "Training Crossbow": 1727, "Training Scythe": 1761, "Training Katana": 1762, "Training Dagger": 1760, "Training Pavise": 2534, "Training Buckler": 2533,
        "Boar Meat": 1957, "Chipped Axe": 2703, "Cracked Pickaxe": 2691, "Wooden Fishing Rod": 2709,
        "Training Magic Staff": 2569, "Unbound Grimoire": 1626, "Training Lantern": 1627, "Training Lantern (2)": 1627, "Wild Grimoire": 1628,
@@ -409,10 +409,13 @@ SHOTS23 = {
     # window「P3 - 神秘 - 神器」Buy tab (11-17 19.05.43～19.06.19): LEGENDARY, 65 323.81 Col, stock ∞ (obtain line: 65000 = base price)
     (3, "Occult Artifact Merchant"): [(n, "s", None, [], "65323.81", "acc") for n in (
         "Grimoire Occulte", "Boucle d'Oreille Occultes", "Bague Occulte", "Masque Occulte", "Hache Occulte", "Casque Occulte", "Bottes Occultes")],
+    # window「P3 - 神秘 - 戒指」(2026-11-15 03.56.43～47): the grey ring = official 2486 (LEGENDARY Lv18, stats identical), 65 323.81 Col, stock ∞.
+    # The red ring sold next to it is not in the catalogue (left out, owner to decide)
+    (3, "Occult Rings Merchant"): [("Anneau Occulte", "s", None, [], "65323.81", "acc")],
     # floor 2, nameplate [NPC] 考古學家 de l'Antre, window「L'Antre d'Astérius - 戰利品資訊」(14.14.04): RARE key, 10 049.82 Col
     (2, "考古學家 de l'Antre"): [("Clé du Roi Taurus", "b", None, [], "10049.82", "key")],
 }
-OID23 = {"Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
+OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
          "Quality Patience Fortifier III": 2001, "Quality Resistance Fortifier III": 2000, "Quality Vitality Fortifier III": 1996,
          "Quality Health Potion IV": 2466, "Quality Health Potion V": 2467, "Quality Health Potion VI": 2468, "Mana Potion III": 2470,
          "Pioche Renforcée": 2695, "Hache Renforcée": 2707, "Houe Renforcée": 2701, "Parchemin de Réallocation": 1708, "Parchemin de Maîtrise": 1707,

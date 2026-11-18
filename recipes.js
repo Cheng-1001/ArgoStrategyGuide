@@ -1461,7 +1461,7 @@ null,
 "floor": 1,
 "items": [
 [
-1298,
+null,
 "Occult Amulet",
 null,
 [],
@@ -1547,7 +1547,7 @@ null,
 "floor": 1,
 "items": [
 [
-2486,
+null,
 "Occult Ring",
 null,
 [],
@@ -4725,6 +4725,22 @@ null,
 [
 1562,
 "Bottes Occultes",
+null,
+[],
+"65323.81",
+"s",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|Occult Rings Merchant": {
+"floor": 3,
+"items": [
+[
+2486,
+"Anneau Occulte",
 null,
 [],
 "65323.81",

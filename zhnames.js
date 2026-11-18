@@ -12,7 +12,7 @@ window.SAO_ZHNAMES={date:"2026-11-07",
 // search-only aliases (2026-11-07, user: 神祕戒指搜尋不到): items whose official Chinese name has not been seen in a screenshot yet.
 // Not shown as titles (official names only); the guess follows the official 神祕X series (神祕兜帽／手環／護身符／長袍／頭骨).
 // Replace with an items entry when a Chinese tooltip of the item is screenshotted.
-search:{"e|2486":["神祕戒指","神秘戒指"]},
+search:{},
 sets:{"Nepenthes Set":"豬籠草套裝","Misty Fangs Set":"迷霧尖牙套裝","Little Slime Set":"小史萊姆套裝","Peaceful Deer Set":"平和雄鹿套裝","Iron Set":"鐵套裝","Copper Set":"銅套裝","Weakling Wolf Set":"孱弱之狼套裝","Spider Set":"蜘蛛套裝","Hunter Herald Set":"獵人傳令官套裝","Hunter Set":"獵人套裝",
  "Shark Set":"鯊魚套裝","Elite Treant Set":"菁英樹人套裝","Ice Spirits Set":"冰之精靈套裝","Shadow Neophyte Set":"暗影新手套裝","Standard Skeleton Set":"標準骷髏套裝","Ice Golem Set":"冰魔像套裝","Fallen Ones Set":"墮落眾套裝","Fire Harpies Set":"火之鳥身女妖套裝"},
 // monsters (user 2026-11-07「1也改」): floor-1 codex number -> name in the Chinese codex list (11/7 15:25～15:26); names cut off in the list (#030 #038 #045 #047) left out,
@@ -402,7 +402,9 @@ items:[
  {"zh": "碎葉", "ids": ["i|Leaf Fragments", "p|2209"], "en": "Leaf Fragments", "fr": "Fragments de Feuilles"},
  {"zh": "神祕兜帽", "ids": ["e|1463"], "en": "Occult Hood", "fr": "Capuche Occulte"},
  {"zh": "神祕手環", "ids": ["e|1597"], "en": "Occult Bracelet", "fr": "Bracelet Occulte"},
- {"zh": "神祕護身符", "ids": ["e|1298"], "en": "Occult Amulet", "fr": "Amulette Occulte"},
+ {"zh": "神祕護身符", "ids": ["i|Occult Amulet"], "en": "Occult Amulet", "fr": null},   // floor-1 shop version (Lv10, dark-red chain); 2026-11-18 split from official 1298
+ {"zh": "神祕之戒", "ids": ["e|2486"], "en": null, "fr": "Anneau Occulte", "src": "shot27"},   // floor-3 ring shop 03.56.47: grey ring, stats = catalogue
+ {"zh": "神祕護身符", "ids": ["e|1298"], "en": null, "fr": "Amulette Occulte", "src": "shot27"},   // floor-3 amulet shop 03.57.10: 2nd row, stats = catalogue
  {"zh": "神祕長袍", "ids": ["e|1462"], "en": "Occult Robe", "fr": "Robe Occulte"},
  {"zh": "神祕頭骨", "ids": ["e|1461"], "en": "Occult Skull", "fr": "Crâne Occulte"},
  {"zh": "精煉小麥", "ids": ["p|1837"], "fr": "Blé Raffiné"},

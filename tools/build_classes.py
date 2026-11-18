@@ -23,7 +23,7 @@ CLASSES = [  # id, wiki page, reference-map id, catalogue class key, Chinese nam
     ("mage", "Mage", "mage", "mage", "法師", "🔮"),
     ("shaman", "Shaman", "shaman", "shaman", "薩滿", "🌿"),
     ("archer", "Archer", "archer", "archer", "弓箭手", "🏹"),
-    ("martial", "Martial_Artist", None, None, "武鬥家", "👊"),
+    ("martial", "Martial_Artist", None, None, "武術家", "👊")   # official Chinese name seen in-game 2026-11-14 (in27: 古林拳套 tooltip),
 ]
 ZH = {  # this site's Chinese rewrite of the wiki descriptions
     "guerrier": "近戰職業，靠力量和耐打壓制對手。用重武器、穿重甲，在前線吸收傷害，同時打出高傷害，是隊友可以依靠的支柱。",

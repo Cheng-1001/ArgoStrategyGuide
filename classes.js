@@ -1136,7 +1136,7 @@ window.SAO_CLASSES = [
  {
   "id": "martial",
   "name": "Martial Artist",
-  "zh": "武鬥家",
+  "zh": "武術家",
   "ic": "👊",
   "role": "Melee DPS",
   "diff": 2,
