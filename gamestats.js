@@ -4,6 +4,10 @@
    values are the game's own text; r = rarity from the tooltip frame colour when it differs from the catalogue ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
    (user 2026-11-05: 裝備資料要照新上傳的截圖更新). */
 window.SAO_GAMESTATS = {date:"2026-11-04", items:{
+ // 2026-11-18 (in28, owner's Chinese screenshots 11/14): only the rarity differs. 1552 幽靈鬼火 tooltip frame EPIC (catalogue common; stats match);
+ // 1831 被遺忘之墓鑰匙 tooltip frame and shop row EPIC (catalogue RARE)
+ "1552":{"date": "2026-11-14", "en": "feu follet spectral", "lvl": null, "dmg": null, "st": null, "r": "a"},
+ "1831":{"date": "2026-11-14", "en": "clé du tombeau oublié", "lvl": null, "dmg": null, "st": null, "r": "a"},
  // 2026-11-17 (in27, owner's Chinese tooltips 11/15～11/16). 1553: only the rarity differs (tooltip frame EPIC, catalogue common; stats match).
  // 2696 / 2702 / 2708 (forest tools, props): the tooltip says minimum level 18 (catalogue 1) and EPIC; 2025 is a rune (props)
  "1512":{"date": "2026-11-16", "en": "bottes du pionnier", "lvl": 16, "dmg": null, "st": [["Physical Damage", "-30%"], ["Magic Damage", "-30%"], ["Projectile Damage", "-30%"], ["Movement Speed", "+50%"]]},

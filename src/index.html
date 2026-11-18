@@ -1735,7 +1735,7 @@ const NPC_NOTE={
 const SHOP_CATS=new Set(["lootBuyers","toolMerchants"]);
 // a row is "sold" when its NPC is a shop, or (screenshot rows) it has no materials and no crafting time but a Col price,
 // e.g. the Alchemist both crafts Quality potions and sells Potion I-III on its Buy tab
-const isShop=r=>{const n=npcByName(r.f,r.npc);return!!n&&SHOP_CATS.has(n.c)||r.src==="shot"&&!(r.mats||[]).length&&r.sec==null&&!!r.cost&&r.cost!=="Free"};
+const isShop=r=>{const n=npcByName(r.f,r.npc);return!!n&&SHOP_CATS.has(n.c)&&!(r.mats||[]).length||r.src==="shot"&&!(r.mats||[]).length&&r.sec==null&&!!r.cost&&r.cost!=="Free"};
 const howTitle=rs=>{const sh=rs.filter(x=>isShop(x)).length;return!sh?"製作方式":sh===rs.length?"NPC 販售":"製作或購買"};
 const RC_CAT={weapon:["武器","⚔️"],armor:["防具","🛡️"],acc:["飾品","💍"],potion:["藥水","🧪"],key:["鑰匙","🗝️"],other:["其他","📦"]};
 const recEnD=r=>r.en.replace(/ \(2\)$/,"");   // display name: the "(2)" only tells two same-named rows apart inside the site

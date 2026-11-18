@@ -3,7 +3,7 @@
    Shop names in the game -> site NPC (npcs.js): "Shop - Hanaka" = Hanaka - Loot Buyer, "Shop - Tolbana" = Magical & Icy Loot Buyer,
    "F1 - Labyrinth of the Forgotten - Loot Buyer" = both Labyrinth of the Fallen loot buyers… Only items seen in a tooltip are listed, so the
    lists are not complete. Row: [English item name, price in Col, "en"|"zh" source]. Built 2026-11-07 (user: 收購商要顯示回收物品). */
-window.SAO_BUYBACK = {shops:{"Starting Merchant": "Starting Merchant", "Mizunari Loot Buyer": "Shop - Mizunari", "Cursed Ruins - Loot Buyer": "Shop - Cursed Ruins", "Cursed Ruins - Loot Buyer (2)": "Shop - Cursed Ruins", "Labyrinth of the Fallen - Loot Buyer": "F1 - Labyrinth of the Forgotten - Loot Buyer", "Labyrinth of the Fallen (2) - Loot Buyer": "F1 - Labyrinth of the Forgotten - Loot Buyer", "Hanaka - Loot Buyer": "Shop - Hanaka", "Vallhat - Loot Buyer": "Shop - Vallhat", "Magical & Icy Loot Buyer": "Shop - Tolbana", "Local Farmer": "F1 Local Farmer - Near the Starting City", "Virelune - Loot Buyer": "Shop - Virelune", "Candelia": "Shop - Candelia", "Local Lumberjack": "F1 Local Lumberjack - Near the Starting City", "Local Miner": "F1 Local Miner - Near the Starting City"},
+window.SAO_BUYBACK = {shops:{"Starting Merchant": "Starting Merchant", "Mizunari Loot Buyer": "Shop - Mizunari", "Cursed Ruins - Loot Buyer": "Shop - Cursed Ruins", "Cursed Ruins - Loot Buyer (2)": "Shop - Cursed Ruins", "Labyrinth of the Fallen - Loot Buyer": "F1 - Labyrinth of the Forgotten - Loot Buyer", "Labyrinth of the Fallen (2) - Loot Buyer": "F1 - Labyrinth of the Forgotten - Loot Buyer", "Hanaka - Loot Buyer": "Shop - Hanaka", "Vallhat - Loot Buyer": "Shop - Vallhat", "Magical & Icy Loot Buyer": "Shop - Tolbana", "Local Farmer": "F1 Local Farmer - Near the Starting City", "Virelune - Loot Buyer": "Shop - Virelune", "Candelia": "Shop - Candelia", "Local Lumberjack": "F1 Local Lumberjack - Near the Starting City", "Local Miner": "F1 Local Miner - Near the Starting City", "Geldorak Mine Dungeon - Loot Buyer": "Shop - Geldorack Mine"},
  items:{
 "Starting Merchant": [
 [
@@ -331,6 +331,13 @@ window.SAO_BUYBACK = {shops:{"Starting Merchant": "Starting Merchant", "Mizunari
 "Iron Ingot",
 "20",
 "en"
+]
+],
+"Geldorak Mine Dungeon - Loot Buyer": [
+[
+"Worn Leather",
+"5",
+"zh"
 ]
 ]
 }};
