@@ -297,5 +297,86 @@ window.SAO_REPORTS = [
    "回報者・遊戲內暱稱": "GOD_Collapse"
   },
   "source": "form"
+ },
+ {
+  "id": "R0019",
+  "type": "monster",
+  "floor": 2,
+  "name": "火焰鳥身女妖",
+  "date": "2026-11-17",
+  "img": "reports/R0019.jpg",
+  "imgs": [
+   "reports/R0019.jpg"
+  ],
+  "raw": {
+   "怪物・截圖種類": "野外截圖（看得到等級和座標）",
+   "怪物・等級": "12",
+   "怪物・座標 x, z": "-521196",
+   "怪物・類型": "一般怪物",
+   "怪物・行為": "主動攻擊（看到就打）"
+  },
+  "source": "form",
+  "review": "審核：lintcbruce"
+ },
+ {
+  "id": "R0020",
+  "type": "monster",
+  "floor": 3,
+  "name": "迷宮區樹人",
+  "date": "2026-11-17",
+  "img": "reports/R0020.jpg",
+  "imgs": [
+   "reports/R0020.jpg"
+  ],
+  "raw": {
+   "怪物・截圖種類": "野外截圖（看得到等級和座標）",
+   "怪物・等級": "18",
+   "怪物・座標 x, z": "374281",
+   "怪物・類型": "一般怪物",
+   "怪物・行為": "主動攻擊（看到就打）"
+  },
+  "source": "form",
+  "review": "審核：lintcbruce"
+ },
+ {
+  "id": "R0021",
+  "type": "monster",
+  "floor": 3,
+  "name": "迷宮區遠古樹人",
+  "date": "2026-11-17",
+  "img": "reports/R0021.jpg",
+  "imgs": [
+   "reports/R0021.jpg"
+  ],
+  "raw": {
+   "怪物・截圖種類": "野外截圖（看得到等級和座標）",
+   "怪物・座標 x, z": "832285"
+  },
+  "source": "form",
+  "review": "審核：lintcbruce"
+ },
+ {
+  "id": "R0022",
+  "type": "monster",
+  "floor": 3,
+  "name": "幼年樹人",
+  "date": "2026-11-17",
+  "img": "reports/R0022.jpg",
+  "imgs": [
+   "reports/R0022.jpg",
+   "reports/R0022-2.jpg"
+  ],
+  "raw": {
+   "怪物・截圖種類": "兩種都有",
+   "怪物・等級": "18",
+   "怪物・座標 x, z": "827360",
+   "怪物・圖鑑編號": "#032",
+   "怪物・圖鑑區域": "蘭瓦烏拉沼澤",
+   "怪物・類型": "一般怪物",
+   "怪物・掉落物和機率": "暗影樹枝75%\n幼樹樹皮35%\n幼嫩種子10%",
+   "怪物・圖鑑描述或 LOCATION HINT": "年輕的黑橡樹精靈,對自己的植物身軀還很笨拙。不起眼\n的體型下藏著日益高漲的怒火。"
+  },
+  "source": "form",
+  "review": "審核：lintcbruce"
  }
 ];
