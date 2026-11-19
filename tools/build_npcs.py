@@ -158,7 +158,7 @@ NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,6
        (2,'accessoriesBlacksmith','第 2 層 - 飾品鍛造：維尼戒指',597,-722,'2026-11-19','甜蜜森林，Y 69；名牌「???」；只做維尼之戒。參考互動地圖附近沒有這位（只有 Honeyed Loot Buyer、Bees Weapon Blacksmith）；它的熊飾品鐵匠 Bull & Bear Accessories Blacksmith 在 -602,-285，差約 1200 格、是多品項鐵匠，判斷不是同一位'),
        # 2026-11-19 owner decision (in29 TRIAGE B-7): 19.37.28 / 19.37.30 F3 player 890.6 / 59 / 398.4 facing north, targeted block 890, 59, 396.
        # Added like the glove / grimoire smiths of the same series; the reference map's Low Corruption Bracelet Blacksmith (439, 474, underground) is kept
-       (3,'accessoriesBlacksmith','P3 - Forgeron Bracelet Corrompu',890,397,'2026-11-18','Y 59，羅盤「迷宮區」；沒有名牌，遊戲視窗「P3 - 鐵匠 手環 腐化」。參考互動地圖的 Low Corruption Bracelet Blacksmith 在 X 439 Z 474 地下，差約 450 格，照同系列手套、魔法書工坊的先例另外列一位（站長 2026-11-19）'),
+       (3,'accessoriesBlacksmith','P3 - Forgeron Bracelet Corrompu',890,397,'2026-11-18','Y 59，紫水晶礦坑'),
        # 2026-11-19 owner decision (in29 B-26 option B): listed without a position like the Anneau des Cieux smith; 00.44.28～35 show no coordinates.
        # The reference map's Manufacturer of Corrupt Mask (-713, -109) is kept and not linked (this batch's floor-2 smiths are 38～1000+ blocks off it)
        (2,'accessoriesBlacksmith','第 2 層 - 飾品鍛造：腐化面具',None,None,'2026-11-19','遊戲視窗「第 2 層 - 飾品鍛造：腐化面具」（取得途徑寫「第2層-飾品鍛造：腐化面具」）；截圖讀不到座標。參考互動地圖有一位 Manufacturer of Corrupt Mask（X -713 Z -109），名稱意思相同但位置沒對過，沒有合併')]
