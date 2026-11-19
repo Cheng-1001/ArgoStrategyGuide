@@ -5874,7 +5874,282 @@ null,
 "shot"
 ]
 ]
+},
+"2|第 2 層 - 飾品鍛造：維尼戒指": {
+"floor": 2,
+"items": [
+[
+2503,
+"Anneau de Winnie",
+60,
+[
+[
+"Copper Ingot",
+32
+],
+[
+"Bear Hide",
+64
+],
+[
+"Honey Residue",
+64
+],
+[
+"Honey",
+64
+],
+[
+"Bear Fat",
+32
+]
+],
+"55",
+"splus",
+"acc",
+null,
+"shot"
+]
+]
+},
+"2|Scrap Accessories Blacksmith": {
+"floor": 2,
+"items": [
+[
+2499,
+"Anneau de Ferraille",
+15,
+[
+[
+"Scrap Metal Piece",
+1
+]
+],
+"30",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1603,
+"Bracelet de Ferraille",
+15,
+[
+[
+"Scrap Metal Piece",
+1
+]
+],
+"30",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+2049,
+"Gants de Ferraille",
+15,
+[
+[
+"Scrap Metal Piece",
+1
+]
+],
+"30",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1485,
+"Pièce de Ferraille",
+15,
+[
+[
+"Scrap Metal Piece",
+1
+]
+],
+"30",
+"c",
+"acc",
+null,
+"shot"
+],
+[
+1311,
+"Amulette de Ferraille",
+15,
+[
+[
+"Scrap Metal Piece",
+1
+]
+],
+"30",
+"c",
+"acc",
+null,
+"shot"
+]
+]
+},
+"2|Manufacturer of the Ring of the Flaming Harpy": {
+"floor": 2,
+"items": [
+[
+2496,
+"Anneau de l'Harpie Enflammé",
+60,
+[
+[
+"Mountain Stag Hide",
+32
+],
+[
+"Scrap Metal Piece",
+64
+],
+[
+"Flaming Feather",
+64
+]
+],
+"55",
+"a",
+"acc",
+null,
+"shot"
+]
+]
+},
+"2|Manufacturer of the Ring of the Drowned Harpy": {
+"floor": 2,
+"items": [
+[
+2497,
+"Anneau de l'Harpie Noyé",
+60,
+[
+[
+"Glacial Magic Shard",
+32
+],
+[
+"Scrap Metal Piece",
+64
+],
+[
+"Rippling Feather",
+64
+]
+],
+"55",
+"a",
+"acc",
+null,
+"shot"
+]
+]
+},
+"2|Manufacturer of the Crushed Harpy Ring": {
+"floor": 2,
+"items": [
+[
+2498,
+"Anneau de l'Harpie Ecrasé",
+60,
+[
+[
+"Ancestral Root",
+16
+],
+[
+"Scrap Metal Piece",
+64
+],
+[
+"Earthen Feather",
+64
+]
+],
+"55",
+"a",
+"acc",
+null,
+"shot"
+]
+]
+},
+"3|P3 - Forgeron Bracelet Corrompu": {
+"floor": 3,
+"items": [
+[
+1625,
+"Bracelet Faible Corruption",
+600,
+[
+[
+"Corrupted Fragment",
+32
+],
+[
+"Corrupted Fragment (2)",
+16
+],
+[
+"Corrupted Fragment (3)",
+8
+]
+],
+"55",
+"splus",
+"acc",
+null,
+"shot"
+]
+]
+},
+"2|第 2 層 - 飾品鍛造：腐化面具": {
+"floor": 2,
+"items": [
+[
+1484,
+"Masque Corrompu",
+60,
+[
+[
+"Soul of the Ruins",
+64
+],
+[
+"Corrupted Crystal",
+128
+],
+[
+"Spectral Cloth",
+64
+],
+[
+"Piece of Spectral Mane",
+1
+],
+[
+"純淨黑瑪瑙錠",
+3
+]
+],
+"55",
+"splusplus",
+"acc",
+null,
+"shot"
+]
+]
 }
 };
 window.SAO_RECIPE_QTY = {"Alchemist|Quality Health Potion I": 3, "Alchemist|Quality Health Potion II": 3, "Alchemist|Quality Health Potion III": 3, "Alchemist|Quality Mana Potion I": 3, "Alchemist|Quality Mana Potion II": 3, "Alchemist|Quality Mana Potion III": 3, "Alchemist|Quality Stamina Potion I": 3, "Alchemist|Quality Stamina Potion II": 3, "Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion II": 3, "3|Alchemist|Quality Mana Potion II": 3, "3|Alchemist|Quality Stamina Potion II": 3, "3|Alchemist|Quality Health Potion III": 3, "3|Alchemist|Quality Mana Potion III": 3, "3|Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion IV": 3, "3|Alchemist|Quality Health Potion V": 3, "3|Alchemist|Quality Health Potion VI": 3, "3|Alchemist|Quality Mana Potion V": 3, "3|Alchemist|Quality Mana Potion VI": 3, "3|Alchemist|Quality Stamina Potion V": 3, "3|Alchemist|Quality Stamina Potion VI": 3};
-window.SAO_RECIPE_MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1};
+window.SAO_RECIPE_MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1, "2|Scrap Accessories Blacksmith|Amulette de Ferraille": "廢鐵細繩|1"};

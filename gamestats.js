@@ -4,6 +4,19 @@
    values are the game's own text; r = rarity from the tooltip frame colour when it differs from the catalogue ("+5%", "1.2/s"). dmg = "Attack Damage". The site shows these and keeps the catalogue values in a note
    (user 2026-11-05: 裝備資料要照新上傳的截圖更新). */
 window.SAO_GAMESTATS = {date:"2026-11-04", items:{
+ // 2026-11-19 (in29, owner's Chinese craft-window tooltips 11/18～11/19). Same item as the catalogue: the description matches line by line and the
+ // craft window's large icon has the same shape and colours as equip.png (comparison sheet scratchpad in29/crop_V/icons.png); the stats are the game's
+ "2497":{"date": "2026-11-18", "en": "anneau de l'harpie noyé", "lvl": 12, "dmg": null, "st": [["Magic Damage", "+4.5%"], ["Spell Vampirism", "+3.5%"], ["Max Mana", "+2"]]},   // 溺水的鳥身女妖之戒 05.05.55
+ "2498":{"date": "2026-11-18", "en": "anneau de l'harpie ecrasé", "lvl": 12, "dmg": null, "st": [["Cooldown Reduction", "+5%"], ["Block Rating", "+5%"], ["Max Health", "+8"]]},   // 被碾碎的鳥身女妖之戒 05.14.23
+ "2499":{"date": "2026-11-18", "en": "anneau de ferraille", "lvl": 11, "dmg": null, "st": [["Critical Strike Chance", "+1.5%"], ["Skill Critical Strike Chance", "+1.5%"], ["Max Health", "+1.5"]]},   // 廢鐵戒指 05.19.40
+ "1603":{"date": "2026-11-18", "en": "bracelet de ferraille", "lvl": 11, "dmg": null, "st": [["Critical Strike Power", "+1.5%"], ["Skill Critical Strike Power", "+1.5%"], ["Max Health", "+1.5"]]},   // 廢鐵手環 05.19.45
+ "2049":{"date": "2026-11-18", "en": "gants de ferraille", "lvl": 11, "dmg": null, "st": [["Defense", "+2"], ["Max Health", "+1.5"]]},   // 廢鐵手套 05.19.48 (equip.png showed a wrong icon; the official model texture gantsferraille = game icon)
+ "1485":{"date": "2026-11-18", "en": "pièce de ferraille", "lvl": 11, "dmg": "0.75", "st": [["Max Health", "+1.5"], ["Heal Bonus", "+1.5"]]},   // 廢鐵幣 05.19.55
+ "1311":{"date": "2026-11-18", "en": "amulette de ferraille", "lvl": 11, "dmg": null, "st": [["Max Health", "+1.5"], ["Max Mana", "+1.5"], ["Max Stamina", "+1.5"]]},   // 廢鐵護符 05.19.59
+ "2503":{"date": "2026-11-19", "en": "anneau de winnie", "lvl": 12, "dmg": "1", "st": [["Critical Strike Chance", "+2%"], ["Skill Critical Strike Chance", "+2%"], ["Max Health", "+5"]]},   // 維尼之戒 00.32.46 (MYTHIC, same as the catalogue)
+ // 寒風項鍊 04.35.57 (auction tooltip): the auction cell's icon has the same shape and colours as equip.png #187 (scratchpad in29/cmp1304/icon_1304.png).
+ // The red-and-white striped frame is the Christmas style (owner 2026-11-19), not MYTHIC: no "r", the catalogue rarity (COMMON) stays
+ "1304":{"date": "2026-11-18", "en": "collier des vents froids", "lvl": 10, "dmg": "0.25", "st": [["Critical Strike Power", "+5%"], ["Health Regeneration", "+0.1/s"]], "auc": 1},   // 寒風項鍊
  // 2026-11-18 (in28, owner's Chinese screenshots 11/14): only the rarity differs. 1552 幽靈鬼火 tooltip frame EPIC (catalogue common; stats match);
  // 1831 被遺忘之墓鑰匙 tooltip frame and shop row EPIC (catalogue RARE)
  "1552":{"date": "2026-11-14", "en": "feu follet spectral", "lvl": null, "dmg": null, "st": null, "r": "a"},

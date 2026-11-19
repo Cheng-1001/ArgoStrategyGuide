@@ -469,6 +469,30 @@ SHOTS23 = {
                                       for n in ("Pioche Nécrotique", "Houe Nécrotique", "Hache Nécrotique")],
     # floor 2, nameplate [NPC] 蜂巢考古學家, window「蜜蜂地下城 - 戰利品資訊」(03.30.54): RARE key, 1 758.72 Col (obtain line: 1750)
     (2, "蜂巢考古學家"): [("Clé de Melliona", "b", None, [], "1758.72", "key")],
+    # 2026-11-19 (in29)
+    # Window「第 2 層 - 飾品鍛造：維尼戒指」(00.32.46 / 00.32.52, 材料 0/5, two scrolls = all 5 rows): MYTHIC 1 min, 55 Col
+    (2, "第 2 層 - 飾品鍛造：維尼戒指"): [("Anneau de Winnie", "splus", 60, [["Copper Ingot", 32], ["Bear Hide", 64], ["Honey Residue", 64], ["Honey", 64], ["Bear Fat", 32]], "55", "acc")],
+    # 2026-11-19 owner decision (in29 TRIAGE B-4～B-7, B-26 option B): the NPCs use the positions worked out from the screenshots (build_npcs.py)
+    # Window「第 2 層 - 廢鐵飾品」(05.19.40～05.20.01, one page of 5 rows): COMMON 15 s, 30 Col; each row 廢鐵碎片 1 (0/1),
+    # the amulet 廢鐵碎片 1 + 廢鐵細繩 1 (0/2)
+    (2, "Scrap Accessories Blacksmith"): [(n, "c", 15, m, "30", "acc") for n, m in (
+        ("Anneau de Ferraille", [["Scrap Metal Piece", 1]]),
+        ("Bracelet de Ferraille", [["Scrap Metal Piece", 1]]),
+        ("Gants de Ferraille", [["Scrap Metal Piece", 1]]),
+        ("Pièce de Ferraille", [["Scrap Metal Piece", 1]]),
+        # the second material 廢鐵細繩 is not tied to a site item yet (TRIAGE B-3, maybe official 2376 Ficelle de Ferraille by name only):
+        # kept out of the material list (it would be an unresolved reference) and shown by name through MISS
+        ("Amulette de Ferraille", [["Scrap Metal Piece", 1]]))],
+    # window「第 2 層 - 飾品鍛造：赤鳥身女妖戒指」(05.10.50 / 05.10.51, 0/3): EPIC 1 min, 55 Col
+    (2, "Manufacturer of the Ring of the Flaming Harpy"): [("Anneau de l'Harpie Enflammé", "a", 60, [["Mountain Stag Hide", 32], ["Scrap Metal Piece", 64], ["Flaming Feather", 64]], "55", "acc")],
+    # window「第 2 層 - 飾品鍛造：綠鳥身女妖戒指」, the one at -802, 211 (05.05.55, 0/3): EPIC 1 min, 55 Col (site name 藍鳥身女妖戒指)
+    (2, "Manufacturer of the Ring of the Drowned Harpy"): [("Anneau de l'Harpie Noyé", "a", 60, [["Glacial Magic Shard", 32], ["Scrap Metal Piece", 64], ["Rippling Feather", 64]], "55", "acc")],
+    # window「第 2 層 - 飾品鍛造：綠鳥身女妖戒指」, the one at -580, 532 (05.14.23, 0/3): EPIC 1 min, 55 Col
+    (2, "Manufacturer of the Crushed Harpy Ring"): [("Anneau de l'Harpie Ecrasé", "a", 60, [["Ancestral Root", 16], ["Scrap Metal Piece", 64], ["Earthen Feather", 64]], "55", "acc")],
+    # window「P3 - 鐵匠 手環 腐化」(19.37.14～24, 0/3): MYTHIC 10 min, 55 Col; 腐化碎片 green 32 / blue 16 / purple 8 (tooltips per row)
+    (3, "P3 - Forgeron Bracelet Corrompu"): [("Bracelet Faible Corruption", "splus", 600, [["Corrupted Fragment", 32], ["Corrupted Fragment (2)", 16], ["Corrupted Fragment (3)", 8]], "55", "acc")],
+    # window「第 2 層 - 飾品鍛造：腐化面具」(00.44.28 / 00.44.35, 0/5, two scrolls = all 5 rows): MYTHIC 1 min, 55 Col; NPC listed without a position
+    (2, "第 2 層 - 飾品鍛造：腐化面具"): [("Masque Corrompu", "splusplus", 60, [["Soul of the Ruins", 64], ["Corrupted Crystal", 128], ["Spectral Cloth", 64], ["Piece of Spectral Mane", 1], ["純淨黑瑪瑙錠", 3]], "55", "acc")],
 }
 OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
          "Quality Patience Fortifier III": 2001, "Quality Resistance Fortifier III": 2000, "Quality Vitality Fortifier III": 1996,
@@ -497,9 +521,15 @@ OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quali
          "Anneau des Bois": 2511, "Anneau Brumeux": 2512, "Anneau Orcien": 2513, "Anneau des Bois Sombres": 2515, "Anneau de la Toile": 2516, "Anneau Spectral": 2517, "Anneau Luminescent": 2518,
          "Gants des Bois": 2063, "Gants Brumeux": 2065, "Gants des Bois Sombres": 2069, "Gants de la Toile": 2070, "Gants Spectral": 2071, "Gants Luminescents": 2072,
          "Bracelet des Bois": 1616, "Bracelet Brumeux": 1617, "Bracelet Orcien": 1618, "Bracelet des Bois Sombres": 1620, "Bracelet de la Toile": 1621, "Bracelet Spectral": 1622, "Bracelet Luminescent": 1623,
-         "Manteau des Crocs Brumeux": 1541, "Gants Faible Corruption": 2076, "Pioche Nécrotique": 2694, "Houe Nécrotique": 2700, "Hache Nécrotique": 2706, "Clé de Melliona": 1830}
-# recipes whose window lists more materials than the screenshot shows: number of unseen rows (site shows ??? for them)
-MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1}
+         "Manteau des Crocs Brumeux": 1541, "Gants Faible Corruption": 2076, "Pioche Nécrotique": 2694, "Houe Nécrotique": 2700, "Hache Nécrotique": 2706, "Clé de Melliona": 1830,
+         "Anneau de Winnie": 2503,
+         "Anneau de Ferraille": 2499, "Bracelet de Ferraille": 1603, "Gants de Ferraille": 2049, "Pièce de Ferraille": 1485, "Amulette de Ferraille": 1311,
+         "Anneau de l'Harpie Enflammé": 2496, "Anneau de l'Harpie Noyé": 2497, "Anneau de l'Harpie Ecrasé": 2498, "Bracelet Faible Corruption": 1625,
+         "Masque Corrompu": 1484}
+# recipes whose window lists more materials than the screenshot shows: number of unseen rows (site shows ??? for them);
+MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1,
+        # a string "name|qty": the row is on screen but the material is not tied to a site item yet (site shows the name, no link)
+        "2|Scrap Accessories Blacksmith|Amulette de Ferraille": "廢鐵細繩|1"}
 LV23 = {"Quality Health Potion II": 5, "Quality Mana Potion II": 5, "Quality Stamina Potion II": 5, "Quality Health Potion III": 8,
         "Quality Mana Potion III": 8, "Quality Stamina Potion III": 8, "Quality Health Potion IV": 12, "Quality Health Potion V": 15,
         "Quality Health Potion VI": 18, "Quality Mana Potion V": 15, "Quality Mana Potion VI": 18, "Quality Stamina Potion V": 15,
