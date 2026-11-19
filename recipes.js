@@ -6084,7 +6084,7 @@ null,
 ]
 ]
 },
-"3|Low Corruption Bracelet Blacksmith": {
+"3|P3 - Forgeron Bracelet Corrompu": {
 "floor": 3,
 "items": [
 [
