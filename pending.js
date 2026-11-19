@@ -4,6 +4,14 @@ window.SAO_PENDING = {
  "updated": "2026-11-19 23:52",
  "list": [
   {
+   "id": "R0023",
+   "type": "place",
+   "floor": 3,
+   "date": "2026-11-18 13:38",
+   "rdate": "2026-11-19",
+   "status": "rejected"
+  },
+  {
    "id": "R0024",
    "type": "place",
    "floor": 1,
