@@ -1,0 +1,136 @@
+// UI-INV R0.1 evidence script (v2) — read-only reproduction of A-R3, A-R13, B-R2, C-R1 and runtime duplicate ids.
+// Base: Cheng-1001/ArgoStrategyGuide main 14f677ba4c0d1a6d6743e17ddfaa7fcc150a250d (src/index.html blob e9d4db271ea061d7c4f76aea22534db036847423)
+// How to run (any machine with Node + Playwright + Chromium):
+//   git worktree add --detach <dir> 14f677ba4c0d1a6d6743e17ddfaa7fcc150a250d
+//   (cd <dir> && python3 -m http.server 8781 --bind 127.0.0.1) &
+//   node UIINV_R0.1_evidence_v2.js http://127.0.0.1:8781/index.html ; echo "exit=$?"
+// The page is only read; nothing is written. Exit code: 0 = every check produced an observation (whether or not the issue reproduced),
+// 1 = a check could not run (missing element / page error). Each check prints {expected, observed, reproduced}.
+const { chromium } = require('playwright');
+const BASE = process.argv[2] || 'http://127.0.0.1:8781/index.html';
+const W = ms => new Promise(r => setTimeout(r, ms));
+const out = { base: BASE, checks: {} };
+let broken = 0;
+const rec = (name, width, expected, observed, reproduced) => {
+  out.checks[name] = { width, expected, observed, reproduced };
+  if (reproduced === null) broken++;
+};
+(async () => {
+  const b = await chromium.launch();
+  const mk = async (w, h) => {
+    const c = await b.newContext({ viewport: { width: w, height: h } });
+    await c.addInitScript(() => { try { localStorage.setItem('sao-tour-v1', '1') } catch (e) {} });
+    await c.route(/fonts\.(googleapis|gstatic)/, r => r.abort());
+    const p = await c.newPage(); p.errs = []; p.on('pageerror', e => p.errs.push(e.message)); return p;
+  };
+  const p = await mk(1280, 900);
+  await p.goto(BASE + '#equip'); await W(1500);
+  out.build = await p.evaluate(() => (document.querySelector('meta[name=sao-build]') || {}).content || null);
+
+  // ---------- A-R3 (a): data-town inside the centre pop-up ----------
+  {
+    const r = await p.evaluate(async () => {
+      const ids = window.__auditIds(), T = document.createElement('div'); let hit = null;
+      for (const [t, L] of Object.entries(ids)) { for (const i of L) { T.innerHTML = window.__detail(t, i); if (T.querySelector('[data-town]')) { hit = [t, i]; break } } if (hit) break }
+      if (!hit) return { error: 'no panel with data-town' };
+      // open the side panel on an equipment card, then retarget its 查看 button to open the town-bearing entry in a pop-up
+      document.querySelector('#lEq .card').click(); await new Promise(r => setTimeout(r, 300));
+      const a = document.querySelector('#pBody [data-goview]'); if (!a) return { error: 'no data-goview base button', hit };
+      a.dataset.goview = 'map|' + hit[0] + '|' + hit[1]; a.click(); await new Promise(r => setTimeout(r, 400));
+      const tb = document.querySelector('.gvbody [data-town]'); if (!tb) return { error: 'popup has no data-town', hit, gv: window.__gv() };
+      const before = { gv: window.__gv().count, rwin: !document.getElementById('rwin').hidden, view: document.body.dataset.view };
+      tb.click(); await new Promise(r => setTimeout(r, 600));
+      return { entry: hit.join('|'), button: tb.textContent.trim().slice(0, 30), before, after: { gv: window.__gv().count, rwin: !document.getElementById('rwin').hidden, view: document.body.dataset.view } };
+    });
+    rec('A-R3a_popup_data-town', 1280, 'clicking 在地圖上查看 (data-town) in a pop-up opens the floating map or moves the map',
+      r, r.error ? null : (r.after.rwin === r.before.rwin && r.after.gv === r.before.gv && r.after.view === r.before.view));
+  }
+  // ---------- A-R3 (b)(c): #cwBody data-rep and data-go ----------
+  {
+    await p.evaluate(() => { while (window.__gv().count) document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' })) });
+    await p.evaluate(() => location.hash = '#classes'); await W(900);
+    const r = await p.evaluate(async () => {
+      const eq = document.querySelector('#pBody [data-eqcls]'); if (!eq) return { error: 'no data-eqcls' };
+      eq.click(); await new Promise(r => setTimeout(r, 300));
+      // pick an equipment item whose detail has a data-rep coordinate
+      const cards = [...document.querySelectorAll('#cwBody [data-cwe]')]; let found = null;
+      for (const c of cards) { c.click(); await new Promise(r => setTimeout(r, 120)); if (document.querySelector('#cwBody [data-rep]')) { found = c.dataset.cwe; break } document.getElementById('cwBack').click(); await new Promise(r => setTimeout(r, 120)) }
+      if (!found) return { error: 'no cw item with data-rep' };
+      const rep = document.querySelector('#cwBody [data-rep]'); const rb = !document.getElementById('rwin').hidden;
+      rep.click(); await new Promise(r => setTimeout(r, 500));
+      const repRes = { item: found, rep: rep.dataset.rep, rwinBefore: rb, rwinAfter: !document.getElementById('rwin').hidden };
+      const go = document.querySelector('#cwBody [data-go]'); if (!go) return { rep: repRes, error: 'no data-go in cwBody' };
+      const c0 = document.getElementById('pCrumb').textContent, inl0 = document.body.classList.contains('cls-inline');
+      go.click(); await new Promise(r => setTimeout(r, 400));
+      return { rep: repRes, go: { value: go.dataset.go, crumbBefore: c0, crumbAfter: document.getElementById('pCrumb').textContent, inlineBefore: inl0, inlineAfter: document.body.classList.contains('cls-inline') } };
+    });
+    rec('A-R3b_cwBody_data-rep', 1280, 'clicking a coordinate (data-rep) in the class-equipment window opens the floating map',
+      r.rep || r, r.rep ? (r.rep.rwinAfter === r.rep.rwinBefore) : null);
+    rec('A-R3c_cwBody_data-go', 1280, 'the class page on the right stays (code comment at :1893: 右側面板（職業）保持不變)',
+      r.go || r, r.go ? (r.go.inlineBefore && !r.go.inlineAfter) : null);
+  }
+  // ---------- A-R13: #32 desktop equipment panel on floor change ----------
+  {
+    await p.evaluate(() => { document.querySelectorAll('.imgzoom').forEach(z => z.remove()) });
+    await p.evaluate(() => location.hash = '#equip'); await W(700);
+    const r = await p.evaluate(async () => {
+      const st = () => ({ hash: location.hash, panelOpen: !document.getElementById('panel').hidden, title: (document.querySelector('#pBody h2') || {}).textContent || null, floorLabel: document.getElementById('flNm').textContent });
+      document.querySelector('#lEq .card').click(); await new Promise(r => setTimeout(r, 300));
+      const s0 = st();
+      location.hash = '#monsters'; await new Promise(r => setTimeout(r, 500)); const sTab = st();
+      location.hash = '#equip'; await new Promise(r => setTimeout(r, 500));
+      location.hash = '#f2-equip'; await new Promise(r => setTimeout(r, 700)); const sFloor = st();
+      return { opened: s0, sameFloorTabSwitch: sTab, afterFloorChange: sFloor };
+    });
+    rec('A-R13_rule32_floor_change', 1280, '#32: same-floor tab switch keeps the panel; changing floor closes the desktop equipment panel',
+      r, r.opened.panelOpen ? (r.sameFloorTabSwitch.panelOpen && r.afterFloorChange.panelOpen) : null);
+  }
+  // ---------- B-R2: floor-3 Alchemist recipe buttons resolve to floor-1 recipes ----------
+  {
+    const r = await p.evaluate(() => {
+      const keys = []; Object.entries(window.SAO_RECIPES).forEach(([k, v]) => v.items.forEach(it => keys.push([k, it[1]])));
+      const recipeReports = (window.SAO_REPORTS || []).filter(x => x.type === 'recipe').length;
+      const n3 = window.__auditIds().n.filter(id => id.startsWith('n3_'));
+      const T = document.createElement('div'); let al = null;
+      for (const id of n3) { const h = window.__detail('n', id); T.innerHTML = h; if (/Alchemist/.test(h) && T.querySelector('[data-goview^="recipes|r|"],[data-go^="r|"]')) { al = id; break } }
+      if (!al) return { error: 'floor-3 alchemist not found', recipeReports };
+      T.innerHTML = window.__detail('n', al);
+      const links = [...T.querySelectorAll('[data-go^="r|"],[data-goview^="recipes|r|"]')].map(e => (e.dataset.go || e.dataset.goview.replace(/^recipes\|/, '')));
+      const resolved = [...new Set(links)].map(l => { const i = +l.split('|')[1]; return { link: l, recipesJsKey: keys[i] ? keys[i][0] : null, item: keys[i] ? keys[i][1] : null } });
+      return { npc: al, recipeReportsInReportsJs: recipeReports, links: resolved, wrongFloor: resolved.filter(x => x.recipesJsKey && !/^3\|/.test(x.recipesJsKey)) };
+    });
+    rec('B-R2_recipe_floor', 1280, 'every recipe link on the floor-3 Alchemist panel resolves to a recipes.js key starting with "3|"',
+      r, r.error ? null : r.wrongFloor.length > 0);
+  }
+  // ---------- C-R1: Chinese search, map markers vs right-hand list ----------
+  {
+    await p.evaluate(() => location.hash = '#map'); await W(1200);
+    const res = {};
+    for (const q of ['煉金術士', '起始之鎮', 'Alchemist', 'Starting']) {
+      await p.fill('#q', q); await W(500);
+      res[q] = await p.evaluate(() => ({
+        mapNpcShown: [...document.querySelectorAll('#world .npc[data-n]')].filter(e => !e.classList.contains('shide')).length,
+        mapTownShown: [...document.querySelectorAll('#world .town[data-t]')].filter(e => !e.classList.contains('shide')).length,
+        listRowsVisible: [...document.querySelectorAll('#zlist .zrow')].filter(r => !r.hidden && r.offsetParent !== null).length
+      }));
+    }
+    await p.fill('#q', '');
+    const zh = ['煉金術士', '起始之鎮'];
+    rec('C-R1_zh_search_list', 1280, 'when the map shows matching markers, the right-hand list also shows matching rows',
+      res, zh.some(q => (res[q].mapNpcShown + res[q].mapTownShown) > 0 && res[q].listRowsVisible === 0));
+  }
+  // ---------- runtime duplicate ids (A-R1 / B-R4) ----------
+  for (const [w, h] of [[1280, 900], [390, 844]]) {
+    const q = await mk(w, h); await q.goto(BASE + '#equip'); await W(1500);
+    const d = await q.evaluate(() => { const m = {}; document.querySelectorAll('[id]').forEach(e => m[e.id] = (m[e.id] || 0) + 1); return Object.fromEntries(Object.entries(m).filter(x => x[1] > 1)) });
+    const staticDone = await q.evaluate(() => ({ doneC: document.querySelectorAll('#doneC').length, doneL: document.querySelectorAll('#doneL').length }));
+    await q.evaluate(() => location.hash = '#report'); await W(900);
+    const afterReport = await q.evaluate(() => ({ doneC: document.querySelectorAll('[id="doneC"]').length, doneL: document.querySelectorAll('[id="doneL"]').length }));
+    rec('A-R1_runtime_duplicate_ids_' + w, w, 'no id appears more than once in the live DOM', { duplicates: d, doneOnEquip: staticDone, doneOnReport: afterReport, pageErrors: q.errs }, Object.keys(d).length > 0);
+    await q.context().close();
+  }
+  out.pageErrors = p.errs;
+  await b.close();
+  console.log(JSON.stringify(out, null, 1));
+  process.exit(broken ? 1 : 0);
+})().catch(e => { console.error('FATAL', e); process.exit(1) });

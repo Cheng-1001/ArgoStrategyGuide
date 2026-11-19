@@ -1,0 +1,224 @@
+$ date -u; git -C uiinv2_src rev-parse HEAD; node UIINV_R0.1_evidence_v2.js http://127.0.0.1:8781/index.html; echo exit=$?
+2026-11-19T11:52:08Z
+14f677ba4c0d1a6d6743e17ddfaa7fcc150a250d
+{
+ "base": "http://127.0.0.1:8781/index.html",
+ "checks": {
+  "A-R3a_popup_data-town": {
+   "width": 1280,
+   "expected": "clicking 在地圖上查看 (data-town) in a pop-up opens the floating map or moves the map",
+   "observed": {
+    "entry": "t|tob",
+    "button": "在地圖上查看",
+    "before": {
+     "gv": 1,
+     "rwin": false,
+     "view": "equip"
+    },
+    "after": {
+     "gv": 1,
+     "rwin": false,
+     "view": "equip"
+    }
+   },
+   "reproduced": true
+  },
+  "A-R3b_cwBody_data-rep": {
+   "width": 1280,
+   "expected": "clicking a coordinate (data-rep) in the class-equipment window opens the floating map",
+   "observed": {
+    "item": "2475",
+    "rep": "1|1778|3530",
+    "rwinBefore": false,
+    "rwinAfter": false
+   },
+   "reproduced": true
+  },
+  "A-R3c_cwBody_data-go": {
+   "width": 1280,
+   "expected": "the class page on the right stays (code comment at :1893: 右側面板（職業）保持不變)",
+   "observed": {
+    "value": "n|n1_52",
+    "crumbBefore": "戰士",
+    "crumbAfter": "Corrupted Boar Accessories",
+    "inlineBefore": true,
+    "inlineAfter": false
+   },
+   "reproduced": true
+  },
+  "A-R13_rule32_floor_change": {
+   "width": 1280,
+   "expected": "#32: same-floor tab switch keeps the panel; changing floor closes the desktop equipment panel",
+   "observed": {
+    "opened": {
+     "hash": "#equip",
+     "panelOpen": true,
+     "title": "Ring of the Boar",
+     "floorLabel": "第 1 層"
+    },
+    "sameFloorTabSwitch": {
+     "hash": "#monsters",
+     "panelOpen": true,
+     "title": "Ring of the Boar",
+     "floorLabel": "第 1 層"
+    },
+    "afterFloorChange": {
+     "hash": "#f2-equip",
+     "panelOpen": true,
+     "title": "Ring of the Boar",
+     "floorLabel": "第 2 層"
+    }
+   },
+   "reproduced": true
+  },
+  "B-R2_recipe_floor": {
+   "width": 1280,
+   "expected": "every recipe link on the floor-3 Alchemist panel resolves to a recipes.js key starting with \"3|\"",
+   "observed": {
+    "npc": "n3_0",
+    "recipeReportsInReportsJs": 0,
+    "links": [
+     {
+      "link": "r|4",
+      "recipesJsKey": "Alchemist",
+      "item": "Quality Mana Potion II"
+     },
+     {
+      "link": "r|7",
+      "recipesJsKey": "Alchemist",
+      "item": "Quality Stamina Potion II"
+     },
+     {
+      "link": "r|5",
+      "recipesJsKey": "Alchemist",
+      "item": "Quality Mana Potion III"
+     },
+     {
+      "link": "r|8",
+      "recipesJsKey": "Alchemist",
+      "item": "Quality Stamina Potion III"
+     },
+     {
+      "link": "r|171",
+      "recipesJsKey": "3|Alchemist",
+      "item": "Quality Mana Potion V"
+     },
+     {
+      "link": "r|172",
+      "recipesJsKey": "3|Alchemist",
+      "item": "Quality Mana Potion VI"
+     },
+     {
+      "link": "r|173",
+      "recipesJsKey": "3|Alchemist",
+      "item": "Quality Stamina Potion V"
+     },
+     {
+      "link": "r|174",
+      "recipesJsKey": "3|Alchemist",
+      "item": "Quality Stamina Potion VI"
+     }
+    ],
+    "wrongFloor": [
+     {
+      "link": "r|4",
+      "recipesJsKey": "Alchemist",
+      "item": "Quality Mana Potion II"
+     },
+     {
+      "link": "r|7",
+      "recipesJsKey": "Alchemist",
+      "item": "Quality Stamina Potion II"
+     },
+     {
+      "link": "r|5",
+      "recipesJsKey": "Alchemist",
+      "item": "Quality Mana Potion III"
+     },
+     {
+      "link": "r|8",
+      "recipesJsKey": "Alchemist",
+      "item": "Quality Stamina Potion III"
+     }
+    ]
+   },
+   "reproduced": true
+  },
+  "C-R1_zh_search_list": {
+   "width": 1280,
+   "expected": "when the map shows matching markers, the right-hand list also shows matching rows",
+   "observed": {
+    "煉金術士": {
+     "mapNpcShown": 2,
+     "mapTownShown": 0,
+     "listRowsVisible": 0
+    },
+    "起始之鎮": {
+     "mapNpcShown": 1,
+     "mapTownShown": 1,
+     "listRowsVisible": 0
+    },
+    "Alchemist": {
+     "mapNpcShown": 3,
+     "mapTownShown": 0,
+     "listRowsVisible": 2
+    },
+    "Starting": {
+     "mapNpcShown": 1,
+     "mapTownShown": 1,
+     "listRowsVisible": 2
+    }
+   },
+   "reproduced": true
+  },
+  "A-R1_runtime_duplicate_ids_1280": {
+   "width": 1280,
+   "expected": "no id appears more than once in the live DOM",
+   "observed": {
+    "duplicates": {
+     "nMon": 6,
+     "nEquip": 6,
+     "nProp": 6,
+     "nItem": 6,
+     "nNpc": 6
+    },
+    "doneOnEquip": {
+     "doneC": 0,
+     "doneL": 0
+    },
+    "doneOnReport": {
+     "doneC": 1,
+     "doneL": 1
+    },
+    "pageErrors": []
+   },
+   "reproduced": true
+  },
+  "A-R1_runtime_duplicate_ids_390": {
+   "width": 390,
+   "expected": "no id appears more than once in the live DOM",
+   "observed": {
+    "duplicates": {
+     "nMon": 6,
+     "nEquip": 6,
+     "nProp": 6,
+     "nItem": 6,
+     "nNpc": 6
+    },
+    "doneOnEquip": {
+     "doneC": 0,
+     "doneL": 0
+    },
+    "doneOnReport": {
+     "doneC": 1,
+     "doneL": 1
+    },
+    "pageErrors": []
+   },
+   "reproduced": true
+  }
+ },
+ "build": "3e4e04dbf1",
+ "pageErrors": []
+}
+exit=0

@@ -1,0 +1,42 @@
+# UI-INV R0.1 v3: component_key full validation = regex + scope whitelist + floor-range semantics (each fN-M needs M > N)
+import re,sys,json,os
+RX=re.compile(r'^[a-z][a-z0-9-]*(\.[a-z0-9][a-z0-9-]*){1,4}(@f[1-9]\d*(-[1-9]\d*)?(,f[1-9]\d*(-[1-9]\d*)?)*)?$')
+SC={"global","panel","popup","floatmap","cwin","imgzoom","map","monsters","equip","props","items","npcs","recipes","dungeons","quests","classes","bosses","report","about","changelog"}
+def check(k):
+    if not RX.match(k): return "invalid: regex"
+    if k.split(".")[0] not in SC: return "invalid: scope"
+    if "@" in k:
+        for fl in k.split("@",1)[1].split(","):
+            m=re.fullmatch(r'f(\d+)(?:-(\d+))?',fl)
+            if m.group(2) is not None and not int(m.group(2))>int(m.group(1)): return f"invalid: range {fl} (need M > N)"
+    return "valid"
+CASES=[("map.legend.base-button@f1-2","valid"),("map.legend.base-button@f2-1","invalid"),("map.legend.base-button@f1-1","invalid"),("map.legend.base-button@f2,f3","valid")]
+print("== test cases")
+ok=True
+for k,exp in CASES:
+    r=check(k); p=r.startswith(exp); ok&=p
+    print(f"{k:34} expected={exp:7} got={r:40} {'PASS' if p else 'FAIL'}")
+O=sys.argv[1]
+hdr=None;rows=[];sec0=False;a0=[]
+for l in open(f"{O}/UIINV_R0.1_A_元件清冊_v2.md",encoding="utf-8"):
+    if l.startswith("## 0."): sec0=True
+    elif l.startswith("## "): sec0=False
+    if not l.startswith("|"): hdr=None; continue
+    c=[x.strip() for x in re.split(r'(?<!\\)\|',l.strip())[1:-1]]
+    if hdr is None: hdr=c; continue
+    if set("".join(c))<=set("-: "): continue
+    if sec0 and hdr[0]=="分工列的 key": a0+=re.findall(r'`([^`]+)`',c[3]); continue
+    if hdr[0]=="component_key": rows.append(c[0])
+al={a["from"] for a in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)),"alias.json"),encoding="utf-8"))}
+keys=[k for k in rows if k not in al]
+print("== inventory (A v2)")
+res=[(k,check(k)) for k in keys]
+bad=[x for x in res if x[1]!="valid"]
+print("rows",len(rows),"alias rows",len(al),"formal keys",len(keys),"unique",len(set(keys)))
+print("formal keys valid",len(res)-len(bad),"invalid",len(bad),bad)
+rng=[k for k in keys if re.search(r'@.*f\d+-\d+',k)]
+print("keys with a floor range",rng,[check(k) for k in rng])
+b0=[(k,check(k)) for k in a0 if check(k)!="valid"]
+print("A§0 formal keys",len(a0),"invalid",b0,"not in inventory",[k for k in a0 if k not in set(keys)])
+ok&=not bad and not b0
+print("RESULT", "PASS" if ok else "FAIL"); sys.exit(0 if ok else 1)

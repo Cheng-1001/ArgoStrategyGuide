@@ -1,0 +1,14 @@
+$ python3 -I uiinv_tools/keyvalidate_v3.py uiinv/out ; echo exit=$?
+2026-11-19T15:07:06Z
+== test cases
+map.legend.base-button@f1-2        expected=valid   got=valid                                    PASS
+map.legend.base-button@f2-1        expected=invalid got=invalid: range f2-1 (need M > N)         PASS
+map.legend.base-button@f1-1        expected=invalid got=invalid: range f1-1 (need M > N)         PASS
+map.legend.base-button@f2,f3       expected=valid   got=valid                                    PASS
+== inventory (A v2)
+rows 308 alias rows 15 formal keys 293 unique 293
+formal keys valid 293 invalid 0 []
+keys with a floor range ['map.legend.base-button@f1-2'] ['valid']
+A§0 formal keys 17 invalid [] not in inventory []
+RESULT PASS
+exit=0
