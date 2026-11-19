@@ -378,5 +378,28 @@ window.SAO_REPORTS = [
   },
   "source": "form",
   "review": "審核：lintcbruce"
+ },
+ {
+  "id": "R0023",
+  "type": "place",
+  "floor": 3,
+  "name": "特里亞格",
+  "date": "2026-11-19",
+  "img": "reports/R0023.jpg",
+  "imgs": [
+   "reports/R0023.jpg",
+   "reports/R0023-2.jpg",
+   "reports/R0023-3.jpg",
+   "reports/R0023-4.jpg",
+   "reports/R0023-5.jpg"
+  ],
+  "raw": {
+   "地點・種類": "NPC",
+   "地點・座標 x, z": "5051408",
+   "地點・在地下嗎": "地面",
+   "地點・NPC 類別": "飾品商人"
+  },
+  "source": "form",
+  "review": "審核：lintcbruce"
  }
 ];
