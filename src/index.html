@@ -2452,7 +2452,7 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
     <div class="note srcn">圖片：官網世界首領頁（Bestiary）「See up close」的模型圖，可切換 3/4 和正面。</div>
   </article>
   <article class="bcard">
-    <div class="bhead">${bFig(u)}<div class="bttl"><span class="kick">獨特怪物 Unique Monster・${esc(u.unit)}</span><h3>${esc(u.zh)}</h3><div class="sub">${esc(u.name)}</div><span class="bstat ${u.available?"on":""}">${u.available?"已開放":"未開放"}</span></div></div>
+    <div class="bhead">${bFig(u)}<div class="bttl"><span class="kick">獨特怪物 Unique Monster・${esc(u.unit)}</span><h3>${esc(u.zh)}</h3><div class="sub">${esc(u.name)}</div><span class="bstat ${u.available===true?"on":""}">${u.available===true?"已開放":u.available===false?"未開放":"未證實"}</span></div></div>
     <dl class="bfacts"><div><dt>等級</dt><dd class="mono">${u.level} <span class="muted" style="font-size:11px">（wiki）</span></dd></div><div><dt>樓層</dt><dd>第 ${u.floor} 層</dd></div><div><dt>出現方式</dt><dd>隱藏條件</dd></div></dl>
     <h4 class="sec">攻擊招式</h4><ul class="atk">${u.attacks.map(([n,t])=>`<li><b>${esc(n)}</b>${esc(t)}</li>`).join("")}</ul>
     <div class="note warn"><b>階段：</b>${esc(u.phases)}</div>

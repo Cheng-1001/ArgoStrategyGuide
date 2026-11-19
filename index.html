@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="3e4e04dbf1">
+<meta name="sao-build" content="bb71c6c17e">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -898,7 +898,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 
 <script src="data.js?v=231c1095"></script>
 <script src="data23.js?v=d3a21cb6"></script>
-<script src="bosses.js?v=77b7ad43"></script>
+<script src="bosses.js?v=a3cba65b"></script>
 <script src="reports.js?v=5eab9ad2"></script>
 <script src="hints.js?v=fcf000d6"></script>
 <script src="codex.js?v=48141603"></script>
@@ -909,7 +909,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=8134ebb7"></script><script src="buyback.js?v=75ad19b4"></script>
 <script src="npcs.js?v=77ea1cfd"></script>
-<script src="changelog.js?v=613dfae1"></script>
+<script src="changelog.js?v=91c5f8f1"></script>
 <script src="recipes.js?v=112fe5d9"></script>
 <script src="jmmeta.js?v=8935be97"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -2463,7 +2463,7 @@ function renderBosses(){const now=new Date();const g=BO.world[0];
     <div class="note srcn">圖片：官網世界首領頁（Bestiary）「See up close」的模型圖，可切換 3/4 和正面。</div>
   </article>
   <article class="bcard">
-    <div class="bhead">${bFig(u)}<div class="bttl"><span class="kick">獨特怪物 Unique Monster・${esc(u.unit)}</span><h3>${esc(u.zh)}</h3><div class="sub">${esc(u.name)}</div><span class="bstat ${u.available?"on":""}">${u.available?"已開放":"未開放"}</span></div></div>
+    <div class="bhead">${bFig(u)}<div class="bttl"><span class="kick">獨特怪物 Unique Monster・${esc(u.unit)}</span><h3>${esc(u.zh)}</h3><div class="sub">${esc(u.name)}</div><span class="bstat ${u.available===true?"on":""}">${u.available===true?"已開放":u.available===false?"未開放":"未證實"}</span></div></div>
     <dl class="bfacts"><div><dt>等級</dt><dd class="mono">${u.level} <span class="muted" style="font-size:11px">（wiki）</span></dd></div><div><dt>樓層</dt><dd>第 ${u.floor} 層</dd></div><div><dt>出現方式</dt><dd>隱藏條件</dd></div></dl>
     <h4 class="sec">攻擊招式</h4><ul class="atk">${u.attacks.map(([n,t])=>`<li><b>${esc(n)}</b>${esc(t)}</li>`).join("")}</ul>
     <div class="note warn"><b>階段：</b>${esc(u.phases)}</div>

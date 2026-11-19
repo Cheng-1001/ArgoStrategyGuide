@@ -57,7 +57,7 @@ window.SAO_BOSSES = {
   unique: [{
     id: "seraphel", img: "img/bosses/seraphel-34.webp", imgFront: "img/bosses/seraphel-face.webp",
     name: "UNIT-01 — Seraphel, the Fallen Arbiter", fr: "Seraphel, le Séraphin du Jugement", zh: "墮落的仲裁者 Seraphel",
-    unit: "UNIT-001", floor: 1, level: 5, levelSrc: "wiki", available: true,
+    unit: "UNIT-001", floor: 1, level: 5, levelSrc: "wiki", available: null,
     attacks: [
       ["Teleport strike（瞬移斬）", "消失後出現在目標面前攻擊。"],
       ["Heavenly Judgement（天之審判）", "升空後打擊遠處的一名玩家。"],
@@ -67,7 +67,7 @@ window.SAO_BOSSES = {
       ["Distorted Judgement（扭曲審判）", "第二階段：連續三次從天而降的打擊。"]
     ],
     phases: "血量低於 50% 時變成扭曲形態，並回復 40% 血量。",
-    note: "官方網站沒有寫等級和出現方式。wiki 的獨特怪物表列出 UNIT-001：第 1 層、等級 5、已開放，應該就是這隻（官方名稱是 UNIT-01）。"
+    note: "是否已開放未證實：官方網站（中、英、法文）的獨特怪物頁只有名稱和模型圖，沒有等級、出現方式和開放狀態，獎勵寫「戰利品請在遊戲中探索」，公告也沒提過牠。wiki 英文版的獨特怪物表寫「已開放」（10/20 有人改的，沒附來源），法文版寫「未開放」，兩邊不同。等級 5 也只有 wiki 寫，是 4 月建表時就有的數字。wiki 的 UNIT-001 頁面寫「召喚資訊未經證實」，內容是空的。官方名稱是 UNIT-01。"
   }],
   uniqueRules: [
     "名稱前綴都是「UNIT」，由腐化的 Cardinal System 派出。",
@@ -76,7 +76,7 @@ window.SAO_BOSSES = {
     "打倒後可以拿到只有牠才會掉的裝備，並替全伺服器解鎖新區域，名字也會登上排行榜。"
   ],
   uniqueWiki: [
-    ["UNIT-001", 1, 5, 3, "已開放"],
+    ["UNIT-001", 1, 5, 3, "英文版已開放、法文版未開放"],
     ["UNIT-002", 2, 10, 4, "未開放"],
     ["UNIT-003", 3, 15, 5, "未開放"]
   ],
