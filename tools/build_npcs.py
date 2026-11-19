@@ -124,6 +124,8 @@ CALC23={(3,'Assistant to the Alchemist'):(828,656,'2026-11-12',''),(3,'Alchemist
         (2,'Manufacturer of the Fierce Talisman'):(98,-55,'2026-11-14','Y 70；名牌「???」、視窗「第 2 層 - 飾品鍛造：凶猛護符」；參考互動地圖寫 X 78 Z -71，差約 25 格（第 2 層參考地圖的座標系統和遊戲一致，這個點本身沒對過）'),
         # 2026-11-19 owner decision (in29 TRIAGE B-4～B-6): use the positions worked out from the 11/18 screenshots (F3 player X/Z + targeted
         # block, about ±2 blocks). The window titles mean the same as these reference-map names; only these points are moved
+        # 2026-11-19 owner: only this point; it is inside the Amethyst Mine under the Labyrinth area (so the compass shows 迷宮區)
+        (3,'Low Corruption Bracelet Blacksmith'):(890,397,'2026-11-18','Y 59，在紫水晶礦坑裡（礦坑在迷宮區底下，所以羅盤顯示「迷宮區」；站長 2026-11-19）。沒有名牌，遊戲視窗「P3 - 鐵匠 手環 腐化」，取得途徑寫「P3 - Forgeron Bracelet Corrompu」。參考互動地圖原本標在 X 439 Z 474（地下）；站長 2026-11-19 決定只放這一點。另有玩家截到同名視窗的工坊在約 X 939 Z 489 Y -50，做的是另一版本的微腐化手環（技能加速、防禦、耐力恢復，說明「驅使人變得桀驁不馴」），還沒收進網站。'),
         (2,'Scrap Accessories Blacksmith'):(238,323,'2026-11-18','Y 74，薩布勒莫礦脈附近；名牌看不到，遊戲視窗「第 2 層 - 廢鐵飾品」（取得途徑寫「第2層-廢鐵飾品」）。參考互動地圖的 Scrap Accessories Blacksmith 在 X -777 Z 17，差 1000 格以上；視窗標題意思相同、只看到這一位，網站當成同一位、改用截圖推算的位置（站長 2026-11-19）'),
         (2,'Manufacturer of the Ring of the Flaming Harpy'):(-613,276,'2026-11-18','Y -10，烈焰巢穴地下；名牌「???」，遊戲視窗「第 2 層 - 飾品鍛造：赤鳥身女妖戒指」。參考互動地圖寫 X -694 Z 205，差約 107 格，改用截圖推算的位置（站長 2026-11-19）'),
         (2,'Manufacturer of the Ring of the Drowned Harpy'):(-802,211,'2026-11-18','Y 43，洞穴裡；名牌「???」。遊戲視窗和取得途徑都寫「第 2 層 - 飾品鍛造：綠鳥身女妖戒指」，和做被碾碎之戒的那一位標題完全相同；這一位做藍色的溺水的鳥身女妖之戒，網站為了區分改叫「第 2 層 - 飾品鍛造：藍鳥身女妖戒指」（站長 2026-11-19 指定）。參考互動地圖寫 X -818 Z 98，差約 113 格，改用截圖推算的位置'),
@@ -157,8 +159,6 @@ NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,6
        # 2026-11-19 (in29 00.32.40～42, F3 player 597.1 / 69 / -721.6, targeted block 598, 70, -723): name = the window title (nameplate is ???)
        (2,'accessoriesBlacksmith','第 2 層 - 飾品鍛造：維尼戒指',597,-722,'2026-11-19','甜蜜森林，Y 69；名牌「???」；只做維尼之戒。參考互動地圖附近沒有這位（只有 Honeyed Loot Buyer、Bees Weapon Blacksmith）；它的熊飾品鐵匠 Bull & Bear Accessories Blacksmith 在 -602,-285，差約 1200 格、是多品項鐵匠，判斷不是同一位'),
        # 2026-11-19 owner decision (in29 TRIAGE B-7): 19.37.28 / 19.37.30 F3 player 890.6 / 59 / 398.4 facing north, targeted block 890, 59, 396.
-       # Added like the glove / grimoire smiths of the same series; the reference map's Low Corruption Bracelet Blacksmith (439, 474, underground) is kept
-       (3,'accessoriesBlacksmith','P3 - Forgeron Bracelet Corrompu',890,397,'2026-11-18','Y 59，羅盤「迷宮區」；沒有名牌，遊戲視窗「P3 - 鐵匠 手環 腐化」。參考互動地圖的 Low Corruption Bracelet Blacksmith 在 X 439 Z 474 地下，差約 450 格，照同系列手套、魔法書工坊的先例另外列一位（站長 2026-11-19）'),
        # 2026-11-19 owner decision (in29 B-26 option B): listed without a position like the Anneau des Cieux smith; 00.44.28～35 show no coordinates.
        # The reference map's Manufacturer of Corrupt Mask (-713, -109) is kept and not linked (this batch's floor-2 smiths are 38～1000+ blocks off it)
        (2,'accessoriesBlacksmith','第 2 層 - 飾品鍛造：腐化面具',None,None,'2026-11-19','遊戲視窗「第 2 層 - 飾品鍛造：腐化面具」（取得途徑寫「第2層-飾品鍛造：腐化面具」）；截圖讀不到座標。參考互動地圖有一位 Manufacturer of Corrupt Mask（X -713 Z -109），名稱意思相同但位置沒對過，沒有合併')]

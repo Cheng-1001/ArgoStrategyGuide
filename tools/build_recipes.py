@@ -490,7 +490,7 @@ SHOTS23 = {
     # window「第 2 層 - 飾品鍛造：綠鳥身女妖戒指」, the one at -580, 532 (05.14.23, 0/3): EPIC 1 min, 55 Col
     (2, "Manufacturer of the Crushed Harpy Ring"): [("Anneau de l'Harpie Ecrasé", "a", 60, [["Ancestral Root", 16], ["Scrap Metal Piece", 64], ["Earthen Feather", 64]], "55", "acc")],
     # window「P3 - 鐵匠 手環 腐化」(19.37.14～24, 0/3): MYTHIC 10 min, 55 Col; 腐化碎片 green 32 / blue 16 / purple 8 (tooltips per row)
-    (3, "P3 - Forgeron Bracelet Corrompu"): [("Bracelet Faible Corruption", "splus", 600, [["Corrupted Fragment", 32], ["Corrupted Fragment (2)", 16], ["Corrupted Fragment (3)", 8]], "55", "acc")],
+    (3, "Low Corruption Bracelet Blacksmith"): [("Bracelet Faible Corruption", "splus", 600, [["Corrupted Fragment", 32], ["Corrupted Fragment (2)", 16], ["Corrupted Fragment (3)", 8]], "55", "acc")],
     # window「第 2 層 - 飾品鍛造：腐化面具」(00.44.28 / 00.44.35, 0/5, two scrolls = all 5 rows): MYTHIC 1 min, 55 Col; NPC listed without a position
     (2, "第 2 層 - 飾品鍛造：腐化面具"): [("Masque Corrompu", "splusplus", 60, [["Soul of the Ruins", 64], ["Corrupted Crystal", 128], ["Spectral Cloth", 64], ["Piece of Spectral Mane", 1], ["純淨黑瑪瑙錠", 3]], "55", "acc")],
 }

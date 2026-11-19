@@ -114,7 +114,7 @@
 | `SAO_ZHNAMES.mobsByName{key}` | resolved | 78 |
 | `SAO_ZHNAMES.mobs{key}` | resolved | 46 |
 | `SAO_ZHNAMES.npcEn{key}` | ambiguous | 1 |
-| `SAO_ZHNAMES.npcEn{key}` | resolved | 44 |
+| `SAO_ZHNAMES.npcEn{key}` | resolved | 45 |
 | `SAO_ZHNAMES.npcs{key}` | ambiguous | 5 |
 | `SAO_ZHNAMES.npcs{key}` | quest-npc | 20 |
 | `SAO_ZHNAMES.npcs{key}` | resolved | 65 |
@@ -467,7 +467,7 @@
 
 ### W10
 
-- 數量：160
+- 數量：159
 
 ### W11
 
