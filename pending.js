@@ -1,21 +1,23 @@
 // 處理中的玩家回報。Google Apps Script 自動產生，不要手改。
 // 只公開回報編號、種類、樓層、送出時間、狀態；名稱和內容要等審核員核准後，才會出現在 reports.js。
 window.SAO_PENDING = {
- "updated": "2026-11-19 23:50",
+ "updated": "2026-11-19 23:52",
  "list": [
   {
    "id": "R0024",
    "type": "place",
    "floor": 1,
    "date": "2026-11-19 16:15",
-   "status": "pending"
+   "rdate": "2026-11-19",
+   "status": "rejected"
   },
   {
    "id": "R0025",
    "type": "place",
    "floor": 1,
    "date": "2026-11-19 16:18",
-   "status": "pending"
+   "rdate": "2026-11-19",
+   "status": "rejected"
   }
  ]
 };
