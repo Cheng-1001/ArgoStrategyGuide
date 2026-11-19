@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="c536d93df4">
+<meta name="sao-build" content="f854756d3b">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -897,7 +897,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 </aside>
 
 <script src="data.js?v=231c1095"></script>
-<script src="data23.js?v=d869e0cb"></script>
+<script src="data23.js?v=d3a21cb6"></script>
 <script src="bosses.js?v=77b7ad43"></script>
 <script src="reports.js?v=5eab9ad2"></script>
 <script src="hints.js?v=fcf000d6"></script>
@@ -907,19 +907,19 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="mainq.js?v=7f99b923"></script>
 <script src="equip.js?v=afe010ec"></script>
 <script src="props.js?v=a6c9503f"></script>
-<script src="gameinfo.js?v=b59191b8"></script><script src="buyback.js?v=75ad19b4"></script>
-<script src="npcs.js?v=13e5daab"></script>
-<script src="changelog.js?v=31fb4927"></script>
-<script src="recipes.js?v=3515ca88"></script>
+<script src="gameinfo.js?v=8134ebb7"></script><script src="buyback.js?v=75ad19b4"></script>
+<script src="npcs.js?v=ecae6d23"></script>
+<script src="changelog.js?v=613dfae1"></script>
+<script src="recipes.js?v=112fe5d9"></script>
 <script src="jmmeta.js?v=8935be97"></script>
 <script src="formcfg.js?v=54663be2"></script>
 <script src="classes.js?v=1be646b7"></script>
 <script src="gameskills.js?v=bb1e5a5a"></script>
 <script src="events.js?v=ca16a154"></script>
 <script src="gacha.js?v=48cf03e8"></script>
-<script src="gamestats.js?v=00c7459e"></script>
+<script src="gamestats.js?v=aa5ceb52"></script>
 <script src="sets.js?v=b951e367"></script>
-<script src="zhnames.js?v=1d2de6ae"></script>
+<script src="zhnames.js?v=0b908ec7"></script>
 <script src="staticons.js?v=dadb2164"></script>
 <script src="gameicons.js?v=708f19d9"></script>
 <script src="recicons.js?v=9e931339"></script>
@@ -1685,7 +1685,7 @@ Object.values(RECIPES).forEach(v=>v.items.forEach(it=>(it[3]||[]).forEach(m=>{m[
   const row=[o[0],o[1],r.sec??o[2],r.mats.length?r.mats:o[3],cost,RAR_ZH[r.rar]||o[5],RC_ZH[r.rcat]||o[6],r.rlv??o[7],"rep",r.id];
   if(i>=0)Rn.items[i]=row;else Rn.items.push(row)})}
 const RQTY=window.SAO_RECIPE_QTY||{},RMISS=window.SAO_RECIPE_MISS||{};   // RMISS: material rows the screenshot did not show (shown as ???, owner 2026-11-18)
-const missOf=r=>RMISS[rKey(r.f,r.npc)+"|"+r.en]||0;   // output per craft (recipes.js, 2026-11-07: the Alchemist makes ×3)
+const missV=r=>RMISS[rKey(r.f,r.npc)+"|"+r.en],missOf=r=>{const v=missV(r);return typeof v==="string"?1:(v||0)},missNm=r=>{const v=missV(r);return typeof v==="string"?v.split("|"):null};   // a string "name|qty" = a row the screenshot shows but the site cannot tie to an item yet (in29 B-3, 2026-11-19);   // output per craft (recipes.js, 2026-11-07: the Alchemist makes ×3)
 const recRow=(npc,f,it)=>({npc,f,oid:it[0],en:it[1],sec:it[2],mats:(it[3]||[]).map(([m,q])=>[ikey(m),q]),cost:it[4],r:it[5],cat:it[6]||"acc",lv:it[7],src:it[8]||"shot",rep:it[9]});
 const RECIPE_BY_EQ={},RECIPE_BY_MAT={};Object.entries(RECIPES).forEach(([k,r])=>r.items.forEach(it=>{const row=recRow(rSplit(k)[0],r.floor,it);
   if(it[0]!=null)(RECIPE_BY_EQ[it[0]]=RECIPE_BY_EQ[it[0]]||[]).push(row);it[3].forEach(([m])=>(RECIPE_BY_MAT[m]=RECIPE_BY_MAT[m]||[]).push(row))}));
@@ -1799,7 +1799,7 @@ function renderRecipes(){if(rcFL!==FL)rcFill();const s=Sq(),np=$("fRcNpc").value
   $("lRc").innerHTML=a.length?a.map(r=>{const e=eqById[String(r.oid)]||prById[String(r.oid)];const go=recGo(r);const rar=e?e.r:r.r;const tag="button";
     return`<${tag} class="card rcard" data-go="r|${r.i}" data-key="r|${r.i}"><div class="chead">${recIcon(r)}<div class="cname"><b>${esc(recZh(r,e)||recEnD(r))}</b><span>${recZh(r,e)?esc(recEnD(r))+"・":potZh(r.en)?esc(potZh(r.en))+"・":""}${e&&!recZh(r,e)&&dn(e)!==r.en?esc(dn(e))+"・":""}${isShop(r)?"販售・":""}${esc(npcN(r.npc))}</span></div></div>
     <div class="cmeta">${RAR[rar]?`<span class="pill ${RAR[rar][1]}">${RAR[rar][0]}</span>`:""}<span>${RC_CAT[r.cat][0]}</span>${r.lv?`<span>· 等級 ${r.lv}</span>`:""}<span>· ${costText(r.cost)}</span>${r.sec?`<span>· ${r.sec} 秒</span>`:""}${r.src==="shot"?'<span class="pill rep">遊戲截圖</span>':r.src==="rep"?'<span class="pill rep">玩家回報</span>':""}</div>
-    <div class="mats">${r.mats.length?matText(r.mats)+(missOf(r)?'<span class="msep">・</span><span class="mat"><span>??? ×?</span></span>':""):'<span class="muted">只要 珂爾</span>'}</div></${tag}>`}).join(""):`<div class="empty-note">沒有符合條件的配方。</div>`;
+    <div class="mats">${r.mats.length?matText(r.mats)+(missOf(r)?'<span class="msep">・</span><span class="mat"><span>'+(missNm(r)?esc(missNm(r)[0])+" ×"+esc(missNm(r)[1]||"?"):"??? ×?")+'</span></span>':""):'<span class="muted">只要 珂爾</span>'}</div></${tag}>`}).join(""):`<div class="empty-note">沒有符合條件的配方。</div>`;
   bindGo($("lRc"));markSel()}
 // ================= classes / skills tab =================
 const CLS=window.SAO_CLASSES||[];
@@ -1985,7 +1985,7 @@ function recipeDetail(id){const r=ALLREC[+id];if(!r)return`<div class="note">找
   const e=eX||eqById[String(r.oid)]||prById[String(r.oid)],go=recGo(r),n=npcByName(r.f,r.npc),shop=isShop(r),rar=e?e.r:r.r,isE=!!(eX||eqById[String(r.oid)]);
   return`<div class="phead">${recIcon(r,52)}<div class="ttl"><div class="num">${flBadge(r.f)} ${shop?"NPC 販售":"配方"}・${RC_CAT[r.cat][0]}</div><h2>${esc(recZh(r,e)||recEnD(r))}</h2>${e||potZh(r.en)||recZh(r,e)?`<div class="sub">${[...new Set((recZh(r,e)?[r.en,e&&!e.extra&&e.name]:[potZh(r.en),e&&!e.extra&&e.name]).filter(Boolean))].map(esc).join("・")}</div>`:""}</div></div>
   <dl class="facts"><dt>${shop?"在哪裡買":"在哪裡做"}</dt><dd>${n?`<button class="linkbtn" data-go="n|${n.id}">${esc(npcN(r.npc))}</button><br>${npcWhere(n)}`:esc(npcN(r.npc))}</dd>${r.lv?`<dt>等級</dt><dd>${r.lv}${r.lvSrc==="game"?` <span class="muted" style="font-size:12px">（遊戲物品說明${r.lvRef?`；${esc(r.lvRefSrc)}寫 ${r.lvRef}`:""}）</span>`:r.lvRef?` <span class="muted" style="font-size:12px">（${esc(r.lvRefSrc)}寫 ${r.lvRef}，遊戲截圖還沒有這件，暫用官網圖鑑）</span>`:""}</dd>`:""}${r.cat==="key"?(()=>{const d=spotsOf(r.f).filter(x=>x.kind==="dungeon"&&dgKeys(x).hit.includes(r));return d.length?`<dt>用途</dt><dd>進入 ${d.map(x=>`<button class="linkbtn" data-go="s|${x.id}">${esc(pN(x))}</button>`).join("、")}</dd>`:""})():""}<dt>費用</dt><dd>${costText(r.cost)}</dd>${r.sec?`<dt>製作時間</dt><dd>${r.sec} 秒</dd>`:""}${RQTY[rKey(r.f,r.npc)+"|"+r.en]?`<dt>產量</dt><dd>每次做 ${RQTY[rKey(r.f,r.npc)+"|"+r.en]} 個</dd>`:""}${RAR[rar]?`<dt>稀有度</dt><dd>${RAR[rar][0]}</dd>`:""}</dl>
-  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m0,q])=>{const m=ikey(m0),R=matRef(m0);return R.go?`<li><button class="lrow" data-go="${esc(R.go)}">${R.ic(32)}<span class="t"><b>${esc(R.nm)}</b>${R.nm!==m0?`<span>${esc(m0)}</span>`:""}<span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow">${GICON[m]?recicImg(GICON[m],32):""}<span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`}).join("")}${Array.from({length:missOf(r)},()=>`<li><div class="lrow"><span class="t"><b>???</b><span>遊戲視窗的材料比截圖看得到的多，這一項沒有截到</span></span><span class="v">× ?</span></div></li>`).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
+  <h3 class="sec">材料</h3>${r.mats.length?`<ul class="rows">${r.mats.map(([m0,q])=>{const m=ikey(m0),R=matRef(m0);return R.go?`<li><button class="lrow" data-go="${esc(R.go)}">${R.ic(32)}<span class="t"><b>${esc(R.nm)}</b>${R.nm!==m0?`<span>${esc(m0)}</span>`:""}<span class="mhint">點了看哪裡拿得到</span></span><span class="v">× ${q}<span class="mgo" aria-hidden="true"> ›</span></span></button></li>`:`<li><div class="lrow">${GICON[m]?recicImg(GICON[m],32):""}<span class="t"><b>${esc(m)}</b><span>本站還沒有這個物品的資料</span></span><span class="v">× ${q}</span></div></li>`}).join("")}${Array.from({length:missOf(r)},()=>missNm(r)?`<li><div class="lrow"><span class="t"><b>${esc(missNm(r)[0])}</b><span>遊戲視窗寫的材料名；網站還沒有確定是哪一件物品</span></span><span class="v">× ${esc(missNm(r)[1]||"?")}</span></div></li>`:`<li><div class="lrow"><span class="t"><b>???</b><span>遊戲視窗的材料比截圖看得到的多，這一項沒有截到</span></span><span class="v">× ?</span></div></li>`).join("")}</ul>`:shop?'<div class="muted">NPC 販售：在商店的 Buy 分頁直接用珂爾購買，不用材料。</div>':'<div class="muted">只要珂爾，不用材料。</div>'}
   ${e?recItemInfo(r,e,isE):""}
   ${r.oid?"":giHTML(GI_EN[norm(r.en)])+gachaHTML(r.en)}<div class="note srcn">${shop?"販售資料":"配方"}來源：${r.src==="ref"?"參考互動地圖（Current Data）的材料清單":r.src==="rep"?`核准的玩家回報（${repLink(r.rep)}）`:"玩家的遊戲截圖"}。</div>`}
 function npcDetail(id){const n=npcById(id);if(!n)return`<div class="note">找不到這個 NPC。</div>`;const g=NGRP[npcGrp(n.c)],c=[g[0],g[1]],ty=NPCCAT[n.c];
@@ -2007,7 +2007,7 @@ function questDetail(id){const Q=questById(id);if(!Q)return`<div class="note">�
 
   ${!Q.main&&(qq.need.length||qq.kill)?`<h3 class="sec">需要的物品和目標</h3><div class="reqs">${reqChips(qq)}</div>`:""}
   ${!Q.main&&qq.raw?`<div class="note">任務原文：${esc(qq.raw)}${qq.tnote?"<br>"+esc(qq.tnote):""}</div>`:""}
-  <div class="note srcn">${Z.zh&&!Z.cont?"任務名稱"+(Z.d?"和說明":"")+"取自遊戲中文版的任務日誌（站長 2026-11-07 截圖）。":""}${Q.main?(FL>1&&qq.tip?"任務名稱、說明和獎勵取自遊戲中文版的任務日誌或任務追蹤（站長截圖），沒有截到的部分寫在上面的提示。"+(qq.wrev?"NPC 和英文任務名取自 wiki 主線表（2026-11-17 版）。":""):FL>1&&qq.wrev?"任務名稱、NPC、編號和獎勵取自 wiki 主線表（2026-11-17 版，寫的人依實際遊玩），說明是本站依 wiki 改寫；還沒有遊戲截圖。":FL>1?"說明、NPC、等級和獎勵取自 wiki 主線表（2026-11-10 新增，寫的人依實際遊玩），步驟和說明是本站改寫；還沒有遊戲截圖，任務追蹤的編號未知。":(Z.d?"":"說明取自 wiki 主線表，")+"步驟順序和座標取自參考互動地圖，文字是本站改寫。")+(qq.img?"步驟圖片是站長的遊戲截圖。":""):qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":qq.src==="shot"?`任務名稱、說明、目標和獎勵取自站長的遊戲任務日誌截圖（${esc(qq.date||"")}，法文介面；名稱照遊戲顯示）。步驟是本站依目標改寫，標「任務說明」的是說明裡寫的做法。NPC 和位置還沒有截圖。`:"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
+  <div class="note srcn">${Z.zh&&!Z.cont?"任務名稱"+(Z.d?"和說明":"")+"取自遊戲中文版的任務日誌（站長 2026-11-07 截圖）。":""}${Q.main?(FL>1&&qq.tip?"任務名稱、說明和獎勵取自遊戲中文版的任務日誌或任務追蹤（站長截圖），沒有截到的部分寫在上面的提示。"+(qq.wrev?"NPC 和英文任務名取自 wiki 主線表（2026-11-17 版）。":""):FL>1&&qq.wrev?"任務名稱、NPC、編號和獎勵取自 wiki 主線表（2026-11-17 版，寫的人依實際遊玩），說明是本站依 wiki 改寫；還沒有遊戲截圖。":FL>1?"說明、NPC、等級和獎勵取自 wiki 主線表（2026-11-10 新增，寫的人依實際遊玩），步驟和說明是本站改寫；還沒有遊戲截圖，任務追蹤的編號未知。":(Z.d?"":"說明取自 wiki 主線表，")+"步驟順序和座標取自參考互動地圖，文字是本站改寫。")+(qq.img?"步驟圖片是站長的遊戲截圖。":""):qq.src==="ref"?"任務、NPC、座標、數量和獎勵取自參考互動地圖，文字是本站改寫。":qq.src==="shot"?(qq.d?`任務名稱、說明、目標和獎勵取自站長的遊戲任務日誌截圖（${esc(qq.date||"")}，法文介面；名稱照遊戲顯示）。步驟是本站依目標改寫，標「任務說明」的是說明裡寫的做法。NPC 和位置還沒有截圖。`:`任務名稱和目標取自站長的任務追蹤截圖（${esc(qq.date||"")}；名稱照遊戲顯示），任務日誌還沒有截圖，說明和獎勵不知道。步驟是本站依目標改寫。NPC 和位置還沒有截圖。`):"任務需求和座標取自 wiki 支線表。物品產地是本站依怪物掉落和採集點推算的建議地點。"}</div>
   ${(qq.reps||[]).length?`<h3 class="sec">玩家回報 <span class="c">${qq.reps.length}</span></h3><ul class="rows">${qq.reps.map(r=>`<li><div class="lrow"><span class="th sm" style="--ring:var(--ok)" aria-hidden="true">📜</span><span class="t"><b>${r.qno?"#"+r.qno+" ":""}${esc(r.name)}</b><span>${r.step?"目前步驟："+esc(r.step):""}${r.x!=null?`・X ${r.x} · Z ${r.z}`:""}${r.reward?"・獎勵："+esc(r.reward):""}</span></span><span class="v">${repLink(r.id)}${r.by?`<br><span class="repby">${esc(r.by)}</span>`:""}</span></div></li>`).join("")}</ul>${qq.nRep?`<div class="muted" style="font-size:12px">任務編號 #${qq.n} 來自玩家回報 ${esc(qq.nRep)} 的任務追蹤截圖。</div>`:""}`:""}
   ${FLOORS[f].map&&Q.steps.some(x=>x[1]!=null)?`<h3 class="sec">路線</h3>${routeMini(Q.steps,f)}<button class="btn" data-route="${esc(id)}">放大查看路線（另開視窗，可縮放）</button>`:""}`}
 function mqCard(qq,i){const Z=qZ(qq)||{},meta=[qT(qq)!==qq.t&&qq.t,qq.npc&&("NPC "+qNpc(qq.npc)),qq.lv&&("等級 "+qq.lv)].filter(Boolean).map(esc).join("・");const id="mq"+FL+"_"+i;

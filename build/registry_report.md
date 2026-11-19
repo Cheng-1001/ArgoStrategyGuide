@@ -17,7 +17,7 @@
 
 ## 來源覆蓋（G1，和例外分開統計）
 
-欄位簽名 562 個：掃描 62、排除 500、沒有登記 0（E9）。
+欄位簽名 563 個：掃描 62、排除 501、沒有登記 0（E9）。
 
 | 欄位 | 結論 | 列數 |
 | --- | --- | --- |
@@ -78,30 +78,30 @@
 | `SAO_GAMEICONS{key}` | resolved | 97 |
 | `SAO_GAMEICONS{key}` | unresolved | 6 |
 | `SAO_GAMEINFO.items[].obt[]` | ambiguous | 15 |
-| `SAO_GAMEINFO.items[].obt[]` | excluded-row | 117 |
-| `SAO_GAMEINFO.items[].obt[]` | resolved | 195 |
+| `SAO_GAMEINFO.items[].obt[]` | excluded-row | 116 |
+| `SAO_GAMEINFO.items[].obt[]` | resolved | 205 |
 | `SAO_GAMEINFO.items[].obt[]` | term | 19 |
 | `SAO_GAMEINFO.items[].obt[]` | unresolved | 25 |
-| `SAO_GAMEINFO.items[].oid[]` | resolved | 204 |
-| `SAO_GAMEINFO.items[].site` | excluded-row | 243 |
+| `SAO_GAMEINFO.items[].oid[]` | resolved | 213 |
+| `SAO_GAMEINFO.items[].site` | excluded-row | 252 |
 | `SAO_GAMEINFO.items[].site` | resolved | 21 |
-| `SAO_GAMESTATS.items{key}` | resolved | 125 |
+| `SAO_GAMESTATS.items{key}` | resolved | 126 |
 | `SAO_HINTS{}{key}` | resolved | 49 |
 | `SAO_MAINQ{}[].npc` | excluded-row | 21 |
 | `SAO_MAINQ{}[].npc` | quest-npc | 68 |
 | `SAO_MOBCODEX.by{}{key}` | resolved | 56 |
 | `SAO_MOBPHOTO.by{}{key}` | resolved | 133 |
-| `SAO_NPC_CALC{key}` | resolved | 61 |
+| `SAO_NPC_CALC{key}` | resolved | 67 |
 | `SAO_RECICONS{key}` | resolved | 19 |
 | `SAO_RECIPES{key}` | ambiguous | 1 |
-| `SAO_RECIPES{key}` | resolved | 88 |
+| `SAO_RECIPES{key}` | resolved | 94 |
 | `SAO_RECIPES{}.items[][0]` | excluded-row | 69 |
-| `SAO_RECIPES{}.items[][0]` | resolved | 236 |
-| `SAO_RECIPES{}.items[][1]` | excluded-row | 236 |
+| `SAO_RECIPES{}.items[][0]` | resolved | 246 |
+| `SAO_RECIPES{}.items[][1]` | excluded-row | 246 |
 | `SAO_RECIPES{}.items[][1]` | resolved | 65 |
 | `SAO_RECIPES{}.items[][1]` | unresolved | 4 |
 | `SAO_RECIPES{}.items[][3][][0]` | ambiguous | 2 |
-| `SAO_RECIPES{}.items[][3][][0]` | resolved | 477 |
+| `SAO_RECIPES{}.items[][3][][0]` | resolved | 499 |
 | `SAO_RECIPES{}.items[][3][][0]` | unresolved | 2 |
 | `SAO_SETS.potions[].name` | resolved | 58 |
 | `SAO_SETS.potions[].name` | unresolved | 5 |
@@ -109,15 +109,15 @@
 | `SAO_SETS.sets[].members[]` | resolved | 170 |
 | `SAO_SETS.sets[].members[]` | unresolved | 3 |
 | `SAO_ZHNAMES.items[].ids[]` | excluded-row | 40 |
-| `SAO_ZHNAMES.items[].ids[]` | resolved | 639 |
+| `SAO_ZHNAMES.items[].ids[]` | resolved | 640 |
 | `SAO_ZHNAMES.items[].ids[]` | unresolved | 1 |
 | `SAO_ZHNAMES.mobsByName{key}` | resolved | 78 |
 | `SAO_ZHNAMES.mobs{key}` | resolved | 46 |
 | `SAO_ZHNAMES.npcEn{key}` | ambiguous | 1 |
-| `SAO_ZHNAMES.npcEn{key}` | resolved | 39 |
+| `SAO_ZHNAMES.npcEn{key}` | resolved | 44 |
 | `SAO_ZHNAMES.npcs{key}` | ambiguous | 5 |
 | `SAO_ZHNAMES.npcs{key}` | quest-npc | 20 |
-| `SAO_ZHNAMES.npcs{key}` | resolved | 61 |
+| `SAO_ZHNAMES.npcs{key}` | resolved | 65 |
 | `SAO_ZHNAMES.places{key}` | ambiguous | 2 |
 | `SAO_ZHNAMES.places{key}` | resolved | 42 |
 | `SAO_ZHNAMES.places{key}` | unresolved | 1 |
@@ -142,7 +142,7 @@
 - 名稱文字（首領、活動怪物、官網新聞的法文名、區域標籤），不在 v5 階段 1 涵蓋表；之後依種類搬家時處理；階段 3／4；19 個：`SAO.SPOTS[].dg.boss`、`SAO.SPOTS[].dg.bossZh`、`SAO.SPOTS[].dg.title`、`SAO23.floors{}.spots[].dg.boss`、`SAO23.floors{}.spots[].dg.bossZh`、`SAO23.floors{}.spots[].dg.title`、`SAO_CODEX{}{}.reg`、`SAO_EVENTS.dungeons[].bosses[][0]`、`SAO_EVENTS.dungeons[].dg.boss`、`SAO_EVENTS.dungeons[].forge.npc`、`SAO_EVENTS.dungeons[].key.npc`、`SAO_EVENTS.dungeons[].zones[].frag`、`SAO_EVENTS.dungeons[].zones[].leader`、`SAO_EVENTS.dungeons[].zones[].mobs[]`、`SAO_MOBPHOTO.by{}{}.old[].fr`、`SAO_MOBPHOTO.by{}{}.rows[].fr`、`SAO_MOBPHOTO.by{}{}.rows[].tw`、`SAO_MOBPHOTO.by{}{}.z[]`、`SAO_ZHNAMES.quests{}.reg`
 - 圖示檔路徑；—；2 個：`SAO_MOBCODEX.by{}{}`、`SAO_RECICONS{}`
 - 圖示檔路徑（E7 釘選另外檢查）；—；1 個：`SAO_GAMEICONS{}`
-- 地點紀錄本身（被引用的一方）或說明文字；—；40 個：`SAO.SPOTS[].area[][0]`、`SAO.SPOTS[].area[][1]`、`SAO.SPOTS[].csrc`、`SAO.SPOTS[].dg.date`、`SAO.SPOTS[].dg.easy[][0]`、`SAO.SPOTS[].dg.easy[][1]`、`SAO.SPOTS[].dg.loot[][2]`、`SAO.SPOTS[].dg.modes[]`、`SAO.SPOTS[].game`、`SAO.SPOTS[].gt`、`SAO.SPOTS[].id`、`SAO.SPOTS[].kind`、`SAO.SPOTS[].n`、`SAO.SPOTS[].note`、`SAO.SPOTS[].nsrc`、`SAO.SPOTS[].old`、`SAO.SPOTS[].src`、`SAO.SPOTS[].tp`、`SAO.SPOTS[].x`、`SAO.SPOTS[].z`、`SAO.SPOTS[].zh`、`SAO23.floors{}.spots[].area[][0]`、`SAO23.floors{}.spots[].area[][1]`、`SAO23.floors{}.spots[].dg.date`、`SAO23.floors{}.spots[].dg.easy[][0]`、`SAO23.floors{}.spots[].dg.easy[][1]`、`SAO23.floors{}.spots[].dg.lootNote`、`SAO23.floors{}.spots[].dg.loot[][2]`、`SAO23.floors{}.spots[].dg.modes[]`、`SAO23.floors{}.spots[].id`、`SAO23.floors{}.spots[].kind`、`SAO23.floors{}.spots[].n`、`SAO23.floors{}.spots[].note`、`SAO23.floors{}.spots[].old`、`SAO23.floors{}.spots[].src`、`SAO23.floors{}.spots[].tp`、`SAO23.floors{}.spots[].u`、`SAO23.floors{}.spots[].x`、`SAO23.floors{}.spots[].z`、`SAO23.floors{}.spots[].zh`
+- 地點紀錄本身（被引用的一方）或說明文字；—；41 個：`SAO.SPOTS[].area[][0]`、`SAO.SPOTS[].area[][1]`、`SAO.SPOTS[].csrc`、`SAO.SPOTS[].dg.date`、`SAO.SPOTS[].dg.easy[][0]`、`SAO.SPOTS[].dg.easy[][1]`、`SAO.SPOTS[].dg.loot[][2]`、`SAO.SPOTS[].dg.modes[]`、`SAO.SPOTS[].game`、`SAO.SPOTS[].gt`、`SAO.SPOTS[].id`、`SAO.SPOTS[].kind`、`SAO.SPOTS[].n`、`SAO.SPOTS[].note`、`SAO.SPOTS[].nsrc`、`SAO.SPOTS[].old`、`SAO.SPOTS[].src`、`SAO.SPOTS[].tp`、`SAO.SPOTS[].x`、`SAO.SPOTS[].z`、`SAO.SPOTS[].zh`、`SAO23.floors{}.spots[].area[][0]`、`SAO23.floors{}.spots[].area[][1]`、`SAO23.floors{}.spots[].dg.date`、`SAO23.floors{}.spots[].dg.easy[][0]`、`SAO23.floors{}.spots[].dg.easy[][1]`、`SAO23.floors{}.spots[].dg.lootNote`、`SAO23.floors{}.spots[].dg.loot[][2]`、`SAO23.floors{}.spots[].dg.modes[]`、`SAO23.floors{}.spots[].gt`、`SAO23.floors{}.spots[].id`、`SAO23.floors{}.spots[].kind`、`SAO23.floors{}.spots[].n`、`SAO23.floors{}.spots[].note`、`SAO23.floors{}.spots[].old`、`SAO23.floors{}.spots[].src`、`SAO23.floors{}.spots[].tp`、`SAO23.floors{}.spots[].u`、`SAO23.floors{}.spots[].x`、`SAO23.floors{}.spots[].z`、`SAO23.floors{}.spots[].zh`
 - 城鎮紀錄本身（被引用的一方）；—；17 個：`SAO.TOWNS[].csrc`、`SAO.TOWNS[].id`、`SAO.TOWNS[].n`、`SAO.TOWNS[].note`、`SAO.TOWNS[].old`、`SAO.TOWNS[].tp`、`SAO.TOWNS[].x`、`SAO.TOWNS[].z`、`SAO.TOWNS[].zh`、`SAO23.floors{}.towns[].id`、`SAO23.floors{}.towns[].n`、`SAO23.floors{}.towns[].note`、`SAO23.floors{}.towns[].old`、`SAO23.floors{}.towns[].src`、`SAO23.floors{}.towns[].x`、`SAO23.floors{}.towns[].z`、`SAO23.floors{}.towns[].zh`
 - 套裝名稱本身（被引用的一方）；—；1 個：`SAO_SETS.sets[].name`
 - 套裝顯示名稱（說明文字）；階段 2；1 個：`SAO.ITEMS{}.set.name`
@@ -362,9 +362,9 @@
 - 第 2 層 NPC：Necrotic Tool Blacksmith ↔ Blacksmith of Necromancer Armor（4.0 格）
 - 第 2 層 NPC：Occult Amulet Merchant ↔ Occult Bracelet Merchant（8.2 格）
 - 第 2 層 NPC：Refauncher ↔ Refaiter（2.2 格）
-- 第 2 層 NPC：Accessories Blacksmith ↔ Scrap Accessories Blacksmith（984.5 格）
+- 第 2 層 NPC：Accessories Blacksmith ↔ Scrap Accessories Blacksmith（742.0 格）
 - 第 2 層 NPC：Impure Onyx Accessories Blacksmith ↔ Pure Onyx Accessories Blacksmith（858.2 格）
-- 第 2 層 NPC：Manufacturer of the Ring of the Drowned Harpy ↔ Manufacturer of the Ring of the Flaming Harpy（163.8 格）
+- 第 2 層 NPC：Manufacturer of the Ring of the Drowned Harpy ↔ Manufacturer of the Ring of the Flaming Harpy（199.9 格）
 - 第 3 層 NPC：Alchemist ↔ Assistant to the Alchemist（3.6 格）
 - 第 3 層 NPC：Loot Buyer Sylnovar ↔ Loot Buyer Sylvaer（752.1 格）
 - 第 3 層 NPC：Equipment Merchant ↔ Equipment Merchant（823.4 格）
@@ -467,7 +467,7 @@
 
 ### W10
 
-- 數量：164
+- 數量：160
 
 ### W11
 
@@ -475,7 +475,7 @@
 
 ### W12
 
-- 數量：{"ITEMS fr": 6, "SAO23 fr": 101, "gameinfo oid": 10, "zhnames ids": 106, "配方 id": 5}
+- 數量：{"ITEMS fr": 6, "SAO23 fr": 101, "gameinfo oid": 10, "zhnames ids": 105, "配方 id": 5}
 
 ### 未量測（4）
 

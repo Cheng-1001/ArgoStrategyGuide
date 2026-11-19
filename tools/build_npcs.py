@@ -121,7 +121,13 @@ CALC23={(3,'Assistant to the Alchemist'):(828,656,'2026-11-12',''),(3,'Alchemist
         (3,'Spider Loot Repreneur'):(533,869,'2026-11-14','Y 67；遊戲名牌「[NPC] 戰利品收購商」、視窗「P3 - Repreneur - Araignées」；參考互動地圖寫 X 532 Z 860，差約 9 格'),
         (3,'Tribe Belt Blacksmith'):(236,1221,'2026-11-13','Y 79；遊戲視窗「P3 - Craft Artefact Ceinture Orc」；參考互動地圖寫 X 235 Z 1200，差約 21 格'),
         (3,'Ancient Wood Armor Blacksmith'):(779,274,'2026-11-14','Y 88，羅盤「迷宮區」；遊戲視窗「P3 - Craft Armure des Bois Anciens」；參考互動地圖寫 X 780 Z 253，差約 21 格'),
-        (2,'Manufacturer of the Fierce Talisman'):(98,-55,'2026-11-14','Y 70；名牌「???」、視窗「第 2 層 - 飾品鍛造：凶猛護符」；參考互動地圖寫 X 78 Z -71，差約 25 格（第 2 層參考地圖的座標系統和遊戲一致，這個點本身沒對過）')}
+        (2,'Manufacturer of the Fierce Talisman'):(98,-55,'2026-11-14','Y 70；名牌「???」、視窗「第 2 層 - 飾品鍛造：凶猛護符」；參考互動地圖寫 X 78 Z -71，差約 25 格（第 2 層參考地圖的座標系統和遊戲一致，這個點本身沒對過）'),
+        # 2026-11-19 owner decision (in29 TRIAGE B-4～B-6): use the positions worked out from the 11/18 screenshots (F3 player X/Z + targeted
+        # block, about ±2 blocks). The window titles mean the same as these reference-map names; only these points are moved
+        (2,'Scrap Accessories Blacksmith'):(238,323,'2026-11-18','Y 74，薩布勒莫礦脈附近；名牌看不到，遊戲視窗「第 2 層 - 廢鐵飾品」（取得途徑寫「第2層-廢鐵飾品」）。參考互動地圖的 Scrap Accessories Blacksmith 在 X -777 Z 17，差 1000 格以上；視窗標題意思相同、只看到這一位，網站當成同一位、改用截圖推算的位置（站長 2026-11-19）'),
+        (2,'Manufacturer of the Ring of the Flaming Harpy'):(-613,276,'2026-11-18','Y -10，烈焰巢穴地下；名牌「???」，遊戲視窗「第 2 層 - 飾品鍛造：赤鳥身女妖戒指」。參考互動地圖寫 X -694 Z 205，差約 107 格，改用截圖推算的位置（站長 2026-11-19）'),
+        (2,'Manufacturer of the Ring of the Drowned Harpy'):(-802,211,'2026-11-18','Y 43，洞穴裡；名牌「???」。遊戲視窗和取得途徑都寫「第 2 層 - 飾品鍛造：綠鳥身女妖戒指」，和做被碾碎之戒的那一位標題完全相同；這一位做藍色的溺水的鳥身女妖之戒，網站為了區分改叫「第 2 層 - 飾品鍛造：藍鳥身女妖戒指」（站長 2026-11-19 指定）。參考互動地圖寫 X -818 Z 98，差約 113 格，改用截圖推算的位置'),
+        (2,'Manufacturer of the Crushed Harpy Ring'):(-580,532,'2026-11-18','Y 129；名牌「???」，遊戲視窗「第 2 層 - 飾品鍛造：綠鳥身女妖戒指」（另一位做溺水之戒的工坊標題相同，網站把那一位改叫藍鳥身女妖戒指）。參考互動地圖寫 X -618 Z 529，差約 38 格，改用截圖推算的位置（站長 2026-11-19）')}
 NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,675,'2026-11-12'),
        (3,'accessoriesBlacksmith','P3 - Craft Couteau en Dent de Loup',707,855,'2026-11-12'),
        (3,'accessoriesBlacksmith','P3 - Craft Gants Féroce',706,833,'2026-11-12'),
@@ -149,7 +155,13 @@ NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,6
        # 03.30.50: the NPC fills the frame ~2-3 blocks in front of the player (520.6, -709.1, facing north); the targeted block (520, -717) is behind it
        (2,'other','蜂巢考古學家',520,-712,'2026-11-14','梅莉歐娜蜂巢入口旁，Y 74；遊戲名牌「[NPC] 蜂巢考古學家」、視窗「蜜蜂地下城 - 戰利品資訊」。位置是推測：NPC 在玩家正前方約 2～3 格（依畫面大小估距離），準星打到它後面的方塊 X 520 Z -717'),
        # 2026-11-19 (in29 00.32.40～42, F3 player 597.1 / 69 / -721.6, targeted block 598, 70, -723): name = the window title (nameplate is ???)
-       (2,'accessoriesBlacksmith','第 2 層 - 飾品鍛造：維尼戒指',597,-722,'2026-11-19','甜蜜森林，Y 69；名牌「???」；只做維尼之戒。參考互動地圖附近沒有這位（只有 Honeyed Loot Buyer、Bees Weapon Blacksmith）；它的熊飾品鐵匠 Bull & Bear Accessories Blacksmith 在 -602,-285，差約 1200 格、是多品項鐵匠，判斷不是同一位')]
+       (2,'accessoriesBlacksmith','第 2 層 - 飾品鍛造：維尼戒指',597,-722,'2026-11-19','甜蜜森林，Y 69；名牌「???」；只做維尼之戒。參考互動地圖附近沒有這位（只有 Honeyed Loot Buyer、Bees Weapon Blacksmith）；它的熊飾品鐵匠 Bull & Bear Accessories Blacksmith 在 -602,-285，差約 1200 格、是多品項鐵匠，判斷不是同一位'),
+       # 2026-11-19 owner decision (in29 TRIAGE B-7): 19.37.28 / 19.37.30 F3 player 890.6 / 59 / 398.4 facing north, targeted block 890, 59, 396.
+       # Added like the glove / grimoire smiths of the same series; the reference map's Low Corruption Bracelet Blacksmith (439, 474, underground) is kept
+       (3,'accessoriesBlacksmith','P3 - Forgeron Bracelet Corrompu',890,397,'2026-11-18','Y 59，羅盤「迷宮區」；沒有名牌，遊戲視窗「P3 - 鐵匠 手環 腐化」。參考互動地圖的 Low Corruption Bracelet Blacksmith 在 X 439 Z 474 地下，差約 450 格，照同系列手套、魔法書工坊的先例另外列一位（站長 2026-11-19）'),
+       # 2026-11-19 owner decision (in29 B-26 option B): listed without a position like the Anneau des Cieux smith; 00.44.28～35 show no coordinates.
+       # The reference map's Manufacturer of Corrupt Mask (-713, -109) is kept and not linked (this batch's floor-2 smiths are 38～1000+ blocks off it)
+       (2,'accessoriesBlacksmith','第 2 層 - 飾品鍛造：腐化面具',None,None,'2026-11-19','遊戲視窗「第 2 層 - 飾品鍛造：腐化面具」（取得途徑寫「第2層-飾品鍛造：腐化面具」）；截圖讀不到座標。參考互動地圖有一位 Manufacturer of Corrupt Mask（X -713 Z -109），名稱意思相同但位置沒對過，沒有合併')]
 for fl,rs in F23.items():
     for r in rs:
         if (fl,r['n']) in CALC23: x,z,d,nt=CALC23[(fl,r['n'])]; r.update(x=x,z=z,src='calc')

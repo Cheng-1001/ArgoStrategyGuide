@@ -14,6 +14,9 @@ window.SAO_GAMESTATS = {date:"2026-11-04", items:{
  "1485":{"date": "2026-11-18", "en": "pièce de ferraille", "lvl": 11, "dmg": "0.75", "st": [["Max Health", "+1.5"], ["Heal Bonus", "+1.5"]]},   // 廢鐵幣 05.19.55
  "1311":{"date": "2026-11-18", "en": "amulette de ferraille", "lvl": 11, "dmg": null, "st": [["Max Health", "+1.5"], ["Max Mana", "+1.5"], ["Max Stamina", "+1.5"]]},   // 廢鐵護符 05.19.59
  "2503":{"date": "2026-11-19", "en": "anneau de winnie", "lvl": 12, "dmg": "1", "st": [["Critical Strike Chance", "+2%"], ["Skill Critical Strike Chance", "+2%"], ["Max Health", "+5"]]},   // 維尼之戒 00.32.46 (MYTHIC, same as the catalogue)
+ // 寒風項鍊 04.35.57 (auction tooltip): the auction cell's icon has the same shape and colours as equip.png #187 (scratchpad in29/cmp1304/icon_1304.png).
+ // The red-and-white striped frame is the Christmas style (owner 2026-11-19), not MYTHIC: no "r", the catalogue rarity (COMMON) stays
+ "1304":{"date": "2026-11-18", "en": "collier des vents froids", "lvl": 10, "dmg": "0.25", "st": [["Critical Strike Power", "+5%"], ["Health Regeneration", "+0.1/s"]], "auc": 1},   // 寒風項鍊
  // 2026-11-18 (in28, owner's Chinese screenshots 11/14): only the rarity differs. 1552 幽靈鬼火 tooltip frame EPIC (catalogue common; stats match);
  // 1831 被遺忘之墓鑰匙 tooltip frame and shop row EPIC (catalogue RARE)
  "1552":{"date": "2026-11-14", "en": "feu follet spectral", "lvl": null, "dmg": null, "st": null, "r": "a"},

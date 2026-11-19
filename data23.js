@@ -94,7 +94,11 @@ const F2 = {
     { id:"f2altar", kind:"poi", n:"Altar of Two Moons", zh:"雙月祭壇", x:570, z:-470, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2baobab", kind:"poi", n:"Millennial Baobab", zh:"千年猴麵包樹", x:-88, z:-92, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
     { id:"f2tarancave", kind:"poi", n:"Taran Cave", zh:"Taran 洞窟", x:-316, z:-94, u:1, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
-    { id:"f2nganga", kind:"poi", n:"Nganga Houses", zh:"恩岡加之家", x:-430, z:-428, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" }
+    { id:"f2nganga", kind:"poi", n:"Nganga Houses", zh:"恩岡加之家", x:-430, z:-428, src:"ref", note:"位置取自參考互動地圖（玩家製作的 Beta 資料）。它的第 2 層座標系統和遊戲一致（站長的 JourneyMap 上 Taurus 塔的中心和它的座標同一格），但這個點本身還沒在遊戲裡對過。" },
+    // 2026-11-19 owner decision (in29 TRIAGE B-10): floor-2 gathering spots seen in the 11/18 screenshots; x/z = where the owner stood.
+    // The harvested items are not site ITEMS records (official props only / names not on the site), so they are written in the note, not in items
+    { id:"f2gamber", kind:"gather", gt:"crop", n:"琥珀萼片・奧拉西爾之刺", x:-428, z:333, src:"player", note:"站長 2026-11-18 截圖（05.01.45）：Taran 附近可以採收琥珀萼片、奧拉西爾之刺（都要等級 2 以上）。座標是站長截圖時站的位置。這兩種目前只有官網圖鑑的道具資料，網站還沒有本站的物品紀錄，所以沒有列在「可取得」。"},
+    { id:"f2goak", kind:"gather", gt:"wood", n:"橡木木材・橡木樹樁", x:-637, z:297, src:"player", note:"站長 2026-11-18 截圖（05.08.28）：這裡有「橡木木材」「橡木樹樁」（都要等級 1 以上）。座標是站長截圖時站的位置。網站還沒有這兩個名稱的物品資料（和第 1 層的橡木原木是不是同一件還不知道），所以沒有列在「可取得」。"}
   ],
 
   // boss spawn points from the reference map (Beta, map-local; names mapped to this site's monster names)
@@ -121,7 +125,15 @@ const F2 = {
     {title:"The storm omelette",src:"shot",date:"2026-11-15",xp:3600,money:1600,
      d:"Mama Esi veut refaire l'omelette des orages, comme quand les harpies apportaient la pluie à Marome. Comment : chassez les harpies de foudre de la baie ondoyante jusqu'à avoir 3 Œufs d'Harpie d'Eau, puis rapportez-les à Mama Esi.",
      steps:["在 baie ondoyante 打雷霆鳥身女妖，收集 Œufs d'Harpie d'Eau ×3","交給 Mama Esi（任務說明）"],
-     en:{0:"Get Water Harpy Eggs from the lightning harpies, rippling ba…（截圖裡被截斷）",1:"Bring 3 Water Harpy Eggs to Mama Esi"}}
+     en:{0:"Get Water Harpy Eggs from the lightning harpies, rippling ba…（截圖裡被截斷）",1:"Bring 3 Water Harpy Eggs to Mama Esi"}},
+    // 2026-11-19 owner: side quests (in29 TRIAGE B-12 / B-13). Only the quest tracker was screenshotted (no journal): no description,
+    // reward, NPC or position; steps = the tracker's objective
+    {title:"What slows the rust",src:"shot",date:"2026-11-18",
+     steps:["在 Taran 附近採收琥珀萼片 ×6（需要農夫等級 2）"],
+     en:{0:"Harvest Amber Sepals, near Taran (Farmer level 2) - 0/6"}},
+    {title:"The Feeding bark",src:"shot",date:"2026-11-19",
+     steps:["在千年猴麵包樹西南方的金合歡樹樁採收金合歡原木 ×8（需要伐木工等級 2）"],
+     en:{0:"Harvest Acacia Logs from the acacia stumps, south-west of the Baobab (lumberjack level 2) - 0/8"}}
   ]
 };
 

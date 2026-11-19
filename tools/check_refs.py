@@ -548,6 +548,7 @@ SKIP = {
     'SAO23.floors{}.M[].lvShot': 'R1',
     'SAO23.floors{}.M[].drops[][2]': 'R1',
     'SAO23.floors{}.spots[].tp': 'R11',
+    'SAO23.floors{}.spots[].gt': 'R11',   # gathering type crop / ore / wood, same as SAO.SPOTS[].gt (floor-2 gathering spots, in29 B-10, 2026-11-19)
     'SAO23.extra{}.use[]': 'R1',
     'SAO23.extra{}.note': 'R1',
     'SAO23.extra{}.slot': 'R1',
