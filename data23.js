@@ -133,7 +133,19 @@ const F2 = {
      en:{0:"Harvest Amber Sepals, near Taran (Farmer level 2) - 0/6"}},
     {title:"The Feeding bark",src:"shot",date:"2026-11-19",
      steps:["在千年猴麵包樹西南方的金合歡樹樁採收金合歡原木 ×8（需要伐木工等級 2）"],
-     en:{0:"Harvest Acacia Logs from the acacia stumps, south-west of the Baobab (lumberjack level 2) - 0/8"}}
+     en:{0:"Harvest Acacia Logs from the acacia stumps, south-west of the Baobab (lumberjack level 2) - 0/8"}},
+    // 2026-11-23 (in30 batch A): accepted in Urbus on 11/22 (banner「Quête acceptée」, quest tracker only; no journal, reward or step after these).
+    // Quest givers (not stored: floor-2 quests have no npc / position field yet): Three cows for two = 歐利克斯 ~X 90 Z -389 Y 135 (18.03.01, 18.10.06 F3);
+    // The collared wolf = 德雷爾 ~X 69 Z -343 Y 142 (18.03.39, 18.11.03 F3); What Morveth keeps = 暮風 (18.05.20, no F3; player at X 47 Z -322)
+    {title:"Three cows for two",src:"shot",date:"2026-11-22",
+     steps:["在公牛之湖擊殺公牛 ×10"],
+     en:{0:"Slay bulls at the Bulls' lake - 0/10"}},
+    {title:"The collared wolf",src:"shot",date:"2026-11-22",
+     steps:["在銀牙沙漠減少狼群 ×12"],
+     en:{0:"Thin out the packs of the Silver Fangs desert - 0/12"}},
+    {title:"What Morveth keeps",src:"shot",date:"2026-11-22",
+     steps:["到被遺忘之墓（地下城，需要被遺忘之墓鑰匙）的盡頭，取得莫爾維斯的黑色骨岩 ×1","從莫爾維斯和他的骷髏（被遺忘之墓）取得死靈法師粉末 ×2"],
+     en:{0:"Take Morveth's Black Bone Stone, at the end of the Forgotten Tomb (dungeon, Forgotten Tomb Key) - 0/1",1:"Get Necromancer Powders (Morveth and his skeletons, Forgotten Tomb) - 0/2"}}
   ]
 };
 

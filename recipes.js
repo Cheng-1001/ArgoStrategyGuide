@@ -6149,7 +6149,773 @@ null,
 "shot"
 ]
 ]
+},
+"2|第 2 層 - 第 2 層鍊金術師": {
+"floor": 2,
+"items": [
+[
+2463,
+"Quality Health Potion I",
+5,
+[
+[
+"Allium Flower",
+3
+],
+[
+"Sylve Sprout",
+2
+]
+],
+"15",
+"b",
+"potion",
+1,
+"shot"
+],
+[
+null,
+"Quality Mana Potion I",
+5,
+[
+[
+"Allium Flower",
+3
+],
+[
+"Sylve Sprout",
+2
+]
+],
+"15",
+"b",
+"potion",
+1,
+"shot"
+],
+[
+null,
+"Quality Stamina Potion I",
+5,
+[
+[
+"Allium Flower",
+3
+],
+[
+"Sylve Sprout",
+2
+]
+],
+"15",
+"b",
+"potion",
+1,
+"shot"
+],
+[
+2464,
+"Quality Health Potion II",
+5,
+[
+[
+"Allium Flower",
+6
+],
+[
+"Sylve Sprout",
+4
+],
+[
+"Magic Wood Shard",
+3
+]
+],
+"15",
+"b",
+"potion",
+5,
+"shot"
+],
+[
+null,
+"Quality Mana Potion II",
+5,
+[
+[
+"Allium Flower",
+6
+],
+[
+"Sylve Sprout",
+4
+],
+[
+"Magic Wood Shard",
+3
+]
+],
+"15",
+"b",
+"potion",
+5,
+"shot"
+],
+[
+null,
+"Quality Stamina Potion II",
+5,
+[
+[
+"Allium Flower",
+6
+],
+[
+"Sylve Sprout",
+4
+],
+[
+"Magic Wood Shard",
+3
+]
+],
+"15",
+"b",
+"potion",
+5,
+"shot"
+],
+[
+2465,
+"Quality Health Potion III",
+5,
+[
+[
+"Allium Flower",
+9
+],
+[
+"Sylve Sprout",
+6
+],
+[
+"Magic Wood Shard",
+5
+],
+[
+"Ancestral Root",
+1
+]
+],
+"15",
+"b",
+"potion",
+8,
+"shot"
+],
+[
+null,
+"Quality Mana Potion III",
+5,
+[
+[
+"Allium Flower",
+9
+],
+[
+"Sylve Sprout",
+6
+],
+[
+"Magic Wood Shard",
+5
+],
+[
+"Ancestral Root",
+1
+]
+],
+"15",
+"b",
+"potion",
+8,
+"shot"
+],
+[
+null,
+"Quality Stamina Potion III",
+5,
+[
+[
+"Allium Flower",
+9
+],
+[
+"Sylve Sprout",
+6
+],
+[
+"Magic Wood Shard",
+5
+],
+[
+"Ancestral Root",
+1
+]
+],
+"15",
+"b",
+"potion",
+8,
+"shot"
+],
+[
+2466,
+"Quality Health Potion IV",
+5,
+[
+[
+"Allium Flower",
+10
+],
+[
+"Flaming Feather",
+10
+],
+[
+"Marrow Powder",
+3
+]
+],
+"15",
+"b",
+"potion",
+12,
+"shot"
+],
+[
+null,
+"Quality Mana Potion IV",
+5,
+[
+[
+"Allium Flower",
+10
+],
+[
+"Rippling Feather",
+10
+]
+],
+"15",
+"b",
+"potion",
+12,
+"shot"
+],
+[
+null,
+"Quality Stamina Potion IV",
+5,
+[
+[
+"Allium Flower",
+10
+],
+[
+"Honey Residue",
+10
+],
+[
+"Bear Fat",
+3
+]
+],
+"15",
+"b",
+"potion",
+12,
+"shot"
+]
+]
+},
+"2|第 2 層 - 第 2 層鍊金術師助手": {
+"floor": 2,
+"items": [
+[
+1984,
+"Quality Endurance Fortifier II",
+60,
+[
+[
+"Wheat",
+12
+],
+[
+"Wheat Leaves",
+4
+],
+[
+"Bear Fat",
+4
+],
+[
+"Honey Residue",
+4
+]
+],
+"15",
+"b",
+"potion",
+null,
+"shot"
+],
+[
+1983,
+"Quality Knowledge Fortifier II",
+60,
+[
+[
+"Allium Flower",
+12
+],
+[
+"Soul of the Ruins",
+6
+],
+[
+"Wisteria",
+4
+],
+[
+"Corrupted Crystal",
+16
+]
+],
+"15",
+"b",
+"potion",
+null,
+"shot"
+],
+[
+1981,
+"Quality Vitality Fortifier II",
+60,
+[
+[
+"Sylve Sprout",
+16
+],
+[
+"Slime Core",
+2
+],
+[
+"Earthen Feather",
+8
+]
+],
+"15",
+"b",
+"potion",
+null,
+"shot"
+],
+[
+1986,
+"Quality Patience Fortifier II",
+60,
+[
+[
+"Frost Dust",
+16
+],
+[
+"Glacial Magic Shard",
+8
+],
+[
+"Rippling Feather",
+8
+]
+],
+"15",
+"b",
+"potion",
+null,
+"shot"
+],
+[
+1985,
+"Quality Resistance Fortifier II",
+60,
+[
+[
+"Shark Carapace",
+12
+],
+[
+"Hard Glacial Hide",
+8
+],
+[
+"琥珀種子",
+4
+],
+[
+"Scrap Metal Piece",
+4
+]
+],
+"15",
+"b",
+"potion",
+null,
+"shot"
+]
+]
+},
+"2|第 2 層 - 第 2 層細木工匠": {
+"floor": 2,
+"items": [
+[
+2132,
+"Acacia Plank",
+0,
+[
+[
+"Acacia Log",
+4
+]
+],
+"15",
+"c",
+"other",
+null,
+"shot"
+],
+[
+2133,
+"Poudre d'Acacia",
+0,
+[
+[
+"Acacia Plank",
+2
+]
+],
+"15",
+"b",
+"other",
+null,
+"shot"
+]
+]
+},
+"2|第 2 層 - 烏爾巴斯鐵匠": {
+"floor": 2,
+"items": [
+[
+2416,
+"Lingot de Bauxite",
+15,
+[
+[
+"Bauxite Ore",
+4
+],
+[
+"Coal Ore",
+3
+]
+],
+"15",
+"b",
+"other",
+null,
+"shot"
+],
+[
+2410,
+"Lingot d’Onyx Impur",
+30,
+[
+[
+"Impure Onyx Ore",
+10
+],
+[
+"Coal Ore",
+5
+]
+],
+"15",
+"a",
+"other",
+null,
+"shot"
+]
+]
+},
+"2|第 2 層 - 烏爾巴斯鐵匠 (2)": {
+"floor": 2,
+"items": [
+[
+2408,
+"Lingot d’Onyx Pur",
+60,
+[
+[
+"純淨黑瑪瑙礦",
+10
+],
+[
+"Coal Ore",
+5
+]
+],
+"15",
+"s",
+"other",
+null,
+"shot"
+]
+]
+},
+"2|第 2 層 - 材料重塑師": {
+"floor": 2,
+"items": [
+[
+2374,
+"Ficelle d'Acacia",
+60,
+[
+[
+"Acacia Log",
+8
+],
+[
+"Spider Thread",
+4
+]
+],
+"15",
+"c",
+"other",
+null,
+"shot"
+],
+[
+2375,
+"Ficelle de Bauxite",
+60,
+[
+[
+"Bauxite Ore",
+4
+],
+[
+"Spider Thread",
+4
+]
+],
+"15",
+"b",
+"other",
+null,
+"shot"
+],
+[
+2377,
+"Ficelle d'Onyx Impure",
+180,
+[
+[
+"Impure Onyx Ore",
+4
+],
+[
+"Spider Thread",
+4
+]
+],
+"15",
+"a",
+"other",
+null,
+"shot"
+],
+[
+2378,
+"Ficelle d'Onyx Pure",
+240,
+[
+[
+"純淨黑瑪瑙礦",
+4
+],
+[
+"Spider Thread",
+4
+]
+],
+"15",
+"s",
+"other",
+null,
+"shot"
+]
+]
+},
+"2|第 2 層 - 裝備商人": {
+"floor": 2,
+"items": [
+[
+2596,
+"Training Sword",
+null,
+[],
+"75.37",
+"c",
+"weapon",
+null,
+"shot"
+],
+[
+2533,
+"Training Buckler",
+null,
+[],
+"25.12",
+"c",
+"weapon",
+null,
+"shot"
+],
+[
+1760,
+"Training Dagger",
+null,
+[],
+"100.50",
+"c",
+"weapon",
+null,
+"shot"
+],
+[
+1567,
+"Arc Basique",
+null,
+[],
+"100.50",
+"c",
+"weapon",
+3,
+"shot"
+],
+[
+1626,
+"Unbound Grimoire",
+null,
+[],
+"25.12",
+"c",
+"weapon",
+null,
+"shot"
+],
+[
+1628,
+"Wild Grimoire",
+null,
+[],
+"25.12",
+"c",
+"weapon",
+null,
+"shot"
+],
+[
+2457,
+"Health Potion I",
+null,
+[],
+"30.15",
+"c",
+"potion",
+1,
+"shot"
+],
+[
+null,
+"Mana Potion I",
+null,
+[],
+"30.15",
+"c",
+"potion",
+1,
+"shot"
+],
+[
+2471,
+"Stamina Potion I",
+null,
+[],
+"30.15",
+"c",
+"potion",
+1,
+"shot"
+],
+[
+1957,
+"Boar Meat",
+null,
+[],
+"0.10",
+"c",
+"other",
+null,
+"shot"
+],
+[
+1708,
+"Parchemin de Réallocation",
+null,
+[],
+"753.74",
+"b",
+"other",
+null,
+"shot"
+],
+[
+1707,
+"Parchemin de Maîtrise",
+null,
+[],
+"753.74",
+"b",
+"other",
+null,
+"shot"
+],
+[
+1709,
+"Parchemin de Changement",
+null,
+[],
+"1507.47",
+"b",
+"other",
+null,
+"shot"
+]
+]
 }
 };
-window.SAO_RECIPE_QTY = {"Alchemist|Quality Health Potion I": 3, "Alchemist|Quality Health Potion II": 3, "Alchemist|Quality Health Potion III": 3, "Alchemist|Quality Mana Potion I": 3, "Alchemist|Quality Mana Potion II": 3, "Alchemist|Quality Mana Potion III": 3, "Alchemist|Quality Stamina Potion I": 3, "Alchemist|Quality Stamina Potion II": 3, "Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion II": 3, "3|Alchemist|Quality Mana Potion II": 3, "3|Alchemist|Quality Stamina Potion II": 3, "3|Alchemist|Quality Health Potion III": 3, "3|Alchemist|Quality Mana Potion III": 3, "3|Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion IV": 3, "3|Alchemist|Quality Health Potion V": 3, "3|Alchemist|Quality Health Potion VI": 3, "3|Alchemist|Quality Mana Potion V": 3, "3|Alchemist|Quality Mana Potion VI": 3, "3|Alchemist|Quality Stamina Potion V": 3, "3|Alchemist|Quality Stamina Potion VI": 3};
-window.SAO_RECIPE_MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1, "2|Scrap Accessories Blacksmith|Amulette de Ferraille": "廢鐵細繩|1"};
+window.SAO_RECIPE_QTY = {"Alchemist|Quality Health Potion I": 3, "Alchemist|Quality Health Potion II": 3, "Alchemist|Quality Health Potion III": 3, "Alchemist|Quality Mana Potion I": 3, "Alchemist|Quality Mana Potion II": 3, "Alchemist|Quality Mana Potion III": 3, "Alchemist|Quality Stamina Potion I": 3, "Alchemist|Quality Stamina Potion II": 3, "Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion II": 3, "3|Alchemist|Quality Mana Potion II": 3, "3|Alchemist|Quality Stamina Potion II": 3, "3|Alchemist|Quality Health Potion III": 3, "3|Alchemist|Quality Mana Potion III": 3, "3|Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion IV": 3, "3|Alchemist|Quality Health Potion V": 3, "3|Alchemist|Quality Health Potion VI": 3, "3|Alchemist|Quality Mana Potion V": 3, "3|Alchemist|Quality Mana Potion VI": 3, "3|Alchemist|Quality Stamina Potion V": 3, "3|Alchemist|Quality Stamina Potion VI": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Health Potion I": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion I": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Stamina Potion I": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Health Potion II": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion II": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Stamina Potion II": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Health Potion III": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion III": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Stamina Potion III": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Health Potion IV": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion IV": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Stamina Potion IV": 3};
+window.SAO_RECIPE_MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1, "2|Scrap Accessories Blacksmith|Amulette de Ferraille": "廢鐵細繩|1", "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion IV": "水之鳥身女妖蛋|3", "2|第 2 層 - 第 2 層鍊金術師助手|Quality Vitality Fortifier II": "奧拉西爾刺莖|4", "2|第 2 層 - 第 2 層鍊金術師助手|Quality Patience Fortifier II": "水之鳥身女妖蛋|4"};

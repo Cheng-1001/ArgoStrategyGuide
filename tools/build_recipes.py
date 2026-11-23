@@ -493,6 +493,46 @@ SHOTS23 = {
     (3, "P3 - Forgeron Bracelet Corrompu"): [("Bracelet Faible Corruption", "splus", 600, [["Corrupted Fragment", 32], ["Corrupted Fragment (2)", 16], ["Corrupted Fragment (3)", 8]], "55", "acc")],
     # window「第 2 層 - 飾品鍛造：腐化面具」(00.44.28 / 00.44.35, 0/5, two scrolls = all 5 rows): MYTHIC 1 min, 55 Col; NPC listed without a position
     (2, "第 2 層 - 飾品鍛造：腐化面具"): [("Masque Corrompu", "splusplus", 60, [["Soul of the Ruins", 64], ["Corrupted Crystal", 128], ["Spectral Cloth", 64], ["Piece of Spectral Mane", 1], ["純淨黑瑪瑙錠", 3]], "55", "acc")],
+    # 2026-11-23 (in30 batch A: owner's 11/22 18:01～18:19 screenshots of Urbus, floor 2). Window titles are the NPC keys (build_npcs.py NEW23).
+    # Window「第 2 層 - 第 2 層鍊金術師」(18.01.26～18.02.14, 12 rows on 2 pages): RARE 5 s, 15 Col, ×3 each. 魔力藥水 IV's third material
+    # 水之鳥身女妖蛋 is not tied to a site item yet (MISS)
+    (2, "第 2 層 - 第 2 層鍊金術師"): [("Quality %s Potion I" % k, "b", 5, [["Allium Flower", 3], ["Sylve Sprout", 2]], "15", "potion") for k in ("Health", "Mana", "Stamina")]
+                                    + [("Quality %s Potion II" % k, "b", 5, P3_II, "15", "potion") for k in ("Health", "Mana", "Stamina")]
+                                    + [("Quality %s Potion III" % k, "b", 5, P3_III, "15", "potion") for k in ("Health", "Mana", "Stamina")]
+                                    + [("Quality Health Potion IV", "b", 5, [["Allium Flower", 10], ["Flaming Feather", 10], ["Marrow Powder", 3]], "15", "potion"),
+                                       ("Quality Mana Potion IV", "b", 5, [["Allium Flower", 10], ["Rippling Feather", 10]], "15", "potion"),
+                                       ("Quality Stamina Potion IV", "b", 5, [["Allium Flower", 10], ["Honey Residue", 10], ["Bear Fat", 3]], "15", "potion")],
+    # Window「第 2 層 - 第 2 層鍊金術師助手」(18.11.41～55, nameplate [NPC] 煉金術士助手): RARE 1 min, 15 Col. 凶猛強化劑 II waits for the owner
+    # (two materials, 強化骷髏骨 and 公牛角, are names only); 活力 II's 奧拉西爾刺莖 and 耐心 II's 水之鳥身女妖蛋 are shown through MISS
+    (2, "第 2 層 - 第 2 層鍊金術師助手"): [
+        ("Quality Endurance Fortifier II", "b", 60, [["Wheat", 12], ["Wheat Leaves", 4], ["Bear Fat", 4], ["Honey Residue", 4]], "15", "potion"),
+        ("Quality Knowledge Fortifier II", "b", 60, [["Allium Flower", 12], ["Soul of the Ruins", 6], ["Wisteria", 4], ["Corrupted Crystal", 16]], "15", "potion"),
+        ("Quality Vitality Fortifier II", "b", 60, [["Sylve Sprout", 16], ["Slime Core", 2], ["Earthen Feather", 8]], "15", "potion"),
+        ("Quality Patience Fortifier II", "b", 60, [["Frost Dust", 16], ["Glacial Magic Shard", 8], ["Rippling Feather", 8]], "15", "potion"),
+        ("Quality Resistance Fortifier II", "b", 60, [["Shark Carapace", 12], ["Hard Glacial Hide", 8], ["琥珀種子", 4], ["Scrap Metal Piece", 4]], "15", "potion")],
+    # Window「第 2 層 - 第 2 層細木工匠」(18.06.52～58): instant, 15 Col. Descriptions match the catalogue's Planche / Poudre d'Acacia
+    (2, "第 2 層 - 第 2 層細木工匠"): [("Acacia Plank", "c", 0, [["Acacia Log", 4]], "15", "other"),
+                                      ("Poudre d'Acacia", "b", 0, [["Acacia Plank", 2]], "15", "other")],
+    # Window「第 2 層 - 烏爾巴斯鐵匠」, the smith at ~76, -427 (18.07.15～21, no name on the nameplate)
+    (2, "第 2 層 - 烏爾巴斯鐵匠"): [("Lingot de Bauxite", "b", 15, [["Bauxite Ore", 4], ["Coal Ore", 3]], "15", "other"),
+                                   ("Lingot d’Onyx Impur", "a", 30, [["Impure Onyx Ore", 10], ["Coal Ore", 5]], "15", "other")],
+    # Window with the same title, the smith at ~109, -412 (18.09.37～40): one row
+    (2, "第 2 層 - 烏爾巴斯鐵匠 (2)"): [("Lingot d’Onyx Pur", "s", 60, [["純淨黑瑪瑙礦", 10], ["Coal Ore", 5]], "15", "other")],
+    # Window「第 2 層 - 材料重塑師」(18.07.41～18.08.04, nameplate [重塑師] 材料): 15 Col; descriptions match the catalogue's Ficelle d'… rows.
+    # The second row 廢鐵細繩 (鐵礦 2, 廢鐵碎片 4, 蛛絲 4; COMMON 1 min) is left out until the owner decides in29 TRIAGE B-3
+    (2, "第 2 層 - 材料重塑師"): [("Ficelle d'Acacia", "c", 60, [["Acacia Log", 8], ["Spider Thread", 4]], "15", "other"),
+                                 ("Ficelle de Bauxite", "b", 60, [["Bauxite Ore", 4], ["Spider Thread", 4]], "15", "other"),
+                                 ("Ficelle d'Onyx Impure", "a", 180, [["Impure Onyx Ore", 4], ["Spider Thread", 4]], "15", "other"),
+                                 ("Ficelle d'Onyx Pure", "s", 240, [["純淨黑瑪瑙礦", 4], ["Spider Thread", 4]], "15", "other")],
+    # Window「第 2 層 - 裝備商人」Buy tab, 3 pages (18.08.43～58). The two「劣質法杖」(mage / shaman) are not in the catalogue and wait for the owner.
+    # 訓練用匕首 and 基礎弓: shop icons compared with equip.png (light blade = 1760, not the floor-1 off-hand dagger; 基礎弓 = 1567 Arc Basique, Archer Lv 3)
+    (2, "第 2 層 - 裝備商人"): [("Training Sword", "c", None, [], "75.37", "weapon"), ("Training Buckler", "c", None, [], "25.12", "weapon"),
+                               ("Training Dagger", "c", None, [], "100.50", "weapon"), ("Arc Basique", "c", None, [], "100.50", "weapon"),
+                               ("Unbound Grimoire", "c", None, [], "25.12", "weapon"), ("Wild Grimoire", "c", None, [], "25.12", "weapon")]
+                              + [("%s Potion I" % k, "c", None, [], "30.15", "potion") for k in ("Health", "Mana", "Stamina")]
+                              + [("Boar Meat", "c", None, [], "0.10", "other"),
+                                 ("Parchemin de Réallocation", "b", None, [], "753.74", "other"), ("Parchemin de Maîtrise", "b", None, [], "753.74", "other"),
+                                 ("Parchemin de Changement", "b", None, [], "1507.47", "other")],
 }
 OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
          "Quality Patience Fortifier III": 2001, "Quality Resistance Fortifier III": 2000, "Quality Vitality Fortifier III": 1996,
@@ -525,24 +565,38 @@ OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quali
          "Anneau de Winnie": 2503,
          "Anneau de Ferraille": 2499, "Bracelet de Ferraille": 1603, "Gants de Ferraille": 2049, "Pièce de Ferraille": 1485, "Amulette de Ferraille": 1311,
          "Anneau de l'Harpie Enflammé": 2496, "Anneau de l'Harpie Noyé": 2497, "Anneau de l'Harpie Ecrasé": 2498, "Bracelet Faible Corruption": 1625,
-         "Masque Corrompu": 1484}
+         "Masque Corrompu": 1484,
+         # 2026-11-23 (in30 batch A, Urbus)
+         "Quality Endurance Fortifier II": 1984, "Quality Knowledge Fortifier II": 1983, "Quality Vitality Fortifier II": 1981,
+         "Quality Patience Fortifier II": 1986, "Quality Resistance Fortifier II": 1985, "Acacia Plank": 2132, "Poudre d'Acacia": 2133,
+         "Lingot de Bauxite": 2416, "Lingot d’Onyx Impur": 2410, "Lingot d’Onyx Pur": 2408, "Ficelle d'Acacia": 2374, "Ficelle de Bauxite": 2375,
+         "Ficelle d'Onyx Impure": 2377, "Ficelle d'Onyx Pure": 2378, "Arc Basique": 1567, "Parchemin de Changement": 1709}
 # recipes whose window lists more materials than the screenshot shows: number of unseen rows (site shows ??? for them);
 MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1,
         # a string "name|qty": the row is on screen but the material is not tied to a site item yet (site shows the name, no link)
-        "2|Scrap Accessories Blacksmith|Amulette de Ferraille": "廢鐵細繩|1"}
+        "2|Scrap Accessories Blacksmith|Amulette de Ferraille": "廢鐵細繩|1",
+        # 2026-11-23 (in30 batch A): names shown in the window that the site does not tie to an item yet
+        "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion IV": "水之鳥身女妖蛋|3",
+        "2|第 2 層 - 第 2 層鍊金術師助手|Quality Vitality Fortifier II": "奧拉西爾刺莖|4",
+        "2|第 2 層 - 第 2 層鍊金術師助手|Quality Patience Fortifier II": "水之鳥身女妖蛋|4"}
 LV23 = {"Quality Health Potion II": 5, "Quality Mana Potion II": 5, "Quality Stamina Potion II": 5, "Quality Health Potion III": 8,
         "Quality Mana Potion III": 8, "Quality Stamina Potion III": 8, "Quality Health Potion IV": 12, "Quality Health Potion V": 15,
         "Quality Health Potion VI": 18, "Quality Mana Potion V": 15, "Quality Mana Potion VI": 18, "Quality Stamina Potion V": 15,
         "Quality Stamina Potion VI": 18, "Health Potion I": 1, "Mana Potion I": 1, "Stamina Potion I": 1, "Health Potion II": 3,
         "Health Potion III": 5, "Mana Potion II": 5, "Mana Potion III": 8, "Stamina Potion II": 5, "Stamina Potion III": 8,
         "Pioche Renforcée": 15, "Hache Renforcée": 15, "Houe Renforcée": 15, "Bottes du Pionnier": 16,
-        "Pioche de la Forêt": 18, "Houe de la Forêt": 18, "Hache de la Forêt": 18}
+        "Pioche de la Forêt": 18, "Houe de la Forêt": 18, "Hache de la Forêt": 18,
+        # 2026-11-23 (in30 batch A): tooltip levels of the floor-2 Alchemist's tier I and IV, and the equipment merchant's bow
+        "Quality Health Potion I": 1, "Quality Mana Potion I": 1, "Quality Stamina Potion I": 1, "Quality Mana Potion IV": 12,
+        "Quality Stamina Potion IV": 12, "Arc Basique": 3}
 out23 = {}
 for (fl, npc), rows in SHOTS23.items():
     key = "%d|%s" % (fl, npc)
     out23[key] = {"floor": fl, "items": [[OID23.get(n, OID.get(n)), n, sec, [m[:] for m in mats], cost, rar, cat, LV23.get(n), "shot"] for n, rar, sec, mats, cost, cat in rows]}
     if npc == "Alchemist":
         QTY.update({key + "|" + r[1]: 3 for r in out23[key]["items"]})
+# 2026-11-23 (in30): the floor-2 Alchemist's window also says ×3 for every row
+QTY.update({"2|第 2 層 - 第 2 層鍊金術師|" + r[1]: 3 for r in out23["2|第 2 層 - 第 2 層鍊金術師"]["items"]})
 cat_ids = {x["id"] for x in json.load(open(CAT, encoding="utf-8"))}
 bad = [r[1] for rows in list(npcs.values()) + [v["items"] for v in out23.values()] for r in rows if r[0] is not None and r[0] not in cat_ids]
 assert not bad, bad

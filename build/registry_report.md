@@ -78,46 +78,46 @@
 | `SAO_GAMEICONS{key}` | resolved | 97 |
 | `SAO_GAMEICONS{key}` | unresolved | 6 |
 | `SAO_GAMEINFO.items[].obt[]` | ambiguous | 15 |
-| `SAO_GAMEINFO.items[].obt[]` | excluded-row | 116 |
-| `SAO_GAMEINFO.items[].obt[]` | resolved | 205 |
+| `SAO_GAMEINFO.items[].obt[]` | excluded-row | 115 |
+| `SAO_GAMEINFO.items[].obt[]` | resolved | 220 |
 | `SAO_GAMEINFO.items[].obt[]` | term | 19 |
 | `SAO_GAMEINFO.items[].obt[]` | unresolved | 25 |
-| `SAO_GAMEINFO.items[].oid[]` | resolved | 213 |
-| `SAO_GAMEINFO.items[].site` | excluded-row | 252 |
-| `SAO_GAMEINFO.items[].site` | resolved | 21 |
+| `SAO_GAMEINFO.items[].oid[]` | resolved | 224 |
+| `SAO_GAMEINFO.items[].site` | excluded-row | 260 |
+| `SAO_GAMEINFO.items[].site` | resolved | 24 |
 | `SAO_GAMESTATS.items{key}` | resolved | 126 |
 | `SAO_HINTS{}{key}` | resolved | 49 |
 | `SAO_MAINQ{}[].npc` | excluded-row | 21 |
 | `SAO_MAINQ{}[].npc` | quest-npc | 68 |
 | `SAO_MOBCODEX.by{}{key}` | resolved | 56 |
 | `SAO_MOBPHOTO.by{}{key}` | resolved | 133 |
-| `SAO_NPC_CALC{key}` | resolved | 67 |
+| `SAO_NPC_CALC{key}` | resolved | 76 |
 | `SAO_RECICONS{key}` | resolved | 19 |
 | `SAO_RECIPES{key}` | ambiguous | 1 |
-| `SAO_RECIPES{key}` | resolved | 94 |
-| `SAO_RECIPES{}.items[][0]` | excluded-row | 69 |
-| `SAO_RECIPES{}.items[][0]` | resolved | 246 |
-| `SAO_RECIPES{}.items[][1]` | excluded-row | 246 |
-| `SAO_RECIPES{}.items[][1]` | resolved | 65 |
+| `SAO_RECIPES{key}` | resolved | 101 |
+| `SAO_RECIPES{}.items[][0]` | excluded-row | 78 |
+| `SAO_RECIPES{}.items[][0]` | resolved | 276 |
+| `SAO_RECIPES{}.items[][1]` | excluded-row | 276 |
+| `SAO_RECIPES{}.items[][1]` | resolved | 74 |
 | `SAO_RECIPES{}.items[][1]` | unresolved | 4 |
 | `SAO_RECIPES{}.items[][3][][0]` | ambiguous | 2 |
-| `SAO_RECIPES{}.items[][3][][0]` | resolved | 499 |
+| `SAO_RECIPES{}.items[][3][][0]` | resolved | 568 |
 | `SAO_RECIPES{}.items[][3][][0]` | unresolved | 2 |
-| `SAO_SETS.potions[].name` | resolved | 58 |
+| `SAO_SETS.potions[].name` | resolved | 60 |
 | `SAO_SETS.potions[].name` | unresolved | 5 |
 | `SAO_SETS.sets[].members[]` | ambiguous | 1 |
 | `SAO_SETS.sets[].members[]` | resolved | 170 |
 | `SAO_SETS.sets[].members[]` | unresolved | 3 |
-| `SAO_ZHNAMES.items[].ids[]` | excluded-row | 40 |
-| `SAO_ZHNAMES.items[].ids[]` | resolved | 640 |
+| `SAO_ZHNAMES.items[].ids[]` | excluded-row | 42 |
+| `SAO_ZHNAMES.items[].ids[]` | resolved | 652 |
 | `SAO_ZHNAMES.items[].ids[]` | unresolved | 1 |
 | `SAO_ZHNAMES.mobsByName{key}` | resolved | 78 |
 | `SAO_ZHNAMES.mobs{key}` | resolved | 46 |
 | `SAO_ZHNAMES.npcEn{key}` | ambiguous | 1 |
-| `SAO_ZHNAMES.npcEn{key}` | resolved | 44 |
+| `SAO_ZHNAMES.npcEn{key}` | resolved | 49 |
 | `SAO_ZHNAMES.npcs{key}` | ambiguous | 5 |
 | `SAO_ZHNAMES.npcs{key}` | quest-npc | 20 |
-| `SAO_ZHNAMES.npcs{key}` | resolved | 65 |
+| `SAO_ZHNAMES.npcs{key}` | resolved | 66 |
 | `SAO_ZHNAMES.places{key}` | ambiguous | 2 |
 | `SAO_ZHNAMES.places{key}` | resolved | 42 |
 | `SAO_ZHNAMES.places{key}` | unresolved | 1 |
@@ -308,7 +308,7 @@
 - gamestats 等級：46 件
 - 配方等級：46 件
 
-### W5（92）
+### W5（94）
 
 - 第 1 層 NPC：Lumberjack ↔ Cabinetmaker（3.6 格）
 - 第 1 層 NPC：Cursed Ruins - Loot Buyer ↔ Cursed Ruins - Loot Buyer (2)（223.4 格）
@@ -363,8 +363,10 @@
 - 第 2 層 NPC：Occult Amulet Merchant ↔ Occult Bracelet Merchant（8.2 格）
 - 第 2 層 NPC：Refauncher ↔ Refaiter（2.2 格）
 - 第 2 層 NPC：Accessories Blacksmith ↔ Scrap Accessories Blacksmith（742.0 格）
+- 第 2 層 NPC：Accessories Blacksmith ↔ 第 2 層 - 烏爾巴斯鐵匠 (2)（4.5 格）
 - 第 2 層 NPC：Impure Onyx Accessories Blacksmith ↔ Pure Onyx Accessories Blacksmith（858.2 格）
 - 第 2 層 NPC：Manufacturer of the Ring of the Drowned Harpy ↔ Manufacturer of the Ring of the Flaming Harpy（199.9 格）
+- 第 2 層 NPC：第 2 層 - 烏爾巴斯鐵匠 ↔ 第 2 層 - 烏爾巴斯鐵匠 (2)（36.2 格）
 - 第 3 層 NPC：Alchemist ↔ Assistant to the Alchemist（3.6 格）
 - 第 3 層 NPC：Loot Buyer Sylnovar ↔ Loot Buyer Sylvaer（752.1 格）
 - 第 3 層 NPC：Equipment Merchant ↔ Equipment Merchant（823.4 格）
@@ -414,7 +416,7 @@
 - Quality Stamina Potion I、Quality Stamina Potion II、Quality Stamina Potion III
 - Stamina Potion I、Stamina Potion II、Stamina Potion III
 
-### W7（48 筆有候選）
+### W7（50 筆有候選）
 
 - data.js ITEMS「Christmas Mittens (2)」→ 2048 Moufles de Noël（0.8，英→法字彙）
 - data.js ITEMS「Christmas Mittens (3)」→ 2048 Moufles de Noël（0.8，英→法字彙）
@@ -454,11 +456,13 @@
 - recipes.js 產出（id 是 null）「Quality Mana Potion I」→ 2463 Qualité Potion de Vie I（0.75，英→法字彙）
 - recipes.js 產出（id 是 null）「Quality Mana Potion II」→ 2464 Qualité Potion de Vie II（0.75，英→法字彙）
 - recipes.js 產出（id 是 null）「Quality Mana Potion III」→ 2470 Potion de Mana III（0.857，英→法字彙）；2465 Qualité Potion de Vie III（0.75，英→法字彙）
+- recipes.js 產出（id 是 null）「Quality Mana Potion IV」→ 2466 Qualité Potion de Vie IV（0.75，英→法字彙）
 - recipes.js 產出（id 是 null）「Quality Mana Potion V」→ 2467 Qualité Potion de Vie V（0.75，英→法字彙）
 - recipes.js 產出（id 是 null）「Quality Mana Potion VI」→ 2468 Qualité Potion de Vie VI（0.75，英→法字彙）
 - recipes.js 產出（id 是 null）「Quality Stamina Potion I」→ 2471 Potion de Stamina I（0.75，英→法字彙）；1972 Qualité Fortifiant d'Endurance I（0.667，英→法字彙）；2463 Qualité Potion de Vie I（0.667，英→法字彙）
 - recipes.js 產出（id 是 null）「Quality Stamina Potion II」→ 2472 Potion de Stamina II（0.75，英→法字彙）；1984 Qualité Fortifiant d'Endurance II（0.667，英→法字彙）；2464 Qualité Potion de Vie II（0.667，英→法字彙）
 - recipes.js 產出（id 是 null）「Quality Stamina Potion III」→ 1999 Qualité Fortifiant d'Endurance III（0.667，英→法字彙）；2465 Qualité Potion de Vie III（0.667，英→法字彙）
+- recipes.js 產出（id 是 null）「Quality Stamina Potion IV」→ 2466 Qualité Potion de Vie IV（0.667，英→法字彙）
 - recipes.js 產出（id 是 null）「Quality Stamina Potion V」→ 2467 Qualité Potion de Vie V（0.667，英→法字彙）
 - recipes.js 產出（id 是 null）「Quality Stamina Potion VI」→ 2468 Qualité Potion de Vie VI（0.667，英→法字彙）
 - recipes.js 產出（id 是 null）「Slime Essence」→ 2369 Essence de Slime（1.0，英→法字彙）
@@ -475,7 +479,7 @@
 
 ### W12
 
-- 數量：{"ITEMS fr": 6, "SAO23 fr": 101, "gameinfo oid": 10, "zhnames ids": 105, "配方 id": 5}
+- 數量：{"ITEMS fr": 6, "SAO23 fr": 98, "gameinfo oid": 10, "zhnames ids": 102, "配方 id": 5}
 
 ### 未量測（4）
 

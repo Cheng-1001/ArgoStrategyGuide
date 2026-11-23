@@ -60,7 +60,7 @@ window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "Quality Vitality Fortifier III", "effects": ["Cooldown: 3600s", "Uses Remaining: 1", "Boosts your max health by 30 for 15min", "Boosts your health regeneration by 0.4/s for 15min", "On consumption, applies 15min of cooldown on all fortifiers"]},
  {"name": "Quality Patience Fortifier III", "effects": ["Cooldown: 3600s", "Uses Remaining: 1", "Boosts your dodge chance by 3% for 15min", "Boosts your mana regeneration by 0.4/s for 15min", "Boosts your stamina regeneration by 0.2/s for 15min", "On consumption, applies 15min of cooldown on all fortifiers"]},
  {"name": "Quality Resistance Fortifier III", "effects": ["Cooldown: 3600s", "Uses Remaining: 1", "Boosts your knockback resistance by 3% for 15min", "Boosts your block chance by 3% for 15min", "Boosts your block power by 3% for 15min", "On consumption, applies 15min of cooldown on all fortifiers"]},
- {"name": "Quality Health Potion IV", "effects": ["Restores : 70 ♥"]},
+ {"name": "Quality Health Potion IV", "effects": ["Restores : 70 ♥", "Cooldown: 15s"]},
  {"name": "Quality Health Potion V", "effects": ["Restores : 85 ♥", "Cooldown: 15s"]},
  {"name": "Quality Health Potion VI", "effects": ["Restores : 100 ♥", "Cooldown: 15s"]},
  {"name": "Quality Mana Potion V", "effects": ["Restores : 40 Mana"]},
@@ -116,5 +116,8 @@ window.SAO_SETS = {date:"2026-11-07", sets:[
  {"name": "Lion of Pride Candy", "effects": ["Cooldown: 180s"]},
  {"name": "Box of Chocolates", "effects": ["Restores : 5 ♥", "Restores : 20 Food", "Restores : 10 Saturation", "Cooldown: 15s"]},
  {"name": "Boar Meat", "effects": ["Restores : 5 Food", "Cooldown: 1s"]},
- {"name": "Effective Repair Kit", "effects": ["Repair: +50%", "Uses Remaining: 1"]}
+ {"name": "Effective Repair Kit", "effects": ["Repair: +50%", "Uses Remaining: 1"]},
+ // 2026-11-23 (in30): floor-2 Alchemist tooltips (18.02.04 / 18.02.14); added at the end so the g… ids of earlier potions stay
+ {"name": "Quality Mana Potion IV", "effects": ["Restores : 35 Mana", "Cooldown: 15s"]},
+ {"name": "Quality Stamina Potion IV", "effects": ["Restores : 17.5 Stamina", "Cooldown: 15s"]}
 ]};

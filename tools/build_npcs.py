@@ -161,7 +161,18 @@ NEW23=[(3,'other','Vault',815,675,'2026-11-12'),(3,'other','Auction House',826,6
        (3,'accessoriesBlacksmith','P3 - Forgeron Bracelet Corrompu',890,397,'2026-11-18','Y 59，紫水晶礦坑'),
        # 2026-11-19 owner decision (in29 B-26 option B): listed without a position like the Anneau des Cieux smith; 00.44.28～35 show no coordinates.
        # The reference map's Manufacturer of Corrupt Mask (-713, -109) is kept and not linked (this batch's floor-2 smiths are 38～1000+ blocks off it)
-       (2,'accessoriesBlacksmith','第 2 層 - 飾品鍛造：腐化面具',None,None,'2026-11-19','遊戲視窗「第 2 層 - 飾品鍛造：腐化面具」（取得途徑寫「第2層-飾品鍛造：腐化面具」）；截圖讀不到座標。參考互動地圖有一位 Manufacturer of Corrupt Mask（X -713 Z -109），名稱意思相同但位置沒對過，沒有合併')]
+       (2,'accessoriesBlacksmith','第 2 層 - 飾品鍛造：腐化面具',None,None,'2026-11-19','遊戲視窗「第 2 層 - 飾品鍛造：腐化面具」（取得途徑寫「第2層-飾品鍛造：腐化面具」）；截圖讀不到座標。參考互動地圖有一位 Manufacturer of Corrupt Mask（X -713 Z -109），名稱意思相同但位置沒對過，沒有合併'),
+       # 2026-11-23 (in30 batch A, owner's 11/22 screenshots of Urbus): F3 player position + targeted block, NPC in between (about ±2 blocks).
+       # Names = the window titles (the two smiths share one title, the second is "(2)"); the reference map's Urbus NPCs are kept and not linked
+       (2,'alchemist','第 2 層 - 第 2 層鍊金術師',None,None,'2026-11-22','遊戲視窗「第 2 層 - 第 2 層鍊金術師」（18.01.26～18.02.14）；這幾張沒有 NPC 畫面和座標。參考互動地圖第 2 層的 Alchemist（X -568 Z -293）位置沒對過，沒有合併'),
+       (2,'lumberjack','第 2 層 - 第 2 層細木工匠',42,-430,'2026-11-22','烏爾巴斯，Y 131；名牌「[NPC] 細木工匠」（18.06.44／45 F3：玩家 43.0, -428.1，準星方塊 41, 130, -432）'),
+       (2,'ingotBlacksmith','第 2 層 - 烏爾巴斯鐵匠',76,-427,'2026-11-22','烏爾巴斯，Y 131；名牌只有「[NPC]」；做鋁土礦錠、不純黑瑪瑙錠（18.07.10／11 F3：玩家 74.1, -426.2，準星方塊 77, 131, -429）。參考互動地圖的 Blacksmith of Bauxite Ingots & Impure Onyx 在 X 124 Z -385，差約 64 格，沒有合併'),
+       (2,'ingotBlacksmith','第 2 層 - 烏爾巴斯鐵匠 (2)',109,-412,'2026-11-22','烏爾巴斯，Y 134；遊戲視窗標題和另一位烏爾巴斯鐵匠相同，只做純淨黑瑪瑙錠；頭上看不到名牌（18.09.32／33 F3：玩家 107.9, -411.3，準星方塊 110, 133, -414）。參考互動地圖這附近（X 111 Z -408）標的是 Accessories Blacksmith'),
+       (2,'other','第 2 層 - 材料重塑師',75,-438,'2026-11-22','烏爾巴斯，Y 131；名牌「[重塑師] 材料」（18.07.33／34 F3：玩家 74.6, -439.5，準星方塊 76, 131, -436）。參考互動地圖第 2 層的 Refaiter 在 X 0 Z -355，差約 110 格，沒有合併'),
+       (2,'equipmentMerchants','第 2 層 - 裝備商人',94,-425,'2026-11-22','烏爾巴斯，Y 132；名牌「[NPC] 裝備商人」（18.08.31／34 F3：玩家 93.4, -424.3，準星方塊 95, 132, -427）'),
+       (2,'alchemist','第 2 層 - 第 2 層鍊金術師助手',131,-316,'2026-11-22','烏爾巴斯，Y 130；名牌「[NPC] 煉金術士助手」（18.11.34／35 F3：玩家 132.2, -317.8，準星方塊 130, 130, -315）'),
+       (2,'toolMerchants','工具商人',65,-434,'2026-11-22','烏爾巴斯，Y 132；名牌「[NPC] 工具商人」，這次沒有截到商店視窗（18.15.30／31 F3：玩家 64.1, -434.9，準星方塊 66, 131, -433）'),
+       (2,'lootBuyers','當地樵夫',150,-559,'2026-11-22','烏爾巴斯東南方的野外，Y 67；名牌「[NPC] 當地樵夫」（18.19.38／39 F3：玩家 150.0, -557.8，準星方塊 150, 66, -561）。物品的取得途徑寫「由第2層-當地樵夫回收」（相思木板 13 珂爾、金合歡粉末 28 珂爾）；回收清單要等收購清單支援第 2 層')]
 for fl,rs in F23.items():
     for r in rs:
         if (fl,r['n']) in CALC23: x,z,d,nt=CALC23[(fl,r['n'])]; r.update(x=x,z=z,src='calc')
