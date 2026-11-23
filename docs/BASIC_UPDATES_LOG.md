@@ -8,9 +8,9 @@
 
 | 日期 | commit | 改了哪些檔案 | baseline_compare 改變的面板數 | 有沒有碰到第 3 節的範圍 |
 |---|---|---|---|---|
-| （in30 A 批：還沒上線） | | | | |
+| 2026-11-24（台灣） | main `bd07325`→`4d3e097`（快轉；34b86f4＋4d3e097） | tools/build_recipes.py→recipes.js、tools/build_npcs.py→npcs.js、zhnames.js、gameinfo.js、sets.js、data23.js、changelog.js、CLAUDE.md、docs/BASIC_UPDATES_LOG.md、index.html、build/registry_report.md、tests/baseline/panels.json、transfer.json | 164（新 53）；剩 3 筆 E5（見下） | 沒有 |
 
-## in30 A 批（2026-11-23，工作分支，還沒上線）
+## in30 A 批（2026-11-23 做、2026-11-24 上線）
 
 - 起點：main `bd07325`
 - 改的檔案：`tools/build_recipes.py`→`recipes.js`、`tools/build_npcs.py`→`npcs.js`、`zhnames.js`、`gameinfo.js`、`sets.js`、`data23.js`、`changelog.js`、`CLAUDE.md`、`index.html`（build）、`build/registry_report.md`、`tests/baseline/panels.json`、`tests/baseline/transfer.json`
