@@ -6,9 +6,9 @@
 
 每次 cheng 說「上線」、合併到 main 後加一行。
 
-| 日期 | commit | 改了哪些檔案 | baseline_compare 改變的面板數 | 有沒有碰到第 3 節的範圍 |
-|---|---|---|---|---|
-| 2026-11-24（台灣） | main `bd07325`→`4d3e097`（快轉；34b86f4＋4d3e097） | tools/build_recipes.py→recipes.js、tools/build_npcs.py→npcs.js、zhnames.js、gameinfo.js、sets.js、data23.js、changelog.js、CLAUDE.md、docs/BASIC_UPDATES_LOG.md、index.html、build/registry_report.md、tests/baseline/panels.json、transfer.json | 164（新 53）；剩 3 筆 E5（見下） | 沒有 |
+| 日期 | 上線後的 main commit | 改了哪些檔案 | baseline_compare 改變的面板數 | 有沒有碰到第 3 節的範圍 | 7 個檔案和 bd073255 | recipes.js 列數 | NPC 數（第 1／2／3 層） |
+|---|---|---|---|---|---|---|---|
+| 2026-11-24（台灣） | `4d3e09745e3db7287e9fe453eea35ea207ca5248`（bd07325 快轉；34b86f4＋4d3e097）；交接紀錄 `f2fd057ae39ed2a680f4a163c5d57e4582a6d46c` | tools/build_recipes.py→recipes.js、tools/build_npcs.py→npcs.js、zhnames.js、gameinfo.js、sets.js、data23.js、changelog.js、CLAUDE.md、docs/BASIC_UPDATES_LOG.md、index.html、build/registry_report.md、tests/baseline/panels.json、transfer.json | 164（新 53）；剩 3 筆 E5（見下） | 沒有 | 相同（2026-11-24 對 f2fd057 補查） | 315→354 | 82／44／66 → 82／53／66 |
 
 ## in30 A 批（2026-11-23 做、2026-11-24 上線）
 
@@ -30,8 +30,13 @@
 - 引用檢查：E1 82（少的就是刪掉的那筆例外）、E2 28、E3 1、E9 0；例外 112→111
 - baseline_compare：38 個面板改變＋6 個新面板，逐一看過後重拍；E5 5 筆＝原本的 3 種錠＋Bull Horn、Reinforced Skeleton Bone（同一筆資料，標題換成中文）
 - 碰到第 3 節的範圍：`registry/exceptions.json`（站長 2026-11-24 同意刪那一筆；沒有新增、沒有核准任何例外）
+- 7 個檔案和 bd073255：相同（afce191 實際檢查）
+- recipes.js 列數 354→356；NPC 數 82／53／66（不變）
+- **和交接 V3 第 5a 節第 6 點衝突，待 cheng 決定再上線**：V3 寫「金合歡細繩的例外照舊留在待架構處理」，但這批照 cheng 11/24 的 ④A 已刪掉那筆例外（afce191，還沒上線）。
 
 ## 待架構處理
+
+- **同一層有同名的 NPC（D6 B14／C8 類）**：第 2 層「第 2 層 - 烏爾巴斯鐵匠」和「第 2 層 - 烏爾巴斯鐵匠 (2)」（in30 A 批，已在 main 4d3e097）。遊戲裡兩位的視窗標題相同（一位做鋁土礦錠、不純黑瑪瑙錠，約 X 76 Z -427；另一位只做純淨黑瑪瑙錠，約 X 109 Z -412），網站內部名稱用「 (2)」區分，畫面顯示同名；物品取得途徑「製作地點：第2層-烏爾巴斯鐵匠」只能連到第一位，純淨黑瑪瑙錠的製作地點寫在 note。沒有合併也沒有指定。原本第 3 層的 Equipment Merchant ×2、Consumables Merchant ×2、符文工匠 ×2 不變。
 
 - 第 2、3 層支線沒有 NPC／座標欄位（`SAO23.floors{}.quests[]` 只登記 title、d、en、steps、xp、money、src、date）：in30 三個支線的接任務 NPC 先寫在 `data23.js` 註解（歐利克斯 約 X 90 Z -389、德雷爾 約 X 69 Z -343、暮風 沒有座標）。
 - 收購清單只支援第 1 層：當地樵夫（相思木板 13、金合歡粉末 28）、當地礦工（鋁土礦錠 21、不純黑瑪瑙錠 70、純淨黑瑪瑙錠 250）、瑪羅姆收購商（骨髓粉末 7）、凱洛爾收購商（泥土羽毛 7）寫在 gameinfo note。
