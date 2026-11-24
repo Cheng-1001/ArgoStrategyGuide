@@ -613,7 +613,12 @@ items:[
  {"zh": "金合歡粉末", "ids": ["p|2133"], "en": null, "fr": "Poudre d'Acacia", "src": "shot30"},
  {"zh": "鋁土礦細繩", "ids": ["p|2375"], "en": null, "fr": "Ficelle de Bauxite", "src": "shot30"},
  {"zh": "不純黑瑪瑙細繩", "ids": ["p|2377"], "en": null, "fr": "Ficelle d'Onyx Impure", "src": "shot30"},
- {"zh": "基礎弓", "ids": ["e|1567"], "en": null, "fr": "Arc Basique", "src": "shot30"}
+ {"zh": "基礎弓", "ids": ["e|1567"], "en": null, "fr": "Arc Basique", "src": "shot30"},
+ // 2026-11-24 owner (in30 ①A ④A): 廢鐵細繩／金合歡細繩 tooltip text matches the catalogue lore; ②A': 強化骷髏骨／公牛角 = name-only (literal) match, accepted by the owner
+ {"zh": "廢鐵細繩", "ids": ["p|2376"], "en": null, "fr": "Ficelle de Ferraille", "src": "shot30"},
+ {"zh": "金合歡細繩", "ids": ["p|2374"], "en": null, "fr": "Ficelle d'Acacia", "src": "shot30"},
+ {"zh": "強化骷髏骨", "ids": ["i|Reinforced Skeleton Bone", "p|2195"], "en": "Reinforced Skeleton Bone", "fr": "Os de Squelette Renforcé", "src": "shot30"},
+ {"zh": "公牛角", "ids": ["i|Bull Horn", "p|2237"], "en": "Bull Horn", "fr": "Corne de Taureau", "src": "shot30"}
 ],
 "quests": {
  "A Question in the air": {

@@ -21,9 +21,20 @@
 - baseline_compare：164 個面板改變（新面板 53），逐一看過；重拍 `panels.json`、`transfer.json`；剩 3 筆 E5：`p|2408`、`p|2410`、`p|2416` 的說明換成遊戲中文（同一筆資料，`fixed_links.json` 存的是舊法文說明，沒有改）
 - 碰到第 3 節的範圍：沒有（`baseline_capture.js` 執行時也改寫了 `tests/fixed_links.json` 和 `tests/baseline/fixtures/`，都已還原、沒有提交）
 
+## in30 A 批待決五項（2026-11-24 站長「①A ②A' ③A ④A ⑤B」，工作分支，還沒上線）
+
+- 起點：main `f2fd057`
+- 改的檔案：`tools/build_recipes.py`→`recipes.js`、`data23.js`（SAO23_ITEMS 最後兩件劣質法杖、EXTRA note）、`zhnames.js`、`gameinfo.js`、`changelog.js`、`CLAUDE.md`、`registry/exceptions.json`（只刪 1 筆 stale：`recipe:3|Refaiter/out:金合歡細繩`，站長同意）、`index.html`、`build/registry_report.md`、`tests/baseline/panels.json`、`transfer.json`
+- `recipes.js`：`r|309`（廢鐵護符）同一列加材料「廢鐵細繩 ×1」、拿掉 MISS；新增 `r|354`、`r|355`（裝備商人最後）；其他列不變
+- 新的遊戲才有裝備 `e|x62`、`e|x63`（SAO23_ITEMS 最後，舊的 x 編號不變）
+- 引用檢查：E1 82（少的就是刪掉的那筆例外）、E2 28、E3 1、E9 0；例外 112→111
+- baseline_compare：38 個面板改變＋6 個新面板，逐一看過後重拍；E5 5 筆＝原本的 3 種錠＋Bull Horn、Reinforced Skeleton Bone（同一筆資料，標題換成中文）
+- 碰到第 3 節的範圍：`registry/exceptions.json`（站長 2026-11-24 同意刪那一筆；沒有新增、沒有核准任何例外）
+
 ## 待架構處理
 
 - 第 2、3 層支線沒有 NPC／座標欄位（`SAO23.floors{}.quests[]` 只登記 title、d、en、steps、xp、money、src、date）：in30 三個支線的接任務 NPC 先寫在 `data23.js` 註解（歐利克斯 約 X 90 Z -389、德雷爾 約 X 69 Z -343、暮風 沒有座標）。
 - 收購清單只支援第 1 層：當地樵夫（相思木板 13、金合歡粉末 28）、當地礦工（鋁土礦錠 21、不純黑瑪瑙錠 70、純淨黑瑪瑙錠 250）、瑪羅姆收購商（骨髓粉末 7）、凱洛爾收購商（泥土羽毛 7）寫在 gameinfo note。
 - `tests/fixed_links.json` 的 3 筆 E5（見上）要不要更新。
-- 「金合歡細繩」＝官網 2374（說明逐句對上）：加中文名會讓 `registry/exceptions.json` 的 `recipe:3|Refaiter/out:金合歡細繩` 變 stale，要站長同意刪那筆例外。
+- ~~「金合歡細繩」的 stale 例外~~：站長 2026-11-24 同意刪除，已處理。
+- 配方列要插在已上線的 NPC 區塊中間的：材料重塑師的廢鐵細繩（COMMON 1 分鐘 15 珂爾：鐵礦 2、廢鐵碎片 4、蛛絲 4）、鍊金術師助手的品質凶猛強化劑 II（RARE 1 分鐘 15 珂爾：強化骷髏骨 12、阿爾巴爾之牙 2、公牛角 4、琥珀萼片 8）。`r|N` 依陣列順序，插入會移動後面的編號，等架構的配方編號方案。

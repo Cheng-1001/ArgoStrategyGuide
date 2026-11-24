@@ -5987,6 +5987,10 @@ null,
 [
 "Scrap Metal Piece",
 1
+],
+[
+"廢鐵細繩",
+1
 ]
 ],
 "30",
@@ -6913,9 +6917,31 @@ null,
 "other",
 null,
 "shot"
+],
+[
+null,
+"劣質法杖",
+null,
+[],
+"75.37",
+"c",
+"weapon",
+1,
+"shot"
+],
+[
+null,
+"劣質法杖 (2)",
+null,
+[],
+"75.37",
+"c",
+"weapon",
+1,
+"shot"
 ]
 ]
 }
 };
 window.SAO_RECIPE_QTY = {"Alchemist|Quality Health Potion I": 3, "Alchemist|Quality Health Potion II": 3, "Alchemist|Quality Health Potion III": 3, "Alchemist|Quality Mana Potion I": 3, "Alchemist|Quality Mana Potion II": 3, "Alchemist|Quality Mana Potion III": 3, "Alchemist|Quality Stamina Potion I": 3, "Alchemist|Quality Stamina Potion II": 3, "Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion II": 3, "3|Alchemist|Quality Mana Potion II": 3, "3|Alchemist|Quality Stamina Potion II": 3, "3|Alchemist|Quality Health Potion III": 3, "3|Alchemist|Quality Mana Potion III": 3, "3|Alchemist|Quality Stamina Potion III": 3, "3|Alchemist|Quality Health Potion IV": 3, "3|Alchemist|Quality Health Potion V": 3, "3|Alchemist|Quality Health Potion VI": 3, "3|Alchemist|Quality Mana Potion V": 3, "3|Alchemist|Quality Mana Potion VI": 3, "3|Alchemist|Quality Stamina Potion V": 3, "3|Alchemist|Quality Stamina Potion VI": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Health Potion I": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion I": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Stamina Potion I": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Health Potion II": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion II": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Stamina Potion II": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Health Potion III": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion III": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Stamina Potion III": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Health Potion IV": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion IV": 3, "2|第 2 層 - 第 2 層鍊金術師|Quality Stamina Potion IV": 3};
-window.SAO_RECIPE_MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1, "2|Scrap Accessories Blacksmith|Amulette de Ferraille": "廢鐵細繩|1", "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion IV": "水之鳥身女妖蛋|3", "2|第 2 層 - 第 2 層鍊金術師助手|Quality Vitality Fortifier II": "奧拉西爾刺莖|4", "2|第 2 層 - 第 2 層鍊金術師助手|Quality Patience Fortifier II": "水之鳥身女妖蛋|4"};
+window.SAO_RECIPE_MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1, "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion IV": "水之鳥身女妖蛋|3", "2|第 2 層 - 第 2 層鍊金術師助手|Quality Vitality Fortifier II": "奧拉西爾刺莖|4", "2|第 2 層 - 第 2 層鍊金術師助手|Quality Patience Fortifier II": "水之鳥身女妖蛋|4"};

@@ -6,7 +6,7 @@
 
 | 代號 | 數量 | 在例外清單上 | 不在例外清單上 |
 | --- | --- | --- | --- |
-| E1 | 83 | 83 | 0 |
+| E1 | 82 | 82 | 0 |
 | E2 | 28 | 28 | 0 |
 | E3 | 1 | 1 | 0 |
 | E6 | 0 | 0 | 0 |
@@ -41,7 +41,7 @@
 | `SAO.SPOTS[].dg.loot[][1]` | resolved | 7 |
 | `SAO.SPOTS[].items[]` | resolved | 10 |
 | `SAO.SPOTS[].mons[]` | resolved | 60 |
-| `SAO23.extra{key}` | resolved | 49 |
+| `SAO23.extra{key}` | resolved | 51 |
 | `SAO23.floors{}.BOSS_SPAWNS[][0]` | resolved | 15 |
 | `SAO23.floors{}.M[].drops[][0]` | resolved | 268 |
 | `SAO23.floors{}.M[].zone` | resolved | 137 |
@@ -51,7 +51,7 @@
 | `SAO23.floors{}.spots[].mons[]` | resolved | 108 |
 | `SAO23.floors{}.spots[].zone` | resolved | 22 |
 | `SAO23.floors{}.spots[].zone[]` | resolved | 2 |
-| `SAO23_ITEMS{}[0]` | excluded-row | 18 |
+| `SAO23_ITEMS{}[0]` | excluded-row | 20 |
 | `SAO23_ITEMS{}[0]` | no-catalogue | 1 |
 | `SAO23_ITEMS{}[0]` | resolved | 117 |
 | `SAO_BOSSES.world[].roulette0[][0]` | resolved | 3 |
@@ -79,11 +79,11 @@
 | `SAO_GAMEICONS{key}` | unresolved | 6 |
 | `SAO_GAMEINFO.items[].obt[]` | ambiguous | 15 |
 | `SAO_GAMEINFO.items[].obt[]` | excluded-row | 115 |
-| `SAO_GAMEINFO.items[].obt[]` | resolved | 220 |
+| `SAO_GAMEINFO.items[].obt[]` | resolved | 221 |
 | `SAO_GAMEINFO.items[].obt[]` | term | 19 |
 | `SAO_GAMEINFO.items[].obt[]` | unresolved | 25 |
-| `SAO_GAMEINFO.items[].oid[]` | resolved | 224 |
-| `SAO_GAMEINFO.items[].site` | excluded-row | 260 |
+| `SAO_GAMEINFO.items[].oid[]` | resolved | 225 |
+| `SAO_GAMEINFO.items[].site` | excluded-row | 261 |
 | `SAO_GAMEINFO.items[].site` | resolved | 24 |
 | `SAO_GAMESTATS.items{key}` | resolved | 126 |
 | `SAO_HINTS{}{key}` | resolved | 49 |
@@ -95,13 +95,13 @@
 | `SAO_RECICONS{key}` | resolved | 19 |
 | `SAO_RECIPES{key}` | ambiguous | 1 |
 | `SAO_RECIPES{key}` | resolved | 101 |
-| `SAO_RECIPES{}.items[][0]` | excluded-row | 78 |
+| `SAO_RECIPES{}.items[][0]` | excluded-row | 80 |
 | `SAO_RECIPES{}.items[][0]` | resolved | 276 |
 | `SAO_RECIPES{}.items[][1]` | excluded-row | 276 |
-| `SAO_RECIPES{}.items[][1]` | resolved | 74 |
-| `SAO_RECIPES{}.items[][1]` | unresolved | 4 |
+| `SAO_RECIPES{}.items[][1]` | resolved | 77 |
+| `SAO_RECIPES{}.items[][1]` | unresolved | 3 |
 | `SAO_RECIPES{}.items[][3][][0]` | ambiguous | 2 |
-| `SAO_RECIPES{}.items[][3][][0]` | resolved | 568 |
+| `SAO_RECIPES{}.items[][3][][0]` | resolved | 569 |
 | `SAO_RECIPES{}.items[][3][][0]` | unresolved | 2 |
 | `SAO_SETS.potions[].name` | resolved | 60 |
 | `SAO_SETS.potions[].name` | unresolved | 5 |
@@ -109,7 +109,7 @@
 | `SAO_SETS.sets[].members[]` | resolved | 170 |
 | `SAO_SETS.sets[].members[]` | unresolved | 3 |
 | `SAO_ZHNAMES.items[].ids[]` | excluded-row | 42 |
-| `SAO_ZHNAMES.items[].ids[]` | resolved | 652 |
+| `SAO_ZHNAMES.items[].ids[]` | resolved | 658 |
 | `SAO_ZHNAMES.items[].ids[]` | unresolved | 1 |
 | `SAO_ZHNAMES.mobsByName{key}` | resolved | 78 |
 | `SAO_ZHNAMES.mobs{key}` | resolved | 46 |
@@ -172,7 +172,7 @@
 
 ## 錯誤清單
 
-### E1（83）
+### E1（82）
 
 | 檔案 | 鍵 | 行 | 原因 | 例外 |
 | --- | --- | --- | --- | --- |
@@ -244,7 +244,6 @@
 | gameinfo.js | `gameinfo:獵人紫水晶護腿/crafted-at:P3 - Craft Armure d'Améthyste` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | gameinfo.js | `gameinfo:獵人紫水晶靴/crafted-at:P3 - Craft Armure d'Améthyste` | 4 | 解析不到：沒有對得上的 NPC | 有 |
 | recipes.js | `recipe:3\|Refaiter/out:冷杉細繩` | 4156 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
-| recipes.js | `recipe:3\|Refaiter/out:金合歡細繩` | 4216 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | recipes.js | `recipe:Iron Accessories/Iron Amulet/mat:Iron String` | 1262 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | recipes.js | `recipe:Secret Gelatinous Cloak/Gelatinous Cloak/mat:Slime Tear` | 1687 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
 | recipes.js | `recipe:Sewer Reshaper/out:Slime Tear` | 1687 | 解析不到：沒有任何物品紀錄、官網名或遊戲名對得上 | 有 |
@@ -479,7 +478,7 @@
 
 ### W12
 
-- 數量：{"ITEMS fr": 6, "SAO23 fr": 98, "gameinfo oid": 10, "zhnames ids": 102, "配方 id": 5}
+- 數量：{"ITEMS fr": 6, "SAO23 fr": 97, "gameinfo oid": 10, "zhnames ids": 102, "配方 id": 5}
 
 ### 未量測（4）
 

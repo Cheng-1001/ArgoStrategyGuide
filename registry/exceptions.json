@@ -685,16 +685,6 @@
   {
    "code": "E1",
    "file": "recipes.js",
-   "key": "recipe:3|Refaiter/out:金合歡細繩",
-   "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
-   "status": "unresolved",
-   "approved_by": "站長",
-   "approved_at": "2026-11-17",
-   "clear_by": "階段 2"
-  },
-  {
-   "code": "E1",
-   "file": "recipes.js",
    "key": "recipe:Iron Accessories/Iron Amulet/mat:Iron String",
    "reason": "解析不到：沒有任何物品紀錄、官網名或遊戲名對得上",
    "status": "unresolved",

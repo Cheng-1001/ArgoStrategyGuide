@@ -482,7 +482,9 @@ SHOTS23 = {
         ("Pièce de Ferraille", [["Scrap Metal Piece", 1]]),
         # the second material 廢鐵細繩 is not tied to a site item yet (TRIAGE B-3, maybe official 2376 Ficelle de Ferraille by name only):
         # kept out of the material list (it would be an unresolved reference) and shown by name through MISS
-        ("Amulette de Ferraille", [["Scrap Metal Piece", 1]]))],
+        # 2026-11-24 owner (in30 ①A): 廢鐵細繩 = official 2376 Ficelle de Ferraille (11/22 tooltip text matches the catalogue lore),
+        # so the second material is a real link now (was MISS "廢鐵細繩|1")
+        ("Amulette de Ferraille", [["Scrap Metal Piece", 1], ["廢鐵細繩", 1]]))],
     # window「第 2 層 - 飾品鍛造：赤鳥身女妖戒指」(05.10.50 / 05.10.51, 0/3): EPIC 1 min, 55 Col
     (2, "Manufacturer of the Ring of the Flaming Harpy"): [("Anneau de l'Harpie Enflammé", "a", 60, [["Mountain Stag Hide", 32], ["Scrap Metal Piece", 64], ["Flaming Feather", 64]], "55", "acc")],
     # window「第 2 層 - 飾品鍛造：綠鳥身女妖戒指」, the one at -802, 211 (05.05.55, 0/3): EPIC 1 min, 55 Col (site name 藍鳥身女妖戒指)
@@ -532,7 +534,10 @@ SHOTS23 = {
                               + [("%s Potion I" % k, "c", None, [], "30.15", "potion") for k in ("Health", "Mana", "Stamina")]
                               + [("Boar Meat", "c", None, [], "0.10", "other"),
                                  ("Parchemin de Réallocation", "b", None, [], "753.74", "other"), ("Parchemin de Maîtrise", "b", None, [], "753.74", "other"),
-                                 ("Parchemin de Changement", "b", None, [], "1507.47", "other")],
+                                 ("Parchemin de Changement", "b", None, [], "1507.47", "other"),
+                                 # 2026-11-24 owner (in30 ③A): the two「劣質法杖」(mage / shaman), game-only equipment in data23.js
+                                 # (SAO23_ITEMS 劣質法杖 / 劣質法杖 (2)); appended at the end of the last block so no recipe id moves
+                                 ("劣質法杖", "c", None, [], "75.37", "weapon"), ("劣質法杖 (2)", "c", None, [], "75.37", "weapon")],
 }
 OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quality Knowledge Fortifier III": 1998, "Quality Ferocity Fortifier III": 1997,
          "Quality Patience Fortifier III": 2001, "Quality Resistance Fortifier III": 2000, "Quality Vitality Fortifier III": 1996,
@@ -574,7 +579,6 @@ OID23 = {"Anneau Occulte": 2486, "Quality Endurance Fortifier III": 1999, "Quali
 # recipes whose window lists more materials than the screenshot shows: number of unseen rows (site shows ??? for them);
 MISS = {"3|P3 - Craft Bracelet Goblin|Bracelet Goblin": 1, "3|P3 - Craft Anneau des Cieux|Anneau des Cieux": 1,
         # a string "name|qty": the row is on screen but the material is not tied to a site item yet (site shows the name, no link)
-        "2|Scrap Accessories Blacksmith|Amulette de Ferraille": "廢鐵細繩|1",
         # 2026-11-23 (in30 batch A): names shown in the window that the site does not tie to an item yet
         "2|第 2 層 - 第 2 層鍊金術師|Quality Mana Potion IV": "水之鳥身女妖蛋|3",
         "2|第 2 層 - 第 2 層鍊金術師助手|Quality Vitality Fortifier II": "奧拉西爾刺莖|4",
@@ -588,7 +592,7 @@ LV23 = {"Quality Health Potion II": 5, "Quality Mana Potion II": 5, "Quality Sta
         "Pioche de la Forêt": 18, "Houe de la Forêt": 18, "Hache de la Forêt": 18,
         # 2026-11-23 (in30 batch A): tooltip levels of the floor-2 Alchemist's tier I and IV, and the equipment merchant's bow
         "Quality Health Potion I": 1, "Quality Mana Potion I": 1, "Quality Stamina Potion I": 1, "Quality Mana Potion IV": 12,
-        "Quality Stamina Potion IV": 12, "Arc Basique": 3}
+        "Quality Stamina Potion IV": 12, "Arc Basique": 3, "劣質法杖": 1, "劣質法杖 (2)": 1}
 out23 = {}
 for (fl, npc), rows in SHOTS23.items():
     key = "%d|%s" % (fl, npc)
