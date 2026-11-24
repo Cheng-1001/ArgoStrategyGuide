@@ -9,6 +9,7 @@
 | 日期 | 上線後的 main commit | 改了哪些檔案 | baseline_compare 改變的面板數 | 有沒有碰到第 3 節的範圍 | 7 個檔案和 bd073255 | recipes.js 列數 | NPC 數（第 1／2／3 層） |
 |---|---|---|---|---|---|---|---|
 | 2026-11-24（台灣） | `4d3e09745e3db7287e9fe453eea35ea207ca5248`（bd07325 快轉；34b86f4＋4d3e097）；交接紀錄 `f2fd057ae39ed2a680f4a163c5d57e4582a6d46c` | tools/build_recipes.py→recipes.js、tools/build_npcs.py→npcs.js、zhnames.js、gameinfo.js、sets.js、data23.js、changelog.js、CLAUDE.md、docs/BASIC_UPDATES_LOG.md、index.html、build/registry_report.md、tests/baseline/panels.json、transfer.json | 164（新 53）；剩 3 筆 E5（見下） | 沒有 | 相同（2026-11-24 對 f2fd057 補查） | 315→354 | 82／44／66 → 82／53／66 |
+| 2026-11-24（台灣）17:20 | `02a34a15775cfde97eed7ea28a5dff4e22045d12`（f2fd057 快轉；afce191＋d28ef03＋02a34a1） | tools/build_recipes.py→recipes.js、data23.js、zhnames.js、gameinfo.js、changelog.js、CLAUDE.md、docs/BASIC_UPDATES_LOG.md、index.html、build/registry_report.md、registry/exceptions.json、tests/baseline/panels.json、transfer.json | 38＋新 6；E5 5 筆 | registry/exceptions.json（cheng 11-24 ④A：刪 `recipe:3\|Refaiter/out:金合歡細繩`，112→111） | 相同（合併後的 02a34a1 實際檢查） | 354→356 | 82／53／66 → 82／53／66 |
 
 ## in30 A 批（2026-11-23 做、2026-11-24 上線）
 
@@ -21,7 +22,7 @@
 - baseline_compare：164 個面板改變（新面板 53），逐一看過；重拍 `panels.json`、`transfer.json`；剩 3 筆 E5：`p|2408`、`p|2410`、`p|2416` 的說明換成遊戲中文（同一筆資料，`fixed_links.json` 存的是舊法文說明，沒有改）
 - 碰到第 3 節的範圍：沒有（`baseline_capture.js` 執行時也改寫了 `tests/fixed_links.json` 和 `tests/baseline/fixtures/`，都已還原、沒有提交）
 
-## in30 A 批待決五項（2026-11-24 站長「①A ②A' ③A ④A ⑤B」，工作分支，還沒上線）
+## in30 A 批待決五項（2026-11-24 站長「①A ②A' ③A ④A ⑤B」，2026-11-24 上線，main 02a34a1）
 
 - 起點：main `f2fd057`
 - 改的檔案：`tools/build_recipes.py`→`recipes.js`、`data23.js`（SAO23_ITEMS 最後兩件劣質法杖、EXTRA note）、`zhnames.js`、`gameinfo.js`、`changelog.js`、`CLAUDE.md`、`registry/exceptions.json`（只刪 1 筆 stale：`recipe:3|Refaiter/out:金合歡細繩`，站長同意）、`index.html`、`build/registry_report.md`、`tests/baseline/panels.json`、`transfer.json`
