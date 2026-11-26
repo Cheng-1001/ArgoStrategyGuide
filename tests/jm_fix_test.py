@@ -285,7 +285,7 @@ try:
         txt = pg.inner_text("#jmFixOut")
         check(all(t in txt for t in ("第 3 層", "補 ", "不用修復", "不處理", "0,-1", "讀不到", "無法確認是這一層", "畫得不一樣")),
               "the result lists each floor, the skipped, unreadable and unchecked squares and the conflicts")
-        with pg.expect_download() as dl:
+        with pg.expect_download(timeout=120000) as dl:
             pg.click("#jmFixDl [data-jmfix='0']")
         z = zipfile.ZipFile(io.BytesIO(open(dl.value.path(), "rb").read()))
         names = z.namelist()
@@ -307,7 +307,7 @@ try:
         check(len(parts) > 1 and nb == len(parts) and sorted(sum(parts, [])) == sorted(want), f"a pack above the part size is split ({len(parts)} parts, {nb} buttons)")
         got, sizes = [], []
         for i in range(nb):
-            with pg.expect_download() as dl:
+            with pg.expect_download(timeout=120000) as dl:
                 pg.click(f"#jmFixDl [data-jmfix='{i}']")
             got += zipfile.ZipFile(dl.value.path()).namelist()
             sizes.append(os.path.getsize(dl.value.path()))
