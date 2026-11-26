@@ -300,28 +300,20 @@ try:
         check(nn and all(Image.open(io.BytesIO(z.read(k))).convert("RGBA").tobytes() == an for k in nn),
               f"every night image written at that square is A's pixel for pixel: none of NIGHT's unchecked night image is in them ({len(nn)} images)")
         # split by size (zip headers counted), and the total limit
-        pg.evaluate("window.__JMFIX.PART=1600000")
+        # about 8 parts: headless Chromium on CI dropped the 20th download in a row from one page (22 parts at 1.6 MB)
+        pg.evaluate("window.__JMFIX.PART=4000000")
         r2 = run()
         parts = r2.get("parts") or []
         nb = pg.locator("#jmFixDl [data-jmfix]").count()
         check(len(parts) > 1 and nb == len(parts) and sorted(sum(parts, [])) == sorted(want), f"a pack above the part size is split ({len(parts)} parts, {nb} buttons)")
         got, sizes = [], []
-        cons = []
-        pg.on("console", lambda m: cons.append(m.type + ": " + m.text))
         for i in range(nb):
-            try:
-                with pg.expect_download(timeout=120000) as dl:
-                    pg.click(f"#jmFixDl [data-jmfix='{i}']")
-                dl.value.path()
-            except Exception as e:   # diagnostics for CI
-                print(f"DIAG download {i + 1}/{nb} failed: {type(e).__name__}; note: {pg.inner_text('#jmFixNote')!r}; "
-                      f"buttons disabled: {pg.evaluate('[...document.querySelectorAll(\"#jmFixDl [data-jmfix]\")].filter(b=>b.disabled).length')}; "
-                      f"console: {cons[-5:]}; page errors: {errs[-3:]}; part {r2['partBytes'][i]} bytes, {len(parts[i])} images")
-                raise
+            with pg.expect_download(timeout=120000) as dl:
+                pg.click(f"#jmFixDl [data-jmfix='{i}']")
             got += zipfile.ZipFile(dl.value.path()).namelist()
             sizes.append(os.path.getsize(dl.value.path()))
         check(sorted(got) == sorted(want), "the parts together hold every image once")
-        check(any(len(q) > 1 for q in parts) and all(s <= 1600000 for s, q in zip(sizes, parts) if len(q) > 1) and sizes == r2["partBytes"],
+        check(any(len(q) > 1 for q in parts) and all(s <= 4000000 for s, q in zip(sizes, parts) if len(q) > 1) and sizes == r2["partBytes"],
               f"every zip is at most the part size and its size is counted exactly: {sizes} vs {r2['partBytes']}")
         pg.evaluate("window.__JMFIX.PART=40*1048576;window.__JMFIX.TOTAL=300000")
         r3 = run()
