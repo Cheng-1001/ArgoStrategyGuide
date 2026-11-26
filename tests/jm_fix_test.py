@@ -4,7 +4,7 @@ Usage (repo root, after src/build.py): python3 tests/jm_fix_test.py   (prints AL
 Three floor-3 server instances cut from the site's floor-3 explored map, each holding a different part of it (two have ids
 the site has never seen), plus folders the tool must refuse: a lone floor-1 world (nothing to do), noise, a folder whose id
 the site ties to floor 2 but whose map is floor 3, a floor-3 folder with one floor-2 image in it, and one that matches both.
-Checks (GPT reviews of v1 a7e9942, v2 806b5b5, v3 7a5718e and v4 09e2526):
+Checks (GPT reviews of v1 a7e9942, v2 806b5b5, v3 7a5718e, v4 09e2526 and v5 8f91a7c):
 - a folder's copy of a square is used or changed only when its surface image of that square is shown to be that floor:
   by the site's map, or (a small piece) by lying inside a copy the site's map shows, the same picture in many colours; a
   surface image too small to check, a night image without a surface image and small pieces that differ from the shown copy,
@@ -139,7 +139,27 @@ try:
     blk = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
     blk.paste((40, 90, 160, 255), (200, 200, 264, 264))
     put(FLAT, D % R6, blk, T + 700)                                 # 4,096 pixels, all the same as A's, one colour
-    for f in (CHB, CHC, XF, MX, FLAT, NIGHT):
+    # v6: a small piece whose other layers there are each inside the same layer of the site-shown copy (A) and the same
+    # picture is not left alone (OKN); one whose night image drew outside A's night (OUTN), differs from it (DIFN) or whose
+    # layer A does not have there (TOPO) still is. A's night at R4 is its bottom half, so these pieces sit in that half
+    full4 = cut(*R4)
+    nx = next(x for x in range(0, 448, 8) if drawn(full4, (x, 280, x + 64, 364)))
+    OKN, OUTN, DIFN, TOPO = "Triggers_fix00011~nightok", "Triggers_fix00012~nightout", "Triggers_fix00013~nightdiff", "Triggers_fix00014~topo"
+    pc = (nx, 300, nx + 64, 364)
+    an4 = cut(*R4, (0, 256, 512, 512))
+    def piece(im, box):
+        o = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+        o.paste(im.crop(box), box[:2])
+        return o
+    for i, f in enumerate((OKN, OUTN, DIFN, TOPO)):
+        put(f, D % R4, cut(*R4, pc), T + 900 + i)
+    put(OKN, "overworld/night/%d,%d.png" % R4, piece(an4, pc), T + 900)
+    put(OUTN, "overworld/night/%d,%d.png" % R4, piece(full4, (nx, 232, nx + 64, 364)), T + 901)   # 24 rows above A's night
+    dn = piece(an4, pc)
+    dn.paste(ImageOps.invert(dn.crop(pc).convert("RGB")).convert("RGBA"), pc[:2])
+    put(DIFN, "overworld/night/%d,%d.png" % R4, dn, T + 902)                                   # same place, other picture
+    put(TOPO, "overworld/topo/%d,%d.png" % R4, piece(full4, pc), T + 903)                      # A has no topo image at R4
+    for f in (CHB, CHC, XF, MX, FLAT, NIGHT, OKN, OUTN, DIFN, TOPO):
         put(f, D % R1, cut(*R1), T)                                 # a big floor-3 image, so the folder is floor 3
     os.makedirs(os.path.join(mp, B, "waypoints"), exist_ok=True)
     open(os.path.join(mp, B, "waypoints", "WaypointData.dat"), "wb").write(b"x")
@@ -155,15 +175,15 @@ try:
     put(MIXED2, D % R1, cut(*R1), T)     # half and half: matches both floors
     put(MIXED2, D % reg2, cut2(*reg2), T)
 
-    SAFE = (A, B, C, CHB, CHC, XF, MX, FLAT, NIGHT)
-    MT = {A: T, B: T + 100, C: T + 200, CHB: T, CHC: T, XF: T, MX: T, FLAT: T, NIGHT: T}
+    SAFE = (A, B, C, CHB, CHC, XF, MX, FLAT, NIGHT, OKN, OUTN, DIFN, TOPO)
+    MT = {A: T, B: T + 100, C: T + 200, CHB: T, CHC: T, XF: T, MX: T, FLAT: T, NIGHT: T, OKN: T + 900, OUTN: T + 901, DIFN: T + 902, TOPO: T + 903}
     c = lambda R: "%d,%d" % R
     # which copies must be shown, written out from the fixture (not taken from the page): by the site's map, or as a piece
     # inside a site-shown copy. The reference images below are built from this, not from what the page reports
-    SITE = {A: [R1, R2, R4, R5, R6], B: [R1, R2, R3], C: [R1, R3], CHB: [R1], CHC: [R1], XF: [R1], MX: [R1], FLAT: [R1], NIGHT: [R1]}
+    SITE = {A: [R1, R2, R4, R5, R6], B: [R1, R2, R3], C: [R1, R3], CHB: [R1], CHC: [R1], XF: [R1], MX: [R1], FLAT: [R1], NIGHT: [R1], OKN: [R1], OUTN: [R1], DIFN: [R1], TOPO: [R1]}
     SITE = {f: sorted(map(c, v)) for f, v in SITE.items()}
-    SIM = {f: [c(R4)] if f in (B, NIGHT) else [] for f in SAFE}
-    HOLD = {NIGHT: [c(R4)]}   # shown by a small piece, other layers there: left alone in that square
+    SIM = {f: [c(R4)] if f in (B, NIGHT, OKN, OUTN, DIFN, TOPO) else [] for f in SAFE}
+    HOLD = {f: [c(R4)] for f in (NIGHT, OUTN, DIFN, TOPO)}   # shown by a small piece, another layer there not checked: left alone
     EXP = {f: sorted(SITE[f] + SIM[f]) for f in SAFE}
 
     def load(folder, rel):
@@ -269,11 +289,14 @@ try:
         check(sorted(r["names"]) == sorted(want), f"the zip holds exactly the images that change ({len(r['names'])} vs {len(want)}): extra {sorted(set(r['names']) - set(want))[:3]} missing {sorted(set(want) - set(r['names']))[:3]}")
         check(not any(x.endswith("/%d,%d.png" % FAR) for x in r["names"]), "nothing at the unchecked square goes anywhere")
         nk = "overworld/night/%d,%d.png" % R4
-        check(f3.get("held") == [NIGHT + " " + c(R4)], f"a square shown by a small piece where the folder has other layers is listed as left alone: {f3.get('held')}")
+        check(sorted(f3.get("held") or []) == sorted(f + " " + c(R4) for f in HOLD), f"a square shown by a small piece whose other layers are not each inside A's and the same is listed as left alone: {f3.get('held')}")
+        check(sorted(f3.get("simok") or []) == sorted([B + " " + c(R4), OKN + " " + c(R4)]), f"a small piece whose night image is inside A's and the same is not left alone (v6): {f3.get('simok')}")
+        check(OKN + "/" + D % R4 in r["names"] and OKN + "/" + nk in r["names"] and not any(x.startswith((OUTN, DIFN, TOPO)) and x.endswith("/%d,%d.png" % R4) for x in r["names"]),
+              "that folder takes A's surface and night images there; OUTN, DIFN and TOPO are not changed there")
         check(not any(x.startswith(NIGHT) and x.endswith("/%d,%d.png" % R4) for x in r["names"]) and B + "/" + nk in r["names"] and B + "/" + D % R4 in r["names"],
               "that folder is not changed there; the folder with the same small piece and no other layer takes A's surface and night images")
         r5 = sorted(x.split("/")[0] for x in r["names"] if x.endswith("/%d,%d.png" % R5))
-        check(r5 == sorted([B, C, FLAT, NIGHT]), f"at the square of the unshown pieces only the folders with nothing there take A's shown half: {r5}")
+        check(r5 == sorted([B, C, FLAT, NIGHT, OKN, OUTN, DIFN, TOPO]), f"at the square of the unshown pieces only the folders with nothing there take A's shown half: {r5}")
         check(not any(x.startswith(C) and x.endswith("/%d,%d.png" % R4) for x in r["names"]) and any(x == B + "/" + D % R4 for x in r["names"]),
               "the folder with an unshown copy is not changed there; the shown small piece is filled")
         check(not any("0,-1" in x or "waypoints" in x for x in r["names"]) and f3.get("skip") == 2, f"square 0,-1 (2 copies) and waypoints are never in the zip: skip {f3.get('skip')}")
@@ -285,11 +308,18 @@ try:
         txt = pg.inner_text("#jmFixOut")
         check(all(t in txt for t in ("第 3 層", "補 ", "不用修復", "不處理", "0,-1", "讀不到", "無法確認是這一層", "畫得不一樣")),
               "the result lists each floor, the skipped, unreadable and unchecked squares and the conflicts")
-        with pg.expect_download(timeout=120000) as dl:
-            pg.click("#jmFixDl [data-jmfix='0']")
-        z = zipfile.ZipFile(io.BytesIO(open(dl.value.path(), "rb").read()))
-        names = z.namelist()
-        check(sorted(names) == sorted(want) and dl.value.suggested_filename.startswith("jm_fix_"), "the download matches")
+        zd, fnames = {}, []   # every part (v6: the fixture is now above one 40 MiB part)
+        for i in range(pg.locator("#jmFixDl [data-jmfix]").count()):
+            with pg.expect_download(timeout=120000) as dl:
+                pg.click(f"#jmFixDl [data-jmfix='{i}']")
+            zi = zipfile.ZipFile(io.BytesIO(open(dl.value.path(), "rb").read()))
+            zd.update({k: zi.read(k) for k in zi.namelist()})
+            fnames.append(dl.value.suggested_filename)
+        names = sorted(zd)
+
+        class z:
+            read = staticmethod(lambda k: zd[k])
+        check(names == sorted(want) and all(f.startswith("jm_fix_") for f in fnames), f"the download matches ({len(fnames)} parts)")
         diff = [k for k in names if k in want and Image.open(io.BytesIO(z.read(k))).convert("RGBA").tobytes() != want[k].tobytes()]
         check(not diff, f"every image keeps the folder's own pixels and fills the rest pixel for pixel (differs: {diff[:3]})")
         half = cut(*R5, (0, 0, 512, 256)).tobytes()
@@ -298,7 +328,7 @@ try:
         an = cut(*R4, (0, 256, 512, 512)).tobytes()
         nn = [k for k in names if k.endswith("/" + nk)]
         check(nn and all(Image.open(io.BytesIO(z.read(k))).convert("RGBA").tobytes() == an for k in nn),
-              f"every night image written at that square is A's pixel for pixel: none of NIGHT's unchecked night image is in them ({len(nn)} images)")
+              f"every night image written at that square is A's pixel for pixel: none of NIGHT's, OUTN's or DIFN's night image is in them ({len(nn)} images)")
         # split by size (zip headers counted), and the total limit
         # about 8 parts: headless Chromium on CI dropped the 20th download in a row from one page (22 parts at 1.6 MB)
         pg.evaluate("window.__JMFIX.PART=4000000")
