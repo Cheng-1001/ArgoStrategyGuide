@@ -54,6 +54,12 @@ jobs:
           pip install playwright==1.63.0
           python3 -m playwright install --with-deps chromium
           PYTHONIOENCODING=utf-8 python3 tests/smoke.py
+      # 修復分流地圖 (2026-11-26, GPT review of a7e9942: the new test must run in CI)
+      - name: JourneyMap instance repair (jm_fix_test)
+        if: always()
+        run: |
+          pip install "pillow==11.0.0"
+          PYTHONIOENCODING=utf-8 python3 tests/jm_fix_test.py
       # W8 / W9 (plan v5 B7): the site audit and the untranslated-name list, served from a local copy of the repo
       - name: site audit and untranslated names (W8 / W9)
         if: always()

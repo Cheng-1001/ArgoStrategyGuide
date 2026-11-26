@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="b2f51cff0f">
+<meta name="sao-build" content="47acacacff">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -909,7 +909,7 @@ h3.sec .c{font-family:var(--f-mono);letter-spacing:0}
 <script src="props.js?v=a6c9503f"></script>
 <script src="gameinfo.js?v=c65516cc"></script><script src="buyback.js?v=75ad19b4"></script>
 <script src="npcs.js?v=62e01d24"></script>
-<script src="changelog.js?v=16f0dcee"></script>
+<script src="changelog.js?v=a2381a67"></script>
 <script src="recipes.js?v=6a1ad7f6"></script>
 <script src="jmmeta.js?v=8935be97"></script>
 <script src="formcfg.js?v=54663be2"></script>
@@ -2869,12 +2869,19 @@ async function jmQuick(g,ref,cv){const {J,N}=ref,f=ref.f;cv.width=cv.height=N;co
   g.overlap=diffs.length;g.med=diffs.length?diffs[diffs.length>>1]:null;g.state=g.overlap<JMP.MIN?"few":g.med>JMP.MED?"other":"f1";if(g.state==="f1")g.floor=f;return g}
 // 修復分流地圖 (2026-11-26, user「如果別的玩家也想恢復，可以做工具嗎」「在網站做」): a floor now runs on several server
 // instances, each with its own world id, so JourneyMap keeps one folder per instance and the in-game map shows only what was
-// drawn while on that instance. The tool finds the folders of one floor (by the same colour check as the packer, since a new
-// instance id is not in SAO_JM.ids), lays the copies of every image on top of each other (oldest first; JourneyMap images are
-// either fully opaque or fully clear, so this keeps every drawn pixel and the newest drawing wins) and zips, per folder, only
-// the images that change. Chrome / Edge do not let a page write inside %APPDATA% (File System Access blocklist), so the player
-// copies the zip into the mp folder. Square 0,-1 is left out: on the owner's map the world shown at login was drawn there
-// into whichever floor folder was open (2026-11-25). Waypoints and JourneyMap's cache are not touched.
+// drawn while on that instance. Chrome / Edge do not let a page write inside %APPDATA% (File System Access blocklist), so the
+// tool zips the images that change and the player copies them into the mp folder. v2 (GPT review 2026-11-26, NOT PASS on v1):
+// - floor: its own check, stricter than jmDetect (which takes a known id with too little overlap as that floor): a folder is
+//   repaired only when exactly one floor's map matches its surface, a known id agrees with it, and no single surface image
+//   contradicts it (JMFIX.OWN: clearly unlike that floor; JMFIX.OTHER: clearly like another floor). Measured on the owner's
+//   four floor-3 folders: images unlike floor 3 by at most 15 (with 30+ chunks), none like floor 1/2 except square 0,-1
+// - pixels: a folder's own drawn pixels are never changed; only its clear pixels are filled from the other folders of that
+//   floor. Where those disagree the newest file wins and the count is shown (owner's floor 3, square 1,1: 3,367 of 219,904
+//   overlapping pixels differ), so folders can end up not identical
+// - square 0,-1 is left out (owner's map: the login world was drawn there into whichever floor folder was open); images that
+//   cannot be read or are not 512 x 512 leave that square untouched in every folder; both counts are shown
+// - the zip is split into parts of at most JMFIX.PART bytes / JMFIX.MAXN files; above JMFIX.TOTAL the tool stops
+const JMFIX={OWN:25,OTHER:20,NMIN:30,PART:150*1048576,MAXN:3000,TOTAL:1024*1048576};window.__JMFIX=JMFIX;   // exposed for tests/jm_fix_test.py
 const JMFIX_DIR=/^(day|night|topo|biome|-?\d+)$/i,JMFIX_SKIP="0,-1";
 function jmFixFolders(files){const m=new Map();
   for(const f of files){const p=(f.webkitRelativePath||f.name).split("/"),i=p.findIndex(s=>/^triggers_./i.test(s));
@@ -2884,45 +2891,77 @@ function jmFixFolders(files){const m=new Map();
     e.tiles.set(p[i+2].toLowerCase()+"/"+(+r[1])+","+(+r[2]),f);e.latest=Math.max(e.latest,f.lastModified||0)}
   return[...m.values()]}
 const jmFixBm=f=>createImageBitmap(f,{premultiplyAlpha:"none",colorSpaceConversion:"none"});
-async function jmFixRun(files){const O=$("jmFixOut");window.__jmFix=null;$("jmFixDl").innerHTML="";
+// one surface image against one floor's map: [chunks compared, median colour difference]
+async function jmFixTile(it,ref,x){const J=ref.J,N=ref.N,R=ref.px;let bm;try{bm=await jmFixBm(it.f)}catch(e){return[0,null]}
+  if(bm.width!==512||bm.height!==512){bm.close&&bm.close();return[0,null]}
+  x.clearRect(0,0,128,128);x.drawImage(bm,0,0,128,128);bm.close&&bm.close();const d=x.getImageData(0,0,128,128).data,ch=new Map();
+  for(let py=0;py<128;py++)for(let px=0;px<128;px++){const i=(py*128+px)*4;if(d[i+3]<250)continue;
+    const bx=it.rx*512+px*4+2,bz=it.rz*512+py*4+2,cx=bx>>4,cz=bz>>4;if(!ref.mask(cx,cz))continue;
+    const qx=Math.floor((bx-J.x0)/4),qz=Math.floor((bz-J.z0)/4);if(qx<0||qz<0||qx>=N||qz>=N)continue;const j=(qz*N+qx)*4;if(R[j+3]<250)continue;
+    const k=cz*100000+cx;let c=ch.get(k);if(!c){c={s:0,n:0};ch.set(k,c)}c.s+=(Math.abs(d[i]-R[j])+Math.abs(d[i+1]-R[j+1])+Math.abs(d[i+2]-R[j+2]))/3;c.n++}
+  const v=[...ch.values()].filter(c=>c.n>=6).map(c=>c.s/c.n).sort((a,b)=>a-b);return[v.length,v.length?v[v.length>>1]:null]}
+// which floor a folder is, or why it is left alone (F.why)
+async function jmFixDetect(F,refs,cv){F.floor=null;
+  const files=[...F.tiles].filter(([k])=>k.startsWith("day/")&&k!=="day/"+JMFIX_SKIP).map(([k,f])=>{const [x,z]=k.slice(4).split(",").map(Number);return{f,rx:x,rz:z,dir:"day"}});
+  if(!files.length){F.why="沒有地面地圖";return}
+  const hits=[];for(const ref of refs){const g={files,layers:{}};await jmQuick(g,ref,cv);if(g.state==="f1")hits.push(ref.f)}
+  if(!hits.length){F.why="認不出是哪一層";return}
+  if(hits.length>1){F.why=`同時像第 ${hits.join("、")} 層`;return}
+  const fl=hits[0],known=JMIDS()[F.label];
+  if(known!=null&&+known!==fl){F.why=`資料夾是第 ${known} 層，內容卻像第 ${fl} 層`;return}
+  const c=document.createElement("canvas");c.width=c.height=128;const x=c.getContext("2d",{willReadFrequently:true});
+  for(const it of files)for(const ref of refs){const [n,med]=await jmFixTile(it,ref,x);if(n<JMFIX.NMIN||med==null)continue;
+    if(ref.f===fl&&med>JMFIX.OWN){F.why=`${it.rx},${it.rz} 這一格不像第 ${fl} 層`;return}
+    if(ref.f!==fl&&med<=JMFIX.OTHER){F.why=`${it.rx},${it.rz} 這一格像第 ${ref.f} 層`;return}}
+  F.floor=fl}
+async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.__jmFix=null;$("jmFixDl").innerHTML="";note.textContent="正在讀取…";
   const fs=jmFixFolders(files);
-  if(!fs.length){O.innerHTML=`<div class="note warn">選的資料夾裡找不到 JourneyMap 的地圖。請確認選的是 <code>journeymap\data\mp</code>。</div>`;return}
+  if(!fs.length){O.innerHTML=`<div class="note warn">選的資料夾裡找不到 JourneyMap 的地圖。請確認選的是 <code>journeymap\\data\\mp</code>。</div>`;note.textContent="";return}
   O.innerHTML=`<div class="muted">找到 ${fs.length} 個世界資料夾，正在確認各是第幾層…</div>`;
-  let refs;try{refs=await Promise.all(JMFLS().map(f=>jmRef(f)))}catch(e){O.innerHTML=`<div class="note warn">讀不到網站的地圖資料，請重新整理頁面再試一次。</div>`;return}
+  let refs;try{refs=await Promise.all(JMFLS().map(f=>jmRef(f)))}catch(e){O.innerHTML=`<div class="note warn">讀不到網站的地圖資料，請重新整理頁面再試一次。</div>`;note.textContent="";return}
   const cv=document.createElement("canvas");
-  for(let i=0;i<fs.length;i++){const F=fs[i];O.firstElementChild.textContent=`正在確認第 ${i+1}／${fs.length} 個資料夾…`;
-    const g={key:F.label,label:F.label,leaf:"overworld",parent:"",dg:null,layers:{},latest:F.latest,
-      files:[...F.tiles].filter(([k])=>k.startsWith("day/")&&k!=="day/"+JMFIX_SKIP).map(([k,f])=>{const [x,z]=k.slice(4).split(",").map(Number);return{f,rx:x,rz:z,dir:"day"}})};
-    await jmDetect(g,refs,cv,jmQuick);F.floor=g.state==="f1"&&g.floor?g.floor:null}
+  for(let i=0;i<fs.length;i++){O.firstElementChild.textContent=`正在確認第 ${i+1}／${fs.length} 個資料夾…`;await jmFixDetect(fs[i],refs,cv)}
   const byFl=new Map();for(const F of fs)if(F.floor){if(!byFl.has(F.floor))byFl.set(F.floor,[]);byFl.get(F.floor).push(F)}
-  const c1=document.createElement("canvas"),c2=document.createElement("canvas");c1.width=c1.height=c2.width=c2.height=512;
-  const x1=c1.getContext("2d",{willReadFrequently:true}),x2=c2.getContext("2d",{willReadFrequently:true});
-  const out=[],sum=[];
-  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,skip:0};sum.push(s);if(F.length<2)continue;
+  const c1=document.createElement("canvas");c1.width=c1.height=512;const x1=c1.getContext("2d",{willReadFrequently:true});
+  const out=[],sum=[];let total=0,stop=false;
+  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,skip:0,bad:[],conflict:0};sum.push(s);if(F.length<2)continue;
     const keys=[...new Set(F.flatMap(e=>[...e.tiles.keys()]))].sort();let k0=0;
-    for(const k of keys){k0++;if(k0%20===1)O.firstElementChild.textContent=`第 ${fl} 層：正在合併 ${k0}／${keys.length} 張…`;
-      if(k.endsWith("/"+JMFIX_SKIP)){s.skip++;continue}
+    for(const k of keys){if(stop)break;k0++;if(k0%20===1)O.firstElementChild.textContent=`第 ${fl} 層：正在合併 ${k0}／${keys.length} 張…`;
+      if(k.endsWith("/"+JMFIX_SKIP)){s.skip+=F.filter(e=>e.tiles.has(k)).length;continue}
       const have=F.filter(e=>e.tiles.has(k)).sort((a,b)=>(a.tiles.get(k).lastModified||0)-(b.tiles.get(k).lastModified||0));
-      x1.clearRect(0,0,512,512);const own=new Map();let bad=false;
-      for(const e of have){try{const bm=await jmFixBm(e.tiles.get(k));if(bm.width!==512||bm.height!==512){bad=true;bm.close&&bm.close();break}
-        x2.clearRect(0,0,512,512);x2.drawImage(bm,0,0);own.set(e,x2.getImageData(0,0,512,512).data);x1.drawImage(bm,0,0);bm.close&&bm.close()}catch(err){bad=true;break}}
-      if(bad)continue;   // an image JourneyMap did not write whole is left as it is
-      const md=x1.getImageData(0,0,512,512).data;let blob=null;
-      for(const e of F){const od=own.get(e);let same=!!od;if(od)for(let i=0;i<md.length;i++)if(md[i]!==od[i]){same=false;break}
-        if(same)continue;if(!blob)blob=await new Promise(r=>c1.toBlob(r,"image/png"));
+      const px=new Map();let bad=false;   // every copy of this square, oldest first
+      for(const e of have){try{const bm=await jmFixBm(e.tiles.get(k));if(bm.width!==512||bm.height!==512){bm.close&&bm.close();bad=true;break}
+        x1.clearRect(0,0,512,512);x1.drawImage(bm,0,0);bm.close&&bm.close();px.set(e,x1.getImageData(0,0,512,512).data)}catch(err){bad=true;break}}
+      if(bad){s.bad.push(k);continue}   // a copy that cannot be read: this square stays as it is in every folder
+      for(const e of F){const own=px.get(e),img=x1.createImageData(512,512),o=img.data;let added=0,conf=0;if(own)o.set(own);
+        for(let i=0;i<o.length;i+=4){if(o[i+3])continue;let pick=null,diff=false;
+          for(const h of have){if(h===e)continue;const d=px.get(h);if(!d[i+3])continue;
+            if(pick&&(pick[i]!==d[i]||pick[i+1]!==d[i+1]||pick[i+2]!==d[i+2]||pick[i+3]!==d[i+3]))diff=true;pick=d}   // later = newer
+          if(!pick)continue;o[i]=pick[i];o[i+1]=pick[i+1];o[i+2]=pick[i+2];o[i+3]=pick[i+3];added++;if(diff)conf++}
+        if(!added)continue;s.conflict+=conf;x1.putImageData(img,0,0);
+        const blob=await new Promise(r=>c1.toBlob(r,"image/png"));if(!blob){s.bad.push(k);continue}
+        total+=blob.size;if(total>JMFIX.TOTAL){stop=true;break}
         out.push({name:`${e.label}/overworld/${k}.png`,file:blob});s.n++}}}
   const unk=fs.filter(F=>!F.floor),flN=f=>`第 ${f} 層`;
-  window.__jmFix={floors:sum,names:out.map(o=>o.name),unknown:unk.map(F=>F.label)};
+  window.__jmFix={floors:sum,names:out.map(o=>o.name),unknown:unk.map(F=>F.label),why:Object.fromEntries(unk.map(F=>[F.label,F.why])),stop};
   const row=(t,sub,pill,c)=>`<div class="jmrow"><span class="t"><b>${esc(t)}</b><span>${sub}</span></span><span class="pill ${c}">${pill}</span></div>`;
   const short=l=>l.length>22?l.slice(0,22)+"…":l;
+  const extra=s=>[s.skip?`0,-1 那一格不動（${s.skip} 張）`:"",s.bad.length?`${s.bad.length} 格有讀不到或尺寸不對的圖，這幾格不動：${s.bad.slice(0,5).map(esc).join("、")}${s.bad.length>5?"…":""}`:"",s.conflict?`${s.conflict.toLocaleString()} 個像素各分流畫得不一樣，用最新的那份補`:""].filter(Boolean).map(t=>`<br>${t}`).join("");
   O.innerHTML=`<div class="jmrows">${sum.map(s=>s.folders.length<2?row(flN(s.floor),"只有 1 個資料夾","不用修復","no")
-      :row(flN(s.floor),`${s.folders.length} 個資料夾：${s.folders.map(l=>esc(short(l))).join("、")}`,s.n?`補 ${s.n} 張`:"已經一致",s.n?"ok":"no")).join("")}
-    ${unk.length?`<details class="jmfold"><summary>認不出是哪一層，不處理 ${unk.length}</summary><div class="jmrows">${unk.map(F=>row(short(F.label),`${F.tiles.size} 張地圖`,"不處理","no")).join("")}</div></details>`:""}</div>`;
-  if(!out.length){$("jmFixNote").textContent=sum.some(s=>s.folders.length>1)?"各分流的地圖已經一樣，不用修復。":"沒有同一層有好幾個資料夾的情形，不用修復。";return}
-  const tot=out.reduce((t,o)=>t+o.file.size,0);$("jmFixNote").innerHTML=`共 ${out.length} 張（${mb(tot)}）。下載後照上面第 4、5 步放進 <b>mp</b> 資料夾。`;
-  $("jmFixDl").innerHTML=`<button class="repbtn" id="jmFixGo">⬇ 下載修復檔</button>`;
-  $("jmFixGo").onclick=async()=>{const b=$("jmFixGo");b.disabled=true;try{const z=await jmZip(out),a=document.createElement("a"),d=new Date();
-    a.href=URL.createObjectURL(z);a.download=`jm_fix_${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}.zip`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000)}finally{b.disabled=false}}}
+      :row(flN(s.floor),`${s.folders.length} 個資料夾：${s.folders.map(l=>esc(short(l))).join("、")}${extra(s)}`,s.n?`補 ${s.n} 張`:"已經完整",s.n?"ok":"no")).join("")}
+    ${unk.length?`<details class="jmfold" open><summary>不處理 ${unk.length}</summary><div class="jmrows">${unk.map(F=>row(short(F.label),esc(F.why||""),"不處理","no")).join("")}</div></details>`:""}</div>`;
+  if(stop){note.innerHTML=`<b class="warn">要補的地圖超過 ${mb(JMFIX.TOTAL)}，為了不讓瀏覽器記憶體不足，這次停止，沒有產生修復檔。</b>`;return}
+  if(!out.length){note.textContent=sum.some(s=>s.folders.length>1)?"各分流的地圖已經完整，不用修復。":"沒有同一層有好幾個資料夾的情形，不用修復。";return}
+  const parts=[];for(const o of out){const p=parts[parts.length-1];if(p&&p.bytes+o.file.size<=JMFIX.PART&&p.items.length<JMFIX.MAXN){p.items.push(o);p.bytes+=o.file.size}else parts.push({items:[o],bytes:o.file.size})}
+  window.__jmFix.parts=parts.map(p=>p.items.map(o=>o.name));
+  note.innerHTML=`共 ${out.length} 張（${mb(total)}）${parts.length>1?`，<b class="warn">分成 ${parts.length} 個壓縮檔，每個都要放進去</b>`:""}。下載後照上面第 5 步放進 <b>mp</b> 資料夾。`;
+  const d=new Date(),ds=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
+  $("jmFixDl").innerHTML=parts.map((p,i)=>`<button class="repbtn" data-jmfix="${i}" title="${mb(p.bytes)}">⬇ 下載修復檔${parts.length>1?` ${i+1}／${parts.length}`:""}</button>`).join("");
+  $("jmFixDl").querySelectorAll("[data-jmfix]").forEach(b=>b.onclick=async()=>{const i=+b.dataset.jmfix;b.disabled=true;
+    try{const z=await jmZip(parts[i].items),a=document.createElement("a");a.href=URL.createObjectURL(z);a.download=`jm_fix_${ds}${parts.length>1?"_"+(i+1):""}.zip`;
+      document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000)}
+    catch(e){note.innerHTML=`<b class="warn">壓縮檔產生失敗（${esc(e&&e.message||e)}）。可能是記憶體不足，請關掉其他分頁後重新選一次資料夾。</b>`}
+    finally{b.disabled=false}})}
 async function jmRunFull(files){const O=$("jmOut");window.__jm=null;window.__jmFull=null;JMG=[];jmPopClose();
   $("jmDl").innerHTML=`<button class="repbtn" disabled>⬇ 全地圖打包</button>`;$("jmDlNote").textContent="正在讀取…";
   const groups=jmGroups(files);O.innerHTML=`<div class="muted">找到 ${groups.length} 個世界資料夾，正在確認哪個是第 1 層…</div>`;
@@ -3257,16 +3296,16 @@ function buildFormReport(){
     <div id="jmOut" class="jmout" aria-live="polite"></div>
   </article>
   <article class="bcard pconly" id="jmFix"><h4 class="sec">🧩 修復分流地圖（JourneyMap）</h4>
-    <p class="jmlead">同一層的伺服器分成好幾台（分流）後，JourneyMap 每一台各存一份地圖，連到新的一台時遊戲裡的地圖只剩一小塊。這個工具把同一層每一份地圖畫過的地方合成一份，再補回每一個資料夾。<b>檔案只在你的瀏覽器裡處理</b>，不會上傳。</p>
+    <p class="jmlead">同一層的伺服器分成好幾台（分流）後，JourneyMap 每一台各存一份地圖，連到新的一台時遊戲裡的地圖只剩一小塊。這個工具把同一層其他分流畫過、這一份還沒有的地方補進每一個資料夾，<b>已經畫好的地方不會改</b>。檔案只在你的瀏覽器裡處理，不會上傳。</p>
     <details class="jmhow" open><summary>怎麼用（6 步）</summary>
     <ol class="steps">
-      <li><b>完全關閉遊戲</b>：JourneyMap 會在退出時用記憶體裡的地圖蓋回檔案，遊戲開著時放進去的檔案會被蓋掉。</li>
+      <li><b>完全關閉遊戲</b>：關掉遊戲視窗和啟動器。JourneyMap 退出時會用記憶體裡的地圖蓋回檔案，遊戲開著時放進去的檔案會被蓋掉。</li>
       <li><b>選資料夾</b>：按下面的按鈕，在路徑列貼上 <code>%APPDATA%\\.Triggers Client\\instances\\Sword Art Online\\journeymap\\data</code> 按 Enter，點一下 <b>mp</b> 資料夾，再按「上傳」。這只是讓網頁讀取。</li>
-      <li><b>下載修復檔</b>：工具自動找出同一層的資料夾，按「下載修復檔」。壓縮檔裡只有需要補的地圖。</li>
-      <li><b>先備份</b>：把整個 <b>mp</b> 資料夾複製一份到桌面，出問題時放回去就好。</li>
-      <li><b>放進去</b>：打開下載的壓縮檔，全選裡面的資料夾、複製，到 <b>mp</b> 資料夾裡貼上，問到同名檔案時選「取代目的地中的檔案」。</li>
-      <li><b>進遊戲確認</b>：連到哪一台都會看到完整的地圖。</li></ol>
-    <div class="jmscope"><span><b>會補</b>：地面、夜晚、等高線、生態域和室內・洞穴各層的地圖</span><span><b>不動</b>：路標（waypoint）；座標 0,-1 那一格（登入畫面的世界常被畫進這一格）；從來沒走過的地方合併不出來</span><span>伺服器之後再加開新的分流，到新的一台後再做一次就好。</span></div>
+      <li><b>先備份</b>：在同一個 <code>data</code> 資料夾裡，把 <b>mp</b> 資料夾整個複製到桌面。打開桌面那份，確認裡面有 <code>Triggers_</code> 開頭的資料夾。</li>
+      <li><b>下載修復檔</b>：看下面的結果，標「補 N 張」的樓層才會修。按「下載修復檔」（分成好幾個時每個都要下載）。</li>
+      <li><b>放進去</b>：打開壓縮檔，裡面直接就是 <code>Triggers_</code> 開頭的資料夾，名稱和你 <b>mp</b> 裡的一樣。全選、複製，打開 <b>mp</b> 資料夾（看得到同名的 <code>Triggers_</code> 資料夾）貼上，問到同名檔案時選「取代目的地中的檔案」。不要貼到 <b>mp</b> 以外的地方，也不要在 <b>mp</b> 裡面再放一個 <b>mp</b>。</li>
+      <li><b>進遊戲確認</b>：結果裡標「補 N 張」的樓層，每個分流都會加上其他分流畫過的地方。不對的話關掉遊戲，刪掉 <code>data</code> 裡的 <b>mp</b>，把桌面備份的 <b>mp</b> 複製回去。</li></ol>
+    <div class="jmscope"><span><b>會補</b>：地面、夜晚、等高線、生態域和室內・洞穴各層的地圖</span><span><b>不動</b>：已經畫好的地方；路標（waypoint）；座標 0,-1 那一格（站長的地圖裡，登入畫面的世界被畫進了這一格）；認不出樓層或同時像好幾層的資料夾；讀不到的圖</span><span>從來沒走過的地方合併不出來。伺服器之後再加開新的分流，到新的一台後再做一次。</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmFixDir">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmFixDir" webkitdirectory multiple hidden><span id="jmFixDl"></span></div>
     <div class="muted jmdlnote" id="jmFixNote">要在電腦上用 Chrome 或 Edge 開本站。</div>
