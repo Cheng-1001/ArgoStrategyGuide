@@ -2887,6 +2887,53 @@ function jmFixFolders(files){const m=new Map();
     const lb=p[i];if(!m.has(lb))m.set(lb,{label:lb,tiles:new Map(),latest:0});const e=m.get(lb);
     e.tiles.set(p[i+2].toLowerCase()+"/"+(+r[1])+","+(+r[2]),f);e.latest=Math.max(e.latest,f.lastModified||0)}
   return[...m.values()]}
+// v11 (owner 2026-11-27「合併」, rules「照建議做」): the waypoints of one floor are shared between its folders. Only a folder's
+// own waypoints/WaypointData.dat is read (JourneyMap 6: uncompressed NBT, root {groups, waypoints}, each point keyed by its
+// guid). The merged file is the target's own bytes with whole point (and group) tags copied byte for byte from the other
+// folders inserted before the end of "waypoints" ("groups"): nothing the target had changes, and no string is re-encoded
+// (names are Java modified UTF-8). Not shared: death and temp points. A point the target already has (same guid, or same
+// name, position and dimension) is never changed; of a point several folders have, the newest file's copy is given (ties:
+// folder order). Nothing is deleted. A file that is not exactly this shape (gzip, cut off, trailing bytes, a point without
+// guid/group/position) is left alone and listed; a folder without a file takes nothing. A file with no points has no
+// "waypoints" tag: one is added at the end of the root, after "groups" (where JourneyMap writes it)
+const JMWP_SKIP=new Set(["journeymap_death","journeymap_temp"]),JMWP_MAX=4*1048576;
+function jmWpFiles(files){const m=new Map();for(const f of files){const p=(f.webkitRelativePath||f.name).split("/"),i=p.findIndex(s=>/^triggers_./i.test(s));
+  if(i>=0&&p.length===i+3&&p[i+1]==="waypoints"&&p[i+2]==="WaypointData.dat")m.set(p[i],f)}return m}
+function jmWpParse(u){if(!u||u.length<5||u.length>JMWP_MAX)return null;const v=new DataView(u.buffer,u.byteOffset,u.length);let p=0;
+  const need=n=>{if(p+n>u.length)throw 0},raw=s=>Array.from(s,b=>String.fromCharCode(b)).join(""),   // a string's bytes, as a key
+    str=()=>{need(2);const n=v.getUint16(p);p+=2;need(n);const s=u.subarray(p,p+n);p+=n;return raw(s)};
+  const skip=t=>{switch(t){case 1:need(1);p+=1;break;case 2:need(2);p+=2;break;case 3:case 5:need(4);p+=4;break;case 4:case 6:need(8);p+=8;break;
+    case 7:{need(4);const n=v.getInt32(p);p+=4;if(n<0)throw 0;need(n);p+=n;break}case 8:str();break;
+    case 9:{need(5);const et=u[p],n=v.getInt32(p+1);p+=5;if(n<0||(n>0&&(et<1||et>12)))throw 0;for(let i=0;i<n;i++)skip(et);break}
+    case 10:for(;;){need(1);const tt=u[p++];if(tt===0)break;str();skip(tt)}break;
+    case 11:{need(4);const n=v.getInt32(p);p+=4;if(n<0)throw 0;need(4*n);p+=4*n;break}
+    case 12:{need(4);const n=v.getInt32(p);p+=4;if(n<0)throw 0;need(8*n);p+=8*n;break}default:throw 0}};
+  // the children of the compound whose payload starts at p: {o:[{k,t,a,b,body}], end} (a..b the whole child tag, end its TAG_End)
+  const kids=()=>{const o=[];for(;;){need(1);const a=p,t=u[p++];if(t===0)return{o,end:a};const k=str(),body=p;skip(t);o.push({k,t,a,b:p,body})}};
+  try{if(u[0]!==10)return null;p=1;if(str().length)return null;const top=kids();if(p!==u.length)return null;
+    const g=top.o.find(c=>c.k==="groups"&&c.t===10),w=top.o.find(c=>c.k==="waypoints");if(!g||(w&&w.t!==10))return null;
+    p=g.body;const G=kids();let W={o:[],end:null};if(w){p=w.body;W=kids()}   // a file without points has no "waypoints" at allif(G.o.some(c=>c.t!==10))return null;
+    const wps=[];for(const c of W.o){if(c.t!==10)return null;p=c.body;const f=kids().o,one=(n,t)=>f.find(y=>y.k===n&&y.t===t),sv=x=>{p=x.body;return str()};
+      const gd=one("guid",8),gi=one("groupId",8),ps=one("pos",10),nm=one("name",8);if(!gd||!gi||!ps||sv(gd)!==c.k)return null;
+      p=ps.body;const q=kids().o,iv=n=>{const x=q.find(y=>y.k===n&&y.t===3);return x?v.getInt32(x.body):null},dm=q.find(y=>y.k==="dimension"&&y.t===8);
+      const X=iv("x"),Y=iv("y"),Z=iv("z");if(X==null||Y==null||Z==null||!dm)return null;
+      wps.push({guid:c.k,group:sv(gi),ck:(nm?sv(nm):"")+"\u0000"+X+","+Y+","+Z+"\u0000"+sv(dm),a:c.a,b:c.b})}
+    return{u,groups:new Map(G.o.map(c=>[c.k,c])),gEnd:G.end,wps,wEnd:W.end,rootEnd:top.end}}catch(e){return null}}
+const JMWP_HEAD=new Uint8Array([10,0,9,...new TextEncoder().encode("waypoints")]),JMWP_END=new Uint8Array([0]);
+function jmWpSplice(t,addG,addW){const ins=[[t.gEnd,addG],t.wEnd==null?[t.rootEnd,[JMWP_HEAD,...addW,JMWP_END]]:[t.wEnd,addW]].sort((a,b)=>a[0]-b[0]),parts=[];let p=0;
+  for(const [at,l] of ins){parts.push(t.u.subarray(p,at),...l);p=at}parts.push(t.u.subarray(p));
+  const o=new Uint8Array(parts.reduce((a,b)=>a+b.length,0));let q=0;for(const x of parts){o.set(x,q);q+=x.length}return o}
+async function jmWpMerge(F,wf,s){const P=[];
+  for(let i=0;i<F.length;i++){const e=F[i],f=wf.get(e.label);if(!f)continue;let d=null;try{d=jmWpParse(new Uint8Array(await f.arrayBuffer()))}catch(x){}
+    if(!d){s.wpBad.push(e.label);continue}P.push({e,d,t:f.lastModified||0,i})}
+  const src=[...P].sort((a,b)=>b.t-a.t||a.i-b.i),res=[];   // newest file first: it gives the copy of a point several folders have
+  for(const T of P){const has=new Set(T.d.wps.map(w=>w.guid)),hc=new Set(T.d.wps.map(w=>w.ck)),addW=[],addG=[],gAdd=new Set(),miss=new Set();
+    for(const S of src){if(S===T)continue;for(const w of S.d.wps){if(JMWP_SKIP.has(w.group)||has.has(w.guid)||hc.has(w.ck))continue;
+      if(!T.d.groups.has(w.group)&&!gAdd.has(w.group)){const g=S.d.groups.get(w.group);if(!g){miss.add(w.guid);continue}addG.push(S.d.u.subarray(g.a,g.b));gAdd.add(w.group)}
+      addW.push(S.d.u.subarray(w.a,w.b));has.add(w.guid);hc.add(w.ck)}}
+    s.wpMiss+=[...miss].filter(g=>!has.has(g)).length;if(addW.length)res.push({e:T.e,n:addW.length,bytes:jmWpSplice(T.d,addG,addW)})}
+  return res}
+window.__JMWP={parse:jmWpParse};   // exposed for tests
 const jmFixBm=f=>createImageBitmap(f,{premultiplyAlpha:"none",colorSpaceConversion:"none"});
 // the pixels of one image, or null when it cannot be read or is not 512 x 512
 async function jmFixPx(f,x){try{const bm=await jmFixBm(f);if(bm.width!==512||bm.height!==512){bm.close&&bm.close();return null}
@@ -2929,7 +2976,7 @@ async function jmFixShow(F,x1,prog){const sq=new Set();for(const e of F)for(cons
         if(!out&&n>=JMFIX.PXMIN&&same>=JMFIX.AGREE*n&&col.size>=JMFIX.COLORS){e.shown.add(c);e.sim.add(c);e.simBy.set(c,h);break}}}}}
 const JMFIX_HEAD=n=>30+46+2*new TextEncoder().encode(n).length;   // zip local + central header and the name twice (jmZip)
 async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.__jmFix=null;$("jmFixDl").innerHTML="";note.textContent="正在讀取…";
-  const fs=jmFixFolders(files);
+  const fs=jmFixFolders(files),wf=jmWpFiles(files);
   if(!fs.length){O.innerHTML=`<div class="note warn">選的資料夾裡找不到 JourneyMap 的地圖。請確認選的是 <code>journeymap\\data\\mp</code>。</div>`;note.textContent="";return}
   O.innerHTML=`<div class="muted">找到 ${fs.length} 個世界資料夾，正在確認各是第幾層…</div>`;
   let refs;try{refs=await Promise.all(JMFLS().map(f=>jmRef(f)))}catch(e){O.innerHTML=`<div class="note warn">讀不到網站的地圖資料，請重新整理頁面再試一次。</div>`;note.textContent="";return}
@@ -2938,7 +2985,7 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
   const byFl=new Map();for(const F of fs)if(F.floor){if(!byFl.has(F.floor))byFl.set(F.floor,[]);byFl.get(F.floor).push(F)}
   const c1=document.createElement("canvas");c1.width=c1.height=512;const x1=c1.getContext("2d",{willReadFrequently:true});
   const out=[],sum=[];let total=0,stop=false;
-  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,skip:0,bad:[],unshown:[],held:[],simok:[],conflict:0};sum.push(s);if(F.length<2)continue;
+  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,skip:0,bad:[],unshown:[],held:[],simok:[],conflict:0,wp:0,wpf:0,wpBad:[],wpMiss:0};sum.push(s);if(F.length<2)continue;
     await jmFixShow(F,x1,c=>{O.firstElementChild.textContent=`第 ${fl} 層：正在確認 ${c} 這一格…`});
     for(const e of F)for(const k of e.tiles.keys()){const c=k.slice(k.indexOf("/")+1);if(c!==JMFIX_SKIP&&!e.shown.has(c)&&!s.unshown.includes(e.label+" "+c))s.unshown.push(e.label+" "+c)}
     // v5 (GPT review of v4 09e2526, V4-M1): a small surface piece (F.sim) shows the surface image only; nothing checked the
@@ -2977,19 +3024,23 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
         if(!added)continue;s.conflict+=conf;x1.putImageData(img,0,0);
         const blob=await new Promise(r=>c1.toBlob(r,"image/png"));if(!blob){s.bad.push(k);continue}
         const name=`${e.label}/overworld/${k}.png`;total+=blob.size+JMFIX_HEAD(name);if(total>JMFIX.TOTAL){stop=true;out.length=0;break}
-        out.push({name,file:blob});s.n++}}}
+        out.push({name,file:blob});s.n++}}
+    if(!stop)for(const r of await jmWpMerge(F,wf,s)){const name=`${r.e.label}/waypoints/WaypointData.dat`,blob=new Blob([r.bytes]);
+      total+=blob.size+JMFIX_HEAD(name);if(total>JMFIX.TOTAL){stop=true;out.length=0;break}out.push({name,file:blob,wp:1});s.wp+=r.n;s.wpf++}}
   const unk=fs.filter(F=>!F.floor),flN=f=>`第 ${f} 層`;
   window.__jmFix={floors:sum,names:out.map(o=>o.name),unknown:unk.map(F=>F.label),why:Object.fromEntries(unk.map(F=>[F.label,F.why])),stop,shown:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.shown].sort()])),
     site:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.site].sort()])),sim:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.sim].sort()]))};
   const row=(t,sub,pill,c)=>`<div class="jmrow"><span class="t"><b>${esc(t)}</b><span>${sub}</span></span><span class="pill ${c}">${pill}</span></div>`;
   const short=l=>l.length>22?l.slice(0,22)+"…":l,few=(a,f=v=>v)=>a.slice(0,5).map(v=>esc(f(v))).join("、")+(a.length>5?"…":"");
-  const left=s=>s.bad.length+s.unshown.length+s.held.length;   // anything besides 0,-1 left out: never "complete"
+  const left=s=>s.bad.length+s.unshown.length+s.held.length+s.wpBad.length;   // anything besides 0,-1 left out: never "complete"
   const extra=s=>[s.skip?`0,-1 那一格不動（${s.skip} 張）`:"",
     s.bad.length?`${s.bad.length} 格有讀不到或尺寸不對的圖，這幾格不動：${few(s.bad)}`:"",
     s.unshown.length?`${s.unshown.length} 格無法確認是這一層的地圖，這幾格不用也不改：${few(s.unshown,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
     s.held.length?`${s.held.length} 格只靠一小塊地面圖確認，同一格的夜間、地形或洞穴圖沒辦法確認，這幾格整格不用也不改：${few(s.held,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
+    s.wpBad.length?`${s.wpBad.length} 個資料夾的路標檔讀不懂，這幾個資料夾的路標不動：${few(s.wpBad,short)}`:"",
+    s.wpMiss?`${s.wpMiss} 個路標的群組找不到，沒有補`:"",
     s.conflict?`補的時候有 ${s.conflict.toLocaleString()} 個像素各分流畫得不一樣，用最新的那份（各資料夾分開計算）`:""].filter(Boolean).map(t=>`<br>${t}`).join("");
-  const pill=s=>s.n?[`補 ${s.n} 張`,"ok"]:left(s)?["無法確認完整","no"]:["已經完整","no"];
+  const pill=s=>s.n||s.wp?[[s.n?`補 ${s.n} 張`:"",s.wp?`路標 ${s.wp} 個`:""].filter(Boolean).join("、"),"ok"]:left(s)?["無法確認完整","no"]:["已經完整","no"];
   O.innerHTML=`<div class="jmrows">${sum.map(s=>s.folders.length<2?row(flN(s.floor),"只有 1 個資料夾","不用修復","no")
       :row(flN(s.floor),`${s.folders.length} 個資料夾：${s.folders.map(l=>esc(short(l))).join("、")}${extra(s)}`,...pill(s))).join("")}
     ${unk.length?`<details class="jmfold" open><summary>不處理 ${unk.length}</summary><div class="jmrows">${unk.map(F=>row(short(F.label),esc(F.why||""),"不處理","no")).join("")}</div></details>`:""}</div>`;
@@ -2999,7 +3050,8 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
   const parts=[];for(const o of out){const sz=o.file.size+JMFIX_HEAD(o.name),p=parts[parts.length-1];
     if(p&&p.bytes+sz+22<=JMFIX.PART&&p.items.length<JMFIX.MAXN){p.items.push(o);p.bytes+=sz}else parts.push({items:[o],bytes:sz})}
   window.__jmFix.parts=parts.map(p=>p.items.map(o=>o.name));window.__jmFix.partBytes=parts.map(p=>p.bytes+22);
-  note.innerHTML=`共 ${out.length} 張（${mb(total)}）${parts.length>1?`，<b class="warn">分成 ${parts.length} 個壓縮檔，每個都要放進去</b>`:""}${multi.some(left)?"。有些地圖略過，見下面的說明":""}。下載後照上面第 5 步放進 <b>mp</b> 資料夾。`;
+  const nImg=out.filter(o=>!o.wp).length,nWp=out.length-nImg;
+  note.innerHTML=`共 ${[nImg?`${nImg} 張地圖`:"",nWp?`${nWp} 個分流的路標`:""].filter(Boolean).join("、")}（${mb(total)}）${parts.length>1?`，<b class="warn">分成 ${parts.length} 個壓縮檔，每個都要放進去</b>`:""}${multi.some(left)?"。有些地圖略過，見下面的說明":""}。下載後照上面第 5 步放進 <b>mp</b> 資料夾。`;
   const d=new Date(),ds=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,"0")}${String(d.getDate()).padStart(2,"0")}`;
   $("jmFixDl").innerHTML=parts.map((p,i)=>`<button class="repbtn" data-jmfix="${i}" title="${mb(p.bytes)}">⬇ 下載修復檔${parts.length>1?` ${i+1}／${parts.length}`:""}</button>`).join("");
   $("jmFixDl").querySelectorAll("[data-jmfix]").forEach(b=>b.onclick=async()=>{const i=+b.dataset.jmfix;b.disabled=true;
@@ -3350,7 +3402,7 @@ function buildFormReport(){
       <li><b>下載修復檔</b>：看下面的結果，標「補 N 張」的樓層才會修。按「下載修復檔」（分成好幾個時每個都要下載）。</li>
       <li><b>放進去</b>：打開壓縮檔，裡面直接就是 <code>Triggers_</code> 開頭的資料夾，名稱和你 <b>mp</b> 裡的一樣。全選、複製，打開 <b>mp</b> 資料夾（看得到同名的 <code>Triggers_</code> 資料夾）貼上，問到同名檔案時選「取代目的地中的檔案」。不要貼到 <b>mp</b> 以外的地方，也不要在 <b>mp</b> 裡面再放一個 <b>mp</b>。</li>
       <li><b>進遊戲確認</b>：結果裡標「補 N 張」的樓層，每個分流都會加上其他分流畫過的地方。不對的話：關掉遊戲，確認桌面的備份還在，把 <code>data</code> 裡的 <b>mp</b> 改名成 <b>mp_修復後</b>，再把桌面備份的 <b>mp</b> 複製回 <code>data</code>。進遊戲確認恢復後，<b>mp_修復後</b> 要不要刪由你決定。</li></ol>
-    <div class="jmscope"><span><b>會補</b>：地面、夜晚、等高線、生態域和室內・洞穴各層的地圖</span><span><b>不動</b>：已經畫好的地方；路標（waypoint）；座標 0,-1 那一格（站長的地圖裡，登入畫面的世界被畫進了這一格）；認不出樓層或同時像好幾層的資料夾；和網站地圖、其他分流都對不起來，無法確認是哪一層的格子；讀不到的圖</span><span>從來沒走過的地方合併不出來。伺服器之後再加開新的分流，到新的一台後再做一次。</span></div>
+    <div class="jmscope"><span><b>會補</b>：地面、夜晚、等高線、生態域和室內・洞穴各層的地圖；路標（waypoint）：同一層各分流的路標合併，每個分流都有全部的路標（死亡和暫存的不共用）</span><span><b>路標</b>：只會增加，不會刪除。在一個分流刪掉的路標，其他分流還有的話，下次修復會再加回來。修復檔要下載後馬上放進去：之後才新增的路標，會被修復檔裡的舊路標檔蓋掉</span><span><b>不動</b>：已經畫好的地方；各分流原本就有的路標；座標 0,-1 那一格（站長的地圖裡，登入畫面的世界被畫進了這一格）；認不出樓層或同時像好幾層的資料夾；和網站地圖、其他分流都對不起來，無法確認是哪一層的格子；讀不到的圖</span><span>從來沒走過的地方合併不出來。伺服器之後再加開新的分流，到新的一台後再做一次。</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmFixDir">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmFixDir" webkitdirectory multiple hidden><span id="jmFixDl"></span></div>
     <div class="muted jmdlnote" id="jmFixNote">要在電腦上用 Chrome 或 Edge 開本站。</div>

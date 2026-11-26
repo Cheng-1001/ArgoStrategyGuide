@@ -15,6 +15,11 @@ Checks (GPT reviews of v1 a7e9942, v2 806b5b5, v3 7a5718e, v4 09e2526 and v5 8f9
 - square 0,-1, waypoints and an image with an unreadable or wrong-size shown copy are never in the zip
 - the result never says "complete" while something was left out; it does when nothing was
 - the zip splits by size counting zip headers; above the total limit nothing is produced; running again finds nothing to do
+- v11 (owner 2026-11-27, waypoints of one floor merged; separate fixture mp3, the main fixture keeps "no waypoints"): a folder
+  takes the other folders' points it lacks, byte for byte, and keeps every byte it had; death and temp points are not shared;
+  a point it has (same guid, or same name, position and dimension) is not changed; of a point several folders have the
+  newest file's copy is given; a custom group comes along; a file without points gets its "waypoints" tag; gzip, cut-off,
+  trailing-byte and garbage files are listed and neither give nor take; running again writes nothing
 """
 import functools, http.server, io, os, shutil, sys, tempfile, threading, zipfile
 from PIL import Image, ImageOps
@@ -52,6 +57,95 @@ def fl_canvas(f, full, x0, z0):
             im = keep
         return im
     return cut, expl
+
+
+# JourneyMap 6 WaypointData.dat (uncompressed NBT), written and read here independently of the page (v11)
+import struct, gzip
+
+
+def mutf8(t):   # Java modified UTF-8: a character above U+FFFF as two 3-byte surrogates
+    out = b""
+    for ch in t:
+        o = ord(ch)
+        if o > 0xFFFF:
+            o -= 0x10000
+            out += (chr(0xD800 + (o >> 10)) + chr(0xDC00 + (o & 0x3FF))).encode("utf-8", "surrogatepass")
+        else:
+            out += ch.encode("utf-8")
+    return out
+
+
+def nstr(t):
+    b = mutf8(t) if isinstance(t, str) else t
+    return struct.pack(">H", len(b)) + b
+
+
+def ntag(t, name, payload):
+    return bytes([t]) + nstr(name) + payload
+
+
+def ncomp(*kids):
+    return b"".join(kids) + b"\0"
+
+
+def wp_point(guid, name, xyz, group, color=-12884949):
+    pos = ncomp(ntag(3, "x", struct.pack(">i", xyz[0])), ntag(3, "y", struct.pack(">i", xyz[1])), ntag(3, "z", struct.pack(">i", xyz[2])),
+                ntag(8, "dimension", nstr("minecraft:overworld")))
+    return ntag(10, guid, ncomp(ntag(10, "settings", ncomp(ntag(1, "enable", b"\1"))), ntag(3, "color", struct.pack(">i", color)),
+                                ntag(10, "pos", pos), ntag(8, "groupId", nstr(group)), ntag(8, "name", nstr(name)), ntag(8, "guid", nstr(guid)),
+                                ntag(9, "dimensions", b"\x08" + struct.pack(">i", 1) + nstr("minecraft:overworld"))))
+
+
+def wp_group(guid, name):
+    return ntag(10, guid, ncomp(ntag(8, "name", nstr(name)), ntag(8, "guid", nstr(guid)), ntag(8, "modId", nstr("journeymap"))))
+
+
+BUILTIN = [wp_group(g, n) for g, n in (("journeymap_all", "全部"), ("journeymap_death", "死亡"), ("journeymap_temp", "暫存"), ("journeymap_default", "預設"))]
+
+
+def wp_file(points, groups=()):
+    kids = [ntag(10, "groups", ncomp(*BUILTIN, *groups))]
+    if points:
+        kids.append(ntag(10, "waypoints", ncomp(*points)))
+    return b"\x0a" + nstr("") + ncomp(*kids)
+
+
+def nkids(b, p):
+    """the children of the compound whose payload starts at p: [(name, type, start, end)], and the position after its TAG_End"""
+    out = []
+    while True:
+        t = b[p]
+        if t == 0:
+            return out, p + 1
+        a = p
+        n = struct.unpack(">H", b[p + 1:p + 3])[0]
+        name = b[p + 3:p + 3 + n]
+        p = nskip(b, t, p + 3 + n)
+        out.append((name, t, a, p))
+
+
+def nskip(b, t, p):
+    if t in (1, 2, 3, 4, 5, 6):
+        return p + {1: 1, 2: 2, 3: 4, 4: 8, 5: 4, 6: 8}[t]
+    if t == 8:
+        return p + 2 + struct.unpack(">H", b[p:p + 2])[0]
+    if t == 9:
+        et, n = b[p], struct.unpack(">i", b[p + 1:p + 5])[0]
+        p += 5
+        for _ in range(n):
+            p = nskip(b, et, p)
+        return p
+    if t == 10:
+        return nkids(b, p)[1]
+    raise ValueError(t)
+
+
+def wp_read(b):
+    """{"groups": {guid bytes: the whole tag}, "waypoints": {...}}; raises unless the file is exactly one root compound"""
+    assert b[:3] == b"\x0a\0\0"
+    top, end = nkids(b, 3)
+    assert end == len(b)
+    return {name.decode(): {k: b[x:y] for k, _, x, y in nkids(b, a + 3 + len(name))[0]} for name, t, a, e in top}
 
 
 tmp = tempfile.mkdtemp()
@@ -450,6 +544,75 @@ try:
             put(f, D % R1, cut(*R1), T, mp2)
         r5 = run(mp2)
         check(r5["names"] == [] and "已經完整" in pg.inner_text("#jmFixNote") and "已經完整" in pg.inner_text("#jmFixOut"), "two folders that hold the same is called complete")
+        # v11: waypoints (separate fixture)
+        check(f3.get("wpBad") == [B] and not any("waypoints" in x for x in r["names"]), f"the main fixture: B's unreadable waypoint file is listed, no waypoint file is written: {f3.get('wpBad')}")
+        mp3 = os.path.join(tmp, "mp3")
+        P, Q, RR, GZ, TR, CUT, JUNK, NOF = ("Triggers_wp00001~p", "Triggers_wp00002~q", "Triggers_wp00003~r", "Triggers_wp00004~gz",
+                                            "Triggers_wp00005~trail", "Triggers_wp00006~cut", "Triggers_wp00007~junk", "Triggers_wp00008~nofile")
+        g1, gq, gq2 = "11111111-0000-0000-0000-000000000001", "22222222-0000-0000-0000-000000000001", "22222222-0000-0000-0000-000000000002"
+        gd, gt, gc, gu = ("11111111-0000-0000-0000-00000000000d", "11111111-0000-0000-0000-00000000000e",
+                          "11111111-0000-0000-0000-00000000000c", "11111111-0000-0000-0000-00000000000f")
+        MINE = wp_group("g-custom-1", "我的")
+        pts = {"p1": wp_point(g1, "遠古樹人", (100, 70, 200), "journeymap_default"),
+               "pd": wp_point(gd, "死亡 00:05:24 11-24-2026", (5, 6, 7), "journeymap_death"),
+               "pt": wp_point(gt, "暫存", (8, 9, 10), "journeymap_temp"),
+               "pc": wp_point(gc, "自己的群組", (11, 12, 13), "g-custom-1"),
+               "pu": wp_point(gu, "樹\U0001F332", (14, 15, 16), "journeymap_default"),   # a character above U+FFFF
+               "q1": wp_point(gq, "Q 的點", (300, 71, 400), "journeymap_default"),
+               "p1q": wp_point(g1, "改名", (100, 70, 200), "journeymap_default", 255),   # P's point, changed in Q (newer)
+               "q2": wp_point(gq2, "遠古樹人", (100, 70, 200), "journeymap_default")}   # P's point again under another guid
+        WF = {P: wp_file([pts[k] for k in ("p1", "pd", "pt", "pc", "pu")], [MINE]), Q: wp_file([pts[k] for k in ("q1", "p1q", "q2")]),
+              RR: wp_file([]), GZ: gzip.compress(wp_file([pts["q1"]])), TR: wp_file([pts["q1"]]) + b"\0", CUT: wp_file([pts["q1"]])[:-5], JUNK: b"x" * 40}
+        MTW = {P: T + 10, Q: T + 20, RR: T + 5, GZ: T + 30, TR: T + 30, CUT: T + 30, JUNK: T + 30}
+        for f in (P, Q, RR, GZ, TR, CUT, JUNK, NOF):
+            put(f, D % R1, cut(*R1), T, mp3)
+        for f, data in WF.items():
+            put(f, "waypoints/WaypointData.dat", data, MTW[f], mp3)
+        r7 = run(mp3)
+        f37 = {s["floor"]: s for s in r7["floors"]}.get(3, {})
+        zd7 = {}
+        for i in range(pg.locator("#jmFixDl [data-jmfix]").count()):
+            with pg.expect_download(timeout=120000) as dl:
+                pg.click(f"#jmFixDl [data-jmfix='{i}']")
+            zi = zipfile.ZipFile(io.BytesIO(open(dl.value.path(), "rb").read()))
+            zd7.update({k: zi.read(k) for k in zi.namelist()})
+        WK = lambda f: f + "/waypoints/WaypointData.dat"
+        check(sorted(f37.get("folders", [])) == sorted([P, Q, RR, GZ, TR, CUT, JUNK, NOF]) and sorted(zd7) == sorted(map(WK, (P, Q, RR))) and sorted(r7["names"]) == sorted(zd7),
+              f"waypoints: only P, Q and R get a file (the images are already the same): {sorted(zd7)}")
+        check(sorted(f37.get("wpBad") or []) == sorted([GZ, TR, CUT, JUNK]), f"gzip, trailing-byte, cut-off and garbage files are listed: {f37.get('wpBad')}")
+        GU = {"q1": gq, "q2": gq2, "pc": gc, "pu": gu, "p1q": g1}
+        want = {P: ["q1"], Q: ["pc", "pu"], RR: ["q1", "p1q", "q2", "pc", "pu"]}   # sources newest first: Q, then P
+        okp = True
+        for f, add in want.items():
+            try:
+                o, n = wp_read(WF[f]), wp_read(zd7.get(WK(f), b""))
+            except Exception as e:
+                check(False, f"waypoints: {f}'s new file reads ({e!r})")
+                okp = False
+                continue
+            nw, ow = n.get("waypoints", {}), o.get("waypoints", {})
+            got = [k for k in nw if k not in ow]
+            exp = [GU[a].encode() for a in add]
+            check(got == exp and all(nw[k] == pts[a] for k, a in zip(exp, add)),
+                  f"waypoints: {f[-1]} takes {add} byte for byte, nothing else: {[k.decode()[-2:] for k in got]}")
+            check(all(nw.get(k) == v for k, v in ow.items()) and all(n["groups"].get(k) == v for k, v in o["groups"].items()),
+                  f"waypoints: every point and group {f[-1]} had is unchanged")
+            nb = zd7[WK(f)]   # the old file is the new one with the added tags taken out (for R also the "waypoints" tag it had to get)
+            for v in [nw.get(k, b"\xff") for k in exp] + ([MINE] if "pc" in add else []):   # a point that is missing: no match, FAIL below
+                i = nb.rfind(v)
+                if i >= 0:
+                    nb = nb[:i] + nb[i + len(v):]
+            if not ow:
+                nb = nb.replace(b"\x0a\x00\x09waypoints\x00", b"", 1)
+            check(nb == WF[f], f"waypoints: {f[-1]}'s file is its old bytes with only the added tags inserted")
+        check(okp and b"g-custom-1" in wp_read(zd7[WK(RR)])["groups"] and b"g-custom-1" in wp_read(zd7[WK(Q)])["groups"],
+              "waypoints: a custom group comes with its point")
+        check(f37.get("wp") == 8 and f37.get("wpf") == 3 and "路標 8 個" in pg.inner_text("#jmFixOut") and "3 個分流的路標" in pg.inner_text("#jmFixNote"),
+              f"waypoints: the result counts 8 points in 3 folders: {f37.get('wp')}, {f37.get('wpf')}")
+        for k, v in zd7.items():
+            open(os.path.join(mp3, *k.split("/")), "wb").write(v)
+        r8 = run(mp3)
+        check(r8["names"] == [], f"waypoints: running again writes nothing: {r8['names']}")
         check(not errs, f"no page errors: {errs[:2]}")
         b.close()
     srv.shutdown()
