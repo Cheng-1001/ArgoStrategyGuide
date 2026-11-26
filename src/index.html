@@ -2859,15 +2859,18 @@ async function jmQuick(g,ref,cv){const {J,N}=ref,f=ref.f;cv.width=cv.height=N;co
 // 修復分流地圖 (2026-11-26, user「如果別的玩家也想恢復，可以做工具嗎」「在網站做」): a floor now runs on several server
 // instances, each with its own world id, so JourneyMap keeps one folder per instance and the in-game map shows only what was
 // drawn while on that instance. Chrome / Edge do not let a page write inside %APPDATA% (File System Access blocklist), so the
-// tool zips the images that change and the player copies them into the mp folder. Reviewed by GPT (v1 a7e9942, v2 806b5b5):
+// tool zips the images that change and the player copies them into the mp folder. Reviewed by GPT (v1 a7e9942, v2 806b5b5, v3 7a5718e):
 // - folder: its own check, stricter than jmDetect (which takes a known id with too little overlap as that floor): a folder is
 //   repaired only when exactly one floor's map matches its surface, a known id agrees with it, and no single surface image
 //   contradicts it (JMFIX.OWN: clearly unlike that floor; JMFIX.OTHER: clearly like another floor). Measured on the owner's
 //   four floor-3 folders: images unlike floor 3 by at most 15 (with 30+ chunks), none like floor 1/2 except square 0,-1
 // - square (v3): a folder's copy of a square (every layer) takes part only when its surface image of that square is shown to
-//   be that floor: like the site's map (JMFIX.NMIN chunks, median difference <= JMFIX.OWN), or the same picture as a copy
-//   already shown (JMFIX.PXMIN drawn pixels in common, JMFIX.AGREE of them identical; owner's floor 3: 97.7-100 % on
-//   1,024-185,088 common pixels). A copy that is not shown is neither used nor changed
+//   be that floor: like the site's map (JMFIX.NMIN chunks, median difference <= JMFIX.OWN; F.site), or (v4, GPT review of
+//   v3 7a5718e, V3-M1) a small piece inside a copy the site's map shows (F.sim): every pixel it drew is drawn in that copy,
+//   at least JMFIX.PXMIN of them, JMFIX.AGREE of them the same RGBA, and those in at least JMFIX.COLORS colours (one flat
+//   colour proves nothing: the owner's floor 2 and 3 share 4,477 / 6,468 identical pixels of a single colour at -1,2 / 0,2).
+//   Only F.site copies can show another, so this never chains; owner's floor 3: 6 such pieces, all inside a site-shown
+//   copy, 97.7-100 % the same, 159-1,777 colours. A copy that is not shown is neither used nor changed
 // - pixels: a folder's own drawn pixels are never changed; only its clear pixels are filled from the other shown copies.
 //   Where those disagree the newest file wins and the count is shown, so folders can end up not identical
 // - square 0,-1 is left out (owner's map: the login world was drawn there into whichever floor folder was open); a square
@@ -2875,7 +2878,7 @@ async function jmQuick(g,ref,cv){const {J,N}=ref,f=ref.f;cv.width=cv.height=N;co
 //   left out is never called complete
 // - size (v3): each zip holds at most JMFIX.PART bytes counting zip headers and names (the packer's 40 MB), at most
 //   JMFIX.MAXN files; above JMFIX.TOTAL of images to write the tool stops. Peak memory measured in tests/jm_fix_mem.py
-const JMFIX={OWN:25,OTHER:20,NMIN:30,PXMIN:1024,AGREE:0.9,PART:40*1048576,MAXN:1500,TOTAL:256*1048576};window.__JMFIX=JMFIX;   // exposed for tests
+const JMFIX={OWN:25,OTHER:20,NMIN:30,PXMIN:1024,AGREE:0.9,COLORS:32,PART:40*1048576,MAXN:1500,TOTAL:256*1048576};window.__JMFIX=JMFIX;   // exposed for tests
 const JMFIX_DIR=/^(day|night|topo|biome|-?\d+)$/i,JMFIX_SKIP="0,-1";
 function jmFixFolders(files){const m=new Map();
   for(const f of files){const p=(f.webkitRelativePath||f.name).split("/"),i=p.findIndex(s=>/^triggers_./i.test(s));
@@ -2898,7 +2901,7 @@ async function jmFixTile(it,ref,x){const J=ref.J,N=ref.N,R=ref.px;let bm;try{bm=
     const k=cz*100000+cx;let c=ch.get(k);if(!c){c={s:0,n:0};ch.set(k,c)}c.s+=(Math.abs(d[i]-R[j])+Math.abs(d[i+1]-R[j+1])+Math.abs(d[i+2]-R[j+2]))/3;c.n++}
   const v=[...ch.values()].filter(c=>c.n>=6).map(c=>c.s/c.n).sort((a,b)=>a-b);return[v.length,v.length?v[v.length>>1]:null]}
 // which floor a folder is, or why it is left alone (F.why); F.shown = squares ("x,z") whose surface image matches that floor's map
-async function jmFixDetect(F,refs,cv){F.floor=null;F.shown=new Set();
+async function jmFixDetect(F,refs,cv){F.floor=null;F.shown=new Set();F.site=new Set();F.sim=new Set();
   const files=[...F.tiles].filter(([k])=>k.startsWith("day/")&&k!=="day/"+JMFIX_SKIP).map(([k,f])=>{const [x,z]=k.slice(4).split(",").map(Number);return{f,rx:x,rz:z,dir:"day"}});
   if(!files.length){F.why="沒有地面地圖";return}
   const hits=[];for(const ref of refs){const g={files,layers:{}};await jmQuick(g,ref,cv);if(g.state==="f1")hits.push(ref.f)}
@@ -2910,18 +2913,20 @@ async function jmFixDetect(F,refs,cv){F.floor=null;F.shown=new Set();
   for(const it of files)for(const ref of refs){const [n,med]=await jmFixTile(it,ref,x);if(n<JMFIX.NMIN||med==null)continue;
     if(ref.f===fl&&med>JMFIX.OWN){F.why=`${it.rx},${it.rz} 這一格不像第 ${fl} 層`;return}
     if(ref.f!==fl&&med<=JMFIX.OTHER){F.why=`${it.rx},${it.rz} 這一格像第 ${ref.f} 層`;return}
-    if(ref.f===fl)F.shown.add(it.rx+","+it.rz)}
+    if(ref.f===fl){F.shown.add(it.rx+","+it.rz);F.site.add(it.rx+","+it.rz)}}
   F.floor=fl}
-// v3: squares not shown by the site's map are shown by a copy of the same square already shown (same picture where both drew),
-// repeated until nothing changes; the surface pixels are read once per square and dropped after
+// v4: a copy the site's map does not show is shown when it lies inside a copy the site's map shows (F.site): every pixel it
+// drew is drawn there too and JMFIX.AGREE of them are the same RGBA, in JMFIX.COLORS colours or more. Compared only with F.site copies, in one pass, so a copy
+// shown this way (F.sim) never shows another; the surface pixels are read once per square and dropped after
 async function jmFixShow(F,x1,prog){const sq=new Set();for(const e of F)for(const k of e.tiles.keys())if(k.startsWith("day/"))sq.add(k.slice(4));
-  for(const c of sq){if(c===JMFIX_SKIP)continue;const has=F.filter(e=>e.tiles.has("day/"+c));if(has.every(e=>e.shown.has(c))||!has.some(e=>e.shown.has(c)))continue;
-    prog&&prog(c);const px=new Map();for(const e of has)px.set(e,await jmFixPx(e.tiles.get("day/"+c),x1));
-    for(let more=true;more;){more=false;
-      for(const e of has){if(e.shown.has(c)||!px.get(e))continue;const a=px.get(e);
-        for(const h of has){if(!h.shown.has(c)||!px.get(h))continue;const b=px.get(h);let n=0,same=0;
-          for(let i=3;i<a.length;i+=4)if(a[i]&&b[i]){n++;if(a[i-3]===b[i-3]&&a[i-2]===b[i-2]&&a[i-1]===b[i-1])same++}
-          if(n>=JMFIX.PXMIN&&same>=JMFIX.AGREE*n){e.shown.add(c);more=true;break}}}}}}
+  for(const c of sq){if(c===JMFIX_SKIP)continue;const has=F.filter(e=>e.tiles.has("day/"+c)),site=has.filter(e=>e.site.has(c));
+    if(!site.length||has.every(e=>e.shown.has(c)))continue;prog&&prog(c);
+    const px=new Map();for(const h of site)px.set(h,await jmFixPx(h.tiles.get("day/"+c),x1));
+    for(const e of has){if(e.shown.has(c))continue;const a=await jmFixPx(e.tiles.get("day/"+c),x1);if(!a)continue;
+      for(const h of site){const b=px.get(h);if(!b)continue;let n=0,same=0,out=false;const col=new Set();
+        for(let i=3;i<a.length;i+=4){if(!a[i])continue;if(!b[i]){out=true;break}n++;
+          if(a[i]===b[i]&&a[i-1]===b[i-1]&&a[i-2]===b[i-2]&&a[i-3]===b[i-3]){same++;if(col.size<JMFIX.COLORS)col.add(((a[i-3]<<16|a[i-2]<<8|a[i-1])>>>0)*256+a[i])}}
+        if(!out&&n>=JMFIX.PXMIN&&same>=JMFIX.AGREE*n&&col.size>=JMFIX.COLORS){e.shown.add(c);e.sim.add(c);break}}}}}
 const JMFIX_HEAD=n=>30+46+2*new TextEncoder().encode(n).length;   // zip local + central header and the name twice (jmZip)
 async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.__jmFix=null;$("jmFixDl").innerHTML="";note.textContent="正在讀取…";
   const fs=jmFixFolders(files);
@@ -2957,7 +2962,8 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
         const name=`${e.label}/overworld/${k}.png`;total+=blob.size+JMFIX_HEAD(name);if(total>JMFIX.TOTAL){stop=true;out.length=0;break}
         out.push({name,file:blob});s.n++}}}
   const unk=fs.filter(F=>!F.floor),flN=f=>`第 ${f} 層`;
-  window.__jmFix={floors:sum,names:out.map(o=>o.name),unknown:unk.map(F=>F.label),why:Object.fromEntries(unk.map(F=>[F.label,F.why])),stop,shown:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.shown].sort()]))};
+  window.__jmFix={floors:sum,names:out.map(o=>o.name),unknown:unk.map(F=>F.label),why:Object.fromEntries(unk.map(F=>[F.label,F.why])),stop,shown:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.shown].sort()])),
+    site:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.site].sort()])),sim:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.sim].sort()]))};
   const row=(t,sub,pill,c)=>`<div class="jmrow"><span class="t"><b>${esc(t)}</b><span>${sub}</span></span><span class="pill ${c}">${pill}</span></div>`;
   const short=l=>l.length>22?l.slice(0,22)+"…":l,few=(a,f=v=>v)=>a.slice(0,5).map(v=>esc(f(v))).join("、")+(a.length>5?"…":"");
   const left=s=>s.bad.length+s.unshown.length;   // anything besides 0,-1 left out: never "complete"
