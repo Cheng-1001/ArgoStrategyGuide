@@ -306,9 +306,18 @@ try:
         nb = pg.locator("#jmFixDl [data-jmfix]").count()
         check(len(parts) > 1 and nb == len(parts) and sorted(sum(parts, [])) == sorted(want), f"a pack above the part size is split ({len(parts)} parts, {nb} buttons)")
         got, sizes = [], []
+        cons = []
+        pg.on("console", lambda m: cons.append(m.type + ": " + m.text))
         for i in range(nb):
-            with pg.expect_download(timeout=120000) as dl:
-                pg.click(f"#jmFixDl [data-jmfix='{i}']")
+            try:
+                with pg.expect_download(timeout=120000) as dl:
+                    pg.click(f"#jmFixDl [data-jmfix='{i}']")
+                dl.value.path()
+            except Exception as e:   # diagnostics for CI
+                print(f"DIAG download {i + 1}/{nb} failed: {type(e).__name__}; note: {pg.inner_text('#jmFixNote')!r}; "
+                      f"buttons disabled: {pg.evaluate('[...document.querySelectorAll(\"#jmFixDl [data-jmfix]\")].filter(b=>b.disabled).length')}; "
+                      f"console: {cons[-5:]}; page errors: {errs[-3:]}; part {r2['partBytes'][i]} bytes, {len(parts[i])} images")
+                raise
             got += zipfile.ZipFile(dl.value.path()).namelist()
             sizes.append(os.path.getsize(dl.value.path()))
         check(sorted(got) == sorted(want), "the parts together hold every image once")
