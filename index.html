@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="36ff1ea14a">
+<meta name="sao-build" content="571256fe8a">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -2870,7 +2870,7 @@ async function jmQuick(g,ref,cv){const {J,N}=ref,f=ref.f;cv.width=cv.height=N;co
 // 修復分流地圖 (2026-11-26, user「如果別的玩家也想恢復，可以做工具嗎」「在網站做」): a floor now runs on several server
 // instances, each with its own world id, so JourneyMap keeps one folder per instance and the in-game map shows only what was
 // drawn while on that instance. Chrome / Edge do not let a page write inside %APPDATA% (File System Access blocklist), so the
-// tool zips the images that change and the player copies them into the mp folder. Reviewed by GPT (v1 a7e9942, v2 806b5b5, v3 7a5718e):
+// tool zips the images that change and the player copies them into the mp folder. Reviewed by GPT (v1 a7e9942, v2 806b5b5, v3 7a5718e, v4 09e2526):
 // - folder: its own check, stricter than jmDetect (which takes a known id with too little overlap as that floor): a folder is
 //   repaired only when exactly one floor's map matches its surface, a known id agrees with it, and no single surface image
 //   contradicts it (JMFIX.OWN: clearly unlike that floor; JMFIX.OTHER: clearly like another floor). Measured on the owner's
@@ -2949,20 +2949,27 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
   const byFl=new Map();for(const F of fs)if(F.floor){if(!byFl.has(F.floor))byFl.set(F.floor,[]);byFl.get(F.floor).push(F)}
   const c1=document.createElement("canvas");c1.width=c1.height=512;const x1=c1.getContext("2d",{willReadFrequently:true});
   const out=[],sum=[];let total=0,stop=false;
-  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,skip:0,bad:[],unshown:[],conflict:0};sum.push(s);if(F.length<2)continue;
+  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,skip:0,bad:[],unshown:[],held:[],conflict:0};sum.push(s);if(F.length<2)continue;
     await jmFixShow(F,x1,c=>{O.firstElementChild.textContent=`第 ${fl} 層：正在確認 ${c} 這一格…`});
     for(const e of F)for(const k of e.tiles.keys()){const c=k.slice(k.indexOf("/")+1);if(c!==JMFIX_SKIP&&!e.shown.has(c)&&!s.unshown.includes(e.label+" "+c))s.unshown.push(e.label+" "+c)}
+    // v5 (GPT review of v4 09e2526, V4-M1): a small surface piece (F.sim) shows the surface image only; nothing checked the
+    // folder's other layers of that square (night, topo, biome, caves). A folder with such layers there is left alone in that
+    // whole square (gives nothing, takes nothing, listed; the floor is not called complete): filling its surface image would
+    // let the site's map show it on the next run and its unchecked layers would then be given. Other layers are given only
+    // by folders whose surface image of that square the site's map shows (F.site)
+    for(const e of F){e.hold=new Set();for(const c of e.sim)if([...e.tiles.keys()].some(t=>!t.startsWith("day/")&&t.endsWith("/"+c))){e.hold.add(c);s.held.push(e.label+" "+c)}}
     const keys=[...new Set(F.flatMap(e=>[...e.tiles.keys()]))].sort();let k0=0;
     for(const k of keys){if(stop)break;k0++;if(k0%20===1)O.firstElementChild.textContent=`第 ${fl} 層：正在合併 ${k0}／${keys.length} 張…`;
       const c=k.slice(k.indexOf("/")+1);
       if(c===JMFIX_SKIP){s.skip+=F.filter(e=>e.tiles.has(k)).length;continue}
-      const have=F.filter(e=>e.tiles.has(k)&&e.shown.has(c)).sort((a,b)=>(a.tiles.get(k).lastModified||0)-(b.tiles.get(k).lastModified||0));
+      const day=k.startsWith("day/");
+      const have=F.filter(e=>e.tiles.has(k)&&!e.hold.has(c)&&(day?e.shown.has(c):e.site.has(c))).sort((a,b)=>(a.tiles.get(k).lastModified||0)-(b.tiles.get(k).lastModified||0));
       if(!have.length)continue;
       // a folder takes new pixels here only when it has nothing of this square yet (no layer) or its own surface image is shown
-      const tgt=F.filter(e=>e.shown.has(c)||![...e.tiles.keys()].some(t=>t.endsWith("/"+c)));
-      const px=new Map();let bad=false;   // every shown copy of this square, oldest first
-      for(const e of have){const d=await jmFixPx(e.tiles.get(k),x1);if(!d){bad=true;break}px.set(e,d.slice())}
-      if(bad){s.bad.push(k);continue}   // a shown copy that cannot be read: this image stays as it is in every folder
+      const tgt=F.filter(e=>!e.hold.has(c)&&(e.shown.has(c)||![...e.tiles.keys()].some(t=>t.endsWith("/"+c))));
+      const px=new Map();let bad=false;   // every source copy of this square, oldest first, and a target's own copy it does not give
+      for(const e of [...have,...tgt.filter(e=>e.tiles.has(k)&&!have.includes(e))]){const d=await jmFixPx(e.tiles.get(k),x1);if(!d){bad=true;break}px.set(e,d.slice())}
+      if(bad){s.bad.push(k);continue}   // a copy that cannot be read: this image stays as it is in every folder
       for(const e of tgt){const own=px.get(e),img=x1.createImageData(512,512),o=img.data;let added=0,conf=0;if(own)o.set(own);
         for(let i=0;i<o.length;i+=4){if(o[i+3])continue;let pick=null,diff=false;
           for(const h of have){if(h===e)continue;const d=px.get(h);if(!d[i+3])continue;
@@ -2977,10 +2984,11 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
     site:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.site].sort()])),sim:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.sim].sort()]))};
   const row=(t,sub,pill,c)=>`<div class="jmrow"><span class="t"><b>${esc(t)}</b><span>${sub}</span></span><span class="pill ${c}">${pill}</span></div>`;
   const short=l=>l.length>22?l.slice(0,22)+"…":l,few=(a,f=v=>v)=>a.slice(0,5).map(v=>esc(f(v))).join("、")+(a.length>5?"…":"");
-  const left=s=>s.bad.length+s.unshown.length;   // anything besides 0,-1 left out: never "complete"
+  const left=s=>s.bad.length+s.unshown.length+s.held.length;   // anything besides 0,-1 left out: never "complete"
   const extra=s=>[s.skip?`0,-1 那一格不動（${s.skip} 張）`:"",
     s.bad.length?`${s.bad.length} 格有讀不到或尺寸不對的圖，這幾格不動：${few(s.bad)}`:"",
     s.unshown.length?`${s.unshown.length} 格無法確認是這一層的地圖，這幾格不用也不改：${few(s.unshown,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
+    s.held.length?`${s.held.length} 格只靠一小塊地面圖確認，同一格的夜間、地形或洞穴圖沒辦法確認，這幾格整格不用也不改：${few(s.held,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
     s.conflict?`補的時候有 ${s.conflict.toLocaleString()} 個像素各分流畫得不一樣，用最新的那份（各資料夾分開計算）`:""].filter(Boolean).map(t=>`<br>${t}`).join("");
   const pill=s=>s.n?[`補 ${s.n} 張`,"ok"]:left(s)?["無法確認完整","no"]:["已經完整","no"];
   O.innerHTML=`<div class="jmrows">${sum.map(s=>s.folders.length<2?row(flN(s.floor),"只有 1 個資料夾","不用修復","no")

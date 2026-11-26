@@ -4,7 +4,7 @@ Usage (repo root, after src/build.py): python3 tests/jm_fix_test.py   (prints AL
 Three floor-3 server instances cut from the site's floor-3 explored map, each holding a different part of it (two have ids
 the site has never seen), plus folders the tool must refuse: a lone floor-1 world (nothing to do), noise, a folder whose id
 the site ties to floor 2 but whose map is floor 3, a floor-3 folder with one floor-2 image in it, and one that matches both.
-Checks (GPT reviews of v1 a7e9942, v2 806b5b5 and v3 7a5718e):
+Checks (GPT reviews of v1 a7e9942, v2 806b5b5, v3 7a5718e and v4 09e2526):
 - a folder's copy of a square is used or changed only when its surface image of that square is shown to be that floor:
   by the site's map, or (a small piece) by lying inside a copy the site's map shows, the same picture in many colours; a
   surface image too small to check, a night image without a surface image and small pieces that differ from the shown copy,
@@ -88,6 +88,13 @@ try:
     put(B, D % R2, cut(*R2, (0, 200, 512, 512)), T + 100)
     put(B, D % R3, cut(*R3), T + 100)
     put(B, D % R4, cut(*R4, (100, 100, 164, 164)), T + 100)                            # 64 x 64: too small for the site check, same as A's
+    # v5 (GPT review of v4 09e2526, V4-M1): NIGHT's R4 is shown only by a small piece (the same as B's) and it also has a
+    # big night image there (floor 2's map, never checked): that whole square of NIGHT gives nothing and takes nothing.
+    # B (the same small piece, no other layer) still takes A's surface and night images
+    NIGHT = "Triggers_fix00010~night"
+    put(NIGHT, D % R4, cut(*R4, (100, 100, 164, 164)), T)
+    put(NIGHT, "overworld/night/%d,%d.png" % R4, cut2(*reg2, (0, 0, 512, 256)), T + 800)
+    put(A, "overworld/night/%d,%d.png" % R4, cut(*R4, (0, 256, 512, 512)), T)
     put(B, "overworld/night/%d,%d.png" % R1, b"not a png", T + 100)                   # unreadable copy of a shown square
     put(B, "overworld/night/%d,%d.png" % FAR, cut2(*reg2), T + 100)                    # a floor-2 night image without any surface image
     put(B, "overworld/day/0,-1.png", Image.new("RGBA", (512, 512), (20, 160, 40, 255)), T + 100)   # the login world
@@ -132,7 +139,7 @@ try:
     blk = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
     blk.paste((40, 90, 160, 255), (200, 200, 264, 264))
     put(FLAT, D % R6, blk, T + 700)                                 # 4,096 pixels, all the same as A's, one colour
-    for f in (CHB, CHC, XF, MX, FLAT):
+    for f in (CHB, CHC, XF, MX, FLAT, NIGHT):
         put(f, D % R1, cut(*R1), T)                                 # a big floor-3 image, so the folder is floor 3
     os.makedirs(os.path.join(mp, B, "waypoints"), exist_ok=True)
     open(os.path.join(mp, B, "waypoints", "WaypointData.dat"), "wb").write(b"x")
@@ -148,14 +155,15 @@ try:
     put(MIXED2, D % R1, cut(*R1), T)     # half and half: matches both floors
     put(MIXED2, D % reg2, cut2(*reg2), T)
 
-    SAFE = (A, B, C, CHB, CHC, XF, MX, FLAT)
-    MT = {A: T, B: T + 100, C: T + 200, CHB: T, CHC: T, XF: T, MX: T, FLAT: T}
+    SAFE = (A, B, C, CHB, CHC, XF, MX, FLAT, NIGHT)
+    MT = {A: T, B: T + 100, C: T + 200, CHB: T, CHC: T, XF: T, MX: T, FLAT: T, NIGHT: T}
     c = lambda R: "%d,%d" % R
     # which copies must be shown, written out from the fixture (not taken from the page): by the site's map, or as a piece
     # inside a site-shown copy. The reference images below are built from this, not from what the page reports
-    SITE = {A: [R1, R2, R4, R5, R6], B: [R1, R2, R3], C: [R1, R3], CHB: [R1], CHC: [R1], XF: [R1], MX: [R1], FLAT: [R1]}
+    SITE = {A: [R1, R2, R4, R5, R6], B: [R1, R2, R3], C: [R1, R3], CHB: [R1], CHC: [R1], XF: [R1], MX: [R1], FLAT: [R1], NIGHT: [R1]}
     SITE = {f: sorted(map(c, v)) for f, v in SITE.items()}
-    SIM = {f: [c(R4)] if f == B else [] for f in SAFE}
+    SIM = {f: [c(R4)] if f in (B, NIGHT) else [] for f in SAFE}
+    HOLD = {NIGHT: [c(R4)]}   # shown by a small piece, other layers there: left alone in that square
     EXP = {f: sorted(SITE[f] + SIM[f]) for f in SAFE}
 
     def load(folder, rel):
@@ -176,8 +184,9 @@ try:
                 out.add(os.path.relpath(os.path.join(dp, x), os.path.join(mp, f)).replace("\\", "/"))
         return out
 
-    def expect(shown):
-        """PIL reference: per image, the folders whose surface image of that square is shown take part"""
+    def expect(shown, site, hold):
+        """PIL reference: per image, the folders whose surface image of that square is shown take part; for the other
+        layers only folders whose surface image the site's map shows give pixels (v5)"""
         keys, has = set(), {}
         for f in SAFE:
             fk = files_of(f)
@@ -188,16 +197,16 @@ try:
             sq = k.split("/")[-1][:-4]
             if sq == "0,-1":
                 continue
-            have = [f for f in SAFE if sq in shown.get(f, ()) and os.path.exists(os.path.join(mp, f, *k.split("/")))]
+            src = shown if k.startswith("overworld/day/") else site
+            have = [f for f in SAFE if sq in src.get(f, ()) and sq not in hold.get(f, ()) and os.path.exists(os.path.join(mp, f, *k.split("/")))]
             if not have:
                 continue
-            ims = {f: load(f, k) for f in have}
+            tg = [f for f in SAFE if sq not in hold.get(f, ()) and (sq in shown.get(f, ()) or sq not in has[f])]
+            ims = {f: load(f, k) for f in set(have) | {f for f in tg if os.path.exists(os.path.join(mp, f, *k.split("/")))}}
             if "bad" in ims.values():
                 bad.add(k)
                 continue
-            for f in SAFE:
-                if not (sq in shown.get(f, ()) or sq not in has[f]):
-                    continue
+            for f in tg:
                 own = ims.get(f)
                 base = None
                 for g in sorted(have, key=MT.get):   # the other shown copies, oldest first: the newest wins where they disagree
@@ -255,12 +264,16 @@ try:
         only = lambda m: {f: (m or {}).get(f) for f in SAFE}
         check(only(r.get("site")) == SITE and only(r.get("sim")) == SIM and only(sh) == EXP,
               f"the shown copies are exactly the ones written out from the fixture (site {only(r.get('site')) == SITE}, piece {only(r.get('sim'))} vs {SIM})")
-        want, bad = expect(EXP)
+        want, bad = expect(EXP, SITE, HOLD)
         check(not any(x.startswith((WRONG, MIXED, MIXED2, "Triggers_noise", "Triggers_815")) for x in r["names"]), "refused folders and other floors are not touched")
         check(sorted(r["names"]) == sorted(want), f"the zip holds exactly the images that change ({len(r['names'])} vs {len(want)}): extra {sorted(set(r['names']) - set(want))[:3]} missing {sorted(set(want) - set(r['names']))[:3]}")
         check(not any(x.endswith("/%d,%d.png" % FAR) for x in r["names"]), "nothing at the unchecked square goes anywhere")
+        nk = "overworld/night/%d,%d.png" % R4
+        check(f3.get("held") == [NIGHT + " " + c(R4)], f"a square shown by a small piece where the folder has other layers is listed as left alone: {f3.get('held')}")
+        check(not any(x.startswith(NIGHT) and x.endswith("/%d,%d.png" % R4) for x in r["names"]) and B + "/" + nk in r["names"] and B + "/" + D % R4 in r["names"],
+              "that folder is not changed there; the folder with the same small piece and no other layer takes A's surface and night images")
         r5 = sorted(x.split("/")[0] for x in r["names"] if x.endswith("/%d,%d.png" % R5))
-        check(r5 == sorted([B, C, FLAT]), f"at the square of the unshown pieces only the folders with nothing there take A's shown half: {r5}")
+        check(r5 == sorted([B, C, FLAT, NIGHT]), f"at the square of the unshown pieces only the folders with nothing there take A's shown half: {r5}")
         check(not any(x.startswith(C) and x.endswith("/%d,%d.png" % R4) for x in r["names"]) and any(x == B + "/" + D % R4 for x in r["names"]),
               "the folder with an unshown copy is not changed there; the shown small piece is filled")
         check(not any("0,-1" in x or "waypoints" in x for x in r["names"]) and f3.get("skip") == 2, f"square 0,-1 (2 copies) and waypoints are never in the zip: skip {f3.get('skip')}")
@@ -282,6 +295,10 @@ try:
         half = cut(*R5, (0, 0, 512, 256)).tobytes()
         check(all(Image.open(io.BytesIO(z.read(k))).convert("RGBA").tobytes() == half for k in names if k.endswith("/%d,%d.png" % R5)),
               "those images are A's shown half pixel for pixel: nothing the unshown pieces drew (below A's half, other floor) is in them")
+        an = cut(*R4, (0, 256, 512, 512)).tobytes()
+        nn = [k for k in names if k.endswith("/" + nk)]
+        check(nn and all(Image.open(io.BytesIO(z.read(k))).convert("RGBA").tobytes() == an for k in nn),
+              f"every night image written at that square is A's pixel for pixel: none of NIGHT's unchecked night image is in them ({len(nn)} images)")
         # split by size (zip headers counted), and the total limit
         pg.evaluate("window.__JMFIX.PART=1600000")
         r2 = run()
