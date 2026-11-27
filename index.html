@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="a8608d6bcd">
+<meta name="sao-build" content="c25c2b7a84">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -2884,9 +2884,18 @@ async function jmQuick(g,ref,cv){const {J,N}=ref,f=ref.f;cv.width=cv.height=N;co
 //   copy, 97.7-100 % the same, 159-1,777 colours. A copy that is not shown is neither used nor changed
 // - pixels: a folder's own drawn pixels are never changed; only its clear pixels are filled from the other shown copies.
 //   Where those disagree the newest file wins and the count is shown, so folders can end up not identical
-// - square 0,-1 is left out (owner's map: the login world was drawn there into whichever floor folder was open); a square
-//   with an unreadable or not 512 x 512 copy is left alone in every folder; all of it is shown, and a floor with anything
-//   left out is never called complete
+// - v13 (owner 2026-11-27: the repaired map had a straight cut at square 0,-1 and at squares the site's map hardly reaches):
+//   an image of a square a folder's surface image is not shown for (too few chunks on the site's map, or square 0,-1, which
+//   is never judged: the login world was drawn there into whichever floor folder was open) gives only its pieces that are
+//   connected to confirmed map. Pieces = 4-connected drawn pixels; two pieces touching across the side of two such images
+//   of one folder and layer are one piece. A piece is given when it touches drawn pixels of that layer in a square the
+//   site's map shows (F.site) of the same folder, and every side of a square it reaches leads to such a square or (with
+//   drawn pixels across) on into the same piece. Anything else (the login world, a piece reaching unexplored or unchecked
+//   squares) is neither given nor changed, and listed. A folder with its own unconfirmed copy there takes pieces only at
+//   0,-1 (never judged by the site's map, so the copy can never become a source of unchecked layers) or when nothing of its
+//   own there is unconfirmed, and never when a given piece would join its unconfirmed pixels (they would be given next run)
+// - a square with an unreadable or not 512 x 512 copy is left alone in every folder; all of it is shown, and a floor with
+//   anything left out is never called complete
 // - size (v3): each zip holds at most JMFIX.PART bytes counting zip headers and names (the packer's 40 MB), at most
 //   JMFIX.MAXN files; above JMFIX.TOTAL of images to write the tool stops. Peak memory measured in tests/jm_fix_mem.py
 const JMFIX={OWN:25,OTHER:20,NMIN:30,PXMIN:1024,AGREE:0.9,COLORS:32,PART:40*1048576,MAXN:1500,TOTAL:256*1048576};window.__JMFIX=JMFIX;   // exposed for tests
@@ -2990,6 +2999,35 @@ async function jmFixShow(F,x1,prog){const sq=new Set();for(const e of F)for(cons
         for(let i=3;i<a.length;i+=4){if(!a[i])continue;if(!b[i]){out=true;break}n++;
           if(a[i]===b[i]&&a[i-1]===b[i-1]&&a[i-2]===b[i-2]&&a[i-3]===b[i-3]){same++;if(col.size<JMFIX.COLORS)col.add(((a[i-3]<<16|a[i-2]<<8|a[i-1])>>>0)*256+a[i])}}
         if(!out&&n>=JMFIX.PXMIN&&same>=JMFIX.AGREE*n&&col.size>=JMFIX.COLORS){e.shown.add(c);e.sim.add(c);e.simBy.set(c,h);break}}}}}
+// v13: for every folder, e.ok = Map(image key -> Uint8Array, 1 = pixel of a given piece) for each image of a square its surface
+// image is not shown for, and e.part = keys of those images with drawn pixels that are not given (listed, never complete)
+async function jmFixConn(F,x1){const SD=[[-1,0],[1,0],[0,-1],[0,1]],P=262144;
+  const edge=(s,t)=>s===0?[t*512,t*512+511]:s===1?[t*512+511,t*512]:s===2?[t,261632+t]:[261632+t,t];   // [here, across] on side s
+  for(const e of F){e.ok=new Map();e.part=new Set();const byL=new Map();
+    for(const k of e.tiles.keys()){const c=k.slice(k.indexOf("/")+1);if(e.shown.has(c)||e.hold.has(c))continue;
+      const L=k.slice(0,k.indexOf("/"));if(!byL.has(L))byL.set(L,[]);byL.get(L).push(k)}
+    for(const [L,ks] of byL){const info=new Map();let base=0;
+      for(const k of ks){const a=await jmFixPx(e.tiles.get(k),x1);if(!a){e.part.add(k);continue}   // unreadable: gives nothing
+        const al=new Uint8Array(P);for(let i=0;i<P;i++)al[i]=a[i*4+3]?1:0;
+        const lab=new Int32Array(P).fill(-1),st=[];let n=0;
+        for(let s0=0;s0<P;s0++){if(!al[s0]||lab[s0]>=0)continue;lab[s0]=n;st.push(s0);
+          while(st.length){const i=st.pop(),x=i&511;
+            for(const j of [x>0?i-1:-1,x<511?i+1:-1,i>=512?i-512:-1,i<261632?i+512:-1])if(j>=0&&al[j]&&lab[j]<0){lab[j]=n;st.push(j)}}n++}
+        info.set(k,{al,lab,n,base});base+=n}
+      const par=new Int32Array(base).map((_,i)=>i),fd=x=>{while(par[x]!==x){par[x]=par[par[x]];x=par[x]}return x};
+      const bad=new Uint8Array(base),good=new Uint8Array(base);
+      for(const [k,I] of info){const [rx,rz]=k.slice(L.length+1).split(",").map(Number);
+        for(let s=0;s<4;s++){const nb=(rx+SD[s][0])+","+(rz+SD[s][1]),nk=L+"/"+nb,site=e.site.has(nb),J=info.get(nk);
+          let na=null;if(site){const f=e.tiles.get(nk),a=f&&await jmFixPx(f,x1);if(a){na=new Uint8Array(P);for(let i=0;i<P;i++)na[i]=a[i*4+3]?1:0}}
+          const reach=new Uint8Array(I.n),touch=new Uint8Array(I.n);
+          for(let t=0;t<512;t++){const [i,j]=edge(s,t),cI=I.lab[i];if(cI<0)continue;reach[cI]=1;
+            if(site){if(na&&na[j])good[I.base+cI]=1}
+            else if(J&&J.al[j]){touch[cI]=1;const a1=fd(I.base+cI),b1=fd(J.base+J.lab[j]);if(a1!==b1)par[a1]=b1}}
+          if(!site)for(let cI=0;cI<I.n;cI++)if(reach[cI]&&!touch[cI])bad[I.base+cI]=1}}   // reaches a side with nothing confirmed across
+      const rb=new Uint8Array(base),rg=new Uint8Array(base);for(let g=0;g<base;g++){const r=fd(g);if(bad[g])rb[r]=1;if(good[g])rg[r]=1}
+      for(const [k,I] of info){const m=new Uint8Array(P);let left=false;
+        for(let i=0;i<P;i++){const cI=I.lab[i];if(cI<0)continue;const r=fd(I.base+cI);if(rg[r]&&!rb[r])m[i]=1;else left=true}
+        e.ok.set(k,m);if(left)e.part.add(k)}}}}
 const JMFIX_HEAD=n=>30+46+2*new TextEncoder().encode(n).length;   // zip local + central header and the name twice (jmZip)
 async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.__jmFix=null;$("jmFixDl").innerHTML="";note.textContent="正在讀取…";
   const fs=jmFixFolders(files),wf=jmWpFiles(files);
@@ -3001,9 +3039,8 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
   const byFl=new Map();for(const F of fs)if(F.floor){if(!byFl.has(F.floor))byFl.set(F.floor,[]);byFl.get(F.floor).push(F)}
   const c1=document.createElement("canvas");c1.width=c1.height=512;const x1=c1.getContext("2d",{willReadFrequently:true});
   const out=[],sum=[];let total=0,stop=false;
-  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,skip:0,bad:[],unshown:[],held:[],simok:[],conflict:0,wp:0,wpf:0,wpBad:[],wpBig:[],wpMiss:0};sum.push(s);if(F.length<2)continue;
+  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,cut:[],bad:[],unshown:[],held:[],simok:[],conflict:0,wp:0,wpf:0,wpBad:[],wpBig:[],wpMiss:0};sum.push(s);if(F.length<2)continue;
     await jmFixShow(F,x1,c=>{O.firstElementChild.textContent=`第 ${fl} 層：正在確認 ${c} 這一格…`});
-    for(const e of F)for(const k of e.tiles.keys()){const c=k.slice(k.indexOf("/")+1);if(c!==JMFIX_SKIP&&!e.shown.has(c)&&!s.unshown.includes(e.label+" "+c))s.unshown.push(e.label+" "+c)}
     // v5 (GPT review of v4 09e2526, V4-M1): a small surface piece (F.sim) shows the surface image only; nothing checked the
     // folder's other layers of that square (night, topo, biome, caves). A folder with such layers there is left alone in that
     // whole square (gives nothing, takes nothing, listed; the floor is not called complete): filling its surface image would
@@ -3020,39 +3057,52 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
           let n=0,same=0;for(let i=3;i<a.length;i+=4){if(!a[i])continue;if(!b[i]){n=-1;break}n++;if(a[i]===b[i]&&a[i-1]===b[i-1]&&a[i-2]===b[i-2]&&a[i-3]===b[i-3])same++}
           if(n<0||same<JMFIX.AGREE*n){ok=false;break}}
         if(ok)s.simok.push(e.label+" "+c);else{e.hold.add(c);s.held.push(e.label+" "+c)}}}
+    O.firstElementChild.textContent=`第 ${fl} 層：正在確認無法比對的格子…`;await jmFixConn(F,x1);
+    for(const e of F)for(const k of e.part){const c=k.slice(k.indexOf("/")+1);if(!s.unshown.includes(e.label+" "+c))s.unshown.push(e.label+" "+c)}
+    // a folder with an unconfirmed copy of a square: a target there only at 0,-1 or when all it has there is confirmed (v13)
+    const mine=(e,c)=>[...e.tiles.keys()].filter(t=>t.endsWith("/"+c)),sure=(e,c)=>mine(e,c).every(t=>e.ok.has(t)&&!e.part.has(t));
     const keys=[...new Set(F.flatMap(e=>[...e.tiles.keys()]))].sort();let k0=0;
     for(const k of keys){if(stop)break;k0++;if(k0%20===1)O.firstElementChild.textContent=`第 ${fl} 層：正在合併 ${k0}／${keys.length} 張…`;
       const c=k.slice(k.indexOf("/")+1);
-      if(c===JMFIX_SKIP){s.skip+=F.filter(e=>e.tiles.has(k)).length;continue}
-      const day=k.startsWith("day/");
-      const have=F.filter(e=>e.tiles.has(k)&&!e.hold.has(c)&&(day?e.shown.has(c):e.site.has(c))).sort((a,b)=>(a.tiles.get(k).lastModified||0)-(b.tiles.get(k).lastModified||0));
+      const day=k.startsWith("day/"),dm=e=>e.shown.has(c)?null:e.ok.get(k);   // dm: the pieces an unshown copy gives (v13)
+      const have=F.filter(e=>e.tiles.has(k)&&!e.hold.has(c)&&((day?e.shown.has(c):e.site.has(c))||(!e.shown.has(c)&&e.ok.has(k)&&e.ok.get(k).some(v=>v))))
+        .sort((a,b)=>(a.tiles.get(k).lastModified||0)-(b.tiles.get(k).lastModified||0));
       if(!have.length)continue;
-      // a folder takes new pixels here only when it has nothing of this square yet (no layer) or its own surface image is shown
-      const tgt=F.filter(e=>!e.hold.has(c)&&(e.shown.has(c)||![...e.tiles.keys()].some(t=>t.endsWith("/"+c))));
+      // a folder takes new pixels here when its own surface image is shown, it has nothing of this square yet, or (v13) its own
+      // copy there is unconfirmed but cannot become a source: square 0,-1, or all of it confirmed
+      const tgt=F.filter(e=>!e.hold.has(c)&&(e.shown.has(c)||!mine(e,c).length||c===JMFIX_SKIP||sure(e,c)));
       const px=new Map();let bad=false;   // every source copy of this square, oldest first, and a target's own copy it does not give
       for(const e of [...have,...tgt.filter(e=>e.tiles.has(k)&&!have.includes(e))]){const d=await jmFixPx(e.tiles.get(k),x1);if(!d){bad=true;break}px.set(e,d.slice())}
       if(bad){s.bad.push(k);continue}   // a copy that cannot be read: this image stays as it is in every folder
       for(const e of tgt){const own=px.get(e),img=x1.createImageData(512,512),o=img.data;let added=0,conf=0;if(own)o.set(own);
         for(let i=0;i<o.length;i+=4){if(o[i+3])continue;let pick=null,diff=false;
-          for(const h of have){if(h===e)continue;const d=px.get(h);if(!d[i+3])continue;
+          for(const h of have){if(h===e)continue;const d=px.get(h);if(!d[i+3])continue;const hm=dm(h);if(hm&&!hm[i>>2])continue;
             if(pick&&(pick[i]!==d[i]||pick[i+1]!==d[i+1]||pick[i+2]!==d[i+2]||pick[i+3]!==d[i+3]))diff=true;pick=d}   // later = newer
           if(!pick)continue;o[i]=pick[i];o[i+1]=pick[i+1];o[i+2]=pick[i+2];o[i+3]=pick[i+3];added++;if(diff)conf++}
-        if(!added)continue;s.conflict+=conf;x1.putImageData(img,0,0);
+        if(!added)continue;
+        // v13: a given piece must not join pixels of this folder's own that are unconfirmed: they would be given next run
+        if(own&&!e.shown.has(c)){const om=e.ok.get(k),seen=new Uint8Array(262144),st=[];let join=false;
+          for(let i=0;i<262144;i++)if(o[i*4+3]&&!own[i*4+3]){seen[i]=1;st.push(i)}
+          while(st.length&&!join){const i=st.pop(),x=i&511;if(own[i*4+3]&&!(om&&om[i])){join=true;break}
+            for(const j of [x>0?i-1:-1,x<511?i+1:-1,i>=512?i-512:-1,i<261632?i+512:-1])if(j>=0&&!seen[j]&&o[j*4+3]){seen[j]=1;st.push(j)}}
+          if(join){s.cut.push(e.label+" "+k);continue}}
+        s.conflict+=conf;x1.putImageData(img,0,0);
         const blob=await new Promise(r=>c1.toBlob(r,"image/png"));if(!blob){s.bad.push(k);continue}
         const name=`${e.label}/overworld/${k}.png`;total+=blob.size+JMFIX_HEAD(name);if(total>JMFIX.TOTAL){stop=true;out.length=0;break}
         out.push({name,file:blob});s.n++}}
     if(!stop)for(const r of await jmWpMerge(F,wf,s)){const name=`${r.e.label}/waypoints/WaypointData.dat`,blob=new Blob([r.bytes]);
       total+=blob.size+JMFIX_HEAD(name);if(total>JMFIX.TOTAL){stop=true;out.length=0;break}out.push({name,file:blob,wp:1});s.wp+=r.n;s.wpf++}}
   const unk=fs.filter(F=>!F.floor),flN=f=>`第 ${f} 層`;
-  window.__jmFix={floors:sum,names:out.map(o=>o.name),unknown:unk.map(F=>F.label),why:Object.fromEntries(unk.map(F=>[F.label,F.why])),stop,shown:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.shown].sort()])),
+  window.__jmFix={part:Object.fromEntries(fs.filter(F=>F.floor&&F.part).map(F=>[F.label,[...F.part].sort()])),floors:sum,names:out.map(o=>o.name),unknown:unk.map(F=>F.label),why:Object.fromEntries(unk.map(F=>[F.label,F.why])),stop,shown:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.shown].sort()])),
     site:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.site].sort()])),sim:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.sim].sort()]))};
   const row=(t,sub,pill,c)=>`<div class="jmrow"><span class="t"><b>${esc(t)}</b><span>${sub}</span></span><span class="pill ${c}">${pill}</span></div>`;
   const short=l=>l.length>22?l.slice(0,22)+"…":l,few=(a,f=v=>v)=>a.slice(0,5).map(v=>esc(f(v))).join("、")+(a.length>5?"…":"");
-  const left=s=>s.bad.length+s.unshown.length+s.held.length+s.wpBad.length+s.wpBig.length;   // anything besides 0,-1 left out: never "complete"
-  const extra=s=>[s.skip?`0,-1 那一格不動（${s.skip} 張）`:"",
+  const left=s=>s.bad.length+s.unshown.length+s.held.length+s.cut.length+s.wpBad.length+s.wpBig.length;   // anything left out: never "complete"
+  const extra=s=>[
     s.bad.length?`${s.bad.length} 格有讀不到或尺寸不對的圖，這幾格不動：${few(s.bad)}`:"",
-    s.unshown.length?`${s.unshown.length} 格無法確認是這一層的地圖，這幾格不用也不改：${few(s.unshown,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
+    s.unshown.length?`${s.unshown.length} 格有一部分無法確認是這一層的地圖（沒有和已確認的地圖相連，例如登入畫面的世界），那一部分不用也不改：${few(s.unshown,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
     s.held.length?`${s.held.length} 格只靠一小塊地面圖確認，同一格的夜間、地形或洞穴圖沒辦法確認，這幾格整格不用也不改：${few(s.held,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
+    s.cut.length?`${s.cut.length} 張圖補上去會和該資料夾自己無法確認的部分連在一起，這幾張不動：${few(s.cut,v=>{const [l,k]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+k})}`:"",
     s.wpBad.length?`${s.wpBad.length} 個資料夾的路標檔讀不懂，這幾個資料夾的路標不動：${few(s.wpBad,short)}`:"",
     s.wpBig.length?`${s.wpBig.length} 個資料夾補上路標後會超過 ${mb(JMWP_MAX)}，這幾個資料夾的路標不動：${few(s.wpBig,short)}`:"",
     s.wpMiss?`${s.wpMiss} 個路標的群組找不到，沒有補`:"",
@@ -3419,7 +3469,7 @@ function buildFormReport(){
       <li><b>下載修復檔</b>：看下面的結果，標「補 N 張」的樓層才會修。按「下載修復檔」（分成好幾個時每個都要下載）。</li>
       <li><b>放進去</b>：打開壓縮檔，裡面直接就是 <code>Triggers_</code> 開頭的資料夾，名稱和你 <b>mp</b> 裡的一樣。全選、複製，打開 <b>mp</b> 資料夾（看得到同名的 <code>Triggers_</code> 資料夾）貼上，問到同名檔案時選「取代目的地中的檔案」。不要貼到 <b>mp</b> 以外的地方，也不要在 <b>mp</b> 裡面再放一個 <b>mp</b>。</li>
       <li><b>進遊戲確認</b>：結果裡標「補 N 張」的樓層，每個分流都會加上其他分流畫過的地方。不對的話：關掉遊戲，確認桌面的備份還在，把 <code>data</code> 裡的 <b>mp</b> 改名成 <b>mp_修復後</b>，再把桌面備份的 <b>mp</b> 複製回 <code>data</code>。進遊戲確認恢復後，<b>mp_修復後</b> 要不要刪由你決定。</li></ol>
-    <div class="jmscope"><span><b>會補</b>：地面、夜晚、等高線、生態域和室內・洞穴各層的地圖；路標（waypoint）：同一層各分流的路標合併，每個分流都有全部的路標（死亡和暫存的不共用）</span><span><b>路標</b>：只會增加，不會刪除。在一個分流刪掉的路標，其他分流還有的話，下次修復會再加回來。修復檔要下載後馬上放進去：之後才新增的路標，會被修復檔裡的舊路標檔蓋掉</span><span><b>不動</b>：已經畫好的地方；各分流原本就有的路標；座標 0,-1 那一格（站長的地圖裡，登入畫面的世界被畫進了這一格）；認不出樓層或同時像好幾層的資料夾；和網站地圖、其他分流都對不起來，無法確認是哪一層的格子；讀不到的圖</span><span>從來沒走過的地方合併不出來。伺服器之後再加開新的分流，到新的一台後再做一次。</span></div>
+    <div class="jmscope"><span><b>會補</b>：地面、夜晚、等高線、生態域和室內・洞穴各層的地圖；路標（waypoint）：同一層各分流的路標合併，每個分流都有全部的路標（死亡和暫存的不共用）</span><span><b>路標</b>：只會增加，不會刪除。在一個分流刪掉的路標，其他分流還有的話，下次修復會再加回來。修復檔要下載後馬上放進去：之後才新增的路標，會被修復檔裡的舊路標檔蓋掉</span><span><b>不動</b>：已經畫好的地方；各分流原本就有的路標；認不出樓層或同時像好幾層的資料夾；無法確認是這一層、也沒有和已確認的地圖相連的部分（例如座標 0,-1 那一格裡登入畫面的世界）；讀不到的圖</span><span>從來沒走過的地方合併不出來。伺服器之後再加開新的分流，到新的一台後再做一次。</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmFixDir">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmFixDir" webkitdirectory multiple hidden><span id="jmFixDl"></span></div>
     <div class="muted jmdlnote" id="jmFixNote">要在電腦上用 Chrome 或 Edge 開本站。</div>

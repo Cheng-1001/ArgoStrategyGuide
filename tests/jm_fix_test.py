@@ -12,7 +12,8 @@ Checks (GPT reviews of v1 a7e9942, v2 806b5b5, v3 7a5718e, v4 09e2526 and v5 8f9
   flat colour are neither used nor changed. Which copies are shown is written out here from the fixture, not read back
 - a folder's own drawn pixels never change; only its clear pixels are filled (where shown copies disagree the newest wins
   and the count is shown); every image equals a PIL reference built from the shown squares the page reports
-- square 0,-1, waypoints and an image with an unreadable or wrong-size shown copy are never in the zip
+- (v13) an image of a square that is not shown gives only its pieces connected to confirmed map (square 0,-1 included); waypoints
+  are not in the main fixture's zip; an image with an unreadable or wrong-size shown copy is never in the zip
 - the result never says "complete" while something was left out; it does when nothing was
 - the zip splits by size counting zip headers; above the total limit nothing is produced; running again finds nothing to do
 - v11 (owner 2026-11-27, waypoints of one floor merged; separate fixture mp3, the main fixture keeps "no waypoints"): a folder
@@ -24,6 +25,11 @@ Checks (GPT reviews of v1 a7e9942, v2 806b5b5, v3 7a5718e, v4 09e2526 and v5 8f9
   "groups"/"waypoints" twice, or with a key twice in any compound (a point's guid, the points, a nested compound) is listed and
   neither gives nor takes; a folder whose merged file would be over 4 MiB is listed and left alone while the other folders and
   the images are still repaired; exactly 4 MiB is written and read back; running again stays the same
+- v13 (owner 2026-11-27: straight cuts at 0,-1 and at squares the site's map hardly reaches; separate fixture mp6): a piece of
+  an unshown image is given only when it touches drawn pixels of a site-shown square of the same folder and layer and every
+  side it reaches leads to one or on into the same piece (across two unshown squares); the login world, pieces reaching
+  unexplored sides and pieces joined to such are not given; a folder with its own unconfirmed copy takes pieces at 0,-1, not
+  where its own pieces would join theirs, and elsewhere only when all of its own is confirmed; running again writes nothing
 """
 import functools, http.server, io, os, shutil, sys, tempfile, threading, zipfile
 from PIL import Image, ImageOps
@@ -150,6 +156,75 @@ def wp_read(b):
     top, end = nkids(b, 3)
     assert end == len(b)
     return {name.decode(): {k: b[x:y] for k, _, x, y in nkids(b, a + 3 + len(name))[0]} for name, t, a, e in top}
+
+
+def pieces(alpha, site, judged):
+    """v13 reference. alpha: {(folder, layer, sq): bytes of 512*512 alpha}; site: {folder: set of sq}; judged: keys to judge.
+    Returns {key: bytearray, 1 = pixel of a given piece}"""
+    from collections import deque
+    lab, ncomp_, base, tot = {}, {}, {}, 0
+    for key in judged:
+        a = alpha[key]
+        lb = [-1] * 262144
+        n = 0
+        for s0 in range(262144):
+            if not a[s0] or lb[s0] >= 0:
+                continue
+            q = deque([s0])
+            lb[s0] = n
+            while q:
+                i = q.popleft()
+                x, y = i % 512, i // 512
+                for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                    if 0 <= nx < 512 and 0 <= ny < 512:
+                        j = ny * 512 + nx
+                        if a[j] and lb[j] < 0:
+                            lb[j] = n
+                            q.append(j)
+            n += 1
+        lab[key], ncomp_[key], base[key] = lb, n, tot
+        tot += n
+    par = list(range(tot))
+
+    def root(x):
+        while par[x] != x:
+            par[x] = par[par[x]]
+            x = par[x]
+        return x
+    good, bad = set(), set()
+    for key in judged:
+        f, L, sq = key
+        rx, rz = map(int, sq.split(","))
+        for (dx, dz) in ((-1, 0), (1, 0), (0, -1), (0, 1)):
+            nb = "%d,%d" % (rx + dx, rz + dz)
+            nk = (f, L, nb)
+            here = [(0, y) for y in range(512)] if dx < 0 else [(511, y) for y in range(512)] if dx > 0 else [(x, 0) for x in range(512)] if dz < 0 else [(x, 511) for x in range(512)]
+            reach, touch = set(), set()
+            for x, y in here:
+                c = lab[key][y * 512 + x]
+                if c < 0:
+                    continue
+                reach.add(c)
+                ax, ay = (x + dx) % 512, (y + dz) % 512   # the pixel across the side, in the neighbour
+                j = ay * 512 + ax
+                if nb in site.get(f, ()):
+                    if nk in alpha and alpha[nk][j]:
+                        good.add(base[key] + c)
+                elif nk in lab and alpha[nk][j]:
+                    touch.add(c)
+                    par[root(base[key] + c)] = root(base[nk] + lab[nk][j])
+            if nb not in site.get(f, ()):
+                bad |= {base[key] + c for c in reach - touch}
+    rg, rb = {root(g) for g in good}, {root(g) for g in bad}
+    out = {}
+    for key in judged:
+        m = bytearray(262144)
+        for i, c in enumerate(lab[key]):
+            if c >= 0:
+                r = root(base[key] + c)
+                m[i] = 1 if r in rg and r not in rb else 0
+        out[key] = m
+    return out
 
 
 tmp = tempfile.mkdtemp()
@@ -323,8 +398,8 @@ try:
     HOLD = {f: [c(R4)] for f in (NIGHT, OUTN, DIFN, TOPO, EDGE, NEAR, LO)}   # shown by a small piece, another layer there not checked: left alone
     EXP = {f: sorted(SITE[f] + SIM[f]) for f in SAFE}
 
-    def load(folder, rel):
-        p = os.path.join(mp, folder, *rel.split("/"))
+    def load(folder, rel, root=None):
+        p = os.path.join(root or mp, folder, *rel.split("/"))
         if not os.path.exists(p):
             return None
         try:
@@ -334,47 +409,95 @@ try:
         except Exception:
             return "bad"
 
-    def files_of(f):
+    def files_of(f, root=None):
         out = set()
-        for dp, _, fn in os.walk(os.path.join(mp, f, "overworld")):
+        for dp, _, fn in os.walk(os.path.join(root or mp, f, "overworld")):
             for x in fn:
-                out.add(os.path.relpath(os.path.join(dp, x), os.path.join(mp, f)).replace("\\", "/"))
+                out.add(os.path.relpath(os.path.join(dp, x), os.path.join(root or mp, f)).replace("\\", "/"))
         return out
 
-    def expect(shown, site, hold):
+    def expect(shown, site, hold, root=None, folders=None, mt=None):
         """PIL reference: per image, the folders whose surface image of that square is shown take part; for the other
-        layers only folders whose surface image the site's map shows give pixels (v5)"""
-        keys, has = set(), {}
-        for f in SAFE:
-            fk = files_of(f)
-            keys |= fk
-            has[f] = {k.split("/")[-1][:-4] for k in fk}
-        out, bad = {}, set()
+        layers only folders whose surface image the site's map shows give pixels (v5); (v13) an image of a square that is
+        not shown gives its pieces connected to confirmed map (pieces() above). Returns (images, bad keys, cut, part)"""
+        root, folders, mt = root or mp, folders or SAFE, mt or MT
+        ex = lambda f, k: os.path.exists(os.path.join(root, f, *k.split("/")))
+        keys, has, fk = set(), {}, {}
+        for f in folders:
+            fk[f] = files_of(f, root)
+            keys |= fk[f]
+            has[f] = {k.split("/")[-1][:-4] for k in fk[f]}
+        alpha, judged, part = {}, set(), {}
+        for f in folders:
+            for k in fk[f]:
+                L, sq = k.split("/")[1], k.split("/")[-1][:-4]
+                im = load(f, k, root)
+                if im not in (None, "bad"):
+                    alpha[(f, L, sq)] = im.getchannel("A").tobytes()
+                if sq in shown.get(f, ()) or sq in hold.get(f, ()):
+                    continue
+                if im in (None, "bad"):
+                    part.setdefault(f, set()).add(L + "/" + sq)
+                else:
+                    judged.add((f, L, sq))
+        acc = pieces(alpha, {f: set(site.get(f, ())) for f in folders}, judged)
+        for (f, L, sq), m in acc.items():
+            if any(a and not g for a, g in zip(alpha[(f, L, sq)], m)):
+                part.setdefault(f, set()).add(L + "/" + sq)
+        sure = lambda f, sq: all((f, k.split("/")[1], sq) in acc and k.split("/")[1] + "/" + sq not in part.get(f, ()) for k in fk[f] if k.split("/")[-1][:-4] == sq)
+        out, bad, cut_ = {}, set(), []
         for k in sorted(keys):
-            sq = k.split("/")[-1][:-4]
-            if sq == "0,-1":
-                continue
+            L, sq = k.split("/")[1], k.split("/")[-1][:-4]
             src = shown if k.startswith("overworld/day/") else site
-            have = [f for f in SAFE if sq in src.get(f, ()) and sq not in hold.get(f, ()) and os.path.exists(os.path.join(mp, f, *k.split("/")))]
+            have = [f for f in folders if sq not in hold.get(f, ()) and ex(f, k) and (sq in src.get(f, ()) or (sq not in shown.get(f, ()) and any(acc.get((f, L, sq), b""))))]
             if not have:
                 continue
-            tg = [f for f in SAFE if sq not in hold.get(f, ()) and (sq in shown.get(f, ()) or sq not in has[f])]
-            ims = {f: load(f, k) for f in set(have) | {f for f in tg if os.path.exists(os.path.join(mp, f, *k.split("/")))}}
+            tg = [f for f in folders if sq not in hold.get(f, ()) and (sq in shown.get(f, ()) or sq not in has[f] or sq == "0,-1" or sure(f, sq))]
+            ims = {f: load(f, k, root) for f in set(have) | {f for f in tg if ex(f, k)}}
             if "bad" in ims.values():
                 bad.add(k)
                 continue
+            give = {}
+            for g in have:   # an unshown copy gives only its pieces
+                im = ims[g]
+                if sq not in shown.get(g, ()):
+                    keep = Image.frombytes("L", (512, 512), bytes(255 if v else 0 for v in acc[(g, L, sq)]))
+                    im = Image.composite(im, Image.new("RGBA", (512, 512), (0, 0, 0, 0)), keep)   # the rest clear
+                give[g] = im
             for f in tg:
                 own = ims.get(f)
                 base = None
-                for g in sorted(have, key=MT.get):   # the other shown copies, oldest first: the newest wins where they disagree
+                for g in sorted(have, key=mt.get):   # the other copies, oldest first: the newest wins where they disagree
                     if g != f:
-                        base = ims[g] if base is None else Image.alpha_composite(base, ims[g])
+                        base = give[g] if base is None else Image.alpha_composite(base, give[g])
                 if base is None:
                     continue
                 res = base if own is None else Image.alpha_composite(base, own)   # own pixels on top: never changed
-                if (own is None or res.tobytes() != own.tobytes()) and res.getchannel("A").getbbox():
-                    out[f + "/" + k] = res
-        return out, bad
+                if not ((own is None or res.tobytes() != own.tobytes()) and res.getchannel("A").getbbox()):
+                    continue
+                if own is not None and sq not in shown.get(f, ()):   # a given piece must not join own unconfirmed pixels
+                    ra, oa, om = res.getchannel("A").tobytes(), own.getchannel("A").tobytes(), acc.get((f, L, sq))
+                    seen = bytearray(262144)
+                    st = [i for i in range(262144) if ra[i] and not oa[i]]
+                    for i in st:
+                        seen[i] = 1
+                    join = False
+                    while st and not join:
+                        i = st.pop()
+                        if oa[i] and not (om and om[i]):
+                            join = True
+                            break
+                        x, y = i % 512, i // 512
+                        for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+                            j = ny * 512 + nx
+                            if 0 <= nx < 512 and 0 <= ny < 512 and ra[j] and not seen[j]:
+                                seen[j] = 1
+                                st.append(j)
+                    if join:
+                        cut_.append(f + " " + k[len("overworld/"):-4])
+                        continue
+                out[f + "/" + k] = res
+        return out, bad, cut_, part
 
     class H(http.server.SimpleHTTPRequestHandler):
         def log_message(self, *a):
@@ -421,7 +544,7 @@ try:
         only = lambda m: {f: (m or {}).get(f) for f in SAFE}
         check(only(r.get("site")) == SITE and only(r.get("sim")) == SIM and only(sh) == EXP,
               f"the shown copies are exactly the ones written out from the fixture (site {only(r.get('site')) == SITE}, piece {only(r.get('sim'))} vs {SIM})")
-        want, bad = expect(EXP, SITE, HOLD)
+        want, bad, _, part1 = expect(EXP, SITE, HOLD)
         check(not any(x.startswith((WRONG, MIXED, MIXED2, "Triggers_noise", "Triggers_815")) for x in r["names"]), "refused folders and other floors are not touched")
         check(sorted(r["names"]) == sorted(want), f"the zip holds exactly the images that change ({len(r['names'])} vs {len(want)}): extra {sorted(set(r['names']) - set(want))[:3]} missing {sorted(set(want) - set(r['names']))[:3]}")
         check(not any(x.endswith("/%d,%d.png" % FAR) for x in r["names"]), "nothing at the unchecked square goes anywhere")
@@ -436,14 +559,17 @@ try:
         check(r5 == sorted([B, C, FLAT, NIGHT, OKN, OUTN, DIFN, TOPO, EDGE, NEAR, LO, HI]), f"at the square of the unshown pieces only the folders with nothing there take A's shown half: {r5}")
         check(not any(x.startswith(C) and x.endswith("/%d,%d.png" % R4) for x in r["names"]) and any(x == B + "/" + D % R4 for x in r["names"]),
               "the folder with an unshown copy is not changed there; the shown small piece is filled")
-        check(not any("0,-1" in x or "waypoints" in x for x in r["names"]) and f3.get("skip") == 2, f"square 0,-1 (2 copies) and waypoints are never in the zip: skip {f3.get('skip')}")
+        check(not any("0,-1" in x or "waypoints" in x for x in r["names"]) and {A + " 0,-1", B + " 0,-1"} <= set(f3.get("unshown") or []) and "day/0,-1" in r["part"].get(A, []) and "day/0,-1" in r["part"].get(B, []),
+              f"v13: A's 0,-1 (reaching sides with nothing confirmed across) and B's whole-square login image give nothing and are listed; no waypoints: {r['part'].get(A)}")
+        check({f: sorted(v) for f, v in r["part"].items() if v and f in SAFE} == {f: sorted(v) for f, v in part1.items() if v},
+              f"v13: the images with pieces left out are exactly the reference's: {[f[-6:] for f, v in r['part'].items() if v]}")
         badk = {k[len("overworld/"):-4] for k in bad}
         check(badk == {"night/" + c(R1), "topo/" + c(R1)} and set(f3.get("bad", [])) == badk and not any(x.split("/", 2)[2][:-4] in badk for x in r["names"]),
               f"images with an unreadable or wrong-size shown copy are left alone in every folder: {f3.get('bad')} vs {sorted(badk)}")
         check(f3.get("conflict", 0) > 0, f"pixels the folders drew differently are counted: {f3.get('conflict')}")
         check(not any(x == B + "/" + D % R3 for x in r["names"]), "a folder's own drawn image is not changed by a newer, different copy")
         txt = pg.inner_text("#jmFixOut")
-        check(all(t in txt for t in ("第 3 層", "補 ", "不用修復", "不處理", "0,-1", "讀不到", "無法確認是這一層", "畫得不一樣")),
+        check(all(t in txt for t in ("第 3 層", "補 ", "不用修復", "不處理", "沒有和已確認的地圖相連", "讀不到", "無法確認是這一層", "畫得不一樣")),
               "the result lists each floor, the skipped, unreadable and unchecked squares and the conflicts")
         zd, fnames = {}, []   # every part (v6: the fixture is now above one 40 MiB part)
         for i in range(pg.locator("#jmFixDl [data-jmfix]").count()):
@@ -692,6 +818,76 @@ try:
         r11 = run(mp5)
         check(r11["names"] == [] and "已經完整" not in pg.inner_text("#jmFixNote") + pg.inner_text("#jmFixOut") and "無法確認完整" in pg.inner_text("#jmFixOut"),
               f"v12: a floor whose only left-out folder is over 4 MiB is not called complete: {pg.inner_text('#jmFixNote')}")
+        # v13: pieces of unshown images (separate fixture). 0,0 1,-1 0,2 1,2 are shown by the site's map; 0,-1 is never
+        # judged; 0,3 and 1,3 have 17 and 22 chunks on the site's map (< NMIN): not shown
+        mp6 = os.path.join(tmp, "mp6")
+        DN, T1, T2, T3, T4 = "Triggers_cn00001~donor", "Triggers_cn00002~none", "Triggers_cn00003~login", "Triggers_cn00004~joins", "Triggers_cn00005~own03"
+        F6 = [DN, T1, T2, T3, T4]
+        MT6 = {DN: T + 50, T1: T, T2: T, T3: T, T4: T}
+        tex = cut(0, 0)
+
+        def piece(*boxes, fill=None):
+            im = Image.new("RGBA", (512, 512), (0, 0, 0, 0))
+            for bx in boxes:
+                im.paste(tex.crop(bx) if fill is None else Image.new("RGBA", (bx[2] - bx[0], bx[3] - bx[1]), fill), bx[:2])
+            return im
+        P1, P2, P3, P4 = (300, 430, 512, 512), (64, 150, 272, 361), (0, 496, 16, 512), (100, 0, 141, 41)
+        for f in F6:
+            for sq in ((0, 0), (1, -1), (0, 2), (1, 2)):
+                put(f, D % sq, cut(*sq), MT6[f], mp6)
+        for sq in ((0, 0), (1, -1), (0, 2), (1, 2)):
+            put(DN, "overworld/night/%d,%d.png" % sq, cut(*sq), MT6[DN], mp6)
+        put(DN, D % (0, -1), piece(P1, P2, P3, P4), MT6[DN], mp6)             # P1 touches 0,0 and 1,-1; P2 the login world; P3, P4 reach unexplored sides
+        put(DN, "overworld/night/0,-1.png", piece(P1, P2), MT6[DN], mp6)
+        put(DN, D % (0, 3), piece((100, 0, 512, 151)), MT6[DN], mp6)          # touches 0,2 ...
+        put(DN, D % (1, 3), piece((0, 50, 301, 151)), MT6[DN], mp6)           # ... and this only through it (one piece over two squares)
+        put(DN, "overworld/night/0,3.png", piece((100, 0, 512, 151)), MT6[DN], mp6)
+        put(DN, "overworld/night/1,3.png", piece((0, 50, 301, 512)), MT6[DN], mp6)   # the same, but it reaches the unexplored side: none of it
+        put(T2, D % (0, -1), piece(P2, fill=(20, 160, 40, 255)), MT6[T2], mp6)          # its own login world, apart from P1
+        put(T3, D % (0, -1), piece((250, 440, 300, 501), fill=(200, 30, 30, 255)), MT6[T3], mp6)   # its own unconfirmed bit right next to P1
+        put(T4, D % (0, 3), piece((20, 300, 61, 341), fill=(200, 30, 30, 255)), MT6[T4], mp6)     # its own unconfirmed bit at 0,3
+        S6 = {f: ["0,0", "0,2", "1,-1", "1,2"] for f in F6}
+        r12 = run(mp6)
+        f612 = {s["floor"]: s for s in r12["floors"]}.get(3, {})
+        check(sorted(f612.get("folders", [])) == sorted(F6) and {f: sorted(r12["site"].get(f, [])) for f in F6} == S6 and {f: sorted(r12["shown"].get(f, [])) for f in F6} == S6,
+              f"v13 fixture: five floor-3 folders, 0,0 0,2 1,-1 1,2 shown by the site's map, nothing else: {r12['shown'].get(DN)}")
+        want6, bad6, cut6, part6 = expect(S6, S6, {}, mp6, F6, MT6)
+        zd12 = {}
+        for i in range(pg.locator("#jmFixDl [data-jmfix]").count()):
+            with pg.expect_download(timeout=120000) as dl:
+                pg.click(f"#jmFixDl [data-jmfix='{i}']")
+            zi = zipfile.ZipFile(io.BytesIO(open(dl.value.path(), "rb").read()))
+            zd12.update({k: zi.read(k) for k in zi.namelist()})
+        check(sorted(zd12) == sorted(want6) and sorted(r12["names"]) == sorted(want6),
+              f"v13: the zip holds exactly the reference's images: extra {sorted(set(zd12) - set(want6))[:3]} missing {sorted(set(want6) - set(zd12))[:3]}")
+        diff6 = [k for k in want6 if k in zd12 and Image.open(io.BytesIO(zd12[k])).convert("RGBA").tobytes() != want6[k].tobytes()]
+        check(not diff6, f"v13: every image is the reference's, pixel for pixel: {[k[13:] for k in diff6][:4]}")
+        g = lambda f, k: Image.open(io.BytesIO(zd12[f + "/overworld/" + k + ".png"])).convert("RGBA") if f + "/overworld/" + k + ".png" in zd12 else None
+        dn01 = Image.open(os.path.join(mp6, DN, *(D % (0, -1)).split("/"))).convert("RGBA")
+        t1 = g(T1, "day/0,-1")
+        p1only = piece(P1)
+        check(t1 is not None and t1.tobytes() == p1only.tobytes(),
+              "v13: at 0,-1 a folder with nothing there takes the piece touching 0,0 and 1,-1 only: not the login world, not the pieces reaching unexplored sides")
+        t2 = g(T2, "day/0,-1")
+        check(t2 is not None and t2.tobytes() == Image.alpha_composite(p1only, piece(P2, fill=(20, 160, 40, 255))).tobytes(),
+              "v13: a folder with its own login world at 0,-1 keeps it and takes the piece")
+        check(g(T3, "day/0,-1") is None and f612.get("cut") == [T3 + " day/0,-1"] and g(T3, "night/0,-1") is not None and cut6 == f612.get("cut"),
+              f"v13: a piece that would join a folder's own unconfirmed pixels is not given there, and that image is listed: {f612.get('cut')}")
+        check(g(T1, "day/1,3") is not None and g(T1, "day/1,3").tobytes() == piece((0, 50, 301, 151)).tobytes() and g(T1, "day/0,3") is not None,
+              "v13: a piece over two unshown squares is given in both, also where it does not touch confirmed map itself")
+        check(not any("night/0,3" in k or "night/1,3" in k for k in zd12) and "night/1,3" in r12["part"].get(DN, []),
+              "v13: the same piece reaching an unexplored side is given nowhere")
+        check(g(T4, "day/0,3") is None and g(T4, "day/1,3") is not None and "day/0,3" in r12["part"].get(T4, []),
+              "v13: a folder with its own unconfirmed copy of a square (not 0,-1) is not changed there")
+        check({f: sorted(v) for f, v in r12["part"].items() if v} == {f: sorted(v) for f, v in part6.items() if v} and not bad6,
+              f"v13: the images with pieces left out are exactly the reference's: {[(f[-5:], v) for f, v in r12['part'].items() if v]}")
+        check(not any("0,-1" in x and x.startswith(DN) for x in zd12) and dn01.tobytes() == Image.open(os.path.join(mp6, DN, *(D % (0, -1)).split("/"))).convert("RGBA").tobytes(),
+              "v13: the donor's own 0,-1 is not changed")
+        for k, v in zd12.items():
+            os.makedirs(os.path.dirname(os.path.join(mp6, *k.split("/"))), exist_ok=True)
+            open(os.path.join(mp6, *k.split("/")), "wb").write(v)
+        r13 = run(mp6)
+        check(r13["names"] == [], f"v13: running again writes nothing: {r13['names'][:3]}")
         check(not errs, f"no page errors: {errs[:2]}")
         b.close()
     srv.shutdown()
