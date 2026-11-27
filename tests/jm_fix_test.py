@@ -162,10 +162,11 @@ def pieces(alpha, site, judged, roots=False):
     """v13 reference. alpha: {(folder, layer, sq): bytes of 512*512 alpha}; site: {folder: set of sq}; judged: keys to judge.
     Returns {key: bytearray, 1 = pixel of a given piece}; with roots also {key: [piece of each pixel, -1 = clear]} (v14)"""
     from collections import deque
+    from array import array
     lab, ncomp_, base, tot = {}, {}, {}, 0
     for key in judged:
         a = alpha[key]
-        lb = [-1] * 262144
+        lb = array("i", [-1]) * 262144
         n = 0
         for s0 in range(262144):
             if not a[s0] or lb[s0] >= 0:
@@ -184,7 +185,7 @@ def pieces(alpha, site, judged, roots=False):
             n += 1
         lab[key], ncomp_[key], base[key] = lb, n, tot
         tot += n
-    par = list(range(tot))
+    par = array("i", range(tot))
 
     def root(x):
         while par[x] != x:
@@ -218,7 +219,7 @@ def pieces(alpha, site, judged, roots=False):
     rg, rb = {root(g) for g in good}, {root(g) for g in bad}
     out, rt = {}, {}
     for key in judged:
-        m, q = bytearray(262144), [-1] * 262144
+        m, q = bytearray(262144), array("i", [-1]) * 262144
         for i, c in enumerate(lab[key]):
             if c >= 0:
                 r = root(base[key] + c)
