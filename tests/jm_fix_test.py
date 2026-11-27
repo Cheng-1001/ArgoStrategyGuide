@@ -955,13 +955,17 @@ try:
         # run); TM a bit at 2,3 that only the pieces at 1,3 and 0,3 together would join to confirmed map;
         # TK (judged again after one image is left out) a bit B1 that the second piece at 0,-1 would confirm, and a bit B2 that
         # the first piece at 0,-1 holds back (it reaches TK's own -1,-1, which has nothing across) and that the clear part of
-        # its 0,0 it would take confirms once 0,-1 is left out. Round 2 adds E
+        # its 0,0 it would take confirms once 0,-1 is left out; TS a piece at 1,3 touching only a square shown by a small
+        # surface piece (not by the site's map): not confirmed, and the full 1,2 it would take makes 1,2 site-shown next run,
+        # so that is not given either. Round 2 adds E
         mp7 = os.path.join(tmp, "mp7")
         SR, TA, TB, TC, TM, TK, E7 = ("Triggers_cx00001~src", "Triggers_cx00002~ta", "Triggers_cx00003~tb", "Triggers_cx00004~tc",
                                       "Triggers_cx00005~tm", "Triggers_cx00007~tk", "Triggers_cx00006~new")
-        F7 = [SR, TA, TB, TC, TM, TK]
-        MT7 = {SR: T + 50, TA: T, TB: T, TC: T, TM: T, TK: T, E7: T}
-        BIT = {TA: (11, 22, 33, 255), TB: (44, 55, 66, 255), TC: (77, 88, 99, 255), TM: (111, 122, 133, 255), TK: (150, 10, 200, 255)}
+        TS = "Triggers_cx00008~ts"
+        F7 = [SR, TA, TB, TC, TM, TK, TS]
+        MT7 = {SR: T + 50, TA: T, TB: T, TC: T, TM: T, TK: T, TS: T, E7: T}
+        BIT = {TA: (11, 22, 33, 255), TB: (44, 55, 66, 255), TC: (77, 88, 99, 255), TM: (111, 122, 133, 255), TK: (150, 10, 200, 255),
+               TS: (5, 200, 120, 255)}
         for f in F7:
             for sq in ((0, 0), (1, -1), (0, 2), (1, 2)):
                 if f == TC and sq == (1, -1):
@@ -971,6 +975,8 @@ try:
                     im.paste((0, 0, 0, 0), (380, 0, 430, 20))   # clear where its bit at 0,-1 touches
                 if f == TK and sq == (0, 0):
                     im.paste((0, 0, 0, 0), (200, 0, 230, 20))
+                if f == TS and sq == (1, 2):
+                    im = cut(1, 2, (0, 448, 64, 512))   # 16 chunks, the same picture as SR's: shown as a small piece
                 put(f, D % sq, im, MT7[f], mp7)
         PQ, QQ = (0, 380, 212, 512), (300, 380, 512, 500)
         put(SR, D % (0, -1), piece(PQ, (300, 480, 360, 512)), MT7[SR], mp7)   # both touch 0,0; PQ also -1,-1 (site-shown), as in GPT's case
@@ -984,10 +990,12 @@ try:
         put(TM, D % (2, 3), piece((0, 60, 2, 62), fill=BIT[TM]), MT7[TM], mp7)
         put(TK, D % (0, -1), piece((298, 490, 300, 492), (212, 505, 215, 512), fill=BIT[TK]), MT7[TK], mp7)   # B1 next to the second piece, B2 next to PQ
         put(TK, D % (-1, -1), piece((5, 5, 7, 7), fill=BIT[TK]), MT7[TK], mp7)   # its own -1,-1: nothing at its east side
+        put(TS, D % (1, 3), piece((10, 0, 40, 30), fill=BIT[TS]), MT7[TS], mp7)
         S7 = {f: ["0,0", "0,2", "1,-1", "1,2"] for f in F7}
         S7[SR] = ["-1,-1", "0,0", "0,2", "1,-1", "1,2"]
         S7[TC] = ["0,0", "0,2", "1,2"]
-        CUT7 = sorted([TA + " day/0,-1", TB + " day/0,0", TC + " day/1,-1", TM + " day/0,3", TM + " day/1,3", TK + " day/0,-1", TK + " day/0,0"])
+        SITE7 = dict(S7, **{TS: ["0,0", "0,2", "1,-1"]})
+        CUT7 = sorted([TA + " day/0,-1", TB + " day/0,0", TC + " day/1,-1", TM + " day/0,3", TM + " day/1,3", TK + " day/0,-1", TK + " day/0,0", TS + " day/1,2"])
 
         def zipped():
             out = {}
@@ -1011,15 +1019,17 @@ try:
                 open(os.path.join(mp7, *k.split("/")), "wb").write(v)
         r14 = run(mp7)
         f714 = {s["floor"]: s for s in r14["floors"]}.get(3, {})
-        check(sorted(f714.get("folders", [])) == sorted(F7) and {f: sorted(r14["shown"].get(f, [])) for f in F7} == S7,
+        check(sorted(f714.get("folders", [])) == sorted(F7) and {f: sorted(r14["shown"].get(f, [])) for f in F7} == S7
+              and {f: sorted(r14["site"].get(f, [])) for f in F7} == SITE7,
               f"v14 fixture: five floor-3 folders, shown squares as written: {r14['why']} {[(f[-3:], r14['shown'].get(f)) for f in F7 if sorted(r14['shown'].get(f, [])) != S7[f]]}")
         zd14 = zipped()
-        want7, bad7, cut7, part7 = expect(S7, S7, {}, mp7, F7, MT7)
+        want7, bad7, cut7, part7 = expect(S7, SITE7, {}, mp7, F7, MT7)
         same = lambda zd, want: sorted(zd) == sorted(want) and all(Image.open(io.BytesIO(zd[k])).convert("RGBA").tobytes() == want[k].tobytes() for k in want)
         check(same(zd14, want7) and sorted(cut7) == CUT7 and not bad7 and {f: sorted(v) for f, v in r14["part"].items() if v} == {f: sorted(v) for f, v in part7.items() if v},
               f"v14: the zip, pixel for pixel, the images left out and the unconfirmed images are the reference's: {sorted(cut7)} {sorted(set(zd14) ^ set(want7))[:3]}")
         check(sorted(f714.get("cut") or []) == CUT7,
               f"v14: each image that would confirm a folder's own unconfirmed bit (across a side, through a site-shown square, by a square becoming site-shown, by two images together) is not given and listed: {sorted(f714.get('cut') or [])}")
+        check(not bits_in(zd14), f"v14: no folder's unconfirmed bit is given to anyone: {bits_in(zd14)[:3]}")
         check(not any(x.split("/overworld/")[0] + " " + x.split("/overworld/")[1][:-4] in CUT7 for x in zd14),
               "v14: none of those images is in the zip")
         check(TB + "/overworld/day/0,-1.png" in zd14 and TC + "/overworld/day/0,-1.png" in zd14 and TA + "/overworld/day/0,3.png" in zd14
@@ -1031,13 +1041,13 @@ try:
         r15 = run(mp7)
         f715 = {s["floor"]: s for s in r15["floors"]}.get(3, {})
         zd15 = zipped()
-        S7e = dict(S7, **{E7: ["0,0", "0,2", "1,-1", "1,2"]})
-        want7b, _, cut7b, _ = expect(S7e, S7e, {}, mp7, F7 + [E7], MT7)
+        S7e, SITE7e = dict(S7, **{E7: ["0,0", "0,2", "1,-1", "1,2"]}), dict(SITE7, **{E7: ["0,0", "0,2", "1,-1", "1,2"]})
+        want7b, _, cut7b, _ = expect(S7e, SITE7e, {}, mp7, F7 + [E7], MT7)
         check(same(zd15, want7b) and sorted(cut7b) == CUT7, f"v14: round 2 is the reference's too: {sorted(set(zd15) ^ set(want7b))[:3]} {sorted(cut7b)}")
         check(not bits_in(zd15), f"v14: round 2 with a new folder: no folder's unconfirmed bit is given to anyone: {bits_in(zd15)[:3]}")
         check(sorted(f715.get("cut") or []) == CUT7 and "day/-1,-1" in r15["part"].get(TA, [])
               and "day/0,-1" in r15["part"].get(TB, []) and "day/0,-1" in r15["part"].get(TC, []) and "day/2,3" in r15["part"].get(TM, [])
-              and "day/0,-1" in r15["part"].get(TK, []),
+              and "day/0,-1" in r15["part"].get(TK, []) and "day/1,3" in r15["part"].get(TS, []),
               f"v14: round 2: the bits are still unconfirmed and the same images still left out: {sorted(f715.get('cut') or [])}")
         e11 = Image.open(io.BytesIO(zd15[E7 + "/overworld/day/-1,-1.png"])).convert("RGBA") if E7 + "/overworld/day/-1,-1.png" in zd15 else None
         check(e11 is not None and e11.tobytes() == cut(-1, -1, QQ).tobytes() and all(k.startswith(E7 + "/") for k in zd15),
