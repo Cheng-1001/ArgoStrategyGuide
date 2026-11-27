@@ -843,6 +843,13 @@ try:
         put(DN, D % (1, 3), piece((0, 50, 301, 151)), MT6[DN], mp6)           # ... and this only through it (one piece over two squares)
         put(DN, "overworld/night/0,3.png", piece((100, 0, 512, 151)), MT6[DN], mp6)
         put(DN, "overworld/night/1,3.png", piece((0, 50, 301, 512)), MT6[DN], mp6)   # the same, but it reaches the unexplored side: none of it
+        for sq in ((0, 2), (1, 2)):
+            put(DN, "overworld/topo/%d,%d.png" % sq, cut(*sq), MT6[DN], mp6)
+        put(DN, "overworld/topo/0,3.png", piece((0, 0, 512, 151)), MT6[DN], mp6)     # the part touching 0,2 reaches the unexplored west side ...
+        put(DN, "overworld/topo/1,3.png", piece((0, 50, 301, 151)), MT6[DN], mp6)    # ... so this part of the same piece goes nowhere either
+        put(DN, "overworld/biome/0,2.png", cut(0, 2), MT6[DN], mp6)
+        put(DN, "overworld/biome/0,3.png", piece((0, 0, 200, 151)), MT6[DN], mp6)    # touches 0,2, reaches -1,3 whose image cannot be read
+        put(DN, "overworld/biome/-1,3.png", b"not a png", MT6[DN], mp6)
         put(T2, D % (0, -1), piece(P2, fill=(20, 160, 40, 255)), MT6[T2], mp6)          # its own login world, apart from P1
         put(T3, D % (0, -1), piece((250, 440, 300, 501), fill=(200, 30, 30, 255)), MT6[T3], mp6)   # its own unconfirmed bit right next to P1
         put(T4, D % (0, 3), piece((20, 300, 61, 341), fill=(200, 30, 30, 255)), MT6[T4], mp6)     # its own unconfirmed bit at 0,3
@@ -877,6 +884,10 @@ try:
               "v13: a piece over two unshown squares is given in both, also where it does not touch confirmed map itself")
         check(not any("night/0,3" in k or "night/1,3" in k for k in zd12) and "night/1,3" in r12["part"].get(DN, []),
               "v13: the same piece reaching an unexplored side is given nowhere")
+        check(not any("topo/0,3" in k or "topo/1,3" in k for k in zd12) and {"topo/0,3", "topo/1,3"} <= set(r12["part"].get(DN, [])),
+              "v13: a piece over two squares is given nowhere when either part reaches an unexplored side")
+        check(not any("biome/0,3" in k or "biome/-1,3" in k for k in zd12) and {"biome/0,3", "biome/-1,3"} <= set(r12["part"].get(DN, [])),
+              "v13: a side leading to an image that cannot be read is not confirmed")
         check(g(T4, "day/0,3") is None and g(T4, "day/1,3") is not None and "day/0,3" in r12["part"].get(T4, []),
               "v13: a folder with its own unconfirmed copy of a square (not 0,-1) is not changed there")
         check({f: sorted(v) for f, v in r12["part"].items() if v} == {f: sorted(v) for f, v in part6.items() if v} and not bad6,
