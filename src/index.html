@@ -2882,7 +2882,11 @@ async function jmQuick(g,ref,cv){const {J,N}=ref,f=ref.f;cv.width=cv.height=N;co
 //   drawn pixels across) on into the same piece. Anything else (the login world, a piece reaching unexplored or unchecked
 //   squares) is neither given nor changed, and listed. A folder with its own unconfirmed copy there takes pieces only at
 //   0,-1 (never judged by the site's map, so the copy can never become a source of unchecked layers) or when nothing of its
-//   own there is unconfirmed, and never when a given piece would join its unconfirmed pixels (they would be given next run)
+//   own there is unconfirmed
+// - v14 (GPT V13-M1: v13 checked that only inside one image): a folder's own pixels that are not given must not be given
+//   on the next run either. What a folder takes at or next to squares it has no shown surface image of is judged again as
+//   the next run would see it (jmFixKeep), across squares and with all it takes at once; what would make such a pixel given
+//   is not given, and listed
 // - a square with an unreadable or not 512 x 512 copy is left alone in every folder; all of it is shown, and a floor with
 //   anything left out is never called complete
 // - size (v3): each zip holds at most JMFIX.PART bytes counting zip headers and names (the packer's 40 MB), at most
@@ -2988,35 +2992,73 @@ async function jmFixShow(F,x1,prog){const sq=new Set();for(const e of F)for(cons
         for(let i=3;i<a.length;i+=4){if(!a[i])continue;if(!b[i]){out=true;break}n++;
           if(a[i]===b[i]&&a[i-1]===b[i-1]&&a[i-2]===b[i-2]&&a[i-3]===b[i-3]){same++;if(col.size<JMFIX.COLORS)col.add(((a[i-3]<<16|a[i-2]<<8|a[i-1])>>>0)*256+a[i])}}
         if(!out&&n>=JMFIX.PXMIN&&same>=JMFIX.AGREE*n&&col.size>=JMFIX.COLORS){e.shown.add(c);e.sim.add(c);e.simBy.set(c,h);break}}}}}
+// v14: the v13 judge for one folder and one layer. ks: the images to judge; A(k): an image's alpha (Uint8Array, 1 = drawn) or
+// null (none, or unreadable); site: the squares whose surface image the site's map shows. Returns ok (Map key -> Uint8Array,
+// 1 = pixel of a given piece), part (keys with drawn pixels not given, or unreadable) and, with rt, rt (Map key -> Int32Array:
+// each pixel's piece, -1 = clear, one numbering for all keys). Pieces = 4-connected drawn pixels; two pieces touching across
+// the side of two judged images are one; a piece is given when it touches drawn pixels of a site-shown square and every
+// side it reaches leads to a site-shown square or, with drawn pixels across, on into a judged image
+const JMFIX_SD=[[-1,0],[1,0],[0,-1],[0,1]],jmFixEdge=(s,t)=>s===0?[t*512,t*512+511]:s===1?[t*512+511,t*512]:s===2?[t,261632+t]:[261632+t,t];   // [here, across] on side s
+const jmFixAl=async(f,x1)=>{const a=f&&await jmFixPx(f,x1);if(!a)return null;const al=new Uint8Array(262144);for(let i=0;i<262144;i++)al[i]=a[i*4+3]?1:0;return al};
+async function jmFixJudge(L,ks,A,site,rt){const P=262144,info=new Map(),ok=new Map(),part=new Set();let base=0;
+  for(const k of ks){const al=await A(k);if(!al){part.add(k);continue}   // unreadable: gives nothing
+    const lab=new Int32Array(P).fill(-1),st=[];let n=0;
+    for(let s0=0;s0<P;s0++){if(!al[s0]||lab[s0]>=0)continue;lab[s0]=n;st.push(s0);
+      while(st.length){const i=st.pop(),x=i&511;
+        for(const j of [x>0?i-1:-1,x<511?i+1:-1,i>=512?i-512:-1,i<261632?i+512:-1])if(j>=0&&al[j]&&lab[j]<0){lab[j]=n;st.push(j)}}n++}
+    info.set(k,{al,lab,n,base});base+=n}
+  const par=new Int32Array(base).map((_,i)=>i),fd=x=>{while(par[x]!==x){par[x]=par[par[x]];x=par[x]}return x};
+  const bad=new Uint8Array(base),good=new Uint8Array(base);
+  for(const [k,I] of info){const [rx,rz]=k.slice(L.length+1).split(",").map(Number);
+    for(let s=0;s<4;s++){const nb=(rx+JMFIX_SD[s][0])+","+(rz+JMFIX_SD[s][1]),nk=L+"/"+nb,si=site.has(nb),J=info.get(nk);
+      const na=si?await A(nk):null,reach=new Uint8Array(I.n),touch=new Uint8Array(I.n);
+      for(let t=0;t<512;t++){const [i,j]=jmFixEdge(s,t),cI=I.lab[i];if(cI<0)continue;reach[cI]=1;
+        if(si){if(na&&na[j])good[I.base+cI]=1}
+        else if(J&&J.al[j]){touch[cI]=1;const a1=fd(I.base+cI),b1=fd(J.base+J.lab[j]);if(a1!==b1)par[a1]=b1}}
+      if(!si)for(let cI=0;cI<I.n;cI++)if(reach[cI]&&!touch[cI])bad[I.base+cI]=1}}   // reaches a side with nothing confirmed across
+  const rb=new Uint8Array(base),rg=new Uint8Array(base);for(let g=0;g<base;g++){const r=fd(g);if(bad[g])rb[r]=1;if(good[g])rg[r]=1}
+  const R=rt?new Map():null;
+  for(const [k,I] of info){const m=new Uint8Array(P),q=rt?new Int32Array(P).fill(-1):null;let left=false;
+    for(let i=0;i<P;i++){const cI=I.lab[i];if(cI<0)continue;const r=fd(I.base+cI);if(q)q[i]=r;if(rg[r]&&!rb[r])m[i]=1;else left=true}
+    ok.set(k,m);if(left)part.add(k);if(R)R.set(k,q)}
+  return{ok,part,rt:R}}
 // v13: for every folder, e.ok = Map(image key -> Uint8Array, 1 = pixel of a given piece) for each image of a square its surface
 // image is not shown for, and e.part = keys of those images with drawn pixels that are not given (listed, never complete)
-async function jmFixConn(F,x1){const SD=[[-1,0],[1,0],[0,-1],[0,1]],P=262144;
-  const edge=(s,t)=>s===0?[t*512,t*512+511]:s===1?[t*512+511,t*512]:s===2?[t,261632+t]:[261632+t,t];   // [here, across] on side s
-  for(const e of F){e.ok=new Map();e.part=new Set();const byL=new Map();
+async function jmFixConn(F,x1){for(const e of F){e.ok=new Map();e.part=new Set();const byL=new Map();
     for(const k of e.tiles.keys()){const c=k.slice(k.indexOf("/")+1);if(e.shown.has(c)||e.hold.has(c))continue;
       const L=k.slice(0,k.indexOf("/"));if(!byL.has(L))byL.set(L,[]);byL.get(L).push(k)}
-    for(const [L,ks] of byL){const info=new Map();let base=0;
-      for(const k of ks){const a=await jmFixPx(e.tiles.get(k),x1);if(!a){e.part.add(k);continue}   // unreadable: gives nothing
-        const al=new Uint8Array(P);for(let i=0;i<P;i++)al[i]=a[i*4+3]?1:0;
-        const lab=new Int32Array(P).fill(-1),st=[];let n=0;
-        for(let s0=0;s0<P;s0++){if(!al[s0]||lab[s0]>=0)continue;lab[s0]=n;st.push(s0);
-          while(st.length){const i=st.pop(),x=i&511;
-            for(const j of [x>0?i-1:-1,x<511?i+1:-1,i>=512?i-512:-1,i<261632?i+512:-1])if(j>=0&&al[j]&&lab[j]<0){lab[j]=n;st.push(j)}}n++}
-        info.set(k,{al,lab,n,base});base+=n}
-      const par=new Int32Array(base).map((_,i)=>i),fd=x=>{while(par[x]!==x){par[x]=par[par[x]];x=par[x]}return x};
-      const bad=new Uint8Array(base),good=new Uint8Array(base);
-      for(const [k,I] of info){const [rx,rz]=k.slice(L.length+1).split(",").map(Number);
-        for(let s=0;s<4;s++){const nb=(rx+SD[s][0])+","+(rz+SD[s][1]),nk=L+"/"+nb,site=e.site.has(nb),J=info.get(nk);
-          let na=null;if(site){const f=e.tiles.get(nk),a=f&&await jmFixPx(f,x1);if(a){na=new Uint8Array(P);for(let i=0;i<P;i++)na[i]=a[i*4+3]?1:0}}
-          const reach=new Uint8Array(I.n),touch=new Uint8Array(I.n);
-          for(let t=0;t<512;t++){const [i,j]=edge(s,t),cI=I.lab[i];if(cI<0)continue;reach[cI]=1;
-            if(site){if(na&&na[j])good[I.base+cI]=1}
-            else if(J&&J.al[j]){touch[cI]=1;const a1=fd(I.base+cI),b1=fd(J.base+J.lab[j]);if(a1!==b1)par[a1]=b1}}
-          if(!site)for(let cI=0;cI<I.n;cI++)if(reach[cI]&&!touch[cI])bad[I.base+cI]=1}}   // reaches a side with nothing confirmed across
-      const rb=new Uint8Array(base),rg=new Uint8Array(base);for(let g=0;g<base;g++){const r=fd(g);if(bad[g])rb[r]=1;if(good[g])rg[r]=1}
-      for(const [k,I] of info){const m=new Uint8Array(P);let left=false;
-        for(let i=0;i<P;i++){const cI=I.lab[i];if(cI<0)continue;const r=fd(I.base+cI);if(rg[r]&&!rb[r])m[i]=1;else left=true}
-        e.ok.set(k,m);if(left)e.part.add(k)}}}}
+    for(const [L,ks] of byL){const r=await jmFixJudge(L,ks,k=>jmFixAl(e.tiles.get(k),x1),e.site);
+      for(const [k,m] of r.ok)e.ok.set(k,m);for(const k of r.part)e.part.add(k)}}}
+// v14 (GPT V13-M1): list = the images a folder would take ({k, al = its alpha after taking}), judged again as the next run would
+// see the folder: with the squares the site's map shows now, and again with every square whose surface image it takes shown
+// too (it may be next run). Where a pixel of its own that is not given now would be given, these are left out (cut): the
+// images with new pixels in that piece, those with new pixels right across from it in a site-shown square, and every image
+// of a square that becomes shown next to it. Judged again until nothing changes; with everything left out it is the folder
+// as it is now, so it ends
+async function jmFixKeep(e,list,x1){const ly=k=>k.slice(0,k.indexOf("/")),sq=k=>k.slice(k.indexOf("/")+1),P=262144;
+  const live=new Map(list.map(c=>[c.k,c])),cut=[],oc=new Map();
+  const orig=async k=>{if(!oc.has(k))oc.set(k,await jmFixAl(e.tiles.get(k),x1));return oc.get(k)};
+  const pre=[...e.tiles.keys()].filter(k=>!e.shown.has(sq(k))&&!e.hold.has(sq(k)));
+  for(;;){const nd=new Set([...live.keys()].filter(k=>ly(k)==="day"&&!e.site.has(sq(k))&&sq(k)!==JMFIX_SKIP).map(sq));
+    const A=async k=>live.has(k)?live.get(k).al:await orig(k),kill=new Set();let flip=false;
+    for(const site of [e.site,new Set([...e.site,...nd])]){const byL=new Map();
+      for(const k of new Set([...pre,...[...live.keys()].filter(k=>!e.shown.has(sq(k))&&!e.hold.has(sq(k)))]))if(!site.has(sq(k))){
+        if(!byL.has(ly(k)))byL.set(ly(k),[]);byL.get(ly(k)).push(k)}
+      for(const [L,ks] of byL){const r=await jmFixJudge(L,ks,A,site,true),V=new Set();
+        for(const k of ks){const m=e.ok.get(k),own=m&&await orig(k),pm=r.ok.get(k),q=r.rt.get(k);if(!own||!pm)continue;
+          for(let i=0;i<P;i++)if(own[i]&&!m[i]&&pm[i])V.add(q[i])}   // own, not given now, given then
+        if(!V.size)continue;flip=true;
+        for(const k of ks){const q=r.rt.get(k);if(!q)continue;
+          if(live.has(k)){const al=live.get(k).al,own=await orig(k);for(let i=0;i<P;i++)if(al[i]&&!(own&&own[i])&&V.has(q[i])){kill.add(k);break}}
+          const [rx,rz]=sq(k).split(",").map(Number);
+          for(let s=0;s<4;s++){const nb=(rx+JMFIX_SD[s][0])+","+(rz+JMFIX_SD[s][1]),nk=L+"/"+nb;if(!site.has(nb))continue;
+            const c=live.get(nk),own=c&&await orig(nk);let side=false;
+            for(let t=0;t<512;t++){const [i,j]=jmFixEdge(s,t);if(q[i]<0||!V.has(q[i]))continue;side=true;
+              if(c&&c.al[j]&&!(own&&own[j]))kill.add(nk)}   // new pixels right across, in a site-shown square
+            if(side&&nd.has(nb))for(const x of live.keys())if(sq(x)===nb)kill.add(x)}}}}   // a square becoming shown next to it
+    if(!flip)break;if(!kill.size)for(const k of live.keys())kill.add(k);
+    for(const k of kill){live.delete(k);cut.push(k)}}
+  return{keep:[...live.values()],cut}}
 const JMFIX_HEAD=n=>30+46+2*new TextEncoder().encode(n).length;   // zip local + central header and the name twice (jmZip)
 async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.__jmFix=null;$("jmFixDl").innerHTML="";note.textContent="正在讀取…";
   const fs=jmFixFolders(files),wf=jmWpFiles(files);
@@ -3051,6 +3093,10 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
     // a folder with an unconfirmed copy of a square: a target there only at 0,-1 or when all it has there is confirmed (v13)
     const mine=(e,c)=>[...e.tiles.keys()].filter(t=>t.endsWith("/"+c)),sure=(e,c)=>mine(e,c).every(t=>e.ok.has(t)&&!e.part.has(t));
     const keys=[...new Set(F.flatMap(e=>[...e.tiles.keys()]))].sort();let k0=0;
+    // v14: what a folder takes at or next to a square whose surface image is not shown for it waits for jmFixKeep
+    const sqs=new Set(keys.map(k=>k.slice(k.indexOf("/")+1))),wait=new Map(F.map(e=>[e,[]]));
+    const near=new Map(F.map(e=>{const n=new Set();for(const c of sqs){if(e.shown.has(c)||e.hold.has(c))continue;n.add(c);
+      const [x,z]=c.split(",").map(Number);for(const [dx,dz] of JMFIX_SD)n.add((x+dx)+","+(z+dz))}return[e,n]}));
     for(const k of keys){if(stop)break;k0++;if(k0%20===1)O.firstElementChild.textContent=`第 ${fl} 層：正在合併 ${k0}／${keys.length} 張…`;
       const c=k.slice(k.indexOf("/")+1);
       const day=k.startsWith("day/"),dm=e=>e.shown.has(c)?null:e.ok.get(k);   // dm: the pieces an unshown copy gives (v13)
@@ -3068,17 +3114,16 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
           for(const h of have){if(h===e)continue;const d=px.get(h);if(!d[i+3])continue;const hm=dm(h);if(hm&&!hm[i>>2])continue;
             if(pick&&(pick[i]!==d[i]||pick[i+1]!==d[i+1]||pick[i+2]!==d[i+2]||pick[i+3]!==d[i+3]))diff=true;pick=d}   // later = newer
           if(!pick)continue;o[i]=pick[i];o[i+1]=pick[i+1];o[i+2]=pick[i+2];o[i+3]=pick[i+3];added++;if(diff)conf++}
-        if(!added)continue;
-        // v13: a given piece must not join pixels of this folder's own that are unconfirmed: they would be given next run
-        if(own&&!e.shown.has(c)){const om=e.ok.get(k),seen=new Uint8Array(262144),st=[];let join=false;
-          for(let i=0;i<262144;i++)if(o[i*4+3]&&!own[i*4+3]){seen[i]=1;st.push(i)}
-          while(st.length&&!join){const i=st.pop(),x=i&511;if(own[i*4+3]&&!(om&&om[i])){join=true;break}
-            for(const j of [x>0?i-1:-1,x<511?i+1:-1,i>=512?i-512:-1,i<261632?i+512:-1])if(j>=0&&!seen[j]&&o[j*4+3]){seen[j]=1;st.push(j)}}
-          if(join){s.cut.push(e.label+" "+k);continue}}
-        s.conflict+=conf;x1.putImageData(img,0,0);
+        if(!added)continue;x1.putImageData(img,0,0);
         const blob=await new Promise(r=>c1.toBlob(r,"image/png"));if(!blob){s.bad.push(k);continue}
-        const name=`${e.label}/overworld/${k}.png`;total+=blob.size+JMFIX_HEAD(name);if(total>JMFIX.TOTAL){stop=true;out.length=0;break}
+        if(near.get(e).has(c)){const al=new Uint8Array(262144);for(let i=0;i<262144;i++)al[i]=o[i*4+3]?1:0;wait.get(e).push({k,al,blob,conf});continue}
+        s.conflict+=conf;const name=`${e.label}/overworld/${k}.png`;total+=blob.size+JMFIX_HEAD(name);if(total>JMFIX.TOTAL){stop=true;out.length=0;break}
         out.push({name,file:blob});s.n++}}
+    if(!stop)for(const e of F){const w=wait.get(e);if(!w.length)continue;O.firstElementChild.textContent=`第 ${fl} 層：正在確認補上的圖…`;
+      const r=await jmFixKeep(e,w,x1);for(const k of r.cut)s.cut.push(e.label+" "+k);
+      for(const c of r.keep){s.conflict+=c.conf;const name=`${e.label}/overworld/${c.k}.png`;total+=c.blob.size+JMFIX_HEAD(name);
+        if(total>JMFIX.TOTAL){stop=true;out.length=0;break}out.push({name,file:c.blob});s.n++}
+      if(stop)break}
     if(!stop)for(const r of await jmWpMerge(F,wf,s)){const name=`${r.e.label}/waypoints/WaypointData.dat`,blob=new Blob([r.bytes]);
       total+=blob.size+JMFIX_HEAD(name);if(total>JMFIX.TOTAL){stop=true;out.length=0;break}out.push({name,file:blob,wp:1});s.wp+=r.n;s.wpf++}}
   const unk=fs.filter(F=>!F.floor),flN=f=>`第 ${f} 層`;
@@ -3091,7 +3136,7 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
     s.bad.length?`${s.bad.length} 格有讀不到或尺寸不對的圖，這幾格不動：${few(s.bad)}`:"",
     s.unshown.length?`${s.unshown.length} 格有一部分無法確認是這一層的地圖（沒有和已確認的地圖相連，例如登入畫面的世界），那一部分不用也不改：${few(s.unshown,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
     s.held.length?`${s.held.length} 格只靠一小塊地面圖確認，同一格的夜間、地形或洞穴圖沒辦法確認，這幾格整格不用也不改：${few(s.held,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
-    s.cut.length?`${s.cut.length} 張圖補上去會和該資料夾自己無法確認的部分連在一起，這幾張不動：${few(s.cut,v=>{const [l,k]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+k})}`:"",
+    s.cut.length?`${s.cut.length} 張圖補上去後，該資料夾自己無法確認的部分下次會被當成已確認，這幾張不動：${few(s.cut,v=>{const [l,k]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+k})}`:"",
     s.wpBad.length?`${s.wpBad.length} 個資料夾的路標檔讀不懂，這幾個資料夾的路標不動：${few(s.wpBad,short)}`:"",
     s.wpBig.length?`${s.wpBig.length} 個資料夾補上路標後會超過 ${mb(JMWP_MAX)}，這幾個資料夾的路標不動：${few(s.wpBig,short)}`:"",
     s.wpMiss?`${s.wpMiss} 個路標的群組找不到，沒有補`:"",
