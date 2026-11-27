@@ -20,6 +20,10 @@ Checks (GPT reviews of v1 a7e9942, v2 806b5b5, v3 7a5718e, v4 09e2526 and v5 8f9
   a point it has (same guid, or same name, position and dimension) is not changed; of a point several folders have the
   newest file's copy is given; a custom group comes along; a file without points gets its "waypoints" tag; gzip, cut-off,
   trailing-byte and garbage files are listed and neither give nor take; running again writes nothing
+- v12 (GPT V11-M1, V11-M2; separate fixture mp4): a file whose "groups" holds a non-compound, whose root holds another tag or
+  "groups"/"waypoints" twice, or with a key twice in any compound (a point's guid, the points, a nested compound) is listed and
+  neither gives nor takes; a folder whose merged file would be over 4 MiB is listed and left alone while the other folders and
+  the images are still repaired; exactly 4 MiB is written and read back; running again stays the same
 """
 import functools, http.server, io, os, shutil, sys, tempfile, threading, zipfile
 from PIL import Image, ImageOps
@@ -613,6 +617,81 @@ try:
             open(os.path.join(mp3, *k.split("/")), "wb").write(v)
         r8 = run(mp3)
         check(r8["names"] == [], f"waypoints: running again writes nothing: {r8['names']}")
+        # v12: files that are not exactly the shape, and the 4 MiB limit after merging (separate fixture)
+        mp4 = os.path.join(tmp, "mp4")
+        GOOD, SMALL, BIG, BIGOK = "Triggers_wq00001~good", "Triggers_wq00002~small", "Triggers_wq00003~big", "Triggers_wq00004~bigok"
+        BADS = ["Triggers_wq%05d~bad%d" % (10 + i, i) for i in range(1, 8)]
+        gk = "33333333-0000-0000-0000-000000000001"
+        k1 = wp_point(gk, "好的點", (1, 2, 3), "journeymap_default")
+        bp = [wp_point("44444444-0000-0000-0000-00000000000%d" % i, "壞的點 %d" % i, (i, i, i), "journeymap_default") for i in range(1, 9)]
+        root = lambda *kids: b"\x0a" + nstr("") + ncomp(*kids)
+        grp = lambda *extra: ntag(10, "groups", ncomp(*BUILTIN, *extra))
+        wps = lambda *pp: ntag(10, "waypoints", ncomp(*pp))
+
+        def pt_raw(guid, fields):   # a point from its fields, so a field can be there twice
+            return ntag(10, guid, ncomp(*fields))
+        pos = ntag(10, "pos", ncomp(ntag(3, "x", struct.pack(">i", 7)), ntag(3, "y", struct.pack(">i", 7)), ntag(3, "z", struct.pack(">i", 7)),
+                                    ntag(8, "dimension", nstr("minecraft:overworld"))))
+        g5 = "44444444-0000-0000-0000-000000000005"
+        g7 = "44444444-0000-0000-0000-000000000007"
+        BADF = [root(grp(ntag(8, "oops", nstr("x"))), wps(bp[0])),                                  # 1 "groups" holds a string
+                root(grp(), wps(bp[1]), ntag(8, "extra", nstr("x"))),                               # 2 another tag in the root
+                root(grp(), grp(), wps(bp[2])),                                                     # 3 "groups" twice
+                root(grp(), wps(bp[3]), wps(bp[7])),                                                # 4 "waypoints" twice
+                root(grp(), wps(pt_raw(g5, [pos, ntag(8, "groupId", nstr("journeymap_default")), ntag(8, "name", nstr("壞的點 5")),
+                                            ntag(8, "guid", nstr(g5)), ntag(8, "guid", nstr(g5))]))),   # 5 a point's guid twice
+                root(grp(), wps(bp[5], bp[5])),                                                     # 6 one point key twice in "waypoints"
+                root(grp(), wps(pt_raw(g7, [ntag(10, "settings", ncomp(ntag(1, "enable", b"\1"), ntag(1, "enable", b"\0"))), pos,
+                                            ntag(8, "groupId", nstr("journeymap_default")), ntag(8, "name", nstr("壞的點 7")), ntag(8, "guid", nstr(g7))])))]   # 7 a key twice in a nested compound
+        WMAX = 4 * 1048576
+
+        def padded(size):   # a file without points of exactly this size: a custom group carries a byte array
+            def mk(n):
+                return wp_file([], [ntag(10, "g-pad", ncomp(ntag(8, "name", nstr("pad")), ntag(8, "guid", nstr("g-pad")), ntag(7, "pad", struct.pack(">i", n) + b"\0" * n)))])
+            return mk(size - len(mk(0)))
+        WF4 = {GOOD: wp_file([k1]), SMALL: wp_file([]), BIG: padded(WMAX - 64), BIGOK: padded(WMAX - len(k1) - 13)}   # 13: the "waypoints" tag it has to get
+        WF4.update(zip(BADS, BADF))
+        check(len(WF4[BIG]) == WMAX - 64 and len(WF4[BIG]) + len(k1) > WMAX and len(WF4[BIGOK]) + 13 + len(k1) == WMAX and len(k1) > 64,
+              f"v12 fixture: BIG is under 4 MiB and over it with the point added, BIGOK exactly 4 MiB: {len(WF4[BIG])}, {len(k1)}")
+        for f in WF4:
+            put(f, D % R1, cut(*R1, (256, 0, 512, 512)) if f == SMALL else cut(*R1), T, mp4)
+            put(f, "waypoints/WaypointData.dat", WF4[f], T + 10, mp4)
+        r9 = run(mp4)
+        f49 = {s["floor"]: s for s in r9["floors"]}.get(3, {})
+        zd9 = {}
+        for i in range(pg.locator("#jmFixDl [data-jmfix]").count()):
+            with pg.expect_download(timeout=120000) as dl:
+                pg.click(f"#jmFixDl [data-jmfix='{i}']")
+            zi = zipfile.ZipFile(io.BytesIO(open(dl.value.path(), "rb").read()))
+            zd9.update({k: zi.read(k) for k in zi.namelist()})
+        out9 = pg.inner_text("#jmFixOut")
+        check(sorted(f49.get("wpBad") or []) == sorted(BADS), f"v12: every file that is not exactly the shape is listed: {[x[-4:] for x in f49.get('wpBad') or []]}")
+        check(sorted(zd9) == sorted([WK(SMALL), WK(BIGOK), SMALL + "/" + D % R1]) and sorted(r9["names"]) == sorted(zd9),
+              f"v12: only SMALL (image and points) and BIGOK are written; BIG, GOOD and the bad files are not: {sorted(zd9)}")
+        try:
+            n9 = wp_read(zd9.get(WK(SMALL), b""))
+            check(list(n9.get("waypoints", {})) == [gk.encode()] and n9["waypoints"][gk.encode()] == k1,
+                  f"v12: SMALL takes the good point only, none from a bad file: {[k.decode()[-2:] for k in n9.get('waypoints', {})]}")
+        except Exception as e:
+            check(False, f"v12: SMALL's new file reads ({e!r})")
+        bo = zd9.get(WK(BIGOK), b"")
+        check(len(bo) == WMAX and bo.replace(k1, b"", 1).replace(b"\x0a\x00\x09waypoints\x00", b"", 1) == WF4[BIGOK],
+              f"v12: BIGOK is written at exactly 4 MiB, its old bytes and the point: {len(bo)}")
+        check(f49.get("wpBig") == [BIG] and "超過 4.0 MB" in out9 and "已經完整" not in out9 and f49.get("wp") == 2 and f49.get("wpf") == 2 and f49.get("n") == 1,
+              f"v12: BIG (over 4 MiB merged) is listed and left alone, the rest still repaired: {f49.get('wpBig')}, {f49.get('wp')}, {f49.get('n')}")
+        for k, v in zd9.items():
+            open(os.path.join(mp4, *k.split("/")), "wb").write(v)
+        r10 = run(mp4)
+        f410 = {s["floor"]: s for s in r10["floors"]}.get(3, {})
+        check(r10["names"] == [] and f410.get("wpBig") == [BIG] and sorted(f410.get("wpBad") or []) == sorted(BADS),
+              f"v12: running again writes nothing, the 4 MiB file reads back, BIG and the bad files stay listed: {r10['names']}, {f410.get('wpBig')}")
+        mp5 = os.path.join(tmp, "mp5")   # only the 4 MiB case left out: not "complete"
+        for f in (GOOD, BIG):
+            put(f, D % R1, cut(*R1), T, mp5)
+            put(f, "waypoints/WaypointData.dat", WF4[f], T + 10, mp5)
+        r11 = run(mp5)
+        check(r11["names"] == [] and "已經完整" not in pg.inner_text("#jmFixNote") + pg.inner_text("#jmFixOut") and "無法確認完整" in pg.inner_text("#jmFixOut"),
+              f"v12: a floor whose only left-out folder is over 4 MiB is not called complete: {pg.inner_text('#jmFixNote')}")
         check(not errs, f"no page errors: {errs[:2]}")
         b.close()
     srv.shutdown()

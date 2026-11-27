@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="d2f558e0a2">
+<meta name="sao-build" content="a8608d6bcd">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -2916,14 +2916,17 @@ function jmWpParse(u){if(!u||u.length<5||u.length>JMWP_MAX)return null;const v=n
   const skip=t=>{switch(t){case 1:need(1);p+=1;break;case 2:need(2);p+=2;break;case 3:case 5:need(4);p+=4;break;case 4:case 6:need(8);p+=8;break;
     case 7:{need(4);const n=v.getInt32(p);p+=4;if(n<0)throw 0;need(n);p+=n;break}case 8:str();break;
     case 9:{need(5);const et=u[p],n=v.getInt32(p+1);p+=5;if(n<0||(n>0&&(et<1||et>12)))throw 0;for(let i=0;i<n;i++)skip(et);break}
-    case 10:for(;;){need(1);const tt=u[p++];if(tt===0)break;str();skip(tt)}break;
+    case 10:{const ks=new Set();for(;;){need(1);const tt=u[p++];if(tt===0)break;const k=str();if(ks.has(k))throw 0;ks.add(k);skip(tt)}break}
     case 11:{need(4);const n=v.getInt32(p);p+=4;if(n<0)throw 0;need(4*n);p+=4*n;break}
     case 12:{need(4);const n=v.getInt32(p);p+=4;if(n<0)throw 0;need(8*n);p+=8*n;break}default:throw 0}};
   // the children of the compound whose payload starts at p: {o:[{k,t,a,b,body}], end} (a..b the whole child tag, end its TAG_End)
-  const kids=()=>{const o=[];for(;;){need(1);const a=p,t=u[p++];if(t===0)return{o,end:a};const k=str(),body=p;skip(t);o.push({k,t,a,b:p,body})}};
+  // a key twice in one compound (never written by JourneyMap) is not this shape: the file is left alone
+  const kids=()=>{const o=[],ks=new Set();for(;;){need(1);const a=p,t=u[p++];if(t===0)return{o,end:a};const k=str(),body=p;if(ks.has(k))throw 0;ks.add(k);skip(t);o.push({k,t,a,b:p,body})}};
   try{if(u[0]!==10)return null;p=1;if(str().length)return null;const top=kids();if(p!==u.length)return null;
+    if(top.o.some(c=>c.k!=="groups"&&c.k!=="waypoints"))return null;   // the root holds "groups" and maybe "waypoints", nothing else
     const g=top.o.find(c=>c.k==="groups"&&c.t===10),w=top.o.find(c=>c.k==="waypoints");if(!g||(w&&w.t!==10))return null;
-    p=g.body;const G=kids();let W={o:[],end:null};if(w){p=w.body;W=kids()}   // a file without points has no "waypoints" at allif(G.o.some(c=>c.t!==10))return null;
+    p=g.body;const G=kids();let W={o:[],end:null};if(w){p=w.body;W=kids()}   // a file without points has no "waypoints" at all
+    if(G.o.some(c=>c.t!==10))return null;
     const wps=[];for(const c of W.o){if(c.t!==10)return null;p=c.body;const f=kids().o,one=(n,t)=>f.find(y=>y.k===n&&y.t===t),sv=x=>{p=x.body;return str()};
       const gd=one("guid",8),gi=one("groupId",8),ps=one("pos",10),nm=one("name",8);if(!gd||!gi||!ps||sv(gd)!==c.k)return null;
       p=ps.body;const q=kids().o,iv=n=>{const x=q.find(y=>y.k===n&&y.t===3);return x?v.getInt32(x.body):null},dm=q.find(y=>y.k==="dimension"&&y.t===8);
@@ -2942,7 +2945,9 @@ async function jmWpMerge(F,wf,s){const P=[];
     for(const S of src){if(S===T)continue;for(const w of S.d.wps){if(JMWP_SKIP.has(w.group)||has.has(w.guid)||hc.has(w.ck))continue;
       if(!T.d.groups.has(w.group)&&!gAdd.has(w.group)){const g=S.d.groups.get(w.group);if(!g){miss.add(w.guid);continue}addG.push(S.d.u.subarray(g.a,g.b));gAdd.add(w.group)}
       addW.push(S.d.u.subarray(w.a,w.b));has.add(w.guid);hc.add(w.ck)}}
-    s.wpMiss+=[...miss].filter(g=>!has.has(g)).length;if(addW.length)res.push({e:T.e,n:addW.length,bytes:jmWpSplice(T.d,addG,addW)})}
+    s.wpMiss+=[...miss].filter(g=>!has.has(g)).length;if(!addW.length)continue;const bytes=jmWpSplice(T.d,addG,addW);
+    if(bytes.length>JMWP_MAX){s.wpBig.push(T.e.label);continue}   // the merged file would be more than this page reads back: left alone, listed
+    res.push({e:T.e,n:addW.length,bytes})}
   return res}
 window.__JMWP={parse:jmWpParse};   // exposed for tests
 const jmFixBm=f=>createImageBitmap(f,{premultiplyAlpha:"none",colorSpaceConversion:"none"});
@@ -2996,7 +3001,7 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
   const byFl=new Map();for(const F of fs)if(F.floor){if(!byFl.has(F.floor))byFl.set(F.floor,[]);byFl.get(F.floor).push(F)}
   const c1=document.createElement("canvas");c1.width=c1.height=512;const x1=c1.getContext("2d",{willReadFrequently:true});
   const out=[],sum=[];let total=0,stop=false;
-  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,skip:0,bad:[],unshown:[],held:[],simok:[],conflict:0,wp:0,wpf:0,wpBad:[],wpMiss:0};sum.push(s);if(F.length<2)continue;
+  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,skip:0,bad:[],unshown:[],held:[],simok:[],conflict:0,wp:0,wpf:0,wpBad:[],wpBig:[],wpMiss:0};sum.push(s);if(F.length<2)continue;
     await jmFixShow(F,x1,c=>{O.firstElementChild.textContent=`第 ${fl} 層：正在確認 ${c} 這一格…`});
     for(const e of F)for(const k of e.tiles.keys()){const c=k.slice(k.indexOf("/")+1);if(c!==JMFIX_SKIP&&!e.shown.has(c)&&!s.unshown.includes(e.label+" "+c))s.unshown.push(e.label+" "+c)}
     // v5 (GPT review of v4 09e2526, V4-M1): a small surface piece (F.sim) shows the surface image only; nothing checked the
@@ -3043,12 +3048,13 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
     site:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.site].sort()])),sim:Object.fromEntries(fs.filter(F=>F.floor).map(F=>[F.label,[...F.sim].sort()]))};
   const row=(t,sub,pill,c)=>`<div class="jmrow"><span class="t"><b>${esc(t)}</b><span>${sub}</span></span><span class="pill ${c}">${pill}</span></div>`;
   const short=l=>l.length>22?l.slice(0,22)+"…":l,few=(a,f=v=>v)=>a.slice(0,5).map(v=>esc(f(v))).join("、")+(a.length>5?"…":"");
-  const left=s=>s.bad.length+s.unshown.length+s.held.length+s.wpBad.length;   // anything besides 0,-1 left out: never "complete"
+  const left=s=>s.bad.length+s.unshown.length+s.held.length+s.wpBad.length+s.wpBig.length;   // anything besides 0,-1 left out: never "complete"
   const extra=s=>[s.skip?`0,-1 那一格不動（${s.skip} 張）`:"",
     s.bad.length?`${s.bad.length} 格有讀不到或尺寸不對的圖，這幾格不動：${few(s.bad)}`:"",
     s.unshown.length?`${s.unshown.length} 格無法確認是這一層的地圖，這幾格不用也不改：${few(s.unshown,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
     s.held.length?`${s.held.length} 格只靠一小塊地面圖確認，同一格的夜間、地形或洞穴圖沒辦法確認，這幾格整格不用也不改：${few(s.held,v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c})}`:"",
     s.wpBad.length?`${s.wpBad.length} 個資料夾的路標檔讀不懂，這幾個資料夾的路標不動：${few(s.wpBad,short)}`:"",
+    s.wpBig.length?`${s.wpBig.length} 個資料夾補上路標後會超過 ${mb(JMWP_MAX)}，這幾個資料夾的路標不動：${few(s.wpBig,short)}`:"",
     s.wpMiss?`${s.wpMiss} 個路標的群組找不到，沒有補`:"",
     s.conflict?`補的時候有 ${s.conflict.toLocaleString()} 個像素各分流畫得不一樣，用最新的那份（各資料夾分開計算）`:""].filter(Boolean).map(t=>`<br>${t}`).join("");
   const pill=s=>s.n||s.wp?[[s.n?`補 ${s.n} 張`:"",s.wp?`路標 ${s.wp} 個`:""].filter(Boolean).join("、"),"ok"]:left(s)?["無法確認完整","no"]:["已經完整","no"];
