@@ -3151,9 +3151,10 @@ async function jmFixPick(files,tok){const O=$("jmFixOut"),note=$("jmFixNote");wi
   const show=(view,html)=>{C.view=view;note.textContent="";O.innerHTML=`<div class="note">${html}</div>`;
     O.querySelectorAll("[data-jmc]").forEach(b=>b.onclick=()=>press(b.dataset.jmc))};
   const go=why=>jmFixRun(files,{from:job.id,why},tok);
-  // a button: only in the session it was made for and only while the check waits; a choice that starts a run goes through
-  // the gate, so a second click (or a click of another button) while it runs does nothing
-  const press=k=>{if(tok!==JMS.tok||JMS.phase!=="ask")return false;if(k==="regen"||k==="new"||k==="done")return jmFixGate(tok,()=>act(k));act(k);return true};
+  // a button: only in the session it was made for and only while the check waits. Every choice goes through the gate
+  // (v15.0.4, GPT W4-M05-R1: 「檢查各包」 starts a run when every pack is placed, and 「我還有那一包」 also shows the packs),
+  // so a second click, another button or a new pick while it works does nothing
+  const press=k=>{if(tok!==JMS.tok||JMS.phase!=="ask")return false;return jmFixGate(tok,()=>act(k))};
   const restore=`還原的方法：關掉遊戲，確認修復前的備份還在，把 <code>data</code> 裡的 <b>mp</b> 改名成 <b>mp_修復後</b>，再把備份的 <b>mp</b> 複製回 <code>data</code>。`;
   const packsView=()=>{if(P.every(p=>p.state==="placed"))return act("done");
     if(P.every(p=>p.state==="not"))return show("notyet",`上次的修復檔（作業代號 <code>${esc(job.id)}</code>）一包都還沒有放進這份 mp。這可能是上次修復的那份 mp，也可能是它的備份或已經還原的備份，網站分不出來，請選一個：${btns([["notyet","這是上次修復的 mp，我還沒放"],["new","這是另一份 mp（或已還原的備份），開始新的修復"]])}`);

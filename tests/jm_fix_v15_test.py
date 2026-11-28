@@ -601,6 +601,40 @@ try:
             pg.click("#jmFixDl [data-jmfix='0']")
         check(e3[0]["phase"] == "ready" and "壓縮檔產生失敗" in e3[1] and "test: zip failed" in e3[1] and e3[2] and e3[3] == 0 and pg.evaluate("window.__jmFix.started") == [0],
               f"M05-4 (zip): the failure is shown, no download is claimed, the buttons work again and the retry downloads ({e3[0]})")
+        # ---------- v15.0.4 W4-M05-R1 (GPT): 「這是上次那份，檢查各包」 starts a run when every pack is placed; a new pick
+        # while that run works is refused, the session stays the same and the result is that run's ----------
+        mpr = os.path.join(tmp, "m5r", "mp")
+        build(mpr)
+        pg.evaluate("localStorage.removeItem('jmFixJobs')")
+        k, rr = pick(mpr)
+        zr = download()
+        apply(mpr, {n: v for zz in zr.values() for n, v in zz.items()})
+        for f in FS:   # the game drew on: the fingerprint no longer matches, so the check asks first
+            for sq in SITE:
+                im = cut(*sq)
+                im.putpixel((7, 7), (3, 4, 5, 255))
+                put(mpr, f, D % ("day", "%d,%d" % sq), im, T + 2000)
+        k, cr = pick(mpr)
+        s0 = st()
+        pg.evaluate("window.__jmFix=null")
+        after = pg.evaluate("""()=>{document.querySelector('#jmFixOut [data-jmc=inspect]').click();
+          const s=window.__jmFixState,o={phase:s.phase,tok:s.tok,view:window.__jmFixCheck&&window.__jmFixCheck.view,disabled:document.getElementById('jmFixDir').disabled};
+          const i=document.getElementById('jmFixDir'),dt=new DataTransfer();dt.items.add(new File(['x'],'0,0.png'));
+          Object.defineProperty(i,'files',{value:dt.files,configurable:true});i.dispatchEvent(new Event('change'));delete i.files;
+          o.second=window.__JMFIXS.start([new File(['x'],'0,0.png')]);o.refused=s.refused;o.tok2=s.tok;return o}""")
+        try:
+            pg.set_input_files("#jmFixDir", m5b, timeout=3000)   # and once more through the input itself
+        except Exception:
+            pass
+        wait("window.__jmFix")
+        pg.wait_for_timeout(1500)
+        rf = pg.evaluate("window.__jmFix")
+        s1 = st()
+        check(k == "check" and cr["view"] == "diff" and after["phase"] == "work" and after["view"] == "done" and after["disabled"]
+              and after["second"] is False and after["refused"] - s0["refused"] == 2 and after["tok2"] == s0["tok"] == s1["tok"]
+              and s1["refused"] - s0["refused"] >= 2 and sorted({x["floor"]: x for x in rf["floors"]}[3]["folders"]) == sorted(FS)
+              and (rf.get("how") or {}).get("done") == len(zr) >= 1 and s1["phase"] in ("idle", "ready"),
+              f"M05-R1: 「檢查各包」 with every pack placed runs locked; a new pick (input and code) is refused, the session and the result are that run's ({s0}, {after}, {s1})")
         pg.evaluate("window.__JMFIX.PART=40*1048576")
         check(not errs, f"no page errors: {errs[:3]}")
         b.close()
