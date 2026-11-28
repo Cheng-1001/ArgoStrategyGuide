@@ -788,6 +788,10 @@ try:
             bot = pg.inner_text("#jmFixOut") + pg.inner_text("#jmFixNote")
             if rb.get("big"):
                 seen.append(rb["big"])
+                # the batch that finds it is worked out again without it: the folders it had pushed out are back in this batch
+                ein, enx, _ = batch_ref(lim2, got4)
+                check(sorted({x.split("/")[0] for x in rb["names"]}) == ein and sorted(rb.get("next") or []) == sorted(enx),
+                      f"v15 M1-4: in the batch that finds it, the other folders are batched as if it were not there ({sorted({x.split('/')[0] for x in rb['names']})} vs {ein})")
                 said = said or (all(t in bot for t in ("網站目前無法修復", "你的地圖沒有被改動，不需要還原，也不要一直重試", "回報表單選「更正或其他」")) and "已經完整" not in bot)
             check(not any(x.startswith(tuple(big1)) for x in rb["names"]), f"v15 M1-4: nothing is ever written for the folder over the limit ({big1})")
             if not rb["names"]:
@@ -1184,6 +1188,10 @@ try:
         check(not errs, f"no page errors: {errs[:2]}")
         b.close()
     srv.shutdown()
+except Exception as e:   # v15: a run that ends in a state the test does not expect is a failure, not a crash
+    import traceback
+    traceback.print_exc()
+    check(False, f"the test stopped on an unexpected state: {type(e).__name__}: {str(e)[:200]}")
 finally:
     shutil.rmtree(tmp, ignore_errors=True)
 print("ALL PASSED" if not fails else f"{len(fails)} FAILED")

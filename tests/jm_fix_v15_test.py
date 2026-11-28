@@ -59,10 +59,11 @@ def piece(*boxes, fill=None):
 T = 1_790_000_000
 D = "overworld/%s/%s.png"
 SITE = ((0, 0), (1, -1), (0, 2), (1, 2))
-DN, DN2, TG, TX, T5, NA, NB = ("Triggers_v15a0001~dn", "Triggers_v15a0002~dn2", "Triggers_v15a0003~tg", "Triggers_v15a0004~tx",
-                               "Triggers_v15a0005~t5", "Triggers_v15a0006~na", "Triggers_v15a0007~nb")
-FS = [DN, DN2, TG, TX, T5, NA, NB]
-MT = {DN: T + 50, DN2: T + 60, TG: T + 90, TX: T, T5: T, NA: T, NB: T}
+DN, DN2, TG, TX, T5, NA, NB, TY = ("Triggers_v15a0001~dn", "Triggers_v15a0002~dn2", "Triggers_v15a0003~tg", "Triggers_v15a0004~tx",
+                                   "Triggers_v15a0005~t5", "Triggers_v15a0006~na", "Triggers_v15a0007~nb", "Triggers_v15a0008~ty")
+FS = [DN, DN2, TG, TX, T5, NA, NB, TY]
+MT = {DN: T + 50, DN2: T + 60, TG: T + 90, TX: T, T5: T, NA: T, NB: T, TY: T}
+TYC = (20, 90, 220, 255)
 P03, P13 = (100, 0, 512, 151), (0, 50, 301, 151)   # touches 0,2; on through 0,3 into 1,3 (one piece over two squares)
 DN2C = (210, 40, 160, 255)
 RED = (230, 20, 20, 255)
@@ -99,6 +100,9 @@ def build(root):
     put(root, TX, D % ("day", "1,3"), Image.alpha_composite(piece(P13), piece((301, 50, 340, 151), fill=RED)), MT[TX])   # DN's piece + its own bit
     for f in (NA, NB):
         put(root, f, D % ("day", "5,5"), piece((0, 0, 120, 120)), MT[f])   # the same unconfirmed image, confirmed nowhere
+    # TY at 1,3: a piece of its own colour touching only site-shown 1,2 (given: no other folder drew there) and, apart from it,
+    # DN's piece (not given, all in E): every pixel it does not give is in E, so it takes the rest of 1,3
+    put(root, TY, D % ("day", "1,3"), Image.alpha_composite(piece(P13), piece((200, 0, 300, 40), fill=TYC)), MT[TY])
 
 
 def img(b):
@@ -126,18 +130,33 @@ try:
         pg.evaluate("localStorage.removeItem('jmFixJobs')")
         WAIT = "window.__jmFix||(window.__jmFixCheck&&window.__jmFixCheck.view&&window.__jmFixCheck.view!=='done')"
 
+        def wait(expr, sec=240):   # a page error ends the wait at once and is a failure
+            t0 = time.time()
+            while not pg.evaluate(f"!!({expr})"):
+                if errs:
+                    raise RuntimeError(f"page error: {errs[:2]}")
+                if time.time() - t0 > sec:
+                    raise RuntimeError(f"no result after {sec} s")
+                pg.wait_for_timeout(250)
+
+        DEF = {"packs": [], "view": None, "fp": None, "job": None, "names": [], "how": {}, "result": None, "zips": [], "floors": [], "E": {}, "saved": None}
+
+        def got():
+            k, o = pg.evaluate("window.__jmFix?['run',window.__jmFix]:['check',window.__jmFixCheck]")
+            return k, {**DEF, **o}
+
         def pick(path):   # the player picks the folder: a result, or a question from the check (B)
             pg.evaluate("window.__jmFix=null;window.__jmFixCheck=null")
             pg.set_input_files("#jmFixDir", path)
-            pg.wait_for_function(WAIT, timeout=180000)
-            return pg.evaluate("window.__jmFix?['run',window.__jmFix]:['check',window.__jmFixCheck]")
+            wait(WAIT)
+            return got()
 
         def press(k):   # one of the check's buttons
             pg.evaluate("window.__jmFix=null")
             v0 = pg.evaluate("window.__jmFixCheck&&window.__jmFixCheck.view")
             pg.click(f"#jmFixOut [data-jmc='{k}']")
-            pg.wait_for_function(f"window.__jmFix||(window.__jmFixCheck&&window.__jmFixCheck.view&&window.__jmFixCheck.view!=='done'&&window.__jmFixCheck.view!=={v0!r})", timeout=180000)
-            return pg.evaluate("window.__jmFix?['run',window.__jmFix]:['check',window.__jmFixCheck]")
+            wait(f"window.__jmFix||(window.__jmFixCheck&&window.__jmFixCheck.view&&window.__jmFixCheck.view!=='done'&&window.__jmFixCheck.view!=={v0!r})")
+            return got()
 
         def jobs():
             return pg.evaluate("JSON.parse(localStorage.getItem('jmFixJobs')||'[]')")
@@ -168,7 +187,7 @@ try:
         # ---------- A ----------
         k, r = pick(mp)
         check(k == "run" and sorted({s["floor"]: s for s in r["floors"]}.get(3, {}).get("folders", [])) == sorted(FS) and all(sorted(r["shown"][f]) == ["0,0", "0,2", "1,-1", "1,2"] for f in FS),
-              f"fixture: seven floor-3 folders, the four site squares shown, nothing else ({k})")
+              f"fixture: eight floor-3 folders, the four site squares shown, nothing else ({k})")
         f3 = {s["floor"]: s for s in r["floors"]}[3]
         z1 = download()
         files1 = {n: v for zz in z1.values() for n, v in zz.items()}
@@ -187,8 +206,12 @@ try:
         t5 = {n: img(v) for n, v in files1.items() if n.startswith(T5)}
         want5 = {T5 + "/" + D % (L, sq): newest[bx] for L in ("day", "night", "topo") for sq, bx in (("0,3", P03), ("1,3", P13))}
         want5.update({T5 + "/" + D % (L, "0,2"): cut(0, 2) for L in ("night", "topo")})
+        want5[T5 + "/" + D % ("day", "1,3")] = Image.alpha_composite(newest[P13], piece((200, 0, 300, 40), fill=TYC))   # TY's given piece is a source too
         check(sorted(t5) == sorted(want5) and all(t5[n].tobytes() == want5[n].tobytes() for n in want5),
               f"A-3: a folder with nothing there gets every pixel from the newest confirmed copy, none from TG's E (TG is the newest file): {sorted(set(t5) ^ set(want5))[:3]}")
+        # E counts only pixels a folder does not give: TY's own given piece is no other folder's, yet TY takes 1,3
+        check("day/1,3" in E.get(TY, []) and not any(x.startswith(TY) for x in f3["unshown"]) and TY + "/" + D % ("night", "1,3") in files1 and TY + "/" + D % ("topo", "1,3") in files1,
+              f"E: a folder's given piece that no other folder drew does not stop it from taking the rest (TY): {[n[len(TY) + 1:] for n in files1 if n.startswith(TY)][:6]}")
         # A-2
         check(TX + "/" + D % ("day", "0,3") not in files1 and TX + " day/0,3" in f3["cut"] and TX + " 1,3" in f3["unshown"] and "day/1,3" in E.get(TX, []),
               f"A-2: TX's confirmed-looking piece joined to its own bit: the 0,3 that would confirm it next run is cut and listed, the square stays listed: {f3['cut']}")
@@ -254,7 +277,7 @@ try:
         mp2 = os.path.join(tmp, "mp2")   # the same names again: a fresh browser, so no record picks it
         build(mp2)
         pg.evaluate("localStorage.removeItem('jmFixJobs')")
-        pg.evaluate("window.__JMFIX.PART=300000")
+        pg.evaluate("window.__JMFIX.PART=1600000")   # about 4 packs: headless Chromium drops downloads after about 20 from one page
         k, r4 = pick(mp2)
         z4 = download()
         zn = r4["zips"]
@@ -345,6 +368,10 @@ try:
               f"B: with fewer than 32 files to fingerprint the copy is never taken as the same: {len(jobs()[0]['fp'])} {c.get('fp')}")
         check(not errs, f"no page errors: {errs[:3]}")
         b.close()
+except Exception as e:   # a run that ends in a state the test does not expect is a failure, not a crash
+    import traceback
+    traceback.print_exc()
+    check(False, f"the test stopped on an unexpected state: {type(e).__name__}: {str(e)[:200]}")
 finally:
     shutil.rmtree(tmp, ignore_errors=True)
 print("ALL PASSED" if not fails else f"{len(fails)} FAILED")
