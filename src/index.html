@@ -3239,10 +3239,11 @@ async function jmFixRun(files,how){const O=$("jmFixOut"),note=$("jmFixNote");how
   const row=(t,sub,pill,c)=>`<div class="jmrow"><span class="t"><b>${esc(t)}</b><span>${sub}</span></span><span class="pill ${c}">${pill}</span></div>`;
   const short=l=>l.length>22?l.slice(0,22)+"…":l,few=(a,f=v=>v)=>a.slice(0,5).map(v=>esc(f(v))).join("、")+(a.length>5?"…":"");
   const lb=v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c};
-  const left=s=>s.bad.length+s.unshown.length+s.held.length+s.cut.length+s.wpBad.length+s.wpBig.length;   // anything left out: never "complete"
+  const left=s=>s.bad.length+s.unshown.length+s.held.length+s.cut.length+s.wpBad.length+s.wpBig.length+s.wpMiss;   // anything left out: never "complete" (v15.0.2, GPT V15-M1: a point whose group is missing too)
   // S4 (r3 §3.7): how many squares (and folders' waypoints) are left out on purpose
   const leftSq=s=>new Set([...s.unshown,...s.held,...s.cut.map(v=>{const [l,k]=v.split(" ");return l+" "+k.slice(k.indexOf("/")+1)}),...s.bad.map(k=>"* "+k.slice(k.indexOf("/")+1))]).size;
-  const leftTxt=ss=>{const a=ss.reduce((x,s)=>x+leftSq(s),0),b=ss.reduce((x,s)=>x+s.wpBad.length+s.wpBig.length,0);return[a?`${a} 格地圖`:"",b?`${b} 個資料夾的路標`:""].filter(Boolean).join("、")};
+  const leftTxt=ss=>{const a=ss.reduce((x,s)=>x+leftSq(s),0),b=ss.reduce((x,s)=>x+s.wpBad.length+s.wpBig.length,0),c=ss.reduce((x,s)=>x+s.wpMiss,0);
+    return[a?`${a} 格地圖`:"",b?`${b} 個資料夾的路標`:"",c?`${c} 個群組找不到的路標`:""].filter(Boolean).join("、")};
   const BIG=`這個資料夾要補的地圖超過 ${mb(JMFIX.TOTAL)}，網站目前無法修復。你的地圖沒有被改動，不需要還原，也不要一直重試。如果需要處理，請在這一頁上面的回報表單選「更正或其他」回報，並附上這段說明。`;
   const extra=s=>[
     s.big.length?`<b class="warn">${s.big.length} 個資料夾無法修復：${few(s.big,short)}。${BIG}</b>`:"",

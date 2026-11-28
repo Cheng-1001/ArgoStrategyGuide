@@ -14,7 +14,7 @@ Folders cut from the site's floor-3 map, as in tests/jm_fix_test.py (0,0 1,-1 0,
   another copy with the same names and contents (backup) and with other contents, too few files for a fingerprint, no
   record, storage full; the three results (complete, done with squares left out, packs missing)
 """
-import functools, http.server, io, os, re, shutil, sys, tempfile, threading, time, zipfile
+import functools, http.server, io, os, re, shutil, struct, sys, tempfile, threading, time, zipfile
 from PIL import Image
 from playwright.sync_api import sync_playwright
 
@@ -107,6 +107,32 @@ def build(root):
 
 def img(b):
     return Image.open(io.BytesIO(b)).convert("RGBA")
+
+
+# JourneyMap 6 WaypointData.dat (uncompressed NBT), as in tests/jm_fix_test.py (v15.0.2: a point whose group is missing)
+def nstr(t):
+    b = t.encode("utf-8")
+    return struct.pack(">H", len(b)) + b
+
+
+def ntag(t, name, payload):
+    return bytes([t]) + nstr(name) + payload
+
+
+def ncomp(*kids):
+    return b"".join(kids) + b"\0"
+
+
+def wp_point(guid, name, xyz, group):
+    pos = ncomp(ntag(3, "x", struct.pack(">i", xyz[0])), ntag(3, "y", struct.pack(">i", xyz[1])), ntag(3, "z", struct.pack(">i", xyz[2])),
+                ntag(8, "dimension", nstr("minecraft:overworld")))
+    return ntag(10, guid, ncomp(ntag(10, "pos", pos), ntag(8, "groupId", nstr(group)), ntag(8, "name", nstr(name)), ntag(8, "guid", nstr(guid))))
+
+
+def wp_file(points):
+    groups = ncomp(*[ntag(10, g, ncomp(ntag(8, "name", nstr(g)), ntag(8, "guid", nstr(g)))) for g in ("journeymap_all", "journeymap_default")])
+    kids = [ntag(10, "groups", groups)] + ([ntag(10, "waypoints", ncomp(*points))] if points else [])
+    return b"\x0a" + nstr("") + ncomp(*kids)
 
 
 class H(http.server.SimpleHTTPRequestHandler):
@@ -366,6 +392,47 @@ try:
         k, c = pick(mp6)
         check(r11["names"] and len(jobs()[0]["fp"]) < 32 and k == "check" and c["fp"] == "few" and c["view"] == "diff" and "檔案太少" in out(),
               f"B: with fewer than 32 files to fingerprint the copy is never taken as the same: {len(jobs()[0]['fp'])} {c.get('fp')}")
+        # ---------- v15.0.2 (GPT V15-M1): the maps are complete, the only thing left out is a point whose group is missing ----------
+        mpw = os.path.join(tmp, "mpw")
+        for f in (DN, T5):
+            for sq in SITE:
+                put(mpw, f, D % ("day", "%d,%d" % sq), cut(*sq), MT[f])
+        put(mpw, DN, "waypoints/WaypointData.dat", wp_file([wp_point("v15-miss-1", "no group", (10, 64, 20), "v15_group_gone")]), MT[DN])
+        put(mpw, T5, "waypoints/WaypointData.dat", wp_file([]), MT[T5])
+        pg.evaluate("localStorage.removeItem('jmFixJobs')")
+        k, rw = pick(mpw)
+        fw = ({s["floor"]: s for s in rw["floors"]}.get(3) or {}) if k == "run" else {}
+        check(k == "run" and rw["names"] == [] and fw.get("wpMiss") == 1 and rw.get("result") == "done_left" and "已經完整" not in note() + out()
+              and "1 個群組找不到的路標本來就不補" in note() and "群組找不到" in out(),
+              f"V15-M1: maps complete, one point left out (its group is missing): not 「已經完整」, it says what is left out ({rw.get('result')}: {note()})")
+        # ---------- C4 (GPT v15.0.1 review): a folder over the limit by itself takes room first and pushes two small folders out;
+        # once it is found the floor is worked out again without it, so both small folders are in this batch ----------
+        BIG, S1, S2 = "Triggers_v15c0001~big", "Triggers_v15c0002~s1", "Triggers_v15c0003~s2"
+        LAY = ["day", "night", "topo", "biome", "1", "2", "3", "4", "5", "6"]
+        mpc = os.path.join(tmp, "mpc")
+        for sq in SITE:
+            for L in LAY:
+                put(mpc, DN, D % (L, "%d,%d" % sq), cut(*sq), MT[DN])   # the donor has every layer of the four site squares
+                for f in (S1, S2):
+                    if not (L == "1" and sq == SITE[0]):
+                        put(mpc, f, D % (L, "%d,%d" % sq), cut(*sq), T)   # each small folder lacks one image: 1/0,0, the first key
+        put(mpc, BIG, D % ("day", "0,0"), cut(0, 0), T)   # the big one lacks 39 images, 1/0,0 among them
+        pg.evaluate("localStorage.removeItem('jmFixJobs');window.__JMFIX.TOTAL=256*1048576")
+        k, rc = pick(mpc)
+        zc = download()
+        per = {}
+        for zz in zc.values():
+            for n, v in zz.items():
+                per[n.split("/")[0]] = per.get(n.split("/")[0], 0) + len(v) + 30 + 46 + 2 * len(n.encode("utf-8"))
+        lim = per.get(BIG, 0) - 1
+        check(k == "run" and sorted(per) == [BIG, S1, S2] and per[S1] + per[S2] < lim and per[BIG] > lim,
+              f"C4 fixture: one run with room for all: the big folder {per.get(BIG)} bytes, the small ones {per.get(S1)} and {per.get(S2)}; limit {lim}")
+        pg.evaluate(f"localStorage.removeItem('jmFixJobs');window.__JMFIX.TOTAL={lim}")
+        k, rc2 = pick(mpc)
+        fo = sorted({n.split("/")[0] for n in rc2["names"]})
+        check(k == "run" and rc2.get("big") == [BIG] and fo == [S1, S2] and not rc2.get("next"),
+              f"C4: the big folder is not repairable and both small folders it had pushed out are in this batch ({rc2.get('big')}, {fo}, next {rc2.get('next')})")
+        pg.evaluate("window.__JMFIX.TOTAL=256*1048576")
         check(not errs, f"no page errors: {errs[:3]}")
         b.close()
 except Exception as e:   # a run that ends in a state the test does not expect is a failure, not a crash
