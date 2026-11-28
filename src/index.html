@@ -3029,6 +3029,26 @@ async function jmFixConn(F,x1){for(const e of F){e.ok=new Map();e.part=new Set()
       const L=k.slice(0,k.indexOf("/"));if(!byL.has(L))byL.set(L,[]);byL.get(L).push(k)}
     for(const [L,ks] of byL){const r=await jmFixJudge(L,ks,k=>jmFixAl(e.tiles.get(k),x1),e.site);
       for(const [k,m] of r.ok)e.ok.set(k,m);for(const k of r.part)e.part.add(k)}}}
+// v15 (r3 §2, GPT P15-M1): e.E = Map(image key -> Uint8Array, 1 = a pixel e drew and does not give that is the same RGBA as the
+// same pixel of another folder's v14-confirmed copy: the whole drawn image where that folder's surface image is shown
+// (surface: h.shown, other layers: h.site), or a piece that folder's own h.ok gives; jmFixSrc is the same rule the merge
+// uses for its sources). Worked out after jmFixConn for every folder, from the others' v14 results only (never their E), so
+// two unconfirmed copies never confirm each other. e.allE = images whose every drawn pixel not given is in E. E is never a
+// source in this run (the merge still takes only e.ok from e); it only lets e take pixels (sure), keeps those pixels off
+// the list and out of jmFixKeep's "own, not given now, given then"
+const jmFixSrc=(h,k)=>{const c=k.slice(k.indexOf("/")+1);if(!h.tiles.has(k)||h.hold.has(c))return null;
+  if(k.startsWith("day/")?h.shown.has(c):h.site.has(c))return true;const m=!h.shown.has(c)&&h.ok.get(k);return m&&m.some(v=>v)?m:null};
+async function jmFixE(F,x1){for(const e of F){e.E=new Map();e.allE=new Set()}
+  for(const e of F)for(const k of e.part){const m=e.ok.get(k);if(!m)continue;   // unreadable: never sure
+    const hs=F.filter(h=>h!==e&&jmFixSrc(h,k));if(!hs.length)continue;
+    const a=await jmFixPx(e.tiles.get(k),x1);if(!a)continue;const src=[];
+    for(const h of hs){const d=await jmFixPx(h.tiles.get(k),x1);if(d)src.push([d,jmFixSrc(h,k)])}
+    const E=new Uint8Array(262144);let left=0;
+    for(let p=0;p<262144;p++){const i=p*4;if(!a[i+3]||m[p])continue;let hit=false;
+      for(const [d,hm] of src){if(hm!==true&&!hm[p])continue;
+        if(d[i+3]&&d[i]===a[i]&&d[i+1]===a[i+1]&&d[i+2]===a[i+2]&&d[i+3]===a[i+3]){hit=true;break}}
+      if(hit)E[p]=1;else left++}
+    e.E.set(k,E);if(!left)e.allE.add(k)}}
 // v14 (GPT V13-M1): list = the images a folder would take ({k, al = its alpha after taking}), judged again as the next run would
 // see the folder: with the squares the site's map shows now, and again with every square whose surface image it takes shown
 // too (it may be next run). Where a pixel of its own that is not given now would be given, these are left out (cut): the
@@ -3045,8 +3065,8 @@ async function jmFixKeep(e,list,x1){const ly=k=>k.slice(0,k.indexOf("/")),sq=k=>
       for(const k of new Set([...pre,...[...live.keys()].filter(k=>!e.shown.has(sq(k))&&!e.hold.has(sq(k)))]))if(!site.has(sq(k))){
         if(!byL.has(ly(k)))byL.set(ly(k),[]);byL.get(ly(k)).push(k)}
       for(const [L,ks] of byL){const r=await jmFixJudge(L,ks,A,site,true),V=new Set();
-        for(const k of ks){const m=e.ok.get(k),own=m&&await orig(k),pm=r.ok.get(k),q=r.rt.get(k);if(!own||!pm)continue;
-          for(let i=0;i<P;i++)if(own[i]&&!m[i]&&pm[i])V.add(q[i])}   // own, not given now, given then
+        for(const k of ks){const m=e.ok.get(k),own=m&&await orig(k),pm=r.ok.get(k),q=r.rt.get(k),Em=e.E&&e.E.get(k);if(!own||!pm)continue;
+          for(let i=0;i<P;i++)if(own[i]&&!m[i]&&pm[i]&&!(Em&&Em[i]))V.add(q[i])}   // own, not given now, given then (v15: not in E)
         if(!V.size)continue;flip=true;
         for(const k of ks){const q=r.rt.get(k);if(!q)continue;
           if(live.has(k)){const al=live.get(k).al,own=await orig(k);for(let i=0;i<P;i++)if(al[i]&&!(own&&own[i])&&V.has(q[i])){kill.add(k);break}}
@@ -3088,10 +3108,10 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
           let n=0,same=0;for(let i=3;i<a.length;i+=4){if(!a[i])continue;if(!b[i]){n=-1;break}n++;if(a[i]===b[i]&&a[i-1]===b[i-1]&&a[i-2]===b[i-2]&&a[i-3]===b[i-3])same++}
           if(n<0||same<JMFIX.AGREE*n){ok=false;break}}
         if(ok)s.simok.push(e.label+" "+c);else{e.hold.add(c);s.held.push(e.label+" "+c)}}}
-    O.firstElementChild.textContent=`第 ${fl} 層：正在確認無法比對的格子…`;await jmFixConn(F,x1);
-    for(const e of F)for(const k of e.part){const c=k.slice(k.indexOf("/")+1);if(!s.unshown.includes(e.label+" "+c))s.unshown.push(e.label+" "+c)}
+    O.firstElementChild.textContent=`第 ${fl} 層：正在確認無法比對的格子…`;await jmFixConn(F,x1);await jmFixE(F,x1);
+    for(const e of F)for(const k of e.part){if(e.allE.has(k))continue;const c=k.slice(k.indexOf("/")+1);if(!s.unshown.includes(e.label+" "+c))s.unshown.push(e.label+" "+c)}
     // a folder with an unconfirmed copy of a square: a target there only at 0,-1 or when all it has there is confirmed (v13)
-    const mine=(e,c)=>[...e.tiles.keys()].filter(t=>t.endsWith("/"+c)),sure=(e,c)=>mine(e,c).every(t=>e.ok.has(t)&&!e.part.has(t));
+    const mine=(e,c)=>[...e.tiles.keys()].filter(t=>t.endsWith("/"+c)),sure=(e,c)=>mine(e,c).every(t=>e.ok.has(t)&&(!e.part.has(t)||e.allE.has(t)));   // v15: or all of it not given is in E
     const keys=[...new Set(F.flatMap(e=>[...e.tiles.keys()]))].sort();let k0=0;
     // v14: what a folder takes at or next to a square whose surface image is not shown for it waits for jmFixKeep
     const sqs=new Set(keys.map(k=>k.slice(k.indexOf("/")+1))),wait=new Map(F.map(e=>[e,[]]));
@@ -3100,7 +3120,7 @@ async function jmFixRun(files){const O=$("jmFixOut"),note=$("jmFixNote");window.
     for(const k of keys){if(stop)break;k0++;if(k0%20===1)O.firstElementChild.textContent=`第 ${fl} 層：正在合併 ${k0}／${keys.length} 張…`;
       const c=k.slice(k.indexOf("/")+1);
       const day=k.startsWith("day/"),dm=e=>e.shown.has(c)?null:e.ok.get(k);   // dm: the pieces an unshown copy gives (v13)
-      const have=F.filter(e=>e.tiles.has(k)&&!e.hold.has(c)&&((day?e.shown.has(c):e.site.has(c))||(!e.shown.has(c)&&e.ok.has(k)&&e.ok.get(k).some(v=>v))))
+      const have=F.filter(e=>jmFixSrc(e,k))
         .sort((a,b)=>(a.tiles.get(k).lastModified||0)-(b.tiles.get(k).lastModified||0));
       if(!have.length)continue;
       // a folder takes new pixels here when its own surface image is shown, it has nothing of this square yet, or (v13) its own
