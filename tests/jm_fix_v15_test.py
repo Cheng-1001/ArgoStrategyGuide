@@ -352,6 +352,28 @@ try:
                   and (("在修復後被改過" in out()) == (tag == "newer")) and pg.locator("#jmFixOut [data-jmc='have']").count() == 0,
                   f"M2-7 ({tag}): a file changed after it was put in is 「內容已變更，原因未確認」, never placed; the time only adds the hint: {c['packs']}")
             check(pg.locator("#jmFixOut [data-jmc='regen']").count() == 1 and pg.locator("#jmFixOut [data-jmc='restore']").count() == 1, f"M2-7 ({tag}): ② and ③ are offered")
+            # W4-M01: changed content AND an absent file from the same recorded repair.
+            job_m01 = jobs()[-1]
+            newly_written = []
+            for package in job_m01["parts"]:
+                for rel, written_hash, before_hash in package["files"]:
+                    folder_i, rest = rel.split("|", 1)
+                    name = job_m01["names"][int(folder_i)] + "/" + rest
+                    if before_hash is None and name != n0:
+                        newly_written.append(name)
+            check(bool(newly_written), f"W4-M01 ({tag}): fixture has an independently missing output")
+            if newly_written:
+                missing_name = newly_written[0]
+                changed_before = open(q, "rb").read()
+                os.remove(os.path.join(mp3, *missing_name.split("/")))
+                k, cm01 = pick(mp3)
+                check(k == "check" and cm01["view"] == "changed"
+                      and sum(x["not"] for x in cm01["packs"]) >= 1
+                      and sum(x["changed"] for x in cm01["packs"]) == 1
+                      and all(pg.locator(f"#jmFixOut [data-jmc='{x}']").count() == 0 for x in ("have", "new", "notyet"))
+                      and all(pg.locator(f"#jmFixOut [data-jmc='{x}']").count() == 1 for x in ("regen", "restore"))
+                      and "不要再放舊修復包" in out() and open(q, "rb").read() == changed_before,
+                      f"W4-M01 ({tag}): mixed changed/missing packages offer only safe recovery, no old package overwrite")
         # ---------- M2-8: the three results ----------
         mp4 = os.path.join(tmp, "mp4")
         for f in (DN, DN2):
@@ -392,6 +414,48 @@ try:
         k, c = pick(mp6)
         check(r11["names"] and len(jobs()[0]["fp"]) < 32 and k == "check" and c["fp"] == "few" and c["view"] == "diff" and "檔案太少" in out(),
               f"B: with fewer than 32 files to fingerprint the copy is never taken as the same: {len(jobs()[0]['fp'])} {c.get('fp')}")
+        # ---------- v15.0.3 W4-M02: scoped completeness, including unknown-only ----------
+        mpu = os.path.join(tmp, "mp_v1503_unknown")
+        unknown = "Triggers_v15m020~unknown"
+        for f in (DN, T5):
+            for sq in SITE:
+                put(mpu, f, D % ("day", "%d,%d" % sq), cut(*sq), MT[f])
+        put(mpu, unknown, D % ("night", "0,0"), cut(0, 0), T)
+        pg.evaluate("localStorage.removeItem('jmFixJobs')")
+        k, ru = pick(mpu)
+        check(k == "run" and ru["result"] == "done_left" and ru["names"] == []
+              and ru.get("unknown") == [unknown] and "無法判定" in note()
+              and "各分流的地圖已經完整" not in note(), f"W4-M02: known maps complete, unknown not declared complete: {note()}")
+        mpu_only = os.path.join(tmp, "mp_v1503_unknown_only")
+        put(mpu_only, unknown, D % ("night", "0,0"), cut(0, 0), T)
+        k, ru = pick(mpu_only)
+        check(k == "run" and ru["result"] == "done_left" and ru["names"] == []
+              and ru.get("unknown") == [unknown] and "無法判定" in note()
+              and "不用修復" not in note(), f"W4-M02: unknown-only input is inconclusive: {note()}")
+        # ---------- v15.0.3 W4-M03: missing target file is disclosed, not created ----------
+        mpm = os.path.join(tmp, "mp_v1503_missing_wp")
+        for f in (DN, T5):
+            for sq in SITE:
+                put(mpm, f, D % ("day", "%d,%d" % sq), cut(*sq), MT[f])
+        wp_rel = "waypoints/WaypointData.dat"
+        point_m03 = wp_point("v15-m03-source", "source point", (10, 64, 20), "journeymap_default")
+        source_m03 = wp_file([point_m03])
+        put(mpm, DN, wp_rel, source_m03, MT[DN])
+        pg.evaluate("localStorage.removeItem('jmFixJobs')")
+        k, rm = pick(mpm)
+        fm = ({s["floor"]: s for s in rm["floors"]}.get(3) or {}) if k == "run" else {}
+        check(k == "run" and rm["result"] == "done_left" and rm["names"] == []
+              and fm.get("wpMissing") == [T5] and "缺少路標檔" in note()
+              and "沒有路標檔" in out() and "各分流的地圖已經完整" not in note()
+              and not os.path.exists(os.path.join(mpm, T5, *wp_rel.split("/"))), "W4-M03: existing point plus missing target disclosed without creating NBT")
+        put(mpm, T5, wp_rel, wp_file([]), MT[T5])
+        k, rm = pick(mpm)
+        actual_wp = {n: v for zz in download().values() for n, v in zz.items()} if k == "run" else {}
+        check(k == "run" and rm["names"] == [T5 + "/" + wp_rel]
+              and actual_wp == {T5 + "/" + wp_rel: source_m03}
+              and open(os.path.join(mpm, DN, *wp_rel.split("/")), "rb").read() == source_m03
+              and open(os.path.join(mpm, T5, *wp_rel.split("/")), "rb").read() == wp_file([]),
+              "W4-M03: existing empty valid target receives exact NBT output, inputs remain unchanged")
         # ---------- v15.0.2 (GPT V15-M1): the maps are complete, the only thing left out is a point whose group is missing ----------
         mpw = os.path.join(tmp, "mpw")
         for f in (DN, T5):

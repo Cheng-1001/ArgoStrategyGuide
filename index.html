@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="7ac2a81f1f">
+<meta name="sao-build" content="e19aa84d6a">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -2953,6 +2953,7 @@ function jmWpSplice(t,addG,addW){const ins=[[t.gEnd,addG],t.wEnd==null?[t.rootEn
 async function jmWpMerge(F,wf,s){const P=[];
   for(let i=0;i<F.length;i++){const e=F[i],f=wf.get(e.label);if(!f)continue;let d=null;try{d=jmWpParse(new Uint8Array(await f.arrayBuffer()))}catch(x){}
     if(!d){s.wpBad.push(e.label);continue}P.push({e,d,t:f.lastModified||0,i})}
+  if(P.some(({d})=>d.wps.some(w=>!JMWP_SKIP.has(w.group))))s.wpMissing=F.filter(e=>!wf.has(e.label)).map(e=>e.label);
   const src=[...P].sort((a,b)=>b.t-a.t||a.i-b.i),res=[];   // newest file first: it gives the copy of a point several folders have
   for(const T of P){const has=new Set(T.d.wps.map(w=>w.guid)),hc=new Set(T.d.wps.map(w=>w.ck)),addW=[],addG=[],gAdd=new Set(),miss=new Set();
     for(const S of src){if(S===T)continue;for(const w of S.d.wps){if(JMWP_SKIP.has(w.group)||has.has(w.guid)||hc.has(w.ck))continue;
@@ -3145,7 +3146,7 @@ async function jmFixPick(files){const O=$("jmFixOut"),note=$("jmFixNote");window
     const lines=[...P.filter(p=>p.state==="not").map(p=>`${nth(p)}沒有放進去`),...P.filter(p=>p.state==="part"&&p.not).map(p=>`${nth(p)}只放了一部分（${p.placed}／${p.n} 個檔案）`),
       chg?`${chg} 個檔案的內容和修復檔不同，原因未確認${newer?`。其中 ${newer} 個在修復後被改過，可能是遊戲畫的，也可能是放錯檔案`:""}`:""].filter(Boolean);
     const list=chg?`<details class="jmfold"><summary>內容不同的檔案 ${chg}</summary><div class="muted">${P.flatMap(p=>p.changed).slice(0,200).map(esc).join("<br>")}${chg>200?"<br>…":""}</div></details>`:"";
-    return show(miss.length?"missing":"changed",`上次的修復（作業代號 <code>${esc(job.id)}</code>，共 ${n} 包）沒有完整放好：<br>${lines.join("<br>")}${list}${btns(miss.length
+    return show(chg?"changed":"missing",`上次的修復（作業代號 <code>${esc(job.id)}</code>，共 ${n} 包）沒有完整放好：<br>${lines.join("<br>")}${list}${chg?"<br><b>不要再放舊修復包，以免覆蓋內容已變更的檔案。</b>":""}${btns(!chg&&miss.length
       ?[["have","① 我還有那一包"],["regen","② 找不到那一包，重新產生缺少的部分"],["restore","③ 還原備份"],["new","④ 這是另一份 mp，開始新的修復"]]
       :[["regen","② 重新產生缺少的部分"],["restore","③ 還原備份"]])}`)};
   const act=k=>{
@@ -3153,7 +3154,7 @@ async function jmFixPick(files){const O=$("jmFixOut"),note=$("jmFixNote");window
     if(k==="regen"||k==="new")return go(k);
     if(k==="inspect")return packsView();
     if(k==="restore")return show("restore",`${restore}<br>還原後回到這裡再選一次 mp，選「這是另一份 mp（或已還原的備份），開始新的修復」。`);
-    if(k==="have"){const m=P.filter(p=>p.state!=="placed");return show("have",`請把 ${zips(m)} 再放一次：關掉遊戲，打開壓縮檔，全選、複製，貼到 <b>mp</b> 資料夾，問到同名檔案時選「取代目的地中的檔案」。這一步不會產生新的檔案。放好後回到這裡再選一次 mp 檢查。`)}
+    if(k==="have"){if(P.some(p=>p.changed.length))return packsView();const m=P.filter(p=>p.state!=="placed");return show("have",`請把 ${zips(m)} 再放一次：關掉遊戲，打開壓縮檔，全選、複製，貼到 <b>mp</b> 資料夾，問到同名檔案時選「取代目的地中的檔案」。這一步不會產生新的檔案。放好後回到這裡再選一次 mp 檢查。`)}
     if(k==="notyet")return show("notyet_how",`請照上面第 5 步把 ${zips(P)} 都放進 <b>mp</b>（放之前不要開遊戲）。放好後回到這裡再選一次 mp 檢查。`)};
   if(r.fp!=="same")return show("diff",`${r.fp==="few"?"這份 mp 的檔案太少，網站無法確認它是不是上次修復（作業代號 <code>"+esc(job.id)+"</code>）的那一份。":"這份 mp 的內容和上次修復（作業代號 <code>"+esc(job.id)+"</code>）時不同，可能是另一份資料，或遊戲已經更新過。"}請選一個：${btns([["new","這是另一份 mp，開始新的修復"],["inspect","這是上次那份，檢查各包"]])}`);
   return packsView()}
@@ -3181,7 +3182,7 @@ async function jmFixRun(files,how){const O=$("jmFixOut"),note=$("jmFixNote");how
     while(total+o.sz>JMFIX.TOTAL){const lo=[e,...out.map(x=>x.e)].reduce((a,b)=>rank.get(b)>rank.get(a)?b:a);cutoff=rank.get(lo);
       for(const x of new Set(out.map(x=>x.e)))if(gone(x))drop(x);if(gone(e))return false}
     out.push(o);total+=o.sz;own.set(e,(own.get(e)||0)+o.sz);return true};
-  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,cut:[],bad:[],unshown:[],held:[],simok:[],conflict:0,wp:0,wpf:0,wpBad:[],wpBig:[],wpMiss:0,next:[],big:[]};sum.push(s);if(F.length<2)continue;
+  for(const [fl,F] of [...byFl].sort((a,b)=>a[0]-b[0])){const s={floor:fl,folders:F.map(e=>e.label),n:0,cut:[],bad:[],unshown:[],held:[],simok:[],conflict:0,wp:0,wpf:0,wpBad:[],wpBig:[],wpMiss:0,wpMissing:[],next:[],big:[]};sum.push(s);if(F.length<2)continue;
     if(F.every(gone))continue;   // the whole floor waits for the next batch
     await jmFixShow(F,x1,c=>{O.firstElementChild.textContent=`第 ${fl} 層：正在確認 ${c} 這一格…`});
     // v5 (GPT review of v4 09e2526, V4-M1): a small surface piece (F.sim) shows the surface image only; nothing checked the
@@ -3250,11 +3251,11 @@ async function jmFixRun(files,how){const O=$("jmFixOut"),note=$("jmFixNote");how
   const row=(t,sub,pill,c)=>`<div class="jmrow"><span class="t"><b>${esc(t)}</b><span>${sub}</span></span><span class="pill ${c}">${pill}</span></div>`;
   const short=l=>l.length>22?l.slice(0,22)+"…":l,few=(a,f=v=>v)=>a.slice(0,5).map(v=>esc(f(v))).join("、")+(a.length>5?"…":"");
   const lb=v=>{const [l,c]=v.split(" ");return short(l).replace(/^Triggers_/,"").slice(0,8)+" 的 "+c};
-  const left=s=>s.bad.length+s.unshown.length+s.held.length+s.cut.length+s.wpBad.length+s.wpBig.length+s.wpMiss;   // anything left out: never "complete" (v15.0.2, GPT V15-M1: a point whose group is missing too)
+  const left=s=>s.bad.length+s.unshown.length+s.held.length+s.cut.length+s.wpBad.length+s.wpBig.length+s.wpMiss+s.wpMissing.length;   // anything left out: never "complete" (v15.0.2, GPT V15-M1: a point whose group is missing too)
   // S4 (r3 §3.7): how many squares (and folders' waypoints) are left out on purpose
   const leftSq=s=>new Set([...s.unshown,...s.held,...s.cut.map(v=>{const [l,k]=v.split(" ");return l+" "+k.slice(k.indexOf("/")+1)}),...s.bad.map(k=>"* "+k.slice(k.indexOf("/")+1))]).size;
-  const leftTxt=ss=>{const a=ss.reduce((x,s)=>x+leftSq(s),0),b=ss.reduce((x,s)=>x+s.wpBad.length+s.wpBig.length,0),c=ss.reduce((x,s)=>x+s.wpMiss,0);
-    return[a?`${a} 格地圖`:"",b?`${b} 個資料夾的路標`:"",c?`${c} 個群組找不到的路標`:""].filter(Boolean).join("、")};
+  const leftTxt=ss=>{const a=ss.reduce((x,s)=>x+leftSq(s),0),b=ss.reduce((x,s)=>x+s.wpBad.length+s.wpBig.length,0),c=ss.reduce((x,s)=>x+s.wpMiss,0),d=ss.reduce((x,s)=>x+s.wpMissing.length,0);
+    return[a?`${a} 格地圖`:"",b?`${b} 個資料夾的路標`:"",c?`${c} 個群組找不到的路標`:"",d?`${d} 個缺少路標檔的資料夾`:""].filter(Boolean).join("、")};
   const BIG=`這個資料夾要補的地圖超過 ${mb(JMFIX.TOTAL)}，網站目前無法修復。你的地圖沒有被改動，不需要還原，也不要一直重試。如果需要處理，請在這一頁上面的回報表單選「更正或其他」回報，並附上這段說明。`;
   const extra=s=>[
     s.big.length?`<b class="warn">${s.big.length} 個資料夾無法修復：${few(s.big,short)}。${BIG}</b>`:"",
@@ -3266,16 +3267,18 @@ async function jmFixRun(files,how){const O=$("jmFixOut"),note=$("jmFixNote");how
     s.wpBad.length?`${s.wpBad.length} 個資料夾的路標檔讀不懂，這幾個資料夾的路標不動：${few(s.wpBad,short)}`:"",
     s.wpBig.length?`${s.wpBig.length} 個資料夾補上路標後會超過 ${mb(JMWP_MAX)}，這幾個資料夾的路標不動：${few(s.wpBig,short)}`:"",
     s.wpMiss?`${s.wpMiss} 個路標的群組找不到，沒有補`:"",
+    s.wpMissing.length?`${s.wpMissing.length} 個資料夾沒有路標檔，無法合併路標（未建立新檔）：${s.wpMissing.map(l=>esc(l)).join("、")}`:"",
     s.conflict?`補的時候有 ${s.conflict.toLocaleString()} 個像素各分流畫得不一樣，用最新的那份（各資料夾分開計算）`:""].filter(Boolean).map(t=>`<br>${t}`).join("");
   const pill=s=>s.n||s.wp?[[s.n?`這批補 ${s.n} 張`:"",s.wp?`路標 ${s.wp} 個`:""].filter(Boolean).join("、"),"ok"]:s.big.length?["無法修復","no"]:s.next.length?["下一批","no"]:left(s)?[`完成，${leftTxt([s])}不補`,"no"]:["已經完整","no"];
   O.innerHTML=`<div class="jmrows">${sum.map(s=>s.folders.length<2?row(flN(s.floor),"只有 1 個資料夾","不用修復","no")
       :row(flN(s.floor),`${s.folders.length} 個資料夾：${s.folders.map(l=>esc(short(l))).join("、")}${extra(s)}`,...pill(s))).join("")}
     ${unk.length?`<details class="jmfold" open><summary>不處理 ${unk.length}</summary><div class="jmrows">${unk.map(F=>row(short(F.label),esc(F.why||""),"不處理","no")).join("")}</div></details>`:""}</div>`;
   const multi=sum.filter(s=>s.folders.length>1),pre=how.done?`上次的 ${how.done} 包都已放好。`:how.nojob==="none"?"這個瀏覽器沒有這份 mp 的修復紀錄，無法檢查每包是否都放好。":how.nojob==="off"?"這個瀏覽器不能保存修復紀錄，無法檢查每包是否都放好。":"";
-  if(!out.length){J.result=nBig?"big":!multi.length?"none":multi.some(left)?"done_left":"complete";
+  const unknownNote=unk.length?`另有 ${unk.length} 個資料夾未確認樓層，不處理，無法判定其完整性。`:"";
+  if(!out.length){J.result=nBig?"big":unk.length?"done_left":!multi.length?"none":multi.some(left)?"done_left":"complete";
     note.innerHTML=pre+(nBig?`<b class="warn">沒有產生修復檔。${nBig} 個資料夾無法修復，見上面的說明。</b>`
-      :!multi.length?"沒有同一層有好幾個資料夾的情形，不用修復。"
-      :multi.some(left)?`修復完成，有 ${leftTxt(multi)}本來就不補，原因見上面各樓層的說明。`:"各分流的地圖已經完整，不用修復。");window.__jmFix=J;return}
+      :!multi.length?(unk.length?"已辨識的資料夾不足以確認是否需要修復。":"沒有同一層有好幾個資料夾的情形，不用修復。")
+      :multi.some(left)?`修復完成，有 ${leftTxt(multi)}本來就不補，原因見上面各樓層的說明。`:unk.length?"已辨識的同樓層分流沒有需補的項目。":"各分流的地圖已經完整，不用修復。")+unknownNote;window.__jmFix=J;return}
   const parts=[];for(const o of out){const sz=o.sz,p=parts[parts.length-1];
     if(p&&p.bytes+sz+22<=JMFIX.PART&&p.items.length<JMFIX.MAXN){p.items.push(o);p.bytes+=sz}else parts.push({items:[o],bytes:sz})}
   const id=jmFixNewId(jmFixJobsRead());parts.forEach((p,i)=>p.zip=`jm_fix_${id}_${i+1}of${parts.length}.zip`);
@@ -3284,7 +3287,7 @@ async function jmFixRun(files,how){const O=$("jmFixOut"),note=$("jmFixNote");how
   const rec=await jmFixRecord(id,parts,jmFixPaths(files),new Set(fs.map(F=>F.label)),{next:sum.flatMap(s=>s.next),big:sum.flatMap(s=>s.big),from:how.from||null,why:how.why||null});
   const saved=jmFixSave(rec);J.saved=saved;
   const nImg=out.filter(o=>!o.wp).length,nWp=out.length-nImg;
-  note.innerHTML=`${pre}這批補 ${[nImg?`${nImg} 張地圖`:"",nWp?`${nWp} 個分流的路標`:""].filter(Boolean).join("、")}（${mb(total)}）${nNext?`，<b class="warn">另 ${nNext} 個資料夾下一批</b>`:""}${parts.length>1?`，<b class="warn">分成 ${parts.length} 個壓縮檔，每個都要放進去</b>`:""}${multi.some(left)||nBig?"。有些地圖略過，見上面的說明":""}。作業代號 <code>${esc(id)}</code>。下載後照上面第 5 步放進 <b>mp</b> 資料夾（放進去之前不要開遊戲），放好後回到這裡再選一次 mp 檢查${nNext?"，會接著產生下一批":""}。${saved?"":`<br><b class="warn">這次沒有留下紀錄，無法事後檢查。</b>`}`;
+  note.innerHTML=`${pre}這批補 ${[nImg?`${nImg} 張地圖`:"",nWp?`${nWp} 個分流的路標`:""].filter(Boolean).join("、")}（${mb(total)}）${nNext?`，<b class="warn">另 ${nNext} 個資料夾下一批</b>`:""}${parts.length>1?`，<b class="warn">分成 ${parts.length} 個壓縮檔，每個都要放進去</b>`:""}${multi.some(left)||nBig?"。有些地圖或路標未處理，見上面的說明":""}。作業代號 <code>${esc(id)}</code>。下載後照上面第 5 步放進 <b>mp</b> 資料夾（放進去之前不要開遊戲），放好後回到這裡再選一次 mp 檢查${nNext?"，會接著產生下一批":""}。${unknownNote}${saved?"":`<br><b class="warn">這次沒有留下紀錄，無法事後檢查。</b>`}`;
   $("jmFixDl").innerHTML=parts.map((p,i)=>`<button class="repbtn" data-jmfix="${i}" title="${mb(p.bytes)}">⬇ 下載修復檔${parts.length>1?` ${i+1}／${parts.length}`:""}</button>`).join("");
   $("jmFixDl").querySelectorAll("[data-jmfix]").forEach(b=>b.onclick=async()=>{const i=+b.dataset.jmfix;b.disabled=true;
     try{const z=await jmZip(parts[i].items),a=document.createElement("a");a.href=URL.createObjectURL(z);a.download=parts[i].zip;
