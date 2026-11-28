@@ -283,7 +283,7 @@ try:
         check(k == "run" and r6["how"].get("done") == 1 and r6["names"] == [], "B-3: after that the folder is done; the player was never stuck")
         pg.evaluate("window.__JMFIX.PART=40*1048576")
         # ---------- M2-7: content changed after the record, newer and older ----------
-        for t_, tag in ((time.time() + 5, "newer"), (T - 100000, "older")):
+        for tag in ("newer", "older"):
             mp3 = os.path.join(tmp, "mp3_" + tag)
             build(mp3)
             pg.evaluate("localStorage.removeItem('jmFixJobs')")
@@ -296,6 +296,7 @@ try:
             im.putpixel((0, 511), (9, 9, 9, 255))
             q = os.path.join(mp3, *n0.split("/"))
             im.save(q)
+            t_ = time.time() + 60 if tag == "newer" else T - 100000   # taken now: after the record, however long the run took
             os.utime(q, (t_, t_))
             k, c = pick(mp3)
             check(k == "check" and c["view"] == "changed" and c["packs"][0]["changed"] == 1 and c["packs"][0]["state"] == "part" and "原因未確認" in out()
