@@ -31,7 +31,7 @@ Checks (GPT reviews of v1 a7e9942, v2 806b5b5, v3 7a5718e, v4 09e2526 and v5 8f9
   unexplored sides and pieces joined to such are not given; a folder with its own unconfirmed copy takes pieces at 0,-1, not
   where its own pieces would join theirs, and elsewhere only when all of its own is confirmed; running again writes nothing
 """
-import functools, http.server, io, os, shutil, sys, tempfile, threading, zipfile
+import functools, http.server, io, os, re, shutil, sys, tempfile, threading, zipfile
 from PIL import Image, ImageOps
 from playwright.sync_api import sync_playwright
 
@@ -230,13 +230,15 @@ def pieces(alpha, site, judged, roots=False):
     return (out, rt) if roots else out
 
 
-def keep_ref(f, live, alpha, acc, shown, site, hold, pre):
+def keep_ref(f, live, alpha, acc, shown, site, hold, pre, E=None):
     """v14 reference (GPT V13-M1): live = {(layer, sq): alpha bytes after taking} a folder would take; alpha = the folder's
     own images now; acc = their given pixels now; pre = (layer, sq) of its images judged now. Judged again as the next run
     would: with its site-shown squares, and with every square whose surface image it takes (not 0,-1) shown too. Where an
     own pixel not given now would be given, left out: images with new pixels in that piece, images with new pixels right
     across from it in a site-shown square, every image of a square becoming shown next to it; again until nothing changes.
+    v15 (r3 §2.4): an own pixel in E (the same RGBA as another folder's confirmed pixel) is not counted.
     Returns the (layer, sq) left out, in order"""
+    E = E or {}
     live, cut_ = dict(live), []
     side = lambda dx, dz: [(0, y) for y in range(512)] if dx < 0 else [(511, y) for y in range(512)] if dx > 0 else [(x, 0) for x in range(512)] if dz < 0 else [(x, 511) for x in range(512)]
     while True:
@@ -252,8 +254,8 @@ def keep_ref(f, live, alpha, acc, shown, site, hold, pre):
                 for key in jd:
                     if key[1] != L or (L, key[2]) not in acc or (L, key[2]) not in alpha:
                         continue
-                    own, m = alpha[(L, key[2])], acc[(L, key[2])]
-                    V |= {rt[key][i] for i in range(262144) if own[i] and not m[i] and m2[key][i]}
+                    own, m, ek = alpha[(L, key[2])], acc[(L, key[2])], E.get((L, key[2]))
+                    V |= {rt[key][i] for i in range(262144) if own[i] and not m[i] and m2[key][i] and not (ek and ek[i])}
                 if not V:
                     continue
                 flip = True
@@ -503,7 +505,42 @@ try:
         for (f, L, sq), m in acc.items():
             if any(a and not g for a, g in zip(alpha[(f, L, sq)], m)):
                 part.setdefault(f, set()).add(L + "/" + sq)
-        sure = lambda f, sq: all((f, k.split("/")[1], sq) in acc and k.split("/")[1] + "/" + sq not in part.get(f, ()) for k in fk[f] if k.split("/")[-1][:-4] == sq)
+        # v15 (r3 §2.2): E = an own pixel drawn and not given that is the same RGBA as the same pixel of another folder's
+        # v14-confirmed copy (its whole drawn image where shown: surface by shown, other layers by site; or a given piece)
+        E, allE = {}, set()
+        for (f, L, sq), m in acc.items():
+            if L + "/" + sq not in part.get(f, ()):
+                continue
+            k = "overworld/%s/%s.png" % (L, sq)
+            src = shown if L == "day" else site
+            srcs = []
+            for g in folders:
+                if g == f or sq in hold.get(g, ()) or not ex(g, k):
+                    continue
+                if sq in src.get(g, ()):
+                    gm = None
+                elif sq not in shown.get(g, ()) and any(acc.get((g, L, sq), b"")):
+                    gm = acc[(g, L, sq)]
+                else:
+                    continue
+                gi = load(g, k, root)
+                if gi not in (None, "bad"):
+                    srcs.append((gi.tobytes(), gm))
+            if not srcs:
+                continue
+            a = load(f, k, root).tobytes()
+            e, left = bytearray(262144), 0
+            for i in range(262144):
+                if not a[4 * i + 3] or m[i]:
+                    continue
+                if any((gm is None or gm[i]) and d[4 * i + 3] and d[4 * i:4 * i + 4] == a[4 * i:4 * i + 4] for d, gm in srcs):
+                    e[i] = 1
+                else:
+                    left += 1
+            E[(f, L, sq)] = e
+            if not left:
+                allE.add((f, L, sq))
+        sure = lambda f, sq: all((f, k.split("/")[1], sq) in acc and (k.split("/")[1] + "/" + sq not in part.get(f, ()) or (f, k.split("/")[1], sq) in allE) for k in fk[f] if k.split("/")[-1][:-4] == sq)
         out, bad, cut_ = {}, set(), []
         for k in sorted(keys):
             L, sq = k.split("/")[1], k.split("/")[-1][:-4]
@@ -544,7 +581,8 @@ try:
             own = {(L, sq): a for (g, L, sq), a in alpha.items() if g == f}
             pre = [(L, sq) for (g, L, sq) in judged if g == f]
             accf = {(L, sq): m for (g, L, sq), m in acc.items() if g == f}
-            for L, sq in keep_ref(f, live, own, accf, set(shown.get(f, ())), set(site.get(f, ())), set(hold.get(f, ())), pre):
+            Ef = {(L, sq): m for (g, L, sq), m in E.items() if g == f}
+            for L, sq in keep_ref(f, live, own, accf, set(shown.get(f, ())), set(site.get(f, ())), set(hold.get(f, ())), pre, Ef):
                 del out[f + "/overworld/" + L + "/" + sq + ".png"]
                 cut_.append(f + " " + L + "/" + sq)
         return out, bad, cut_, part
@@ -563,8 +601,8 @@ try:
         pg.goto(f"http://127.0.0.1:{srv.server_address[1]}/index.html#report"); pg.wait_for_timeout(600)
         check(pg.locator("#jmFix").count() == 1 and pg.locator("#jmFixDir").count() == 1, "the 修復分流地圖 card is on the report page")
 
-        def run(path=mp):
-            pg.evaluate("window.__jmFix=null")
+        def run(path=mp):   # v15: no repair record (B is tested in tests/jm_fix_v15_test.py), so every pick is worked out afresh
+            pg.evaluate("window.__jmFix=null;localStorage.removeItem('jmFixJobs')")
             pg.set_input_files("#jmFixDir", path)
             pg.wait_for_function("window.__jmFix", timeout=120000)
             return pg.evaluate("window.__jmFix")
@@ -590,7 +628,10 @@ try:
         check(c(R5) not in sh.get(XF, []), "a small piece of another floor's map inside a site-shown copy is not shown")
         check(c(R5) not in sh.get(MX, []), "a small piece 3/4 the same as the site-shown copy and 1/4 another floor is not shown")
         check(c(R6) not in sh.get(FLAT, []), "a piece of one flat colour, the same as the site-shown copy, is not shown")
-        check(not any(x.startswith(FLAT) and x.endswith("/%d,%d.png" % R6) for x in r["names"]), "and it is not changed")
+        # v15 (r3 §2.4, §2.6): FLAT's flat piece is not shown, but every pixel of it is the same RGBA as A's site-shown copy (E),
+        # so FLAT takes A's image there; checked pixel for pixel against the reference below (was v4: "and it is not changed")
+        check(FLAT + "/" + D % R6 in r["names"] and FLAT + " " + c(R6) not in (f3.get("unshown") or []) and D[len("overworld/"):-4] % R6 in r.get("E", {}).get(FLAT, []),
+              "v15: and since all of it is the same as A's site-shown copy (E), FLAT takes A's image there and the square is not listed")
         only = lambda m: {f: (m or {}).get(f) for f in SAFE}
         check(only(r.get("site")) == SITE and only(r.get("sim")) == SIM and only(sh) == EXP,
               f"the shown copies are exactly the ones written out from the fixture (site {only(r.get('site')) == SITE}, piece {only(r.get('sim'))} vs {SIM})")
@@ -678,9 +719,93 @@ try:
         check(sorted(got) == sorted(want), "the parts together hold every image once")
         check(any(len(q) > 1 for q in parts) and all(s <= 4000000 for s, q in zip(sizes, parts) if len(q) > 1) and sizes == r2["partBytes"],
               f"every zip is at most the part size and its size is counted exactly: {sizes} vs {r2['partBytes']}")
-        pg.evaluate("window.__JMFIX.PART=40*1048576;window.__JMFIX.TOTAL=300000")
-        r3 = run()
-        check(r3["stop"] and r3["names"] == [] and pg.locator("#jmFixDl [data-jmfix]").count() == 0 and "停止" in pg.inner_text("#jmFixNote"), "above the total limit nothing is produced")
+        # v15 M1 (r3 §4): above the total limit the folders take turns, a whole folder at a time. Worked out here from the
+        # first run's images: each folder's bytes (image + zip headers), the folders in name order; a batch is the longest
+        # run of folders (in that order, without the ones over the limit by themselves) that fits; the rest wait
+        hb = lambda n: 30 + 46 + 2 * len(n.encode("utf-8"))
+        per = {}
+        for k, v in zd.items():
+            per[k.split("/")[0]] = per.get(k.split("/")[0], 0) + len(v) + hb(k)
+        order = sorted(per)
+
+        def batch_ref(lim, done):
+            big_ = [f for f in order if per[f] > lim]
+            todo = [f for f in order if f not in big_ and f not in done]
+            got_, tot = [], 0
+            for f in todo:
+                if tot + per[f] > lim:
+                    break
+                got_.append(f)
+                tot += per[f]
+            return got_, [f for f in todo if f not in got_], big_
+        lim = sorted(per.values())[-1] + sorted(per.values())[-2] // 2   # the two biggest folders do not fit together
+        pg.evaluate(f"window.__JMFIX.PART=40*1048576;window.__JMFIX.TOTAL={lim}")
+        mpb = os.path.join(tmp, "mp_batch")
+        shutil.copytree(mp, mpb)
+        done, batches, rounds = set(), [], 0
+        while rounds < 40:
+            rounds += 1
+            rb = run(mpb)
+            exp_in, exp_next, exp_big = batch_ref(lim, done)
+            fo = sorted({x.split("/")[0] for x in rb["names"]})
+            check(fo == exp_in and sorted(rb.get("next") or []) == sorted(exp_next) and rb.get("big") == [],
+                  f"v15 M1 batch {rounds}: the folders in it and the ones waiting are as worked out ({fo} vs {exp_in}; next {rb.get('next')} vs {exp_next})")
+            check(sorted(rb["names"]) == sorted(k for k in want if k.split("/")[0] in exp_in) and sum(rb.get("partBytes") or [0]) - 22 * len(rb.get("partBytes") or []) <= lim,
+                  f"v15 M1 batch {rounds}: every image of those folders, nothing of any other, at most the limit ({sum(rb.get('partBytes') or [0])} <= {lim} + headers)")
+            ot = pg.inner_text("#jmFixOut") + pg.inner_text("#jmFixNote")
+            check(not exp_next or (f"另 {len(exp_next)} 個資料夾下一批" in ot and "下一批" in ot and "停止" not in ot), f"v15 M1-2 batch {rounds}: says how many folders wait")
+            if not rb["names"]:
+                break
+            batches.append(fo)
+            for i in range(pg.locator("#jmFixDl [data-jmfix]").count()):
+                with pg.expect_download(timeout=120000) as dl:
+                    pg.click(f"#jmFixDl [data-jmfix='{i}']")
+                check(re.fullmatch(r"jm_fix_\d{8}_\d{4}_[a-z2-9]{4}_%dof%d\.zip" % (i + 1, len(rb["zips"])), dl.value.suggested_filename) is not None and dl.value.suggested_filename == rb["zips"][i],
+                      f"v15 (r3 §3.6): zip name {dl.value.suggested_filename}")
+                zi = zipfile.ZipFile(dl.value.path())
+                for k in zi.namelist():   # put in with the date the file had (new files: before every original), so the newest
+                    q = os.path.join(mpb, *k.split("/"))   # source of each pixel is the one-run reference's; a later batch picking
+                    os.makedirs(os.path.dirname(q), exist_ok=True)   # by the new dates is checked per round on real data (r3 §5)
+                    t0 = os.path.getmtime(q) if os.path.exists(q) else T - 5000
+                    open(q, "wb").write(zi.read(k))
+                    os.utime(q, (t0, t0))
+            done |= set(fo)
+        check(len(batches) >= 2 and sorted(sum(batches, [])) == order, f"v15 M1-1: the batches end and every folder is in exactly one ({batches})")
+        fin = {f + "/" + k: load(f, k, mpb) for f in order for k in files_of(f, mpb)}
+        dif = [k for k, v in want.items() if fin.get(k) is None or fin[k].tobytes() != v.tobytes()]
+        check(not dif, f"v15 M1-1: after every batch is put in, each image is the one-run reference pixel for pixel (differs: {len(dif)} {dif[:4]})")
+        # M1-4 (r3 §4.4): a folder over the limit by itself is not repaired, says so, and the others still are. It is found
+        # when its turn comes (before that it waits like any other); from then on its floor is worked out without it
+        lim2 = sorted(per.values())[-1] - 1
+        big1 = [f for f in order if per[f] > lim2]
+        pg.evaluate(f"window.__JMFIX.TOTAL={lim2}")
+        mpc = os.path.join(tmp, "mp_big")
+        shutil.copytree(mp, mpc)
+        seen, got4, said, done4 = [], set(), False, False
+        for _ in range(40):
+            before = {k: os.path.getmtime(os.path.join(mpc, *k.split("/"))) for f in big1 for k in [f + "/" + x for x in files_of(f, mpc)]}
+            rb = run(mpc)
+            bot = pg.inner_text("#jmFixOut") + pg.inner_text("#jmFixNote")
+            if rb.get("big"):
+                seen.append(rb["big"])
+                said = said or (all(t in bot for t in ("網站目前無法修復", "你的地圖沒有被改動，不需要還原，也不要一直重試", "回報表單選「更正或其他」")) and "已經完整" not in bot)
+            check(not any(x.startswith(tuple(big1)) for x in rb["names"]), f"v15 M1-4: nothing is ever written for the folder over the limit ({big1})")
+            if not rb["names"]:
+                done4 = rb.get("big") == big1 and rb.get("result") == "big"
+                break
+            got4 |= {x.split("/")[0] for x in rb["names"]}
+            for i in range(pg.locator("#jmFixDl [data-jmfix]").count()):
+                with pg.expect_download(timeout=120000) as dl:
+                    pg.click(f"#jmFixDl [data-jmfix='{i}']")
+                zi = zipfile.ZipFile(dl.value.path())
+                for k in zi.namelist():
+                    q = os.path.join(mpc, *k.split("/"))
+                    os.makedirs(os.path.dirname(q), exist_ok=True)
+                    open(q, "wb").write(zi.read(k))
+                    os.utime(q, (T - 5000, T - 5000))
+        check(seen and all(x == big1 for x in seen) and said and done4 and got4 == set(order) - set(big1),
+              f"v15 M1-4: it is listed as not repairable with the three sentences, never as complete, and every other folder is repaired ({seen[:1]}, {sorted(set(order) - set(big1) - got4)})")
+        check(all(os.path.getmtime(os.path.join(mpc, *k.split("/"))) == t for k, t in before.items()), "v15 M1-4: its files are not changed")
         pg.evaluate("window.__JMFIX.TOTAL=256*1048576")
         # copied in: nothing more to do, but this floor had squares left out, so it is not called complete
         for k in names:
@@ -690,7 +815,7 @@ try:
         r4 = run()
         f34 = {s["floor"]: s for s in r4["floors"]}.get(3, {})
         note = pg.inner_text("#jmFixNote")
-        check(r4["names"] == [] and "無法確認是否完整" in note and "已經完整" not in note and "無法確認完整" in pg.inner_text("#jmFixOut"),
+        check(r4["names"] == [] and re.search(r"修復完成，有 \d+ 格地圖[^。]*本來就不補", note) is not None and "已經完整" not in note and "不補" in pg.inner_text("#jmFixOut") and r4.get("result") == "done_left",
               f"running again finds nothing to do and does not call a floor with left-out squares complete: {note}")
         # v7 (local review of v6, M1/M2): a second round with a folder that joins after the repair (nothing at R4).
         # OKN is now whole there, so the site's map shows it and its night image is a source. What it gives is fixed here
@@ -866,7 +991,7 @@ try:
             put(f, D % R1, cut(*R1), T, mp5)
             put(f, "waypoints/WaypointData.dat", WF4[f], T + 10, mp5)
         r11 = run(mp5)
-        check(r11["names"] == [] and "已經完整" not in pg.inner_text("#jmFixNote") + pg.inner_text("#jmFixOut") and "無法確認完整" in pg.inner_text("#jmFixOut"),
+        check(r11["names"] == [] and "已經完整" not in pg.inner_text("#jmFixNote") + pg.inner_text("#jmFixOut") and "路標本來就不補" in pg.inner_text("#jmFixNote") and r11.get("result") == "done_left",
               f"v12: a floor whose only left-out folder is over 4 MiB is not called complete: {pg.inner_text('#jmFixNote')}")
         # v13: pieces of unshown images (separate fixture). 0,0 1,-1 0,2 1,2 are shown by the site's map; 0,-1 is never
         # judged; 0,3 and 1,3 have 17 and 22 chunks on the site's map (< NMIN): not shown
