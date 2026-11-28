@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="utf-8">
-<meta name="sao-build" content="c1487699f2">
+<meta name="sao-build" content="e7b5d89d72">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="阿爾戈的攻略本：SAO Minecraft 艾恩葛朗特（Aincrad）攻略，地圖、怪物、裝備、配方、任務、地下城、職業技能、世界王。">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,"Segoe UI",sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -3116,6 +3116,7 @@ async function jmFixRecord(id,parts,byPath,labels,info){const names=[...labels].
   return{id,at:Date.now(),names,fp,parts:zs,...info}}
 function jmFixSave(rec){const jobs=jmFixJobsRead();if(!jobs)return false;const all=[...jobs,rec];while(all.length>JMFIX_KEEP)all.shift();
   try{localStorage.setItem(JMFIX_JOBS,JSON.stringify(all));return true}catch(e){return false}}   // QuotaExceededError, storage off
+window.__JMFIXB={newId:jmFixNewId,save:jmFixSave,read:jmFixJobsRead,KEEP:JMFIX_KEEP};   // exposed for tests
 // the newest record whose folders are all in this pick, checked against what is there now
 async function jmFixCheck(job,byPath){const cur=async p=>{const f=byPath.get(p);return f?await jmFixHash(f):null};
   let fp=job.fp.length<JMFIX_FP?"few":"same";if(fp==="same")for(const [p,h] of job.fp)if(await cur(jmFixJobPath(job,p))!==h){fp="diff";break}

@@ -60,6 +60,10 @@ jobs:
         run: |
           pip install "pillow==11.0.0"
           PYTHONIOENCODING=utf-8 python3 tests/jm_fix_test.py
+      # 修復分流地圖 v15 (plan r3, GPT PASS 2026-11-28): A, the repair records and their checks, on made-up folders
+      - name: JourneyMap instance repair v15 (jm_fix_v15_test)
+        if: always()
+        run: PYTHONIOENCODING=utf-8 python3 tests/jm_fix_v15_test.py
       # W8 / W9 (plan v5 B7): the site audit and the untranslated-name list, served from a local copy of the repo
       - name: site audit and untranslated names (W8 / W9)
         if: always()
