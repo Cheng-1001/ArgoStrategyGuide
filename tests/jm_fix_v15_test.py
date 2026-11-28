@@ -497,6 +497,111 @@ try:
         check(k == "run" and rc2.get("big") == [BIG] and fo == [S1, S2] and not rc2.get("next"),
               f"C4: the big folder is not repairable and both small folders it had pushed out are in this batch ({rc2.get('big')}, {fo}, next {rc2.get('next')})")
         pg.evaluate("window.__JMFIX.TOTAL=256*1048576")
+        # ---------- v15.0.3 W4-M05 (GPT): one repair job at a time; an older session's buttons do nothing ----------
+        st = lambda: pg.evaluate("({phase:window.__jmFixState.phase,tok:window.__jmFixState.tok,refused:window.__jmFixState.refused,error:window.__jmFixState.error})")
+        pg.evaluate("localStorage.removeItem('jmFixJobs');window.__JMFIX.PART=1600000")
+        m5a, m5b = os.path.join(tmp, "m5a", "mp"), os.path.join(tmp, "m5b", "mp")
+        build(m5a)
+        for f, sqs in (("Triggers_v15m5b1~dn", SITE[:2]), ("Triggers_v15m5b2~t5", SITE[:1])):   # a small other copy (other names): the second lacks 1,-1
+            for sq in sqs:
+                put(m5b, f, D % ("day", "%d,%d" % sq), cut(*sq), T + 50)
+        # M05-1: a second pick while the first is still being worked out (through the input, and in code) is refused
+        pg.evaluate("window.__jmFix=null;window.__jmFixCheck=null")
+        pg.set_input_files("#jmFixDir", m5a)
+        s1 = st()
+        busy = pg.evaluate("document.getElementById('jmFixDir').disabled")
+        pg.evaluate("""()=>{const i=document.getElementById('jmFixDir'),dt=new DataTransfer();dt.items.add(new File(['x'],'0,0.png'));
+          Object.defineProperty(i,'files',{value:dt.files,configurable:true});i.dispatchEvent(new Event('change'));delete i.files;
+          return window.__JMFIXS.start([new File(['x'],'0,0.png')])}""")
+        s2 = st()
+        wait("window.__jmFix")
+        r51 = pg.evaluate("window.__jmFix")
+        s3 = st()
+        check(s1["phase"] == "work" and busy and s2["refused"] - s1["refused"] == 2 and s2["tok"] == s1["tok"]
+              and sorted({s_["floor"]: s_ for s_ in r51["floors"]}[3]["folders"]) == sorted(FS) and s3["phase"] == "ready" and s3["tok"] == s1["tok"]
+              and not pg.evaluate("document.getElementById('jmFixDir').disabled"),
+              f"M05-1: while the first pick is worked out, a second one (input and code) is refused; the result is the first one's, then picking works again ({s1}, {s2}, {s3})")
+        # M05-3 (downloads): three clicks at once make one zip; the other zips can still be downloaded afterwards
+        zn5 = r51["zips"]
+        got5 = []
+        pg.on("download", lambda d: got5.append(d.suggested_filename))
+        pg.evaluate("()=>{const b=[...document.querySelectorAll('#jmFixDl [data-jmfix]')];b[0].onclick();b[0].onclick();b[1].onclick()}")
+        pg.wait_for_timeout(3000)
+        one = list(got5)
+        with pg.expect_download(timeout=120000):
+            pg.click("#jmFixDl [data-jmfix='1']")
+        pg.wait_for_timeout(500)
+        check(len(zn5) >= 2 and one == [zn5[0]] and got5[-1] == zn5[1] and pg.evaluate("window.__jmFix.started") == [0, 1] and "已交給瀏覽器下載" in pg.inner_text("#jmFixDl"),
+              f"M05-3: clicks on two zips at once make one zip only; the other can be downloaded after it ({one}, {got5}, {zn5[:2]})")
+        # M05-2: a download button of the finished session, kept and pressed after a new pick, does nothing
+        pg.evaluate("window.__oldDl=document.querySelector('#jmFixDl [data-jmfix]').onclick")
+        n_jobs = len(jobs())
+        k, r52 = pick(m5b)
+        before = (pg.inner_text("#jmFixOut"), pg.inner_text("#jmFixNote"), pg.evaluate("window.__jmFix.job"))
+        n0 = len(got5)
+        res_old = pg.evaluate("window.__oldDl()")
+        pg.wait_for_timeout(2500)
+        check(k == "run" and res_old is False and len(got5) == n0 and before == (pg.inner_text("#jmFixOut"), pg.inner_text("#jmFixNote"), pg.evaluate("window.__jmFix.job")),
+              f"M05-2: the old session's download button does nothing after a new pick (returns {res_old}, downloads {got5[n0:]})")
+        # M05-2: a decision button of a session waiting for the player, pressed after a new pick, does nothing
+        k, c5 = pick(m5a)   # the record of the first run, nothing put in: the check asks
+        pg.evaluate("window.__oldNew=document.querySelector('#jmFixOut [data-jmc=new]').onclick")
+        tok_old = st()["tok"]
+        k2, r53 = pick(m5b)   # a new session (its own record asks, or it runs)
+        tok_new = st()["tok"]
+        n_jobs = len(jobs())
+        before = (pg.inner_text("#jmFixOut"), pg.inner_text("#jmFixNote"), pg.evaluate("window.__jmFix&&window.__jmFix.job"))
+        res_old = pg.evaluate("window.__oldNew()")
+        pg.wait_for_timeout(2500)
+        check(k == "check" and c5["view"] == "notyet" and k2 in ("run", "check") and tok_new == tok_old + 1 and res_old is False and len(jobs()) == n_jobs
+              and before == (pg.inner_text("#jmFixOut"), pg.inner_text("#jmFixNote"), pg.evaluate("window.__jmFix&&window.__jmFix.job")),
+              f"M05-2: the old check's 「開始新的修復」, pressed after a new pick, starts nothing, adds no record and changes nothing ({res_old})")
+        # M05-3 (decisions): two clicks on 「重新產生」 start one run and add one record
+        mp5c = os.path.join(tmp, "m5c", "mp")
+        build(mp5c)
+        pg.evaluate("localStorage.removeItem('jmFixJobs')")
+        k, r = pick(mp5c)
+        z5 = download()
+        names5 = sorted(n for zz in z5.values() for n in zz)
+        apply(mp5c, {n: v for zz in z5.values() for n, v in zz.items() if n != names5[0]})
+        k, c = pick(mp5c)
+        nj = len(jobs())
+        pg.evaluate("window.__jmFix=null")
+        pg.evaluate("()=>{const b=document.querySelector('#jmFixOut [data-jmc=regen]');b.onclick();b.onclick();document.querySelector('#jmFixOut [data-jmc=restore]')&&document.querySelector('#jmFixOut [data-jmc=restore]').onclick()}")
+        wait("window.__jmFix")
+        pg.wait_for_timeout(1000)
+        check(k == "check" and c["view"] == "missing" and len(jobs()) == nj + 1 and pg.evaluate("window.__jmFix.names") == [names5[0]] and st()["phase"] == "ready",
+              f"M05-3: two clicks on 「重新產生」 (and one on 「還原」 while it runs) start one run and add one record ({len(jobs()) - nj})")
+        # M05-4: a failure while working out, while hashing, and while making a zip ends in a message, everything usable again
+        pg.evaluate("()=>{window.__gc=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(){throw new Error('test: analysis failed')};return 1}")
+        pg.evaluate("localStorage.removeItem('jmFixJobs');window.__jmFix=null")
+        pg.set_input_files("#jmFixDir", m5b)
+        wait("window.__jmFixState.phase==='error'||window.__jmFix")
+        e1 = (st(), pg.inner_text("#jmFixOut"), pg.evaluate("document.getElementById('jmFixDir').disabled"))
+        pg.evaluate("()=>{HTMLCanvasElement.prototype.getContext=window.__gc;return 1}")
+        k, ok1 = pick(m5b)
+        check(e1[0]["phase"] == "error" and "test: analysis failed" in e1[1] and "沒有被改動" in e1[1] and not e1[2] and "已經完整" not in e1[1] and k == "run" and ok1["names"],
+              f"M05-4 (working out): the error is shown, nothing is called complete, picking works and the retry succeeds ({e1[0]})")
+        pg.evaluate("()=>{window.__dg=crypto.subtle.digest.bind(crypto.subtle);crypto.subtle.digest=()=>Promise.reject(new Error('test: hash failed'));return 1}")
+        pg.evaluate("localStorage.removeItem('jmFixJobs');window.__jmFix=null")
+        pg.set_input_files("#jmFixDir", m5b)
+        wait("window.__jmFixState.phase==='error'||window.__jmFix")
+        e2 = (st(), pg.inner_text("#jmFixOut"), pg.locator("#jmFixDl [data-jmfix]").count(), len(jobs()))
+        pg.evaluate("()=>{crypto.subtle.digest=window.__dg;return 1}")
+        k, ok2 = pick(m5b)
+        check(e2[0]["phase"] == "error" and "test: hash failed" in e2[1] and e2[2] == 0 and e2[3] == 0 and k == "run" and ok2["names"] and len(jobs()) == 1,
+              f"M05-4 (hashing): no zips and no record are left behind, the retry succeeds ({e2[0]})")
+        pg.evaluate("()=>{window.__ab=Blob.prototype.arrayBuffer;Blob.prototype.arrayBuffer=()=>Promise.reject(new Error('test: zip failed'));return 1}")
+        n0 = len(got5)
+        pg.evaluate("document.querySelector('#jmFixDl [data-jmfix]').onclick()")
+        wait("window.__jmFix.zipErrors===1&&window.__jmFixState.phase==='ready'")
+        e3 = (st(), pg.inner_text("#jmFixNote"), pg.evaluate("[...document.querySelectorAll('#jmFixDl [data-jmfix]')].every(b=>!b.disabled)"), len(got5) - n0)
+        pg.evaluate("()=>{Blob.prototype.arrayBuffer=window.__ab;return 1}")
+        with pg.expect_download(timeout=120000):
+            pg.click("#jmFixDl [data-jmfix='0']")
+        check(e3[0]["phase"] == "ready" and "壓縮檔產生失敗" in e3[1] and "test: zip failed" in e3[1] and e3[2] and e3[3] == 0 and pg.evaluate("window.__jmFix.started") == [0],
+              f"M05-4 (zip): the failure is shown, no download is claimed, the buttons work again and the retry downloads ({e3[0]})")
+        pg.evaluate("window.__JMFIX.PART=40*1048576")
         check(not errs, f"no page errors: {errs[:3]}")
         b.close()
 except Exception as e:   # a run that ends in a state the test does not expect is a failure, not a crash

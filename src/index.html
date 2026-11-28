@@ -3115,19 +3115,45 @@ async function jmFixCheck(job,byPath){const cur=async p=>{const f=byPath.get(p);
       if(h===o)st.placed++;else if(h===b)st.not++;else{st.changed.push(P);const f=byPath.get(P);if(f&&(f.lastModified||0)>job.at)st.newer++}}
     st.state=st.placed===st.n?"placed":st.not===st.n?"not":"part";packs.push(st)}
   return{fp,packs}}
-async function jmFixPick(files){const O=$("jmFixOut"),note=$("jmFixNote");window.__jmFix=null;window.__jmFixCheck=null;$("jmFixDl").innerHTML="";
-  const fs=jmFixFolders(files);if(!fs.length)return jmFixRun(files,{});
+// v15.0.3 W4-M05 (GPT): one repair job at a time. JMS.phase: idle | work (reading, checking, working out, recording) | ask
+// (the check waits for the player) | ready (zips to download) | zip (one zip being made) | error. While work or zip nothing
+// else starts: the folder input and every button are disabled, and a pick or click that still arrives is refused in code.
+// Every pick that starts gets a new session (JMS.tok); a decision or download button of an older session does nothing
+const JMS={tok:0,phase:"idle",refused:0,error:null};window.__jmFixState=JMS;
+const JMS_TXT={work:"正在處理這份 mp：請不要關閉或重新整理這個分頁，完成前不能再選資料夾。你的 mp 不會被改動。",
+  ask:"等你選擇下一步（也可以重新選一次資料夾）。",ready:"修復檔已準備好：請逐一按下載，等瀏覽器下載完成後，再照第 5 步放進 mp。",
+  zip:"正在產生壓縮檔：完成前不能再選資料夾，也不能下載其他壓縮檔。",error:"處理失敗，你的 mp 沒有被改動。可以重新選一次資料夾再試。",idle:""};
+const jmFixBusy=()=>JMS.phase==="work"||JMS.phase==="zip";
+function jmFixPhase(p){JMS.phase=p;const busy=jmFixBusy(),inp=$("jmFixDir"),lab=document.querySelector('label[for="jmFixDir"]'),st=$("jmFixState");
+  if(inp)inp.disabled=busy;if(lab){lab.setAttribute("aria-disabled",busy?"true":"false");lab.style.pointerEvents=busy?"none":"";lab.style.opacity=busy?".5":""}
+  document.querySelectorAll("#jmFixDl [data-jmfix],#jmFixOut [data-jmc]").forEach(b=>b.disabled=busy);if(st)st.textContent=JMS_TXT[p]||""}
+// one step of session tok (a pick, or a button that starts a run): refused unless that session is the current one and
+// nothing is running; it ends in the phase its result shows, and an error ends in a message with everything usable again
+async function jmFixGate(tok,f){if(tok!==JMS.tok||jmFixBusy())return false;jmFixPhase("work");JMS.error=null;
+  try{await f();if(tok===JMS.tok)jmFixPhase(window.__jmFix?(window.__jmFix.result==="zips"?"ready":"idle"):window.__jmFixCheck&&window.__jmFixCheck.view?"ask":"idle")}
+  catch(e){if(tok!==JMS.tok)return false;JMS.error=String(e&&e.message||e);
+    $("jmFixOut").innerHTML=`<div class="note warn">處理時發生錯誤（${esc(JMS.error)}），沒有產生修復檔，你的 mp 沒有被改動。可以重新選一次資料夾再試。</div>`;
+    $("jmFixNote").textContent="";$("jmFixDl").innerHTML="";window.__jmFix=null;jmFixPhase("error")}
+  return true}
+function jmFixStart(files){if(jmFixBusy()){JMS.refused++;const st=$("jmFixState");if(st)st.textContent="目前還在處理上一份資料，這次的選擇沒有開始。請等它完成後再選。";return false}
+  const tok=++JMS.tok;return jmFixGate(tok,()=>jmFixPick(files,tok))}
+window.__JMFIXS={start:jmFixStart};   // exposed for tests (a pick that arrives in code, not through the input)
+async function jmFixPick(files,tok){const O=$("jmFixOut"),note=$("jmFixNote");window.__jmFix=null;window.__jmFixCheck=null;$("jmFixDl").innerHTML="";
+  const fs=jmFixFolders(files);if(!fs.length)return jmFixRun(files,{},tok);
   const jobs=jmFixJobsRead(),labels=new Set(fs.map(F=>F.label.toLowerCase()));
   const job=jobs&&[...jobs].reverse().find(j=>j.names.length&&j.names.every(l=>labels.has(l.toLowerCase())));
-  if(!job)return jmFixRun(files,{nojob:jobs?"none":"off"});
+  if(!job)return jmFixRun(files,{nojob:jobs?"none":"off"},tok);
   note.textContent="正在檢查上次的修復檔有沒有放好…";O.innerHTML="";
   const byPath=jmFixPaths(files),r=await jmFixCheck(job,byPath),P=r.packs,n=P.length;
   const zips=ps=>ps.map(p=>`<code>${esc(p.zip)}</code>`).join("、"),nth=p=>`第 ${P.indexOf(p)+1}／${n} 包（<code>${esc(p.zip)}</code>）`;
   const C=window.__jmFixCheck={job:job.id,fp:r.fp,packs:P.map(p=>({zip:p.zip,state:p.state,n:p.n,placed:p.placed,not:p.not,changed:p.changed.length,newer:p.newer})),view:null};
   const btns=l=>`<div class="jmtools">${l.map(([k,t])=>`<button class="repbtn" data-jmc="${k}">${t}</button>`).join("")}</div>`;
   const show=(view,html)=>{C.view=view;note.textContent="";O.innerHTML=`<div class="note">${html}</div>`;
-    O.querySelectorAll("[data-jmc]").forEach(b=>b.onclick=()=>act(b.dataset.jmc))};
-  const go=why=>jmFixRun(files,{from:job.id,why});
+    O.querySelectorAll("[data-jmc]").forEach(b=>b.onclick=()=>press(b.dataset.jmc))};
+  const go=why=>jmFixRun(files,{from:job.id,why},tok);
+  // a button: only in the session it was made for and only while the check waits; a choice that starts a run goes through
+  // the gate, so a second click (or a click of another button) while it runs does nothing
+  const press=k=>{if(tok!==JMS.tok||JMS.phase!=="ask")return false;if(k==="regen"||k==="new"||k==="done")return jmFixGate(tok,()=>act(k));act(k);return true};
   const restore=`還原的方法：關掉遊戲，確認修復前的備份還在，把 <code>data</code> 裡的 <b>mp</b> 改名成 <b>mp_修復後</b>，再把備份的 <b>mp</b> 複製回 <code>data</code>。`;
   const packsView=()=>{if(P.every(p=>p.state==="placed"))return act("done");
     if(P.every(p=>p.state==="not"))return show("notyet",`上次的修復檔（作業代號 <code>${esc(job.id)}</code>）一包都還沒有放進這份 mp。這可能是上次修復的那份 mp，也可能是它的備份或已經還原的備份，網站分不出來，請選一個：${btns([["notyet","這是上次修復的 mp，我還沒放"],["new","這是另一份 mp（或已還原的備份），開始新的修復"]])}`);
@@ -3139,7 +3165,7 @@ async function jmFixPick(files){const O=$("jmFixOut"),note=$("jmFixNote");window
       ?[["have","① 我還有那一包"],["regen","② 找不到那一包，重新產生缺少的部分"],["restore","③ 還原備份"],["new","④ 這是另一份 mp，開始新的修復"]]
       :[["regen","② 重新產生缺少的部分"],["restore","③ 還原備份"]])}`)};
   const act=k=>{
-    if(k==="done"){C.view="done";return jmFixRun(files,{from:job.id,why:"done",done:n})}
+    if(k==="done"){C.view="done";return jmFixRun(files,{from:job.id,why:"done",done:n},tok)}
     if(k==="regen"||k==="new")return go(k);
     if(k==="inspect")return packsView();
     if(k==="restore")return show("restore",`${restore}<br>還原後回到這裡再選一次 mp，選「這是另一份 mp（或已還原的備份），開始新的修復」。`);
@@ -3148,7 +3174,7 @@ async function jmFixPick(files){const O=$("jmFixOut"),note=$("jmFixNote");window
   if(r.fp!=="same")return show("diff",`${r.fp==="few"?"這份 mp 的檔案太少，網站無法確認它是不是上次修復（作業代號 <code>"+esc(job.id)+"</code>）的那一份。":"這份 mp 的內容和上次修復（作業代號 <code>"+esc(job.id)+"</code>）時不同，可能是另一份資料，或遊戲已經更新過。"}請選一個：${btns([["new","這是另一份 mp，開始新的修復"],["inspect","這是上次那份，檢查各包"]])}`);
   return packsView()}
 const JMFIX_HEAD=n=>30+46+2*new TextEncoder().encode(n).length;   // zip local + central header and the name twice (jmZip)
-async function jmFixRun(files,how){const O=$("jmFixOut"),note=$("jmFixNote");how=how||{};window.__jmFix=null;$("jmFixDl").innerHTML="";note.textContent="正在讀取…";
+async function jmFixRun(files,how,tok){const O=$("jmFixOut"),note=$("jmFixNote");how=how||{};window.__jmFix=null;$("jmFixDl").innerHTML="";note.textContent="正在讀取…";
   const fs=jmFixFolders(files),wf=jmWpFiles(files);
   if(!fs.length){O.innerHTML=`<div class="note warn">選的資料夾裡找不到 JourneyMap 的地圖。請確認選的是 <code>journeymap\\data\\mp</code>。</div>`;note.textContent="";return}
   O.innerHTML=`<div class="muted">找到 ${fs.length} 個世界資料夾，正在確認各是第幾層…</div>`;
@@ -3277,12 +3303,16 @@ async function jmFixRun(files,how){const O=$("jmFixOut"),note=$("jmFixNote");how
   const saved=jmFixSave(rec);J.saved=saved;
   const nImg=out.filter(o=>!o.wp).length,nWp=out.length-nImg;
   note.innerHTML=`${pre}這批補 ${[nImg?`${nImg} 張地圖`:"",nWp?`${nWp} 個分流的路標`:""].filter(Boolean).join("、")}（${mb(total)}）${nNext?`，<b class="warn">另 ${nNext} 個資料夾下一批</b>`:""}${parts.length>1?`，<b class="warn">分成 ${parts.length} 個壓縮檔，每個都要放進去</b>`:""}${multi.some(left)||nBig?"。有些地圖或路標未處理，見上面的說明":""}。作業代號 <code>${esc(id)}</code>。下載後照上面第 5 步放進 <b>mp</b> 資料夾（放進去之前不要開遊戲），放好後回到這裡再選一次 mp 檢查${nNext?"，會接著產生下一批":""}。${unknownNote}${saved?"":`<br><b class="warn">這次沒有留下紀錄，無法事後檢查。</b>`}`;
-  $("jmFixDl").innerHTML=parts.map((p,i)=>`<button class="repbtn" data-jmfix="${i}" title="${mb(p.bytes)}">⬇ 下載修復檔${parts.length>1?` ${i+1}／${parts.length}`:""}</button>`).join("");
-  $("jmFixDl").querySelectorAll("[data-jmfix]").forEach(b=>b.onclick=async()=>{const i=+b.dataset.jmfix;b.disabled=true;
-    try{const z=await jmZip(parts[i].items),a=document.createElement("a");a.href=URL.createObjectURL(z);a.download=parts[i].zip;
-      document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000)}
-    catch(e){note.innerHTML=`<b class="warn">壓縮檔產生失敗（${esc(e&&e.message||e)}）。可能是記憶體不足，請關掉其他分頁後重新選一次資料夾。</b>`}
-    finally{b.disabled=false}});window.__jmFix=J}
+  $("jmFixDl").innerHTML=parts.map((p,i)=>`<button class="repbtn" data-jmfix="${i}" title="${mb(p.bytes)}">⬇ 下載修復檔${parts.length>1?` ${i+1}／${parts.length}`:""}</button>`).join("")+`<span class="muted" id="jmFixDlMsg"></span>`;
+  // W4-M05: one zip at a time, only in this session and only while its zips are ready; "started" is all the page can know
+  J.started=[];J.zipErrors=0;
+  $("jmFixDl").querySelectorAll("[data-jmfix]").forEach(b=>b.onclick=async()=>{const i=+b.dataset.jmfix;if(tok!==JMS.tok||JMS.phase!=="ready")return false;jmFixPhase("zip");
+    try{const z=await jmZip(parts[i].items);if(tok!==JMS.tok)return false;const a=document.createElement("a");a.href=URL.createObjectURL(z);a.download=parts[i].zip;
+      document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000);J.started.push(i);
+      const m=$("jmFixDlMsg");if(m)m.textContent=` 已交給瀏覽器下載：${parts[i].zip}（請在瀏覽器確認下載完成）`}
+    catch(e){if(tok!==JMS.tok)return false;J.zipErrors++;const m=$("jmFixDlMsg");if(m)m.textContent="";
+      note.innerHTML=`<b class="warn">壓縮檔產生失敗（${esc(e&&e.message||e)}）。可能是記憶體不足，請關掉其他分頁後再按一次下載，或重新選一次資料夾。</b>`}
+    finally{if(tok===JMS.tok)jmFixPhase("ready")}return true});window.__jmFix=J}
 async function jmRunFull(files){const O=$("jmOut");window.__jm=null;window.__jmFull=null;JMG=[];jmPopClose();
   $("jmDl").innerHTML=`<button class="repbtn" disabled>⬇ 全地圖打包</button>`;$("jmDlNote").textContent="正在讀取…";
   const groups=jmGroups(files);O.innerHTML=`<div class="muted">找到 ${groups.length} 個世界資料夾，正在確認哪個是第 1 層…</div>`;
@@ -3629,7 +3659,7 @@ function buildFormReport(){
     <div class="jmscope"><span><b>會補</b>：地面、夜晚、等高線、生態域和室內・洞穴各層的地圖；路標（waypoint）：同一層各分流的路標合併，每個分流都有全部的路標（死亡和暫存的不共用）</span><span><b>路標</b>：只會增加，不會刪除。在一個分流刪掉的路標，其他分流還有的話，下次修復會再加回來。修復檔要下載後馬上放進去：之後才新增的路標，會被修復檔裡的舊路標檔蓋掉</span><span><b>不動</b>：已經畫好的地方；各分流原本就有的路標；認不出樓層或同時像好幾層的資料夾；無法確認是這一層、也沒有和已確認的地圖相連的部分（例如座標 0,-1 那一格裡登入畫面的世界）；讀不到的圖</span><span><b>檢查的限制</b>：每次產生修復檔，網站會在這個瀏覽器記下每個檔案的內容（最多記 5 次），再選一次 mp 時用來檢查有沒有放好。網站擋不住把過期的修復檔放進去，這種情況只能在事後檢查時顯示為「內容已變更」，只能用備份還原。</span><span>從來沒走過的地方合併不出來。伺服器之後再加開新的分流，到新的一台後再做一次。</span></div>
     </details>
     <div class="jmtools"><label class="repbtn" for="jmFixDir">📂 選擇 JourneyMap 的 mp 資料夾</label><input type="file" id="jmFixDir" webkitdirectory multiple hidden><span id="jmFixDl"></span></div>
-    <div class="muted jmdlnote" id="jmFixNote">要在電腦上用 Chrome 或 Edge 開本站。</div>
+    <div class="muted jmdlnote" id="jmFixState" aria-live="polite"></div><div class="muted jmdlnote" id="jmFixNote">要在電腦上用 Chrome 或 Edge 開本站。</div>
     <div id="jmFixOut" class="jmout" aria-live="polite"></div>
   </article>
   </div><div class="rcol rc-q">
@@ -3638,7 +3668,7 @@ function buildFormReport(){
   <article class="bcard"><h4 class="sec">已收錄 <span class="c" id="doneC"></span></h4><div id="doneL"></div></article></div></div></div>`;
   if(COLLAB_PAUSE){$("jmDir").disabled=true;pauseBtn($("jmPick"));$("jmPick").removeAttribute("for");$("jmDl").innerHTML=`<button class="repbtn" disabled>⬇ 下載壓縮檔</button>`;$("jmDlNote").textContent="暫停中，見上方說明。";$("jmPick").closest(".jmtools").insertAdjacentHTML("beforebegin",`<div class="note warn pausenote">${PAUSE_MSG}</div>`)}
   $("jmDir").onchange=e=>{const fs=[...(e.target.files||[])];e.target.value="";if(fs.length)jmChoose(fs)};
-  $("jmFixDir").onchange=e=>{const fs=[...(e.target.files||[])];e.target.value="";if(fs.length)jmFixPick(fs)};
+  $("jmFixDir").onchange=e=>{const fs=[...(e.target.files||[])];e.target.value="";if(fs.length)jmFixStart(fs)};
   rBuilt=true}
 function renderReport(){
   if(FORM_PREFILL){if(!rBuilt)buildFormReport();if(!COLLAB_PAUSE)$("formGo").href=formUrl(FL);pauseBtn($("formGo"));showCollab()}
